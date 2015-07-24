@@ -1,0 +1,42 @@
+[submodule "plugins/banner_codenarc.git"]
+	path = plugins/banner_codenarc.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_codenarc.git
+[submodule "plugins/banner_packaging.git"]
+	path = plugins/banner_packaging.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_packaging.git
+[submodule "plugins/banner_core.git"]
+	path = plugins/banner_core.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_core.git
+[submodule "plugins/banner_seeddata_catalog.git"]
+	path = plugins/banner_seeddata_catalog.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_seeddata_catalog.git
+[submodule "plugins/banner_general_common.git"]
+	path = plugins/banner_general_common.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_general_common.git
+[submodule "plugins/banner_ui_ss.git"]
+	path = plugins/banner_ui_ss.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_ui_ss.git
+[submodule "plugins/banner_general_common_ui_ss.git"]
+	path = plugins/banner_general_common_ui_ss.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_general_common_ui_ss.git
+[submodule "plugins/domain_extension.git"]
+	path = plugins/domain_extension.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/domain_extension.git
+[submodule "plugins/banner_general_person.git"]
+	path = plugins/banner_general_person.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_general_person.git
+[submodule "plugins/i18n_core.git"]
+	path = plugins/i18n_core.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/i18n_core.git
+[submodule "plugins/banner_general_utility.git"]
+	path = plugins/banner_general_utility.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_general_utility.git
+[submodule "plugins/sghe_aurora.git"]
+	path = plugins/sghe_aurora.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/sghe_aurora.git
+[submodule "plugins/banner_general_validation_common.git"]
+	path = plugins/banner_general_validation_common.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_general_validation_common.git
+[submodule "plugins/spring_security_cas.git"]
+	path = plugins/spring_security_cas.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/spring_security_cas.git
