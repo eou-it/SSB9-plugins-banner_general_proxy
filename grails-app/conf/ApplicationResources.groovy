@@ -17,13 +17,13 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-common.js']
     }
 
-   'generalApp' {
+   'directDepositApp' {
        dependsOn "angular,bootstrap,bannerSelfService,glyphicons"
 
-       defaultBundle environment == "development" ? false : "generalApp"
+       defaultBundle environment == "development" ? false : "directDepositApp"
 
        //Main configuration file
-    //   resource url: [file: 'generalApp/app.js']
+       resource url: [file: 'directDepositApp/app.js']
    }
 
 }

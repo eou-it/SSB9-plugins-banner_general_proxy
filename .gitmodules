@@ -40,3 +40,6 @@
 [submodule "plugins/spring_security_cas.git"]
 	path = plugins/spring_security_cas.git
 	url = ssh://git@devgit1.ellucian.com/banner/plugins/spring_security_cas.git
+[submodule "plugins/web-app-extensibility.git"]
+	path = plugins/web-app-extensibility.git
+	url = https://git.ellucian.com/scm/ext/web-app-extensibility.git
