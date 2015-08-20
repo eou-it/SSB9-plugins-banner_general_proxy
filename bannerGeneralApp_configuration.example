@@ -221,5 +221,15 @@ grails.resources.adhoc.excludes = ['/WEB-INF/**']
 banner8.SS.url = 'http://<host_name>:<port_number>/<banner8>/'
 
 
-
-
+/** *****************************************************************************
+ *                                                                              *
+ *   Add admin roles as required by web-app-extensibility SecurityService in    *
+ *   non-production environment.                                                *
+ *   See:  http://confluence.ellucian.com/display/banner/                       *
+ *         Steps+to+include+the+web-app-extensibility+plugin+to+an+application  *
+ *                                                                              *
+ ***************************************************************************** **/
+webAppExtensibility {
+    // Comma separated list of roles
+    adminRoles = "ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M"
+}
