@@ -62,6 +62,7 @@ grails.project.dependency.resolution = {
         compile ':codenarc:0.21'
         compile ':markdown:1.0.0.RC1'
         runtime ":rendering:1.0.0"
+        compile ':restful-api:1.0.0'
     }
 
     dependencies {
