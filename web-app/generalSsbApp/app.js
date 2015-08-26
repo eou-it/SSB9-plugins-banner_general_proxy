@@ -1,12 +1,12 @@
 /*******************************************************************************
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-var directDepositAppControllers = angular.module('directDepositAppControllers', []);
-var directDepositAppDirectives = angular.module('directDepositAppDirectives', []);
+var generalSsbAppControllers = angular.module('generalSsbAppControllers', []);
+var generalSsbAppDirectives = angular.module('generalSsbAppDirectives', []);
 
 
-var generalSsbApp = angular.module('directDepositApp', ['ui.router','generalSsbAppControllers',
-    'generalSsbAppDirectives','ui.bootstrap','ngResource','I18n','unsavedChanges','ngFileUpload'])
+var generalSsbApp = angular.module('generalSsbApp', ['ui.router','generalSsbAppControllers',
+    'generalSsbAppDirectives','ui.bootstrap','I18n'])
     .run(
     ['$rootScope', '$state', '$stateParams', '$filter','breadcrumbService',
         function ($rootScope, $state, $stateParams, $filter,breadcrumbService) {
@@ -38,15 +38,15 @@ generalSsbApp.config(function($stateProvider, $urlRouterProvider){
     // For any unmatched url, send to /route1
     var url = url?url:'directDepositApp1';
     $urlRouterProvider.otherwise(url) ;
-    /******************************************************
-     * Defining all the different states of the positionDescApp
+    /*********************************************************
+     * Defining all the different states of the generalSsbApp
      * Landing pages
-     *******************************************************/
+     *********************************************************/
     $stateProvider
         .state('directDepositApp1', {
             url: "/directDepositApp1",
-            templateUrl: '../directDepositApp/dashboard/directDeposit.html',
-            controller: 'ddDashboardController',
+            templateUrl: '../generalSsbApp/ddListing/directDeposit.html',
+            controller: 'ddListingController',
             data: {
                 breadcrumbs: []
             }

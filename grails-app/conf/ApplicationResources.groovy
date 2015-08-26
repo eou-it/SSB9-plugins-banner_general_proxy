@@ -17,13 +17,27 @@ modules = {
         resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-common.js']
     }
 
-   'directDepositApp' {
+   'generalSsbApp' {
        dependsOn "angular,bootstrap,bannerSelfService,glyphicons"
 
-       defaultBundle environment == "development" ? false : "directDepositApp"
+       defaultBundle environment == "development" ? false : "generalSsbApp"
 
        //Main configuration file
-       resource url: [file: 'directDepositApp/app.js']
+       resource url: [file: 'generalSsbApp/app.js']
+
+       // Services
+       resource url:[file: 'generalSsbApp/common/services/breadcrumb-service.js']
+
+       // Controllers
+       resource url:[file: 'generalSsbApp/ddListing/ddListing-controller.js']
+
+       // Filters
+       resource url:[file: 'generalSsbApp/common/filters/i18n-filter.js']
+
+       // Directives
+
+       // CSS
+
    }
 
 }

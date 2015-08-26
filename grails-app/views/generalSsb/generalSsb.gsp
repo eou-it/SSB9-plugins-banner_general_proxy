@@ -2,8 +2,8 @@
 Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************--}%
 <!DOCTYPE html>
-<!--[if IE 9 ]>    <html xmlns:ng="http://angularjs.org" ng-app="directDepositApp" id="ng-app" class="ie9"> <![endif]-->
-<html xmlns:ng="http://angularjs.org" ng-app="directDepositApp" id="ng-app">
+<!--[if IE 9 ]>    <html xmlns:ng="http://angularjs.org" ng-app="generalSsbApp" id="ng-app" class="ie9"> <![endif]-->
+<html xmlns:ng="http://angularjs.org" ng-app="generalSsbApp" id="ng-app">
 <head>
     <script type="text/javascript">
         var superUser=${session['SUPER_USER_INDICATOR'] ?: 'undefined'};
@@ -23,10 +23,10 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         <meta name="menuBaseURL" content="${request.contextPath}/ssb"/>
         <meta charset="${message(code: 'default.character.encoding')}">
 
-        <r:require modules="directDepositApp"/>
+        <r:require modules="generalSsbApp"/>
 
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-            <r:require modules="directDepositAppRTL"/>
+            <r:require modules="generalSsbAppRTL"/>
         </g:if>
 
     </g:applyLayout>
@@ -43,30 +43,8 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 
 <div class="body-overlay"></div>
 <div id="content" aria-live="polite" aria-atomic="true" aria-relevant="additions" role="main">
-    <div class="proxy-text" id="actingAsProxy"><g:message code="proxy.actAsFor"/><span> ${session.PROXY_USER_NAME}</span></div>
-    <div class="proxy-text" id="actingAsSuper"><g:message code="proxy.actAsForSuperUser"/>%{--<span> ${session.PROXY_USER_NAME}</span>--}%</div>
-    <div class="proxy-text" id="actingAsProxySuperuser"><g:message code="proxy.actingAs"/><span> ${session.PROXY_USER_NAME}</span><span class="landingProxy"><g:message code="proxy.superuserAs"/></span></div>
     <div ui-view></div>
 </div>
-<script type="text/javascript">
-    if(proxyUser && !superUser){
-        $("#actingAsProxy").show();
-    }else{
-        $("#actingAsProxy").hide();
-    }
-    if(superUser){
-        $("#actingAsSuper").show();
-    }else{
-        $("#actingAsSuper").hide();
-    }
-    if(proxyUser && superUser){
-        $("#actingAsProxySuperuser").show();
-        $("#actingAsSuper").hide();
-        $("#actingAsProxy").hide();
-    }else{
-        $("#actingAsProxySuperuser").hide();
-    }
-</script>
 <script  type="text/javascript">
     function tellAngular() {
         var domElt = document.getElementsByClassName('page-header');
