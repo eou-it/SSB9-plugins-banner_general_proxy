@@ -5,7 +5,7 @@ var generalSsbAppControllers = angular.module('generalSsbAppControllers', []);
 var generalSsbAppDirectives = angular.module('generalSsbAppDirectives', []);
 
 
-var generalSsbApp = angular.module('generalSsbApp', ['ui.router','generalSsbAppControllers',
+var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','generalSsbAppControllers',
     'generalSsbAppDirectives','ui.bootstrap','I18n'])
     .run(
     ['$rootScope', '$state', '$stateParams', '$filter','breadcrumbService',
@@ -45,7 +45,7 @@ generalSsbApp.config(function($stateProvider, $urlRouterProvider){
     $stateProvider
         .state('directDepositApp1', {
             url: "/directDepositApp1",
-            templateUrl: '../generalSsbApp/ddListing/directDeposit.html',
+            templateUrl: '../generalSsbApp/ddListing/directDepositListing.html',
             controller: 'ddListingController',
             data: {
                 breadcrumbs: []

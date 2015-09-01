@@ -26,6 +26,7 @@ modules = {
        resource url: [file: 'generalSsbApp/app.js']
 
        // Services
+       resource url:[file: 'generalSsbApp/ddListing/ddListing-service.js']
        resource url:[file: 'generalSsbApp/common/services/breadcrumb-service.js']
 
        // Controllers
