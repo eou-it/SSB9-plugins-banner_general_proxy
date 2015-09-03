@@ -28,16 +28,19 @@ modules = {
        // Services
        resource url:[file: 'generalSsbApp/ddListing/ddListing-service.js']
        resource url:[file: 'generalSsbApp/common/services/breadcrumb-service.js']
-
+       resource url:[file: 'generalSsbApp/ddAddAccount/ddAddAccount-service.js']
+       
        // Controllers
        resource url:[file: 'generalSsbApp/ddListing/ddListing-controller.js']
-
+       resource url:[file: 'generalSsbApp/ddAddAccount/ddAddAccount-controller.js']
+       
        // Filters
        resource url:[file: 'generalSsbApp/common/filters/i18n-filter.js']
 
        // Directives
 
        // CSS
+       
 
    }
 

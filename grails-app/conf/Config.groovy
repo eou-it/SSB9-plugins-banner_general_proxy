@@ -131,7 +131,8 @@ formControllerMap = [
         'survey': ['SELFSERVICE'],
         'useragreement': ['SELFSERVICE'],
         'securityqa': ['SELFSERVICE'],
-        'generalssb': ['SELFSERVICE']
+        'generalssb': ['SELFSERVICE'],
+        'updateaccount': ['SELFSERVICE']
 ]
 
 
@@ -186,7 +187,8 @@ grails.plugins.springsecurity.interceptUrlMap = [
         '/ssb/securityQA/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE_BAN_DEFAULT_M'],
         '/ssb/survey/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
         '/ssb/userAgreement/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/generalSsb/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M']
+        '/ssb/generalSsb/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
+        '/ssb/UpdateAccount/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M']
 ]
 
 // CodeNarc rulesets
