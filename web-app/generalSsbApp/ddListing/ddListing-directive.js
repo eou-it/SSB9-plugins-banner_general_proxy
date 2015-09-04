@@ -10,3 +10,13 @@ generalSsbAppDirectives.directive('accountInfo',[function () {
         }
     };
 }]);
+
+generalSsbAppDirectives.directive('accountType',[function () {
+    return{
+        restrict: 'E',
+        template: "{{(acct.accountType === 'C' ? 'directDeposit.account.type.checking' : 'directDeposit.account.type.savings')|i18n}}",
+        scope: {
+            acct: '='
+        }
+    };
+}]);

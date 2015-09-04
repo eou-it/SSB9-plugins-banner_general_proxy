@@ -8,6 +8,5 @@ generalSsbAppControllers.controller('ddListingController',['$scope', 'directDepo
                 $scope.accounts = response
             })
 
-        $scope.test1 = 'hello world'; //DEBUG
     }
 ]);
