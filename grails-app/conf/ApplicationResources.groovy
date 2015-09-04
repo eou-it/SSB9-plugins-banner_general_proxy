@@ -41,7 +41,7 @@ modules = {
        // Directives
 
        // CSS
-       
+       resource url:[file: 'css/main.css'],   attrs: [media: 'screen, projection']
 
    }
 
