@@ -1,0 +1,15 @@
+.break-word {
+    word-wrap: break-word;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+
+#content {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    min-height: initial !important;
+    font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
