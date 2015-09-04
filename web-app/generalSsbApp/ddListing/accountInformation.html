@@ -1,20 +1,29 @@
-<div>
-    <div>
-        hi
-    </div>
-    <div>
-        how
-    </div>
-    <div>
-        are
-    </div>
-    <div>
-        you
-    </div>
-    <div>
-        {{test1}}
-    </div>
-    <div>
-        {{test2}}
+<div class="col-md-3 col-lg-3 col-sm-12 col-xs-12 small-padding-top small-padding-bottom dashboard-section-padding">
+    <div ng-repeat="a in accounts">
+        <div class="no-margin break-word">
+            <p>
+                hi
+            </p>
+        </div>
+        <div class="no-margin break-word">
+            <p>
+                {{'directDeposit.account.label.routing'|i18n}}: {{a.bankRoutingNum}}
+            </p>
+        </div>
+        <div class="no-margin break-word">
+            <p>
+                {{'directDeposit.account.label.account'|i18n}}: {{a.bankAccountNum}}
+            </p>
+        </div>
+        <div class="no-margin break-word">
+            <p>
+                {{'directDeposit.account.label.accountType'|i18n}}: {{a.accountType == 'C' ? 'Checking' : 'Savings'}}
+            </p>
+        </div>
+        <div class="no-margin break-word">
+            <p>
+                {{'directDeposit.account.label.status'|i18n}}: {{a.status}}
+            </p>
+        </div>
     </div>
 </div>

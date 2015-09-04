@@ -5,7 +5,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', 'directDepo
     function ($scope, directDepositListingService){
         directDepositListingService.getDirectDepositListing().$promise.then(
             function (response) {
-                $scope.test2 = response.test0; //DEBUG
+                $scope.accounts = response
             })
 
         $scope.test1 = 'hello world'; //DEBUG

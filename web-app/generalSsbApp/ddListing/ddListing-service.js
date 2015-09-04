@@ -3,9 +3,11 @@
  *******************************************************************************/
 
 generalSsbApp.service('directDepositListingService', ['$resource', function ($resource) {
+    //var listing = $resource('../ssb/:controller/:action',
+    //    {controller: 'AccountListing', action: 'getMyAccounts'}, {
+    //        query: {method:'GET', isArray:true}});
     var listing = $resource('../ssb/:controller/:action',
-        {controller: 'AccountListing', action: 'getMyAccounts'}, {
-            query: {method:'GET'}});
+        {controller: 'AccountListing', action: 'getMyAccounts'});
 
     this.getDirectDepositListing = function (){
         return listing.query();
