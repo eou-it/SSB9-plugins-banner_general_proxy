@@ -1,25 +1,15 @@
-<div class="no-margin break-word">
-    <p>
+<div class="break-word entry-heading entry-row">
         BANK NAME HERE
-    </p>
 </div>
-<div class="no-margin break-word">
-    <p>
+<div class="entry-row break-word">
         {{'directDeposit.account.label.routing'|i18n}}: {{acct.bankRoutingNum}}
-    </p>
 </div>
-<div class="no-margin break-word">
-    <p>
+<div class="entry-row break-word">
         {{'directDeposit.account.label.account'|i18n}}: {{acct.bankAccountNum}}
-    </p>
 </div>
-<div class="no-margin break-word">
-    <p>
+<div class="entry-row break-word">
         {{'directDeposit.account.label.accountType'|i18n}}: <account-type acct="acct"/>
-    </p>
 </div>
-<div class="no-margin break-word">
-    <p>
-        {{'directDeposit.account.label.status'|i18n}}: {{acct.status}}
-    </p>
+<div class="entry-row break-word">
+        {{'directDeposit.account.label.status'|i18n}}: <account-status acct="acct"/>
 </div>

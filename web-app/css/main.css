@@ -12,4 +12,65 @@
     overflow-y: auto !important;
     min-height: initial !important;
     font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding: 0;
+    position: static;
+}
+
+.entry {
+    padding-left: 20px;
+}
+
+.entry-heading {
+    font-weight: bold;
+}
+
+.entry-row {
+    margin-bottom: 10px;
+}
+
+.panel.panel-accordion {
+    border-radius: 0;
+    background-color: #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+
+.panel-accordion .panel-heading {
+    padding: 0;
+    border-radius: 0;
+    background-color: #f2f2f2;
+}
+
+.panel-accordion .panel-title {
+    padding: 0;
+    font-weight: bold;
+}
+
+.panel-accordion .panel-title > a {
+    padding: 20px;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+    cursor: pointer;
+}
+
+.panel-accordion .panel-title > a:after {
+    font-family: 'Glyphicons Halflings';
+    content: "\e113";
+    float: right;
+    color: grey;
+}
+
+.panel-accordion .panel-heading > a.collapsed {
+    background-color: #f2f2f2;
+}
+
+.panel-accordion .panel-title > a.collapsed:after {
+    font-family: 'Glyphicons Halflings';
+    content: "\e114";
+    float: right;
+    color: grey;
+}
+
+.panel-accordion .panel-body {
+    background-color: #ffffff;
 }

@@ -20,3 +20,13 @@ generalSsbAppDirectives.directive('accountType',[function () {
         }
     };
 }]);
+
+generalSsbAppDirectives.directive('accountStatus',[function () {
+    return{
+        restrict: 'E',
+        template: "{{(acct.status === 'P' ? 'directDeposit.account.status.prenote' : 'directDeposit.account.status.active')|i18n}}",
+        scope: {
+            acct: '='
+        }
+    };
+}]);

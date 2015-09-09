@@ -9,13 +9,11 @@ generalSsbApp.service( 'breadcrumbService', ['$filter',function ($filter) {
     this.reset = function() {
         constantBreadCrumb = [
             {
-                //TODO: may need to be redefined for Direct Deposit
                 label: 'general.breadcrumb.bannerSelfService',
                 url: '/'
             },
             {
-                //TODO: may need to be redefined for Direct Deposit
-                label: 'general.breadcrumb.generalSsb',
+                label: 'general.breadcrumb.directDeposit',
                 url: '/directDepositApp1'
             }
         ];

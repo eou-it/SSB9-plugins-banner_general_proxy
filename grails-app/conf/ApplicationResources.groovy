@@ -18,7 +18,7 @@ modules = {
     }
 
    'generalSsbApp' {
-       dependsOn "angular,bootstrap,bannerSelfService,glyphicons"
+       dependsOn "angular,glyphicons,bootstrap,bannerSelfService"
 
        defaultBundle environment == "development" ? false : "generalSsbApp"
 
@@ -43,6 +43,7 @@ modules = {
 
        // CSS
        resource url:[file: 'css/main.css'],   attrs: [media: 'screen, projection']
+       resource url:[file: 'css/responsive.css'],   attrs: [media: 'screen, projection']
 
    }
 
