@@ -1,0 +1,28 @@
+<!--*******************************************************************************
+Copyright 2015 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+
+<div class="col-md-12">
+    <div class="col-lg-12 col-md-12 col-xs-12 no-padding">
+		<p class="input-field-label">Bank Routing Number</p>
+		<input id="routing-number" data-ng-model="account.bankRoutingNum" type="text" class="form-control"  placeholder="Bank Routing Number" />
+		<p class="input-field-label">Bank Account Number</p>
+		<input id="account-number" data-ng-model="account.bankAccountNum" type="text" class="form-control"  placeholder="Bank Account Number" />
+		<p class="input-field-label">Account Type</p>
+		<div class="dropdown">
+		    <button class="form-control" data-toggle="dropdown" href="#" role="option" ><account-type acct="account"/></button>
+		    <ul class="dropdown-menu" role="menu" aria-labelledby="accountTypeSelect">
+	            <li ng-click="setAccountType('C')">
+	                <a class="" role="option" href="">Checking</a>
+	            </li>
+	            <li ng-click="setAccountType('S')">
+	                <a role="option" href="">Savings</a>
+	            </li>
+		    </ul>
+		</div> 
+		<div class="padding-1em-above">
+			<input type="checkbox" class="main-nav-check" id="main-nav-check" ng-click="toggleAuthorizedChanges()"/>
+			<p class="lbl">By checking this box, I authorize changes to my direct deposit allocations.</p>
+		</div>
+	</div>
+</div>

@@ -75,6 +75,175 @@
     background-color: #ffffff;
 }
 
+/* Add Account Page Styles */
+.input-field-label {
+    padding: 0.875em 0em;
+    margin: 0px;
+}
+
+.dialog-hdr1 {
+    margin: 0px;
+    padding: 0em 0em 0em 1.5em
+}
+
+.padding-2em-below {
+    padding: 0em 0em 0.625em 0em;
+}
+
+.padding-2em-above {
+    margin-top: 1.5em;
+}
+
+.padding-1em-above {
+    margin-top: 1.25em;
+}
+
+.dialog-hdr2 {
+    margin: 0px;
+    float: right;
+    width: 100%;
+}
+
+button.closebtn {
+    color: #4f585f;
+    opacity: 1;
+    font-size: 1.375em;
+    font-family: open-sans-semi-bold;
+    background: url('../images/close.svg') 50% 50% no-repeat;
+    width: 0px;
+    height: 0px;
+    padding: 1.5em;
+    display: block;
+    border: none;
+}
+
+.center-r {
+    float: right;
+    width: 50%;
+}
+
+.center-l {
+    float: left;
+    width: 50%;
+}
+
+.modal-footer {
+    padding: 0px;
+    border-top: 1px solid black;
+}
+
+.pad-1em {
+    padding: 1em;
+    text-align: center;
+    overflow: auto;
+}
+
+.cancel-btn {
+    box-sizing: border-box;
+    float: left;
+    width: 100%;
+    text-align: center;
+    overflow: auto;
+}
+
+.save-btn {
+    box-sizing: border-box;
+    float: right;
+    width: 100%;
+    padding: 1em;
+    text-align: center;
+    overflow: auto;
+}
+
+.mid-dash {
+    float: left;
+    width: 100%;
+    border-right: 1px solid rgb(0, 0, 0);
+    margin: 1em 0em;
+}
+
+/*  Dropdown menu  */
+.dropdown-toggle {
+    width: 100%;
+    text-align: left;
+    padding: 6px 10px;
+    font-size: 14px;
+}
+
+.dropdown-menu {
+    left: 0;
+    border-radius: 6px;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.open > .dropdown-menu {
+    width: 100% !important;
+    border-style: none solid solid;
+    border-width: 2px;
+    border-color: #B0DEEC;
+    background-color: #F3FCFF;
+}
+
+.dropdown-menu > li > a {
+    border-radius: 6px
+}
+
+/*  Check box  */
+/*Custom Radio and check boxes*/
+input[type=checkbox],input[type=radio] {
+    opacity: 0;
+    position: absolute;
+    z-index: 12;
+    width: 1.25em;
+    height: 1.25em;
+}
+
+input[type=checkbox]+.lbl,input[type=radio]+.lbl {
+    position: relative;
+    z-index: 11;
+    display: inline-block;
+    margin: 0;
+    line-height: 20px;
+    min-height: 14px;
+    min-width: 14px;
+}
+
+input[type=checkbox]+.lbl::before,input[type=radio]+.lbl::before {
+    font-family: fontAwesome;
+    font-weight: bold;
+    font-size: 13px;
+    color: #ffffff;
+    content: "\a0";
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 0;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    height: 18px;
+    line-height: 16px;
+    min-width: 18px;
+    margin-right: 5px;
+    margin-top: -5px;
+    border-radius: 4px;
+}
+
+input[type=checkbox]:focus+.lbl::before,input[type=radio]:focus+.lbl::before,input[type=checkbox][focus]+.lbl::before,input[type=radio][focus]+.lbl::before,input[type=checkbox].focus+.lbl::before,input[type=radio].focus+.lbl::before {
+    border: 1px solid  #316699;
+}
+
+/* Checked state styles */
+input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before {
+    display: inline-block;
+    content: '\2713';
+    background-color: #006600;
+    border: 1px solid #006600;
+}
+
 .replace-account-panel,
 .add-account-panel {
     height: 60px;

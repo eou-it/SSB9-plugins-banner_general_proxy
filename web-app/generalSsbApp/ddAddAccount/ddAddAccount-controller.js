@@ -2,10 +2,11 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppControllers.controller('DdAddAccountController', ['$scope', 'ddAddAccountService', function($scope, ddAddAccountService){
+generalSsbAppControllers.controller('DdAddAccountController', ['$scope', '$modalInstance', 'ddAddAccountService', function($scope, $modalInstance, ddAddAccountService){
+	
+	$scope.responsiveView = 'mobile';
 	
 	$scope.account = {};
-	$scope.madeit = 'here we go..';
 	
 	$scope.account.pidm;
 	$scope.account.status;
@@ -15,7 +16,17 @@ generalSsbAppControllers.controller('DdAddAccountController', ['$scope', 'ddAddA
 	$scope.account.bankRoutingNum;
 	$scope.account.amount;
 	$scope.account.percent = 100;
-	$scope.account.accountType;
+	$scope.account.accountType = '';
+	
+	$scope.authorizedChanges = false;
+	
+	$scope.setAccountType = function (acctType) {
+		$scope.account.accountType = acctType;
+	};
+	
+	$scope.toggleAuthorizedChanges = function () {
+		$scope.authorizedChanges = !$scope.authorizedChanges;
+	}
 	
 	$scope.saveAccount = function() {
 		if(!$scope.account.bankRoutingNum) {
@@ -24,15 +35,22 @@ generalSsbAppControllers.controller('DdAddAccountController', ['$scope', 'ddAddA
 			alert("inp2 error");
 		} else if(!$scope.account.accountType) {
 			alert("inp3 error");
+		} else if(!$scope.authorizedChanges) {
+			alert("disclaimer error");
 		} else {
 			ddAddAccountService.createApAccount($scope.account).$promise.then(function (response) {
 				if(response.failure) {
 					alert("response error");
 				}
 				else {
-					$scope.madeit = "Good!";
+					$modalInstance.dismiss('cancel');
 				}
 			});
 		}
 	};
+	
+	$scope.cancelModal = function () {
+        $modalInstance.dismiss('cancel');
+    };
+    
 }]);
