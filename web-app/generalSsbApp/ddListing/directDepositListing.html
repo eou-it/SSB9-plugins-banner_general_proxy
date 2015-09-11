@@ -4,18 +4,20 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 
 <div class="row tile">
     <div class="col-md-12 no-padding panel-group panel-accordion" aria-multiselectable="true" role="tablist">
-        <h2 aria-expanded="{{panelCollapsed}}" class="panel panel-heading panel-default panel-title">
+        <h2 id="account-listing-heading" aria-expanded="{{!panelCollapsed}}" aria-controls="account-listing"
+            class="panel panel-heading panel-default panel-title">
             <a href="" data-toggle="collapse" data-target="#account-listing"
                ng-class="{'collapsed': panelCollapsed}" ng-click="panelCollapsed = !panelCollapsed;">
                 <span class="job-label no-margin">{{'directDeposit.label.accountsPayableDeposit'|i18n}}</span>
             </a>
         </h2>
 
-        <div id="account-listing" class="collapse in">
-            <div class="" tabindex="0" role="tabpanel" aria-labelledby="" aria-expanded="" ng-if="!!accounts.length">
+        <div id="account-listing" class="collapse in" aria-labelledby="account-listing-heading"
+             aria-expanded="{{!panelCollapsed}}" aria-hidden="{{panelCollapsed}}">
+            <div ng-if="!!accounts.length">
                 <replace-account-panel accounts="accounts"/>
             </div>
-            <div class="" tabindex="0" role="tabpanel" aria-labelledby="" aria-expanded="" ng-if="!!!accounts.length">
+            <div ng-if="!!!accounts.length">
                 <add-account-panel/>
             </div>
         </div>
