@@ -4,8 +4,6 @@
 
 generalSsbAppControllers.controller('DdAddAccountController', ['$scope', '$modalInstance', 'ddAddAccountService', function($scope, $modalInstance, ddAddAccountService){
 	
-	$scope.responsiveView = 'mobile';
-	
 	$scope.account = {};
 	
 	$scope.account.pidm;

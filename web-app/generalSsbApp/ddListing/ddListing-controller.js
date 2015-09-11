@@ -12,7 +12,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
 
         //display add account pop up
         $scope.showAddAccount = function () {
-        	mobile = true;
+            var mobile = true;
         	if(mobile) {
 	            $modal.open({
 	                templateUrl: '../generalSsbApp/ddAddAccount/ddAddAccount.html',

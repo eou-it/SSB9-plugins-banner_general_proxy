@@ -253,14 +253,8 @@ input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before
     position: relative;
 }
 
-a.replace-account-link:link,
-a.replace-account-link:visited,
-a.replace-account-link:hover,
-a.replace-account-link:active,
-a.add-account-link:link,
-a.add-account-link:visited,
-a.add-account-link:hover,
-a.add-account-link:active {
+a.replace-account-link,
+a.add-account-link {
     position: absolute;
     top: 21px;
     right: 20px;
