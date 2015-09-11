@@ -30,3 +30,20 @@ generalSsbAppDirectives.directive('accountStatus',[function () {
         }
     };
 }]);
+
+generalSsbAppDirectives.directive('replaceAccountPanel',[function () {
+    return{
+        restrict: 'E',
+        templateUrl: '../generalSsbApp/ddListing/replaceAccountPanel.html',
+        scope: {
+            accounts: '='
+        }
+    };
+}]);
+
+generalSsbAppDirectives.directive('addAccountPanel',[function () {
+    return{
+        restrict: 'E',
+        templateUrl: '../generalSsbApp/ddListing/addAccountPanel.html',
+    };
+}]);

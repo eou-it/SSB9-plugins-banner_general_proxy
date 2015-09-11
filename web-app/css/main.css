@@ -74,3 +74,49 @@
 .panel-accordion .panel-body {
     background-color: #ffffff;
 }
+
+.replace-account-panel,
+.add-account-panel {
+    height: 60px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    position: relative;
+}
+
+a.replace-account-link:link,
+a.replace-account-link:visited,
+a.replace-account-link:hover,
+a.replace-account-link:active,
+a.add-account-link:link,
+a.add-account-link:visited,
+a.add-account-link:hover,
+a.add-account-link:active {
+    position: absolute;
+    top: 21px;
+    right: 20px;
+    color: #333;
+    text-decoration: none;
+}
+
+.no-entries-notification {
+    height: 80px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 12px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    position: relative;
+}
+
+.notification-icon {
+    margin-right: 10px;
+    position: absolute;
+    top: 25px;
+}
+
+.notification-text {
+    width: 290px;
+    position: absolute;
+    left: 38px;
+}
