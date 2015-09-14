@@ -14,11 +14,13 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 
         <div id="account-listing" class="collapse in" aria-labelledby="account-listing-heading"
              aria-expanded="{{!panelCollapsed}}" aria-hidden="{{panelCollapsed}}">
-            <div ng-if="!!accounts.length">
-                <replace-account-panel accounts="accounts"/>
-            </div>
-            <div ng-if="!!!accounts.length">
-                <add-account-panel/>
+            <div ng-show="accountsLoaded">
+                <div ng-if="numAccounts">
+                    <replace-account-panel accounts="accounts"/>
+                </div>
+                <div ng-if="!numAccounts">
+                    <add-account-panel/>
+                </div>
             </div>
         </div>
     </div>

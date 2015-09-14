@@ -3,11 +3,15 @@
  *******************************************************************************/
 generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', 'directDepositListingService',
     function ($scope, $modal, directDepositListingService){
+        $scope.accountsLoaded = false;
+        $scope.numAccounts = 0;
         $scope.panelCollapsed = false;
 
         directDepositListingService.getDirectDepositListing().$promise.then(
             function (response) {
-                $scope.accounts = response
+                $scope.accounts = response;
+                $scope.numAccounts = $scope.accounts.length;
+                $scope.accountsLoaded = true;
             })
 
         //display add account pop up
