@@ -75,7 +75,20 @@
     background-color: #ffffff;
 }
 
+/***************************/
 /* Add Account Page Styles */
+/***************************/
+.float-l {
+    float: left;
+}
+
+.float-r {
+    float: right;
+}
+.no-padding {
+    padding: 0px;
+}
+
 .input-field-label {
     padding: 0.875em 0em;
     margin: 0px;
@@ -83,18 +96,14 @@
 
 .dialog-hdr1 {
     margin: 0px;
-    padding: 0em 0em 0em 1.5em
+    padding: 0em 0.875em 0.625em;
 }
 
-.padding-2em-below {
-    padding: 0em 0em 0.625em 0em;
-}
-
-.padding-2em-above {
+.dialog-footer-margin {
     margin-top: 1.5em;
 }
 
-.padding-1em-above {
+.disclaimer-margin {
     margin-top: 1.25em;
 }
 
@@ -117,42 +126,30 @@ button.closebtn {
     border: none;
 }
 
-.center-r {
-    float: right;
-    width: 50%;
-}
-
-.center-l {
-    float: left;
-    width: 50%;
-}
-
-.modal-footer {
+.modal-footer.addAcct {
     padding: 0px;
     border-top: 1px solid black;
 }
 
-.pad-1em {
-    padding: 1em;
-    text-align: center;
-    overflow: auto;
-}
-
-.cancel-btn {
+.dialog-btn {
     box-sizing: border-box;
-    float: left;
-    width: 100%;
+    width: 50%;
     text-align: center;
+    font-size: 18px;
     overflow: auto;
+    border-style: none;
+    background: white;
+    color: #206E9F;
+    line-height: normal;
 }
 
 .save-btn {
-    box-sizing: border-box;
     float: right;
-    width: 100%;
     padding: 1em;
-    text-align: center;
-    overflow: auto;
+}
+
+.save-btn[disabled] {
+    color: #869FB1;
 }
 
 .mid-dash {
@@ -164,31 +161,50 @@ button.closebtn {
 
 /*  Dropdown menu  */
 .dropdown-toggle {
+    /* class overridden from bootstrap.css */
     width: 100%;
     text-align: left;
     padding: 6px 10px;
     font-size: 14px;
 }
 
-.dropdown-menu {
+.dropdown-menu.addAcct {
     left: 0;
-    border-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
     border: 0;
     padding: 0;
     margin: 0;
     width: 100%;
 }
 
-.open > .dropdown-menu {
-    width: 100% !important;
-    border-style: none solid solid;
+.open > .dropdown-menu.addAcct{
+    width: 100%;
+    border-style: solid;
     border-width: 2px;
-    border-color: #B0DEEC;
+    border-color: #206E9F;
+}
+
+.dropdown-menu > li > a.addAcct {
+    border-radius: 0px;
+    border-style: solid none;
+    border-color: #FFFFFF;
+}
+
+.dropdown-menu > li > a.addAcct:hover,
+.dropdown-menu > li > a.addAcct:focus  {
+    border-top-color: #B0DEEC;
+    border-bottom-color: #B0DEEC;
     background-color: #F3FCFF;
 }
 
-.dropdown-menu > li > a {
-    border-radius: 6px
+.dropdown-menu > li > a.addAcct.end-dropdown-radius {
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
 }
 
 /*  Check box  */
@@ -282,4 +298,14 @@ a.add-account-link {
     width: 290px;
     position: absolute;
     left: 38px;
+}
+
+/*  Custom modal  */
+.modal.in .modal-dialog {
+    /* class overridden from bootstrap.css */
+    transform: translate(0px, 90px);
+}
+
+.pad-dialog-lr {
+    padding: 0em 1.5em;
 }

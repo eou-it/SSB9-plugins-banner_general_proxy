@@ -99,7 +99,9 @@ grails.resources.mappers.yuijsminify.excludes = ['**/*.min.js']
 
 // set per-environment serverURL stem for creating absolute links
 environments {
-
+    development {
+        grails.resources.debug = true;
+    }
 }
 
 // ******************************************************************************

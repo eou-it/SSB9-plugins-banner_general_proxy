@@ -51,14 +51,14 @@ generalSsbApp.config(function($stateProvider, $urlRouterProvider){
                 breadcrumbs: []
             }
         })
-	    .state('ddAddAccount', {
-	        url: "/ddAddAccount",
-	        templateUrl: '../generalSsbApp/ddAddAccount/ddAddAccount.html',
-	        controller: 'DdAddAccountController',
-	        data: {
-	            breadcrumbs: []
-	        }
-	    });
+    .state('ddAddAccount', {
+        url: "/ddAddAccount",
+        templateUrl: '../generalSsbApp/ddAddAccount/ddAddAccount.html',
+        controller: 'DdAddAccountController',
+        data: {
+            breadcrumbs: []
+        }
+    });
 });
 
 generalSsbApp.config(['$locationProvider',

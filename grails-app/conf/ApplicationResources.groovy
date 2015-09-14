@@ -40,6 +40,7 @@ modules = {
 
        // Directives
        resource url:[file: 'generalSsbApp/ddListing/ddListing-directive.js']
+       resource url:[file: 'generalSsbApp/ddAddAccount/ddAddAccount-directive.js']
 
        // CSS
        resource url:[file: 'css/main.css'],   attrs: [media: 'screen, projection']

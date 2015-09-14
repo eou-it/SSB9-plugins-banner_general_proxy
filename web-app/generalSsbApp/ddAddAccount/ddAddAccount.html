@@ -3,26 +3,19 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 
 <div >
-	<!-- Dialog starts here -->
-	<div>
-	    <div class="padding-2em-below">
-		    <div class="dialog-hdr2">
-		        <button class="close closebtn" ng-click="cancelModal()" title="close"></button>
-		    </div>
-		    <h3 class="dialog-hdr1">Add Accounts Payable Deposit</h5>
-	    </div>
-	    <ng-include
+    <!-- Dialog starts here -->
+    <div class="dialog-hdr2">
+        <button class="close closebtn" ng-click="cancelModal()" title="close"></button>
+    </div>
+    <h3 class="dialog-hdr1">Add Accounts Payable Deposit</h3>
+    <div class="pad-dialog-lr">
+        <ng-include
             src="'../generalSsbApp/ddAddAccount/accountNumberInput.html'">
         </ng-include>
     </div>
-	<div class="padding-2em-above modal-footer">
-	    <div class="center-l">
-            <a class="cancel-btn" ng-click="cancelModal()"><span class="mid-dash">Cancel</span></a>
-        </div>
-        <div class="center-r">
-            <!-- <input class="primary-button" type="submit" value="Save" ng-click="saveAccount()" />-->
-            <a class="save-btn" ng-click="saveAccount()">Save</a>
-       </div>
+    <div class="dialog-footer-margin modal-footer addAcct">
+        <button class="dialog-btn float-l" ng-click="cancelModal()"><span class="mid-dash">CANCEL</span></button>
+        <button class="dialog-btn save-btn" ng-disabled="!authorizedChanges" ng-click="saveAccount()">SAVE</button>
     </div>
     <!-- Dialog ends here -->
 </div>
