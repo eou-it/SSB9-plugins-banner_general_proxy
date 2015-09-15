@@ -89,9 +89,49 @@
     padding: 0px;
 }
 
+.semi-bold {
+    font-weight: bold;
+}
+
 .input-field-label {
     padding: 0.875em 0em;
     margin: 0px;
+}
+
+.text-input-field {
+    border-radius: 4px;
+    background-color: #fff;
+    border:1px solid #869FB1;
+    box-shadow: 4px 4px #EDF3F6 inset;
+    width: 100%;
+    color: #869FB1;
+}
+
+.text-input-field::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #869FB1;
+    font-weight: bold;
+}
+.text-input-field:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color: #869FB1;
+   font-weight: bold;
+   opacity:  1;
+}
+.text-input-field::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color: #869FB1;
+   font-weight: bold;
+   opacity:  1;
+}
+.text-input-field:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: #869FB1;
+   font-weight: bold;
+}
+
+.text-input-field:focus {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #206E9F;
+    box-shadow: 0px 2px #CBE2E8 inset;
+    color: #4F585F;
 }
 
 .dialog-hdr1 {
@@ -168,8 +208,8 @@ button.closebtn {
     font-size: 14px;
 }
 
-.dropdown-spacing,
-.dropdown-menu > li > a.dropdown-spacing {
+.form-spacing,
+.dropdown-menu > li > a.form-spacing {
     padding: 1em .75em;
     line-height: 136%;
 }
@@ -184,7 +224,8 @@ button.closebtn {
 }
 
 .dropdown-btn:focus {
-	color: #4F585F;
+    box-shadow: 0px 2px #CBE2E8 inset;
+    color: #4F585F;
 }
 
 .open > .dropdown-btn {
@@ -192,6 +233,11 @@ button.closebtn {
     border-width: 1px;
     border-color: #206E9F;
     color: #4F585F;
+}
+
+.open > .dropdown-btn .icon-caret-down,
+.dropdown-btn:focus .icon-caret-down {
+    color: #206E9F;
 }
 
 .dropdown-menu.addAcct {
@@ -211,7 +257,7 @@ button.closebtn {
     border-style: solid;
     border-width: 1px;
     border-color: #206E9F;
-    top: 3em;
+    top: 3.175em;
 }
 
 .dropdown-menu > li > a.addAcct {
@@ -219,6 +265,7 @@ button.closebtn {
     border-radius: 0px;
     border-style: solid none;
     border-color: #FFFFFF;
+    font-weight: bold;
 }
 
 .dropdown-menu > li > a.addAcct:hover,
