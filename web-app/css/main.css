@@ -127,7 +127,7 @@ button.closebtn {
 }
 
 .modal-footer.addAcct {
-    padding: 0px;
+    padding: 1px 0px 0px;
     border-top: 1px solid black;
 }
 
@@ -168,6 +168,32 @@ button.closebtn {
     font-size: 14px;
 }
 
+.dropdown-spacing,
+.dropdown-menu > li > a.dropdown-spacing {
+    padding: 1em .75em;
+    line-height: 136%;
+}
+
+.dropdown-btn {
+    border-radius: 4px;
+    background-color: #fff;
+    border:1px solid #869FB1;
+    box-shadow: 0px -4px #DEE5E7 inset;
+    width: 100%;
+    color: #869FB1;
+}
+
+.dropdown-btn:focus {
+	color: #4F585F;
+}
+
+.open > .dropdown-btn {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #206E9F;
+    color: #4F585F;
+}
+
 .dropdown-menu.addAcct {
     left: 0;
     border-bottom-right-radius: 6px;
@@ -183,11 +209,13 @@ button.closebtn {
 .open > .dropdown-menu.addAcct{
     width: 100%;
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     border-color: #206E9F;
+    top: 3em;
 }
 
 .dropdown-menu > li > a.addAcct {
+    border-width: 1px;
     border-radius: 0px;
     border-style: solid none;
     border-color: #FFFFFF;
