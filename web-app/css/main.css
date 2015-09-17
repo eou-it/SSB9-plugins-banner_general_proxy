@@ -200,13 +200,6 @@ button.closebtn {
 }
 
 /*  Dropdown menu  */
-.dropdown-toggle {
-    /* class overridden from bootstrap.css */
-    width: 100%;
-    text-align: left;
-    padding: 6px 10px;
-    font-size: 14px;
-}
 
 .form-spacing,
 .dropdown-menu > li > a.form-spacing {
@@ -376,8 +369,7 @@ a.add-account-link {
 }
 
 /*  Custom modal  */
-.modal.in .modal-dialog {
-    /* class overridden from bootstrap.css */
+.direct-deposit .modal.in .modal-dialog {
     transform: translate(0px, 90px);
 }
 

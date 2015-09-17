@@ -2,7 +2,7 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppControllers.controller('DdAddAccountController', ['$scope', '$modalInstance', 'ddAddAccountService', function($scope, $modalInstance, ddAddAccountService){
+generalSsbAppControllers.controller('DdAddAccountController', ['$scope', '$modalInstance', '$state', 'ddAddAccountService', function($scope, $modalInstance, $state, ddAddAccountService){
 
     $scope.account = {};
     
@@ -41,6 +41,7 @@ generalSsbAppControllers.controller('DdAddAccountController', ['$scope', '$modal
                     alert("response error");
                 }
                 else {
+                	$state.go('directDepositApp1', {}, {reload: true, inherit: false, notify: true});
                     $modalInstance.dismiss('cancel');
                 }
             });
