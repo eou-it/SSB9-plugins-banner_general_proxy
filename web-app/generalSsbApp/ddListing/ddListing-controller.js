@@ -13,29 +13,28 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
                 // Create accounts array, merging account info with its bank name and routing number
                 _.each(response, function(accountInfo) {
                     var acct = accountInfo[0];
-                    acct.bankRoutingNum = accountInfo[1].bankRoutingNum;
                     acct.bankName = accountInfo[1].bankName;
                     $scope.accounts.push(acct);
                 });
 
                 $scope.numAccounts = $scope.accounts.length;
                 $scope.accountsLoaded = true;
-            })
+            });
 
         //display add account pop up
         $scope.showAddAccount = function () {
             var mobile = true;
-        	if(mobile) {
-	            $modal.open({
-	                templateUrl: '../generalSsbApp/ddAddAccount/ddAddAccount.html',
-	                keyboard:true,
-	                controller: "DdAddAccountController",
-	                scope: $scope
-	            });
-        	}
-        	else {
-        		// enable in-line editing(?) or go to select from existing acct page
-        	}
+            if(mobile) {
+                $modal.open({
+                    templateUrl: '../generalSsbApp/ddAddAccount/ddAddAccount.html',
+                    keyboard:true,
+                    controller: "DdAddAccountController",
+                    scope: $scope
+                });
+            }
+            else {
+                // enable in-line editing(?) or go to select from existing acct page
+            }
         };
 
 
