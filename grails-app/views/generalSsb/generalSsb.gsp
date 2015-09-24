@@ -42,7 +42,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 <body class="direct-deposit">
 
 <div class="body-overlay"></div>
-<div id="content" aria-live="polite" aria-atomic="true" aria-relevant="additions" role="main">
+<div id="content" class="container-fluid" aria-live="polite" aria-atomic="true" aria-relevant="additions" role="main">
     <div ui-view></div>
 </div>
 <script  type="text/javascript">

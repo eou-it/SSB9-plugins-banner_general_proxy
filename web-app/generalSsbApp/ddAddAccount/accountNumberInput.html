@@ -1,14 +1,16 @@
 <!--*******************************************************************************
 Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
-
-<div class="col-md-12 no-padding">
-    <div class="col-lg-12 col-md-12 col-xs-12 no-padding">
-    <div class="semi-bold">
+<div class="row semi-bold">
+    <div class="col-xs-6 col-sm-4 col-md-4 pad-left-sm xs-fix">
         <p class="input-field-label">Bank Routing Number</p>
         <input id="routing-number" data-ng-model="account.bankRoutingNum" type="text" class="text-input-field semi-bold form-spacing"  placeholder="Bank Routing Number" tabindex="1"/>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-4 xs-fix"><!-- col-xs-6 -->
         <p class="input-field-label">Bank Account Number</p>
         <input id="account-number" data-ng-model="account.bankAccountNum" type="text" class="text-input-field semi-bold form-spacing"  placeholder="Bank Account Number" />
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
         <p class="input-field-label">Account Type</p>
         <div class="dropdown">
             <button class="dropdown-btn" data-toggle="dropdown" href="#" role="option" >
@@ -25,11 +27,12 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                     <a class="addAcct end-dropdown-radius form-spacing" role="option" href="">Savings</a>
                 </li>
             </ul>
-        </div> 
-    </div>
-        <div class="disclaimer-margin">
-            <input type="checkbox" class="main-nav-check" id="main-nav-check" ng-click="toggleAuthorizedChanges()"/>
-            <p class="lbl">By checking this box, I authorize changes to my direct deposit allocations.</p>
         </div>
+    </div>
+</div>
+<div class="row disclaimer-margin">
+    <div class="col-xs-12">
+        <input type="checkbox" class="main-nav-check" id="main-nav-check" ng-click="toggleAuthorizedChanges()"/>
+        <p class="lbl">By checking this box, I authorize changes to my direct deposit allocations.</p>
     </div>
 </div>

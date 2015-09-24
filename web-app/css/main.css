@@ -106,6 +106,18 @@
     width: 100%;
     color: #869FB1;
 }
+/*
+@media(min-width:768px){
+	.text-input-field {
+	    width: 18.75em;
+	}
+}
+*/
+@media(max-width:568px){
+    .xs-fix {
+        width: 100%;
+    }
+}
 
 .text-input-field::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color: #869FB1;
@@ -200,7 +212,6 @@ button.closebtn {
 }
 
 /*  Dropdown menu  */
-
 .form-spacing,
 .dropdown-menu > li > a.form-spacing {
     padding: 1em .75em;
@@ -370,7 +381,27 @@ a.add-account-link {
 
 /*  Custom modal  */
 .direct-deposit .modal.in .modal-dialog {
-    transform: translate(0px, 90px);
+    transform: translate(0em, 7em);
+}
+
+@media(min-width:768px){
+    .direct-deposit .modal-dialog {
+        width: auto;
+    }
+    
+    .pad-left-sm {
+	    padding: 0px 0px 0px 15px;
+	}
+
+	.pad-right-sm {
+	    padding: 0px 15px 0px 0px;
+	}
+}
+
+@media(min-width:1024px){
+    .direct-deposit .modal-dialog {
+        width: 768px;
+    }
 }
 
 .pad-dialog-lr {
