@@ -3,14 +3,16 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="row semi-bold">
     <div class="col-xs-6 col-sm-4 col-md-4 pad-left-sm xs-fix">
-        <p class="input-field-label">Bank Routing Number</p>
-        <input id="routing-number" data-ng-model="account.bankRoutingNum" type="text" class="text-input-field semi-bold form-spacing"  placeholder="Bank Routing Number" tabindex="1"/>
+        <p class="input-field-label ng-class: (routingNumErr ? 'field-error' : null);">Bank Routing Number</p>
+        <input type="text" id="routing-number" data-ng-model="account.bankRoutingNum" ng-blur="validateRoutingNum()"
+            class="text-input-field ng-class: (routingNumErr ? 'input-field-error' : null); semi-bold form-spacing"  placeholder="Bank Routing Number" tabindex="1"/>
+        <p class="ng-class: (routingNumErr ? 'field-error' : null);">{{routingNumMessage}}</p>
     </div>
-    <div class="col-xs-6 col-sm-4 col-md-4 xs-fix"><!-- col-xs-6 -->
+    <div class="col-xs-6 col-sm-4 col-md-4 xs-fix"><!-- col-xs-6   ng-change="clearRoutingNumErr()"  -->
         <p class="input-field-label">Bank Account Number</p>
-        <input id="account-number" data-ng-model="account.bankAccountNum" type="text" class="text-input-field semi-bold form-spacing"  placeholder="Bank Account Number" />
+        <input id="account-number" data-ng-model="account.bankAccountNum" ng-change="clearRoutingNumErr()" type="text" class="text-input-field semi-bold form-spacing"  placeholder="Bank Account Number" />
     </div>
-    <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
+    <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix clear-xs-sm">
         <p class="input-field-label">Account Type</p>
         <div class="dropdown">
             <button class="dropdown-btn" data-toggle="dropdown" href="#" role="option" >

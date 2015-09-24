@@ -37,5 +37,27 @@ class UpdateAccountController {
             }
         }
     }
+    
+    def getBankInfo() {
+        def model = [:]
+        def map = request?.JSON ?: params
+        
+        log.debug("trying to fetch bank: "+ map.bankRoutingNum)
+        
+        try {
+            render directDepositAccountService.validateRoutingNumber(map.bankRoutingNum)[0] as JSON
+
+        } catch (ApplicationException e) {
+            model.failure = true;
+            try {
+                model.message = e.returnMap({ mapToLocalize -> new ValidationTagLib().message(mapToLocalize) }).message
+                render model as JSON
+            } catch (ApplicationException ex) {
+                log.error(ex)
+                model.message = ex.message
+                render model as JSON
+            }
+        }
+    }
 
 }
