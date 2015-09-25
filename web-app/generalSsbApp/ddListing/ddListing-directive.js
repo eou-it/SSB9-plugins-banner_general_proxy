@@ -31,19 +31,19 @@ generalSsbAppDirectives.directive('accountStatus',[function () {
     };
 }]);
 
-generalSsbAppDirectives.directive('replaceAccountPanel',[function () {
+generalSsbAppDirectives.directive('listingPanelPopulated',[function () {
     return{
         restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/replaceAccountPanel.html',
+        templateUrl: '../generalSsbApp/ddListing/listingPanelPopulated.html',
         scope: {
             accounts: '='
         }
     };
 }]);
 
-generalSsbAppDirectives.directive('addAccountPanel',[function () {
+generalSsbAppDirectives.directive('listingPanelNonpopulated',[function () {
     return{
         restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/addAccountPanel.html',
+        templateUrl: '../generalSsbApp/ddListing/listingPanelNonpopulated.html',
     };
 }]);

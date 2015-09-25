@@ -12,7 +12,7 @@
     overflow-y: auto !important;
     min-height: initial !important;
     font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
-    padding: 0;
+    padding: 0 15px;
     position: static;
 }
 
@@ -108,9 +108,9 @@
 }
 /*
 @media(min-width:768px){
-	.text-input-field {
-	    width: 18.75em;
-	}
+    .text-input-field {
+        width: 18.75em;
+    }
 }
 */
 @media(max-width:568px){
@@ -339,8 +339,8 @@ input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before
     border: 1px solid #006600;
 }
 
-.replace-account-panel,
-.add-account-panel {
+.listing-panel-populated,
+.listing-panel-nonpopulated {
     height: 60px;
     padding: 20px;
     background-color: #f9f9f9;
@@ -358,25 +358,22 @@ a.add-account-link {
 }
 
 .no-entries-notification {
-    height: 80px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin: 12px;
     padding: 10px;
     background-color: #f9f9f9;
-    position: relative;
+    display: table;
 }
 
 .notification-icon {
-    margin-right: 10px;
-    position: absolute;
-    top: 25px;
+    padding-right: 15px;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .notification-text {
-    width: 290px;
-    position: absolute;
-    left: 38px;
+    display: table-cell;
 }
 
 /*  Custom modal  */
@@ -390,12 +387,12 @@ a.add-account-link {
     }
     
     .pad-left-sm {
-	    padding: 0px 0px 0px 15px;
-	}
+        padding: 0px 0px 0px 15px;
+    }
 
-	.pad-right-sm {
-	    padding: 0px 15px 0px 0px;
-	}
+    .pad-right-sm {
+        padding: 0px 15px 0px 0px;
+    }
 }
 
 @media(min-width:1024px){
@@ -406,4 +403,22 @@ a.add-account-link {
 
 .pad-dialog-lr {
     padding: 0em 1.5em;
+}
+
+/* Icons */
+
+.icon-add-new {
+    background: url('../images/add-new.svg') no-repeat;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.icon-replace {
+    background: url('../images/replace.svg') no-repeat;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    vertical-align: bottom;
 }

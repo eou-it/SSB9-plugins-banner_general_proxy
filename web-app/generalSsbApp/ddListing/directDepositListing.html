@@ -16,10 +16,10 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
              aria-expanded="{{!panelCollapsed}}" aria-hidden="{{panelCollapsed}}">
             <div ng-show="accountsLoaded">
                 <div ng-if="numAccounts">
-                    <replace-account-panel accounts="accounts"/>
+                    <listing-panel-populated accounts="accounts"/>
                 </div>
                 <div ng-if="!numAccounts">
-                    <add-account-panel/>
+                    <listing-panel-nonpopulated/>
                 </div>
             </div>
         </div>
