@@ -94,9 +94,17 @@
     font-weight: bold;
 }
 
+.no-display {
+	display: none;
+}
+
 .input-field-label {
     padding: 0.875em 0em;
     margin: 0px;
+}
+
+.field-error {
+    color: #CD3B3E;
 }
 
 .text-input-field {
@@ -120,6 +128,12 @@
     }
 }
 
+@media(max-width:768px){
+    .clear-xs-sm {
+        clear: both;
+    }
+}
+
 .text-input-field::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color: #869FB1;
     font-weight: bold;
@@ -136,6 +150,33 @@
 }
 .text-input-field:-ms-input-placeholder { /* Internet Explorer 10-11 */
    color: #869FB1;
+   font-weight: bold;
+}
+.dropdown .input-field-error,
+.input-field-error {
+    background-color: #F6E5E6;
+    border:1px solid #CD3B3E;
+    box-shadow: 3px 3px #F0D3D3 inset;
+    width: 100%;
+    color: #CD3B3E;
+}
+
+.input-field-error::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #CD3B3E;
+    font-weight: bold;
+}
+.input-field-error:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color: #CD3B3E;
+   font-weight: bold;
+   opacity:  1;
+}
+.input-field-error::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color: #CD3B3E;
+   font-weight: bold;
+   opacity:  1;
+}
+.input-field-error:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: #CD3B3E;
    font-weight: bold;
 }
 

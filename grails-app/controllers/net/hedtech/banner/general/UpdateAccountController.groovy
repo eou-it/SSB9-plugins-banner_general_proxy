@@ -26,15 +26,51 @@ class UpdateAccountController {
             render directDepositAccountService.create(map) as JSON
 
         } catch (ApplicationException e) {
-            model.failure = true;
-            try {
-                model.message = e.returnMap({ mapToLocalize -> new ValidationTagLib().message(mapToLocalize) }).message
-                render model as JSON
-            } catch (ApplicationException ex) {
-                log.error(ex)
-                model.message = ex.message
-                render model as JSON
-            }
+            render returnFailureMessage(e) as JSON
+        }
+    }
+    
+    def getBankInfo() {
+        def model = [:]
+        def map = request?.JSON ?: params
+        
+        log.debug("trying to fetch bank: "+ map.bankRoutingNum)
+        
+        try {
+            render directDepositAccountService.validateRoutingNumber(map.bankRoutingNum)[0] as JSON
+
+        } catch (ApplicationException e) {
+            render returnFailureMessage(e) as JSON
+        }
+    }
+    
+    def validateAccountNum() {
+        def model = [:]
+        def map = request?.JSON ?: params
+        
+        log.debug("validating acct num: "+ map.bankAccountNum)
+        
+        try {
+            model.failure = false
+            directDepositAccountService.validateAccountNumFormat(map.bankAccountNum)
+            render model as JSON
+
+        } catch (ApplicationException e) {
+            render returnFailureMessage(e) as JSON
+        }
+    }
+    
+    def  returnFailureMessage(ApplicationException  e) {
+        def model = [:]
+        model.failure = true
+        log.error(e)
+        try {
+            model.message = e.returnMap({ mapToLocalize -> new ValidationTagLib().message(mapToLocalize) }).message
+            return model
+        } catch (ApplicationException ex) {
+            log.error(ex)
+            model.message = e.message
+            return model
         }
     }
 
