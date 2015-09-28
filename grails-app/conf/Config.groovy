@@ -255,5 +255,18 @@ restfulApiConfig = {
             extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
         }
     }
+    resource 'resources' config {
+        serviceName = 'webAppExtensibilityResourceService'   // In some cases the service name has to be prepended with the plugin name
+        representation {
+            mediaTypes = ["application/json"]
+            marshallers {
+                marshaller {
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
+                    priority = 100
+                }
+            }
+            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+        }
+    }
     // End Resources for web_app_extensibility plugin
 }
