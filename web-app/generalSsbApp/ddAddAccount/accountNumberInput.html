@@ -3,17 +3,21 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="row semi-bold">
     <div class="col-xs-6 col-sm-4 col-md-4 pad-left-sm xs-fix">
-        <p class="input-field-label">Bank Routing Number</p>
-        <input id="routing-number" data-ng-model="account.bankRoutingNum" type="text" class="text-input-field semi-bold form-spacing"  placeholder="Bank Routing Number" tabindex="1"/>
+        <p class="input-field-label ng-class: (routingNumErr ? 'field-error' : null);">Bank Routing Number</p>
+        <input type="text" id="routing-number" data-ng-model="account.bankRoutingNum" ng-blur="validateRoutingNum()"
+            class="text-input-field ng-class: (routingNumErr ? 'input-field-error' : null); semi-bold form-spacing"  placeholder="Bank Routing Number" tabindex="1"/>
+        <p class="ng-class: (routingNumErr ? 'field-error' : null);">{{routingNumMessage}}</p>
     </div>
-    <div class="col-xs-6 col-sm-4 col-md-4 xs-fix"><!-- col-xs-6 -->
-        <p class="input-field-label">Bank Account Number</p>
-        <input id="account-number" data-ng-model="account.bankAccountNum" type="text" class="text-input-field semi-bold form-spacing"  placeholder="Bank Account Number" />
+    <div class="col-xs-6 col-sm-4 col-md-4 xs-fix"><!-- col-xs-6   ng-change="clearRoutingNumErr()"  -->
+        <p class="input-field-label ng-class: (accountNumErr ? 'field-error' : null);">Bank Account Number</p>
+        <input type="text" id="account-number" data-ng-model="account.bankAccountNum" ng-blur="validateAccountNum()"
+            class="text-input-field ng-class: (accountNumErr ? 'input-field-error' : null); semi-bold form-spacing"  placeholder="Bank Account Number" />
+        <p class="ng-class: (accountNumErr ? 'field-error' : null);">{{accountNumMessage}}</p>
     </div>
-    <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
-        <p class="input-field-label">Account Type</p>
+    <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix clear-xs-sm">
+        <p class="input-field-label ng-class: (accountTypeErr ? 'field-error' : null);">Account Type</p>
         <div class="dropdown">
-            <button class="dropdown-btn" data-toggle="dropdown" href="#" role="option" >
+            <button class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#" role="option" >
                 <span class="float-l semi-bold form-spacing">
                     <choose-account acct="account"/>
                 </span>
@@ -28,6 +32,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                 </li>
             </ul>
         </div>
+        <p class="ng-class: (accountTypeErr ? 'field-error' : 'no-display');">{{'directDeposit.invalid.missing.account.type'|i18n}}</p>
     </div>
 </div>
 <div class="row disclaimer-margin">
