@@ -93,6 +93,10 @@
     font-weight: bold;
 }
 
+.no-display {
+	display: none;
+}
+
 .input-field-label {
     padding: 0.875em 0em;
     margin: 0px;
@@ -147,7 +151,7 @@
    color: #869FB1;
    font-weight: bold;
 }
-
+.dropdown .input-field-error,
 .input-field-error {
     background-color: #F6E5E6;
     border:1px solid #CD3B3E;

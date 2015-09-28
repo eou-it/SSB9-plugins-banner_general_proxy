@@ -16,4 +16,11 @@ generalSsbApp.service('ddAddAccountService', ['$resource', function ($resource) 
     this.getBankInfo = function (routingNum) {
         return bankInfo.query({bankRoutingNum: routingNum});
     };
+    
+    var validAccount = $resource('../ssb/:controller/:action',
+            {controller: 'UpdateAccount', action: 'validateAccountNum'}, {query: {method:'GET', isArray:false}});
+    
+    this.validateAccountNum = function (accountNum) {
+        return validAccount.query({bankAccountNum: accountNum});
+    };
 }]);
