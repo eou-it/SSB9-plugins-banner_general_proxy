@@ -31,16 +31,9 @@ class AccountListingController  {
             }
         }
 
-        def x
-
         JSON.use("deep") {
-            x = model as JSON
+            render model as JSON
         }
-
-        def str = x.toString(true)
-
-        render x
-//        render model as JSON
     }
 
 }
