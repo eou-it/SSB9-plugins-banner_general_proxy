@@ -20,11 +20,12 @@
     padding-left: 20px;
 }
 
-.entry-heading {
+.account-heading {
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
-.entry-row {
+.account-field {
     margin-bottom: 10px;
 }
 
@@ -357,12 +358,12 @@ a.add-account-link {
     text-decoration: none;
 }
 
-.no-entries-notification {
+.dd-notification-box {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin: 12px;
     padding: 10px;
-    background-color: #f9f9f9;
+    background-color: #fffeea;
     display: table;
 }
 
@@ -421,4 +422,30 @@ a.add-account-link {
     height: 18px;
     display: inline-block;
     vertical-align: bottom;
+}
+
+
+/*** Media Query Section ***/
+
+@media(max-width:1024px){
+    body {
+        padding: 0;
+    }
+}
+
+@media(min-width:768px){
+    .account-heading {
+        margin-bottom: 15px;
+    }
+
+    .account-field {
+        float: left;
+        margin-right: 90px;
+        margin-bottom: 15px;
+    }
+
+    .dd-notification-box {
+        margin-left:  auto;
+        margin-right: auto;
+    }
 }

@@ -4,6 +4,11 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 
 <div class="row tile">
     <div class="col-md-12 no-padding panel-group panel-accordion" aria-multiselectable="true" role="tablist">
+        <div ng-show="accountsLoaded">
+            <div ng-if="hasAccounts()">
+                <notification-box notification-text="{{'directDeposit.notification.only.one.accounts.payable.allocation.can.exist'|i18n}}"/>
+            </div>
+        </div>
         <h2 id="account-listing-heading" aria-expanded="{{!panelCollapsed}}" aria-controls="account-listing"
             class="panel panel-heading panel-default panel-title">
             <a href="" data-toggle="collapse" data-target="#account-listing"

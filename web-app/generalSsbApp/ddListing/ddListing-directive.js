@@ -47,3 +47,13 @@ generalSsbAppDirectives.directive('listingPanelNonpopulated',[function () {
         templateUrl: '../generalSsbApp/ddListing/listingPanelNonpopulated.html',
     };
 }]);
+
+generalSsbAppDirectives.directive('notificationBox',[function () {
+    return{
+        restrict: 'E',
+        templateUrl: '../generalSsbApp/ddListing/ddNotificationBox.html',
+        scope: {
+            notificationText: '@'
+        }
+    };
+}]);
