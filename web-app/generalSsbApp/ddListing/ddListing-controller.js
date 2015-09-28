@@ -3,15 +3,19 @@
  *******************************************************************************/
 generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', 'directDepositListingService',
     function ($scope, $modal, directDepositListingService){
-        $scope.accounts = null;
+        $scope.accounts = [];
         $scope.accountsLoaded = false;
-        $scope.numAccounts = 0;
         $scope.panelCollapsed = false;
 
         directDepositListingService.getDirectDepositListing().$promise.then(
             function (response) {
-                $scope.accounts = response;
-                $scope.numAccounts = $scope.accounts.length;
+                // Create accounts array, merging account info with its bank name and routing number
+                _.each(response, function(accountInfo) {
+                    var acct = accountInfo[0];
+                    acct.bankName = accountInfo[1].bankName;
+                    $scope.accounts.push(acct);
+                });
+
                 $scope.accountsLoaded = true;
             });
 
