@@ -1,3 +1,4 @@
+/* General Styles */
 .break-word {
     word-wrap: break-word;
 }
@@ -14,19 +15,6 @@
     font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
     padding: 0 15px;
     position: static;
-}
-
-.entry {
-    padding-left: 20px;
-}
-
-.account-heading {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.account-field {
-    margin-bottom: 10px;
 }
 
 .panel.panel-accordion {
@@ -381,6 +369,20 @@ input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before
     border: 1px solid #006600;
 }
 
+/* Account Listing Page Styles */
+.entry {
+    padding-left: 20px;
+}
+
+.account-heading {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.account-field {
+    margin-bottom: 10px;
+}
+
 .listing-panel-populated,
 .listing-panel-nonpopulated {
     height: 60px;
@@ -397,6 +399,11 @@ a.add-account-link {
     right: 20px;
     color: #333;
     text-decoration: none;
+}
+
+.notification-box-wrapper {
+    width: 100%;
+    padding: 0 15px;
 }
 
 .dd-notification-box {
@@ -416,6 +423,24 @@ a.add-account-link {
 
 .notification-text {
     display: table-cell;
+}
+
+.desktop-account-list-table {
+    display: table;
+    /*border-spacing: 90px 0;*/
+}
+
+.desktop-account-list-row {
+    display: table-row;
+}
+
+.desktop-account-list-cell {
+    display: table-cell;
+    padding-right: 90px;
+}
+
+.account-list-heading {
+    font-weight: bold;
 }
 
 /*  Custom modal  */
@@ -465,8 +490,60 @@ a.add-account-link {
     vertical-align: bottom;
 }
 
+/*Table and grid section styles*/
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #beccd7;
+    border-bottom: 1px solid #beccd7;
+    border-top: none;
+    background: #ffffff;
+}
 
-/*** Media Query Section ***/
+table th, .table>thead>tr>th {
+    background: #ffffff url('../images/table-separator.png') center right no-repeat;
+    border: none;
+    padding: 18px 16px 18px 16px;
+    text-align: left;
+    border-bottom: 1px solid #c0ced0;
+    vertical-align: middle;
+}
+
+table th:last-child, .table>thead>tr>th:last-child, .dashboard th:nth-of-type(8), .dashboard th:nth-of-type(9) {
+    background: none;
+    white-space: nowrap;
+}
+.dashboard td:nth-of-type(8), .dashboard td:nth-of-type(7)  {
+    white-space: nowrap;
+
+}
+
+table tr:hover {
+    background: #F3FCFF !important;
+}
+
+table tr:hover th:last-child, .dashboard tr:hover th:nth-of-type(8) {
+    background: #ffffff;
+}
+
+table th span, .table>thead>tr>th span, table tr td {
+    color: #4F585F;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+table>thead>tr>th:first-child, table>tbody>tr>td:first-child {
+    padding-left: 20px;
+}
+
+table tr td {
+    font-weight: normal;
+    border-bottom: 1px solid #beccd7;
+    padding: 15px 16px 15px 16px;
+}
+
+
+/* Media Query Section */
 
 @media(max-width:1024px){
     body {

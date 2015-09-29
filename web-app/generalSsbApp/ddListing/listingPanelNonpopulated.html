@@ -1,4 +1,4 @@
 <div class="listing-panel-nonpopulated">
     <a class="add-account-link" ng-enter="showAddAccount()" ng-click="showAddAccount()"><span class="icon-add-new"></span> <span>{{'directDeposit.account.label.add.new'|i18n}}</span></a>
 </div>
-<notification-box notification-text="{{'directDeposit.notification.no.accounts.payable.allocation'|i18n}}"/>
+<notification-box notification-text="{{getNoApAllocationsNotificationText()|i18n}}"/>

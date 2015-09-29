@@ -11,6 +11,16 @@ generalSsbAppDirectives.directive('accountInfo',[function () {
     };
 }]);
 
+generalSsbAppDirectives.directive('accountInfoDesktop',[function () {
+    return{
+        restrict: 'A',
+        templateUrl: '../generalSsbApp/ddListing/accountInformationDesktop.html',
+        scope: {
+            acct: '='
+        }
+    };
+}]);
+
 generalSsbAppDirectives.directive('accountType',[function () {
     return{
         restrict: 'E',
@@ -34,9 +44,13 @@ generalSsbAppDirectives.directive('accountStatus',[function () {
 generalSsbAppDirectives.directive('listingPanelPopulated',[function () {
     return{
         restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/listingPanelPopulated.html',
+        templateUrl: function() {
+            var type = isDesktop() ? 'Desktop' : '';
+            return '../generalSsbApp/ddListing/listingPanelPopulated' + type + '.html'
+        },
         scope: {
-            accounts: '='
+            accounts: '=',
+            apListingColumns: '='
         }
     };
 }]);

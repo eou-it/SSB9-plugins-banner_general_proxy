@@ -4,9 +4,9 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 
 <div class="row tile">
     <div class="col-md-12 no-padding panel-group panel-accordion" aria-multiselectable="true" role="tablist">
-        <div ng-show="accountsLoaded">
-            <div ng-if="hasAccounts()">
-                <notification-box notification-text="{{'directDeposit.notification.only.one.accounts.payable.allocation.can.exist'|i18n}}"/>
+        <div class="notification-box-wrapper" ng-show="accountsLoaded">
+            <div ng-if="isNotDesktopAndHasAccounts()">
+                <notification-box notification-text="{{'directDeposit.notification.only.one.accounts.payable.allocation.can.exist.tap'|i18n}}"/>
             </div>
         </div>
         <h2 id="account-listing-heading" aria-expanded="{{!panelCollapsed}}" aria-controls="account-listing"
@@ -21,11 +21,16 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
              aria-expanded="{{!panelCollapsed}}" aria-hidden="{{panelCollapsed}}">
             <div ng-show="accountsLoaded">
                 <div ng-if="hasAccounts()">
-                    <listing-panel-populated accounts="accounts"/>
+                    <listing-panel-populated accounts="accounts" ap-listing-columns="apListingColumns"/>
                 </div>
                 <div ng-if="!hasAccounts()">
                     <listing-panel-nonpopulated/>
                 </div>
+            </div>
+        </div>
+        <div ng-show="accountsLoaded">
+            <div ng-if="isDesktopWithAccounts()">
+                <notification-box notification-text="{{'directDeposit.notification.only.one.accounts.payable.allocation.can.exist.click'|i18n}}"/>
             </div>
         </div>
     </div>
