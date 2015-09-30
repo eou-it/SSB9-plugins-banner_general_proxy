@@ -83,7 +83,7 @@
 }
 
 .no-display {
-	display: none;
+    display: none;
 }
 
 .input-field-label {
@@ -95,6 +95,10 @@
     color: #CD3B3E;
 }
 
+.error-font-size {
+    font-weight: normal;
+}
+
 .text-input-field {
     border-radius: 4px;
     background-color: #fff;
@@ -103,20 +107,14 @@
     width: 100%;
     color: #869FB1;
 }
-/*
-@media(min-width:768px){
-    .text-input-field {
-        width: 18.75em;
-    }
-}
-*/
+
 @media(max-width:568px){
     .xs-fix {
         width: 100%;
     }
 }
 
-@media(max-width:768px){
+@media(max-width:767px){
     .clear-xs-sm {
         clear: both;
     }
@@ -168,6 +166,14 @@
    font-weight: bold;
 }
 
+.input-fail {
+    position: absolute;
+    float: right;
+    right: 1.75em;
+    top: 4.285em;
+    background: #F6E5E6;
+}
+
 .text-input-field:focus {
     border-style: solid;
     border-width: 1px;
@@ -178,7 +184,7 @@
 
 .dialog-hdr1 {
     margin: 0px;
-    padding: 0em 0.875em 0.625em;
+   padding: 1em 1em 0.5em;
 }
 
 .dialog-footer-margin {
@@ -198,12 +204,10 @@
 button.closebtn {
     color: #4f585f;
     opacity: 1;
-    font-size: 1.375em;
+    font-size: 14px;
     font-family: open-sans-semi-bold;
     background: url('../images/close.svg') 50% 50% no-repeat;
-    width: 0px;
-    height: 0px;
-    padding: 1.5em;
+    padding: 2.85em;
     display: block;
     border: none;
 }
@@ -220,6 +224,7 @@ button.closebtn {
     font-size: 18px;
     overflow: auto;
     border-style: none;
+    border-radius: 6px;
     background: white;
     color: #206E9F;
     line-height: normal;
@@ -238,7 +243,8 @@ button.closebtn {
     float: left;
     width: 100%;
     border-right: 1px solid rgb(0, 0, 0);
-    margin: 1em 0em;
+    padding: 0.25em 0em;
+    margin: 0.75em 0em;
 }
 
 /*  Dropdown menu  */
@@ -269,8 +275,14 @@ button.closebtn {
     color: #4F585F;
 }
 
-.open > .dropdown-btn .icon-caret-down,
-.dropdown-btn:focus .icon-caret-down {
+.float-r.form-spacing.down-caret:after {
+    font-family: 'Glyphicons Halflings';
+    content: "\e114";
+    float: right;
+}
+
+.open > .dropdown-btn .caret-color,
+.dropdown-btn:focus .caret-color {
     color: #206E9F;
 }
 
@@ -299,6 +311,7 @@ button.closebtn {
     border-radius: 0px;
     border-style: solid none;
     border-color: #FFFFFF;
+    color: #4F585F;
     font-weight: bold;
 }
 
@@ -452,14 +465,6 @@ a.add-account-link {
     .direct-deposit .modal-dialog {
         width: auto;
     }
-    
-    .pad-left-sm {
-        padding: 0px 0px 0px 15px;
-    }
-
-    .pad-right-sm {
-        padding: 0px 15px 0px 0px;
-    }
 }
 
 @media(min-width:1024px){
@@ -469,7 +474,7 @@ a.add-account-link {
 }
 
 .pad-dialog-lr {
-    padding: 0em 1.5em;
+    padding: 0em 2em;
 }
 
 /* Icons */
@@ -565,5 +570,17 @@ table tr td {
     .dd-notification-box {
         margin-left:  auto;
         margin-right: auto;
+    }
+    
+    .dialog-hdr1 {
+        font-size: 24px;
+        padding: 1em 1em 0.75em;
+    }
+    
+    button.closebtn {
+        padding: 2.35em;
+    }
+    .pad-dialog-lr {
+        padding: 0em 1.7em;
     }
 }
