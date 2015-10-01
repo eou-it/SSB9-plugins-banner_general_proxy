@@ -213,14 +213,18 @@ button.closebtn {
 }
 
 .modal-footer.addAcct {
+    display: table;
     padding: 1px 0px 0px;
     border-top: 1px solid black;
+    width: 100%;
 }
 
 .dialog-btn {
     box-sizing: border-box;
+    display: table-cell;
     width: 50%;
     text-align: center;
+    vertical-align: middle;
     font-size: 18px;
     overflow: auto;
     border-style: none;
@@ -228,11 +232,11 @@ button.closebtn {
     background: white;
     color: #206E9F;
     line-height: normal;
+    padding: 1em;
 }
 
 .save-btn {
-    float: right;
-    padding: 1em;
+    padding: 0em;
 }
 
 .save-btn[disabled] {
@@ -242,8 +246,8 @@ button.closebtn {
 .mid-dash {
     float: left;
     width: 100%;
-    border-right: 1px solid rgb(0, 0, 0);
-    padding: 0.25em 0em;
+    border-left: 1px solid rgb(0, 0, 0);
+    padding: 0.25em 1em;
     margin: 0.75em 0em;
 }
 
