@@ -262,6 +262,7 @@ button.closebtn {
     color: #fff;
     background-color: #428bca;
     border-color: #357ebd;
+    padding: 8px 25px;
 }
 
 .desktop-save .save-btn[disabled] {
