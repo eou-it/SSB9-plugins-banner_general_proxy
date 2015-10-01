@@ -19,7 +19,7 @@ class UpdateAccountController {
         map.status = 'P'
         map.documentType = 'D'
         map.intlAchTransactionIndicator = 'N'
-        
+
         log.debug("trying to create acct: "+ map.bankAccountNum)
         
         try {
@@ -29,7 +29,18 @@ class UpdateAccountController {
             render returnFailureMessage(e) as JSON
         }
     }
-    
+
+    def updateAccount() {
+        def map = request?.JSON ?: params
+
+        try {
+            render directDepositAccountService.update(map) as JSON
+
+        } catch (ApplicationException e) {
+            render returnFailureMessage(e) as JSON
+        }
+    }
+
     def getBankInfo() {
         def model = [:]
         def map = request?.JSON ?: params

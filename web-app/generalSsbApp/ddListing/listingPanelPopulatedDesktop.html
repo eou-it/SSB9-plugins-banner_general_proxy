@@ -1,22 +1,28 @@
 <div class="listing-panel-populated">
     <a class="replace-account-link" href=""><span class="icon-replace"></span> <span>{{'directDeposit.account.label.replace'|i18n}}</span></a>
 </div>
-<div panel-body">
-    <table role="grid" aria-labelledby="ap_account_list_label">
-    <caption id ="ap_account_list_label" class="offscreen" aria-hidden="false">{{'directDeposit.apListTableDesc'|i18n}}</caption>
-        <thead>
-            <tr>
-                <th role="columnheader" ng-repeat="heading in apListingColumns">
-                    <div class="headervalues">
-                        <span class="column-title">
-                            {{heading.title}}
-                        </span>
-                    </div>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="acct in accounts" account-info-desktop acct="acct"></tr>
-        </tbody>
-    </table>
+<table role="grid" aria-labelledby="ap_account_list_label">
+<caption id ="ap_account_list_label" class="offscreen" aria-hidden="false">{{'directDeposit.apListTableDesc'|i18n}}</caption>
+    <thead>
+        <tr>
+            <th role="columnheader" ng-repeat="heading in apListingColumns">
+                <div class="headervalues">
+                    <span class="column-title">
+                        {{heading.title}}
+                    </span>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr account-info-desktop account="account" edit-account-service="editAccountService"></tr>
+    </tbody>
+</table>
+<div class="desktop-disclaimer">
+    <input type="checkbox" class="main-nav-check" id="main-nav-check" ng-checked="editAccountService.authorizedChanges" ng-click="editAccountService.toggleAuthorizedChanges()"/>
+    <p class="lbl">{{'directDeposit.disclaimer.text'|i18n}}</p>
+</div>
+<div class="clearfix"></div>
+<div class="desktop-save">
+    <button class="btn save-btn" ng-disabled="!editAccountService.authorizedChanges" ng-click="editAccountService.updateApAccount(account)">{{'directDeposit.save.changes.button.label'|i18n}}</button>
 </div>

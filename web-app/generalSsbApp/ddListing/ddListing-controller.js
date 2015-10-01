@@ -1,10 +1,30 @@
 /*******************************************************************************
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '$filter', 'directDepositListingService',
-    function ($scope, $modal, $filter, directDepositListingService){
-        $scope.accounts = [];
-        $scope.accountsLoaded = false;
+generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '$filter',
+    'directDepositListingService', 'directDepositEditAccountService',
+    function ($scope, $modal, $filter, directDepositListingService, directDepositEditAccountService){
+        /**
+         * Select the one AP account that will be displayed to user, according to business rules.
+         */
+        var getApAccountFromResponse = function(response) {
+            var accountInfo = null,
+                account = null;
+
+            if (response.length) {
+                // TODO: until defined otherwise, return first account
+                accountInfo = response[0];
+                account = accountInfo[0];
+                account.bankName = accountInfo[1].bankName;
+            }
+
+            return account;
+        };
+
+        $scope.editAccountService = directDepositEditAccountService;
+
+        $scope.account = null;
+        $scope.accountLoaded = false;
         $scope.panelCollapsed = false;
 
         $scope.apListingColumns = [
@@ -17,14 +37,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
 
         directDepositListingService.getDirectDepositListing().$promise.then(
             function (response) {
-                // Create accounts array, merging account info with its bank name and routing number
-                _.each(response, function(accountInfo) {
-                    var acct = accountInfo[0];
-                    acct.bankName = accountInfo[1].bankName;
-                    $scope.accounts.push(acct);
-                });
-
-                $scope.accountsLoaded = true;
+                $scope.account = getApAccountFromResponse(response);
+                $scope.accountLoaded = true;
             });
 
         //display add account pop up
@@ -43,28 +57,19 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
             }
         };
 
-        $scope.hasAccounts = function () {
-            var accounts = $scope.accounts;
-            return (accounts && accounts.length > 0);
+        $scope.hasAccount = function () {
+            return !!$scope.account;
         };
 
         $scope.isDesktop = function () {
             return isDesktop();
         };
 
-        $scope.isNotDesktopAndHasAccounts = function () {
-            return !$scope.isDesktop() && $scope.hasAccounts();
-        };
-
-        $scope.isDesktopWithAccounts = function () {
-            return $scope.isDesktop() && $scope.hasAccounts();
-        };
-
         $scope.getNoApAllocationsNotificationText = function () {
             return ($scope.isDesktop()) ?
                 'directDeposit.notification.no.accounts.payable.allocation.click' :
                 'directDeposit.notification.no.accounts.payable.allocation.tap';
-        }
+        };
 
     }
 ]);

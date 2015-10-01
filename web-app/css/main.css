@@ -64,6 +64,21 @@
     background-color: #ffffff;
 }
 
+.desktop-disclaimer {
+    float: right;
+    margin: 40px 15px 0 0;
+}
+
+.desktop-save {
+    float: right;
+    margin: 15px 15px 0 0;
+}
+
+.direct-deposit #outerFooter {
+    z-index: 13;
+}
+
+
 /***************************/
 /* Add Account Page Styles */
 /***************************/
@@ -234,6 +249,17 @@ button.closebtn {
     color: #869FB1;
 }
 
+.desktop-save .save-btn {
+    color: #fff;
+    background-color: #428bca;
+    border-color: #357ebd;
+}
+
+.desktop-save .save-btn[disabled] {
+    color: #C6DFF1;
+    opacity: 0.65;
+}
+
 .mid-dash {
     float: left;
     width: 100%;
@@ -272,6 +298,11 @@ button.closebtn {
 .open > .dropdown-btn .icon-caret-down,
 .dropdown-btn:focus .icon-caret-down {
     color: #206E9F;
+}
+
+.desktop .dropdown-btn {
+    color: #4F585F;
+    width: 222px;
 }
 
 .dropdown-menu.addAcct {
@@ -314,6 +345,10 @@ button.closebtn {
     border-bottom-left-radius: 6px;
     border-top-right-radius: 0px;
     border-top-left-radius: 0px;
+}
+
+.desktop .dropdown-menu > li > a.addAcct {
+    font-weight: normal;
 }
 
 /*  Check box  */
@@ -473,7 +508,6 @@ a.add-account-link {
 }
 
 /* Icons */
-
 .icon-add-new {
     background: url('../images/add-new.svg') no-repeat;
     width: 18px;

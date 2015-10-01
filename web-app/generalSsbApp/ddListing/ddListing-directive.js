@@ -6,7 +6,7 @@ generalSsbAppDirectives.directive('accountInfo',[function () {
         restrict: 'E',
         templateUrl: '../generalSsbApp/ddListing/accountInformation.html',
         scope: {
-            acct: '='
+            account: '='
         }
     };
 }]);
@@ -16,7 +16,8 @@ generalSsbAppDirectives.directive('accountInfoDesktop',[function () {
         restrict: 'A',
         templateUrl: '../generalSsbApp/ddListing/accountInformationDesktop.html',
         scope: {
-            acct: '='
+            account: '=',
+            editAccountService: '='
         }
     };
 }]);
@@ -24,9 +25,9 @@ generalSsbAppDirectives.directive('accountInfoDesktop',[function () {
 generalSsbAppDirectives.directive('accountType',[function () {
     return{
         restrict: 'E',
-        template: "{{(acct.accountType === 'C' ? 'directDeposit.account.type.checking' : 'directDeposit.account.type.savings')|i18n}}",
+        template: "{{(account.accountType === 'C' ? 'directDeposit.account.type.checking' : 'directDeposit.account.type.savings')|i18n}}",
         scope: {
-            acct: '='
+            account: '='
         }
     };
 }]);
@@ -34,9 +35,9 @@ generalSsbAppDirectives.directive('accountType',[function () {
 generalSsbAppDirectives.directive('accountStatus',[function () {
     return{
         restrict: 'E',
-        template: "{{(acct.status === 'P' ? 'directDeposit.account.status.prenote' : 'directDeposit.account.status.active')|i18n}}",
+        template: "{{(account.status === 'P' ? 'directDeposit.account.status.prenote' : 'directDeposit.account.status.active')|i18n}}",
         scope: {
-            acct: '='
+            account: '='
         }
     };
 }]);
@@ -49,8 +50,9 @@ generalSsbAppDirectives.directive('listingPanelPopulated',[function () {
             return '../generalSsbApp/ddListing/listingPanelPopulated' + type + '.html'
         },
         scope: {
-            accounts: '=',
-            apListingColumns: '='
+            account: '=',
+            apListingColumns: '=',
+            editAccountService: '='
         }
     };
 }]);

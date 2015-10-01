@@ -30,18 +30,19 @@ modules = {
        resource url:[file: 'generalSsbApp/common/services/breadcrumb-service.js']
        resource url:[file: 'generalSsbApp/ddAddAccount/ddAddAccount-service.js']
        resource url:[file: 'generalSsbApp/common/services/notificationcenter-service.js']
-       
+       resource url:[file: 'generalSsbApp/ddEditAccount/ddEditAccount-service.js']
+
 
        // Controllers
        resource url:[file: 'generalSsbApp/ddListing/ddListing-controller.js']
        resource url:[file: 'generalSsbApp/ddAddAccount/ddAddAccount-controller.js']
-       
+
        // Filters
        resource url:[file: 'generalSsbApp/common/filters/i18n-filter.js']
 
        // Directives
        resource url:[file: 'generalSsbApp/ddListing/ddListing-directive.js']
-       resource url:[file: 'generalSsbApp/ddAddAccount/ddAddAccount-directive.js']
+       resource url:[file: 'generalSsbApp/ddEditAccount/ddEditAccount-directive.js']
 
        // CSS
        resource url:[file: 'css/main.css'],   attrs: [media: 'screen, projection']
