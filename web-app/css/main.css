@@ -464,6 +464,7 @@ a.add-account-link {
     right: 20px;
     color: #333;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .notification-box-wrapper {
