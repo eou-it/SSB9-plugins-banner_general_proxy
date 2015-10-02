@@ -101,6 +101,17 @@
     display: none;
 }
 
+.visuallyhidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+}
+
 .input-field-label {
     padding: 0.875em 0em;
     margin: 0px;
@@ -198,8 +209,9 @@
 }
 
 .dialog-hdr1 {
+    font-size: 30px;
     margin: 0px;
-   padding: 1em 1em 0.5em;
+    padding: 1em 1em 0.5em;
 }
 
 .dialog-footer-margin {

@@ -3,47 +3,51 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="row semi-bold">
     <div class="col-xs-6 col-sm-4 col-md-4 pad-left-sm xs-fix">
-        <p class="input-field-label ng-class: (routingNumErr ? 'field-error' : null);">{{'directDeposit.account.label.bank.routing.num'|i18n}}</p>
-        <input type="text" id="routing-number" data-ng-model="account.bankRoutingNum" ng-blur="validateRoutingNum()"
-            class="text-input-field ng-class: (routingNumErr ? 'input-field-error' : null); semi-bold form-spacing"  placeholder="{{'directDeposit.account.label.bank.routing.num'|i18n}}" tabindex="1"/>
+        <label class="input-field-label ng-class: (routingNumErr ? 'field-error' : null);" for="routing-number">{{'directDeposit.account.label.bank.routing.num'|i18n}}</label>
+        <input data-ng-model="account.bankRoutingNum" ng-blur="validateRoutingNum()" 
+             class="text-input-field ng-class: (routingNumErr ? 'input-field-error' : null); semi-bold form-spacing" 
+             id="routing-number" type="text" placeholder="{{'directDeposit.account.label.bank.routing.num'|i18n}}" />
         <span ng-if="routingNumErr" class="icon input-fail">
             <span class="icon-error"></span>
         </span>
         <p class="input-field-label ng-class: (routingNumErr ? 'field-error error-font-size' : 'no-display');">{{routingNumMessage}}</p>
     </div>
-    <div class="col-xs-6 col-sm-4 col-md-4 .pad-center-sm xs-fix"><!-- col-xs-6   ng-change="clearRoutingNumErr()"  -->
-        <p class="input-field-label ng-class: (accountNumErr ? 'field-error' : null);">{{'directDeposit.account.label.account.num'|i18n}}</p>
-        <input type="text" id="account-number" data-ng-model="account.bankAccountNum" ng-blur="validateAccountNum()"
-            class="text-input-field ng-class: (accountNumErr ? 'input-field-error' : null); semi-bold form-spacing"  placeholder="{{'directDeposit.account.label.account.num'|i18n}}"/>
+    <div class="col-xs-6 col-sm-4 col-md-4 .pad-center-sm xs-fix">
+        <label class="input-field-label ng-class: (accountNumErr ? 'field-error' : null);" for="account-number">{{'directDeposit.account.label.account.num'|i18n}}</label>
+        <input data-ng-model="account.bankAccountNum" ng-blur="validateAccountNum()"
+            class="text-input-field ng-class: (accountNumErr ? 'input-field-error' : null); semi-bold form-spacing"
+            id="account-number" type="text" placeholder="{{'directDeposit.account.label.account.num'|i18n}}"/>
         <span ng-if="accountNumErr" class="icon input-fail">
             <span class="icon-error"></span>
         </span>
         <p class="input-field-label ng-class: (accountNumErr ? 'field-error error-font-size' : 'no-display');">{{accountNumMessage}}</p>
     </div>
     <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix clear-xs-sm">
-        <p class="input-field-label ng-class: (accountTypeErr ? 'field-error' : null);">{{'directDeposit.account.label.accountType'|i18n}}</p>
-        <div class="dropdown">
-            <button class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#" role="option" >
+        <label class="input-field-label ng-class: (accountTypeErr ? 'field-error' : null);" >{{'directDeposit.account.label.accountType'|i18n}}</label>
+        <label class="visuallyhidden" id="select-acct-type">Select an Account Type</label>
+        <div class="dropdown" role="listbox">
+            <button class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#" aria-labelledby="select-acct-type">
                 <span class="float-l semi-bold form-spacing">
-                    <choose-account acct="account"/>
+                    <choose-account acct="account" id="account-type"/>
                 </span>
                 <span class="float-r form-spacing down-caret caret-color"></span>
             </button>
-            <ul class="dropdown-menu addAcct" role="menu" aria-labelledby="accountTypeSelect">
-                <li ng-click="setAccountType('C')">
-                    <a class="addAcct form-spacing" role="option" href="">{{'directDeposit.account.type.checking'|i18n}}</a>
+            <ul class="dropdown-menu addAcct">
+                <li ng-click="setAccountType('C')" role="option">
+                    <a class="addAcct form-spacing" href="">{{'directDeposit.account.type.checking'|i18n}}</a>
                 </li>
-                <li ng-click="setAccountType('S')">
-                    <a class="addAcct end-dropdown-radius form-spacing" role="option" href="">{{'directDeposit.account.type.savings'|i18n}}</a>
+                <li ng-click="setAccountType('S')" role="option">
+                    <a class="addAcct end-dropdown-radius form-spacing" href="">{{'directDeposit.account.type.savings'|i18n}}</a>
                 </li>
             </ul>
         </div>
-        <p class="input-field-label ng-class: (accountTypeErr ? 'field-error error-font-size' : 'no-display');">{{'directDeposit.invalid.missing.account.type'|i18n}}</p>
+        <p ng-show="accountTypeErr" class="input-field-label field-error error-font-size">{{'directDeposit.invalid.missing.account.type'|i18n}}</p>
     </div>
 </div>
 <div class="row disclaimer-margin">
     <div class="col-xs-12">
-        <input type="checkbox" class="main-nav-check" id="main-nav-check" ng-click="toggleAuthorizedChanges()"/>
-        <p class="lbl">{{'directDeposit.disclaimer.text'|i18n}}</p>
+        <label class="visuallyhidden" for="disclaimer-checkbox">Disclaimer Checkbox</label>
+        <input ng-click="toggleAuthorizedChanges()" ng-enter="toggleAuthorizedChanges()" class="main-nav-check" id="disclaimer-checkbox" type="checkbox" aria-describedby="disclaimer"/>
+        <p class="lbl" id="disclaimer">{{'directDeposit.disclaimer.text'|i18n}}</p>
     </div>
 </div>

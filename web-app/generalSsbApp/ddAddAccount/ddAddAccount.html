@@ -2,10 +2,10 @@
 Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 
-<div >
+<div aria-labelledby="add-acct-title">
     <!-- Dialog starts here -->
     <button class="close closebtn" ng-click="cancelModal()" title="close"></button>
-    <h2 class="dialog-hdr1">{{'directDeposit.label.add.ApDeposit'|i18n}}</h2>
+    <h1 class="dialog-hdr1" id="add-acct-title">{{'directDeposit.label.add.ApDeposit'|i18n}}</h1>
     <div class="pad-dialog-lr">
         <ng-include
             src="'../generalSsbApp/ddAddAccount/accountNumberInput.html'">
@@ -16,7 +16,6 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         <button class="dialog-btn save-btn" ng-disabled="!authorizedChanges" ng-click="saveAccount()">
             <span class="mid-dash">{{'directDeposit.button.save.new'|i18n}}</span>
         </button>
-        <!-- div -->
     </div>
     <!-- Dialog ends here -->
 </div>
