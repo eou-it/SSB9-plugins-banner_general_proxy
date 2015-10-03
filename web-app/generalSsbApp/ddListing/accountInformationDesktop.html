@@ -9,11 +9,11 @@
                 </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down"></span></span>
         </button>
-        <ul class="dropdown-menu addAcct" role="menu" aria-labelledby="accountTypeSelect">
-            <li ng-click="editAccountService.setAccountType(account, 'C')">
+        <ul class="dropdown-menu addAcct" role="menu" aria-label="Edit Account Type">
+            <li role="menuitem" ng-click="editAccountService.setAccountType(account, 'C')">
                 <a class="addAcct form-spacing" role="option" href="">{{'directDeposit.account.type.checking'|i18n}}</a>
             </li>
-            <li ng-click="editAccountService.setAccountType(account, 'S')">
+            <li role="menuitem" ng-click="editAccountService.setAccountType(account, 'S')">
                 <a class="addAcct end-dropdown-radius form-spacing" role="option" href="">{{'directDeposit.account.type.savings'|i18n}}</a>
             </li>
         </ul>
