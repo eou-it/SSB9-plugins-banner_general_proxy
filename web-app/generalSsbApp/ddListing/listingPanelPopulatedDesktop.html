@@ -5,7 +5,7 @@
 <caption id ="ap_account_list_label" class="offscreen" aria-hidden="false">{{'directDeposit.apListTableDesc'|i18n}}</caption>
     <thead>
         <tr>
-            <th role="columnheader" ng-repeat="heading in apListingColumns">
+            <th ng-repeat="heading in apListingColumns">
                 <div class="headervalues">
                     <span class="column-title">
                         {{heading.title}}
@@ -19,7 +19,7 @@
     </tbody>
 </table>
 <div class="desktop-disclaimer">
-    <input type="checkbox" class="main-nav-check" id="main-nav-check" ng-checked="editAccountService.authorizedChanges" ng-click="editAccountService.toggleAuthorizedChanges()"/>
+    <input type="checkbox" class="main-nav-check" id="disclaimer-check" aria-label="Acknowldege Disclaimer" ng-checked="editAccountService.authorizedChanges" ng-click="editAccountService.toggleAuthorizedChanges()"/>
     <p class="lbl">{{'directDeposit.disclaimer.text'|i18n}}</p>
 </div>
 <div class="clearfix"></div>

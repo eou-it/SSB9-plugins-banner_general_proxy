@@ -2,29 +2,31 @@
 Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 
-<div class="row tile">
-    <div class="col-md-12 no-padding panel-group panel-accordion" aria-multiselectable="true" role="tablist">
-        <div class="notification-box-wrapper" ng-show="accountLoaded">
-            <div ng-if="hasAccount()">
-                <notification-box notification-text="{{'directDeposit.notification.only.one.accounts.payable.allocation.can.exist.tap'|i18n}}"/>
-            </div>
-        </div>
-        <h2 id="account-listing-heading" aria-expanded="{{!panelCollapsed}}" aria-controls="account-listing"
-            class="panel panel-heading panel-default panel-title">
-            <a href="" data-toggle="collapse" data-target="#account-listing"
-               ng-class="{'collapsed': panelCollapsed}" ng-click="panelCollapsed = !panelCollapsed;">
-                <span class="job-label no-margin">{{'directDeposit.label.accountsPayableDeposit'|i18n}}</span>
-            </a>
-        </h2>
-
-        <div id="account-listing" class="collapse in" aria-labelledby="account-listing-heading"
-             aria-expanded="{{!panelCollapsed}}" aria-hidden="{{panelCollapsed}}">
-            <div ng-show="accountLoaded">
+<div role="tablist">
+    <div id="apTab" class="row tile" role="tab">
+        <div class="col-md-12 no-padding panel-group panel-accordion">
+            <div class="notification-box-wrapper" ng-show="accountLoaded">
                 <div ng-if="hasAccount()">
-                    <listing-panel-populated account="account" ap-listing-columns="apListingColumns" edit-account-service="editAccountService"/>
+                    <notification-box notification-text="{{'directDeposit.notification.only.one.accounts.payable.allocation.can.exist.tap'|i18n}}"/>
                 </div>
-                <div ng-if="!hasAccount()">
-                    <listing-panel-nonpopulated/>
+            </div>
+            <h2 id="account-listing-heading" aria-expanded="{{!panelCollapsed}}" aria-controls="account-listing"
+                class="panel panel-heading panel-default panel-title">
+                <a href="" data-toggle="collapse" data-target="#account-listing"
+                   ng-class="{'collapsed': panelCollapsed}" ng-click="panelCollapsed = !panelCollapsed;">
+                    <span class="job-label no-margin">{{'directDeposit.label.accountsPayableDeposit'|i18n}}</span>
+                </a>
+            </h2>
+
+            <div id="account-listing" class="collapse in" aria-labelledby="account-listing-heading"
+                 aria-expanded="{{!panelCollapsed}}" aria-hidden="{{panelCollapsed}}" role="tabpanel">
+                <div ng-show="accountLoaded">
+                    <div ng-if="hasAccount()">
+                        <listing-panel-populated account="account" ap-listing-columns="apListingColumns" edit-account-service="editAccountService"/>
+                    </div>
+                    <div ng-if="!hasAccount()">
+                        <listing-panel-nonpopulated/>
+                    </div>
                 </div>
             </div>
         </div>
