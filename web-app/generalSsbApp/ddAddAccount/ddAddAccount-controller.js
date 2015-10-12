@@ -4,18 +4,19 @@
 
 generalSsbAppControllers.controller('DdAddAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddAddAccountService', 'notificationCenterService', function($scope, $modalInstance, $state, $filter, ddAddAccountService, notificationCenterService){
 
-    $scope.account = {};
-    
-    $scope.account.pidm;
-    $scope.account.status;
-    $scope.account.apIndicator = 'A';
-    $scope.account.hrIndicator = 'I';
-    $scope.account.bankAccountNum;
-    $scope.account.bankRoutingNum;
-    $scope.account.amount;
-    $scope.account.percent = 100;
-    $scope.account.accountType = '';
-    $scope.account.bankName;
+    $scope.account = {
+        pidm: null,
+        status: null,
+        apIndicator: 'A',
+        hrIndicator: 'I',
+        bankAccountNum: null,
+        amount: null,
+        percent: 100,
+        accountType: '',
+        bankRoutingInfo: {
+            bankRoutingNum: null
+        }
+    };
 
     $scope.authorizedChanges = false;
     
@@ -23,12 +24,12 @@ generalSsbAppControllers.controller('DdAddAccountController', ['$scope', '$modal
     $scope.routingNumMessage;
     
     $scope.validateRoutingNum = function () {
-        if($scope.account.bankRoutingNum){
-            ddAddAccountService.getBankInfo($scope.account.bankRoutingNum).$promise.then(function (response) {
+        if($scope.account.bankRoutingInfo.bankRoutingNum){
+            ddAddAccountService.getBankInfo($scope.account.bankRoutingInfo.bankRoutingNum).$promise.then(function (response) {
                 if(response.failure) {
                     $scope.routingNumErr = true;
                     $scope.routingNumMessage = $filter('i18n')('directDeposit.invalid.routing.number');
-                    $scope.account.bankName = null;
+                    $scope.account.bankRoutingInfo.bankName = null;
                     notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
                 }
                 else{
@@ -87,10 +88,10 @@ generalSsbAppControllers.controller('DdAddAccountController', ['$scope', '$modal
     };
     
     var requiredFieldsValid = function() {
-        if(!$scope.account.bankRoutingNum){
+        if(!$scope.account.bankRoutingInfo.bankRoutingNum){
             $scope.routingNumErr = true;
             $scope.routingNumMessage = $filter('i18n')('directDeposit.invalid.missing.routing.number');
-            $scope.account.bankName = null;
+            $scope.account.bankRoutingInfo.bankName = null;
             notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
         } 
         else if($scope.routingNumErr){

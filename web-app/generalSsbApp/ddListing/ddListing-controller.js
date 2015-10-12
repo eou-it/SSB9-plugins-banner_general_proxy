@@ -4,29 +4,48 @@
 generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '$filter',
     'directDepositListingService', 'directDepositEditAccountService',
     function ($scope, $modal, $filter, directDepositListingService, directDepositEditAccountService){
+
+        // LOCAL FUNCTIONS
+        // ---------------
         /**
          * Select the one AP account that will be displayed to user, according to business rules.
          */
-        var getApAccountFromResponse = function(response) {
-            var accountInfo = null,
-                account = null;
+        this.getApAccountFromResponse = function(response) {
+            var account = null;
 
             if (response.length) {
                 // TODO: until defined otherwise, return first account
-                accountInfo = response[0];
-                account = accountInfo[0];
-                account.bankName = accountInfo[1].bankName;
+                account = response[0];
             }
 
             return account;
         };
 
+        /**
+         * Initialize controller
+         */
+        this.init = function() {
+            var self = this;
+
+            directDepositListingService.getDirectDepositListing().$promise.then(
+                function (response) {
+                    $scope.account = self.getApAccountFromResponse(response);
+                    $scope.accountLoaded = true;
+                });
+        };
+
+
+        // CONTROLLER VARIABLES
+        // --------------------
         $scope.editAccountService = directDepositEditAccountService;
 
         $scope.account = null;
         $scope.accountLoaded = false;
         $scope.panelCollapsed = false;
 
+
+        // CONTROLLER FUNCTIONS
+        // --------------------
         $scope.apListingColumns = [
             { tabindex: '0', title: $filter('i18n')('directDeposit.account.label.bank.name')},
             { title: $filter('i18n')('directDeposit.account.label.routing.num')},
@@ -34,12 +53,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
             { title: $filter('i18n')('directDeposit.account.label.accountType')},
             { title: $filter('i18n')('directDeposit.account.label.status')}
         ];
-
-        directDepositListingService.getDirectDepositListing().$promise.then(
-            function (response) {
-                $scope.account = getApAccountFromResponse(response);
-                $scope.accountLoaded = true;
-            });
 
         //display add account pop up
         $scope.showAddAccount = function () {
@@ -70,6 +83,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
                 'directDeposit.notification.no.accounts.payable.allocation.click' :
                 'directDeposit.notification.no.accounts.payable.allocation.tap';
         };
+
+
+        // INITIALIZE
+        // ----------
+        this.init();
 
     }
 ]);

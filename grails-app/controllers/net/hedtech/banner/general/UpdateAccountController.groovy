@@ -2,29 +2,31 @@ package net.hedtech.banner.general
 
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
-import net.hedtech.banner.i18n.LocalizeUtil
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 import org.springframework.security.core.context.SecurityContextHolder
 
 class UpdateAccountController {
 
     def directDepositAccountService
+    def bankRoutingInfoService
+    def directDepositAccountCompositeService
     
     def createAccount() {
-        def model = [:]
         def map = request?.JSON ?: params
         map.pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
-        
+
         // default values for a new Direct Deposit account
+        map.id = null
         map.status = 'P'
         map.documentType = 'D'
         map.intlAchTransactionIndicator = 'N'
 
         log.debug("trying to create acct: "+ map.bankAccountNum)
-        
-        try {
-            render directDepositAccountService.create(map) as JSON
 
+        try {
+            JSON.use( 'deep' ) {
+                render directDepositAccountCompositeService.addorUpdateAccount(map) as JSON
+            }
         } catch (ApplicationException e) {
             render returnFailureMessage(e) as JSON
         }
@@ -42,13 +44,12 @@ class UpdateAccountController {
     }
 
     def getBankInfo() {
-        def model = [:]
         def map = request?.JSON ?: params
         
         log.debug("trying to fetch bank: "+ map.bankRoutingNum)
         
         try {
-            render directDepositAccountService.validateRoutingNumber(map.bankRoutingNum)[0] as JSON
+            render bankRoutingInfoService.validateRoutingNumber(map.bankRoutingNum)[0] as JSON
 
         } catch (ApplicationException e) {
             render returnFailureMessage(e) as JSON
