@@ -24,20 +24,20 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
     </div>
     <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix clear-xs-sm">
         <label class="input-field-label ng-class: (accountTypeErr ? 'field-error' : null);" >{{'directDeposit.account.label.accountType'|i18n}}</label>
-        <label class="visuallyhidden" id="select-acct-type">Select an Account Type</label>
+        <label class="visuallyhidden" id="select-acct-type">{{'directDeposit.label.account.type.select'|i18n}}</label>
         <div class="dropdown" role="listbox">
-            <button class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#" aria-labelledby="select-acct-type">
-                <span class="float-l semi-bold form-spacing">
+            <button class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#" aria-labelledby="select-acct-type account-type">
+                <span class="float-l semi-bold form-spacing" aria-live="polite">
                     <choose-account acct="account" id="account-type"/>
                 </span>
                 <span class="float-r form-spacing down-caret caret-color"></span>
             </button>
             <ul class="dropdown-menu addAcct">
                 <li ng-click="setAccountType('C')" role="option">
-                    <a class="addAcct form-spacing" href="">{{'directDeposit.account.type.checking'|i18n}}</a>
+                    <a class="addAcct form-spacing" href="" tabindex="-1">{{'directDeposit.account.type.checking'|i18n}}</a>
                 </li>
                 <li ng-click="setAccountType('S')" role="option">
-                    <a class="addAcct end-dropdown-radius form-spacing" href="">{{'directDeposit.account.type.savings'|i18n}}</a>
+                    <a class="addAcct end-dropdown-radius form-spacing" href="" tabindex="-1">{{'directDeposit.account.type.savings'|i18n}}</a>
                 </li>
             </ul>
         </div>
@@ -47,7 +47,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 <div class="row disclaimer-margin">
     <div class="col-xs-12">
         <label class="visuallyhidden" for="disclaimer-checkbox">Disclaimer Checkbox</label>
-        <input ng-click="toggleAuthorizedChanges()" ng-enter="toggleAuthorizedChanges()" class="main-nav-check" id="disclaimer-checkbox" type="checkbox" aria-describedby="disclaimer"/>
+        <input ng-click="toggleAuthorizedChanges()" enter-key="toggleAuthorizedChanges()" class="main-nav-check" id="disclaimer-checkbox" type="checkbox" aria-describedby="disclaimer"/>
         <p class="lbl" id="disclaimer">{{'directDeposit.disclaimer.text'|i18n}}</p>
     </div>
 </div>
