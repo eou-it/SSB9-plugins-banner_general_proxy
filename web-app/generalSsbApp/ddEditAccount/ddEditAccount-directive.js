@@ -5,10 +5,7 @@
 generalSsbAppDirectives.directive('chooseAccount',[function () {
     return{
         restrict: 'E',
-        template: "{{( acct.accountType === 'C' ? 'directDeposit.account.type.checking' : " +
-                    " ( acct.accountType === 'S' ? 'directDeposit.account.type.savings' : 'directDeposit.account.type.select'))|i18n}}",
-        scope: {
-            acct: '='
-        }
+        template: "{{( account.accountType === 'C' ? 'directDeposit.account.type.checking' : " +
+                    " ( account.accountType === 'S' ? 'directDeposit.account.type.savings' : 'directDeposit.account.type.select'))|i18n}}"
     };
 }]);
