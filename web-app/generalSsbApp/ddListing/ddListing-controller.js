@@ -56,18 +56,12 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
 
         //display add account pop up
         $scope.showAddAccount = function () {
-            var mobile = true;
-            if(mobile) {
-                $modal.open({
-                    templateUrl: '../generalSsbApp/ddAddAccount/ddAddAccount.html',
-                    keyboard:true,
-                    controller: "DdAddAccountController",
-                    scope: $scope
-                });
-            }
-            else {
-                // enable in-line editing(?) or go to select from existing acct page
-            }
+            $modal.open({
+                templateUrl: '../generalSsbApp/ddAddAccount/ddAddAccount.html',
+                keyboard:true,
+                controller: "DdAddAccountController",
+                scope: $scope
+            });
         };
 
         $scope.hasAccount = function () {

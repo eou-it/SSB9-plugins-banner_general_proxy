@@ -2,7 +2,9 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppControllers.controller('DdAddAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddAddAccountService', 'notificationCenterService', function($scope, $modalInstance, $state, $filter, ddAddAccountService, notificationCenterService){
+generalSsbAppControllers.controller('DdAddAccountController',
+    ['$scope', '$modalInstance', '$state', '$filter', 'ddAddAccountService', 'directDepositEditAccountService', 'notificationCenterService',
+    function($scope, $modalInstance, $state, $filter, ddAddAccountService, directDepositEditAccountService, notificationCenterService){
 
     $scope.account = {
         pidm: null,
@@ -18,7 +20,8 @@ generalSsbAppControllers.controller('DdAddAccountController', ['$scope', '$modal
         }
     };
 
-    $scope.authorizedChanges = false;
+    $scope.editAccountService = directDepositEditAccountService;
+    $scope.disclaimer = $scope.editAccountService.disclaimer;
     
     $scope.routingNumErr = false;
     $scope.routingNumMessage;
@@ -68,6 +71,8 @@ generalSsbAppControllers.controller('DdAddAccountController', ['$scope', '$modal
         $scope.accountTypeErr = false;
         notificationCenterService.clearNotifications();
     };
+    
+    $scope.authorizedChanges = false;
     
     $scope.toggleAuthorizedChanges = function () {
         $scope.authorizedChanges = !$scope.authorizedChanges;

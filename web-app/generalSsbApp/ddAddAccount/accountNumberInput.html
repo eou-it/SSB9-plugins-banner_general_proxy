@@ -44,10 +44,10 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         <p ng-show="accountTypeErr" class="input-field-label field-error error-font-size">{{'directDeposit.invalid.missing.account.type'|i18n}}</p>
     </div>
 </div>
-<div class="row disclaimer-margin">
+<div ng-show="!!disclaimer" class="row disclaimer-margin">
     <div class="col-xs-12">
-        <label class="visuallyhidden" for="disclaimer-checkbox">Disclaimer Checkbox</label>
+        <label class="visuallyhidden" for="disclaimer-checkbox">{{'directDeposit.label.disclaimer.checkbox'|i18n}}</label>
         <input ng-click="toggleAuthorizedChanges()" enter-key="toggleAuthorizedChanges()" class="main-nav-check" id="disclaimer-checkbox" type="checkbox" aria-describedby="disclaimer"/>
-        <p class="lbl" id="disclaimer">{{'directDeposit.disclaimer.text'|i18n}}</p>
+        <p class="lbl" id="disclaimer">{{disclaimer}}</p>
     </div>
 </div>

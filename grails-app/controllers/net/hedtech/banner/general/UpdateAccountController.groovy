@@ -3,7 +3,7 @@ package net.hedtech.banner.general
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
-import org.springframework.security.core.context.SecurityContextHolder
+import net.hedtech.banner.webtailor.WebTailorUtility
 
 class UpdateAccountController {
 
@@ -13,7 +13,7 @@ class UpdateAccountController {
     
     def createAccount() {
         def map = request?.JSON ?: params
-        map.pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        map.pidm = ControllerUtility.getPrincipalPidm()
 
         // default values for a new Direct Deposit account
         map.id = null
@@ -72,6 +72,20 @@ class UpdateAccountController {
         }
     }
     
+    def getDisclaimerText() {
+        def model = [:]
+        
+        log.debug("fetching disclaimer text")
+        
+        model.disclaimer = WebTailorUtility.getInfoText("XeDirectDeposit", "XE_DIRECT_DEPOSIT")
+        
+        if(!model.disclaimer){
+            model.failure = true
+        }
+        
+        render model as JSON
+    }
+
     def  returnFailureMessage(ApplicationException  e) {
         def model = [:]
         model.failure = true
