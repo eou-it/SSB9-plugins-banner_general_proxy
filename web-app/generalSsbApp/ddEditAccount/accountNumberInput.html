@@ -4,7 +4,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 <div class="row semi-bold">
     <div class="col-xs-6 col-sm-4 col-md-4 pad-left-sm xs-fix">
         <label class="input-field-label ng-class: (routingNumErr ? 'field-error' : null);" for="routing-number">{{'directDeposit.account.label.bank.routing.num'|i18n}}</label>
-        <input data-ng-model="account.bankRoutingInfo.bankRoutingNum" ng-blur="validateRoutingNum()"
+        <input data-ng-model="account.bankRoutingInfo.bankRoutingNum" ng-blur="validateRoutingNum()" ng-disabled="!creatingNewAccount"
              class="text-input-field ng-class: (routingNumErr ? 'input-field-error' : null); semi-bold form-spacing" 
              id="routing-number" type="text" placeholder="{{'directDeposit.account.label.bank.routing.num'|i18n}}" />
         <span ng-if="routingNumErr" class="icon input-fail">
@@ -14,7 +14,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
     </div>
     <div class="col-xs-6 col-sm-4 col-md-4 .pad-center-sm xs-fix">
         <label class="input-field-label ng-class: (accountNumErr ? 'field-error' : null);" for="account-number">{{'directDeposit.account.label.account.num'|i18n}}</label>
-        <input data-ng-model="account.bankAccountNum" ng-blur="validateAccountNum()"
+        <input data-ng-model="account.bankAccountNum" ng-blur="validateAccountNum()" ng-disabled="!creatingNewAccount"
             class="text-input-field ng-class: (accountNumErr ? 'input-field-error' : null); semi-bold form-spacing"
             id="account-number" type="text" placeholder="{{'directDeposit.account.label.account.num'|i18n}}"/>
         <span ng-if="accountNumErr" class="icon input-fail">
@@ -28,7 +28,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         <div class="dropdown" role="listbox">
             <button class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#" aria-labelledby="select-acct-type account-type">
                 <span class="float-l semi-bold form-spacing" aria-live="polite">
-                    <choose-account acct="account" id="account-type"/>
+                    <choose-account/>
                 </span>
                 <span class="float-r form-spacing down-caret caret-color"></span>
             </button>

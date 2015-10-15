@@ -80,9 +80,9 @@
 }
 
 
-/***************************/
-/* Add Account Page Styles */
-/***************************/
+/********************************/
+/* Add/Edit Account Page Styles */
+/********************************/
 .float-l {
     float: left;
 }
@@ -289,6 +289,10 @@ button.closebtn {
     border-left: 1px solid rgb(0, 0, 0);
     padding: 0.25em 1em;
     margin: 0.75em 0em;
+}
+
+.text-input-field:disabled {
+    background-color: #F1F4F6;
 }
 
 /*  Dropdown menu  */
@@ -552,6 +556,14 @@ a.add-account-link {
     height: 18px;
     display: inline-block;
     vertical-align: bottom;
+}
+
+.edit-account-link {
+    color: #333;
+}
+
+.edit-account-link .icon-edit {
+    font-size: 14px;
 }
 
 /*Table and grid section styles*/

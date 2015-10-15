@@ -38,10 +38,11 @@ generalSsbAppDirectives.directive('accountStatus',[function () {
 generalSsbAppDirectives.directive('listingPanelPopulated',[function () {
     return{
         restrict: 'E',
-        templateUrl: function() {
-            var type = isDesktop() ? 'Desktop' : '';
-            return '../generalSsbApp/ddListing/listingPanelPopulated' + type + '.html'
-        }
+        link: function(scope) {
+            var type = scope.isDesktop() ? 'Desktop' : '';
+            scope.listingPanelPopulatedTemplate = '../generalSsbApp/ddListing/listingPanelPopulated' + type + '.html'
+        },
+        template: '<div ng-include="listingPanelPopulatedTemplate"></div>'
     };
 }]);
 

@@ -2,8 +2,8 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '$filter',
-    'directDepositListingService', 'directDepositEditAccountService', 'notificationCenterService',
-    function ($scope, $modal, $filter, directDepositListingService, directDepositEditAccountService,
+    'ddListingService', 'ddEditAccountService', 'notificationCenterService',
+    function ($scope, $modal, $filter, ddListingService, ddEditAccountService,
               notificationCenterService){
 
         // LOCAL FUNCTIONS
@@ -28,7 +28,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
         this.init = function() {
             var self = this;
 
-            directDepositListingService.getDirectDepositListing().$promise.then(
+            ddListingService.getDirectDepositListing().$promise.then(
                 function (response) {
                     $scope.account = self.getApAccountFromResponse(response);
                     $scope.accountLoaded = true;
@@ -56,19 +56,13 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
 
         //display add account pop up
         $scope.showAddAccount = function () {
-            var mobile = true;
-            if(mobile) {
-                $modal.open({
-                    templateUrl: '../generalSsbApp/ddAddAccount/ddAddAccount.html',
-                    keyboard:true,
-                    controller: "DdAddAccountController",
-                    scope: $scope
-                });
-            }
-            else {
-                // enable in-line editing(?) or go to select from existing acct page
-            }
-        };
+            var modal = $modal.open({
+                templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
+                keyboard:true,
+                controller: "ddEditAccountController",
+                scope: $scope
+            });
+       };
 
         $scope.hasAccount = function () {
             return !!$scope.account;
@@ -85,7 +79,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
         };
 
         $scope.updateApAccount = function () {
-            directDepositEditAccountService.updateAccount($scope.account).$promise.then(function (response) {
+            ddEditAccountService.saveApAccount($scope.account).$promise.then(function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
                 } else {
@@ -103,9 +97,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
         // Display Edit Account modal
         $scope.showEditAccountModal = function () {
             $modal.open({
-                templateUrl: '../generalSsbApp/ddAddAccount/ddAddAccount.html',
+                templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
                 keyboard:true,
-                controller: "DdAddAccountController",
+                controller: "ddEditAccountController",
                 scope: $scope
             });
         };
