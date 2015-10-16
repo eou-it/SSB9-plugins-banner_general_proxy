@@ -41,6 +41,7 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
         fetchDisclaimer.query().$promise.then(function (response) {
             if(response.failure) {
                 notificationCenterService.displayNotifications('directDeposit.invalid.missing.disclaimer', "error");
+                self.disclaimer = $filter('i18n')('directDeposit.disclaimer.text');
             }
             else {
                 self.disclaimer = response.disclaimer;

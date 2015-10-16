@@ -74,8 +74,6 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         notificationCenterService.clearNotifications();
     };
     
-    $scope.authorizedChanges = false;
-    
     $scope.toggleAuthorizedChanges = function () {
         $scope.authorizedChanges = !$scope.authorizedChanges;
     };
