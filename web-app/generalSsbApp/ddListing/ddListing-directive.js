@@ -35,10 +35,13 @@ generalSsbAppDirectives.directive('accountStatus',[function () {
     };
 }]);
 
-generalSsbAppDirectives.directive('listingPanelPopulated',[function () {
+generalSsbAppDirectives.directive('listingPanelPopulated',['ddEditAccountService', function (ddEditAccountService) {
     return{
         restrict: 'E',
         link: function(scope) {
+            scope.editAccountService = ddEditAccountService;
+            scope.disclaimer = scope.editAccountService.disclaimer;
+            
             var type = scope.isDesktop() ? 'Desktop' : '';
             scope.listingPanelPopulatedTemplate = '../generalSsbApp/ddListing/listingPanelPopulated' + type + '.html'
         },

@@ -21,7 +21,10 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
     $scope.creatingNewAccount = false;
     $scope.authorizedChanges = false;
-    
+
+    $scope.editAccountService = ddEditAccountService;
+    $scope.disclaimer = $scope.editAccountService.disclaimer;
+
     $scope.routingNumErr = false;
     $scope.routingNumMessage;
 
