@@ -62,6 +62,7 @@
 
 .panel-accordion .panel-body {
     background-color: #ffffff;
+    position: relative;
 }
 
 .desktop-disclaimer {
@@ -79,9 +80,9 @@
 }
 
 
-/***************************/
-/* Add Account Page Styles */
-/***************************/
+/********************************/
+/* Add/Edit Account Page Styles */
+/********************************/
 .float-l {
     float: left;
 }
@@ -290,6 +291,10 @@ button.closebtn {
     margin: 0.75em 0em;
 }
 
+.text-input-field:disabled {
+    background-color: #F1F4F6;
+}
+
 /*  Dropdown menu  */
 .form-spacing,
 .dropdown-menu > li > a.form-spacing {
@@ -467,6 +472,12 @@ a.add-account-link {
     cursor: pointer;
 }
 
+.edit-account {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
 .notification-box-wrapper {
     width: 100%;
     padding: 0 15px;
@@ -547,6 +558,14 @@ a.add-account-link {
     vertical-align: bottom;
 }
 
+.edit-account-link {
+    color: #333;
+}
+
+.edit-account-link .icon-edit {
+    font-size: 14px;
+}
+
 /*Table and grid section styles*/
 table {
     width: 100%;
@@ -605,6 +624,10 @@ table tr td {
 @media(max-width:1024px){
     body {
         padding: 0;
+    }
+
+    .account-heading {
+        margin-right: 40px;
     }
 }
 

@@ -4,21 +4,14 @@
 generalSsbAppDirectives.directive('accountInfo',[function () {
     return{
         restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/accountInformation.html',
-        scope: {
-            account: '='
-        }
+        templateUrl: '../generalSsbApp/ddListing/accountInformation.html'
     };
 }]);
 
 generalSsbAppDirectives.directive('accountInfoDesktop',[function () {
     return{
         restrict: 'A',
-        templateUrl: '../generalSsbApp/ddListing/accountInformationDesktop.html',
-        scope: {
-            account: '=',
-            editAccountService: '='
-        }
+        templateUrl: '../generalSsbApp/ddListing/accountInformationDesktop.html'
     };
 }]);
 
@@ -45,15 +38,11 @@ generalSsbAppDirectives.directive('accountStatus',[function () {
 generalSsbAppDirectives.directive('listingPanelPopulated',[function () {
     return{
         restrict: 'E',
-        templateUrl: function() {
-            var type = isDesktop() ? 'Desktop' : '';
-            return '../generalSsbApp/ddListing/listingPanelPopulated' + type + '.html'
+        link: function(scope) {
+            var type = scope.isDesktop() ? 'Desktop' : '';
+            scope.listingPanelPopulatedTemplate = '../generalSsbApp/ddListing/listingPanelPopulated' + type + '.html'
         },
-        scope: {
-            account: '=',
-            apListingColumns: '=',
-            editAccountService: '='
-        }
+        template: '<div ng-include="listingPanelPopulatedTemplate"></div>'
     };
 }]);
 

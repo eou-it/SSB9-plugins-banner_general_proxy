@@ -51,10 +51,10 @@ generalSsbApp.config(function($stateProvider, $urlRouterProvider){
                 breadcrumbs: []
             }
         })
-    .state('ddAddAccount', {
-        url: "/ddAddAccount",
-        templateUrl: '../generalSsbApp/ddAddAccount/ddAddAccount.html',
-        controller: 'DdAddAccountController',
+    .state('ddEditAccount', {
+        url: "/ddEditAccount",
+        templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
+        controller: 'ddEditAccountController',
         data: {
             breadcrumbs: []
         }

@@ -2,34 +2,22 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbApp.service('directDepositEditAccountService', ['$resource', 'notificationCenterService',
-    function ($resource, notificationCenterService) {
+generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource) {
+    var createAccount = $resource('../ssb/:controller/:action',
+        {controller: 'UpdateAccount', action: 'createAccount'}, {save: {method:'POST'}}),
 
-    var updateAccount = $resource('../ssb/:controller/:action',
+        updateAccount = $resource('../ssb/:controller/:action',
         {controller: 'UpdateAccount', action: 'updateAccount'}, {save: {method:'POST'}});
 
-    this.authorizedChanges = false;
-
-    this.updateApAccount = function (account) {
-        var self = this;
-
-        updateAccount.save(account).$promise.then(function (response) {
-            if(response.failure) {
-                notificationCenterService.displayNotifications(response.message, "error");
-            }
-            else {
-                // Set form back to initial "at rest" state
-                self.authorizedChanges = false;
-
-                // TODO: show confirmation message or something here?
-            }
-        });
+    this.saveApAccount = function (account, createNew) {
+        return createNew ? createAccount.save(account) : updateAccount.save(account);
     };
 
-    this.toggleAuthorizedChanges = function () {
-        var self = this;
-
-        self.authorizedChanges = !self.authorizedChanges;
+    var bankInfo = $resource('../ssb/:controller/:action',
+            {controller: 'UpdateAccount', action: 'getBankInfo'}, {query: {method:'GET', isArray:false}});
+    
+    this.getBankInfo = function (routingNum) {
+        return bankInfo.query({bankRoutingNum: routingNum});
     };
 
     this.setAccountType = function (acct, acctType) {

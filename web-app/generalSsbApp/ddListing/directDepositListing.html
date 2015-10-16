@@ -22,7 +22,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                  aria-expanded="{{!panelCollapsed}}" aria-hidden="{{panelCollapsed}}" role="tabpanel">
                 <div ng-show="accountLoaded">
                     <div ng-if="hasAccount()">
-                        <listing-panel-populated account="account" ap-listing-columns="apListingColumns" edit-account-service="editAccountService"/>
+                        <listing-panel-populated/>
                     </div>
                     <div ng-if="!hasAccount()">
                         <listing-panel-nonpopulated/>

@@ -29,14 +29,13 @@ modules = {
        // Services
        resource url:[file: 'generalSsbApp/ddListing/ddListing-service.js']
        resource url:[file: 'generalSsbApp/common/services/breadcrumb-service.js']
-       resource url:[file: 'generalSsbApp/ddAddAccount/ddAddAccount-service.js']
        resource url:[file: 'generalSsbApp/common/services/notificationcenter-service.js']
        resource url:[file: 'generalSsbApp/ddEditAccount/ddEditAccount-service.js']
 
 
        // Controllers
        resource url:[file: 'generalSsbApp/ddListing/ddListing-controller.js']
-       resource url:[file: 'generalSsbApp/ddAddAccount/ddAddAccount-controller.js']
+       resource url:[file: 'generalSsbApp/ddEditAccount/ddEditAccount-controller.js']
 
        // Filters
        resource url:[file: 'generalSsbApp/common/filters/i18n-filter.js']
@@ -49,6 +48,7 @@ modules = {
        // CSS
        resource url:[file: 'css/main.css'],   attrs: [media: 'screen, projection']
        resource url:[file: 'css/responsive.css'],   attrs: [media: 'screen, projection']
+       resource url:[file: 'css/banner-icon-font.css'],   attrs: [media: 'screen, projection']
 
    }
 

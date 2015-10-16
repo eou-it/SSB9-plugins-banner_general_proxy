@@ -5,16 +5,18 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 <div aria-labelledby="add-acct-title">
     <!-- Dialog starts here -->
     <button class="close closebtn" ng-click="cancelModal()" title="close"></button>
-    <h1 class="dialog-hdr1" id="add-acct-title">{{'directDeposit.label.add.ApDeposit'|i18n}}</h1>
+    <h1 class="dialog-hdr1" id="add-acct-title">
+        <title-for-edit-modal/>
+    </h1>
     <div class="pad-dialog-lr">
         <ng-include
-            src="'../generalSsbApp/ddAddAccount/accountNumberInput.html'">
+            src="'../generalSsbApp/ddEditAccount/accountNumberInput.html'">
         </ng-include>
     </div>
     <div class="dialog-footer-margin modal-footer addAcct">
         <button class="dialog-btn" ng-click="cancelModal()">{{'directDeposit.button.cancel'|i18n}}</button>
         <button class="dialog-btn save-btn" ng-disabled="!authorizedChanges" ng-click="saveAccount()">
-            <span class="mid-dash">{{'directDeposit.button.save.new'|i18n}}</span>
+            <span class="mid-dash"><edit-modal-save-button/></span>
         </button>
     </div>
     <!-- Dialog ends here -->
