@@ -24,6 +24,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
     $scope.editAccountService = ddEditAccountService;
     $scope.disclaimer = $scope.editAccountService.disclaimer;
+
     $scope.routingNumErr = false;
     $scope.routingNumMessage;
 
