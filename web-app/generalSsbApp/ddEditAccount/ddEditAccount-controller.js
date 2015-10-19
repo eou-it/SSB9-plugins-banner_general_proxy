@@ -5,25 +5,10 @@
 generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddEditAccountService', 'notificationCenterService',
     function($scope, $modalInstance, $state, $filter, ddEditAccountService, notificationCenterService){
 
-    //$scope.account = {
-    //    pidm: null,
-    //    status: null,
-    //    apIndicator: 'A',
-    //    hrIndicator: 'I',
-    //    bankAccountNum: null,
-    //    amount: null,
-    //    percent: 100,
-    //    accountType: '',
-    //    bankRoutingInfo: {
-    //        bankRoutingNum: null
-    //    }
-    //};
-
     $scope.creatingNewAccount = false;
     $scope.authorizedChanges = false;
 
     $scope.editAccountService = ddEditAccountService;
-    $scope.disclaimer = $scope.editAccountService.disclaimer;
 
     $scope.routingNumErr = false;
     $scope.routingNumMessage;

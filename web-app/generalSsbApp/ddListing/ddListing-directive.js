@@ -40,8 +40,7 @@ generalSsbAppDirectives.directive('listingPanelPopulated',['ddEditAccountService
         restrict: 'E',
         link: function(scope) {
             scope.editAccountService = ddEditAccountService;
-            scope.disclaimer = scope.editAccountService.disclaimer;
-            
+
             var type = scope.isDesktop() ? 'Desktop' : '';
             scope.listingPanelPopulatedTemplate = '../generalSsbApp/ddListing/listingPanelPopulated' + type + '.html'
         },
