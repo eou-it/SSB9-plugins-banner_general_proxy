@@ -31,23 +31,4 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
         acct.accountType = acctType;
     };
 
-    var fetchDisclaimer = $resource('../ssb/:controller/:action',
-            {controller: 'UpdateAccount', action: 'getDisclaimerText'}, {query: {method:'GET', isArray:false}});
-
-    this.disclaimer;
-    this.initDisclaimer = function () {
-        var self = this;
-        
-        fetchDisclaimer.query().$promise.then(function (response) {
-            if(response.failure) {
-                notificationCenterService.displayNotifications('directDeposit.invalid.missing.disclaimer', "error");
-                self.disclaimer = $filter('i18n')('directDeposit.disclaimer.text');
-            }
-            else {
-                self.disclaimer = response.disclaimer;
-            }
-        });
-    };
-    this.initDisclaimer();
-
 }]);

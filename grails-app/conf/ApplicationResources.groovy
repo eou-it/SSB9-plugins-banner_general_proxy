@@ -30,6 +30,7 @@ modules = {
        resource url:[file: 'generalSsbApp/ddListing/ddListing-service.js']
        resource url:[file: 'generalSsbApp/common/services/breadcrumb-service.js']
        resource url:[file: 'generalSsbApp/common/services/notificationcenter-service.js']
+       resource url:[file: 'generalSsbApp/common/services/disclaimer-service.js']
        resource url:[file: 'generalSsbApp/ddEditAccount/ddEditAccount-service.js']
 
 
