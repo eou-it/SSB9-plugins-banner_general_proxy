@@ -14,7 +14,6 @@
     min-height: initial !important;
     font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
     padding: 0 15px;
-    position: static;
 }
 
 .panel.panel-accordion {
@@ -72,7 +71,7 @@
 
 .desktop-save {
     float: right;
-    margin: 15px 15px 0 0;
+    margin: 15px;
 }
 
 .direct-deposit #outerFooter {
@@ -440,6 +439,12 @@ input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before
 }
 
 /* Account Listing Page Styles */
+.pay-entry {
+    margin-top: 10px;
+    padding-left: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
 .entry {
     padding-left: 20px;
 }
@@ -453,13 +458,35 @@ input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before
     margin-bottom: 10px;
 }
 
-.listing-panel-populated,
-.listing-panel-nonpopulated {
+.account-entry-last-row-left {
+    float: left;
+}
+
+.account-entry-last-row-right {
+    float: right;
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.pay-panel-body {
+    padding: 0 15px;
+}
+
+.panel-group .panel-heading.panel-bottom-border {
+    border-bottom: 1px solid #ddd;
+}
+
+.ap-listing-panel,
+.proposed-pay-listing-subheader {
     height: 60px;
     padding: 20px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     position: relative;
+}
+
+.pay-listing-panel-wrapper {
+    margin-bottom: 20px;
 }
 
 a.replace-account-link,
@@ -470,6 +497,14 @@ a.add-account-link {
     color: #333;
     text-decoration: none;
     cursor: pointer;
+}
+
+.add-account-link span {
+    vertical-align: middle;
+}
+
+.add-account-link [class^="icon-"] {
+    font-size: 18px;
 }
 
 .edit-account {
@@ -493,6 +528,7 @@ a.add-account-link {
 }
 
 .notification-icon {
+    font-size: 20px;
     padding-right: 15px;
     display: table-cell;
     vertical-align: middle;
@@ -542,14 +578,6 @@ a.add-account-link {
 }
 
 /* Icons */
-.icon-add-new {
-    background: url('../images/add-new.svg') no-repeat;
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    vertical-align: bottom;
-}
-
 .icon-replace {
     background: url('../images/replace.svg') no-repeat;
     width: 18px;

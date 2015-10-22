@@ -1,0 +1,15 @@
+<div class="account-heading break-word">
+    {{account.bankRoutingInfo.bankName}}
+</div>
+<div class="account-field break-word">
+    {{'directDeposit.account.label.routing'|i18n}}: {{account.bankRoutingInfo.bankRoutingNum}}
+</div>
+<div class="account-field break-word">
+    {{'directDeposit.account.label.account'|i18n}}: {{account.bankAccountNum}}
+</div>
+<div class="account-field break-word account-entry-last-row-left">
+    {{'directDeposit.account.label.accountType'|i18n}}: <account-type account="account"/>
+</div>
+<div class="account-field account-entry-last-row-right">
+    {{account.amount}}
+</div>

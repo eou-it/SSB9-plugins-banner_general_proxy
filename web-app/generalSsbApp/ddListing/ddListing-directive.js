@@ -1,6 +1,16 @@
 /*******************************************************************************
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
+generalSsbAppDirectives.directive('payAccountInfoMostRecent',[function () {
+    return{
+        restrict: 'E',
+        templateUrl: '../generalSsbApp/ddListing/payAccountInformationMostRecent.html',
+        scope: {
+            account: '='
+        }
+    };
+}]);
+
 generalSsbAppDirectives.directive('accountInfo',[function () {
     return{
         restrict: 'E',
@@ -32,6 +42,27 @@ generalSsbAppDirectives.directive('accountStatus',[function () {
         scope: {
             account: '='
         }
+    };
+}]);
+
+generalSsbAppDirectives.directive('payListingPanelPopulatedMostRecent',[function () {
+    return{
+        restrict: 'E',
+        templateUrl: '../generalSsbApp/ddListing/payListingPanelPopulatedMostRecent.html'
+    };
+}]);
+
+generalSsbAppDirectives.directive('payListingPanelPopulatedProposed',[function () {
+    return{
+        restrict: 'E',
+        templateUrl: '../generalSsbApp/ddListing/payListingPanelPopulatedProposed.html'
+    };
+}]);
+
+generalSsbAppDirectives.directive('payListingPanelNonpopulatedProposed',[function () {
+    return{
+        restrict: 'E',
+        templateUrl: '../generalSsbApp/ddListing/payListingPanelNonpopulatedProposed.html'
     };
 }]);
 

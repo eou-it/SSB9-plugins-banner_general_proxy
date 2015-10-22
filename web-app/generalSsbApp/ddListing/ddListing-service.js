@@ -9,4 +9,8 @@ generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
     this.getDirectDepositListing = function (){
         return listing.query();
     }
+
+    this.getPayrollListing = function() {
+        //STUB
+    };
 }]);

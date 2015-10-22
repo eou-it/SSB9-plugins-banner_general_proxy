@@ -33,11 +33,76 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
                     $scope.account = self.getApAccountFromResponse(response);
                     $scope.accountLoaded = true;
                 });
+
+            // TODO: Everything in this function below this comment is a stub. Do payroll below like AP just above
+            $scope.payAccountsLoaded = true;
+
+            // have no allocations yet
+            //$scope.distributions = {
+            //    mostRecent: {
+            //        date: null,
+            //        allocations: []
+            //    },
+            //    proposed: {
+            //        allocations: []
+            //    }
+            //};
+
+            // have allocations
+            $scope.distributions = {
+                mostRecent: {
+                    date: '04/30/2014',
+                    allocations: [
+                        {
+                            bankRoutingInfo: {
+                                bankName: 'First State Bank',
+                                bankRoutingNum: '123456789'
+                            },
+                            bankAccountNum: '555666777',
+                            accountType: 'C',
+                            accountStatus: 'A',
+                            priority: 1,
+                            amount: '$500.00'
+                        },
+                        {
+                            bankRoutingInfo: {
+                                bankName: 'Second State Bank',
+                                bankRoutingNum: '444455555'
+                            },
+                            bankAccountNum: '111222333',
+                            accountType: 'S',
+                            accountStatus: 'A',
+                            priority: 1,
+                            amount: '$700.00'
+                        }
+                    ]
+                },
+                proposed: {
+                    allocations: [
+                        {
+                            bankRoutingInfo: {
+                                bankName: 'Third State Bank',
+                                bankRoutingNum: '987654321'
+                            },
+                            bankAccountNum: '888999000',
+                            accountType: 'S',
+                            accountStatus: 'A',
+                            priority: 1,
+                            amount: '$600.00'
+                        }
+                    ]
+               }
+            };
         };
 
 
         // CONTROLLER VARIABLES
         // --------------------
+        $scope.payAccountsLoaded = false;
+        $scope.payPanelMostRecentCollapsed = false;
+        $scope.payPanelProposedCollapsed = false;
+
+        $scope.distributions = null;
         $scope.account = null;
         $scope.accountLoaded = false;
         $scope.panelCollapsed = false;
@@ -46,6 +111,24 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
 
         // CONTROLLER FUNCTIONS
         // --------------------
+
+        // Payroll
+        $scope.hasPayAccountsMostRecent = function () {
+            return !!$scope.distributions.mostRecent.allocations;
+        };
+
+        $scope.hasPayAccountsProposed = function () {
+            //TODO: implement this stub
+            return false;
+        };
+
+        $scope.dateStringForPayDistHeader = function () {
+            var date = $scope.distributions.mostRecent.date;
+
+            return date ? ' as of ' + date : '';
+        };
+
+        // Accounts Payable
         $scope.apListingColumns = [
             { tabindex: '0', title: $filter('i18n')('directDeposit.account.label.bank.name')},
             { title: $filter('i18n')('directDeposit.account.label.routing.num')},
@@ -70,6 +153,12 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
 
         $scope.isDesktop = function () {
             return isDesktop();
+        };
+
+        $scope.getNoPayAllocationsNotificationText = function () {
+            return ($scope.isDesktop()) ?
+                'directDeposit.notification.no.payroll.allocation.click' :
+                'directDeposit.notification.no.payroll.allocation.tap';
         };
 
         $scope.getNoApAllocationsNotificationText = function () {
