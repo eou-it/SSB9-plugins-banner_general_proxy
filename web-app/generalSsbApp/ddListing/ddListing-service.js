@@ -8,9 +8,28 @@ generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
 
     this.getDirectDepositListing = function (){
         return listing.query();
-    }
+    };
 
     this.getPayrollListing = function() {
         //STUB
     };
+
+    this.getUserAllocationAmount = function () {
+        // STUB
+        // TODO: choose between percentage or amount designated by user (latter could be
+        // remaining amount)
+        // Does this belong here or in controller or in directive?
+
+        return 'Remaining'; // $500.00, 70%, or Remaining
+    };
+
+    this.getDistributionAmount = function () {
+        // STUB
+        // TODO: calculate amount to be distributed (displayed in lower right corner of proposed allocation),
+        // presumably based on actual pay and either percentage or amount designated by user (latter could be
+        // remaining amount).
+        // Does this belong here or in controller or in directive?
+        return 747;
+    };
+
 }]);

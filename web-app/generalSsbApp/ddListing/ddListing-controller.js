@@ -62,7 +62,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
                             accountType: 'C',
                             accountStatus: 'A',
                             priority: 1,
-                            amount: '$500.00'
+                            amount: 500.00
                         },
                         {
                             bankRoutingInfo: {
@@ -73,7 +73,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
                             accountType: 'S',
                             accountStatus: 'A',
                             priority: 1,
-                            amount: '$700.00'
+                            amount: 700.00
                         }
                     ]
                 },
@@ -88,7 +88,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
                             accountType: 'S',
                             accountStatus: 'A',
                             priority: 1,
-                            amount: '$600.00'
+                            amount: 500.00,
+                            percent: null
                         }
                     ]
                }
@@ -113,19 +114,28 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
         // --------------------
 
         // Payroll
+        $scope.dateStringForPayDistHeader = function () {
+            var date = $scope.distributions.mostRecent.date;
+
+            return date ? ' as of ' + date : '';
+        };
+
         $scope.hasPayAccountsMostRecent = function () {
             return !!$scope.distributions.mostRecent.allocations;
         };
 
         $scope.hasPayAccountsProposed = function () {
-            //TODO: implement this stub
-            return false;
+            return !!$scope.distributions.proposed.allocations;
         };
 
-        $scope.dateStringForPayDistHeader = function () {
-            var date = $scope.distributions.mostRecent.date;
+        $scope.totalPayAmounts = function (distribution) {
+            var total = 0;
 
-            return date ? ' as of ' + date : '';
+            _.each(distribution.allocations, function(allocation) {
+                total += allocation.amount;
+            });
+
+            return total;
         };
 
         // Accounts Payable

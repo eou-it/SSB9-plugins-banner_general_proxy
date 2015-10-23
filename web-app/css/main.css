@@ -462,9 +462,16 @@ input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before
     float: left;
 }
 
-.account-entry-last-row-right {
+.amount-right {
     float: right;
     margin-right: 15px;
+}
+
+.amount-total-label {
+    margin-right: 15px;
+}
+
+.amount-total {
     font-weight: bold;
 }
 
@@ -485,8 +492,22 @@ input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before
     position: relative;
 }
 
-.pay-listing-panel-wrapper {
+.pay-listing-panel-wrapper-most-recent {
     margin-bottom: 20px;
+}
+
+.pay-listing-panel-wrapper-proposed {
+    margin-bottom: 30px;
+}
+
+.pay-listing-bottom-notification {
+    border-bottom: 1px solid #ddd;
+}
+
+.account-total-footer {
+    padding: 10px 0;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
 }
 
 a.replace-account-link,

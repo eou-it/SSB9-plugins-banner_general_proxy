@@ -3,5 +3,10 @@
         <div class="pay-entry clearfix" ng-repeat="allocation in distributions.mostRecent.allocations">
             <pay-account-info-most-recent account="allocation"/>
         </div>
+        <div class="account-total-footer clearfix">
+            <div class="amount-right">
+                <span class="amount-total-label">{{'directDeposit.label.total.net.pay'|i18n}}</span><span class="amount-total">{{totalPayAmounts(distributions.mostRecent)}}</span>
+            </div>
+        </div>
     </div>
 </div>
