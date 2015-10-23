@@ -8,7 +8,7 @@ import net.hedtech.banner.general.person.PersonUtility
 class AccountListingController  {
 
     def directDepositAccountService
-
+    def directDepositPayrollHistoryService
 
     private def findPerson() {
         return PersonUtility.getPerson(ControllerUtility.getPrincipalPidm())
@@ -29,6 +29,15 @@ class AccountListingController  {
         JSON.use("deep") {
             render model as JSON
         }
+    }
+    
+    def getLastPayDateInfo() {
+        def model = [:]
+        def pidm = ControllerUtility.getPrincipalPidm()
+        
+        model = directDepositPayrollHistoryService.getLastPayDistribution(pidm)
+        
+        render model as JSON
     }
 
 }
