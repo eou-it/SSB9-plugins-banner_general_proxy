@@ -31,11 +31,12 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
             ddListingService.getDirectDepositListing().$promise.then(
                 function (response) {
                     $scope.account = self.getApAccountFromResponse(response);
+                    $scope.hasAccount = !!$scope.account;
                     $scope.accountLoaded = true;
                 });
 
             // TODO: Everything in this function below this comment is a stub. Do payroll below like AP just above
-            $scope.payAccountsLoaded = true;
+            $scope.payAccountsProposedLoaded = true;
 
             // have no allocations yet
             //$scope.distributions = {
@@ -50,33 +51,34 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
 
             // have allocations
             $scope.distributions = {
-                mostRecent: {
-                    date: '04/30/2014',
-                    allocations: [
-                        {
-                            bankRoutingInfo: {
-                                bankName: 'First State Bank',
-                                bankRoutingNum: '123456789'
-                            },
-                            bankAccountNum: '555666777',
-                            accountType: 'C',
-                            accountStatus: 'A',
-                            priority: 1,
-                            amount: 500.00
-                        },
-                        {
-                            bankRoutingInfo: {
-                                bankName: 'Second State Bank',
-                                bankRoutingNum: '444455555'
-                            },
-                            bankAccountNum: '111222333',
-                            accountType: 'S',
-                            accountStatus: 'A',
-                            priority: 1,
-                            amount: 700.00
-                        }
-                    ]
-                },
+                mostRecent: null,
+                //mostRecent: {
+                //    date: '04/30/2014',
+                //    allocations: [
+                //        {
+                //            bankRoutingInfo: {
+                //                bankName: 'First State Bank',
+                //                bankRoutingNum: '123456789'
+                //            },
+                //            bankAccountNum: '555666777',
+                //            accountType: 'C',
+                //            accountStatus: 'A',
+                //            priority: 1,
+                //            amount: 500.00
+                //        },
+                //        {
+                //            bankRoutingInfo: {
+                //                bankName: 'Second State Bank',
+                //                bankRoutingNum: '444455555'
+                //            },
+                //            bankAccountNum: '111222333',
+                //            accountType: 'S',
+                //            accountStatus: 'A',
+                //            priority: 1,
+                //            amount: 700.00
+                //        }
+                //    ]
+                //},
                 proposed: {
                     allocations: [
                         {
@@ -94,18 +96,34 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
                     ]
                }
             };
+
+            ddListingService.getMostRecentPayrollListing().$promise.then( function (response) {
+                if(response.failure) {
+                    notificationCenterService.displayNotifications(response.message, "error");
+                } else {
+                    $scope.distributions.mostRecent = response;
+                    $scope.hasPayAccountsMostRecent = !!response.docAccts
+                    $scope.payAccountsMostRecentLoaded = true;
+                }
+            });
+
+            $scope.hasPayAccountsProposed = !!$scope.distributions.proposed.allocations;
         };
 
 
         // CONTROLLER VARIABLES
         // --------------------
-        $scope.payAccountsLoaded = false;
+        $scope.payAccountsMostRecentLoaded = false;
+        $scope.payAccountsProposedLoaded = false;
+        $scope.hasPayAccountsMostRecent = false;
+        $scope.hasPayAccountsProposed = false;
         $scope.payPanelMostRecentCollapsed = false;
         $scope.payPanelProposedCollapsed = false;
 
         $scope.distributions = null;
         $scope.account = null;
         $scope.accountLoaded = false;
+        $scope.hasAccount = false;
         $scope.panelCollapsed = false;
         $scope.authorizedChanges = false;
 
@@ -115,17 +133,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
 
         // Payroll
         $scope.dateStringForPayDistHeader = function () {
-            var date = $scope.distributions.mostRecent.date;
+            var date = $scope.distributions.mostRecent.payDate;
 
             return date ? ' as of ' + date : '';
-        };
-
-        $scope.hasPayAccountsMostRecent = function () {
-            return !!$scope.distributions.mostRecent.allocations;
-        };
-
-        $scope.hasPayAccountsProposed = function () {
-            return !!$scope.distributions.proposed.allocations;
         };
 
         $scope.totalPayAmounts = function (distribution) {
@@ -156,10 +166,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
                 scope: $scope
             });
        };
-
-        $scope.hasAccount = function () {
-            return !!$scope.account;
-        };
 
         $scope.isDesktop = function () {
             return isDesktop();

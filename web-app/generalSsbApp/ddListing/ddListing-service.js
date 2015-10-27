@@ -4,14 +4,16 @@
 
 generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
     var listing = $resource('../ssb/:controller/:action',
-        {controller: 'AccountListing', action: 'getMyAccounts'});
+            {controller: 'AccountListing', action: 'getMyAccounts'}),
+        mostRecentPayrollListing = $resource('../ssb/:controller/:action',
+            {controller: 'AccountListing', action: 'getLastPayDateInfo'});
 
     this.getDirectDepositListing = function (){
         return listing.query();
     };
 
-    this.getPayrollListing = function() {
-        //STUB
+    this.getMostRecentPayrollListing = function() {
+        return mostRecentPayrollListing.get();
     };
 
     this.getUserAllocationAmount = function () {
