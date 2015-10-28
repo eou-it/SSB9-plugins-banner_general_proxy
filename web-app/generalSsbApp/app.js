@@ -8,8 +8,8 @@ var generalSsbAppDirectives = angular.module('generalSsbAppDirectives', []);
 var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','ngAria', 'generalSsbAppControllers',
     'generalSsbAppDirectives','ui.bootstrap','I18n'])
     .run(
-    ['$rootScope', '$state', '$stateParams', '$filter', 'breadcrumbService', 'disclaimerService', 'notificationCenterService',
-        function ($rootScope, $state, $stateParams, $filter, breadcrumbService, disclaimerService, notificationCenterService) {
+    ['$rootScope', '$state', '$stateParams', '$filter', 'breadcrumbService', 'directDepositService', 'notificationCenterService',
+        function ($rootScope, $state, $stateParams, $filter, breadcrumbService, directDepositService, notificationCenterService) {
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
             $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
@@ -31,13 +31,18 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','n
                 window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
             }
 
-            disclaimerService.getDisclaimer().$promise.then(function (response) {
+            directDepositService.getDisclaimer().$promise.then(function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications('directDeposit.invalid.missing.disclaimer', "error");
                     $rootScope.disclaimer = $filter('i18n')('directDeposit.disclaimer.text');
                 } else {
                     $rootScope.disclaimer = response.disclaimer;
                 }
+            });
+            
+            directDepositService.getRoles().$promise.then(function (response) {
+                $rootScope.isStudent = response.isStudent;
+                $rootScope.isEmployee = response.isEmployee;
             });
         }
     ]

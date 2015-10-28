@@ -8,6 +8,7 @@ import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.i18n.LocalizeUtil
 import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
+import net.hedtech.banner.positioncontrol.utility.UsersUtility
 
 class GeneralSsbController  {
 
@@ -32,6 +33,14 @@ class GeneralSsbController  {
         } catch (ApplicationException e) {
             render returnFailureMessage( e ) as JSON
         }
+    }
+    
+    def getRoles() {
+        def model = [:]
+        model.isStudent = UsersUtility.hasUserRole("STUDENT")
+        model.isEmployee = UsersUtility.hasUserRole("EMPLOYEE")
+        
+        render model as JSON
     }
 
 
