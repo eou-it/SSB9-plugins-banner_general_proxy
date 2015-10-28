@@ -446,7 +446,17 @@ input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before
 }
 
 .entry {
-    padding-left: 20px;
+    margin-left: 47px;
+}
+
+.delete-checkbox-wrapper {
+    float: left;
+    margin-left: 15px;
+}
+
+.delete-checkbox-wrapper-desktop {
+    display: inline-block;
+    padding-right: 5px;
 }
 
 .account-heading {
@@ -510,22 +520,32 @@ input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before
     border-bottom: 1px solid #ddd;
 }
 
-a.replace-account-link,
-a.add-account-link {
-    position: absolute;
-    top: 21px;
-    right: 20px;
+a.add-account-link,
+a.delete-account-link {
+    float: right;
     color: #333;
     text-decoration: none;
     cursor: pointer;
 }
 
-.add-account-link span {
+.add-account-link span,
+.delete-account-link span {
     vertical-align: middle;
 }
 
-.add-account-link [class^="icon-"] {
+.add-account-link [class^="icon-"],
+.delete-account-link [class^="icon-"] {
     font-size: 18px;
+}
+
+.add-account-link.disabled,
+.delete-account-link.disabled {
+    cursor: not-allowed;
+    color: #A0A3A4;
+}
+
+a.delete-account-link {
+    padding-right: 25px;
 }
 
 .edit-account {
@@ -599,14 +619,6 @@ a.add-account-link {
 }
 
 /* Icons */
-.icon-replace {
-    background: url('../images/replace.svg') no-repeat;
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    vertical-align: bottom;
-}
-
 .edit-account-link {
     color: #333;
 }

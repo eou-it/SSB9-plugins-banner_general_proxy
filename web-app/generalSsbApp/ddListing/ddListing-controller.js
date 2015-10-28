@@ -1,9 +1,9 @@
 /*******************************************************************************
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '$filter',
+generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '$modal', '$filter',
     'ddListingService', 'ddEditAccountService', 'notificationCenterService',
-    function ($scope, $modal, $filter, ddListingService, ddEditAccountService,
+    function ($scope, $state, $modal, $filter, ddListingService, ddEditAccountService,
               notificationCenterService){
 
         // LOCAL FUNCTIONS
@@ -126,6 +126,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
         $scope.hasAccount = false;
         $scope.panelCollapsed = false;
         $scope.authorizedChanges = false;
+        $scope.apAccountSelectedForDelete = false;
 
 
         // CONTROLLER FUNCTIONS
@@ -159,6 +160,10 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
 
         //display add account pop up
         $scope.showAddAccount = function () {
+            // If account already exists, this functionality is disabled
+            if ($scope.hasAccount) return;
+
+            // Otherwise, open modal
             var modal = $modal.open({
                 templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
                 keyboard:true,
@@ -195,6 +200,30 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$modal', '
                     $scope.authorizedChanges = false;
 
                     // TODO: show confirmation message or something here?
+                }
+            });
+        };
+
+        $scope.toggleApAccountSelectedForDelete = function () {
+            $scope.apAccountSelectedForDelete = !$scope.apAccountSelectedForDelete;
+        };
+
+        $scope.deleteAccounts = function () {
+            // If no account is selected for deletion, this functionality is disabled
+            if (!$scope.apAccountSelectedForDelete) return;
+
+            // Otherwise, do the delete
+            var accounts = [];
+
+            accounts.push($scope.account);
+
+            ddEditAccountService.deleteAccounts(accounts).$promise.then(function (response) {
+                if(response.failure) {
+                    notificationCenterService.displayNotifications(response.message, "error");
+                } else {
+                    // Refresh account info
+                    $scope.account = null;
+                    $state.go('directDepositApp1', {}, {reload: true, inherit: false, notify: true});
                 }
             });
         };

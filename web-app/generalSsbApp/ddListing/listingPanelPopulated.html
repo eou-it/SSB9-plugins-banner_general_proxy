@@ -1,10 +1,11 @@
-<div class="ap-listing-panel">
-    <a class="replace-account-link" href=""><span class="icon-replace"></span> <span>{{'directDeposit.account.label.replace'|i18n}}</span></a>
-</div>
 <div class="panel-body">
     <div class="row">
         <div class="edit-account">
             <a class="edit-account-link" ng-click="showEditAccountModal()" enter-key="showEditAccountModal()"><span class="icon-edit"></span> <span>{{'directDeposit.account.label.edit'|i18n}}</span></a>
+        </div>
+        <div class="delete-checkbox-wrapper">
+            <input type="checkbox" ng-click="toggleApAccountSelectedForDelete()" enter-key="toggleApAccountSelectedForDelete()">
+            <div class="lbl"></div>
         </div>
         <div class="entry">
             <account-info/>

@@ -46,6 +46,15 @@ class UpdateAccountControllerTests extends BaseIntegrationTestCase {
     }
 
     @Test
+    void testDeleteAccount() {
+        updateAccountController.request.contentType = "text/json"
+        updateAccountController.deleteAccounts()
+        def dataForNullCheck = updateAccountController.response.contentAsString
+        def data = JSON.parse( dataForNullCheck )
+        assertNotNull data
+    }
+
+    @Test
     void testReturnFailureMessage() {
         ApplicationException e = new ApplicationException(DirectDepositAccount, "@@r1:invalidAccountNumFmt@@")
 

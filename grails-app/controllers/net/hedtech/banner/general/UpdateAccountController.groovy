@@ -43,6 +43,17 @@ class UpdateAccountController {
         }
     }
 
+    def deleteAccounts() {
+        def map = request?.JSON ?: params
+
+        try {
+            render directDepositAccountService.delete(map)
+
+        } catch (ApplicationException e) {
+            render returnFailureMessage(e) as JSON
+        }
+    }
+
     def getBankInfo() {
         def map = request?.JSON ?: params
         

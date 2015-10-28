@@ -1,4 +1,10 @@
-<td class="break-word">{{account.bankRoutingInfo.bankName}}</td>
+<td class="break-word">
+    <div class="delete-checkbox-wrapper-desktop">
+        <input type="checkbox" class="delete-checkbox-desktop" ng-click="toggleApAccountSelectedForDelete()" enter-key="toggleApAccountSelectedForDelete()" aria-label="Select for Delete" aria-describedby="ap-bank-name">
+        <span class="lbl"></span>
+    </div>
+    <span id="ap-bank-name">{{account.bankRoutingInfo.bankName}}</span>
+</td>
 <td class="break-word">{{account.bankRoutingInfo.bankRoutingNum}}</td>
 <td class="break-word">{{account.bankAccountNum}}</td>
 <td>
