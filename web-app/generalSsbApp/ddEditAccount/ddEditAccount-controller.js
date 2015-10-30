@@ -76,7 +76,24 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             });
         }
     };
-    
+
+    $scope.deleteAPAccount = function () {
+        var accounts = [];
+
+        accounts.push($scope.account);
+
+        ddEditAccountService.deleteAccounts(accounts).$promise.then(function (response) {
+            if(response.failure) {
+                notificationCenterService.displayNotifications(response.message, "error");
+            } else {
+                // Refresh account info
+                $scope.account = null;
+                $state.go('directDepositApp1', {}, {reload: true, inherit: false, notify: true});
+                $scope.cancelModal();
+            }
+        });
+    };
+
     var requiredFieldsValid = function() {
         if(!$scope.account.bankRoutingInfo.bankRoutingNum){
             $scope.routingNumErr = true;
@@ -111,10 +128,10 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     };
 
     this.init = function() {
-        // In initializing this controller, we could be doing an account create or account edit.  For the former, no
-        // account will exist and we need to create a new account object.  For the latter, an account will already
-        // exist on scope, so use that.  (At the time of this writing, the latter case happens only when $modal.open()
-        // is called, initializing this controller with a parent scope object.)
+        // In initializing this controller, we could be doing an account create, edit, or delete.  For the create, no
+        // account will exist and we need to instantiate a new account object.  For the edit and delete, an account will
+        // already exist on scope, so use that.  (At the time of this writing, the edit and delete cases happen only
+        // when $modal.open() is called, initializing this controller with a parent scope object.)
         if (!$scope.account) {
             // Create "new account" object
             $scope.account = {

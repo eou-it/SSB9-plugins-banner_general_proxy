@@ -294,6 +294,10 @@ button.closebtn {
     background-color: #F1F4F6;
 }
 
+.confirm-delete-notification {
+    padding: 15px 15px 0;
+}
+
 /*  Dropdown menu  */
 .form-spacing,
 .dropdown-menu > li > a.form-spacing {
@@ -716,6 +720,7 @@ table tr td {
     button.closebtn {
         padding: 2.35em;
     }
+
     .pad-dialog-lr {
         padding: 0em 1.7em;
     }

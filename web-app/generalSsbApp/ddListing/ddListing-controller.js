@@ -208,23 +208,17 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             $scope.apAccountSelectedForDelete = !$scope.apAccountSelectedForDelete;
         };
 
-        $scope.deleteAccounts = function () {
+        // Display accounts payable Delete Account confirmation modal
+        $scope.confirmAPDelete = function () {
             // If no account is selected for deletion, this functionality is disabled
             if (!$scope.apAccountSelectedForDelete) return;
 
-            // Otherwise, do the delete
-            var accounts = [];
-
-            accounts.push($scope.account);
-
-            ddEditAccountService.deleteAccounts(accounts).$promise.then(function (response) {
-                if(response.failure) {
-                    notificationCenterService.displayNotifications(response.message, "error");
-                } else {
-                    // Refresh account info
-                    $scope.account = null;
-                    $state.go('directDepositApp1', {}, {reload: true, inherit: false, notify: true});
-                }
+            // Otherwise, confirm/do the delete
+            $modal.open({
+                templateUrl: '../generalSsbApp/ddEditAccount/deleteAPAccount.html',
+                keyboard:true,
+                controller: "ddEditAccountController",
+                scope: $scope
             });
         };
 
