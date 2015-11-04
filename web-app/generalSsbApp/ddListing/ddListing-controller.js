@@ -166,6 +166,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             // Otherwise, open modal
             var modal = $modal.open({
                 templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
+                windowClass: 'edit-account-modal',
                 keyboard:true,
                 controller: "ddEditAccountController",
                 scope: $scope
@@ -208,24 +209,51 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             $scope.apAccountSelectedForDelete = !$scope.apAccountSelectedForDelete;
         };
 
+        $scope.cancelNotification = function () {
+            notificationCenterService.clearNotifications();
+        };
+
+        $scope.deleteAPAccount = function () {
+            var accounts = [];
+
+            accounts.push($scope.account);
+
+            ddEditAccountService.deleteAccounts(accounts).$promise.then(function (response) {
+                if(response.failure) {
+                    notificationCenterService.displayNotifications(response.message, "error");
+                } else {
+                    // Refresh account info
+                    $scope.account = null;
+                    $scope.cancelNotification();
+                    $state.go('directDepositApp1', {}, {reload: true, inherit: false, notify: true});
+                }
+            });
+        };
+
         // Display accounts payable Delete Account confirmation modal
         $scope.confirmAPDelete = function () {
             // If no account is selected for deletion, this functionality is disabled
             if (!$scope.apAccountSelectedForDelete) return;
 
-            // Otherwise, confirm/do the delete
-            $modal.open({
-                templateUrl: '../generalSsbApp/ddEditAccount/deleteAPAccount.html',
-                keyboard:true,
-                controller: "ddEditAccountController",
-                scope: $scope
-            });
+            var prompts = [
+                {
+                    label: "Cancel",
+                    action: $scope.cancelNotification
+                },
+                {
+                    label: "Delete",
+                    action: $scope.deleteAPAccount
+                }
+            ];
+
+            notificationCenterService.displayNotifications('directDeposit.confirm.ap.delete.text', 'warning', false, prompts);
         };
 
         // Display Edit Account modal
         $scope.showEditAccountModal = function () {
             $modal.open({
                 templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
+                windowClass: 'edit-account-modal',
                 keyboard:true,
                 controller: "ddEditAccountController",
                 scope: $scope

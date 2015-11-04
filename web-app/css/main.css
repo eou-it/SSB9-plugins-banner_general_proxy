@@ -602,18 +602,18 @@ a.delete-account-link {
 }
 
 /*  Custom modal  */
-.direct-deposit .modal.in .modal-dialog {
+.modal.edit-account-modal.in .modal-dialog {
     transform: translate(0em, 7em);
 }
 
 @media(min-width:768px){
-    .direct-deposit .modal-dialog {
+    .edit-account-modal .modal-dialog {
         width: auto;
     }
 }
 
 @media(min-width:1024px){
-    .direct-deposit .modal-dialog {
+    .edit-account-modal .modal-dialog {
         width: 768px;
     }
 }

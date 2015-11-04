@@ -7,7 +7,8 @@ generalSsbApp.service('notificationCenterService', ['$filter', function ($filter
     this.clearNotifications = function() {
         notifications.clearNotifications();
     };
-    this.displayNotifications = function(displayMessage, messageType, flashType) {
+
+    this.displayNotifications = function(displayMessage, messageType, flashType, prompts) {
         if ($filter('i18n')(displayMessage) !== undefined) {
             displayMessage = $filter('i18n')(displayMessage);
         }
@@ -18,7 +19,8 @@ generalSsbApp.service('notificationCenterService', ['$filter', function ($filter
                 type: messageType,
                 model: null,
                 flash: flashType ? flashType : flashNotification,
-                attribute: null
+                attribute: null,
+                prompts: prompts
             }
         );
         notifications.addNotification(notification);
