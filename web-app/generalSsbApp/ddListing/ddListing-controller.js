@@ -198,7 +198,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     // Refresh account info
                     $scope.account = null;
                     $scope.cancelNotification();
-                    $state.go('directDepositApp1', {}, {reload: true, inherit: false, notify: true});
+                    $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
                 }
             });
         };

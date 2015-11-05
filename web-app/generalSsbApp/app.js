@@ -49,16 +49,18 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','n
 );
 
 generalSsbApp.config(function($stateProvider, $urlRouterProvider){
-    // For any unmatched url, send to /route1
-    var url = url?url:'directDepositApp1';
+    // For any unmatched url, send to /directDepositListing
+    var url = url ? url : 'directDepositListing';
+
     $urlRouterProvider.otherwise(url) ;
+
     /*********************************************************
      * Defining all the different states of the generalSsbApp
      * Landing pages
      *********************************************************/
     $stateProvider
-        .state('directDepositApp1', {
-            url: "/directDepositApp1",
+        .state('directDepositListing', {
+            url: "/directDepositListing",
             templateUrl: '../generalSsbApp/ddListing/directDepositListing.html',
             controller: 'ddListingController',
             data: {
