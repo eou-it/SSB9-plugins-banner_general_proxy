@@ -132,7 +132,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         ];
 
         //display add account pop up
-        $scope.showAddAccount = function () {
+        $scope.showAddAccount = function (typeInd) {
             // If account already exists, this functionality is disabled
             if ($scope.hasAccount) return;
 
@@ -142,7 +142,12 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 windowClass: 'edit-account-modal',
                 keyboard:true,
                 controller: "ddEditAccountController",
-                scope: $scope
+                scope: $scope,
+                resolve: {
+                	typeIndicator: function(){
+                		return typeInd;
+                	}
+                }
             });
        };
 

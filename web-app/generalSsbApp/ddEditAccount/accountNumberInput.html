@@ -43,6 +43,13 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </div>
         <p ng-show="accountTypeErr" class="input-field-label field-error error-font-size">{{'directDeposit.invalid.missing.account.type'|i18n}}</p>
     </div>
+    <div ng-if="typeIndicator==='HR'" class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix clear-xs-sm">
+        <label ng-class="(amountErr ? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.amount'|i18n}}:</label><br>
+        <input class="edit-radio" type="radio" name="amount-type" checked><span class="lbl">Remaining</span><br>
+        <input class="edit-radio" type="radio" name="amount-type"><span class="lbl">Amount</span><br>
+        <input class="edit-radio" type="radio" name="amount-type"><span class="lbl">Percentage</span><br>
+        <p ng-show="amountErr" class="input-field-label field-error error-font-size">{{'directDeposit.invalid.missing.account.type'|i18n}}</p>
+    </div>
 </div>
 <div class="row disclaimer-margin">
     <div class="col-xs-12">

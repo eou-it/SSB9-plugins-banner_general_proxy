@@ -2,13 +2,15 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddEditAccountService', 'notificationCenterService',
-    function($scope, $modalInstance, $state, $filter, ddEditAccountService, notificationCenterService){
+generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddEditAccountService', 'notificationCenterService', 'typeIndicator',
+    function($scope, $modalInstance, $state, $filter, ddEditAccountService, notificationCenterService, typeIndicator){
 
     $scope.creatingNewAccount = false;
     $scope.authorizedChanges = false;
 
     $scope.editAccountService = ddEditAccountService;
+    
+    $scope.typeIndicator = typeIndicator;
 
     $scope.routingNumErr = false;
     $scope.routingNumMessage;

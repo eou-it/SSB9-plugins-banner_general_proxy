@@ -442,6 +442,30 @@ input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before
     border: 1px solid #006600;
 }
 
+.edit-radio {
+	position: relative;
+}
+
+input[type=radio]+.lbl::before {
+    border-radius: 32px;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 21px;
+}
+
+input[type=radio]:checked+.lbl::before {
+    content: "\2022";
+}
+
+input[type=radio]+.lbl::before {
+    border-radius: 32px;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 21px;
+}
+
+input[type=radio]:checked+.lbl::before {
+    content: "\2022";
+}
+
 /* Account Listing Page Styles */
 .pay-entry {
     margin-top: 10px;
