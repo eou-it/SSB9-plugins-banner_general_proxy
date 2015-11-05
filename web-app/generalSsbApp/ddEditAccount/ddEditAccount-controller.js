@@ -2,15 +2,14 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddEditAccountService', 'notificationCenterService', 'typeIndicator',
-    function($scope, $modalInstance, $state, $filter, ddEditAccountService, notificationCenterService, typeIndicator){
+generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddEditAccountService', 'notificationCenterService', 'editAcctProperties',
+    function($scope, $modalInstance, $state, $filter, ddEditAccountService, notificationCenterService, editAcctProperties){
 
-    $scope.creatingNewAccount = false;
+    $scope.typeIndicator = editAcctProperties.typeIndicator;
+    $scope.creatingNewAccount = editAcctProperties.creatingNew;
     $scope.authorizedChanges = false;
 
     $scope.editAccountService = ddEditAccountService;
-    
-    $scope.typeIndicator = typeIndicator;
 
     $scope.routingNumErr = false;
     $scope.routingNumMessage;
@@ -66,6 +65,8 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     };
     
     $scope.saveAccount = function() {
+        handleAmounts();
+
         if(requiredFieldsValid()) {
             ddEditAccountService.saveApAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
                 if(response.failure) {
@@ -123,6 +124,15 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         
         return !($scope.routingNumErr || $scope.accountNumErr || $scope.accountTypeErr);
     };
+
+    $scope.amountType = 'remaining';
+
+    var handleAmounts = function(){
+        if($scope.amountType === 'remaining'){
+            $scope.account.percent = 100;
+            $scope.account.amount = null;
+        }
+    };
     
     $scope.cancelModal = function () {
         $modalInstance.dismiss('cancel');
@@ -134,7 +144,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         // account will exist and we need to instantiate a new account object.  For the edit and delete, an account will
         // already exist on scope, so use that.  (At the time of this writing, the edit and delete cases happen only
         // when $modal.open() is called, initializing this controller with a parent scope object.)
-        if (!$scope.account) {
+        if ($scope.creatingNewAccount) {
             // Create "new account" object
             $scope.account = {
                 pidm: null,
@@ -150,7 +160,12 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 }
             };
 
-            $scope.creatingNewAccount = true;
+            if($scope.typeIndicator === 'HR'){
+                $scope.account.hrIndicator = 'A';
+                $scope.account.apIndicator = 'I';
+            }
+
+            //$scope.creatingNewAccount = true;
         }
     };
 

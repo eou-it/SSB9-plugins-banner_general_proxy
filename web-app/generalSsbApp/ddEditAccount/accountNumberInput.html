@@ -2,7 +2,7 @@
 Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="row semi-bold">
-    <div class="col-xs-6 col-sm-4 col-md-4 pad-left-sm xs-fix">
+    <div class="col-xs-6 col-sm-4 col-md-4 clear-both xs-fix">
         <label ng-class="(routingNumErr? 'input-field-label field-error' : 'input-field-label')" for="routing-number">{{'directDeposit.account.label.bank.routing.num'|i18n}}</label>
         <input data-ng-model="account.bankRoutingInfo.bankRoutingNum" ng-blur="validateRoutingNum()" ng-disabled="!creatingNewAccount"
              ng-class="['text-input-field', 'semi-bold', 'form-spacing', (routingNumErr ? 'input-field-error' : null)]" 
@@ -12,7 +12,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </span>
         <p class="input-field-label ng-class: (routingNumErr ? 'field-error error-font-size' : 'no-display');">{{routingNumMessage}}</p>
     </div>
-    <div class="col-xs-6 col-sm-4 col-md-4 .pad-center-sm xs-fix">
+    <div class="col-xs-6 col-sm-4 col-md-4 xs-fix">
         <label ng-class="(accountNumErr ? 'input-field-label field-error' : 'input-field-label')" for="account-number">{{'directDeposit.account.label.account.num'|i18n}}</label>
         <input data-ng-model="account.bankAccountNum" ng-blur="validateAccountNum()" ng-disabled="!creatingNewAccount"
             ng-class="['text-input-field', 'semi-bold', 'form-spacing', (accountNumErr ? 'input-field-error' : null)]"
@@ -22,7 +22,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </span>
         <p class="input-field-label ng-class: (accountNumErr ? 'field-error error-font-size' : 'no-display');">{{accountNumMessage}}</p>
     </div>
-    <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix clear-xs-sm">
+    <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
         <label ng-class="(accountTypeErr ? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.accountType'|i18n}}</label>
         <label class="visuallyhidden" id="select-acct-type">{{'directDeposit.label.account.type.select'|i18n}}</label>
         <div class="dropdown" role="menu">
@@ -43,12 +43,12 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </div>
         <p ng-show="accountTypeErr" class="input-field-label field-error error-font-size">{{'directDeposit.invalid.missing.account.type'|i18n}}</p>
     </div>
-    <div ng-if="typeIndicator==='HR'" class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix clear-xs-sm">
+    <div ng-if="typeIndicator==='HR'" class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
         <label ng-class="(amountErr ? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.amount'|i18n}}:</label><br>
-        <input class="edit-radio" type="radio" name="amount-type" checked><span class="lbl">Remaining</span><br>
-        <input class="edit-radio" type="radio" name="amount-type"><span class="lbl">Amount</span><br>
-        <input class="edit-radio" type="radio" name="amount-type"><span class="lbl">Percentage</span><br>
-        <p ng-show="amountErr" class="input-field-label field-error error-font-size">{{'directDeposit.invalid.missing.account.type'|i18n}}</p>
+        <input ng-model="amountType" class="edit-radio" type="radio" name="amount-type" value="remaining" checked><span class="lbl radio-list">Remaining</span><br>
+        <input ng-model="amountType" class="edit-radio" type="radio" name="amount-type" value="amount"><span class="lbl radio-list">Amount</span><br>
+        <input ng-model="amountType" class="edit-radio" type="radio" name="amount-type" value="percentage"><span class="lbl radio-list">Percentage</span><br>
+        <p ng-show="amountErr" class="input-field-label field-error error-font-size">Amount error</p>
     </div>
 </div>
 <div class="row disclaimer-margin">

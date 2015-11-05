@@ -132,24 +132,35 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         ];
 
         //display add account pop up
-        $scope.showAddAccount = function (typeInd) {
-            // If account already exists, this functionality is disabled
-            if ($scope.hasAccount) return;
+        $scope.showAddAccount = function (typeInd, isAddNew) {
+            // If AP account already exists, this functionality is disabled
+            if(isAddNew && typeInd === 'AP' && $scope.hasAccount) return;
 
             // Otherwise, open modal
             var modal = $modal.open({
                 templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
                 windowClass: 'edit-account-modal',
-                keyboard:true,
+                keyboard: true,
                 controller: "ddEditAccountController",
                 scope: $scope,
                 resolve: {
-                	typeIndicator: function(){
-                		return typeInd;
-                	}
+                    editAcctProperties: function(){
+                        return { typeIndicator: typeInd, creatingNew: !!isAddNew };
+                    }
                 }
             });
        };
+       
+       /* Display Edit Account modal
+       $scope.showEditAccountModal = function () {
+           $modal.open({
+               templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
+               windowClass: 'edit-account-modal',
+               keyboard:true,
+               controller: "ddEditAccountController",
+               scope: $scope
+           });
+       };*/
 
         $scope.isDesktop = function () {
             return isDesktop();
@@ -225,17 +236,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             ];
 
             notificationCenterService.displayNotifications('directDeposit.confirm.ap.delete.text', 'warning', false, prompts);
-        };
-
-        // Display Edit Account modal
-        $scope.showEditAccountModal = function () {
-            $modal.open({
-                templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
-                windowClass: 'edit-account-modal',
-                keyboard:true,
-                controller: "ddEditAccountController",
-                scope: $scope
-            });
         };
 
         $scope.toggleAuthorizedChanges = function () {
