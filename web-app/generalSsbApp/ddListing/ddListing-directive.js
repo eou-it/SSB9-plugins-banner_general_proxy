@@ -6,7 +6,7 @@ generalSsbAppDirectives.directive('payAccountInfoMostRecent',[function () {
         restrict: 'E',
         templateUrl: '../generalSsbApp/ddListing/payAccountInformationMostRecent.html',
         scope: {
-            account: '='
+            payHistoryDist: '='
         }
     };
 }]);

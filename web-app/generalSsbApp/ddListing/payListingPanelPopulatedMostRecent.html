@@ -1,7 +1,7 @@
 <div class="pay-panel-body">
     <div class="row">
-        <div class="pay-entry clearfix" ng-repeat="allocation in distributions.mostRecent.docAccts">
-            <pay-account-info-most-recent account="allocation"/>
+        <div class="pay-entry clearfix" ng-repeat="dist in distributions.mostRecent.docAccts">
+            <pay-account-info-most-recent pay-history-dist="dist"/>
         </div>
         <div class="account-total-footer clearfix">
             <div class="amount-right">

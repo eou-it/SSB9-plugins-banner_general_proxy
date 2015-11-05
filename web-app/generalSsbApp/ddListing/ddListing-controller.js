@@ -52,33 +52,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             // have allocations
             $scope.distributions = {
                 mostRecent: null,
-                //mostRecent: {
-                //    date: '04/30/2014',
-                //    allocations: [
-                //        {
-                //            bankRoutingInfo: {
-                //                bankName: 'First State Bank',
-                //                bankRoutingNum: '123456789'
-                //            },
-                //            bankAccountNum: '555666777',
-                //            accountType: 'C',
-                //            accountStatus: 'A',
-                //            priority: 1,
-                //            amount: 500.00
-                //        },
-                //        {
-                //            bankRoutingInfo: {
-                //                bankName: 'Second State Bank',
-                //                bankRoutingNum: '444455555'
-                //            },
-                //            bankAccountNum: '111222333',
-                //            accountType: 'S',
-                //            accountStatus: 'A',
-                //            priority: 1,
-                //            amount: 700.00
-                //        }
-                //    ]
-                //},
                 proposed: {
                     allocations: [
                         {
@@ -94,7 +67,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                             percent: null
                         }
                     ]
-               }
+                }
             };
 
             ddListingService.getMostRecentPayrollListing().$promise.then( function (response) {
