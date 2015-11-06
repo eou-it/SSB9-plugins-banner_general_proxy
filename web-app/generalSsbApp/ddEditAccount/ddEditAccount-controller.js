@@ -21,7 +21,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
             if( invalidCharRegEx.test($scope.account.bankRoutingInfo.bankRoutingNum) ){
                 $scope.routingNumErr = true;
-                $scope.routingNumMessage = $filter('i18n')('directDeposit.invalid.routing.number');
+                $scope.routingNumMessage = $filter('i18n')('directDeposit.invalid.chars.routing');
                 $scope.account.bankRoutingInfo.bankName = null;
                 notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
             }
@@ -53,7 +53,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
             if( invalidCharRegEx.test($scope.account.bankAccountNum) ){
                 $scope.accountNumErr = true;
-                $scope.accountNumMessage = $filter('i18n')('directDeposit.invalid.account.number');
+                $scope.accountNumMessage = $filter('i18n')('directDeposit.invalid.chars.account');
                 notificationCenterService.displayNotifications($scope.accountNumMessage, "error");
             }
             else {
