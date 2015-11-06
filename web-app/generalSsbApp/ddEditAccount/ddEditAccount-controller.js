@@ -2,52 +2,76 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddEditAccountService', 'notificationCenterService',
-    function($scope, $modalInstance, $state, $filter, ddEditAccountService, notificationCenterService){
+generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddEditAccountService', 'notificationCenterService', 'editAcctProperties',
+    function($scope, $modalInstance, $state, $filter, ddEditAccountService, notificationCenterService, editAcctProperties){
 
-    $scope.creatingNewAccount = false;
+    $scope.typeIndicator = editAcctProperties.typeIndicator;
+    $scope.creatingNewAccount = editAcctProperties.creatingNew;
     $scope.authorizedChanges = false;
 
     $scope.editAccountService = ddEditAccountService;
 
+    //routing and account number should only contain upper case letters and digits
+    var invalidCharRegEx = /[^A-Za-z0-9]/i;
     $scope.routingNumErr = false;
     $scope.routingNumMessage;
 
     $scope.validateRoutingNum = function () {
         if($scope.account.bankRoutingInfo.bankRoutingNum){
-            ddEditAccountService.getBankInfo($scope.account.bankRoutingInfo.bankRoutingNum).$promise.then(function (response) {
-                if(response.failure) {
-                    $scope.routingNumErr = true;
-                    $scope.routingNumMessage = $filter('i18n')('directDeposit.invalid.routing.number');
-                    $scope.account.bankRoutingInfo.bankName = null;
-                    notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
-                }
-                else{
-                    $scope.routingNumMessage = response.bankName;
-                    $scope.routingNumErr = false;
-                    notificationCenterService.clearNotifications();
-                }
-            });
+
+            if( invalidCharRegEx.test($scope.account.bankRoutingInfo.bankRoutingNum) ){
+                $scope.routingNumErr = true;
+                $scope.routingNumMessage = $filter('i18n')('directDeposit.invalid.chars.routing');
+                $scope.account.bankRoutingInfo.bankName = null;
+                notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
+            }
+            else {
+                $scope.account.bankRoutingInfo.bankRoutingNum = $scope.account.bankRoutingInfo.bankRoutingNum.toUpperCase();
+
+                ddEditAccountService.getBankInfo($scope.account.bankRoutingInfo.bankRoutingNum).$promise.then(function (response) {
+                    if(response.failure) {
+                        $scope.routingNumErr = true;
+                        $scope.routingNumMessage = $filter('i18n')('directDeposit.invalid.routing.number');
+                        $scope.account.bankRoutingInfo.bankName = null;
+                        notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
+                    }
+                    else {
+                        $scope.routingNumMessage = response.bankName;
+                        $scope.routingNumErr = false;
+                        notificationCenterService.clearNotifications();
+                    }
+                });
+            }
         }
     };
-    
+
     $scope.accountNumErr = false;
     $scope.accountNumMessage;
     
     $scope.validateAccountNum = function () {
         if($scope.account.bankAccountNum){
-            ddEditAccountService.validateAccountNum($scope.account.bankAccountNum).$promise.then(function (response) {
-                if(response.failure) {
-                    $scope.accountNumErr = true;
-                    $scope.accountNumMessage = $filter('i18n')('directDeposit.invalid.account.number');
-                    notificationCenterService.displayNotifications($scope.accountNumMessage, "error");
-                }
-                else{
-                    $scope.accountNumMessage = null;
-                    $scope.accountNumErr = false;
-                    notificationCenterService.clearNotifications();
-                }
-            });
+
+            if( invalidCharRegEx.test($scope.account.bankAccountNum) ){
+                $scope.accountNumErr = true;
+                $scope.accountNumMessage = $filter('i18n')('directDeposit.invalid.chars.account');
+                notificationCenterService.displayNotifications($scope.accountNumMessage, "error");
+            }
+            else {
+                $scope.account.bankAccountNum = $scope.account.bankAccountNum.toUpperCase();
+
+                ddEditAccountService.validateAccountNum($scope.account.bankAccountNum).$promise.then(function (response) {
+                    if(response.failure) {
+                        $scope.accountNumErr = true;
+                        $scope.accountNumMessage = $filter('i18n')('directDeposit.invalid.account.number');
+                        notificationCenterService.displayNotifications($scope.accountNumMessage, "error");
+                    }
+                    else {
+                        $scope.accountNumMessage = null;
+                        $scope.accountNumErr = false;
+                        notificationCenterService.clearNotifications();
+                    }
+                });
+            }
         }
     };
     
@@ -64,6 +88,8 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     };
     
     $scope.saveAccount = function() {
+        handleAmounts();
+
         if(requiredFieldsValid()) {
             ddEditAccountService.saveApAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
                 if(response.failure) {
@@ -121,6 +147,15 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         
         return !($scope.routingNumErr || $scope.accountNumErr || $scope.accountTypeErr);
     };
+
+    $scope.amountType = 'remaining';
+
+    var handleAmounts = function(){
+        if($scope.amountType === 'remaining'){
+            $scope.account.percent = 100;
+            $scope.account.amount = null;
+        }
+    };
     
     $scope.cancelModal = function () {
         $modalInstance.dismiss('cancel');
@@ -132,7 +167,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         // account will exist and we need to instantiate a new account object.  For the edit and delete, an account will
         // already exist on scope, so use that.  (At the time of this writing, the edit and delete cases happen only
         // when $modal.open() is called, initializing this controller with a parent scope object.)
-        if (!$scope.account) {
+        if ($scope.creatingNewAccount) {
             // Create "new account" object
             $scope.account = {
                 pidm: null,
@@ -148,7 +183,12 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 }
             };
 
-            $scope.creatingNewAccount = true;
+            if($scope.typeIndicator === 'HR'){
+                $scope.account.hrIndicator = 'A';
+                $scope.account.apIndicator = 'I';
+            }
+
+            //$scope.creatingNewAccount = true;
         }
     };
 

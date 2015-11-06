@@ -101,6 +101,10 @@
     display: none;
 }
 
+.clear-both {
+    clear: both;
+}
+
 .visuallyhidden {
     position: absolute;
     overflow: hidden;
@@ -198,6 +202,11 @@
     right: 1.75em;
     top: 4.285em;
     background: #F6E5E6;
+}
+
+.icon-error.ellucian-font,
+.icon-caret-down.ellucian-font {
+    font-family: ellucian;
 }
 
 .text-input-field:focus {
@@ -440,6 +449,25 @@ input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before
     content: '\2713';
     background-color: #006600;
     border: 1px solid #006600;
+}
+
+.edit-radio {
+    position: relative;
+}
+
+input[type=radio]+.lbl::before {
+    border-radius: 32px;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 21px;
+}
+
+input[type=radio]:checked+.lbl::before {
+    content: "\2022";
+}
+
+.radio-list {
+    padding-bottom: 0.875em;
+    font-weight: normal;
 }
 
 /* Account Listing Page Styles */

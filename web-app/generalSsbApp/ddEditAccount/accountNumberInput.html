@@ -2,27 +2,27 @@
 Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="row semi-bold">
-    <div class="col-xs-6 col-sm-4 col-md-4 pad-left-sm xs-fix">
+    <div class="col-xs-6 col-sm-4 col-md-4 clear-both xs-fix">
         <label ng-class="(routingNumErr? 'input-field-label field-error' : 'input-field-label')" for="routing-number">{{'directDeposit.account.label.bank.routing.num'|i18n}}</label>
         <input data-ng-model="account.bankRoutingInfo.bankRoutingNum" ng-blur="validateRoutingNum()" ng-disabled="!creatingNewAccount"
              ng-class="['text-input-field', 'semi-bold', 'form-spacing', (routingNumErr ? 'input-field-error' : null)]" 
              id="routing-number" type="text" placeholder="{{'directDeposit.account.label.bank.routing.num'|i18n}}" />
         <span ng-if="routingNumErr" class="icon input-fail">
-            <span class="icon-error"></span>
+            <span class="icon-error ellucian-font"></span>
         </span>
         <p class="input-field-label ng-class: (routingNumErr ? 'field-error error-font-size' : 'no-display');">{{routingNumMessage}}</p>
     </div>
-    <div class="col-xs-6 col-sm-4 col-md-4 .pad-center-sm xs-fix">
+    <div class="col-xs-6 col-sm-4 col-md-4 xs-fix">
         <label ng-class="(accountNumErr ? 'input-field-label field-error' : 'input-field-label')" for="account-number">{{'directDeposit.account.label.account.num'|i18n}}</label>
         <input data-ng-model="account.bankAccountNum" ng-blur="validateAccountNum()" ng-disabled="!creatingNewAccount"
             ng-class="['text-input-field', 'semi-bold', 'form-spacing', (accountNumErr ? 'input-field-error' : null)]"
             id="account-number" type="text" placeholder="{{'directDeposit.account.label.account.num'|i18n}}"/>
         <span ng-if="accountNumErr" class="icon input-fail">
-            <span class="icon-error"></span>
+            <span class="icon-error ellucian-font"></span>
         </span>
         <p class="input-field-label ng-class: (accountNumErr ? 'field-error error-font-size' : 'no-display');">{{accountNumMessage}}</p>
     </div>
-    <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix clear-xs-sm">
+    <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
         <label ng-class="(accountTypeErr ? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.accountType'|i18n}}</label>
         <label class="visuallyhidden" id="select-acct-type">{{'directDeposit.label.account.type.select'|i18n}}</label>
         <div class="dropdown" role="menu">
@@ -43,11 +43,18 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </div>
         <p ng-show="accountTypeErr" class="input-field-label field-error error-font-size">{{'directDeposit.invalid.missing.account.type'|i18n}}</p>
     </div>
+    <div ng-if="typeIndicator==='HR'" class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
+        <label ng-class="(amountErr ? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.amount'|i18n}}:</label><br>
+        <input ng-model="amountType" class="edit-radio" type="radio" name="amount-type" value="remaining" checked><span class="lbl radio-list">{{'directDeposit.account.amount.remaining'|i18n}}</span><br>
+        <input ng-model="amountType" class="edit-radio" type="radio" name="amount-type" value="amount"><span class="lbl radio-list">{{'directDeposit.account.label.amount'|i18n}}</span><br>
+        <input ng-model="amountType" class="edit-radio" type="radio" name="amount-type" value="percentage"><span class="lbl radio-list">{{'directDeposit.account.amount.percentage'|i18n}}</span><br>
+        <p ng-show="amountErr" class="input-field-label field-error error-font-size">Amount error</p>
+    </div>
 </div>
 <div class="row disclaimer-margin">
     <div class="col-xs-12">
         <label class="visuallyhidden" for="disclaimer-checkbox">{{'directDeposit.label.disclaimer.checkbox'|i18n}}</label>
-        <input ng-click="toggleAuthorizedChanges()" enter-key="toggleAuthorizedChanges()" class="main-nav-check" id="disclaimer-checkbox" type="checkbox" aria-describedby="disclaimer"/>
+        <input ng-click="toggleAuthorizedChanges()" class="main-nav-check" id="disclaimer-checkbox" type="checkbox" aria-describedby="disclaimer"/>
         <p class="lbl" id="disclaimer">{{disclaimer}}</p>
     </div>
 </div>
