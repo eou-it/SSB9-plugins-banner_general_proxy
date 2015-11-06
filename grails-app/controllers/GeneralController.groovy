@@ -10,7 +10,7 @@ import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 import net.hedtech.banner.positioncontrol.utility.UsersUtility
 
-class GeneralSsbController  {
+class GeneralController {
 
     def log = Logger.getLogger( this.getClass() )
     static defaultAction = "landingPage"
@@ -29,7 +29,8 @@ class GeneralSsbController  {
             def url = g.message( code: 'default.url.landing.page.for.roles' )
 
             model = ['url': url]
-            render model: model, view: "generalSsb"
+//            render model: model, view: "generalSsb"
+            render model: model, view: "general"
         } catch (ApplicationException e) {
             render returnFailureMessage( e ) as JSON
         }

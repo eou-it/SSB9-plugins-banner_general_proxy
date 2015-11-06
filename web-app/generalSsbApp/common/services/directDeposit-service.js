@@ -12,7 +12,7 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
     };
     
     var fetchRoles = $resource('../ssb/:controller/:action',
-        {controller: 'GeneralSsb', action: 'getRoles'}, {query: {method:'GET', isArray:false}});
+        {controller: 'General', action: 'getRoles'}, {query: {method:'GET', isArray:false}});
 
     this.getRoles = function () {
         return fetchRoles.query();

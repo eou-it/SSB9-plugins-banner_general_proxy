@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
     <g:set var="mep" value="${params?.mepCode}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta HTTP-EQUIV="REFRESH" content="0; url=${!mep ? 'ssb/generalSsb' : 'ssb/generalSsb?mepCode='+mep}">
+    <meta HTTP-EQUIV="REFRESH" content="0; url=${!mep ? 'ssb/general' : 'ssb/general?mepCode='+mep}">
 </head>
 <body>
 </body>
