@@ -73,7 +73,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                     notificationCenterService.displayNotifications(response.message, "error");
                 }
                 else {
-                    $state.go('directDepositApp1', {}, {reload: true, inherit: false, notify: true});
+                    $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
                     $scope.cancelModal();
                 }
             });
@@ -91,7 +91,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             } else {
                 // Refresh account info
                 $scope.account = null;
-                $state.go('directDepositApp1', {}, {reload: true, inherit: false, notify: true});
+                $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
                 $scope.cancelModal();
             }
         });

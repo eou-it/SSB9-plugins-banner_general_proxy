@@ -14,7 +14,7 @@ generalSsbApp.service( 'breadcrumbService', ['$filter',function ($filter) {
             },
             {
                 label: 'general.breadcrumb.directDeposit',
-                url: '/directDepositApp1'
+                url: '/directDepositListing'
             }
         ];
         list = [];

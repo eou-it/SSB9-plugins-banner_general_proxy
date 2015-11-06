@@ -9,6 +9,8 @@ class AccountListingController  {
 
     def directDepositAccountService
     def directDepositPayrollHistoryService
+    def currencyFormatService
+
 
     private def findPerson() {
         return PersonUtility.getPerson(ControllerUtility.getPrincipalPidm())
@@ -36,8 +38,28 @@ class AccountListingController  {
         def pidm = ControllerUtility.getPrincipalPidm()
         
         model = directDepositPayrollHistoryService.getLastPayDistribution(pidm)
+
+        model.totalNet = formatCurrency(model.totalNet)
+
+        model.docAccts.each { it ->
+            it.net = formatCurrency(it.net)
+        }
         
         render model as JSON
     }
 
+    /**
+     * Formats a Double or BigDecimal to currency.  This is null safe.
+     */
+    private formatCurrency(amount) {
+        def formattedAmount
+
+        if (amount instanceof BigDecimal
+                || amount instanceof Double) {
+            formattedAmount = currencyFormatService.format(ControllerUtility.getCurrencyCode(),
+                    (amount instanceof BigDecimal ? amount : BigDecimal.valueOf(amount)))
+        }
+
+        return formattedAmount
+    }
 }
