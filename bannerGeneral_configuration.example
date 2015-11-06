@@ -27,7 +27,7 @@ This configuration file contains the following sections:
 
 ***************************************************************************** **/
 
-logAppName = "BannerGeneralApp"
+logAppName = "BannerGeneral"
 
 // ******************************************************************************
 //
