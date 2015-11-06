@@ -204,6 +204,11 @@
     background: #F6E5E6;
 }
 
+.icon-error.ellucian-font,
+.icon-caret-down.ellucian-font {
+    font-family: ellucian;
+}
+
 .text-input-field:focus {
     border-style: solid;
     border-width: 1px;
@@ -447,7 +452,7 @@ input[type=checkbox]:checked+.lbl::before,input[type=radio]:checked+.lbl::before
 }
 
 .edit-radio {
-	position: relative;
+    position: relative;
 }
 
 input[type=radio]+.lbl::before {
@@ -461,8 +466,8 @@ input[type=radio]:checked+.lbl::before {
 }
 
 .radio-list {
-	padding-bottom: 0.875em;
-	font-weight: normal;
+    padding-bottom: 0.875em;
+    font-weight: normal;
 }
 
 /* Account Listing Page Styles */

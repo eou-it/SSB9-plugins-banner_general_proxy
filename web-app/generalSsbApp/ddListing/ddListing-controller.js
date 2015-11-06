@@ -131,8 +131,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             { title: $filter('i18n')('directDeposit.account.label.status')}
         ];
 
-        //display add account pop up
-        $scope.showAddAccount = function (typeInd, isAddNew) {
+        //display add/edit account pop up
+        $scope.showEditAccount = function (typeInd, isAddNew) {
             // If AP account already exists, this functionality is disabled
             if(isAddNew && typeInd === 'AP' && $scope.hasAccount) return;
 
