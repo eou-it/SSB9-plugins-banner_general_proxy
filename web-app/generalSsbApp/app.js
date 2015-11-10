@@ -66,15 +66,7 @@ generalSsbApp.config(function($stateProvider, $urlRouterProvider){
             data: {
                 breadcrumbs: []
             }
-        })
-    .state('ddEditAccount', {
-        url: "/ddEditAccount",
-        templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
-        controller: 'ddEditAccountController',
-        data: {
-            breadcrumbs: []
-        }
-    });
+        });
 });
 
 generalSsbApp.config(['$locationProvider',

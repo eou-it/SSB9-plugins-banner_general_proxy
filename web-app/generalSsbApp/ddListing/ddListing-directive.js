@@ -27,17 +27,17 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddListingService',
     };
 }]);
 
-generalSsbAppDirectives.directive('accountInfo',[function () {
+generalSsbAppDirectives.directive('apAccountInfo',[function () {
     return{
         restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/accountInformation.html'
+        templateUrl: '../generalSsbApp/ddListing/apAccountInformation.html'
     };
 }]);
 
-generalSsbAppDirectives.directive('accountInfoDesktop',[function () {
+generalSsbAppDirectives.directive('apAccountInfoDesktop',[function () {
     return{
         restrict: 'A',
-        templateUrl: '../generalSsbApp/ddListing/accountInformationDesktop.html'
+        templateUrl: '../generalSsbApp/ddListing/apAccountInformationDesktop.html'
     };
 }]);
 
@@ -82,23 +82,23 @@ generalSsbAppDirectives.directive('payListingPanelNonpopulatedProposed',[functio
     };
 }]);
 
-generalSsbAppDirectives.directive('listingPanelPopulated',['ddEditAccountService', function (ddEditAccountService) {
+generalSsbAppDirectives.directive('apListingPanelPopulated',['ddEditAccountService', function (ddEditAccountService) {
     return{
         restrict: 'E',
         link: function(scope) {
             scope.editAccountService = ddEditAccountService; // TODO: is this still used?
 
             var type = scope.isDesktop() ? 'Desktop' : '';
-            scope.listingPanelPopulatedTemplate = '../generalSsbApp/ddListing/listingPanelPopulated' + type + '.html'
+            scope.apListingPanelPopulatedTemplate = '../generalSsbApp/ddListing/apListingPanelPopulated' + type + '.html'
         },
-        template: '<div ng-include="listingPanelPopulatedTemplate"></div>'
+        template: '<div ng-include="apListingPanelPopulatedTemplate"></div>'
     };
 }]);
 
-generalSsbAppDirectives.directive('listingPanelNonpopulated',[function () {
+generalSsbAppDirectives.directive('apListingPanelNonpopulated',[function () {
     return{
         restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/listingPanelNonpopulated.html',
+        templateUrl: '../generalSsbApp/ddListing/apListingPanelNonpopulated.html',
     };
 }]);
 
