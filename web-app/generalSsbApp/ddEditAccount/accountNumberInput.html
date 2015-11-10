@@ -26,7 +26,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         <label ng-class="(accountTypeErr ? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.accountType'|i18n}}</label>
         <label class="visuallyhidden" id="select-acct-type">{{'directDeposit.label.account.type.select'|i18n}}</label>
         <div class="dropdown" role="menu">
-            <button ng-class="(accountTypeErr ? 'dropdown-btn input-field-error' : 'dropdown-btn')" data-toggle="dropdown" href="#" aria-labelledby="select-acct-type account-type">
+            <button dropdown-helper="begin" ng-class="(accountTypeErr ? 'dropdown-btn input-field-error' : 'dropdown-btn')" data-toggle="dropdown" aria-labelledby="select-acct-type account-type">
                 <span class="float-l semi-bold form-spacing" aria-live="polite">
                     <choose-account id="account-type"/>
                 </span>
@@ -37,7 +37,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                     <a ng-click="setAccountType('C')" class="addAcct form-spacing" href="#" role="menuitem">{{'directDeposit.account.type.checking'|i18n}}</a>
                 </li>
                 <li role="presentation">
-                    <a ng-click="setAccountType('S')" class="addAcct end-dropdown-radius form-spacing" href="#" role="menuitem">{{'directDeposit.account.type.savings'|i18n}}</a>
+                    <a dropdown-helper="end" ng-click="setAccountType('S')" class="addAcct end-dropdown-radius form-spacing" href="#" role="menuitem">{{'directDeposit.account.type.savings'|i18n}}</a>
                 </li>
             </ul>
         </div>
