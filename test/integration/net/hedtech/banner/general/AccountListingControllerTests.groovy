@@ -36,9 +36,9 @@ class AccountListingControllerTests extends BaseIntegrationTestCase {
 
 
     @Test
-    void testGetMyAccounts(){
+    void testGetApAccountsForCurrentUser(){
         accountListingController.request.contentType = "text/json"
-        accountListingController.getMyAccounts()
+        accountListingController.getApAccountsForCurrentUser()
         def dataForNullCheck = accountListingController.response.contentAsString
         def data = JSON.parse( dataForNullCheck )
         println data

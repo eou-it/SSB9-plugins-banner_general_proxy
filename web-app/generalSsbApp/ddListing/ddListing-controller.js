@@ -28,10 +28,12 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         this.init = function() {
             var self = this;
 
-            ddListingService.getDirectDepositListing().$promise.then(
+            ddListingService.getApListing().$promise.then(
                 function (response) {
+                    // By default, set A/P account as currently active account, as it can be edited inline (in desktop
+                    // view), while payroll accounts can not be.
                     $scope.account = self.getApAccountFromResponse(response);
-                    $scope.hasAccount = !!$scope.account;
+                    $scope.hasApAccount = !!$scope.account;
                     $scope.accountLoaded = true;
                 });
 
@@ -94,9 +96,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         $scope.payPanelProposedCollapsed = false;
 
         $scope.distributions = null;
-        $scope.account = null;
+        $scope.account = null; // Currently active account.  Could be A/P or payroll.
         $scope.accountLoaded = false;
-        $scope.hasAccount = false;
+        $scope.hasApAccount = false;
         $scope.panelCollapsed = false;
         $scope.authorizedChanges = false;
         $scope.apAccountSelectedForDelete = false;
@@ -133,8 +135,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
 
         //display add/edit account pop up
         $scope.showEditAccount = function (typeInd, isAddNew) {
-            // If AP account already exists, this functionality is disabled
-            if(isAddNew && typeInd === 'AP' && $scope.hasAccount) return;
+            // If this is an AP account and an AP account already exists, this functionality is disabled
+            if(isAddNew && typeInd === 'AP' && $scope.hasApAccount) return;
 
             // Otherwise, open modal
             var modal = $modal.open({
@@ -149,18 +151,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     }
                 }
             });
-       };
-       
-       /* Display Edit Account modal
-       $scope.showEditAccountModal = function () {
-           $modal.open({
-               templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
-               windowClass: 'edit-account-modal',
-               keyboard:true,
-               controller: "ddEditAccountController",
-               scope: $scope
-           });
-       };*/
+        };
 
         $scope.isDesktop = function () {
             return isDesktop();
@@ -178,8 +169,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 'directDeposit.notification.no.accounts.payable.allocation.tap';
         };
 
-        $scope.updateApAccount = function () {
-            ddEditAccountService.saveApAccount($scope.account).$promise.then(function (response) {
+        $scope.updateAccount = function () {
+            ddEditAccountService.saveAccount($scope.account).$promise.then(function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
                 } else {
@@ -202,7 +193,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             notificationCenterService.clearNotifications();
         };
 
-        $scope.deleteAPAccount = function () {
+        $scope.deleteAccount = function () {
             var accounts = [];
 
             accounts.push($scope.account);
@@ -231,7 +222,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 },
                 {
                     label: "Delete",
-                    action: $scope.deleteAPAccount
+                    action: $scope.deleteAccount
                 }
             ];
 

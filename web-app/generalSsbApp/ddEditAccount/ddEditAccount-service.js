@@ -15,7 +15,7 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
         bankInfo = $resource('../ssb/:controller/:action',
             {controller: 'UpdateAccount', action: 'getBankInfo'}, {query: {method:'GET', isArray:false}});
 
-    this.saveApAccount = function (account, createNew) {
+    this.saveAccount = function (account, createNew) {
         return createNew ? createAccount.save(account) : updateAccount.save(account);
     };
 
