@@ -3,13 +3,13 @@
  *******************************************************************************/
 
 generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
-    var listing = $resource('../ssb/:controller/:action',
-            {controller: 'AccountListing', action: 'getMyAccounts'}),
+    var apListing = $resource('../ssb/:controller/:action',
+            {controller: 'AccountListing', action: 'getApAccountsForCurrentUser'}),
         mostRecentPayrollListing = $resource('../ssb/:controller/:action',
             {controller: 'AccountListing', action: 'getLastPayDateInfo'});
 
-    this.getDirectDepositListing = function (){
-        return listing.query();
+    this.getApListing = function (){
+        return apListing.query();
     };
 
     this.getMostRecentPayrollListing = function() {

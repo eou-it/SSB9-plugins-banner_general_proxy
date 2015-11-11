@@ -91,7 +91,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         handleAmounts();
 
         if(requiredFieldsValid()) {
-            ddEditAccountService.saveApAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
+            ddEditAccountService.saveAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
                 }
@@ -101,23 +101,6 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 }
             });
         }
-    };
-
-    $scope.deleteAPAccount = function () {
-        var accounts = [];
-
-        accounts.push($scope.account);
-
-        ddEditAccountService.deleteAccounts(accounts).$promise.then(function (response) {
-            if(response.failure) {
-                notificationCenterService.displayNotifications(response.message, "error");
-            } else {
-                // Refresh account info
-                $scope.account = null;
-                $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
-                $scope.cancelModal();
-            }
-        });
     };
 
     var requiredFieldsValid = function() {

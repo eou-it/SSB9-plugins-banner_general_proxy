@@ -16,7 +16,7 @@ class AccountListingController  {
         return PersonUtility.getPerson(ControllerUtility.getPrincipalPidm())
     }
 
-    def getMyAccounts() {
+    def getApAccountsForCurrentUser() {
         def person = findPerson()
         def model = [:]
 
