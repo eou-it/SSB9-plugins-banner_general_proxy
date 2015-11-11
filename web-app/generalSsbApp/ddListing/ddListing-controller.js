@@ -15,8 +15,14 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             var account = null;
 
             if (response.length) {
-                // TODO: until defined otherwise, return first account
-                account = response[0];
+                // Probably only one account has been returned, but if more than one, return the one with the
+                // highest priority (i.e. lowest integer value).
+                _.each(response, function(acctFromResponse) {
+                    if (account === null || acctFromResponse.priority < account.priority) {
+                        account = acctFromResponse;
+                    }
+                });
+
             }
 
             return account;
