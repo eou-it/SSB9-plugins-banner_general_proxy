@@ -33,6 +33,23 @@ class AccountListingController  {
         }
     }
     
+    def getHrAccountsForCurrentUser() {
+        def person = findPerson()
+        def model = [:]
+
+        if (person) {
+            try {
+                model = directDepositAccountService.getActiveHrAccounts(person.pidm)
+            } catch (ApplicationException e) {
+                render returnFailureMessage(e) as JSON
+            }
+        }
+
+        JSON.use("deep") {
+            render model as JSON
+        }
+    }
+    
     def getLastPayDateInfo() {
         def model = [:]
         def pidm = ControllerUtility.getPrincipalPidm()
