@@ -12,7 +12,6 @@ grails.project.test.reports.dir = "target/test-reports"
 // result in the all-too-familiar exception:
 // "Cannot cast object 'oracle.jdbc.driver.T4CConnection@6469adc7'... to class 'oracle.jdbc.OracleConnection'
 grails.war.resources = { stagingDir ->
-    delete(file: "${stagingDir}/WEB-INF/lib/ojdbc6.jar")
 }
 
     grails.plugin.location.'i18n_core'                        = "plugins/i18n_core.git"
