@@ -2,10 +2,10 @@
     {{account.bankRoutingInfo.bankName}}
 </div>
 <div class="account-field break-word">
-    {{'directDeposit.account.label.routing'|i18n}}: {{account.bankRoutingInfo.bankRoutingNum}}
+    {{'directDeposit.account.label.routing'|i18n}}: {{account.bankRoutingInfo.bankRoutingNum|accountNumMask}}
 </div>
 <div class="account-field break-word">
-    {{'directDeposit.account.label.account'|i18n}}: {{account.bankAccountNum}}
+    {{'directDeposit.account.label.account'|i18n}}: {{account.bankAccountNum|accountNumMask}}
 </div>
 <div class="account-field break-word">
     {{'directDeposit.account.label.accountType'|i18n}}: <account-type account="account"/>

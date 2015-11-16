@@ -5,8 +5,8 @@
     </div>
     <span id="ap-bank-name">{{account.bankRoutingInfo.bankName}}</span>
 </td>
-<td class="break-word">{{account.bankRoutingInfo.bankRoutingNum}}</td>
-<td class="break-word">{{account.bankAccountNum}}</td>
+<td class="break-word">{{account.bankRoutingInfo.bankRoutingNum|accountNumMask}}</td>
+<td class="break-word">{{account.bankAccountNum|accountNumMask}}</td>
 <td>
     <div class="dropdown desktop">
         <button dropdown-helper="begin" class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#" role="option" >

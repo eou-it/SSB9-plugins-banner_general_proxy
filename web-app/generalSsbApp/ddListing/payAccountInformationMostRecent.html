@@ -2,10 +2,10 @@
     {{payHistoryDist.bankName}}
 </div>
 <div class="account-field break-word">
-    {{'directDeposit.account.label.routing'|i18n}}: {{payHistoryDist.bankRoutingNumber}}
+    {{'directDeposit.account.label.routing'|i18n}}: {{payHistoryDist.bankRoutingNumber|accountNumMask}}
 </div>
 <div class="account-field break-word">
-    {{'directDeposit.account.label.account'|i18n}}: {{payHistoryDist.bankAccountNumber}}
+    {{'directDeposit.account.label.account'|i18n}}: {{payHistoryDist.bankAccountNumber|accountNumMask}}
 </div>
 <div class="account-field break-word account-entry-last-row-left">
     {{'directDeposit.account.label.accountType'|i18n}}: <account-type account="payHistoryDist"/>

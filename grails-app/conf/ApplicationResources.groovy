@@ -40,6 +40,7 @@ modules = {
 
        // Filters
        resource url:[file: 'generalSsbApp/common/filters/i18n-filter.js']
+       resource url:[file: 'generalSsbApp/common/filters/accountNumMask-filter.js']
 
        // Directives
        resource url:[file: 'generalSsbApp/ddListing/ddListing-directive.js']
