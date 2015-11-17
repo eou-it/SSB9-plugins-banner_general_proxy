@@ -1,15 +1,6 @@
 /*******************************************************************************
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-generalSsbAppDirectives.directive('payAccountInfoMostRecent',[function () {
-    return{
-        restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/payAccountInformationMostRecent.html',
-        scope: {
-            payHistoryDist: '='
-        }
-    };
-}]);
 
 generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddListingService', function (ddListingService) {
     return{
@@ -62,9 +53,33 @@ generalSsbAppDirectives.directive('accountStatus',[function () {
 }]);
 
 generalSsbAppDirectives.directive('payListingPanelPopulatedMostRecent',[function () {
+	return{
+        restrict: 'E',
+        link: function(scope) {
+            var type = scope.isDesktop() ? 'Desktop' : '';
+            scope.mostRecentPayPanelPopulatedTemplate = '../generalSsbApp/ddListing/payListingPanelPopulatedMostRecent' + type + '.html'
+        },
+        template: '<div ng-include="mostRecentPayPanelPopulatedTemplate"></div>'
+    };
+}]);
+
+generalSsbAppDirectives.directive('payAccountInfoMostRecent',[function () {
     return{
         restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/payListingPanelPopulatedMostRecent.html'
+        templateUrl: '../generalSsbApp/ddListing/payAccountInformationMostRecent.html',
+        scope: {
+            payHistoryDist: '='
+        }
+    };
+}]);
+
+/* 
+ * relies on the dist variable from the ng-repeat in payListingPanelPopulatedMostRecentDesktop.html 
+ */
+generalSsbAppDirectives.directive('payAccountInfoMostRecentDesktop',[function () {
+    return{
+        restrict: 'A',
+        templateUrl: '../generalSsbApp/ddListing/payAccountInformationMostRecentDesktop.html'
     };
 }]);
 

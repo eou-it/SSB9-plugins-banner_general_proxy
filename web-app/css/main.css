@@ -509,6 +509,10 @@ input[type=radio]:checked+.lbl::before {
     margin-right: 15px;
 }
 
+.text-rt {
+    text-align: right;
+}
+
 .pmr-amount {
     display: flex;
     align-items: flex-end;
