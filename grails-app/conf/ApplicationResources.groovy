@@ -45,6 +45,7 @@ modules = {
        resource url:[file: 'generalSsbApp/ddListing/ddListing-directive.js']
        resource url:[file: 'generalSsbApp/ddEditAccount/ddEditAccount-directive.js']
        resource url:[file: 'generalSsbApp/common/directives/enterKey-directive.js']
+       resource url:[file: 'generalSsbApp/common/directives/ddPopover-directive.js']
 
        // CSS
        resource url:[file: 'css/main.css'],   attrs: [media: 'screen, projection']

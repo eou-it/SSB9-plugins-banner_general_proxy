@@ -16,6 +16,8 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     $scope.routingNumErr = false;
     $scope.routingNumMessage;
 
+    $scope.popoverElements = {}; // Used to coordinate popovers in modal
+
     $scope.validateRoutingNum = function () {
         if($scope.account.bankRoutingInfo.bankRoutingNum){
 
