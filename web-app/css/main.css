@@ -472,9 +472,9 @@ input[type=radio]:checked+.lbl::before {
 
 /* Account Listing Page Styles */
 .pay-entry {
-    margin-top: 10px;
-    padding-left: 20px;
+    padding: 15px;
     border-bottom: 1px solid #ddd;
+    overflow: hidden;
 }
 
 .entry {
@@ -507,6 +507,25 @@ input[type=radio]:checked+.lbl::before {
 .amount-right {
     float: right;
     margin-right: 15px;
+}
+
+.pmr-amount {
+    display: flex;
+    align-items: flex-end;
+}
+
+.pmr-amount > span {
+    width: 100%;
+    text-align: right;
+}
+
+.flex-div {
+    display: flex;
+    width: 100%;
+}
+
+.table-fmt{
+    clear: both;
 }
 
 .amount-total-label {

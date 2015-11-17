@@ -1,15 +1,21 @@
-<div class="account-heading break-word">
+<div class="account-heading">
     {{payHistoryDist.bankName}}
 </div>
-<div class="account-field break-word">
-    {{'directDeposit.account.label.routing'|i18n}}: {{payHistoryDist.bankRoutingNumber|accountNumMask}}
-</div>
-<div class="account-field break-word">
-    {{'directDeposit.account.label.account'|i18n}}: {{payHistoryDist.bankAccountNumber|accountNumMask}}
-</div>
-<div class="account-field break-word account-entry-last-row-left">
-    {{'directDeposit.account.label.accountType'|i18n}}: <account-type account="payHistoryDist"/>
-</div>
-<div class="account-field amount-right">
-    {{payHistoryDist.net}}
+<div class="row flex-div no-margin">
+    <div class="col-xs-9 no-padding">
+        <div class="row no-margin">
+            <div class="col-sm-4 no-padding">
+                {{'directDeposit.account.label.routing'|i18n}}: {{payHistoryDist.bankRoutingNumber|accountNumMask}}
+            </div>
+            <div class="col-sm-4 no-padding">
+                {{'directDeposit.account.label.account'|i18n}}: {{payHistoryDist.bankAccountNumber|accountNumMask}}
+            </div>
+            <div class="col-sm-4 no-padding">
+                {{'directDeposit.account.label.accountType'|i18n}}: <account-type account="payHistoryDist"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-3 pmr-amount no-padding">
+        <span>{{payHistoryDist.net}}</span>
+    </div>
 </div>
