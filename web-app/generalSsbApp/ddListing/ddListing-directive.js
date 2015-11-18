@@ -1,31 +1,6 @@
 /*******************************************************************************
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-generalSsbAppDirectives.directive('payAccountInfoMostRecent',[function () {
-    return{
-        restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/payAccountInformationMostRecent.html',
-        scope: {
-            payHistoryDist: '='
-        }
-    };
-}]);
-
-generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddListingService', function (ddListingService) {
-    return{
-        restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposed.html',
-        link: function (scope, element, attrs) {
-            // TODO: preliminary implementation for these values.  May need to refactor, e.g. in order to pass
-            // in account and other data.
-            scope.userAllocationAmount = ddListingService.getUserAllocationAmount();
-            scope.distributionAmount = ddListingService.getDistributionAmount();
-        },
-        scope: {
-            account: '='
-        }
-    };
-}]);
 
 generalSsbAppDirectives.directive('apAccountInfo',[function () {
     return{
@@ -62,16 +37,70 @@ generalSsbAppDirectives.directive('accountStatus',[function () {
 }]);
 
 generalSsbAppDirectives.directive('payListingPanelPopulatedMostRecent',[function () {
+	return{
+        restrict: 'E',
+        link: function(scope) {
+            var type = scope.isDesktop() ? 'Desktop' : '';
+            scope.mostRecentPayPanelPopulatedTemplate = '../generalSsbApp/ddListing/payListingPanelPopulatedMostRecent' + type + '.html'
+        },
+        template: '<div ng-include="mostRecentPayPanelPopulatedTemplate"></div>'
+    };
+}]);
+
+generalSsbAppDirectives.directive('payAccountInfoMostRecent',[function () {
     return{
         restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/payListingPanelPopulatedMostRecent.html'
+        templateUrl: '../generalSsbApp/ddListing/payAccountInformationMostRecent.html',
+        scope: {
+            payHistoryDist: '='
+        }
+    };
+}]);
+
+/* 
+ * relies on the dist variable from the ng-repeat in payListingPanelPopulatedMostRecentDesktop.html 
+ */
+generalSsbAppDirectives.directive('payAccountInfoMostRecentDesktop',[function () {
+    return{
+        restrict: 'A',
+        templateUrl: '../generalSsbApp/ddListing/payAccountInformationMostRecentDesktop.html'
     };
 }]);
 
 generalSsbAppDirectives.directive('payListingPanelPopulatedProposed',[function () {
     return{
         restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/payListingPanelPopulatedProposed.html'
+        link: function(scope) {
+            var type = scope.isDesktop() ? 'Desktop' : '';
+            scope.proposedPayPanelPopulatedTemplate = '../generalSsbApp/ddListing/payListingPanelPopulatedProposed' + type + '.html'
+        },
+        template: '<div ng-include="proposedPayPanelPopulatedTemplate"></div>'
+    };
+}]);
+
+generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddListingService', function (ddListingService) {
+    return{
+        restrict: 'E',
+        templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposed.html',
+        link: function (scope, element, attrs) {
+            // TODO: preliminary implementation for these values.  May need to refactor, e.g. in order to pass
+            // in account and other data.
+            scope.userAllocationAmount = ddListingService.getUserAllocationAmount();
+            scope.distributionAmount = ddListingService.getDistributionAmount();
+        },
+        scope: {
+            account: '='
+        }
+    };
+}]);
+
+/* 
+ * relies on the alloc variable from the ng-repeat in payListingPanelPopulatedProposedDesktop.html 
+ */
+generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',[function () {
+    return{
+        restrict: 'A',
+        templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposedDesktop.html'
     };
 }]);
 

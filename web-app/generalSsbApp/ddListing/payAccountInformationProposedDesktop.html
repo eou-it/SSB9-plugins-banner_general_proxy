@@ -1,0 +1,30 @@
+<td class="break-word">
+    <div class="delete-checkbox-wrapper-desktop">
+        <input type="checkbox" class="delete-checkbox-desktop" ng-click="" enter-key="" aria-label="Select for Delete" aria-describedby="mr-bank-name{{$index}}">
+        <span class="lbl"></span>
+    </div>
+    <span id="mr-bank-name{{$index}}">{{alloc.bankRoutingInfo.bankName}}</span>
+</td>
+<td class="break-word">{{alloc.bankRoutingInfo.bankRoutingNum|accountNumMask}}</td>
+<td class="break-word">{{alloc.bankAccountNum|accountNumMask}}</td>
+<td>
+    <div class="dropdown desktop">
+        <button dropdown-helper="begin" class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#" role="option" >
+            <span class="float-l form-spacing">
+                <choose-account/>
+            </span>
+            <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font"></span></span>
+        </button>
+        <ul class="dropdown-menu addAcct" role="menu" aria-label="{{'directDeposit.label.account.type.edit'|i18n}}">
+            <li role="presentation">
+                <a ng-click="setAccountType('C')" class="addAcct form-spacing" role="menuitem" href="">{{'directDeposit.account.type.checking'|i18n}}</a>
+            </li>
+            <li role="presentation">
+                <a dropdown-helper="end" ng-click="setAccountType('S')" class="addAcct end-dropdown-radius form-spacing" role="menuitem" href="">{{'directDeposit.account.type.savings'|i18n}}</a>
+            </li>
+        </ul>
+    </div>
+</td>
+<td class="break-word">{{alloc.amount}}</td>
+<td class="break-word">{{alloc.priority}}</td>
+<td class="break-word">{{alloc.net}}</td>
