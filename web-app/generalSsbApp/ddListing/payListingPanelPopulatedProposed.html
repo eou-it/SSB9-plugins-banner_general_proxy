@@ -1,12 +1,8 @@
-<div class="">
-    <div class="">
-        <div class="pay-entry" ng-repeat="allocation in distributions.proposed.allocations">
-            <pay-account-info-proposed account="allocation"/>
-        </div>
-        <div class="account-total-footer clearfix">
-            <div class="amount-right">
-                <span class="amount-total-label">{{'directDeposit.label.total.net.pay'|i18n}}</span><span class="amount-total">{{totalPayAmounts(distributions.proposed)}}</span>
-            </div>
-        </div>
+<div class="pay-entry" ng-repeat="allocation in distributions.proposed.allocations">
+    <pay-account-info-proposed account="allocation"/>
+</div>
+<div class="account-total-footer clearfix">
+    <div class="amount-right">
+        <span class="amount-total-label">{{'directDeposit.label.total.net.pay'|i18n}}</span><span class="amount-total">{{distributions.mostRecent.totalNet}}</span>
     </div>
 </div>

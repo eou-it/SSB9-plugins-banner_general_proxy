@@ -2,22 +2,6 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddListingService', function (ddListingService) {
-    return{
-        restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposed.html',
-        link: function (scope, element, attrs) {
-            // TODO: preliminary implementation for these values.  May need to refactor, e.g. in order to pass
-            // in account and other data.
-            scope.userAllocationAmount = ddListingService.getUserAllocationAmount();
-            scope.distributionAmount = ddListingService.getDistributionAmount();
-        },
-        scope: {
-            account: '='
-        }
-    };
-}]);
-
 generalSsbAppDirectives.directive('apAccountInfo',[function () {
     return{
         restrict: 'E',
@@ -86,7 +70,37 @@ generalSsbAppDirectives.directive('payAccountInfoMostRecentDesktop',[function ()
 generalSsbAppDirectives.directive('payListingPanelPopulatedProposed',[function () {
     return{
         restrict: 'E',
-        templateUrl: '../generalSsbApp/ddListing/payListingPanelPopulatedProposed.html'
+        link: function(scope) {
+            var type = scope.isDesktop() ? 'Desktop' : '';
+            scope.proposedPayPanelPopulatedTemplate = '../generalSsbApp/ddListing/payListingPanelPopulatedProposed' + type + '.html'
+        },
+        template: '<div ng-include="proposedPayPanelPopulatedTemplate"></div>'
+    };
+}]);
+
+generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddListingService', function (ddListingService) {
+    return{
+        restrict: 'E',
+        templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposed.html',
+        link: function (scope, element, attrs) {
+            // TODO: preliminary implementation for these values.  May need to refactor, e.g. in order to pass
+            // in account and other data.
+            scope.userAllocationAmount = ddListingService.getUserAllocationAmount();
+            scope.distributionAmount = ddListingService.getDistributionAmount();
+        },
+        scope: {
+            account: '='
+        }
+    };
+}]);
+
+/* 
+ * relies on the alloc variable from the ng-repeat in payListingPanelPopulatedProposedDesktop.html 
+ */
+generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',[function () {
+    return{
+        restrict: 'A',
+        templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposedDesktop.html'
     };
 }]);
 

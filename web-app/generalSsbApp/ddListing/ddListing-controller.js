@@ -141,6 +141,17 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
 		    { title: $filter('i18n')('directDeposit.account.label.accountType')},
 		    { title: $filter('i18n')('directDeposit.label.distribution.net.pay')}
 		];
+        
+        // Proposed Pay
+        $scope.proposedPayColumns = [
+		    { tabindex: '0', title: $filter('i18n')('directDeposit.account.label.bank.name')},
+		    { title: $filter('i18n')('directDeposit.account.label.routing.num')},
+		    { title: $filter('i18n')('directDeposit.account.label.account.num')},
+		    { title: $filter('i18n')('directDeposit.account.label.accountType')},
+		    { title: $filter('i18n')('directDeposit.account.label.amount')},
+		    { title: $filter('i18n')('directDeposit.account.label.priority')},
+		    { title: $filter('i18n')('directDeposit.label.distribution.net.pay')}
+		];
 
         //display add/edit account pop up
         $scope.showEditAccount = function (typeInd, isAddNew) {

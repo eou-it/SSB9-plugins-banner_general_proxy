@@ -3,7 +3,7 @@
     <div class="lbl"></div>
 </div>
 <div class="proposed-entry">
-    <div class="account-heading break-word hdg-inline">
+    <div class="hr-heading break-word hdg-inline">
         {{account.bankRoutingInfo.bankName}}
     </div>
     <div class="edit-acct">
@@ -11,26 +11,26 @@
     </div>
     <div class="row flex-div no-margin">
         <div class="col-xs-10 no-padding">
-            <div class="col-sm-4 no-padding">
+            <div class="col-sm-4 hr-account-field no-padding">
                 {{'directDeposit.account.label.routing'|i18n}}: {{account.bankRoutingInfo.bankRoutingNum|accountNumMask}}
             </div>
-            <div class="col-sm-4 no-padding">
+            <div class="col-sm-4 hr-account-field no-padding">
                 {{'directDeposit.account.label.account'|i18n}}: {{account.bankAccountNum|accountNumMask}}
             </div>
-            <div class="col-sm-4 no-padding">
+            <div class="col-sm-4 hr-account-field no-padding">
                 {{'directDeposit.account.label.accountType'|i18n}}: <account-type account="account"/>
             </div>
-            <div class="col-sm-4 no-padding">
+            <div class="col-sm-4 hr-account-field no-padding">
                 {{'directDeposit.account.label.amount'|i18n}}: {{userAllocationAmount}}
             </div>
-            <div class="col-sm-4 no-padding">
+            <div class="col-sm-4 hr-account-field no-padding">
                 {{'directDeposit.account.label.priority'|i18n}}: {{account.priority}}
             </div>
-            <div class="col-sm-4 no-padding">
+            <div class="col-sm-4 hr-account-field no-padding">
                 {{'directDeposit.account.label.status'|i18n}}: <account-status account="account"/>
             </div>
         </div>
-        <div class="col-xs-2 pmr-amount no-padding">
+        <div class="col-xs-2 hr-amount no-padding">
             <span>{{distributionAmount}}</span>
         </div>
     </div>
