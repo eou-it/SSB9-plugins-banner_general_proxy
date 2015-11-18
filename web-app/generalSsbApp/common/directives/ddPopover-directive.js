@@ -29,11 +29,18 @@ generalSsbAppDirectives.directive('popOver', [function() {
                 popoverElement = $(element).popover({
                     content: '<img class="sample-check" src="' + src + '">',
                     trigger: 'manual',
-                    placement: 'left',
+                    placement: 'bottom',
                     html: true
                 });
 
                 popovers[id] = popoverElement;
+
+                // Adjust positioning based on screen dimensions
+                // TODO: make this work for other dimensions than just portrait mobile
+                $(popoverElement).on('shown.bs.popover', function() {
+                    $('.popover').css('left', parseInt($('.popover').css('left')) - 155 + 'px');
+                    $('.popover').css('top', parseInt($('.popover').css('top')) - 13 + 'px');
+                });
             }
 
             $(popoverElement).popover('show');

@@ -669,6 +669,36 @@ a.delete-account-link {
     border: 0;
 }
 
+.dd-account-input .popover {
+    max-width: none;
+    background-color: #fffeea;
+}
+
+    /* Plays a part in creating "half arrow" */
+.dd-account-input .popover {
+    border-top-right-radius: 0;
+}
+
+    /* Plays a part in creating "half arrow" */
+.dd-account-input .popover .arrow {
+    border-width: 12px;
+}
+
+    /* Plays a part in creating "half arrow" */
+.dd-account-input .popover.bottom .arrow {
+    border-right-width: 0;
+    top: -24px;
+    left: 100%;
+}
+
+    /* Plays a part in creating "half arrow" */
+.dd-account-input .popover.bottom .arrow:after {
+    border-right-width: 0;
+    border-bottom-color: #fffeea;
+    top: 2px;
+    margin-left: -11px;
+}
+
 
 /*Table and grid section styles*/
 table {
@@ -732,8 +762,8 @@ table tr td {
     }
 
     img.sample-check {
-        width: 245px;
-        height: 125px;
+        width: 280px;
+        height: 144px;
     }
 }
 
