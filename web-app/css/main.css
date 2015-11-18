@@ -481,6 +481,10 @@ input[type=radio]:checked+.lbl::before {
     margin-left: 47px;
 }
 
+.proposed-entry {
+    margin-left: 32px;
+}
+
 .delete-checkbox-wrapper {
     float: left;
     margin-left: 15px;
@@ -494,6 +498,10 @@ input[type=radio]:checked+.lbl::before {
 .account-heading {
     font-weight: bold;
     margin-bottom: 10px;
+}
+
+.hdg-inline {
+    display: inline;
 }
 
 .account-field {
@@ -607,6 +615,11 @@ a.delete-account-link {
     position: absolute;
     top: 15px;
     right: 15px;
+}
+
+.edit-acct {
+    display: inline;
+    float: right;
 }
 
 .notification-box-wrapper {
