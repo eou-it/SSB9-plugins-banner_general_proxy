@@ -6,7 +6,9 @@ generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
     var apListing = $resource('../ssb/:controller/:action',
             {controller: 'AccountListing', action: 'getApAccountsForCurrentUser'}),
         mostRecentPayrollListing = $resource('../ssb/:controller/:action',
-            {controller: 'AccountListing', action: 'getLastPayDateInfo'});
+            {controller: 'AccountListing', action: 'getLastPayDateInfo'}),
+        userPayrollAllocationListing = $resource('../ssb/:controller/:action',
+            {controller: 'AccountListing', action: 'getUserPayrollAllocations'});
 
     this.getApListing = function (){
         return apListing.query();
@@ -23,6 +25,10 @@ generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
         // Does this belong here or in controller or in directive?
 
         return 'Remaining'; // $500.00, 70%, or Remaining
+    };
+
+    this.getUserPayrollAllocationListing = function() {
+        return userPayrollAllocationListing.query();
     };
 
     this.getDistributionAmount = function () {

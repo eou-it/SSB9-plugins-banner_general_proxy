@@ -52,24 +52,28 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             //};
 
             // have allocations
+            //$scope.distributions = {
+            //    mostRecent: null,
+            //    proposed: {
+            //        allocations: [
+            //            {
+            //                bankRoutingInfo: {
+            //                    bankName: 'Third State Bank',
+            //                    bankRoutingNum: '987654321'
+            //                },
+            //                bankAccountNum: '888999000',
+            //                accountType: 'S',
+            //                accountStatus: 'A',
+            //                priority: 1,
+            //                amount: 500.00,
+            //                percent: null
+            //            }
+            //        ]
+            //    }
+            //};
             $scope.distributions = {
                 mostRecent: null,
-                proposed: {
-                    allocations: [
-                        {
-                            bankRoutingInfo: {
-                                bankName: 'Third State Bank',
-                                bankRoutingNum: '987654321'
-                            },
-                            bankAccountNum: '888999000',
-                            accountType: 'S',
-                            accountStatus: 'A',
-                            priority: 1,
-                            amount: 500.00,
-                            percent: null
-                        }
-                    ]
-                }
+                proposed: null
             };
 
             ddListingService.getMostRecentPayrollListing().$promise.then( function (response) {
@@ -82,7 +86,16 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 }
             });
 
-            $scope.hasPayAccountsProposed = !!$scope.distributions.proposed.allocations;
+            ddListingService.getUserPayrollAllocationListing().$promise.then( function (response) {
+                debugger;
+                if(response.failure) {
+                    notificationCenterService.displayNotifications(response.message, "error");
+                } else {
+                    $scope.distributions.proposed = response;
+                    $scope.hasPayAccountsProposed = !!response.length
+                    $scope.payAccountsProposedLoaded = true;
+                }
+            });
         };
 
 
