@@ -19,7 +19,7 @@ generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
     };
 
     this.getUserPayrollAllocationListing = function() {
-        return userPayrollAllocationListing.query();
+        return userPayrollAllocationListing.get();
     };
 
 }]);
