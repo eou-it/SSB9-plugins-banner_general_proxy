@@ -13,7 +13,24 @@ generalSsbAppDirectives.directive('chooseAccount',[function () {
 generalSsbAppDirectives.directive('titleForEditModal',[function () {
     return{
         restrict: 'E',
-        template: "{{(creatingNewAccount === true ? 'directDeposit.label.add.ApDeposit' : 'directDeposit.label.edit.ApDeposit')|i18n}}"
+        link: function(scope){
+            scope.title = 'directDeposit.label.';
+            
+            if(scope.creatingNewAccount){
+                scope.title += 'add.';
+            }
+            else {
+                scope.title += 'edit.';
+            }
+            
+            if(scope.typeIndicator === 'HR'){
+                scope.title += 'hrDeposit';
+            }
+            else{
+                scope.title += 'apDeposit';
+            }
+        },
+        template: "{{title|i18n}}"
     };
 }]);
 
