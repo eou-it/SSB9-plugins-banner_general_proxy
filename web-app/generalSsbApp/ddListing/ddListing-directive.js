@@ -82,12 +82,6 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddListingService',
     return{
         restrict: 'E',
         templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposed.html',
-        link: function (scope, element, attrs) {
-            // TODO: preliminary implementation for these values.  May need to refactor, e.g. in order to pass
-            // in account and other data.
-            scope.userAllocationAmount = ddListingService.getUserAllocationAmount();
-            scope.distributionAmount = ddListingService.getDistributionAmount();
-        },
         scope: {
             account: '='
         }

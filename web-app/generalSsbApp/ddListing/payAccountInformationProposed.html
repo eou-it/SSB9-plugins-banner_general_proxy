@@ -21,7 +21,7 @@
                 {{'directDeposit.account.label.accountType'|i18n}}: <account-type account="account"/>
             </div>
             <div class="col-sm-4 hr-account-field no-padding">
-                {{'directDeposit.account.label.amount'|i18n}}: {{userAllocationAmount}}
+                {{'directDeposit.account.label.amount'|i18n}}: {{account.allocation}}
             </div>
             <div class="col-sm-4 hr-account-field no-padding">
                 {{'directDeposit.account.label.priority'|i18n}}: {{account.priority}}
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="col-xs-2 hr-amount no-padding">
-            <span>{{distributionAmount}}</span>
+            <span>{{account.calculatedAmount}}</span>
         </div>
     </div>
 </div>
