@@ -42,9 +42,9 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
                     if(attrs.dropdownHelper === 'begin'){
                         if(event.shiftKey){
                             //close dropdown if it is open when shift+tab off element
-                        	if(elem.parent().hasClass('open')){
-                        		elem.dropdown('toggle');
-                        	}
+                            if(elem.parent().hasClass('open')){
+                                elem.dropdown('toggle');
+                            }
                         }
                     }
                     else if(attrs.dropdownHelper === 'end'){
@@ -55,6 +55,24 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
                     }
                 }
             });
+        }
+    };
+}]);
+
+generalSsbAppDirectives.directive('maskInput', ['$filter', function ($filter) {
+    return {
+        restrict: 'A',
+        require: '?ngModel', 
+        link: function (scope, elem, attrs, ngModel) {
+            
+            // do nothing if ng-model is not present
+            if (!ngModel) return;
+            
+            ngModel.$render = function(){
+                if(!scope.creatingNewAccount){
+                    elem.val($filter('accountNumMask')(ngModel.$modelValue));
+                }
+            };
         }
     };
 }]);

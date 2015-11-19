@@ -472,13 +472,17 @@ input[type=radio]:checked+.lbl::before {
 
 /* Account Listing Page Styles */
 .pay-entry {
-    margin-top: 10px;
-    padding-left: 20px;
+    padding: 15px;
     border-bottom: 1px solid #ddd;
+    overflow: hidden;
 }
 
 .entry {
     margin-left: 47px;
+}
+
+.proposed-entry {
+    margin-left: 32px;
 }
 
 .delete-checkbox-wrapper {
@@ -496,6 +500,18 @@ input[type=radio]:checked+.lbl::before {
     margin-bottom: 10px;
 }
 
+.hr-heading {
+    font-weight: bold;
+}
+
+.hdg-inline {
+    display: inline;
+}
+
+.hr-account-field {
+    margin-top: 10px;
+}
+
 .account-field {
     margin-bottom: 10px;
 }
@@ -507,6 +523,29 @@ input[type=radio]:checked+.lbl::before {
 .amount-right {
     float: right;
     margin-right: 15px;
+}
+
+.text-rt {
+    text-align: right;
+}
+
+.hr-amount {
+    display: flex;
+    align-items: flex-end;
+}
+
+.hr-amount > span {
+    width: 100%;
+    text-align: right;
+}
+
+.flex-div {
+    display: flex;
+    width: 100%;
+}
+
+.table-fmt{
+    clear: both;
 }
 
 .amount-total-label {
@@ -584,6 +623,11 @@ a.delete-account-link {
     position: absolute;
     top: 15px;
     right: 15px;
+}
+
+.edit-acct {
+    display: inline;
+    float: right;
 }
 
 .notification-box-wrapper {

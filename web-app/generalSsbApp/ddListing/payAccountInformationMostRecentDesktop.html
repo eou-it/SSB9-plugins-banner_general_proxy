@@ -1,0 +1,11 @@
+<td class="break-word">
+    <span id="mr-bank-name{{$index}}">{{dist.bankName}}</span>
+</td>
+<td class="break-word">{{dist.bankRoutingNumber|accountNumMask}}</td>
+<td class="break-word">{{dist.bankAccountNumber|accountNumMask}}</td>
+<td>
+    <span class="float-l form-spacing">
+        <account-type account="payHistoryDist"/>
+    </span>
+</td>
+<td class="break-word text-rt">{{dist.net}}</td>

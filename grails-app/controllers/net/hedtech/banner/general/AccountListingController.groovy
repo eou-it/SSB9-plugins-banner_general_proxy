@@ -9,6 +9,7 @@ class AccountListingController  {
 
     def directDepositAccountService
     def directDepositPayrollHistoryService
+    def directDepositAccountCompositeService
     def currencyFormatService
 
 
@@ -49,11 +50,25 @@ class AccountListingController  {
             render model as JSON
         }
     }
-    
+
+    def getUserPayrollAllocations() {
+        def person = findPerson()
+
+        if (person) {
+            try {
+                JSON.use('deep') {
+                    render directDepositAccountCompositeService.getUserHrAllocations(person.pidm) as JSON
+                }
+            } catch (ApplicationException e) {
+                render returnFailureMessage(e) as JSON
+            }
+        }
+    }
+
     def getLastPayDateInfo() {
         def model = [:]
         def pidm = ControllerUtility.getPrincipalPidm()
-        
+
         model = directDepositPayrollHistoryService.getLastPayDistribution(pidm)
 
         model.totalNet = formatCurrency(model.totalNet)
@@ -61,7 +76,7 @@ class AccountListingController  {
         model.docAccts.each { it ->
             it.net = formatCurrency(it.net)
         }
-        
+
         render model as JSON
     }
 

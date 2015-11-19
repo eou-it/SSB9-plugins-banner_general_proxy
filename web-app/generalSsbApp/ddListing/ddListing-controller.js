@@ -43,39 +43,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.accountLoaded = true;
                 });
 
-            // TODO: Everything in this function below this comment is a stub. Do payroll below like AP just above
-            $scope.payAccountsProposedLoaded = true;
-
-            // have no allocations yet
-            //$scope.distributions = {
-            //    mostRecent: {
-            //        date: null,
-            //        allocations: []
-            //    },
-            //    proposed: {
-            //        allocations: []
-            //    }
-            //};
-
-            // have allocations
             $scope.distributions = {
                 mostRecent: null,
-                proposed: {
-                    allocations: [
-                        {
-                            bankRoutingInfo: {
-                                bankName: 'Third State Bank',
-                                bankRoutingNum: '987654321'
-                            },
-                            bankAccountNum: '888999000',
-                            accountType: 'S',
-                            accountStatus: 'A',
-                            priority: 1,
-                            amount: 500.00,
-                            percent: null
-                        }
-                    ]
-                }
+                proposed: null
             };
 
             ddListingService.getMostRecentPayrollListing().$promise.then( function (response) {
@@ -88,7 +58,15 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 }
             });
 
-            $scope.hasPayAccountsProposed = !!$scope.distributions.proposed.allocations;
+            ddListingService.getUserPayrollAllocationListing().$promise.then( function (response) {
+                if(response.failure) {
+                    notificationCenterService.displayNotifications(response.message, "error");
+                } else {
+                    $scope.distributions.proposed = response;
+                    $scope.hasPayAccountsProposed = !!response.length
+                    $scope.payAccountsProposedLoaded = true;
+                }
+            });
         };
 
 
@@ -138,6 +116,26 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             { title: $filter('i18n')('directDeposit.account.label.accountType')},
             { title: $filter('i18n')('directDeposit.account.label.status')}
         ];
+        
+        // Most Recent Pay
+        $scope.mostRecentPayColumns = [
+		    { tabindex: '0', title: $filter('i18n')('directDeposit.account.label.bank.name')},
+		    { title: $filter('i18n')('directDeposit.account.label.routing.num')},
+		    { title: $filter('i18n')('directDeposit.account.label.account.num')},
+		    { title: $filter('i18n')('directDeposit.account.label.accountType')},
+		    { title: $filter('i18n')('directDeposit.label.distribution.net.pay')}
+		];
+        
+        // Proposed Pay
+        $scope.proposedPayColumns = [
+		    { tabindex: '0', title: $filter('i18n')('directDeposit.account.label.bank.name')},
+		    { title: $filter('i18n')('directDeposit.account.label.routing.num')},
+		    { title: $filter('i18n')('directDeposit.account.label.account.num')},
+		    { title: $filter('i18n')('directDeposit.account.label.accountType')},
+		    { title: $filter('i18n')('directDeposit.account.label.amount')},
+		    { title: $filter('i18n')('directDeposit.account.label.priority')},
+		    { title: $filter('i18n')('directDeposit.label.distribution.net.pay')}
+		];
 
         //display add/edit account pop up
         $scope.showEditAccount = function (typeInd, isAddNew) {
