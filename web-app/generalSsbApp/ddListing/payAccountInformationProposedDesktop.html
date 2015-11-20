@@ -1,9 +1,10 @@
 <td class="break-word">
     <div class="delete-checkbox-wrapper-desktop">
-        <input type="checkbox" class="delete-checkbox-desktop" ng-click="" enter-key="" aria-label="Select for Delete" aria-describedby="mr-bank-name{{$index}}">
+        <label class="visuallyhidden" id="for-delete">{{'directDeposit.label.select.for.delete'|i18n}}</label>
+        <input type="checkbox" class="delete-checkbox-desktop" ng-click="" enter-key="" aria-labelledby="for-delete pro-bank-name{{$index}}">
         <span class="lbl"></span>
     </div>
-    <span id="mr-bank-name{{$index}}">{{alloc.bankRoutingInfo.bankName}}</span>
+    <span id="pro-bank-name{{$index}}">{{alloc.bankRoutingInfo.bankName}}</span>
 </td>
 <td class="break-word">{{alloc.bankRoutingInfo.bankRoutingNum|accountNumMask}}</td>
 <td class="break-word">{{alloc.bankAccountNum|accountNumMask}}</td>
@@ -27,4 +28,5 @@
 </td>
 <td class="break-word">{{alloc.allocation}}</td>
 <td class="break-word">{{alloc.priority}}</td>
-<td class="break-word">{{alloc.calculatedAmount}}</td>
+<td class="break-word text-rt">{{alloc.calculatedAmount}}</td>
+<td class="break-word"><account-status/></td>

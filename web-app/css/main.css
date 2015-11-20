@@ -1,4 +1,8 @@
 /* General Styles */
+body {
+    padding: 0;
+}
+
 .break-word {
     word-wrap: break-word;
 }
@@ -776,6 +780,10 @@ table tr:hover {
     background: #F3FCFF !important;
 }
 
+table tr.account-total-footer:hover {
+    background: #f9f9f9 !important;
+}
+
 table tr:hover th:last-child, .dashboard tr:hover th:nth-of-type(8) {
     background: #ffffff;
 }
@@ -812,10 +820,6 @@ table tr td {
 }
 
 @media(max-width:1024px){
-    body {
-        padding: 0;
-    }
-
     .account-heading {
         margin-right: 40px;
     }
