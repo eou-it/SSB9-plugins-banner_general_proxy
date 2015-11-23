@@ -92,6 +92,8 @@ class UpdateAccountController {
         
         if(!model.disclaimer){
             model.failure = true
+            
+            log.error("Error: Disclaimer text could not be retrieved")
         }
         
         render model as JSON
