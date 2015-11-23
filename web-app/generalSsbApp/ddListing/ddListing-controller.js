@@ -63,7 +63,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     notificationCenterService.displayNotifications(response.message, "error");
                 } else {
                     $scope.distributions.proposed = response;
-                    $scope.hasPayAccountsProposed = !!response.allocations
+                    $scope.hasPayAccountsProposed = !!response.allocations.length
                     $scope.payAccountsProposedLoaded = true;
                 }
             });
