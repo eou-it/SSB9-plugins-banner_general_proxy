@@ -32,8 +32,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
          * Initialize controller
          */
         this.init = function() {
+        	console.log("attempt init")
             var self = this;
-
+        	
+        	if(ddListingService.isInit()) return;
+        	console.log("begin init...");
             ddListingService.getApListing().$promise.then(
                 function (response) {
                     // By default, set A/P account as currently active account, as it can be edited inline (in desktop
@@ -41,6 +44,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.account = self.getApAccountFromResponse(response);
                     $scope.hasApAccount = !!$scope.account;
                     $scope.accountLoaded = true;
+                    console.log("loaded ap.")
+                    self.remodel();
             });
 
             $scope.distributions = {
@@ -55,6 +60,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.distributions.mostRecent = response;
                     $scope.hasPayAccountsMostRecent = !!response.docAccts
                     $scope.payAccountsMostRecentLoaded = true;
+                    console.log("loaded most recent.")
+                    self.remodel();
                 }
             });
 
@@ -65,8 +72,34 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.distributions.proposed = response;
                     $scope.hasPayAccountsProposed = !!response.allocations.length
                     $scope.payAccountsProposedLoaded = true;
+                    console.log("loaded payroll.")
+                    self.remodel();
                 }
             });
+            
+            console.log("...end init.")
+        };
+        
+        this.isRemodeled = false;
+        this.remodel = function () {
+        	console.log("attempt remodel");
+        	if(!this.isRemodeled){
+	        	console.log("begin remodel...");
+	        	if($scope.payAccountsProposedLoaded && $scope.hasPayAccountsProposed && $scope.accountLoaded && $scope.hasApAccount) {
+	        		console.log("..remodeling..");
+
+	        		var allocs = $scope.distributions.proposed.allocations, i;
+	        		for(i = 0; i < allocs.length; i++) {
+	        			if(allocs[i].bankRoutingInfo.bankRoutingNum === $scope.account.bankRoutingInfo.bankRoutingNum 
+	        					&& allocs[i].bankAccountNum === $scope.account.bankAccountNum){
+	        				console.log("Need to sync "+ allocs[i].bankAccountNum);
+	        				$scope.account = allocs[i];
+	        			}
+	        		}
+	        		this.isRemodeled = true;
+	        	}
+	        	console.log("...end remodel");
+        	}
         };
 
 

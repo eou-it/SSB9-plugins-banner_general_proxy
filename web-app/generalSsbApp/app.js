@@ -62,6 +62,9 @@ generalSsbApp.config(function($stateProvider, $urlRouterProvider){
             url: "/directDepositListing",
             templateUrl: '../generalSsbApp/ddListing/directDepositListing.html',
             controller: 'ddListingController',
+            onEnter: function(ddListingService){
+                ddListingService.doReload();
+            },
             data: {
                 breadcrumbs: []
             }
