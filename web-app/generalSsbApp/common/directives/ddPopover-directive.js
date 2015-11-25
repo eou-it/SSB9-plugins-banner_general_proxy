@@ -37,9 +37,12 @@ generalSsbAppDirectives.directive('popOver', [function() {
 
                 // Adjust positioning based on screen dimensions
                 // TODO: make this work for other dimensions than just portrait mobile
-                $(popoverElement).on('shown.bs.popover', function() {
-                    $('.popover').css('left', parseInt($('.popover').css('left')) - 155 + 'px');
-                    $('.popover').css('top', parseInt($('.popover').css('top')) - 13 + 'px');
+                $(popoverElement).on('shown.bs.popover', function(e) {
+                    var element = $(e.target).next();
+
+                    element.css('left', parseInt($(element).css('left')) - 150 + 'px');
+                    element.css('top', parseInt($(element).css('top')) - 13 + 'px');
+                    element.find('.popover-content').css('padding', '9px');
                 });
             }
 
