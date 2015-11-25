@@ -12,16 +12,16 @@
     <div class="dropdown desktop">
         <button dropdown-helper="begin" class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#" role="option" >
             <span class="float-l form-spacing">
-                <choose-account/>
+                <choose-account account="alloc"/>
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font"></span></span>
         </button>
         <ul class="dropdown-menu addAcct" role="menu" aria-label="{{'directDeposit.label.account.type.edit'|i18n}}">
             <li role="presentation">
-                <a ng-click="setAccountType('C')" class="addAcct form-spacing" role="menuitem" href="">{{'directDeposit.account.type.checking'|i18n}}</a>
+                <a ng-click="setAllocationAcctType('C')" class="addAcct form-spacing" role="menuitem" href="">{{'directDeposit.account.type.checking'|i18n}}</a>
             </li>
             <li role="presentation">
-                <a dropdown-helper="end" ng-click="setAccountType('S')" class="addAcct end-dropdown-radius form-spacing" role="menuitem" href="">{{'directDeposit.account.type.savings'|i18n}}</a>
+                <a dropdown-helper="end" ng-click="setAllocationAcctType('S')" class="addAcct end-dropdown-radius form-spacing" role="menuitem" href="">{{'directDeposit.account.type.savings'|i18n}}</a>
             </li>
         </ul>
     </div>

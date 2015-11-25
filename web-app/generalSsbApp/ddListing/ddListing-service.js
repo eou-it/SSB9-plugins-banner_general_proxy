@@ -23,3 +23,35 @@ generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
     };
 
 }]);
+
+generalSsbApp.service('ddListingInitService', ['ddListingService', function (ddListingService) {
+	
+	var account;
+	ddListingService.getApListing().$promise.then(
+        function (response) {
+            // By default, set A/P account as currently active account, as it can be edited inline (in desktop
+            // view), while payroll accounts can not be.
+            account = getApAccountFromResponse(response);
+    });
+	
+	var getApAccountFromResponse = function(response) {
+        var account = null;
+
+        if (response.length) {
+            // Probably only one account has been returned, but if more than one, return the one with the
+            // highest priority (i.e. lowest integer value).
+            _.each(response, function(acctFromResponse) {
+                if (account === null || acctFromResponse.priority < account.priority) {
+                    account = acctFromResponse;
+                }
+            });
+
+        }
+
+        return account;
+    }
+	
+
+	return account;
+
+}]);

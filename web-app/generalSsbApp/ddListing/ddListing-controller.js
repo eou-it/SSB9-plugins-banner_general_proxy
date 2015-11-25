@@ -41,7 +41,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.account = self.getApAccountFromResponse(response);
                     $scope.hasApAccount = !!$scope.account;
                     $scope.accountLoaded = true;
-                });
+            });
 
             $scope.distributions = {
                 mostRecent: null,
@@ -142,7 +142,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         $scope.showEditAccount = function (typeInd, isAddNew) {
             // If this is an AP account and an AP account already exists, this functionality is disabled
             if(isAddNew && typeInd === 'AP' && $scope.hasApAccount) return;
-
+            //console.log($scope.account); $scope.account = $scope.allocation; console.log($scope.account); 
             // Otherwise, open modal
             var modal = $modal.open({
                 templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
@@ -174,13 +174,41 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 'directDeposit.notification.no.accounts.payable.allocation.tap';
         };
 
-        $scope.updateAccount = function () {
-            ddEditAccountService.saveAccount($scope.account).$promise.then(function (response) {
+        $scope.updateAccounts = function () {
+        	console.log('updating...');
+            var doReload = true;
+            var allocs = $scope.distributions.proposed.allocations
+            if($scope.isEmployee){
+                var i;
+                for(i = 0; i < allocs.length; i++){
+                    /*if(allocs[i].id = $scope.account.id) {
+                        //skip
+                    }
+                    else {*/
+                        doReload = updateAccount($scope.distributions.proposed.allocations[i]) && doReload;
+                    //}
+                }
+            }
+            if($scope.hasApAccount){
+                doReload = updateAccount($scope.account) && doReload;
+            }
+            
+            if(doReload){
+                console.log('reloading');
+                //$state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+            }
+            console.log('...done');
+        };
+        
+        var updateAccount = function (acct) {
+            var result = true;
+            ddEditAccountService.saveAccount(acct).$promise.then(function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
+                    result = false;
                 } else {
                     // Refresh account info
-                    $scope.account.version = response.version;
+                    acct.version = response.version;
 
                     // Set form back to initial "at rest" state
                     $scope.authorizedChanges = false;
@@ -188,6 +216,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     // TODO: show confirmation message or something here?
                 }
             });
+            
+            return result;
         };
 
         $scope.toggleApAccountSelectedForDelete = function () {
@@ -246,6 +276,5 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         // INITIALIZE
         // ----------
         this.init();
-
     }
 ]);

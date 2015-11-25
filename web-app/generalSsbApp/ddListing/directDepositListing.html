@@ -2,7 +2,7 @@
 Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 
-<div role="tablist">
+<div role="tablist" ng-init="doInit()">
     <!-- PAYROLL MOST RECENT -->
     <div id="payTabMostRecent" class="row tile">
         <div class="col-md-12 no-padding panel-group panel-accordion">
@@ -88,5 +88,12 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                 </div>
             </div>
         </div>
+    </div>
+    <div class="desktop-disclaimer">
+        <input type="checkbox" class="main-nav-check" id="disclaimer-check" aria-label="{{'directDeposit.label.disclaimer.ack'|i18n}}" ng-checked="authorizedChanges" ng-click="toggleAuthorizedChanges()"/>
+        <p class="lbl">{{disclaimer}}</p>
+    </div>
+    <div class="desktop-save">
+        <button class="btn save-btn" ng-disabled="!authorizedChanges" ng-click="updateAccounts()">{{'directDeposit.save.changes.button.label'|i18n}}</button>
     </div>
 </div>
