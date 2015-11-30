@@ -22,16 +22,19 @@ generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
         return userPayrollAllocationListing.get();
     };
     
+    // flag to indicate if the listing controller is initialized
     this.init = false;
+
+    // return the state of the listing controller and set the state to initialized
     this.isInit = function(){
-    	var ret = !!this.init;
-    	this.init = true;
-    	return ret;
+        var ret = !!this.init;
+        this.init = true;
+        return ret;
     };
-    
+
+    // set init to false to force the listing controller to reload
     this.doReload = function(){
-    	this.init = false;
-    	console.log("reset");
+        this.init = false;
     };
 
 }]);

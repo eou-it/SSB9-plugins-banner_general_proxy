@@ -36,6 +36,8 @@ class UpdateAccountController {
         def map = request?.JSON ?: params
 
         try {
+            directDepositAccountService.syncApAndHrAccounts(map)
+            
             render directDepositAccountService.update(map) as JSON
 
         } catch (ApplicationException e) {

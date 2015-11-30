@@ -32,11 +32,12 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
          * Initialize controller
          */
         this.init = function() {
-        	console.log("attempt init")
+
             var self = this;
-        	
-        	if(ddListingService.isInit()) return;
-        	console.log("begin init...");
+            
+            // if the listing controller has already been initialized, then abort
+            if(ddListingService.isInit()) return;
+
             ddListingService.getApListing().$promise.then(
                 function (response) {
                     // By default, set A/P account as currently active account, as it can be edited inline (in desktop
@@ -44,8 +45,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.account = self.getApAccountFromResponse(response);
                     $scope.hasApAccount = !!$scope.account;
                     $scope.accountLoaded = true;
-                    console.log("loaded ap.")
-                    self.remodel();
+
+                    self.syncAccounts();
             });
 
             $scope.distributions = {
@@ -60,8 +61,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.distributions.mostRecent = response;
                     $scope.hasPayAccountsMostRecent = !!response.docAccts
                     $scope.payAccountsMostRecentLoaded = true;
-                    console.log("loaded most recent.")
-                    self.remodel();
+
+                    self.syncAccounts();
                 }
             });
 
@@ -72,34 +73,38 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.distributions.proposed = response;
                     $scope.hasPayAccountsProposed = !!response.allocations.length
                     $scope.payAccountsProposedLoaded = true;
-                    console.log("loaded payroll.")
-                    self.remodel();
+
+                    self.syncAccounts();
                 }
             });
-            
-            console.log("...end init.")
         };
         
-        this.isRemodeled = false;
-        this.remodel = function () {
-        	console.log("attempt remodel");
-        	if(!this.isRemodeled){
-	        	console.log("begin remodel...");
-	        	if($scope.payAccountsProposedLoaded && $scope.hasPayAccountsProposed && $scope.accountLoaded && $scope.hasApAccount) {
-	        		console.log("..remodeling..");
+        // if an account is used for AP and Payroll, have scope.account and allocation[x] point to same
+        // account object so that they are always in sync in the UI. The backend will save the changes
+        // to both records if it needs to.
+        this.isSynced = false;
+        this.syncAccounts = function () {
+            if(!this.isSynced){
+                if(!$scope.isEmployee){
+                    //should be no need to sync pure student, only has an AP account
+                    this.isSynced = true;
+                }
+                else {
+                    // make sure AP and Payroll accounts are loaded before trying to sync them
+                    if($scope.payAccountsProposedLoaded && $scope.hasPayAccountsProposed && $scope.accountLoaded && $scope.hasApAccount) {
+    
+                        var allocs = $scope.distributions.proposed.allocations, i;
+                        for(i = 0; i < allocs.length; i++) {
+                            if(allocs[i].bankRoutingInfo.bankRoutingNum === $scope.account.bankRoutingInfo.bankRoutingNum 
+                                    && allocs[i].bankAccountNum === $scope.account.bankAccountNum){
 
-	        		var allocs = $scope.distributions.proposed.allocations, i;
-	        		for(i = 0; i < allocs.length; i++) {
-	        			if(allocs[i].bankRoutingInfo.bankRoutingNum === $scope.account.bankRoutingInfo.bankRoutingNum 
-	        					&& allocs[i].bankAccountNum === $scope.account.bankAccountNum){
-	        				console.log("Need to sync "+ allocs[i].bankAccountNum);
-	        				$scope.account = allocs[i];
-	        			}
-	        		}
-	        		this.isRemodeled = true;
-	        	}
-	        	console.log("...end remodel");
-        	}
+                                $scope.account = allocs[i];
+                            }
+                        }
+                        this.isSynced = true;
+                    }
+                }
+            }
         };
 
 
@@ -175,7 +180,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         $scope.showEditAccount = function (typeInd, isAddNew) {
             // If this is an AP account and an AP account already exists, this functionality is disabled
             if(isAddNew && typeInd === 'AP' && $scope.hasApAccount) return;
-            //console.log($scope.account); $scope.account = $scope.allocation; console.log($scope.account); 
+
             // Otherwise, open modal
             var modal = $modal.open({
                 templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
@@ -208,29 +213,19 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         };
 
         $scope.updateAccounts = function () {
-        	console.log('updating...');
-            var doReload = true;
+            var accountSynced = false;
             var allocs = $scope.distributions.proposed.allocations
             if($scope.isEmployee){
                 var i;
                 for(i = 0; i < allocs.length; i++){
-                    /*if(allocs[i].id = $scope.account.id) {
-                        //skip
-                    }
-                    else {*/
-                        doReload = updateAccount($scope.distributions.proposed.allocations[i]) && doReload;
-                    //}
+                    accountSynced = ($scope.hasApAccount && allocs[i].id === $scope.account.id);
+                    updateAccount($scope.distributions.proposed.allocations[i]);
                 }
             }
-            if($scope.hasApAccount){
-                doReload = updateAccount($scope.account) && doReload;
+            // AP account will already be updated if it is synced with a Payroll account
+            if($scope.hasApAccount && !accountSynced){
+                updateAccount($scope.account);
             }
-            
-            if(doReload){
-                console.log('reloading');
-                //$state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
-            }
-            console.log('...done');
         };
         
         var updateAccount = function (acct) {
