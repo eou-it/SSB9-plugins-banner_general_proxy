@@ -11,8 +11,6 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
     $scope.editAccountService = ddEditAccountService;
 
-    $scope.popoverElements = {}; // Used to coordinate popovers in modal
-
     //routing and account number should only contain upper case letters and digits
     var invalidCharRegEx = /[^A-Za-z0-9]/i;
     $scope.routingNumErr = false;

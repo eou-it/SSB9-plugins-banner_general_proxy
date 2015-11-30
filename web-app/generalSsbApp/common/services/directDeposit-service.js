@@ -18,4 +18,18 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
         return fetchRoles.query();
     };
 
+    // Destroy all popovers (i.e. Bootstrap popovers)
+    this.destroyAllPopovers = function (){
+        // When created, the actual popover is the next sibling adjacent to the
+        // AngularJS popover element.  The actual popover has the '.popover.in'
+        // CSS selector.  Here's a diagram:
+        //
+        //     ANGULARJS ELEMENT        ACTUAL POPOVER VISIBLE TO USER
+        //     <pop-over ...></pop-over><div class="popover in" ...> ... </div>
+        //
+        // Thus the previous sibling (grabbed with prev()) is the
+        // AngularJS popover element that needs to have 'destroy' called on it.
+        $('body').find('.popover.in').prev().popover('destroy');
+    }
+
 }]);
