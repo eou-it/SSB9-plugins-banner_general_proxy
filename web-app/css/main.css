@@ -717,34 +717,53 @@ a.delete-account-link {
     border: 0;
 }
 
-.dd-account-input .popover {
+.dd-popover-client .popover {
     max-width: none;
     background-color: #fffeea;
 }
 
-    /* Plays a part in creating "half arrow" */
-.dd-account-input .popover {
+/* Following group plays a part in creating top RIGHT "half arrow," i.e. popover flips to the left */
+.dd-popover-client .popover.flipleft {
     border-top-right-radius: 0;
 }
 
-    /* Plays a part in creating "half arrow" */
-.dd-account-input .popover .arrow {
+.dd-popover-client .popover.flipleft .arrow {
     border-width: 12px;
 }
 
-    /* Plays a part in creating "half arrow" */
-.dd-account-input .popover.bottom .arrow {
+.dd-popover-client .popover.bottom.flipleft .arrow {
     border-right-width: 0;
     top: -24px;
     left: 100%;
 }
 
-    /* Plays a part in creating "half arrow" */
-.dd-account-input .popover.bottom .arrow:after {
+.dd-popover-client .popover.bottom.flipleft .arrow:after {
     border-right-width: 0;
     border-bottom-color: #fffeea;
     top: 2px;
     margin-left: -11px;
+}
+
+/* Following group plays a part in creating top LEFT "half arrow," i.e. popover flips to the left */
+.dd-popover-client .popover.flipright {
+    border-top-left-radius: 0;
+}
+
+.dd-popover-client .popover.flipright .arrow {
+    border-width: 12px;
+}
+
+.dd-popover-client .popover.bottom.flipright .arrow {
+    border-left-width: 0;
+    top: -24px;
+    left: 10px;
+}
+
+.dd-popover-client .popover.bottom.flipright .arrow:after {
+    border-left-width: 0;
+    border-bottom-color: #fffeea;
+    top: 2px;
+    margin-left: 1px;
 }
 
 

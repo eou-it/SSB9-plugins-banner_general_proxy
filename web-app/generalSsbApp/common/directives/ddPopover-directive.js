@@ -29,22 +29,32 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
                     html: true
                 });
 
-                // Adjust positioning based on screen dimensions
+                // Adjust positioning, etc. based on screen dimensions
                 // TODO: make this work for other dimensions than just portrait mobile
                 $(element).on('shown.bs.popover', function(e) {
-                    var popoverElement = $(e.target).next();
+                    var flipsLeft = isElementRightOfCenter(e.target),
+                        flipClass = flipsLeft ? 'flipleft' : 'flipright',
+                        popoverElement = $(e.target).next(),
+                        leftOffset = flipsLeft ? 150 : 161;
 
-                    popoverElement.css('left', parseInt($(popoverElement).css('left')) - 150 + 'px');
-                    popoverElement.css('top', parseInt($(popoverElement).css('top')) - 13 + 'px');
+                    popoverElement.css('left', parseInt($(popoverElement).css('left')) + leftOffset + 'px');
+                    popoverElement.css('top', parseInt($(popoverElement).css('top')) - 10 + 'px');
                     popoverElement.find('.popover-content').css('padding', '9px');
-
-                    popoverElement.addClass('positionSet');
+                    popoverElement.addClass(flipClass);
                 });
 
                 $(element).popover('show');
             }
         });
     };
+
+    function isElementRightOfCenter(element) {
+        var parentCenter = $(element).parent().width() / 2,
+            iconRightEdgePos = $(element).offset().left,
+            iconCenterPos = iconRightEdgePos - ($(element).width() / 2);
+
+        return iconCenterPos > parentCenter;
+    }
 
     return {
         restrict: 'E',
@@ -56,7 +66,11 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
 generalSsbAppDirectives.directive('hidePopover', ['directDepositService', function(directDepositService) {
     var link = function(scope, element) {
         $(element).on('click', function(e) {
-            directDepositService.destroyAllPopovers();
+            // If not clicking on the modal (the check for ".parents('.popover.in')" checks for that),
+            // destroy all popovers.
+            if ($(e.target).parents('.popover.in').length === 0) {
+                directDepositService.destroyAllPopovers();
+            }
         });
     };
 
