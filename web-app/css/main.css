@@ -708,6 +708,17 @@ a.delete-account-link {
 }
 
 /* Popover */
+.dd-popover {
+    float: right;
+    padding: 0.875em 0em;
+    margin-right: -5px;
+}
+
+img.sample-check {
+    width: 290px;
+    height: 148px;
+}
+
 .dd-popover .icon-info-CO {
     font-size: 18px;
     background-color: transparent;
@@ -825,18 +836,6 @@ table tr td {
 
 
 /* Media Query Section */
-
-@media(max-width:1024px) {
-    .dd-popover {
-        float: right;
-        padding: 0.875em 0em;
-    }
-
-    img.sample-check {
-        width: 290px;
-        height: 148px;
-    }
-}
 
 @media(max-width:1024px){
     .account-heading {

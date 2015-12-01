@@ -35,10 +35,10 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
                     var flipsLeft = isElementRightOfCenter(e.target),
                         flipClass = flipsLeft ? 'flipleft' : 'flipright',
                         popoverElement = $(e.target).next(),
-                        leftOffset = flipsLeft ? 150 : 161;
+                        leftOffset = flipsLeft ? -150 : 161;
 
                     popoverElement.css('left', parseInt($(popoverElement).css('left')) + leftOffset + 'px');
-                    popoverElement.css('top', parseInt($(popoverElement).css('top')) - 10 + 'px');
+                    popoverElement.css('top', parseInt($(popoverElement).css('top')) - 11 + 'px');
                     popoverElement.find('.popover-content').css('padding', '9px');
                     popoverElement.addClass(flipClass);
                 });
@@ -49,11 +49,21 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
     };
 
     function isElementRightOfCenter(element) {
-        var parentCenter = $(element).parent().width() / 2,
-            iconRightEdgePos = $(element).offset().left,
-            iconCenterPos = iconRightEdgePos - ($(element).width() / 2);
+        var clientElement = $('.dd-popover-client'),
+            clientElementLeftEdge,
+            clientCenter,
+            iconLeftEdge = $(element).offset().left,
+            iconCenter = iconLeftEdge + ($(element).width() / 2);
 
-        return iconCenterPos > parentCenter;
+        if (clientElement.length === 0) {
+            // Default to right-of-center
+            return true;
+        }
+
+        clientElementLeftEdge = clientElement.offset().left;
+        clientCenter = clientElementLeftEdge + $(clientElement).width() / 2;
+
+        return iconCenter > clientCenter;
     }
 
     return {
