@@ -33,7 +33,6 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','n
 
             directDepositService.getDisclaimer().$promise.then(function (response) {
                 if(response.failure) {
-                    notificationCenterService.displayNotifications('directDeposit.invalid.missing.disclaimer', "error");
                     $rootScope.disclaimer = $filter('i18n')('directDeposit.disclaimer.text');
                 } else {
                     $rootScope.disclaimer = response.disclaimer;
@@ -63,6 +62,9 @@ generalSsbApp.config(function($stateProvider, $urlRouterProvider){
             url: "/directDepositListing",
             templateUrl: '../generalSsbApp/ddListing/directDepositListing.html',
             controller: 'ddListingController',
+            onEnter: function(ddListingService){
+                ddListingService.doReload();
+            },
             data: {
                 breadcrumbs: []
             }

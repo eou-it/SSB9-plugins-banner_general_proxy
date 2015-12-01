@@ -32,7 +32,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
          * Initialize controller
          */
         this.init = function() {
+
             var self = this;
+            
+            // if the listing controller has already been initialized, then abort
+            if(ddListingService.isInit()) return;
 
             ddListingService.getApListing().$promise.then(
                 function (response) {
@@ -41,7 +45,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.account = self.getApAccountFromResponse(response);
                     $scope.hasApAccount = !!$scope.account;
                     $scope.accountLoaded = true;
-                });
+
+                    self.syncAccounts();
+            });
 
             $scope.distributions = {
                 mostRecent: null,
@@ -55,6 +61,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.distributions.mostRecent = response;
                     $scope.hasPayAccountsMostRecent = !!response.docAccts
                     $scope.payAccountsMostRecentLoaded = true;
+
+                    self.syncAccounts();
                 }
             });
 
@@ -65,8 +73,38 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.distributions.proposed = response;
                     $scope.hasPayAccountsProposed = !!response.allocations.length
                     $scope.payAccountsProposedLoaded = true;
+
+                    self.syncAccounts();
                 }
             });
+        };
+        
+        // if an account is used for AP and Payroll, have scope.account and allocation[x] point to same
+        // account object so that they are always in sync in the UI. The backend will save the changes
+        // to both records if it needs to.
+        this.isSynced = false;
+        this.syncAccounts = function () {
+            if(!this.isSynced){
+                if(!$scope.isEmployee){
+                    //should be no need to sync pure student, only has an AP account
+                    this.isSynced = true;
+                }
+                else {
+                    // make sure AP and Payroll accounts are loaded before trying to sync them
+                    if($scope.payAccountsProposedLoaded && $scope.hasPayAccountsProposed && $scope.accountLoaded && $scope.hasApAccount) {
+    
+                        var allocs = $scope.distributions.proposed.allocations, i;
+                        for(i = 0; i < allocs.length; i++) {
+                            if(allocs[i].bankRoutingInfo.bankRoutingNum === $scope.account.bankRoutingInfo.bankRoutingNum 
+                                    && allocs[i].bankAccountNum === $scope.account.bankAccountNum){
+
+                                $scope.account = allocs[i];
+                            }
+                        }
+                        this.isSynced = true;
+                    }
+                }
+            }
         };
 
 
@@ -174,13 +212,31 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 'directDeposit.notification.no.accounts.payable.allocation.tap';
         };
 
-        $scope.updateAccount = function () {
-            ddEditAccountService.saveAccount($scope.account).$promise.then(function (response) {
+        $scope.updateAccounts = function () {
+            var accountSynced = false;
+            var allocs = $scope.distributions.proposed.allocations
+            if($scope.isEmployee){
+                var i;
+                for(i = 0; i < allocs.length; i++){
+                    accountSynced = ($scope.hasApAccount && allocs[i].id === $scope.account.id);
+                    updateAccount($scope.distributions.proposed.allocations[i]);
+                }
+            }
+            // AP account will already be updated if it is synced with a Payroll account
+            if($scope.hasApAccount && !accountSynced){
+                updateAccount($scope.account);
+            }
+        };
+        
+        var updateAccount = function (acct) {
+            var result = true;
+            ddEditAccountService.saveAccount(acct).$promise.then(function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
+                    result = false;
                 } else {
                     // Refresh account info
-                    $scope.account.version = response.version;
+                    acct.version = response.version;
 
                     // Set form back to initial "at rest" state
                     $scope.authorizedChanges = false;
@@ -188,6 +244,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     // TODO: show confirmation message or something here?
                 }
             });
+            
+            return result;
         };
 
         $scope.toggleApAccountSelectedForDelete = function () {
@@ -246,6 +304,5 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         // INITIALIZE
         // ----------
         this.init();
-
     }
 ]);

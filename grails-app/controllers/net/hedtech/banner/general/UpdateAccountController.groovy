@@ -36,6 +36,8 @@ class UpdateAccountController {
         def map = request?.JSON ?: params
 
         try {
+            directDepositAccountService.syncApAndHrAccounts(map)
+            
             render directDepositAccountService.update(map) as JSON
 
         } catch (ApplicationException e) {
@@ -92,6 +94,8 @@ class UpdateAccountController {
         
         if(!model.disclaimer){
             model.failure = true
+            
+            log.error("Error: Disclaimer text could not be retrieved")
         }
         
         render model as JSON

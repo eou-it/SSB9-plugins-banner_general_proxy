@@ -5,6 +5,9 @@
 generalSsbAppDirectives.directive('chooseAccount',[function () {
     return{
         restrict: 'E',
+        scope: {
+            account: '='
+        },
         template: "{{( account.accountType === 'C' ? 'directDeposit.account.type.checking' : " +
                     " ( account.accountType === 'S' ? 'directDeposit.account.type.savings' : 'directDeposit.account.type.select'))|i18n}}"
     };
@@ -71,6 +74,9 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
                         }
                     }
                 }
+            });
+            scope.$on('$destroy', function () {
+                elem.unbind('keydown');
             });
         }
     };

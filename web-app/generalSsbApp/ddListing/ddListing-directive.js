@@ -37,7 +37,7 @@ generalSsbAppDirectives.directive('accountStatus',[function () {
 }]);
 
 generalSsbAppDirectives.directive('payListingPanelPopulatedMostRecent',[function () {
-	return{
+    return{
         restrict: 'E',
         link: function(scope) {
             var type = scope.isDesktop() ? 'Desktop' : '';
@@ -82,19 +82,34 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddListingService',
     return{
         restrict: 'E',
         templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposed.html',
-        scope: {
-            account: '='
+        controller: 'ddListingController',
+        link: function(scope, elem, attrs, ctrl){
+            scope.alloc = scope.allocation;
+
+            scope.showEditPayroll = function(){
+                scope.account = scope.alloc;
+                scope.showEditAccount('HR');
+            };
         }
     };
 }]);
 
 /* 
- * relies on the alloc variable from the ng-repeat in payListingPanelPopulatedProposedDesktop.html 
+ * relies on the allocation variable from the ng-repeat in payListingPanelPopulatedProposedDesktop.html 
  */
 generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',[function () {
     return{
         restrict: 'A',
-        templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposedDesktop.html'
+        templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposedDesktop.html',
+        controller: 'ddListingController',
+        link: function(scope, elem, attrs, ctrl){
+            scope.alloc = scope.allocation;
+
+            scope.setAllocationAcctType = function(type){
+                scope.account = scope.alloc;
+                scope.setAccountType(type);
+            }
+        }
     };
 }]);
 
