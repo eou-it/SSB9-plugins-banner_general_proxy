@@ -2,7 +2,7 @@
 Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="dd-account-input row semi-bold dd-popover-client">
-    <div class="clear-both xs-fix">
+    <div class="col-xs-6 col-sm-4 col-md-4 clear-both xs-fix">
         <label ng-class="(routingNumErr? 'input-field-label field-error' : 'input-field-label')" for="routing-number">{{'directDeposit.account.label.bank.routing.num'|i18n}}</label>
         <pop-over class="dd-popover" popover-img="../images/sample_check.jpg"></pop-over>
         <input ng-model="account.bankRoutingInfo.bankRoutingNum" ng-blur="validateRoutingNum()" ng-disabled="!creatingNewAccount"
@@ -13,7 +13,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </span>
         <p class="input-field-label ng-class: (routingNumErr ? 'field-error error-font-size' : 'no-display');">{{routingNumMessage}}</p>
     </div>
-    <div class="xs-fix">
+    <div class="col-xs-6 col-sm-4 col-md-4 xs-fix">
         <label ng-class="(accountNumErr ? 'input-field-label field-error' : 'input-field-label')" for="account-number">{{'directDeposit.account.label.account.num'|i18n}}</label>
         <pop-over class="dd-popover" popover-img="../images/sample_check.jpg"></pop-over>
         <input data-ng-model="account.bankAccountNum" ng-blur="validateAccountNum()" ng-disabled="!creatingNewAccount"
@@ -24,7 +24,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </span>
         <p class="input-field-label ng-class: (accountNumErr ? 'field-error error-font-size' : 'no-display');">{{accountNumMessage}}</p>
     </div>
-    <div class="xs-fix">
+    <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
         <label ng-class="(accountTypeErr ? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.accountType'|i18n}}</label>
         <label class="visuallyhidden" id="select-acct-type">{{'directDeposit.label.account.type.select'|i18n}}</label>
         <div class="dropdown" role="menu">
@@ -54,7 +54,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
     </div>
 </div>
 <div class="row disclaimer-margin">
-    <div>
+    <div class="col-xs-12">
         <label class="visuallyhidden" for="disclaimer-checkbox">{{'directDeposit.label.disclaimer.checkbox'|i18n}}</label>
         <input ng-click="toggleAuthorizedChanges()" class="main-nav-check" id="disclaimer-checkbox" type="checkbox" aria-describedby="disclaimer"/>
         <p class="lbl" id="disclaimer">{{disclaimer}}</p>
