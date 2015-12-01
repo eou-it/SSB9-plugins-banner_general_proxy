@@ -9,7 +9,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     $scope.creatingNewAccount = editAcctProperties.creatingNew;
     $scope.authorizedChanges = false;
 
-    $scope.editAccountService = ddEditAccountService;
+    $scope.popoverElements = {}; // Used to coordinate popovers in modal
 
     //routing and account number should only contain upper case letters and digits
     var invalidCharRegEx = /[^A-Za-z0-9]/i;
@@ -88,7 +88,9 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     };
     
     $scope.saveAccount = function() {
-        handleAmounts();
+        if($scope.typeIndicator === 'HR'){
+        	ddEditAccountService.setAmountValues($scope.account, $scope.amount.type);
+        }
 
         if(requiredFieldsValid()) {
             ddEditAccountService.saveAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
@@ -130,16 +132,47 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         
         return !($scope.routingNumErr || $scope.accountNumErr || $scope.accountTypeErr);
     };
-
-    $scope.amountType = 'remaining';
-
-    var handleAmounts = function(){
-        if($scope.amountType === 'remaining'){
-            $scope.account.percent = 100;
-            $scope.account.amount = null;
-        }
-    };
     
+    
+    var handleAmounts = function(){
+    	if($scope.amount.type === 'remaining'){
+            $scope.account.percent = 100;
+            $scope.account.amount = ''; // grails will ignore null values, so use empty strings instead
+    	}
+    	else if($scope.amount.type === 'amount'){
+    		$scope.account.percent = '';
+        	//$scope.account.amount = $scope.amount.val;
+    	}
+    	else if($scope.amount.type === 'percentage'){
+    		//$scope.account.percent = $scope.amount.val;
+            $scope.account.amount = '';
+    	}
+    };/*
+    ddy=0;
+    $scope.showThing1 = function(){
+    	if($scope.amount.type === 'percentage'){
+    		if(ddy === 0){
+    		$scope.amount.val = $scope.account.percent;
+    		ddy=1; ddx=0;
+    		}
+    		return true;
+    	}
+    	else return false;
+    };
+    ddx=0;
+    $scope.showThing2 = function(){
+    	//console.log('amount:'+ x++);
+    	if($scope.amount.type === 'amount'){
+    		if(ddx === 0){
+    		$scope.amount.val = $scope.account.amount;
+    		ddx=1; ddy=0;
+    		}
+    		return true;
+    	}
+    	else return false;
+    };*/
+    //ng-focus="amount.val=account.amount"
+    //ng-focus="amount.val=account.percent" 
     $scope.cancelModal = function () {
         $modalInstance.dismiss('cancel');
         notificationCenterService.clearNotifications();
@@ -159,7 +192,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 hrIndicator: 'I',
                 bankAccountNum: null,
                 amount: null,
-                percent: 100,
+                percent: null,
                 accountType: '',
                 bankRoutingInfo: {
                     bankRoutingNum: null
@@ -171,7 +204,31 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 $scope.account.apIndicator = 'I';
             }
         }
+        else {
+	        if($scope.typeIndicator === 'HR'){
+	        	$scope.amount.type = ddEditAccountService.getAmountType($scope.account);
+	        }
+        }
     };
+    
+    $scope.amount = {};
+    $scope.amount.type = 'remaining';
+    /*$scope.amount.val = null;
+    var initAmounts = function(){
+    	if($scope.account.allocation === 'Remaining'){
+    		$scope.amount.type = 'remaining';
+    		$scope.account.percent = null;
+    		$scope.account.amount = null;
+    	}
+    	else if($scope.account.amount != null){
+    		$scope.amount.type = 'amount';
+    		//$scope.amount.val = $scope.account.amount;
+    	}
+    	else if($scope.account.percent != null){
+    		$scope.amount.type = 'percentage';
+    		//$scope.amount.val = $scope.account.percent;
+    	}
+    };*/
 
 
     // INITIALIZE

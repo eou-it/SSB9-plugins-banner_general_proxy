@@ -34,7 +34,7 @@ class AccountListingController  {
         }
     }
     
-    def getHrAccountsForCurrentUser() {
+    /*def getHrAccountsForCurrentUser() {
         def person = findPerson()
         def model = [:]
 
@@ -49,7 +49,7 @@ class AccountListingController  {
         JSON.use("deep") {
             render model as JSON
         }
-    }
+    }*/
 
     def getUserPayrollAllocations() {
         def person = findPerson()
