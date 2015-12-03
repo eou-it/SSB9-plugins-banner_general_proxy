@@ -352,7 +352,18 @@ button.closebtn {
 
 .desktop .dropdown-btn {
     color: #4F585F;
-    width: 222px;
+}
+
+.desktop .dropdown-btn span.icon {
+    padding-left: 0px;
+}
+
+.min-width-acctType {
+    min-width: 15%;
+}
+
+.min-width-amount {
+    min-width: 20%;
 }
 
 .dropdown-menu.addAcct {
@@ -367,15 +378,24 @@ button.closebtn {
     width: 100%;
 }
 
-.open > .dropdown-menu.addAcct{
-    width: 100%;
+.dropdown-menu.addAcct.listing {
+    min-width: 100%;
+    width: unset;
+}
+
+li.listing {
+    padding: 7.5px;
+}
+
+.open > .dropdown-menu.addAcct {
     border-style: solid;
     border-width: 1px;
     border-color: #206E9F;
     top: 3.175em;
 }
 
-.dropdown-menu > li > a.addAcct {
+.dropdown-menu > li > a.addAcct,
+.dropdown-menu > li.listing {
     border-width: 1px;
     border-radius: 0px;
     border-style: solid none;
@@ -385,13 +405,16 @@ button.closebtn {
 }
 
 .dropdown-menu > li > a.addAcct:hover,
-.dropdown-menu > li > a.addAcct:focus  {
+.dropdown-menu > li > a.addAcct:focus,
+.dropdown-menu > li.listing:hover,
+.dropdown-menu > li.listing.dropdown-li-focus {
     border-top-color: #B0DEEC;
     border-bottom-color: #B0DEEC;
     background-color: #F3FCFF;
 }
 
-.dropdown-menu > li > a.addAcct.end-dropdown-radius {
+.dropdown-menu > li > a.addAcct.end-dropdown-radius,
+.dropdown-menu > li.listing.end-dropdown-radius {
     border-bottom-right-radius: 6px;
     border-bottom-left-radius: 6px;
     border-top-right-radius: 0px;
@@ -400,6 +423,14 @@ button.closebtn {
 
 .desktop .dropdown-menu > li > a.addAcct {
     font-weight: normal;
+}
+
+li.listing > .radio-list {
+    padding: 0px;
+}
+
+li.listing .radio-txt-input {
+    margin-top: 7px;
 }
 
 /*  Check box  */
@@ -469,10 +500,30 @@ input[type=radio]:checked+.lbl::before {
     content: "\2022";
 }
 
+input[type=radio]:checked+.lbl {
+    color: #1C8445;
+}
+
 .radio-list {
     padding-bottom: 0.875em;
     font-weight: normal;
+    white-space: nowrap;
 }
+
+.ws-nowrap {
+	white-space: nowrap;
+}
+
+.radio-txt-input {
+	border-radius: 4px;
+	background-color: #FFF;
+	border: 1px solid #869FB1;
+	box-shadow: 4px 4px #EDF3F6 inset;
+	width: initial;
+	color: #869FB1;
+	margin-left: 20px;
+}
+
 
 /* Account Listing Page Styles */
 .pay-entry {
@@ -710,7 +761,7 @@ a.delete-account-link {
 /* Popover */
 .dd-popover {
     float: right;
-    padding: 0.875em 0em;
+    padding: 0.875em 0em 0em;
     margin-right: -5px;
 }
 

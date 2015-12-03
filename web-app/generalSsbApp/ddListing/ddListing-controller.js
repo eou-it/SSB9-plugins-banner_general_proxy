@@ -125,7 +125,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         $scope.authorizedChanges = false;
         $scope.apAccountSelectedForDelete = false;
 
-
         // CONTROLLER FUNCTIONS
         // --------------------
 
@@ -229,11 +228,13 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         };
         
         var updateAccount = function (acct) {
-            var result = true;
+            if(acct.hrIndicator === 'A'){
+                ddEditAccountService.setAmountValues(acct, acct.amountType);
+            }
+
             ddEditAccountService.saveAccount(acct).$promise.then(function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
-                    result = false;
                 } else {
                     // Refresh account info
                     acct.version = response.version;
@@ -244,8 +245,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     // TODO: show confirmation message or something here?
                 }
             });
-            
-            return result;
         };
 
         $scope.toggleApAccountSelectedForDelete = function () {

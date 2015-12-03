@@ -88,11 +88,11 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     };
     
     $scope.saveAccount = function() {
-        if($scope.typeIndicator === 'HR'){
-        	ddEditAccountService.setAmountValues($scope.account, $scope.amount.type);
-        }
-
         if(requiredFieldsValid()) {
+            if($scope.typeIndicator === 'HR'){
+                ddEditAccountService.setAmountValues($scope.account, $scope.amount.type);
+            }
+
             ddEditAccountService.saveAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
@@ -133,46 +133,6 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         return !($scope.routingNumErr || $scope.accountNumErr || $scope.accountTypeErr);
     };
     
-    
-    var handleAmounts = function(){
-    	if($scope.amount.type === 'remaining'){
-            $scope.account.percent = 100;
-            $scope.account.amount = ''; // grails will ignore null values, so use empty strings instead
-    	}
-    	else if($scope.amount.type === 'amount'){
-    		$scope.account.percent = '';
-        	//$scope.account.amount = $scope.amount.val;
-    	}
-    	else if($scope.amount.type === 'percentage'){
-    		//$scope.account.percent = $scope.amount.val;
-            $scope.account.amount = '';
-    	}
-    };/*
-    ddy=0;
-    $scope.showThing1 = function(){
-    	if($scope.amount.type === 'percentage'){
-    		if(ddy === 0){
-    		$scope.amount.val = $scope.account.percent;
-    		ddy=1; ddx=0;
-    		}
-    		return true;
-    	}
-    	else return false;
-    };
-    ddx=0;
-    $scope.showThing2 = function(){
-    	//console.log('amount:'+ x++);
-    	if($scope.amount.type === 'amount'){
-    		if(ddx === 0){
-    		$scope.amount.val = $scope.account.amount;
-    		ddx=1; ddy=0;
-    		}
-    		return true;
-    	}
-    	else return false;
-    };*/
-    //ng-focus="amount.val=account.amount"
-    //ng-focus="amount.val=account.percent" 
     $scope.cancelModal = function () {
         $modalInstance.dismiss('cancel');
         notificationCenterService.clearNotifications();
@@ -192,44 +152,21 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 hrIndicator: 'I',
                 bankAccountNum: null,
                 amount: null,
-                percent: null,
+                percent: 100,
                 accountType: '',
                 bankRoutingInfo: {
                     bankRoutingNum: null
-                }
+                },
+                amountType: 'remaining'
             };
 
             if($scope.typeIndicator === 'HR'){
                 $scope.account.hrIndicator = 'A';
                 $scope.account.apIndicator = 'I';
+                $scope.account.percent = null; // we will determine what value this should be on save, AP is always 100
             }
         }
-        else {
-	        if($scope.typeIndicator === 'HR'){
-	        	$scope.amount.type = ddEditAccountService.getAmountType($scope.account);
-	        }
-        }
     };
-    
-    $scope.amount = {};
-    $scope.amount.type = 'remaining';
-    /*$scope.amount.val = null;
-    var initAmounts = function(){
-    	if($scope.account.allocation === 'Remaining'){
-    		$scope.amount.type = 'remaining';
-    		$scope.account.percent = null;
-    		$scope.account.amount = null;
-    	}
-    	else if($scope.account.amount != null){
-    		$scope.amount.type = 'amount';
-    		//$scope.amount.val = $scope.account.amount;
-    	}
-    	else if($scope.account.percent != null){
-    		$scope.amount.type = 'percentage';
-    		//$scope.amount.val = $scope.account.percent;
-    	}
-    };*/
-
 
     // INITIALIZE
     // ----------

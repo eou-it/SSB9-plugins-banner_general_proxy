@@ -78,13 +78,15 @@ generalSsbAppDirectives.directive('payListingPanelPopulatedProposed',[function (
     };
 }]);
 
-generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddListingService', function (ddListingService) {
+generalSsbAppDirectives.directive('payAccountInfoProposed', [function () {
     return{
         restrict: 'E',
         templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposed.html',
         controller: 'ddListingController',
         link: function(scope, elem, attrs, ctrl){
             scope.alloc = scope.allocation;
+            
+            scope.alloc.amountType = ddEditAccountService.getAmountType(scope.alloc);
 
             scope.showEditPayroll = function(){
                 scope.account = scope.alloc;
@@ -97,13 +99,15 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddListingService',
 /* 
  * relies on the allocation variable from the ng-repeat in payListingPanelPopulatedProposedDesktop.html 
  */
-generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',[function () {
+generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccountService', function (ddEditAccountService) {
     return{
         restrict: 'A',
         templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposedDesktop.html',
         controller: 'ddListingController',
         link: function(scope, elem, attrs, ctrl){
             scope.alloc = scope.allocation;
+            
+            scope.alloc.amountType = ddEditAccountService.getAmountType(scope.alloc);
 
             scope.setAllocationAcctType = function(type){
                 scope.account = scope.alloc;
@@ -146,6 +150,18 @@ generalSsbAppDirectives.directive('notificationBox',[function () {
         templateUrl: '../generalSsbApp/ddListing/ddNotificationBox.html',
         scope: {
             notificationText: '@'
+        }
+    };
+}]);
+
+generalSsbAppDirectives.directive('stopClick', [function () {
+    return {
+        restrict: 'A',
+        link: function (scope, elem, attrs) {
+
+            elem.on('click', function(event) {
+                event.stopPropagation();
+            });
         }
     };
 }]);

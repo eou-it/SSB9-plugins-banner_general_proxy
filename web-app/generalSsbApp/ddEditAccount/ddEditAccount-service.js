@@ -39,30 +39,30 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
     };
     
     this.getAmountType = function (acct) {
-    	if(acct.allocation === 'Remaining'){
-    		acct.percent = null;
-    		acct.amount = null;
-    		return 'remaining';
-    	}
-    	else if(acct.amount != null){
-    		return 'amount';
-    	}
-    	else if(acct.percent != null){
-    		return 'percentage';
-    	}
+        if(acct.allocation === 'Remaining'){
+            acct.percent = null;
+            acct.amount = null;
+            return 'remaining';
+        }
+        else if(acct.amount != null){
+            return 'amount';
+        }
+        else if(acct.percent != null){
+            return 'percentage';
+        }
     };
     
     this.setAmountValues = function (acct, amountType){
-    	if(amountType === 'remaining'){
+        if(amountType === 'remaining'){
             acct.percent = 100;
             acct.amount = ''; // grails will ignore null values, so use empty strings instead
-    	}
-    	else if(amountType === 'amount'){
-    		acct.percent = '';
-    	}
-    	else if(amountType === 'percentage'){
-    		acct.amount = '';
-    	}
+        }
+        else if(amountType === 'amount'){
+            acct.percent = '';
+        }
+        else if(amountType === 'percentage'){
+            acct.amount = '';
+        }
     };
 
 }]);

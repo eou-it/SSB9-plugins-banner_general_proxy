@@ -24,6 +24,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </span>
         <p class="input-field-label ng-class: (accountNumErr ? 'field-error error-font-size' : 'no-display');">{{accountNumMessage}}</p>
     </div>
+    <div class="clearfix visible-xs-block hidden-sm hidden-md hidden-lg"></div>
     <div class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
         <label ng-class="(accountTypeErr ? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.accountType'|i18n}}</label>
         <label class="visuallyhidden" id="select-acct-type">{{'directDeposit.label.account.type.select'|i18n}}</label>
@@ -45,20 +46,21 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </div>
         <p ng-show="accountTypeErr" class="input-field-label field-error error-font-size">{{'directDeposit.invalid.missing.account.type'|i18n}}</p>
     </div>
-    <div ng-if="typeIndicator==='HR'" class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
+    <div class="clearfix visible-md-block hidden-xs"></div>
+    <div ng-show="typeIndicator==='HR'" class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
         <label ng-class="(amountErr ? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.amount'|i18n}}</label><br>
-        <input ng-model="amount.type" class="edit-radio" type="radio" name="amount-type" value="remaining" checked><span class="lbl radio-list">{{'directDeposit.account.amount.remaining'|i18n}}</span>
+        <input ng-model="account.amountType" class="edit-radio" type="radio" name="amount-type" value="remaining" checked><span class="lbl radio-list">{{'directDeposit.account.amount.remaining'|i18n}}</span>
         <br>
-        <input ng-model="amount.type" class="edit-radio" type="radio" name="amount-type" value="amount"><span class="lbl radio-list">{{'directDeposit.account.amount.amount'|i18n}}</span>
-        <div ng-show="amount.type === 'amount'" class="">
+        <input ng-model="account.amountType" class="edit-radio" type="radio" name="amount-type" value="amount"><span class="lbl radio-list">{{'directDeposit.account.amount.amount'|i18n}}</span>
+        <div ng-show="account.amountType === 'amount'" class="">
             <label class="visuallyhidden" for="">{{'directDeposit.account.label.account.num'|i18n}}</label>
-            <input ng-model="account.amount" id="" type="text" placeholder="{{'directDeposit.label.input.amount'|i18n}}"/>
+            <input ng-model="account.amount" class="radio-txt-input semi-bold form-spacing" id="" type="text" placeholder="{{'directDeposit.label.input.amount'|i18n}}"/>
         </div>
         <br>
-        <input ng-model="amount.type" class="edit-radio" type="radio" name="amount-type" value="percentage"><span class="lbl radio-list">{{'directDeposit.account.amount.percentage'|i18n}}</span>
-        <div ng-show="amount.type === 'percentage'" class="">
-	        <label class="visuallyhidden" for="">{{'directDeposit.account.label.account.num'|i18n}}</label>
-	        <input ng-model="account.percent" id="" type="text" placeholder="{{'directDeposit.label.input.percent'|i18n}}"/>%
+        <input ng-model="account.amountType" class="edit-radio" type="radio" name="amount-type" value="percentage"><span class="lbl radio-list">{{'directDeposit.account.amount.percentage'|i18n}}</span>
+        <div ng-show="account.amountType === 'percentage'" class="ws-nowrap">
+            <label class="visuallyhidden" for="">{{'directDeposit.account.label.account.num'|i18n}}</label>
+            <input ng-model="account.percent" class="radio-txt-input semi-bold form-spacing" id="" type="text" placeholder="{{'directDeposit.label.input.percent'|i18n}}"/> %
         </div>
         <br>
         <p ng-show="amountErr" class="input-field-label field-error error-font-size">Amount error</p>
