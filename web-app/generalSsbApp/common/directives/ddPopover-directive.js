@@ -7,22 +7,22 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
     var template = '<button class="icon-info-CO"></button>';
 
     var link = function (scope, element, attrs) {
-        $(element).on('click', function(e) {
+        element.on('click', function(event) {
             var src = attrs.popoverImg || '';
 
             // Prevent the hidePopover directive from handling the event, immediately closing the popover
-            e.stopImmediatePropagation();
+            event.stopImmediatePropagation();
 
             // Toggle popover open/closed
-            if ($(element).next('.popover.in').length !== 0) {
+            if (element.next('.popover.in').length !== 0) {
                 // Popover is already open, toggle it closed
-                $(element).popover('destroy');
+                element.popover('destroy');
             } else {
                 // Destroy any existing popovers
                 directDepositService.destroyAllPopovers();
 
                 // Open popover
-                $(element).popover({
+                element.popover({
                     content: '<img class="sample-check" src="' + src + '">',
                     trigger: 'manual',
                     placement: 'bottom',
@@ -31,19 +31,19 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
 
                 // Adjust positioning, etc. based on screen dimensions
                 // TODO: make this work for other dimensions than just portrait mobile
-                $(element).on('shown.bs.popover', function(e) {
-                    var flipsLeft = isElementRightOfCenter(e.target),
+                element.on('shown.bs.popover', function(event) {
+                    var flipsLeft = isElementRightOfCenter(event.target),
                         flipClass = flipsLeft ? 'flipleft' : 'flipright',
-                        popoverElement = $(e.target).next(),
+                        popoverElement = $(event.target).next(),
                         leftOffset = flipsLeft ? -150 : 161;
 
-                    popoverElement.css('left', parseInt($(popoverElement).css('left')) + leftOffset + 'px');
-                    popoverElement.css('top', parseInt($(popoverElement).css('top')) - 11 + 'px');
+                    popoverElement.css('left', parseInt(popoverElement.css('left')) + leftOffset + 'px');
+                    popoverElement.css('top', parseInt(popoverElement.css('top')) - 11 + 'px');
                     popoverElement.find('.popover-content').css('padding', '9px');
                     popoverElement.addClass(flipClass);
                 });
 
-                $(element).popover('show');
+                element.popover('show');
             }
         });
     };
@@ -61,7 +61,7 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
         }
 
         clientElementLeftEdge = clientElement.offset().left;
-        clientCenter = clientElementLeftEdge + $(clientElement).width() / 2;
+        clientCenter = clientElementLeftEdge + clientElement.width() / 2;
 
         return iconCenter > clientCenter;
     }
@@ -75,10 +75,10 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
 
 generalSsbAppDirectives.directive('hidePopover', ['directDepositService', function(directDepositService) {
     var link = function(scope, element) {
-        $(element).on('click', function(e) {
+        element.on('click', function(event) {
             // If not clicking on the modal (the check for ".parents('.popover.in')" checks for that),
             // destroy all popovers.
-            if ($(e.target).parents('.popover.in').length === 0) {
+            if ($(event.target).parents('.popover.in').length === 0) {
                 directDepositService.destroyAllPopovers();
             }
         });
