@@ -35,11 +35,11 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
                     var flipsLeft = isElementRightOfCenter(event.target),
                         flipClass = flipsLeft ? 'flipleft' : 'flipright',
                         popoverElement = $(event.target).next(),
-                        leftOffset = flipsLeft ? -150 : 161;
+                        leftOffset = flipsLeft ? -142 : 162;
 
                     popoverElement.css('left', parseInt(popoverElement.css('left')) + leftOffset + 'px');
                     popoverElement.css('top', parseInt(popoverElement.css('top')) - 11 + 'px');
-                    popoverElement.find('.popover-content').css('padding', '9px');
+                    popoverElement.find('.popover-content').css('padding', '5px');
                     popoverElement.addClass(flipClass);
                 });
 
