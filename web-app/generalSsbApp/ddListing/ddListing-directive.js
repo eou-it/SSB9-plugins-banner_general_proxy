@@ -78,7 +78,7 @@ generalSsbAppDirectives.directive('payListingPanelPopulatedProposed',[function (
     };
 }]);
 
-generalSsbAppDirectives.directive('payAccountInfoProposed', [function () {
+generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddEditAccountService', function (ddEditAccountService) {
     return{
         restrict: 'E',
         templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposed.html',
@@ -99,7 +99,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', [function () {
 /* 
  * relies on the allocation variable from the ng-repeat in payListingPanelPopulatedProposedDesktop.html 
  */
-generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccountService', function (ddEditAccountService) {
+generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccountService', '$filter', function (ddEditAccountService, $filter) {
     return{
         restrict: 'A',
         templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposedDesktop.html',
@@ -113,6 +113,31 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                 scope.account = scope.alloc;
                 scope.setAccountType(type);
             }
+
+            scope.displayAllocationVal = function () {
+                if(scope.alloc.amountType === 'remaining'){
+                    scope.alloc.allocation = 'Remaining'
+                }
+                else if(scope.alloc.amountType === 'percentage'){
+                    scope.alloc.allocation = (scope.alloc.percent ? scope.alloc.percent : '0') + '%';
+                }
+                else if(scope.alloc.amountType === 'amount'){
+                    scope.alloc.allocation = $filter('currency')(scope.alloc.amount);
+                }
+                return scope.alloc.allocation;
+            };
+        }
+    };
+}]);
+
+generalSsbAppDirectives.directive('stopClick', [function () {
+    return {
+        restrict: 'A',
+        link: function (scope, elem, attrs) {
+
+            elem.on('click', function(event) {
+                event.stopPropagation();
+            });
         }
     };
 }]);
@@ -150,18 +175,6 @@ generalSsbAppDirectives.directive('notificationBox',[function () {
         templateUrl: '../generalSsbApp/ddListing/ddNotificationBox.html',
         scope: {
             notificationText: '@'
-        }
-    };
-}]);
-
-generalSsbAppDirectives.directive('stopClick', [function () {
-    return {
-        restrict: 'A',
-        link: function (scope, elem, attrs) {
-
-            elem.on('click', function(event) {
-                event.stopPropagation();
-            });
         }
     };
 }]);

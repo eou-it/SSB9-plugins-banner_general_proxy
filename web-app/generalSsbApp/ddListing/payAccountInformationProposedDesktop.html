@@ -1,7 +1,7 @@
 <td class="break-word">
     <div class="delete-checkbox-wrapper-desktop">
-        <label class="visuallyhidden" id="for-delete">{{'directDeposit.label.select.for.delete'|i18n}}</label>
-        <input type="checkbox" class="delete-checkbox-desktop" ng-click="" enter-key="" aria-labelledby="for-delete pro-bank-name{{$index}}">
+        <label class="visuallyhidden" id="for-delete{{$index}}">{{'directDeposit.label.select.for.delete'|i18n}}</label>
+        <input type="checkbox" class="delete-checkbox-desktop" ng-click="" enter-key="" aria-labelledby="for-delete{{$index}} pro-bank-name{{$index}}">
         <span class="lbl"></span>
     </div>
     <span id="pro-bank-name{{$index}}">{{alloc.bankRoutingInfo.bankName}}</span>
@@ -9,8 +9,8 @@
 <td class="break-word">{{alloc.bankRoutingInfo.bankRoutingNum|accountNumMask}}</td>
 <td class="break-word">{{alloc.bankAccountNum|accountNumMask}}</td>
 <td class="min-width-acctType">
-    <div class="dropdown desktop">
-        <button dropdown-helper="begin" class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#" role="option" >
+    <div class="dropdown desktop" role="menu">
+        <button dropdown-helper="begin" class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#">
             <span class="float-l form-spacing">
                 <choose-account account="alloc"/>
             </span>
@@ -28,32 +28,32 @@
 </td>
 <td class="min-width-amount">
     <div class="dropdown desktop">
-        <button dropdown-helper="begin" class="dropdown-btn ws-nowrap" data-toggle="dropdown" href="#" role="option" >
+        <button dropdown-helper="begin" class="dropdown-btn ws-nowrap" data-toggle="dropdown" href="#" role="option" id="marker{{$index}}">
             <span class="float-l form-spacing">
-                {{alloc.allocation}}
+                {{displayAllocationVal()}}
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font"></span></span>
         </button>
-        <ul class="dropdown-menu addAcct listing" stop-click role="menu" aria-label="{{'directDeposit.label.account.type.edit'|i18n}}">
-            <li ng-class="(alloc.amountType === 'remaining' ? 'dropdown-li-focus' : '')" class="listing">
-                <input ng-model="alloc.amountType" class="edit-radio" type="radio" name="amount-type{{$index}}" value="remaining" checked>
-                <span class="lbl radio-list">{{'directDeposit.account.amount.remaining'|i18n}}</span>
+        <ul class="dropdown-menu addAcct listing" stop-click role="radiogroup" aria-label="{{'directDeposit.label.account.amount.edit'|i18n}}">
+            <li ng-class="(alloc.amountType === 'remaining' ? 'dropdown-li-focus' : '')" class="listing" role="presentation">
+                <input ng-model="alloc.amountType" class="edit-radio" type="radio" name="amount-type{{$index}}" value="remaining" checked aria-labelledby="rem-radio-lbl{{$index}}">
+                <span class="lbl radio-list" id="rem-radio-lbl{{$index}}">{{'directDeposit.account.amount.remaining'|i18n}}</span>
                 <br>
             </li>
-            <li ng-class="(alloc.amountType === 'amount' ? 'dropdown-li-focus' : '')" class="listing">
-                <input ng-model="alloc.amountType" class="edit-radio" type="radio" name="amount-type{{$index}}" value="amount">
-                <span class="lbl radio-list">{{'directDeposit.account.amount.amount'|i18n}}</span>
+            <li ng-class="(alloc.amountType === 'amount' ? 'dropdown-li-focus' : '')" class="listing" role="presentation">
+                <input ng-model="alloc.amountType" class="edit-radio" type="radio" name="amount-type{{$index}}" value="amount" aria-labelledby="amt-radio-lbl{{$index}}">
+                <span class="lbl radio-list" id="amt-radio-lbl{{$index}}">{{'directDeposit.account.amount.amount'|i18n}}</span>
                 <div ng-show="alloc.amountType === 'amount'" class="ws-nowrap">
-                    <label class="visuallyhidden" for="">{{'directDeposit.account.label.account.num'|i18n}}</label>
-                    <input ng-model="alloc.amount" class="radio-txt-input semi-bold form-spacing" id="" type="text" placeholder="{{'directDeposit.label.input.amount'|i18n}}"/>
+                    <label class="visuallyhidden" for="amt-txt-input{{$index}}">{{'directDeposit.account.label.amount.amount'|i18n}}</label>
+                    <input ng-model="alloc.amount" dropdown-helper="end" class="radio-txt-input semi-bold form-spacing" id="amt-txt-input{{$index}}" type="text" placeholder="{{'directDeposit.label.input.amount'|i18n}}"/>
                 </div>
             </li>
-            <li ng-class="(alloc.amountType === 'percentage' ? 'dropdown-li-focus' : '')" class="listing end-dropdown-radius">
-                <input ng-model="alloc.amountType" class="edit-radio" type="radio" name="amount-type{{$index}}" value="percentage">
-                <span class="lbl radio-list">{{'directDeposit.account.amount.percentage'|i18n}}</span>
+            <li ng-class="(alloc.amountType === 'percentage' ? 'dropdown-li-focus' : '')" class="listing end-dropdown-radius" role="presentation">
+                <input ng-model="alloc.amountType" class="edit-radio" type="radio" name="amount-type{{$index}}" value="percentage" aria-labelledby="pct-radio-lbl{{$index}}">
+                <span class="lbl radio-list" id="pct-radio-lbl{{$index}}">{{'directDeposit.account.amount.percentage'|i18n}}</span>
                 <div ng-show="alloc.amountType === 'percentage'" class="ws-nowrap">
-                    <label class="visuallyhidden" for="">{{'directDeposit.account.label.account.num'|i18n}}</label>
-                    <input ng-model="alloc.percent" class="radio-txt-input semi-bold form-spacing" id="" type="text" placeholder="{{'directDeposit.label.input.percent'|i18n}}"/> %
+                    <label class="visuallyhidden" for="pct-txt-input{{$index}}">{{'directDeposit.account.label.amount.percent'|i18n}}</label>
+                    <input ng-model="alloc.percent" dropdown-helper="end" class="radio-txt-input semi-bold form-spacing" id="pct-txt-input{{$index}}" type="text" placeholder="{{'directDeposit.label.input.percent'|i18n}}"/> %
                 </div>
             </li>
         </ul>

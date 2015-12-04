@@ -213,7 +213,8 @@ body {
     font-family: ellucian;
 }
 
-.text-input-field:focus {
+.text-input-field:focus,
+.radio-txt-input:focus {
     border-style: solid;
     border-width: 1px;
     border-color: #206E9F;
