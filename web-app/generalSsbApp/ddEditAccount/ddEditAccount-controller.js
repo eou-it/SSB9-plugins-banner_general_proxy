@@ -90,7 +90,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     $scope.saveAccount = function() {
         if(requiredFieldsValid()) {
             if($scope.typeIndicator === 'HR'){
-                ddEditAccountService.setAmountValues($scope.account, $scope.amount.type);
+                ddEditAccountService.setAmountValues($scope.account, $scope.account.amountType);
             }
 
             ddEditAccountService.saveAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {

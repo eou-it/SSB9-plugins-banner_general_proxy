@@ -122,7 +122,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                     scope.alloc.allocation = (scope.alloc.percent ? scope.alloc.percent : '0') + '%';
                 }
                 else if(scope.alloc.amountType === 'amount'){
-                    scope.alloc.allocation = $filter('currency')(scope.alloc.amount);
+                    scope.alloc.allocation = $filter('currency')((scope.alloc.amount ? scope.alloc.amount : '0'));
                 }
                 return scope.alloc.allocation;
             };

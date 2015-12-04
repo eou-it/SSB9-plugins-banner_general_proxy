@@ -512,17 +512,17 @@ input[type=radio]:checked+.lbl {
 }
 
 .ws-nowrap {
-	white-space: nowrap;
+    white-space: nowrap;
 }
 
 .radio-txt-input {
-	border-radius: 4px;
-	background-color: #FFF;
-	border: 1px solid #869FB1;
-	box-shadow: 4px 4px #EDF3F6 inset;
-	width: initial;
-	color: #869FB1;
-	margin-left: 20px;
+    border-radius: 4px;
+    background-color: #FFF;
+    border: 1px solid #869FB1;
+    box-shadow: 4px 4px #EDF3F6 inset;
+    width: initial;
+    color: #869FB1;
+    margin-left: 20px;
 }
 
 

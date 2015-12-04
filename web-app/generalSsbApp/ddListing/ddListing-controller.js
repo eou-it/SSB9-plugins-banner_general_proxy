@@ -217,7 +217,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             if($scope.isEmployee){
                 var i;
                 for(i = 0; i < allocs.length; i++){
-                    accountSynced = ($scope.hasApAccount && allocs[i].id === $scope.account.id);
+                    if($scope.hasApAccount && allocs[i].id === $scope.account.id){
+                        accountSynced = true;
+                    }
                     updateAccount($scope.distributions.proposed.allocations[i]);
                 }
             }
