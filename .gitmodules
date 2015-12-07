@@ -37,18 +37,21 @@
 [submodule "plugins/banner_general_validation_common.git"]
 	path = plugins/banner_general_validation_common.git
 	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_general_validation_common.git
-[submodule "plugins/spring_security_cas.git"]
-	path = plugins/spring_security_cas.git
-	url = ssh://git@devgit1.ellucian.com/banner/plugins/spring_security_cas.git
 [submodule "plugins/web-app-extensibility.git"]
 	path = plugins/web-app-extensibility.git
 	url = https://git.ellucian.com/scm/ext/web-app-extensibility.git
-[submodule "plugins/spring_security_saml.git"]
-	path = plugins/spring_security_saml.git
-	url = ssh://git@devgit1.ellucian.com/banner/plugins/spring_security_saml.git
 [submodule "banner_payroll_common"]
 	path = plugins/banner_payroll_common.git
 	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_payroll_common.git
 [submodule "banner_posnctl_common"]
 	path = plugins/banner_posnctl_common.git
 	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_posnctl_common.git
+[submodule "plugins/grails_constraints.git"]
+	path = plugins/grails_constraints.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/grails-constraints.git
+[submodule "plugins/banner_spring_security_cas.git"]
+	path = plugins/banner_spring_security_cas.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_spring_security_cas.git
+[submodule "plugins/banner_spring_security_saml.git"]
+	path = plugins/banner_spring_security_saml.git
+	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_spring_security_saml.git

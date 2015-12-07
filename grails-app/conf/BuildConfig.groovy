@@ -2,7 +2,7 @@
  Copyright 2015 Ellucian.
  *********************************************************************************/
 
-grails.project.dependency.resolver = "ivy"
+grails.project.dependency.resolver = "maven"
 grails.project.class.dir        = "target/classes"
 grails.project.lib.dir          = "lib"
 grails.project.test.class.dir   = "target/test-classes"
@@ -18,7 +18,6 @@ grails.war.resources = { stagingDir ->
     grails.plugin.location.'banner-ui-ss'                     = "plugins/banner_ui_ss.git"
     grails.plugin.location.'banner-core'                      = "plugins/banner_core.git"
     grails.plugin.location.'banner-codenarc'                  = "plugins/banner_codenarc.git"
-    grails.plugin.location.'spring-security-cas'              = "plugins/spring_security_cas.git"
     grails.plugin.location.'banner-general-person'            = "plugins/banner_general_person.git"
     grails.plugin.location.'banner-general-common'            = "plugins/banner_general_common.git"
     grails.plugin.location.'banner-payroll-common'            = "plugins/banner_payroll_common.git"
@@ -49,19 +48,11 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        compile ':spring-security-core:1.2.7.3'
-        compile ':resources:1.1.6'
         compile ':zipped-resources:1.0'
         compile ':cached-resources:1.0'
         compile ':yui-minify-resources:0.1.4'
         compile ':cache-headers:1.1.5'
-        compile ":hibernate:3.6.10.10"
-        build ":tomcat:7.0.52.1"
         test ':code-coverage:1.2.5'
-        compile ":functional-test:2.0.0"
-        runtime ":webxml:1.4.1"
-        compile ':codenarc:0.21'
-        compile ':markdown:1.0.0.RC1'
         runtime ":rendering:1.0.0"
         compile ':restful-api:1.0.0'
     }

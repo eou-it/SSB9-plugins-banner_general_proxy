@@ -4,7 +4,7 @@ Copyright 2013 Ellucian Company L.P. and its affiliates.
 
 
 import net.hedtech.banner.configuration.ApplicationConfigurationUtils as ConfigFinder
-import grails.plugins.springsecurity.SecurityConfigType
+import grails.plugin.springsecurity.SecurityConfigType
 
 // ******************************************************************************
 //
@@ -79,7 +79,7 @@ grails.mime.types = [
 grails.views.default.codec = "html" // none, html, base64  **** note: Setting this to html will ensure html is escaped, to prevent XSS attack ****
 grails.views.gsp.encoding = "UTF-8"
 grails.converters.encoding = "UTF-8"
-grails.plugins.springsecurity.logout.afterLogoutUrl = "/ssb/hrDashboard"
+grails.plugin.springsecurity.logout.afterLogoutUrl = "/ssb/hrDashboard"
 grails.converters.domain.include.version = true
 //grails.converters.json.date = "default"
 
@@ -139,16 +139,15 @@ formControllerMap = [
 ]
 
 
-grails.plugins.springsecurity.useRequestMapDomainClass = false
-grails.plugins.springsecurity.providerNames = ['casBannerAuthenticationProvider', 'selfServiceBannerAuthenticationProvider', 'bannerAuthenticationProvider']
-//grails.plugins.springsecurity.rejectIfNoRule = true
+grails.plugin.springsecurity.useRequestMapDomainClass = false
+//grails.plugin.springsecurity.rejectIfNoRule = true
 
-grails.plugins.springsecurity.filterChain.chainMap = [
+grails.plugin.springsecurity.filterChain.chainMap = [
     '/api/**': 'authenticationProcessingFilter,basicAuthenticationFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor',
     '/**': 'securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor'
 ]
 
-grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
+grails.plugin.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
 
 
 // ******************************************************************************
@@ -157,12 +156,13 @@ grails.plugins.springsecurity.securityConfigType = SecurityConfigType.InterceptU
 //
 // ******************************************************************************
 
-grails.plugins.springsecurity.interceptUrlMap = [
+grails.plugin.springsecurity.interceptUrlMap = [
         '/': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/resetPassword/**': [ 'IS_AUTHENTICATED_ANONYMOUSLY' ] ,
         '/login/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/index**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/logout/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+		'/ssb/menu':['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/js/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/css/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/images/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
@@ -270,3 +270,6 @@ restfulApiConfig = {
     }
     // End Resources for web_app_extensibility plugin
 }
+
+grails.plugin.springsecurity.cas.active=false
+grails.plugin.springsecurity.saml.active=false
