@@ -142,10 +142,10 @@ formControllerMap = [
 grails.plugin.springsecurity.useRequestMapDomainClass = false
 //grails.plugin.springsecurity.rejectIfNoRule = true
 
-grails.plugin.springsecurity.filterChain.chainMap = [
+/*grails.plugin.springsecurity.filterChain.chainMap = [
     '/api/**': 'authenticationProcessingFilter,basicAuthenticationFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor',
     '/**': 'securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor'
-]
+]*/
 
 grails.plugin.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
 
@@ -162,7 +162,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/login/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/index**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/logout/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-		'/ssb/menu':['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/ssb/menu':['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/js/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/css/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/images/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],

@@ -68,7 +68,8 @@ eventCreateWarStart = { warName, stagingDir ->
     // We'll move this to 'target/' so that our 'package-release' target (from banner_packaging) may copy it
     // into the product home, as a convenience to the client.
     //
-    Ant.move(file: "${stagingDir}/WEB-INF/lib/ojdbc6.jar", toFile: "$basedir/target/ojdbc6.jar")
+    ant.move( file:"${stagingDir}/WEB-INF/lib/ojdbc6-11.2.0.1.0.jar", toFile:"$basedir/target/ojdbc6.jar" )
+    ant.move( file:"${stagingDir}/WEB-INF/lib/xdb6-11.2.0.4.jar", toFile:"$basedir/target/xdb6.jar" )
 
     preparePlugin("banner-ui-ss") { name, version, pluginDirectory ->
         println "Copying CSS, image, and JavaScript files from banner-ui-ss plugin"
