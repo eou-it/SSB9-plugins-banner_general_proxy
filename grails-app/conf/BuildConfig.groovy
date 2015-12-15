@@ -77,6 +77,10 @@ grails.project.dependency.resolution = {
 
         runtime 'org.springframework:spring-test:3.1.0.RELEASE'
 
+        compile ('org.apache.poi:poi-ooxml-3.7') {
+            excludes 'stax-api'
+        }
+
 
 
     }
