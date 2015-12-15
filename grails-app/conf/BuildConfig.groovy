@@ -77,15 +77,7 @@ grails.project.dependency.resolution = {
 
         runtime 'org.springframework:spring-test:3.1.0.RELEASE'
 
-        runtime 'poi:poi:3.7-20101029'
 
-        runtime 'poi-ooxml:poi-ooxml:3.7-20101029'
-
-        runtime 'poi-ooxml-schemas:poi-ooxml-schemas:3.7-20101029'
-
-        runtime 'poi-scrathpad:poi-scratchpad:3.7-20101029'
-
-        runtime 'xmlbeans:xmlbeans:2.3.0'
 
     }
 }
