@@ -142,11 +142,6 @@ formControllerMap = [
 grails.plugin.springsecurity.useRequestMapDomainClass = false
 //grails.plugin.springsecurity.rejectIfNoRule = true
 
-grails.plugin.springsecurity.filterChain.chainMap = [
-    '/api/**': 'authenticationProcessingFilter,basicAuthenticationFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor',
-    '/**': 'securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor'
-]
-
 grails.plugin.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
 
 

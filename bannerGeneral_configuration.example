@@ -73,7 +73,7 @@ banner {
 }
 
 grails {
-    plugins {
+    plugin {
         springsecurity {
             cas {
                 serverUrlPrefix  = 'http://CAS_HOST:PORT/cas'
@@ -188,7 +188,7 @@ log4j = {
     off 'net.hedtech.banner.security.BannerAuthenticationProvider'
     off 'net.hedtech.banner.security.CasAuthenticationProvider'
     off 'net.hedtech.banner.security.SelfServiceBannerAuthenticationProvider'
-    off 'grails.plugins.springsecurity'
+    off 'grails.plugin.springsecurity'
     off 'org.springframework.security'
     off 'org.apache.http.headers'
     off 'org.apache.http.wire'

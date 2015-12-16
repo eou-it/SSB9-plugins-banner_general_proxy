@@ -30,7 +30,6 @@ grails.war.resources = { stagingDir ->
     grails.plugin.location.'banner-general-common-ui-ss'      = "plugins/banner_general_common_ui_ss.git"
     grails.plugin.location.'domain-extension'                 = "plugins/domain_extension.git"
     grails.plugin.location.'web-app-extensibility'            = "plugins/web-app-extensibility.git"
-    grails.plugin.location.'spring_security_saml'             = "plugins/spring_security_saml.git"  
 
 
 grails.project.dependency.resolution = {

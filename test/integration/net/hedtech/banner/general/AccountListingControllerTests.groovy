@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 
 class AccountListingControllerTests extends BaseIntegrationTestCase {
-    def selfServiceBannerAuthenticationProvider
+//    def selfServiceBannerAuthenticationProvider
     def accountListingController
 
     /**
@@ -22,8 +22,9 @@ class AccountListingControllerTests extends BaseIntegrationTestCase {
         formContext = ['GUAGMNU']
         accountListingController = new AccountListingController()
         super.setUp()
-        def auth = selfServiceBannerAuthenticationProvider.authenticate( new UsernamePasswordAuthenticationToken( 'MYE000001', '111111' ) )
-        SecurityContextHolder.getContext().setAuthentication( auth )
+//        def auth = selfServiceBannerAuthenticationProvider.authenticate( new UsernamePasswordAuthenticationToken( 'MYE000001', '111111' ) )
+//        SecurityContextHolder.getContext().setAuthentication( auth )
+        loginSSB('MYE000001', '111111')
     }
 
     /**
