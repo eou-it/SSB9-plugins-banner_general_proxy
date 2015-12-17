@@ -10,9 +10,11 @@ import org.springframework.security.core.context.SecurityContextHolder
 
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 
+import net.hedtech.banner.general.AccountListingController
+
 class AccountListingControllerTests extends BaseIntegrationTestCase {
-//    def selfServiceBannerAuthenticationProvider
-    def accountListingController
+    def selfServiceBannerAuthenticationProvider
+//    def accountListingController
 
     /**
      * The setup method will run before all test case method executions start.
@@ -20,11 +22,8 @@ class AccountListingControllerTests extends BaseIntegrationTestCase {
     @Before
     public void setUp() {
         formContext = ['GUAGMNU']
-        accountListingController = new AccountListingController()
+        controller = new AccountListingController()
         super.setUp()
-//        def auth = selfServiceBannerAuthenticationProvider.authenticate( new UsernamePasswordAuthenticationToken( 'MYE000001', '111111' ) )
-//        SecurityContextHolder.getContext().setAuthentication( auth )
-        loginSSB('MYE000001', '111111')
     }
 
     /**
@@ -38,9 +37,12 @@ class AccountListingControllerTests extends BaseIntegrationTestCase {
 
     @Test
     void testGetApAccountsForCurrentUser(){
-        accountListingController.request.contentType = "text/json"
-        accountListingController.getApAccountsForCurrentUser()
-        def dataForNullCheck = accountListingController.response.contentAsString
+        def auth = selfServiceBannerAuthenticationProvider.authenticate( new UsernamePasswordAuthenticationToken( 'KRJ000001', '123456' ) )
+        SecurityContextHolder.getContext().setAuthentication( auth )
+
+        controller.request.contentType = "text/json"
+        controller.getApAccountsForCurrentUser()
+        def dataForNullCheck = controller.response.contentAsString
         def data = JSON.parse( dataForNullCheck )
         println data
         assertNotNull data
