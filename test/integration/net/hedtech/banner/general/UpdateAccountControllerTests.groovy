@@ -11,8 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 
 class UpdateAccountControllerTests extends BaseIntegrationTestCase {
-    def selfServiceBannerAuthenticationProvider
-    def updateAccountController
 
     /**
      * The setup method will run before all test case method executions start.
@@ -20,10 +18,8 @@ class UpdateAccountControllerTests extends BaseIntegrationTestCase {
     @Before
     public void setUp() {
         formContext = ['GUAGMNU']
-        updateAccountController = new UpdateAccountController()
+        controller = new UpdateAccountController()
         super.setUp()
-        def auth = selfServiceBannerAuthenticationProvider.authenticate( new UsernamePasswordAuthenticationToken( 'MYE000001', '111111' ) )
-        SecurityContextHolder.getContext().setAuthentication( auth )
     }
 
     /**
@@ -38,18 +34,22 @@ class UpdateAccountControllerTests extends BaseIntegrationTestCase {
 
     @Test
     void testCreateAccount() {
-        updateAccountController.request.contentType = "text/json"
-        updateAccountController.createAccount()
-        def dataForNullCheck = updateAccountController.response.contentAsString
+        loginSSB 'MYE000001', '111111'
+        
+        controller.request.contentType = "text/json"
+        controller.createAccount()
+        def dataForNullCheck = controller.response.contentAsString
         def data = JSON.parse( dataForNullCheck )
         assertNotNull data
     }
 
     @Test
     void testDeleteAccount() {
-        updateAccountController.request.contentType = "text/json"
-        updateAccountController.deleteAccounts()
-        def dataForNullCheck = updateAccountController.response.contentAsString
+        loginSSB 'MYE000001', '111111'
+        
+        controller.request.contentType = "text/json"
+        controller.deleteAccounts()
+        def dataForNullCheck = controller.response.contentAsString
         def data = JSON.parse( dataForNullCheck )
         assertNotNull data
     }
@@ -58,7 +58,7 @@ class UpdateAccountControllerTests extends BaseIntegrationTestCase {
     void testReturnFailureMessage() {
         ApplicationException e = new ApplicationException(DirectDepositAccount, "@@r1:invalidAccountNumFmt@@")
 
-        def failureMessageModel = updateAccountController.returnFailureMessage(e)
+        def failureMessageModel = controller.returnFailureMessage(e)
 
         assert(failureMessageModel.failure)
         assertEquals("Invalid bank account number format.", failureMessageModel.message)

@@ -13,8 +13,6 @@ import net.hedtech.banner.testing.BaseIntegrationTestCase
 import net.hedtech.banner.general.AccountListingController
 
 class AccountListingControllerTests extends BaseIntegrationTestCase {
-    def selfServiceBannerAuthenticationProvider
-//    def accountListingController
 
     /**
      * The setup method will run before all test case method executions start.
@@ -32,14 +30,14 @@ class AccountListingControllerTests extends BaseIntegrationTestCase {
     @After
     public void tearDown() {
         super.tearDown()
+        super.logout()
     }
 
 
     @Test
     void testGetApAccountsForCurrentUser(){
-        def auth = selfServiceBannerAuthenticationProvider.authenticate( new UsernamePasswordAuthenticationToken( 'KRJ000001', '123456' ) )
-        SecurityContextHolder.getContext().setAuthentication( auth )
-
+        loginSSB 'MYE000001', '111111'
+        
         controller.request.contentType = "text/json"
         controller.getApAccountsForCurrentUser()
         def dataForNullCheck = controller.response.contentAsString
