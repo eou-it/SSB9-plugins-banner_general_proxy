@@ -222,6 +222,15 @@ body {
     color: #4F585F;
 }
 
+.input-bank-name {
+    position: absolute;
+    float: right;
+    right: 1.75em;
+    top: 4.285em;
+    color: #869FB1;
+    line-height: 136%;
+}
+
 .dialog-hdr1 {
     font-size: 30px;
     margin: 0px;

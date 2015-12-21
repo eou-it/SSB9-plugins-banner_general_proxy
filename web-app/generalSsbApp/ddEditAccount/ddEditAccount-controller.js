@@ -8,6 +8,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     $scope.typeIndicator = editAcctProperties.typeIndicator;
     $scope.creatingNewAccount = editAcctProperties.creatingNew;
     $scope.authorizedChanges = false;
+    $scope.routNumFocused = false;
 
     $scope.popoverElements = {}; // Used to coordinate popovers in modal
 
@@ -36,12 +37,25 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                         notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
                     }
                     else {
-                        $scope.routingNumMessage = response.bankName;
+                        $scope.account.bankRoutingInfo.bankName = response.bankName;
                         $scope.routingNumErr = false;
                         notificationCenterService.clearNotifications();
                     }
                 });
             }
+        }
+    };
+    
+    $scope.getTruncatedBankName = function(name){
+        if(name){
+            var result = name;
+            
+            if(name.length >= 18){
+                result = name.substring(0, 16);
+                result += "...";
+            }
+            
+            return result;
         }
     };
 
