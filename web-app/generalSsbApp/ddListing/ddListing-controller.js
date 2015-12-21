@@ -38,6 +38,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             // if the listing controller has already been initialized, then abort
             if(ddListingService.isInit()) return;
 
+            ddEditAccountService.setSyncedAccounts(false);
+
             ddListingService.getApListing().$promise.then(
                 function (response) {
                     // By default, set A/P account as currently active account, as it can be edited inline (in desktop
@@ -84,6 +86,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         // to both records if it needs to.
         this.isSynced = false;
         this.syncAccounts = function () {
+
             if(!this.isSynced){
                 if(!$scope.isEmployee){
                     //should be no need to sync pure student, only has an AP account
@@ -99,6 +102,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                                     && allocs[i].bankAccountNum === $scope.account.bankAccountNum){
 
                                 $scope.account = allocs[i];
+                                ddEditAccountService.setSyncedAccounts($scope.account.bankAccountNum);
                             }
                         }
                         this.isSynced = true;
@@ -212,19 +216,15 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         };
 
         $scope.updateAccounts = function () {
-            var accountSynced = false;
             var allocs = $scope.distributions.proposed.allocations
             if($scope.isEmployee){
                 var i;
                 for(i = 0; i < allocs.length; i++){
-                    if($scope.hasApAccount && allocs[i].id === $scope.account.id){
-                        accountSynced = true;
-                    }
                     updateAccount($scope.distributions.proposed.allocations[i]);
                 }
             }
             // AP account will already be updated if it is synced with a Payroll account
-            if($scope.hasApAccount && !accountSynced){
+            if($scope.hasApAccount && !ddEditAccountService.syncedAccounts){
                 updateAccount($scope.account);
             }
         };
@@ -238,6 +238,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
                 } else {
+                    if(acct.version != response.version &&
+                            ddEditAccountService.syncedAccounts === acct.bankAccountNum){
+                        notificationCenterService.displayNotifications("Account "+ddEditAccountService.syncedAccounts+" updated automatically", "success");
+                    }
+
                     // Refresh account info
                     acct.version = response.version;
 

@@ -65,4 +65,8 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
         }
     };
 
+    this.syncedAccounts = false;
+
+    this.setSyncedAccounts = function(val){this.syncedAccounts = val;};
+
 }]);

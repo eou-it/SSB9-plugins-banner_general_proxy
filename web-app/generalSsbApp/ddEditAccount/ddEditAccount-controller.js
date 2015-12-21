@@ -112,8 +112,11 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                     notificationCenterService.displayNotifications(response.message, "error");
                 }
                 else {
+                    if(!$scope.creatingNewAccount && $scope.account.version != response.version &&
+                            ddEditAccountService.syncedAccounts === $scope.account.bankAccountNum){
+                        notificationCenterService.displayNotifications("Account "+ddEditAccountService.syncedAccounts+" updated automatically", "success");
+                    }
                     $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
-                    $scope.cancelModal();
                 }
             });
         }
