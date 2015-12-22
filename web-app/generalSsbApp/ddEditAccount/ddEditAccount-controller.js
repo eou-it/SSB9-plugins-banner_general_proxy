@@ -9,6 +9,9 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     $scope.creatingNewAccount = editAcctProperties.creatingNew;
     $scope.authorizedChanges = false;
     $scope.routNumFocused = false;
+    $scope.acctNumFocused = false;
+    $scope.acctTypeFocused = false;
+    $scope.dropdownIsOpen = false;
 
     $scope.popoverElements = {}; // Used to coordinate popovers in modal
 

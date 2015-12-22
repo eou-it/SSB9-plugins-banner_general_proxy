@@ -338,14 +338,16 @@ button.closebtn {
 }
 
 .dropdown-btn:focus {
+    background-color: #fff;
+    border:1px solid #869FB1;
     box-shadow: 0px 2px #CBE2E8 inset;
     color: #4F585F;
 }
 
 .open > .dropdown-btn {
-    border-style: solid;
-    border-width: 1px;
-    border-color: #206E9F;
+    background-color: #fff;
+    border:1px solid #206E9F;
+    box-shadow: 0px -4px #DEE5E7 inset;
     color: #4F585F;
 }
 
