@@ -55,13 +55,13 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
     this.setAmountValues = function (acct, amountType){
         if(amountType === 'remaining'){
             acct.percent = 100;
-            acct.amount = ''; // grails will ignore null values, so use empty strings instead
+            acct.amount = null;
         }
         else if(amountType === 'amount'){
             acct.percent = '';
         }
         else if(amountType === 'percentage'){
-            acct.amount = '';
+            acct.amount = null;
         }
     };
 

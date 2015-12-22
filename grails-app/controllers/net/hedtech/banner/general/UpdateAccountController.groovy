@@ -1,9 +1,13 @@
 package net.hedtech.banner.general
 
 import grails.converters.JSON
+
+import net.hedtech.banner.DateUtility
 import net.hedtech.banner.exceptions.ApplicationException
-import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 import net.hedtech.banner.webtailor.WebTailorUtility
+
+import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 class UpdateAccountController {
 
@@ -37,7 +41,8 @@ class UpdateAccountController {
 
         try {
             directDepositAccountService.syncApAndHrAccounts(map)
-            
+            fixJSONObjectForCast(map)
+
             render directDepositAccountService.update(map) as JSON
 
         } catch (ApplicationException e) {
@@ -112,6 +117,32 @@ class UpdateAccountController {
             log.error(ex)
             model.message = e.message
             return model
+        }
+    }
+
+    /**
+     * Prepare the values in a JSONObject map to be properly cast to values that can be set on the
+     * domain object (i.e. class DirectDepositAccount).
+     *
+     * To be specific, here's the problem:  ServiceBase.update uses InvokerHelper to set properties from
+     * the JSON object onto the domain object.  In doing this, InvokerHelper.setProperties eventually
+     * results in the DefaultTypeTransformation.castToType (the class is a Java one not Groovy).  This
+     * method does not know how to handle JSONObject.NULL as a true Java null nor a data string as a
+     * Date object, which results in exceptions being thrown for these.  In this method we fix those
+     * values to be of a type that castToType can handle.
+     * @param json A JSONObject
+     */
+    private def fixJSONObjectForCast(JSONObject json) {
+        json.each {entry ->
+            // Make JSONObject.NULL a real Java null
+            if (entry.value == JSONObject.NULL) {
+                entry.value = null
+            }
+
+            // Make this date string a real Date object
+            if (entry.key == "lastModified") {
+                entry.value = DateUtility.parseDateString(entry.value, "yyyy-MM-dd'T'HH:mm:ss'Z'")
+            }
         }
     }
 
