@@ -198,6 +198,19 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             }
 
             // Otherwise, open modal
+            var acctList = [];
+            
+            if($scope.isEmployee){
+            	var allocs = $scope.distributions.proposed.allocations;
+            	
+	            if(typeInd === 'HR' && $scope.account){
+	            	acctList[0] = $scope.account;
+	            }
+	            else if (typeInd === 'AP' && allocs.length > 0){
+	            	acctList = allocs;
+	            }
+            }
+            
             var modal = $modal.open({
                 templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
                 windowClass: 'edit-account-modal',
@@ -206,7 +219,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 scope: $scope,
                 resolve: {
                     editAcctProperties: function(){
-                        return { typeIndicator: typeInd, creatingNew: !!isAddNew };
+                        return { 
+                        	typeIndicator: typeInd, 
+                        	creatingNew: !!isAddNew,
+                        	otherAccounts: acctList
+                        };
                     }
                 }
             });
