@@ -5,17 +5,22 @@
 generalSsbApp.service('directDepositService', ['$resource', function ($resource) {
 
     var fetchDisclaimer = $resource('../ssb/:controller/:action',
-        {controller: 'UpdateAccount', action: 'getDisclaimerText'}, {query: {method:'GET', isArray:false}});
+            {controller: 'UpdateAccount', action: 'getDisclaimerText'}, {query: {method:'GET', isArray:false}}),
+        fetchRoles = $resource('../ssb/:controller/:action',
+            {controller: 'General', action: 'getRoles'}, {query: {method:'GET', isArray:false}}),
+        fetchConfig = $resource('../ssb/:controller/:action',
+            {controller: 'DirectDepositConfiguration', action: 'getConfig'}, {query: {method:'GET', isArray:true}});
 
     this.getDisclaimer = function () {
         return fetchDisclaimer.query();
     };
     
-    var fetchRoles = $resource('../ssb/:controller/:action',
-        {controller: 'General', action: 'getRoles'}, {query: {method:'GET', isArray:false}});
-
     this.getRoles = function () {
         return fetchRoles.query();
+    };
+
+    this.getConfiguration = function () {
+        return fetchConfig.query();
     };
 
     // Destroy all popovers (i.e. Bootstrap popovers)
