@@ -10,16 +10,19 @@ class UpdateAccountController {
     def directDepositAccountService
     def bankRoutingInfoService
     def directDepositAccountCompositeService
-    
+    def directDepositConfigurationService
+
     def createAccount() {
         def map = request?.JSON ?: params
         map.pidm = ControllerUtility.getPrincipalPidm()
 
         // default values for a new Direct Deposit account
         map.id = null
-        map.status = 'P'
         map.documentType = 'D'
         map.intlAchTransactionIndicator = 'N'
+
+        def configStatus = directDepositConfigurationService.getParam(directDepositConfigurationService.SHOW_USER_PRENOTE_STATUS, 'Y')
+        map.status = (configStatus == 'Y') ? 'P' : 'A'
 
         log.debug("trying to create acct: "+ map.bankAccountNum)
 

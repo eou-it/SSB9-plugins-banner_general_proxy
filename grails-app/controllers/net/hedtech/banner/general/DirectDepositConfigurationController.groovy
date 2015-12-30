@@ -10,7 +10,7 @@ class DirectDepositConfigurationController {
 
     def getConfig() {
         try {
-            render directDepositConfigurationService.getDirectDepositParamsFromWebTailor() as JSON
+            render directDepositConfigurationService.getDirectDepositParams() as JSON
         } catch (ApplicationException e) {
             render returnFailureMessage(e) as JSON
         }
