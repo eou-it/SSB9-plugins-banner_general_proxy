@@ -19,8 +19,15 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
         return fetchRoles.query();
     };
 
+    this.config = null;
+
     this.getConfiguration = function () {
-        return fetchConfig.get();
+        // Retrieve configuration just once; don't make a round trip each time it's requested.
+        if (!this.config) {
+            this.config = fetchConfig.get();
+        }
+
+        return this.config;
     };
 
     // Destroy all popovers (i.e. Bootstrap popovers)

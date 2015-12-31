@@ -2,8 +2,8 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '$modal', '$filter',
-    'ddListingService', 'ddEditAccountService', 'notificationCenterService',
-    function ($scope, $state, $modal, $filter, ddListingService, ddEditAccountService,
+    'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
+    function ($scope, $state, $modal, $filter, ddListingService, ddEditAccountService, directDepositService,
               notificationCenterService){
 
         // LOCAL FUNCTIONS
@@ -77,6 +77,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.payAccountsProposedLoaded = true;
 
                     self.syncAccounts();
+
+                    $scope.updateWhetherHasMaxPayrollAccounts();
                 }
             });
         };
@@ -128,6 +130,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         $scope.panelCollapsed = false;
         $scope.authorizedChanges = false;
         $scope.apAccountSelectedForDelete = false;
+        $scope.hasMaxPayrollAccounts = false;
 
         // CONTROLLER FUNCTIONS
         // --------------------
@@ -181,8 +184,18 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
 
         //display add/edit account pop up
         $scope.showEditAccount = function (typeInd, isAddNew) {
-            // If this is an AP account and an AP account already exists, this functionality is disabled
-            if(isAddNew && typeInd === 'AP' && $scope.hasApAccount) return;
+            //if(isAddNew && typeInd === 'AP' && $scope.hasApAccount) return;
+            if(isAddNew) {
+                // If this is an AP account and an AP account already exists, this functionality is disabled
+                if (typeInd === 'AP' && $scope.hasApAccount) {
+                    return;
+                }
+
+                if (typeInd === 'HR' && $scope.hasMaxPayrollAccounts) {
+                    notificationCenterService.displayNotifications('directDeposit.max.payroll.accounts.text', 'error');
+                    return;
+                }
+            }
 
             // Otherwise, open modal
             var modal = $modal.open({
@@ -248,8 +261,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
 
                     // Set form back to initial "at rest" state
                     $scope.authorizedChanges = false;
-
-                    // TODO: show confirmation message or something here?
                 }
             });
         };
@@ -304,6 +315,19 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
 
         $scope.setAccountType = function (acctType) {
             $scope.account.accountType = acctType;
+        };
+
+        $scope.updateWhetherHasMaxPayrollAccounts = function () {
+            if (!$scope.distributions.proposed) {
+                $scope.hasMaxPayrollAccounts = false;
+            }
+
+            directDepositService.getConfiguration().$promise.then(
+                function(response) {
+                    var numAllocatons = $scope.distributions.proposed.allocations.length;
+
+                    $scope.hasMaxPayrollAccounts = numAllocatons >= response.MAX_USER_PAYROLL_ALLOCATIONS;
+            });
         };
 
 

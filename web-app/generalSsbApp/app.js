@@ -43,10 +43,6 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','n
                 $rootScope.isStudent = response.isStudent;
                 $rootScope.isEmployee = response.isEmployee;
             });
-
-            directDepositService.getConfiguration().$promise.then(function (response) {
-                //TODO
-            });
         }
     ]
 );
