@@ -8,38 +8,23 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         <title-for-edit-modal/>
     </h1>
     <div ng-if="!setup.hasOtherAccounts">
-	    <div class="pad-dialog-lr">
-	        <ng-include
-	            src="'../generalSsbApp/ddEditAccount/accountNumberInput.html'">
-	        </ng-include>
-	    </div>
-	    <div class="dialog-footer-margin modal-footer addAcct">
-	        <button class="dialog-btn" ng-click="cancelModal()">{{'directDeposit.button.cancel'|i18n}}</button>
-	        <button class="dialog-btn save-btn" ng-disabled="!authorizedChanges" ng-click="saveAccount()">
-	            <span class="mid-dash"><edit-modal-save-button/></span>
-	        </button>
-	    </div>
-    </div>
-    <div ng-if="setup.hasOtherAccounts">
-        <label class="input-field-label">Choose an option:</label><br>
-        <input ng-model="setup.createFromExisting" class="edit-radio" type="radio" name="create-option" value="yes" aria-labelledby=""><span class="lbl radio-list" id="">Create from existing account information</span>
-        <div ng-show="setup.createFromExisting === 'yes'" class="">
-            <label class="visuallyhidden" for="">{{'directDeposit.account.label.amount.amount'|i18n}}</label>
-            <input class="radio-txt-input semi-bold form-spacing" id="" type="text" placeholder="{{'directDeposit.label.input.amount'|i18n}}"/>
-        </div>
-        <br>
-        <input ng-model="setup.createFromExisting" class="edit-radio" type="radio" name="create-option" value="no" aria-labelledby=""><span class="lbl radio-list" id="">Create new</span>
-        <div ng-show="setup.createFromExisting === 'no'" class="pad-dialog-lr"> <!-- class="ws-nowrap -->
+        <div class="pad-dialog-lr">
             <ng-include
                 src="'../generalSsbApp/ddEditAccount/accountNumberInput.html'">
             </ng-include>
         </div>
-        <div class="dialog-footer-margin modal-footer addAcct">
-            <button class="dialog-btn" ng-click="cancelModal()">{{'directDeposit.button.cancel'|i18n}}</button>
-            <button class="dialog-btn save-btn" ng-disabled="!authorizedChanges" ng-click="saveAccount()">
-                <span class="mid-dash"><edit-modal-save-button/></span>
-            </button>
+    </div>
+    <div ng-if="setup.hasOtherAccounts">
+        <div class="pad-dialog-lr">
+            <ng-include
+                    src="'../generalSsbApp/ddEditAccount/existingAccountInput.html'">
+            </ng-include>
         </div>
-        <br>
+    </div>
+    <div class="dialog-footer-margin modal-footer addAcct">
+        <button class="dialog-btn" ng-click="cancelModal()">{{'directDeposit.button.cancel'|i18n}}</button>
+        <button class="dialog-btn save-btn" ng-disabled="!authorizedChanges" ng-click="saveAccount()">
+            <span class="mid-dash"><edit-modal-save-button/></span>
+        </button>
     </div>
 </div>

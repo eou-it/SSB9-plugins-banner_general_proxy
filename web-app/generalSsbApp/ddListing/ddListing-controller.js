@@ -200,15 +200,15 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             // Otherwise, open modal
             var acctList = [];
             
-            if($scope.isEmployee){
-            	var allocs = $scope.distributions.proposed.allocations;
-            	
-	            if(typeInd === 'HR' && $scope.account){
-	            	acctList[0] = $scope.account;
-	            }
-	            else if (typeInd === 'AP' && allocs.length > 0){
-	            	acctList = allocs;
-	            }
+            if(isAddNew && $scope.isEmployee){
+                var allocs = $scope.distributions.proposed.allocations;
+                
+                if(typeInd === 'HR' && $scope.account){
+                    acctList[0] = $scope.account;
+                }
+                else if (typeInd === 'AP' && allocs.length > 0){
+                    acctList = allocs;
+                }
             }
             
             var modal = $modal.open({
@@ -220,9 +220,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 resolve: {
                     editAcctProperties: function(){
                         return { 
-                        	typeIndicator: typeInd, 
-                        	creatingNew: !!isAddNew,
-                        	otherAccounts: acctList
+                            typeIndicator: typeInd, 
+                            creatingNew: !!isAddNew,
+                            otherAccounts: acctList
                         };
                     }
                 }

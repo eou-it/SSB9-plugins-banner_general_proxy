@@ -100,12 +100,22 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         $scope.accountTypeErr = false;
         notificationCenterService.clearNotifications();
     };
+
+    $scope.selectOtherAcct = function (acct) {
+        $scope.otherAccountSelected = acct;
+    }
     
     $scope.toggleAuthorizedChanges = function () {
         $scope.authorizedChanges = !$scope.authorizedChanges;
     };
     
     $scope.saveAccount = function() {
+        if($scope.setup.createFromExisting === 'yes'){
+            $scope.account.bankAccountNum = $scope.otherAccountSelected.bankAccountNum;
+            $scope.account.bankRoutingInfo = $scope.otherAccountSelected.bankRoutingInfo;
+            $scope.account.accountType = $scope.otherAccountSelected.accountType;
+        }
+        
         if(requiredFieldsValid()) {
             if($scope.typeIndicator === 'HR'){
                 ddEditAccountService.setAmountValues($scope.account, $scope.account.amountType);
@@ -160,8 +170,8 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     };
 
     this.init = function() {
-    	$scope.setup = {}
-    	$scope.setup.hasOtherAccounts = false;
+        $scope.setup = {}
+        $scope.setup.hasOtherAccounts = false;
 
         // In initializing this controller, we could be doing an account create, edit, or delete.  For the create, no
         // account will exist and we need to instantiate a new account object.  For the edit and delete, an account will

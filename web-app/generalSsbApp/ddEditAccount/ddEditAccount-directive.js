@@ -44,6 +44,42 @@ generalSsbAppDirectives.directive('editModalSaveButton',[function () {
     };
 }]);
 
+generalSsbAppDirectives.directive('selectBankAcct',[function () {
+    return{
+        restrict: 'E',
+        link: function(scope, elem){
+            scope.getExistingAcctText = function(){
+                var existingAcctText;
+                
+                if(!scope.otherAccountSelected){
+                    existingAcctText = 'Select exisiting account';
+                }
+                else{
+                    var bankName = scope.otherAccountSelected.bankRoutingInfo.bankName;
+                    var acctNum = scope.otherAccountSelected.bankAccountNum;
+                    
+                    existingAcctText = bankName;
+                    existingAcctText += ' ...' + acctNum.substring(acctNum.length-4);
+                    
+                    var btnWidth = elem.parent().parent().width();
+                    
+                    // magic formula to truncate bank name to fit text in button based on estimated
+                    // icon width and character widths
+                    if(btnWidth - ((existingAcctText.length*8) + 45) < 0){
+                        var num = (-(btnWidth - ((existingAcctText.length*8) + 45)))/10 - 1;
+
+                        existingAcctText = bankName.substring(0, bankName.length-num);
+                        existingAcctText += ' ...' + acctNum.substring(acctNum.length-4);
+                    }
+                }
+                
+                return existingAcctText;
+            }
+        },
+        template: "{{getExistingAcctText()}}"
+    };
+}]);
+
 /* 
  * usage:
  * place dropdown-helper="begin" on the element with the data-toggle attribute so that when user keys to the previous focusable element
