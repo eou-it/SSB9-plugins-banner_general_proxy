@@ -6,14 +6,12 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         <label ng-class="(routingNumErr && !routNumFocused ? 'input-field-label field-error' : 'input-field-label')" for="routing-number">{{'directDeposit.account.label.bank.routing.num'|i18n}}</label>
         <pop-over class="dd-popover" popover-img="../images/sample_check_290x166.png" popover-alt="{{'directDeposit.sample.check.alt.text'|i18n}}"></pop-over>
         <input ng-model="account.bankRoutingInfo.bankRoutingNum" ng-blur="routNumFocused=false; validateRoutingNum()" ng-focus="routNumFocused=true" ng-disabled="!creatingNewAccount"
-             ng-class="['text-input-field', 'semi-bold', 'form-spacing', (routingNumErr && !routNumFocused ? 'input-field-error' : null)]" mask-input
-             id="routing-number" type="text" placeholder="{{'directDeposit.account.label.bank.routing.num'|i18n}}" />
+             ng-class="[(routingNumErr && !routNumFocused ? 'input-field-error' : null)]" mask-input class="text-input-field semi-bold form-spacing" id="routing-number" type="text"
+             placeholder="{{'directDeposit.account.label.bank.routing.num'|i18n}}" />
         <span ng-if="routingNumErr && !routNumFocused" class="icon input-fail">
             <span class="icon-error ellucian-font"></span>
         </span>
-        <span ng-if="!routingNumErr && !routNumFocused" class="input-bank-name">
-            {{getTruncatedBankName(account.bankRoutingInfo.bankName)}}
-        </span>
+        <truncated-bank-name ng-if="!routingNumErr && !routNumFocused" class="input-bank-name"></truncated-bank-name>
         <p class="input-field-label ng-class: (routingNumErr ? 'field-error error-font-size' : 'no-display');">{{routingNumMessage}}</p>
     </div>
     <div class="col-xs-6 col-sm-4 col-md-4 xs-fix">
@@ -66,14 +64,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
             <label class="visuallyhidden" for="pct-txt-input">{{'directDeposit.account.label.amount.percent'|i18n}}</label>
             <input ng-model="account.percent" class="radio-txt-input semi-bold form-spacing" id="pct-txt-input" type="text" placeholder="{{'directDeposit.label.input.percent'|i18n}}"/> %
         </div>
-        <br>
         <p ng-show="amountErr" class="input-field-label field-error error-font-size">Amount error</p>
     </div>
 </div>
-<div class="row disclaimer-margin">
-    <div class="col-xs-12">
-        <label class="visuallyhidden" for="disclaimer-checkbox">{{'directDeposit.label.disclaimer.checkbox'|i18n}}</label>
-        <input ng-click="toggleAuthorizedChanges()" class="main-nav-check" id="disclaimer-checkbox" type="checkbox" aria-describedby="disclaimer"/>
-        <p class="lbl" id="disclaimer">{{disclaimer}}</p>
-    </div>
-</div>
+<modal-disclaimer id="accNI"/>

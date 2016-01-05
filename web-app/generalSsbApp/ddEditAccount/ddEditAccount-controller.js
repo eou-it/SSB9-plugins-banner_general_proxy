@@ -7,7 +7,6 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
     $scope.typeIndicator = editAcctProperties.typeIndicator;
     $scope.creatingNewAccount = editAcctProperties.creatingNew;
-    $scope.authorizedChanges = false;
     
     $scope.routNumFocused = false;
     $scope.acctNumFocused = false;
@@ -48,18 +47,8 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 });
             }
         }
-    };
-    
-    $scope.getTruncatedBankName = function(name){
-        if(name){
-            var result = name;
-            
-            if(name.length >= 18){
-                result = name.substring(0, 16);
-                result += "...";
-            }
-            
-            return result;
+        else {
+            $scope.account.bankRoutingInfo.bankName = null;
         }
     };
 
@@ -106,17 +95,22 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     }
     
     $scope.toggleAuthorizedChanges = function () {
-        $scope.authorizedChanges = !$scope.authorizedChanges;
+        $scope.setup.authorizedChanges = !$scope.setup.authorizedChanges;
     };
     
     $scope.saveAccount = function() {
+        var doSave = true;
+        
         if($scope.setup.createFromExisting === 'yes'){
             $scope.account.bankAccountNum = $scope.otherAccountSelected.bankAccountNum;
             $scope.account.bankRoutingInfo = $scope.otherAccountSelected.bankRoutingInfo;
             $scope.account.accountType = $scope.otherAccountSelected.accountType;
         }
+        else {
+            doSave = requiredFieldsValid();
+        }
         
-        if(requiredFieldsValid()) {
+        if(doSave) {
             if($scope.typeIndicator === 'HR'){
                 ddEditAccountService.setAmountValues($scope.account, $scope.account.amountType);
             }
@@ -124,6 +118,14 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             ddEditAccountService.saveAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
+                    
+                    // if there is an error when creating from existing account, then reset account
+                    // so user can start fresh
+                    if($scope.setup.createFromExisting === 'yes'){
+                        $scope.account.bankAccountNum = null;
+                        $scope.account.bankRoutingInfo = {bankRoutingNum: null};
+                        $scope.account.accountType = null;
+                    }
                 }
                 else {
                     if(!$scope.creatingNewAccount && $scope.account.version != response.version &&
@@ -194,15 +196,21 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 amountType: 'remaining'
             };
 
+            $scope.setup.hasOtherAccounts = editAcctProperties.otherAccounts.length > 0;
+            $scope.setup.otherAccounts = editAcctProperties.otherAccounts;
+            $scope.setup.createFromExisting;
+            
+            $scope.setup.authorizedChanges = false;
+
             if($scope.typeIndicator === 'HR'){
                 $scope.account.hrIndicator = 'A';
                 $scope.account.apIndicator = 'I';
                 $scope.account.percent = null; // we will determine what value this should be on save, AP is always 100
-            }
             
-            $scope.setup.hasOtherAccounts = editAcctProperties.otherAccounts.length > 0;
-            $scope.setup.otherAccounts = editAcctProperties.otherAccounts;
-            $scope.setup.createFromExisting;
+                if($scope.setup.hasOtherAccounts){
+                    $scope.selectOtherAcct($scope.setup.otherAccounts[0]);
+                }
+            }
         }
     };
 

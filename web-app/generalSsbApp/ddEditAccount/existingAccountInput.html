@@ -14,14 +14,16 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </button>
         <ul class="dropdown-menu addAcct">
             <li role="presentation" ng-repeat="existingAcct in setup.otherAccounts">
-                <a dropdown-helper="{{($last ? 'end': null)}}" ng-click="selectOtherAcct(existingAcct)" class="addAcct form-spacing" href="#" role="menuitem">
+                <a dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" ng-click="selectOtherAcct(existingAcct)" class="addAcct form-spacing" href="#" role="menuitem">
                    {{existingAcct.bankRoutingInfo.bankName}}<br>
                    <span class="no-bold">Account: {{existingAcct.bankAccountNum|accountNumMask}}</span>
                 </a>
             </li>
         </ul>
     </div>
-    <div ng-show="!!otherAccountSelected.bankRoutingInfo && typeIndicator==='HR'" class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
+    <div ng-show="typeIndicator==='HR'">
+        <span class="semi-bold">{{otherAccountSelected.bankRoutingInfo.bankName}}</span><br>
+        Account: {{otherAccountSelected.bankAccountNum|accountNumMask}}<br>
         <label ng-class="(amountErr ? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.amount'|i18n}}</label><br>
         <input ng-model="account.amountType" class="edit-radio" type="radio" name="existing-amount-type" value="remaining" checked aria-labelledby="rem-radio-lbl"><span class="lbl radio-list" id="rem-radio-lbl">{{'directDeposit.account.amount.remaining'|i18n}}</span>
         <br>
@@ -39,17 +41,11 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         <br>
         <p ng-show="amountErr" class="input-field-label field-error error-font-size">Amount error</p>
     </div>
-    <div ng-show="!!otherAccountSelected.bankRoutingInfo" class="row disclaimer-margin">
-        <div class="col-xs-12">
-            <label class="visuallyhidden" for="disclaimer-checkbox">{{'directDeposit.label.disclaimer.checkbox'|i18n}}</label>
-            <input ng-click="toggleAuthorizedChanges()" class="main-nav-check" id="disclaimer-checkbox" type="checkbox" aria-describedby="disclaimer"/>
-            <p class="lbl" id="disclaimer">{{disclaimer}}</p>
-        </div>
-    </div>
+    <modal-disclaimer ng-show="!!otherAccountSelected.bankRoutingInfo" id="exNI"/>
 </div>
 <br>
 <input ng-model="setup.createFromExisting" class="edit-radio" type="radio" name="create-option" value="no" aria-labelledby=""><span class="lbl radio-list no-padding" id="">Create new</span>
-<div ng-show="setup.createFromExisting === 'no'" class="existing-accts"> <!-- class="ws-nowrap -->
+<div ng-show="setup.createFromExisting === 'no'" class="existing-accts">
     <ng-include
         src="'../generalSsbApp/ddEditAccount/accountNumberInput.html'">
     </ng-include>
