@@ -93,12 +93,17 @@ body {
 .float-r {
     float: right;
 }
+
 .no-padding {
     padding: 0px;
 }
 
 .semi-bold {
     font-weight: bold;
+}
+
+.no-bold {
+    font-weight: normal;
 }
 
 .no-display {
@@ -118,6 +123,10 @@ body {
     margin: -1px;
     padding: 0;
     border: 0;
+}
+
+.existing-accts {
+    padding-left: 2em;
 }
 
 .input-field-label {
@@ -228,7 +237,7 @@ body {
     right: 1.75em;
     top: 4.285em;
     color: #869FB1;
-    line-height: 136%;
+    line-height: 118%;
 }
 
 .dialog-hdr1 {
@@ -326,6 +335,18 @@ button.closebtn {
 .dropdown-menu > li > a.form-spacing {
     padding: 1em .75em;
     line-height: 136%;
+}
+
+.existing-accts .dropdown {
+    max-width: 22.5em;
+}
+
+.existing-accts .dropdown .semi-bold.form-spacing {
+    padding-right: 5px;
+}
+
+.existing-accts .down-caret {
+    padding-left: 0px;
 }
 
 .dropdown-btn {
@@ -519,7 +540,10 @@ input[type=radio]:checked+.lbl {
 .radio-list {
     padding-bottom: 0.875em;
     font-weight: normal;
-    white-space: nowrap;
+}
+
+span.radio-list.no-padding {
+    padding: 0px;
 }
 
 .ws-nowrap {

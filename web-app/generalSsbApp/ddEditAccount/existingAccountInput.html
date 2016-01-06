@@ -1,0 +1,52 @@
+<!--*******************************************************************************
+Copyright 2015 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<label class="input-field-label">Choose an option:</label><br>
+<input ng-model="setup.createFromExisting" class="edit-radio" type="radio" name="create-option" value="yes" aria-labelledby=""><span class="lbl radio-list" id="">Create from existing account information</span>
+<div ng-show="setup.createFromExisting === 'yes'" class="existing-accts">
+    <label class="visuallyhidden" id="">Select from existing</label>
+    <div ng-show="typeIndicator==='AP'" class="dropdown" role="menu">
+        <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
+            <span class="float-l semi-bold form-spacing" aria-live="polite">
+                <select-bank-acct/>
+            </span>
+            <span class="float-r form-spacing down-caret caret-color"></span>
+        </button>
+        <ul class="dropdown-menu addAcct">
+            <li role="presentation" ng-repeat="existingAcct in setup.otherAccounts">
+                <a dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" ng-click="selectOtherAcct(existingAcct)" class="addAcct form-spacing" href="#" role="menuitem">
+                   {{existingAcct.bankRoutingInfo.bankName}}<br>
+                   <span class="no-bold">Account: {{existingAcct.bankAccountNum|accountNumMask}}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div ng-show="typeIndicator==='HR'">
+        <span class="semi-bold">{{otherAccountSelected.bankRoutingInfo.bankName}}</span><br>
+        Account: {{otherAccountSelected.bankAccountNum|accountNumMask}}<br>
+        <label ng-class="(amountErr ? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.amount'|i18n}}</label><br>
+        <input ng-model="account.amountType" class="edit-radio" type="radio" name="existing-amount-type" value="remaining" checked aria-labelledby="rem-radio-lbl"><span class="lbl radio-list" id="rem-radio-lbl">{{'directDeposit.account.amount.remaining'|i18n}}</span>
+        <br>
+        <input ng-model="account.amountType" class="edit-radio" type="radio" name="existing-amount-type" value="amount" aria-labelledby="amt-radio-lbl"><span class="lbl radio-list" id="amt-radio-lbl">{{'directDeposit.account.amount.amount'|i18n}}</span>
+        <div ng-show="account.amountType === 'amount'" class="">
+            <label class="visuallyhidden" for="amt-txt-input">{{'directDeposit.account.label.amount.amount'|i18n}}</label>
+            <input ng-model="account.amount" class="radio-txt-input semi-bold form-spacing" id="amt-txt-input" type="text" placeholder="{{'directDeposit.label.input.amount'|i18n}}"/>
+        </div>
+        <br>
+        <input ng-model="account.amountType" class="edit-radio" type="radio" name="existing-amount-type" value="percentage" aria-labelledby="pct-radio-lbl"><span class="lbl radio-list" id="pct-radio-lbl">{{'directDeposit.account.amount.percentage'|i18n}}</span>
+        <div ng-show="account.amountType === 'percentage'" class="ws-nowrap">
+            <label class="visuallyhidden" for="pct-txt-input">{{'directDeposit.account.label.amount.percent'|i18n}}</label>
+            <input ng-model="account.percent" class="radio-txt-input semi-bold form-spacing" id="pct-txt-input" type="text" placeholder="{{'directDeposit.label.input.percent'|i18n}}"/> %
+        </div>
+        <br>
+        <p ng-show="amountErr" class="input-field-label field-error error-font-size">Amount error</p>
+    </div>
+    <modal-disclaimer ng-show="!!otherAccountSelected.bankRoutingInfo" id="exNI"/>
+</div>
+<br>
+<input ng-model="setup.createFromExisting" class="edit-radio" type="radio" name="create-option" value="no" aria-labelledby=""><span class="lbl radio-list no-padding" id="">Create new</span>
+<div ng-show="setup.createFromExisting === 'no'" class="existing-accts">
+    <ng-include
+        src="'../generalSsbApp/ddEditAccount/accountNumberInput.html'">
+    </ng-include>
+</div>
