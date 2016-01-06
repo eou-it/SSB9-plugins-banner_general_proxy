@@ -94,8 +94,8 @@ generalSsbAppDirectives.directive('truncatedBankName',[function () {
                     
                     // magic formula to truncate bank name to fit text in box based on estimated
                     // icon width and character widths
-                    if(inputWidth - ((truncated.length*8) + 90) < 0){
-                        var num = (-(inputWidth - ((truncated.length*8) + 90)))/10;
+                    if(inputWidth - ((truncated.length*8) + 100) < 0){
+                        var num = (-(inputWidth - ((truncated.length*8) + 100)))/10;
     
                         truncated = bankName.substring(0, bankName.length-num);
                         truncated += '...';

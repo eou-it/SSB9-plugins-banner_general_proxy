@@ -341,6 +341,10 @@ button.closebtn {
     max-width: 22.5em;
 }
 
+.existing-accts .dropdown .semi-bold.form-spacing {
+    padding-right: 5px;
+}
+
 .existing-accts .down-caret {
     padding-left: 0px;
 }
