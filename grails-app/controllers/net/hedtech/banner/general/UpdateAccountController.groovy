@@ -4,10 +4,12 @@ import grails.converters.JSON
 
 import net.hedtech.banner.DateUtility
 import net.hedtech.banner.exceptions.ApplicationException
+import net.hedtech.banner.general.crossproduct.BankRoutingInfo
 import net.hedtech.banner.webtailor.WebTailorUtility
 
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.codehaus.groovy.runtime.InvokerHelper
 
 class UpdateAccountController {
 
@@ -137,11 +139,35 @@ class UpdateAccountController {
             // Make JSONObject.NULL a real Java null
             if (entry.value == JSONObject.NULL) {
                 entry.value = null
-            }
-
-            // Make this date string a real Date object
-            if (entry.key == "lastModified") {
+            } else if (entry.key == "lastModified") {
+                // Make this date string a real Date object
                 entry.value = DateUtility.parseDateString(entry.value, "yyyy-MM-dd'T'HH:mm:ss'Z'")
+            } else if (entry.key == "bankRoutingInfo") {
+                def bankRoutingInfoObject = new BankRoutingInfo()
+
+                fixJSONObjectForCast(entry.value)
+                // TODO: remove this debug code
+                try {
+                    def junka = entry
+                    def junkb = entry.value
+//                    def junk0 = directDepositAccountService.fetch('BankRoutingInfo', entry.value.id, log)
+//                    directDepositAccountService.setDomainClass(BankRoutingInfo.class)
+//                    def junk0 = directDepositAccountService.fetch('BankRoutingInfo', '6', log)
+                    def junk0 = directDepositAccountService.fetch(BankRoutingInfo.class, '6', log)
+                    def junk = junk0?.getDirtyPropertyNames()
+                    def junk2 = junk0?.getDirtyPropertyNames()?.findAll { entry.value."$it" instanceof Date }?.size()
+                    def junk3 = junk0?.getPersistentValue('bankRoutingInfo')
+                    def junk4
+                } catch (Exception e) {
+                    e.printStackTrace()
+                }
+                // END debug code
+
+                use(InvokerHelper) {
+                    bankRoutingInfoObject.setProperties(entry.value)
+                }
+
+                entry.value = bankRoutingInfoObject
             }
         }
     }

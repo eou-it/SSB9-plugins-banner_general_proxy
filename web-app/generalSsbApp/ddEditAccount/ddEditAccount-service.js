@@ -58,7 +58,7 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
             acct.amount = null;
         }
         else if(amountType === 'amount'){
-            acct.percent = '';
+            acct.percent = null;
         }
         else if(amountType === 'percentage'){
             acct.amount = null;
