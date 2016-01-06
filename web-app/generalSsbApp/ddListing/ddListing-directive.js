@@ -89,8 +89,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddEditAccountServi
             scope.alloc.amountType = ddEditAccountService.getAmountType(scope.alloc);
 
             scope.showEditPayroll = function(){
-                scope.account = scope.alloc;
-                scope.showEditAccount('HR');
+                scope.showEditAccount(scope.alloc, 'HR');
             };
         }
     };
@@ -110,8 +109,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             scope.alloc.amountType = ddEditAccountService.getAmountType(scope.alloc);
 
             scope.setAllocationAcctType = function(type){
-                scope.account = scope.alloc;
-                scope.setAccountType(type);
+                scope.alloc.accountType = type;
             }
 
             scope.displayAllocationVal = function () {
@@ -153,10 +151,12 @@ generalSsbAppDirectives.directive('apListingPanelPopulated',['ddEditAccountServi
     return{
         restrict: 'E',
         link: function(scope) {
-            scope.editAccountService = ddEditAccountService; // TODO: is this still used?
-
             var type = scope.isDesktop() ? 'Desktop' : '';
             scope.apListingPanelPopulatedTemplate = '../generalSsbApp/ddListing/apListingPanelPopulated' + type + '.html'
+
+            scope.showEditAP = function(){
+                scope.showEditAccount(scope.apAccount, 'AP');
+            };
         },
         template: '<div ng-include="apListingPanelPopulatedTemplate"></div>'
     };

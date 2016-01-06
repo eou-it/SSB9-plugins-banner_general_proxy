@@ -44,8 +44,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 function (response) {
                     // By default, set A/P account as currently active account, as it can be edited inline (in desktop
                     // view), while payroll accounts can not be.
-                    $scope.account = self.getApAccountFromResponse(response);
-                    $scope.hasApAccount = !!$scope.account;
+                    $scope.apAccount = self.getApAccountFromResponse(response);
+                    $scope.hasApAccount = !!$scope.apAccount;
                     $scope.accountLoaded = true;
 
                     self.syncAccounts();
@@ -100,11 +100,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
     
                         var allocs = $scope.distributions.proposed.allocations, i;
                         for(i = 0; i < allocs.length; i++) {
-                            if(allocs[i].bankRoutingInfo.bankRoutingNum === $scope.account.bankRoutingInfo.bankRoutingNum 
-                                    && allocs[i].bankAccountNum === $scope.account.bankAccountNum){
+                            if(allocs[i].bankRoutingInfo.bankRoutingNum === $scope.apAccount.bankRoutingInfo.bankRoutingNum
+                                    && allocs[i].bankAccountNum === $scope.apAccount.bankAccountNum){
 
-                                $scope.account = allocs[i];
-                                ddEditAccountService.setSyncedAccounts($scope.account.bankAccountNum);
+                                $scope.apAccount = allocs[i];
+                                ddEditAccountService.setSyncedAccounts($scope.apAccount.bankAccountNum);
                             }
                         }
                         this.isSynced = true;
@@ -123,8 +123,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         $scope.payPanelMostRecentCollapsed = false;
         $scope.payPanelProposedCollapsed = false;
 
+        $scope.account = null; // Account currently in edit. Could be A/P or payroll.
         $scope.distributions = null;
-        $scope.account = null; // Currently active account.  Could be A/P or payroll.
+        $scope.apAccount = null; // Currently active A/P account.
         $scope.accountLoaded = false;
         $scope.hasApAccount = false;
         $scope.panelCollapsed = false;
@@ -182,34 +183,47 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             { title: $filter('i18n')('directDeposit.account.label.status')}
         ];
 
-        //display add/edit account pop up
-        $scope.showEditAccount = function (typeInd, isAddNew) {
-            //if(isAddNew && typeInd === 'AP' && $scope.hasApAccount) return;
-            if(isAddNew) {
-                // If this is an AP account and an AP account already exists, this functionality is disabled
-                if (typeInd === 'AP' && $scope.hasApAccount) {
-                    return;
-                }
+        var openAddOrEditModal = function(typeInd, isAddNew) {
 
-                if (typeInd === 'HR' && $scope.hasMaxPayrollAccounts) {
-                    notificationCenterService.displayNotifications('directDeposit.max.payroll.accounts.text', 'error');
-                    return;
-                }
-            }
-
-            // Otherwise, open modal
-            var modal = $modal.open({
+            $modal.open({
                 templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
                 windowClass: 'edit-account-modal',
                 keyboard: true,
                 controller: "ddEditAccountController",
                 scope: $scope,
                 resolve: {
-                    editAcctProperties: function(){
-                        return { typeIndicator: typeInd, creatingNew: !!isAddNew };
+                    editAcctProperties: function () {
+                        return {typeIndicator: typeInd, creatingNew: !!isAddNew};
                     }
                 }
             });
+
+        };
+
+        // Display "Add Account" pop up
+        $scope.showAddAccount = function (typeInd) {
+            // If this is an AP account and an AP account already exists, this functionality is disabled.
+            if (typeInd === 'AP' && $scope.hasApAccount) {
+                return;
+            }
+
+            // If this is an HR account and the maximum number of HR accounts already exists,
+            // this functionality is disabled.
+            if (typeInd === 'HR' && $scope.hasMaxPayrollAccounts) {
+                notificationCenterService.displayNotifications('directDeposit.max.payroll.accounts.text', 'error');
+                return;
+            }
+
+            // Otherwise, open modal
+            openAddOrEditModal(typeInd, true);
+        };
+
+        // Display "Edit Account" pop up
+        $scope.showEditAccount = function (account, typeInd) {
+            $scope.account = account;
+
+            // Otherwise, open modal
+            openAddOrEditModal(typeInd, false);
         };
 
         $scope.isDesktop = function () {
@@ -238,7 +252,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             }
             // AP account will already be updated if it is synced with a Payroll account
             if($scope.hasApAccount && !ddEditAccountService.syncedAccounts){
-                updateAccount($scope.account);
+                updateAccount($scope.apAccount);
             }
         };
         
@@ -276,14 +290,14 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         $scope.deleteAccount = function () {
             var accounts = [];
 
-            accounts.push($scope.account);
+            accounts.push($scope.apAccount);
 
             ddEditAccountService.deleteAccounts(accounts).$promise.then(function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
                 } else {
                     // Refresh account info
-                    $scope.account = null;
+                    $scope.apAccount = null;
                     $scope.cancelNotification();
                     $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
                 }
@@ -313,8 +327,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             $scope.authorizedChanges = !$scope.authorizedChanges;
         };
 
-        $scope.setAccountType = function (acctType) {
-            $scope.account.accountType = acctType;
+        $scope.setApAccountType = function (acctType) {
+            $scope.apAccount.accountType = acctType;
         };
 
         $scope.updateWhetherHasMaxPayrollAccounts = function () {
