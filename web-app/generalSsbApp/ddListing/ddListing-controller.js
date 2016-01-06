@@ -183,22 +183,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             { title: $filter('i18n')('directDeposit.account.label.status')}
         ];
 
-        var openAddOrEditModal = function(typeInd, isAddNew) {
+        var openAddOrEditModal = function(typeInd, isAddNew, acctList) {
 
             $modal.open({
-            var acctList = [];
-            
-            if(isAddNew && $scope.isEmployee){
-                var allocs = $scope.distributions.proposed.allocations;
-                
-                if(typeInd === 'HR' && $scope.account){
-                    acctList[0] = $scope.account;
-                }
-                else if (typeInd === 'AP' && allocs.length > 0){
-                    acctList = allocs;
-                }
-            }
-            
                 templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
                 windowClass: 'edit-account-modal',
                 keyboard: true,
@@ -209,7 +196,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                         return { 
                             typeIndicator: typeInd, 
                             creatingNew: !!isAddNew,
-                            otherAccounts: acctList
+                            otherAccounts: acctList || []
                         };
                     }
                 }
@@ -231,8 +218,21 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 return;
             }
 
+            var acctList = [];
+
+            if($scope.isEmployee){
+                var allocs = $scope.distributions.proposed.allocations;
+
+                if(typeInd === 'HR' && $scope.apAccount){
+                    acctList[0] = $scope.apAccount;
+                }
+                else if (typeInd === 'AP' && allocs.length > 0){
+                    acctList = allocs;
+                }
+            }
+
             // Otherwise, open modal
-            openAddOrEditModal(typeInd, true);
+            openAddOrEditModal(typeInd, true, acctList);
         };
 
         // Display "Edit Account" pop up
@@ -304,7 +304,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             notificationCenterService.clearNotifications();
         };
 
-        $scope.deleteAccount = function () {
+        $scope.deleteApAccount = function () {
             var accounts = [];
 
             accounts.push($scope.apAccount);
@@ -333,7 +333,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 },
                 {
                     label: "Delete",
-                    action: $scope.deleteAccount
+                    action: $scope.deleteApAccount
                 }
             ];
 
