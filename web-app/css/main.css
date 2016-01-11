@@ -154,24 +154,33 @@ body {
     }
 }
 
+currency-input > input.form-control::-webkit-input-placeholder,
+percent-input > input.form-control::-webkit-input-placeholder,
 .text-input-field::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color: #869FB1;
     font-weight: bold;
 }
+currency-input > input.form-control:-moz-placeholder,
+percent-input > input.form-control:-moz-placeholder,
 .text-input-field:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
    color: #869FB1;
    font-weight: bold;
    opacity:  1;
 }
+currency-input > input.form-control::-moz-placeholder,
+percent-input > input.form-control::-moz-placeholder,
 .text-input-field::-moz-placeholder { /* Mozilla Firefox 19+ */
    color: #869FB1;
    font-weight: bold;
    opacity:  1;
 }
+currency-input > input.form-control:-ms-input-placeholder,
+percent-input > input.form-control:-ms-input-placeholder,
 .text-input-field:-ms-input-placeholder { /* Internet Explorer 10-11 */
    color: #869FB1;
    font-weight: bold;
 }
+
 .dropdown .input-field-error,
 .input-field-error {
     background-color: #F6E5E6;
@@ -214,7 +223,9 @@ body {
 }
 
 .text-input-field:focus,
-.radio-txt-input:focus {
+.radio-txt-input:focus,
+percent-input > input.form-control:focus,
+currency-input > input.form-control:focus{
     border-style: solid;
     border-width: 1px;
     border-color: #206E9F;
@@ -430,8 +441,19 @@ li.listing > .radio-list {
     padding: 0px;
 }
 
-li.listing .radio-txt-input {
+li.listing .radio-txt-input,
+li.listing percent-input > input.form-control,
+li.listing currency-input > input.form-control {
     margin-top: 7px;
+}
+
+percent-input > input.form-control,
+currency-input > input.form-control {
+    /* form-spacing and semi-bold */
+    padding: 1em .75em;
+    line-height: 136%;
+    font-weight: bold;
+    height: initial;
 }
 
 /*  Check box  */
@@ -515,7 +537,9 @@ input[type=radio]:checked+.lbl {
     white-space: nowrap;
 }
 
-.radio-txt-input {
+.radio-txt-input,
+percent-input > input.form-control,
+currency-input > input.form-control {
     border-radius: 4px;
     background-color: #FFF;
     border: 1px solid #869FB1;

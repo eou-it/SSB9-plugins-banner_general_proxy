@@ -6,7 +6,7 @@ var generalSsbAppDirectives = angular.module('generalSsbAppDirectives', []);
 
 
 var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','ngAria', 'generalSsbAppControllers',
-    'generalSsbAppDirectives','ui.bootstrap','I18n'])
+    'generalSsbAppDirectives','ui.bootstrap','I18n','numericApp'])
     .run(
     ['$rootScope', '$state', '$stateParams', '$filter', 'breadcrumbService', 'directDepositService', 'notificationCenterService',
         function ($rootScope, $state, $stateParams, $filter, breadcrumbService, directDepositService, notificationCenterService) {

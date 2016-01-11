@@ -23,11 +23,12 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         <meta name="menuBaseURL" content="${request.contextPath}/ssb"/>
         <meta charset="${message(code: 'default.character.encoding')}">
 
-        <r:require modules="generalSsbApp"/>
-
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
             <r:require modules="generalSsbAppRTL"/>
         </g:if>
+        <g:else>
+            <r:require modules="generalSsbAppLTR"/>
+        </g:else>
 
     </g:applyLayout>
 

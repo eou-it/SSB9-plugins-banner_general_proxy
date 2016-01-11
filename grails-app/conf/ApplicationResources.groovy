@@ -5,21 +5,12 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 modules = {
 
     'angular' {
-        resource url:[file: 'js/angular/angular.min.js']
-        resource url:[file: 'js/angular/angular-resource.min.js']
         resource url:[file: 'js/angular/angular-route.min.js']
-        resource url:[file: 'js/angular/angular-sanitize.min.js']
-        resource url:[file: 'js/angular/angular-animate.min.js']
-        resource url:[file: 'js/angular/angular-ui-router.min.js']
         resource url:[file: 'js/angular/angular-aria.min.js']
-        resource url:[file: 'js/angular/ui-bootstrap-tpls-0.13.3.min.js']
-        resource url:[file: 'js/angular/lrInfiniteScroll.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/moment.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-common.js']
     }
 
    'generalSsbApp' {
-       dependsOn "angular,glyphicons,bootstrap,bannerSelfService"
+       dependsOn "angular,glyphicons,bootstrap"
 
        defaultBundle environment == "development" ? false : "generalSsbApp"
 
@@ -48,11 +39,24 @@ modules = {
        resource url:[file: 'generalSsbApp/common/directives/enterKey-directive.js']
        resource url:[file: 'generalSsbApp/common/directives/ddPopover-directive.js']
 
+   }
+   
+   'generalSsbAppLTR' {
+      dependsOn "bannerWebLTR, generalSsbApp"
+      
        // CSS
        resource url:[file: 'css/main.css'],   attrs: [media: 'screen, projection']
        resource url:[file: 'css/responsive.css'],   attrs: [media: 'screen, projection']
        resource url:[file: 'css/banner-icon-font.css'],   attrs: [media: 'screen, projection']
-
+   }
+   
+   'generalSsbAppRTL' {
+      dependsOn "bannerWebRTL, generalSsbApp"
+      
+       // CSS
+       resource url:[file: 'css/main-rtl.css'],   attrs: [media: 'screen, projection']
+       resource url:[file: 'css/responsive-rtl.css'],   attrs: [media: 'screen, projection']
+       resource url:[file: 'css/banner-icon-font-rtl.css'],   attrs: [media: 'screen, projection']
    }
 
 }
