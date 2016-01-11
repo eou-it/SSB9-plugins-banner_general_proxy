@@ -307,15 +307,33 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         $scope.deleteApAccount = function () {
             var accounts = [];
 
+            $scope.apAccount.apDelete = true;
+            
             accounts.push($scope.apAccount);
 
+            $scope.cancelNotification();
+            
             ddEditAccountService.deleteAccounts(accounts).$promise.then(function (response) {
-                if(response.failure) {
-                    notificationCenterService.displayNotifications(response.message, "error");
+
+                if (response[0].failure) {
+                    notificationCenterService.displayNotifications(response[0].message, "error");
                 } else {
                     // Refresh account info
                     $scope.apAccount = null;
-                    $scope.cancelNotification();
+
+                    var cancelNotification = true;
+                    for (i = 0; i < response.length; i++) {
+                        if (response[i].acct) {
+                            var msg = 'Account '+response[i].acct;
+                            
+                            if (response[i].activeType === 'PR'){
+                                msg += ' is still active for Payroll';
+                            }
+
+                            notificationCenterService.displayNotifications(msg, "success");
+                        }
+                    }
+
                     $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
                 }
             });

@@ -52,10 +52,21 @@ class UpdateAccountController {
         def map = request?.JSON ?: params
 
         try {
-            render directDepositAccountService.delete(map)
+            def accounts = [:]
+            def model = [:]
+            accounts = directDepositAccountService.setupAccountsForDelete(map)
+            def result = directDepositAccountService.delete(accounts.toBeDeleted)
+            
+            model.messages = accounts.messages
+            model.messages.add(result)
+            
+            render model.messages as JSON
 
         } catch (ApplicationException e) {
-            render returnFailureMessage(e) as JSON
+            def arrayResult = [];
+            arrayResult[0] = returnFailureMessage(e)
+            
+            render arrayResult as JSON
         }
     }
 
@@ -109,7 +120,8 @@ class UpdateAccountController {
         model.failure = true
         log.error(e)
         try {
-            model.message = e.returnMap({ mapToLocalize -> new ValidationTagLib().message(mapToLocalize) }).message
+            def extractError = e.returnMap({ mapToLocalize -> new ValidationTagLib().message(mapToLocalize) })
+            model.message = extractError.message + (extractError.errors ? " "+ extractError.errors : "")
             return model
         } catch (ApplicationException ex) {
             log.error(ex)
@@ -117,5 +129,6 @@ class UpdateAccountController {
             return model
         }
     }
+
 
 }
