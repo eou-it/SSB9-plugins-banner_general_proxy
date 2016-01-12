@@ -284,7 +284,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 } else {
                     if(acct.version != response.version &&
                             ddEditAccountService.syncedAccounts === acct.bankAccountNum){
-                        notificationCenterService.displayNotifications("Account "+ddEditAccountService.syncedAccounts+" updated automatically", "success");
+                   //     notificationCenterService.displayNotifications("Account "+ddEditAccountService.syncedAccounts+" updated automatically", "success");
+                        notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
                     }
 
                     // Refresh account info
