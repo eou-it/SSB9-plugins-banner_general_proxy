@@ -3,53 +3,55 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 
 <div role="tablist">
-    <!-- PAYROLL MOST RECENT -->
-    <div id="payTabMostRecent" class="row tile">
-        <div class="col-md-12 no-padding panel-group panel-accordion">
-            <h2 id="pay-account-most-recent-listing-heading" class="panel panel-heading panel-default panel-title panel-bottom-border">
-                <a href="" data-toggle="collapse" data-target="#pay-account-most-recent-listing"
-                   ng-class="{'collapsed': payPanelMostRecentCollapsed}" ng-click="payPanelMostRecentCollapsed = !payPanelMostRecentCollapsed;"
-                   aria-controls="pay-account-most-recent-listing" aria-expanded="{{!payPanelMostRecentCollapsed}}" role="tab">
-                    {{'directDeposit.label.payDistributionAsOf'|i18n}} {{distributions.mostRecent.payDate}}
-                </a>
-            </h2>
+    <div ng-show="!isStudent">
+        <!-- PAYROLL MOST RECENT -->
+        <div id="payTabMostRecent" class="row tile">
+            <div class="col-md-12 no-padding panel-group panel-accordion">
+                <h2 id="pay-account-most-recent-listing-heading" class="panel panel-heading panel-default panel-title panel-bottom-border">
+                    <a href="" data-toggle="collapse" data-target="#pay-account-most-recent-listing"
+                       ng-class="{'collapsed': payPanelMostRecentCollapsed}" ng-click="payPanelMostRecentCollapsed = !payPanelMostRecentCollapsed;"
+                       aria-controls="pay-account-most-recent-listing" aria-expanded="{{!payPanelMostRecentCollapsed}}" role="tab">
+                        {{'directDeposit.label.payDistributionAsOf'|i18n}} {{distributions.mostRecent.payDate}}
+                    </a>
+                </h2>
 
-            <div id="pay-account-most-recent-listing" class="collapse in" aria-labelledby="pay-account-most-recent-listing-heading"
-                 aria-expanded="{{!payPanelMostRecentCollapsed}}" aria-hidden="{{payPanelMostRecentCollapsed}}" role="tabpanel">
-                <div ng-show="payAccountsMostRecentLoaded">
-                    <div class="pay-listing-panel-wrapper-most-recent">
-                        <div ng-if="hasPayAccountsMostRecent">
-                            <pay-listing-panel-populated-most-recent/>
+                <div id="pay-account-most-recent-listing" class="collapse in" aria-labelledby="pay-account-most-recent-listing-heading"
+                     aria-expanded="{{!payPanelMostRecentCollapsed}}" aria-hidden="{{payPanelMostRecentCollapsed}}" role="tabpanel">
+                    <div ng-show="payAccountsMostRecentLoaded">
+                        <div class="pay-listing-panel-wrapper-most-recent">
+                            <div ng-if="hasPayAccountsMostRecent">
+                                <pay-listing-panel-populated-most-recent/>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- PAYROLL PROPOSED -->
-    <div id="payTabProposed" class="row tile">
-        <div class="col-md-12 no-padding panel-group panel-accordion">
-            <h2 id="pay-account-proposed-listing-heading" class="panel panel-heading panel-default panel-title">
-                <a href="" data-toggle="collapse" data-target="#pay-account-proposed-listing"
-                   ng-class="{'collapsed': payPanelProposedCollapsed}" ng-click="payPanelProposedCollapsed = !payPanelProposedCollapsed;"
-                   aria-controls="pay-account-proposed-listing" aria-expanded="{{!payPanelProposedCollapsed}}" role="tab">
-                    {{'directDeposit.label.payDistribution.proposed'|i18n}}
-                </a>
-            </h2>
+        <!-- PAYROLL PROPOSED -->
+        <div id="payTabProposed" class="row tile">
+            <div class="col-md-12 no-padding panel-group panel-accordion">
+                <h2 id="pay-account-proposed-listing-heading" class="panel panel-heading panel-default panel-title">
+                    <a href="" data-toggle="collapse" data-target="#pay-account-proposed-listing"
+                       ng-class="{'collapsed': payPanelProposedCollapsed}" ng-click="payPanelProposedCollapsed = !payPanelProposedCollapsed;"
+                       aria-controls="pay-account-proposed-listing" aria-expanded="{{!payPanelProposedCollapsed}}" role="tab">
+                        {{'directDeposit.label.payDistribution.proposed'|i18n}}
+                    </a>
+                </h2>
 
-            <div id="pay-account-proposed-listing" class="collapse in" aria-labelledby="pay-account-proposed-listing-heading"
-                 aria-expanded="{{!payPanelProposedCollapsed}}" aria-hidden="{{payPanelProposedCollapsed}}" role="tabpanel">
-                <div ng-show="payAccountsProposedLoaded">
-                    <div class="pay-listing-panel-wrapper-proposed">
-                        <div class="proposed-pay-listing-subheader clearfix">
-                            <a class="add-account-link" ng-class="{disabled: hasMaxPayrollAccounts}" ng-click="showAddAccount('HR')" enter-key="showAddAccount('HR')"><span class="icon-add-CO"></span> <span>{{'directDeposit.account.label.add.new'|i18n}}</span></a>
-                            <a class="delete-account-link" ng-class="{disabled: true}" ng-click="false" enter-key="false"><span class="icon-delete-CO"></span> <span>{{'directDeposit.account.label.delete'|i18n}}</span></a>
-                        </div>
-                        <div ng-if="hasPayAccountsProposed">
-                            <pay-listing-panel-populated-proposed/>
-                        </div>
-                        <div ng-if="!hasPayAccountsProposed">
-                            <pay-listing-panel-nonpopulated-proposed/>
+                <div id="pay-account-proposed-listing" class="collapse in" aria-labelledby="pay-account-proposed-listing-heading"
+                     aria-expanded="{{!payPanelProposedCollapsed}}" aria-hidden="{{payPanelProposedCollapsed}}" role="tabpanel">
+                    <div ng-show="payAccountsProposedLoaded">
+                        <div class="pay-listing-panel-wrapper-proposed">
+                            <div class="proposed-pay-listing-subheader clearfix">
+                                <a class="add-account-link" ng-class="{disabled: hasMaxPayrollAccounts}" ng-click="showAddAccount('HR')" enter-key="showAddAccount('HR')"><span class="icon-add-CO"></span> <span>{{'directDeposit.account.label.add.new'|i18n}}</span></a>
+                                <a class="delete-account-link" ng-class="{disabled: true}" ng-click="false" enter-key="false"><span class="icon-delete-CO"></span> <span>{{'directDeposit.account.label.delete'|i18n}}</span></a>
+                            </div>
+                            <div ng-if="hasPayAccountsProposed">
+                                <pay-listing-panel-populated-proposed/>
+                            </div>
+                            <div ng-if="!hasPayAccountsProposed">
+                                <pay-listing-panel-nonpopulated-proposed/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -89,11 +91,11 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
             </div>
         </div>
     </div>
-    <div ng-show="isDesktop()" class="desktop-disclaimer">
+    <div ng-show="isDesktopView" class="desktop-disclaimer">
         <input type="checkbox" class="main-nav-check" id="disclaimer-check" aria-label="{{'directDeposit.label.disclaimer.ack'|i18n}}" ng-checked="authorizedChanges" ng-click="toggleAuthorizedChanges()"/>
         <p class="lbl">{{disclaimer}}</p>
     </div>
-    <div ng-show="isDesktop()" class="desktop-save">
+    <div ng-show="isDesktopView" class="desktop-save">
         <button class="btn save-btn" ng-disabled="!authorizedChanges" ng-click="updateAccounts()">{{'directDeposit.save.changes.button.label'|i18n}}</button>
     </div>
 </div>

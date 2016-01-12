@@ -39,7 +39,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
     </script>
 </head>
 
-<body class="direct-deposit">
+<body ng-class="{'direct-deposit': true, employee: isEmployee, student: isStudent, desktop: isDesktopView, 'no-ap': !apAccountExists}">
 
 <div class="body-overlay"></div>
 <div id="content" class="container-fluid" aria-live="polite" aria-atomic="true" aria-relevant="additions" role="main">

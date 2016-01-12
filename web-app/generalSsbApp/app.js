@@ -43,6 +43,9 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','n
                 $rootScope.isStudent = response.isStudent;
                 $rootScope.isEmployee = response.isEmployee;
             });
+
+            $rootScope.isDesktopView = isDesktop();
+            $rootScope.apAccountExists = false;
         }
     ]
 );
