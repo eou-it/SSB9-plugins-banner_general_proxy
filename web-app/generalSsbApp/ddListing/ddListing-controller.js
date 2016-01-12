@@ -1,9 +1,9 @@
 /*******************************************************************************
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '$modal', '$filter',
+generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope', '$state', '$modal', '$filter',
     'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
-    function ($scope, $state, $modal, $filter, ddListingService, ddEditAccountService, directDepositService,
+    function ($scope, $rootScope, $state, $modal, $filter, ddListingService, ddEditAccountService, directDepositService,
               notificationCenterService){
 
         // LOCAL FUNCTIONS
@@ -47,6 +47,10 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.apAccount = self.getApAccountFromResponse(response);
                     $scope.hasApAccount = !!$scope.apAccount;
                     $scope.accountLoaded = true;
+
+                    // Flag whether AP account exists in rootScope, as certain styling for elements
+                    // not using this controller (e.g. breadcrumb panel) depends on knowing this.
+                    $rootScope.apAccountExists = $scope.hasApAccount;
 
                     self.syncAccounts();
             });
@@ -243,18 +247,14 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             openAddOrEditModal(typeInd, false);
         };
 
-        $scope.isDesktop = function () {
-            return isDesktop();
-        };
-
         $scope.getNoPayAllocationsNotificationText = function () {
-            return ($scope.isDesktop()) ?
+            return ($scope.isDesktopView) ?
                 'directDeposit.notification.no.payroll.allocation.click' :
                 'directDeposit.notification.no.payroll.allocation.tap';
         };
 
         $scope.getNoApAllocationsNotificationText = function () {
-            return ($scope.isDesktop()) ?
+            return ($scope.isDesktopView) ?
                 'directDeposit.notification.no.accounts.payable.allocation.click' :
                 'directDeposit.notification.no.accounts.payable.allocation.tap';
         };

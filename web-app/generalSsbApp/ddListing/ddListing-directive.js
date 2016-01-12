@@ -40,7 +40,7 @@ generalSsbAppDirectives.directive('payListingPanelPopulatedMostRecent',[function
     return{
         restrict: 'E',
         link: function(scope) {
-            var type = scope.isDesktop() ? 'Desktop' : '';
+            var type = scope.isDesktopView ? 'Desktop' : '';
             scope.mostRecentPayPanelPopulatedTemplate = '../generalSsbApp/ddListing/payListingPanelPopulatedMostRecent' + type + '.html'
         },
         template: '<div ng-include="mostRecentPayPanelPopulatedTemplate"></div>'
@@ -71,7 +71,7 @@ generalSsbAppDirectives.directive('payListingPanelPopulatedProposed',[function (
     return{
         restrict: 'E',
         link: function(scope) {
-            var type = scope.isDesktop() ? 'Desktop' : '';
+            var type = scope.isDesktopView ? 'Desktop' : '';
             scope.proposedPayPanelPopulatedTemplate = '../generalSsbApp/ddListing/payListingPanelPopulatedProposed' + type + '.html'
         },
         template: '<div ng-include="proposedPayPanelPopulatedTemplate"></div>'
@@ -151,7 +151,7 @@ generalSsbAppDirectives.directive('apListingPanelPopulated',['ddEditAccountServi
     return{
         restrict: 'E',
         link: function(scope) {
-            var type = scope.isDesktop() ? 'Desktop' : '';
+            var type = scope.isDesktopView ? 'Desktop' : '';
             scope.apListingPanelPopulatedTemplate = '../generalSsbApp/ddListing/apListingPanelPopulated' + type + '.html'
 
             scope.showEditAP = function(){
