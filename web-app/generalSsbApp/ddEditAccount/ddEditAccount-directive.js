@@ -44,7 +44,7 @@ generalSsbAppDirectives.directive('editModalSaveButton',[function () {
     };
 }]);
 
-generalSsbAppDirectives.directive('selectBankAcct',[function () {
+generalSsbAppDirectives.directive('selectBankAcct',['$filter', function ($filter) {
     return{
         restrict: 'E',
         link: function(scope, elem){
@@ -52,7 +52,7 @@ generalSsbAppDirectives.directive('selectBankAcct',[function () {
                 var existingAcctText;
                 
                 if(!scope.otherAccountSelected){
-                    existingAcctText = 'Select exisiting account';
+                    existingAcctText = $filter('i18n')('directDeposit.label.select.exisiting');
                 }
                 else{
                     var bankName = scope.otherAccountSelected.bankRoutingInfo.bankName;

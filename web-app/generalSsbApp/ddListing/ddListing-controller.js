@@ -325,10 +325,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     var cancelNotification = true;
                     for (i = 0; i < response.length; i++) {
                         if (response[i].acct) {
-                            var msg = 'Account '+response[i].acct;
+                            var msg = $filter('i18n')('directDeposit.account.label.account')+
+                                        ' '+ $filter('accountNumMask')(response[i].acct);
                             
                             if (response[i].activeType === 'PR'){
-                                msg += ' is still active for Payroll';
+                                msg += ' '+ $filter('i18n')('directDeposit.still.active.payroll');
                             }
 
                             notificationCenterService.displayNotifications(msg, "success");
