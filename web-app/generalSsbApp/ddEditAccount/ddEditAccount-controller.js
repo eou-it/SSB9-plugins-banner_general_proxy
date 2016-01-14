@@ -89,6 +89,11 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         $scope.accountTypeErr = false;
         notificationCenterService.clearNotifications();
     };
+    
+    $scope.priorities = ddEditAccountService.priorities;
+    $scope.setAccountPriority = function (priority) {
+        ddEditAccountService.setAccountPriority($scope.account, priority);
+    };
 
     $scope.selectOtherAcct = function (acct) {
         $scope.otherAccountSelected = acct;

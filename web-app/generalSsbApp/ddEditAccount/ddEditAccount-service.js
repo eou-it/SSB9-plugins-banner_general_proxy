@@ -69,4 +69,19 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
 
     this.setSyncedAccounts = function(val){this.syncedAccounts = val;};
 
+    this.priorities = [0];
+    
+    this.setPriorities = function ( accts ) {
+        // create priority list and normalize account priorities (might not be neccessary).
+    	var i;
+    	for(i = 0; i < accts.length; i++) {
+            accts[i].priority = i+1;
+            this.priorities[i] = i+1;
+        }
+    };
+
+    this.setAccountPriority = function (acct, priority) {
+        acct.priority = priority;
+    };
+
 }]);

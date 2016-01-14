@@ -411,6 +411,10 @@ button.closebtn {
     min-width: 20%;
 }
 
+.min-width-priority {
+    min-width: 0px;
+}
+
 .dropdown-menu.addAcct {
     left: 0;
     border-bottom-right-radius: 6px;

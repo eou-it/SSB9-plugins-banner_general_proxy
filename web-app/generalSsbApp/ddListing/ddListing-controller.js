@@ -80,6 +80,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     $scope.hasPayAccountsProposed = !!response.allocations.length;
                     $scope.payAccountsProposedLoaded = true;
 
+                    if($scope.hasPayAccountsProposed){
+                        ddEditAccountService.setPriorities(response.allocations);
+                    }
                     self.syncAccounts();
 
                     $scope.updateWhetherHasMaxPayrollAccounts();
@@ -256,7 +259,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
         // Display "Edit Account" pop up
         $scope.showEditAccount = function (account, typeInd) {
-            $scope.account = account;
+            // use a copy of the account in modal so changes don't persist in UI
+            // if a user cancels their changes
+            $scope.account = angular.copy(account);
 
             // Otherwise, open modal
             openAddOrEditModal(typeInd, false);
@@ -336,7 +341,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     // Display notification if an account also exists as AP
                     _.find(response, function(item) {
                         if (item.acct) {
-                            var msg = 'Account ' + item.acct;
+                            var msg = $filter('i18n')('directDeposit.account.label.account')+
+                                        ' '+ $filter('accountNumMask')(item.acct);
 
                             if (item.activeType === 'AP'){
                                 msg += ' ' + $filter('i18n')('directDeposit.still.active.AP');
@@ -389,18 +395,15 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     // Refresh account info
                     $scope.apAccount = null;
 
-                    var cancelNotification = true;
-                    for (i = 0; i < response.length; i++) {
-                        if (response[i].acct) {
-                            var msg = $filter('i18n')('directDeposit.account.label.account')+
-                                        ' '+ $filter('accountNumMask')(response[i].acct);
+                    if (response[0].acct) {
+                        var msg = $filter('i18n')('directDeposit.account.label.account')+
+                                    ' '+ $filter('accountNumMask')(response[0].acct);
 
-                            if (response[i].activeType === 'PR'){
-                                msg += ' '+ $filter('i18n')('directDeposit.still.active.payroll');
-                            }
-
-                            notificationCenterService.displayNotifications(msg, "success");
+                        if (response[i].activeType === 'PR'){
+                            msg += ' '+ $filter('i18n')('directDeposit.still.active.payroll');
                         }
+
+                        notificationCenterService.displayNotifications(msg, "success");
                     }
 
                     $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
