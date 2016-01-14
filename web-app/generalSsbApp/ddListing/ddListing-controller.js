@@ -97,9 +97,10 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             });
         };
         
-        // if an account is used for AP and Payroll, have scope.account and allocation[x] point to same
-        // account object so that they are always in sync in the UI. The backend will save the changes
-        // to both records if it needs to.
+        // if an account is used for AP and Payroll, have scope.apAccount and allocation[x] point to same
+        // account object so that they are always in sync. The frontend will save and delete the synced
+        // accounts at the same time so the backend can save the changes to both records if it needs to
+        // and handle deletion logic.
         this.isSynced = false;
         this.syncAccounts = function () {
 
@@ -117,6 +118,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                             if(allocs[i].bankRoutingInfo.bankRoutingNum === $scope.apAccount.bankRoutingInfo.bankRoutingNum
                                     && allocs[i].bankAccountNum === $scope.apAccount.bankAccountNum){
 
+                                // sync accounts
                                 $scope.apAccount = allocs[i];
                                 ddEditAccountService.setSyncedAccounts($scope.apAccount.bankAccountNum);
                             }
@@ -295,11 +297,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
                 } else {
-                    if(acct.version != response.version &&
-                            ddEditAccountService.syncedAccounts === acct.bankAccountNum){
-                   //     notificationCenterService.displayNotifications("Account "+ddEditAccountService.syncedAccounts+" updated automatically", "success");
-                        notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
-                    }
+                    
+                    notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
 
                     // Refresh account info
                     acct.version = response.version;
@@ -340,7 +339,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                             var msg = 'Account ' + item.acct;
 
                             if (item.activeType === 'AP'){
-                                msg += ' ' + $filter('i18n')('directDeposit.still.active.for.ap.text');
+                                msg += ' ' + $filter('i18n')('directDeposit.still.active.AP');
                             }
 
                             notificationCenterService.displayNotifications(msg, "success");
@@ -393,10 +392,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     var cancelNotification = true;
                     for (i = 0; i < response.length; i++) {
                         if (response[i].acct) {
-                            var msg = 'Account '+response[i].acct;
+                            var msg = $filter('i18n')('directDeposit.account.label.account')+
+                                        ' '+ $filter('accountNumMask')(response[i].acct);
 
                             if (response[i].activeType === 'PR'){
-                                msg += ' is still active for Payroll';
+                                msg += ' '+ $filter('i18n')('directDeposit.still.active.payroll');
                             }
 
                             notificationCenterService.displayNotifications(msg, "success");
