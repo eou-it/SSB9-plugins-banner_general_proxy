@@ -110,7 +110,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
 
             scope.setAllocationAcctType = function(type){
                 scope.alloc.accountType = type;
-            }
+            };
 
             scope.displayAllocationVal = function () {
                 if(scope.alloc.amountType === 'remaining'){

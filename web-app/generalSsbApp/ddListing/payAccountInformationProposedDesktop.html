@@ -1,7 +1,7 @@
 <td class="break-word">
     <div class="delete-checkbox-wrapper-desktop">
         <label class="visuallyhidden" id="for-delete{{$index}}">{{'directDeposit.label.select.for.delete'|i18n}}</label>
-        <input type="checkbox" class="delete-checkbox-desktop" ng-click="" enter-key="" aria-labelledby="for-delete{{$index}} pro-bank-name{{$index}}">
+        <input type="checkbox" class="delete-checkbox-desktop" ng-model="allocation.deleteMe" aria-labelledby="for-delete{{$index}} pro-bank-name{{$index}}">
         <span class="lbl"></span>
     </div>
     <span id="pro-bank-name{{$index}}">{{alloc.bankRoutingInfo.bankName}}</span>

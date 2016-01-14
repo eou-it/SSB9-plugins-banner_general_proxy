@@ -77,12 +77,22 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     notificationCenterService.displayNotifications(response.message, "error");
                 } else {
                     $scope.distributions.proposed = response;
-                    $scope.hasPayAccountsProposed = !!response.allocations.length
+                    $scope.hasPayAccountsProposed = !!response.allocations.length;
                     $scope.payAccountsProposedLoaded = true;
 
                     self.syncAccounts();
 
                     $scope.updateWhetherHasMaxPayrollAccounts();
+
+                    // If any allocation is flagged for delete (happens via user checking a checkbox, which
+                    // in turn sets the deleteMe property to true), set selectedForDelete.payroll to true,
+                    // enabling the "Delete" button.
+                    $scope.$watch('distributions.proposed', function () {
+                        // Determine if any payroll allocations are selected for delete
+                        $scope.selectedForDelete.payroll = _.any($scope.distributions.proposed.allocations, function(alloc) {
+                            return alloc.deleteMe;
+                        });
+                    }, true);
                 }
             });
         };
@@ -134,8 +144,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         $scope.hasApAccount = false;
         $scope.panelCollapsed = false;
         $scope.authorizedChanges = false;
-        $scope.apAccountSelectedForDelete = false;
         $scope.hasMaxPayrollAccounts = false;
+        $scope.selectedForDelete = {
+            payroll: false,
+            ap:      false
+        };
 
         // CONTROLLER FUNCTIONS
         // --------------------
@@ -298,22 +311,77 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         };
 
         $scope.toggleApAccountSelectedForDelete = function () {
-            $scope.apAccountSelectedForDelete = !$scope.apAccountSelectedForDelete;
+            $scope.selectedForDelete.ap = !$scope.selectedForDelete.ap;
         };
 
         $scope.cancelNotification = function () {
             notificationCenterService.clearNotifications();
         };
 
+        $scope.deletePayrollAccount = function () {
+            var allocations = $scope.distributions.proposed.allocations,
+                accountsToDelete = _.where(allocations, {deleteMe: true}),
+                index;
+
+            $scope.cancelNotification();
+
+            ddEditAccountService.deleteAccounts(accountsToDelete).$promise.then(function (response) {
+
+                if (response[0].failure) {
+                    notificationCenterService.displayNotifications(response[0].message, "error");
+                } else {
+                    // Refresh account info
+                    $scope.distributions.proposed.allocations = _.difference(allocations, accountsToDelete);
+
+
+                    // Display notification if an account also exists as AP
+                    _.find(response, function(item) {
+                        if (item.acct) {
+                            var msg = 'Account ' + item.acct;
+
+                            if (item.activeType === 'AP'){
+                                msg += ' ' + $filter('i18n')('directDeposit.still.active.for.ap.text');
+                            }
+
+                            notificationCenterService.displayNotifications(msg, "success");
+
+                            return true;
+                        }
+
+                        return false;
+                    });
+                }
+            });
+        };
+
+        // Display payroll Delete Account confirmation modal
+        $scope.confirmPayrollDelete = function () {
+            // If no account is selected for deletion, this functionality is disabled
+            if (!$scope.selectedForDelete.payroll) return;
+
+            var prompts = [
+                {
+                    label: "Cancel",
+                    action: $scope.cancelNotification
+                },
+                {
+                    label: "Delete",
+                    action: $scope.deletePayrollAccount
+                }
+            ];
+
+            notificationCenterService.displayNotifications('directDeposit.confirm.payroll.delete.text', 'warning', false, prompts);
+        };
+
         $scope.deleteApAccount = function () {
             var accounts = [];
 
             $scope.apAccount.apDelete = true;
-            
+
             accounts.push($scope.apAccount);
 
             $scope.cancelNotification();
-            
+
             ddEditAccountService.deleteAccounts(accounts).$promise.then(function (response) {
 
                 if (response[0].failure) {
@@ -326,7 +394,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     for (i = 0; i < response.length; i++) {
                         if (response[i].acct) {
                             var msg = 'Account '+response[i].acct;
-                            
+
                             if (response[i].activeType === 'PR'){
                                 msg += ' is still active for Payroll';
                             }
@@ -343,7 +411,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         // Display accounts payable Delete Account confirmation modal
         $scope.confirmAPDelete = function () {
             // If no account is selected for deletion, this functionality is disabled
-            if (!$scope.apAccountSelectedForDelete) return;
+            if (!$scope.selectedForDelete.ap) return;
 
             var prompts = [
                 {

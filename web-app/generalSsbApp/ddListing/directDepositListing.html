@@ -44,7 +44,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                         <div class="pay-listing-panel-wrapper-proposed">
                             <div class="proposed-pay-listing-subheader clearfix">
                                 <a class="add-account-link" ng-class="{disabled: hasMaxPayrollAccounts}" ng-click="showAddAccount('HR')" enter-key="showAddAccount('HR')"><span class="icon-add-CO"></span> <span>{{'directDeposit.account.label.add.new'|i18n}}</span></a>
-                                <a class="delete-account-link" ng-class="{disabled: true}" ng-click="false" enter-key="false"><span class="icon-delete-CO"></span> <span>{{'directDeposit.account.label.delete'|i18n}}</span></a>
+                                <a class="delete-account-link" ng-class="{disabled: !selectedForDelete.payroll}" ng-click="confirmPayrollDelete()" enter-key="confirmPayrollDelete()"><span class="icon-delete-CO"></span> <span>{{'directDeposit.account.label.delete'|i18n}}</span></a>
                             </div>
                             <div ng-if="hasPayAccountsProposed">
                                 <pay-listing-panel-populated-proposed/>
@@ -79,7 +79,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                 <div ng-show="accountLoaded">
                     <div class="ap-listing-panel clearfix">
                         <a class="add-account-link" ng-class="{disabled: hasApAccount}" ng-click="showAddAccount('AP')" enter-key="showAddAccount('AP')"><span class="icon-add-CO"></span> <span>{{'directDeposit.account.label.add.new'|i18n}}</span></a>
-                        <a class="delete-account-link" ng-class="{disabled: !apAccountSelectedForDelete}" ng-click="confirmAPDelete()" enter-key="confirmAPDelete()"><span class="icon-delete-CO"></span> <span>{{'directDeposit.account.label.delete'|i18n}}</span></a>
+                        <a class="delete-account-link" ng-class="{disabled: !selectedForDelete.ap}" ng-click="confirmAPDelete()" enter-key="confirmAPDelete()"><span class="icon-delete-CO"></span> <span>{{'directDeposit.account.label.delete'|i18n}}</span></a>
                     </div>
                     <div ng-if="hasApAccount">
                         <ap-listing-panel-populated/>
