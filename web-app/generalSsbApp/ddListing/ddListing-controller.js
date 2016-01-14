@@ -2,9 +2,9 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope', '$state', '$modal', '$filter',
-    'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
-    function ($scope, $rootScope, $state, $modal, $filter, ddListingService, ddEditAccountService, directDepositService,
-              notificationCenterService){
+    '$q', 'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
+    function ($scope, $rootScope, $state, $modal, $filter, $q, ddListingService, ddEditAccountService,
+              directDepositService, notificationCenterService){
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -280,20 +280,32 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         };
 
         $scope.updateAccounts = function () {
-            var allocs = $scope.distributions.proposed.allocations
+            var allocs = $scope.distributions.proposed.allocations,
+                promises = [];
+
             if($scope.isEmployee){
                 var i;
                 for(i = 0; i < allocs.length; i++){
-                    updateAccount($scope.distributions.proposed.allocations[i]);
+                    promises.push(updateAccount($scope.distributions.proposed.allocations[i]));
                 }
             }
             // AP account will already be updated if it is synced with a Payroll account
             if($scope.hasApAccount && !ddEditAccountService.syncedAccounts){
-                updateAccount($scope.apAccount);
+                promises.push(updateAccount($scope.apAccount));
             }
+
+            // When all updates are done, a refresh would not be necessary, as the input fields
+            // (e.g. Account Type dropdown) will have been already "updated" when the user made the
+            // change.  The *exception* to this, and the reason we do indeed refresh here, is because the
+            // "Net Pay Distribution" values may need to be recalculated, depending on the change the user made.
+            $q.all(promises).then(function() {
+                $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+            });
         };
         
         var updateAccount = function (acct) {
+            var deferred = $q.defer();
+
             if(acct.hrIndicator === 'A'){
                 ddEditAccountService.setAmountValues(acct, acct.amountType);
             }
@@ -302,16 +314,13 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
                 } else {
-                    
                     notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
-
-                    // Refresh account info
-                    acct.version = response.version;
-
-                    // Set form back to initial "at rest" state
-                    $scope.authorizedChanges = false;
                 }
+
+                deferred.resolve();
             });
+
+            return deferred.promise;
         };
 
         $scope.toggleApAccountSelectedForDelete = function () {
