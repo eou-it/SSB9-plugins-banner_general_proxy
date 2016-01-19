@@ -26,12 +26,23 @@ generalSsbAppDirectives.directive('accountType',[function () {
     };
 }]);
 
-generalSsbAppDirectives.directive('accountStatus',[function () {
+generalSsbAppDirectives.directive('accountStatus', ['$filter', function ($filter) {
     return{
         restrict: 'E',
-        template: "{{(account.status === 'P' ? 'directDeposit.account.status.prenote' : 'directDeposit.account.status.active')|i18n}}",
+        templateUrl: '../generalSsbApp/ddListing/accountStatus.html',
         scope: {
-            account: '='
+            account: '=',
+            type: '@'
+        },
+        link: function(scope, element, attrs) {
+            // Observe "account" to be sure it has been (re)loaded when a change is made, e.g. when a new account created
+            attrs.$observe('account', function() {
+                var isPrenote = scope.account.status === 'P',
+                    statusProp = isPrenote ? 'directDeposit.account.status.prenote' : 'directDeposit.account.status.active';
+
+                scope.statusText = $filter('i18n')(statusProp);
+                scope.statusClass = isPrenote ? 'status-prenote' : 'status-active';
+            });
         }
     };
 }]);

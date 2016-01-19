@@ -764,7 +764,6 @@ a.delete-account-link {
 
 .desktop-account-list-table {
     display: table;
-    /*border-spacing: 90px 0;*/
 }
 
 .desktop-account-list-row {
@@ -779,6 +778,37 @@ a.delete-account-link {
 .account-list-heading {
     font-weight: bold;
 }
+
+.payroll-status-wrapper {
+    position: absolute;
+    top: 12px;
+    right: 0;
+}
+
+.ap-status-wrapper {
+    position: absolute;
+    top: 44px;
+    right: 15px;
+}
+
+.status-chiclet {
+    font-size: .9em;
+    text-align: center;
+    padding: 4px 0;
+    width: 66px;
+    border-radius: 4px;
+}
+
+.status-prenote {
+    background: #FFCDAA;
+    border: 1px solid #E19F72;
+}
+
+.status-active {
+    background: #C9F0C7;
+    border: 1px solid #4EC76A;
+}
+
 
 /*  Custom modal  */
 .modal.edit-account-modal.in .modal-dialog {
@@ -937,16 +967,17 @@ table tr td {
     padding: 15px 16px 15px 16px;
 }
 
-
+/***********************/
 /* Media Query Section */
+/***********************/
 
-@media(max-width:1024px){
+@media screen and (max-width:1024px) {
     .account-heading {
         margin-right: 40px;
     }
 }
 
-@media(min-width:768px){
+@media screen and (min-width:768px) {
     .account-heading {
         margin-bottom: 15px;
     }
@@ -973,5 +1004,12 @@ table tr td {
 
     .pad-dialog-lr {
         padding: 0em 1.7em;
+    }
+}
+
+/*Tablet device*/
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .payroll-status-wrapper {
+        top: 28px;
     }
 }
