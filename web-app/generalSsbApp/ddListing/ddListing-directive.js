@@ -138,6 +138,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
 
             scope.priorities = ddEditAccountService.priorities;
             scope.setAccountPriority = function (priority) {
+                ddEditAccountService.doReorder = 'all';
                 ddEditAccountService.setAccountPriority(scope.alloc, priority);
             };
         }

@@ -89,10 +89,12 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         $scope.accountTypeErr = false;
         notificationCenterService.clearNotifications();
     };
-    
+
     $scope.priorities = ddEditAccountService.priorities;
     $scope.setAccountPriority = function (priority) {
-        ddEditAccountService.setAccountPriority($scope.account, priority);
+        ddEditAccountService.doReorder = 'single';
+        //ddEditAccountService.setAccountPriority($scope.account, priority);
+        $scope.account.priority = priority;
     };
 
     $scope.selectOtherAcct = function (acct) {
@@ -120,24 +122,40 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 ddEditAccountService.setAmountValues($scope.account, $scope.account.amountType);
             }
 
-            ddEditAccountService.saveAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
-                if(response.failure) {
-                    notificationCenterService.displayNotifications(response.message, "error");
-                    
-                    // if there is an error when creating from existing account, then reset account
-                    // so user can start fresh
-                    if($scope.setup.createFromExisting === 'yes'){
-                        $scope.account.bankAccountNum = null;
-                        $scope.account.bankRoutingInfo = {bankRoutingNum: null};
-                        $scope.account.accountType = null;
+           if(ddEditAccountService.doReorder === 'single'){
+                ddEditAccountService.reorderAccounts($scope.account).$promise.then(function (response) {
+                    if(response.failure) {
+                        notificationCenterService.displayNotifications(response.message, "error");
                     }
-                }
-                else {
-                    notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
+                    else {
+                        notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
 
-                    $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
-                }
-            });
+                        ddEditAccountService.doReorder = false;
+
+                        $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                    }
+                });
+            }
+            else {
+                ddEditAccountService.saveAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
+                    if(response.failure) {
+                        notificationCenterService.displayNotifications(response.message, "error");
+                        
+                        // if there is an error when creating from existing account, then reset account
+                        // so user can start fresh
+                        if($scope.setup.createFromExisting === 'yes'){
+                            $scope.account.bankAccountNum = null;
+                            $scope.account.bankRoutingInfo = {bankRoutingNum: null};
+                            $scope.account.accountType = null;
+                        }
+                    }
+                    else {
+                        notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
+    
+                        $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                    }
+                });
+            }
         }
     };
 

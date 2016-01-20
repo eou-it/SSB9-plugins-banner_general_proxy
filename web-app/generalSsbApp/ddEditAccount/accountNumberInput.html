@@ -77,7 +77,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
             </button>
             <ul class="dropdown-menu addAcct">
                 <li ng-repeat="i in priorities" role="presentation">
-                    <a ng-click="setAccountPriority(i)" class="addAcct form-spacing" href="#" role="menuitem">{{i}}</a>
+                    <a ng-click="setAccountPriority(i.displayVal)" class="addAcct form-spacing" href="#" role="menuitem">{{i.displayVal}}</a>
                 </li>
             </ul>
         </div>
