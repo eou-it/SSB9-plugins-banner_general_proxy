@@ -90,7 +90,7 @@ grails {
                 filterProcessesUrl = '/j_spring_cas_security_check'
             }
             logout {
-                   afterLogoutUrl = 'https://cas-server/logout?url=http://myportal/main_page.html'
+                   afterLogoutUrl = 'http://localhost:8091/applicationNavigator/logout/customLogout'
             }
         }
     }
