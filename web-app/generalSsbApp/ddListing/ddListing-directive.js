@@ -26,12 +26,23 @@ generalSsbAppDirectives.directive('accountType',[function () {
     };
 }]);
 
-generalSsbAppDirectives.directive('accountStatus',[function () {
+generalSsbAppDirectives.directive('accountStatus', ['$filter', function ($filter) {
     return{
         restrict: 'E',
-        template: "{{(account.status === 'P' ? 'directDeposit.account.status.prenote' : 'directDeposit.account.status.active')|i18n}}",
+        templateUrl: '../generalSsbApp/ddListing/accountStatus.html',
         scope: {
-            account: '='
+            account: '=',
+            type: '@'
+        },
+        link: function(scope, element, attrs) {
+            // Observe "account" to be sure it has been (re)loaded when a change is made, e.g. when a new account created
+            attrs.$observe('account', function() {
+                var isPrenote = scope.account.status === 'P',
+                    statusProp = isPrenote ? 'directDeposit.account.status.prenote' : 'directDeposit.account.status.active';
+
+                scope.statusText = $filter('i18n')(statusProp);
+                scope.statusClass = isPrenote ? 'status-prenote' : 'status-active';
+            });
         }
     };
 }]);
@@ -40,7 +51,7 @@ generalSsbAppDirectives.directive('payListingPanelPopulatedMostRecent',[function
     return{
         restrict: 'E',
         link: function(scope) {
-            var type = scope.isDesktop() ? 'Desktop' : '';
+            var type = scope.isDesktopView ? 'Desktop' : '';
             scope.mostRecentPayPanelPopulatedTemplate = '../generalSsbApp/ddListing/payListingPanelPopulatedMostRecent' + type + '.html'
         },
         template: '<div ng-include="mostRecentPayPanelPopulatedTemplate"></div>'
@@ -71,7 +82,7 @@ generalSsbAppDirectives.directive('payListingPanelPopulatedProposed',[function (
     return{
         restrict: 'E',
         link: function(scope) {
-            var type = scope.isDesktop() ? 'Desktop' : '';
+            var type = scope.isDesktopView ? 'Desktop' : '';
             scope.proposedPayPanelPopulatedTemplate = '../generalSsbApp/ddListing/payListingPanelPopulatedProposed' + type + '.html'
         },
         template: '<div ng-include="proposedPayPanelPopulatedTemplate"></div>'
@@ -89,8 +100,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddEditAccountServi
             scope.alloc.amountType = ddEditAccountService.getAmountType(scope.alloc);
 
             scope.showEditPayroll = function(){
-                scope.account = scope.alloc;
-                scope.showEditAccount('HR');
+                scope.showEditAccount(scope.alloc, 'HR');
             };
         }
     };
@@ -110,13 +120,12 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             scope.alloc.amountType = ddEditAccountService.getAmountType(scope.alloc);
 
             scope.setAllocationAcctType = function(type){
-                scope.account = scope.alloc;
-                scope.setAccountType(type);
-            }
+                scope.alloc.accountType = type;
+            };
 
             scope.displayAllocationVal = function () {
                 if(scope.alloc.amountType === 'remaining'){
-                    scope.alloc.allocation = 'Remaining'
+                    scope.alloc.allocation = $filter('i18n')('directDeposit.account.label.remaining');
                 }
                 else if(scope.alloc.amountType === 'percentage'){
                     scope.alloc.allocation = $filter('number')((scope.alloc.percent ? scope.alloc.percent : '0'), 1) + '%';
@@ -125,6 +134,12 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                     scope.alloc.allocation = $filter('currency')((scope.alloc.amount ? scope.alloc.amount : '0'));
                 }
                 return scope.alloc.allocation;
+            };
+
+            scope.priorities = ddEditAccountService.priorities;
+            scope.setAccountPriority = function (priority) {
+                ddEditAccountService.doReorder = 'all';
+                ddEditAccountService.setAccountPriority(scope.alloc, priority);
             };
         }
     };
@@ -153,10 +168,12 @@ generalSsbAppDirectives.directive('apListingPanelPopulated',['ddEditAccountServi
     return{
         restrict: 'E',
         link: function(scope) {
-            scope.editAccountService = ddEditAccountService; // TODO: is this still used?
-
-            var type = scope.isDesktop() ? 'Desktop' : '';
+            var type = scope.isDesktopView ? 'Desktop' : '';
             scope.apListingPanelPopulatedTemplate = '../generalSsbApp/ddListing/apListingPanelPopulated' + type + '.html'
+
+            scope.showEditAP = function(){
+                scope.showEditAccount(scope.apAccount, 'AP');
+            };
         },
         template: '<div ng-include="apListingPanelPopulatedTemplate"></div>'
     };

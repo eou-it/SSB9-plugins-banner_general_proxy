@@ -8,9 +8,10 @@ import net.hedtech.banner.general.person.PersonUtility
 class AccountListingController  {
 
     def directDepositAccountService
-    def directDepositPayrollHistoryService
+ //   def directDepositPayrollHistoryService
     def directDepositAccountCompositeService
     def currencyFormatService
+
 
 
     private def findPerson() {
@@ -69,7 +70,7 @@ class AccountListingController  {
         def model = [:]
         def pidm = ControllerUtility.getPrincipalPidm()
 
-        model = directDepositPayrollHistoryService.getLastPayDistribution(pidm)
+        model = directDepositAccountCompositeService.getLastPayDistribution(pidm)
 
         model.totalNet = formatCurrency(model.totalNet)
 

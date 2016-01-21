@@ -40,12 +40,6 @@
 [submodule "plugins/web-app-extensibility.git"]
 	path = plugins/web-app-extensibility.git
 	url = https://git.ellucian.com/scm/ext/web-app-extensibility.git
-[submodule "banner_payroll_common"]
-	path = plugins/banner_payroll_common.git
-	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_payroll_common.git
-[submodule "banner_posnctl_common"]
-	path = plugins/banner_posnctl_common.git
-	url = ssh://git@devgit1.ellucian.com/banner/plugins/banner_posnctl_common.git
 [submodule "plugins/grails_constraints.git"]
 	path = plugins/grails_constraints.git
 	url = ssh://git@devgit1.ellucian.com/banner/plugins/grails-constraints.git

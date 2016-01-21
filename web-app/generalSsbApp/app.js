@@ -43,6 +43,16 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','n
                 $rootScope.isStudent = response.isStudent;
                 $rootScope.isEmployee = response.isEmployee;
             });
+
+            $rootScope.isDesktopView = isDesktop();
+
+            // Above, we use the isDesktop function implemented in the banner_ui_ss plugin, which thus far has
+            // proven to be satisfactory.  Below we modify the implementation of isTablet from banner_ui_ss to
+            // be consistent with the definition of "is tablet" elsewhere in this app.
+            var isTablet = window.matchMedia("only screen and (min-width: 768px) and (max-width:1024px)");
+            $rootScope.isTabletView = isTablet.matches;
+
+            $rootScope.apAccountExists = false;
         }
     ]
 );

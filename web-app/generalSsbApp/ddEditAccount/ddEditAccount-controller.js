@@ -7,7 +7,11 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
     $scope.typeIndicator = editAcctProperties.typeIndicator;
     $scope.creatingNewAccount = editAcctProperties.creatingNew;
-    $scope.authorizedChanges = false;
+    
+    $scope.routNumFocused = false;
+    $scope.acctNumFocused = false;
+    $scope.acctTypeFocused = false;
+    $scope.dropdownIsOpen = false;
 
     $scope.popoverElements = {}; // Used to coordinate popovers in modal
 
@@ -36,12 +40,15 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                         notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
                     }
                     else {
-                        $scope.routingNumMessage = response.bankName;
+                        $scope.account.bankRoutingInfo.bankName = response.bankName;
                         $scope.routingNumErr = false;
                         notificationCenterService.clearNotifications();
                     }
                 });
             }
+        }
+        else {
+            $scope.account.bankRoutingInfo.bankName = null;
         }
     };
 
@@ -82,26 +89,73 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         $scope.accountTypeErr = false;
         notificationCenterService.clearNotifications();
     };
+
+    $scope.priorities = ddEditAccountService.priorities;
+    $scope.setAccountPriority = function (priority) {
+        ddEditAccountService.doReorder = 'single';
+        //ddEditAccountService.setAccountPriority($scope.account, priority);
+        $scope.account.priority = priority;
+    };
+
+    $scope.selectOtherAcct = function (acct) {
+        $scope.otherAccountSelected = acct;
+    }
     
     $scope.toggleAuthorizedChanges = function () {
-        $scope.authorizedChanges = !$scope.authorizedChanges;
+        $scope.setup.authorizedChanges = !$scope.setup.authorizedChanges;
     };
     
     $scope.saveAccount = function() {
-        if(requiredFieldsValid()) {
+        var doSave = true;
+        
+        if($scope.setup.createFromExisting === 'yes'){
+            $scope.account.bankAccountNum = $scope.otherAccountSelected.bankAccountNum;
+            $scope.account.bankRoutingInfo = $scope.otherAccountSelected.bankRoutingInfo;
+            $scope.account.accountType = $scope.otherAccountSelected.accountType;
+        }
+        else {
+            doSave = requiredFieldsValid();
+        }
+        
+        if(doSave) {
             if($scope.typeIndicator === 'HR'){
                 ddEditAccountService.setAmountValues($scope.account, $scope.account.amountType);
             }
 
-            ddEditAccountService.saveAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
-                if(response.failure) {
-                    notificationCenterService.displayNotifications(response.message, "error");
-                }
-                else {
-                    $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
-                    $scope.cancelModal();
-                }
-            });
+           if(ddEditAccountService.doReorder === 'single'){
+                ddEditAccountService.reorderAccounts($scope.account).$promise.then(function (response) {
+                    if(response.failure) {
+                        notificationCenterService.displayNotifications(response.message, "error");
+                    }
+                    else {
+                        notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
+
+                        ddEditAccountService.doReorder = false;
+
+                        $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                    }
+                });
+            }
+            else {
+                ddEditAccountService.saveAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
+                    if(response.failure) {
+                        notificationCenterService.displayNotifications(response.message, "error");
+                        
+                        // if there is an error when creating from existing account, then reset account
+                        // so user can start fresh
+                        if($scope.setup.createFromExisting === 'yes'){
+                            $scope.account.bankAccountNum = null;
+                            $scope.account.bankRoutingInfo = {bankRoutingNum: null};
+                            $scope.account.accountType = null;
+                        }
+                    }
+                    else {
+                        notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
+    
+                        $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                    }
+                });
+            }
         }
     };
 
@@ -139,6 +193,9 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     };
 
     this.init = function() {
+        $scope.setup = {}
+        $scope.setup.hasOtherAccounts = false;
+
         // In initializing this controller, we could be doing an account create, edit, or delete.  For the create, no
         // account will exist and we need to instantiate a new account object.  For the edit and delete, an account will
         // already exist on scope, so use that.  (At the time of this writing, the edit and delete cases happen only
@@ -160,10 +217,20 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 amountType: 'remaining'
             };
 
+            $scope.setup.hasOtherAccounts = editAcctProperties.otherAccounts.length > 0;
+            $scope.setup.otherAccounts = editAcctProperties.otherAccounts;
+            $scope.setup.createFromExisting;
+            
+            $scope.setup.authorizedChanges = false;
+
             if($scope.typeIndicator === 'HR'){
                 $scope.account.hrIndicator = 'A';
                 $scope.account.apIndicator = 'I';
                 $scope.account.percent = null; // we will determine what value this should be on save, AP is always 100
+            
+                if($scope.setup.hasOtherAccounts){
+                    $scope.selectOtherAcct($scope.setup.otherAccounts[0]);
+                }
             }
         }
     };

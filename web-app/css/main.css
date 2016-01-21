@@ -20,6 +20,18 @@ body {
     padding: 0 15px;
 }
 
+/* Remove breadcrumb panel bottom border where it clashes with elements below it */
+.employee.desktop #breadcrumb-panel,
+.student.desktop.no-ap #breadcrumb-panel{
+    border-bottom: none;
+}
+
+#title-panel {
+    display: none;
+    height: 0;
+    min-height: 0;
+}
+
 .panel.panel-accordion {
     border-radius: 0;
     background-color: #ffffff;
@@ -93,12 +105,17 @@ body {
 .float-r {
     float: right;
 }
+
 .no-padding {
     padding: 0px;
 }
 
 .semi-bold {
     font-weight: bold;
+}
+
+.no-bold {
+    font-weight: normal;
 }
 
 .no-display {
@@ -118,6 +135,10 @@ body {
     margin: -1px;
     padding: 0;
     border: 0;
+}
+
+.existing-accts {
+    padding-left: 2em;
 }
 
 .input-field-label {
@@ -233,6 +254,15 @@ currency-input > input.form-control:focus{
     color: #4F585F;
 }
 
+.input-bank-name {
+    position: absolute;
+    float: right;
+    right: 1.75em;
+    top: 4.285em;
+    color: #869FB1;
+    line-height: 118%;
+}
+
 .dialog-hdr1 {
     font-size: 30px;
     margin: 0px;
@@ -330,6 +360,18 @@ button.closebtn {
     line-height: 136%;
 }
 
+.existing-accts .dropdown {
+    max-width: 22.5em;
+}
+
+.existing-accts .dropdown .semi-bold.form-spacing {
+    padding-right: 5px;
+}
+
+.existing-accts .down-caret {
+    padding-left: 0px;
+}
+
 .dropdown-btn {
     border-radius: 4px;
     background-color: #fff;
@@ -340,14 +382,16 @@ button.closebtn {
 }
 
 .dropdown-btn:focus {
+    background-color: #fff;
+    border:1px solid #869FB1;
     box-shadow: 0px 2px #CBE2E8 inset;
     color: #4F585F;
 }
 
 .open > .dropdown-btn {
-    border-style: solid;
-    border-width: 1px;
-    border-color: #206E9F;
+    background-color: #fff;
+    border:1px solid #206E9F;
+    box-shadow: 0px -4px #DEE5E7 inset;
     color: #4F585F;
 }
 
@@ -376,6 +420,10 @@ button.closebtn {
 
 .min-width-amount {
     min-width: 20%;
+}
+
+.min-width-priority {
+    min-width: 0px;
 }
 
 .dropdown-menu.addAcct {
@@ -530,7 +578,10 @@ input[type=radio]:checked+.lbl {
 .radio-list {
     padding-bottom: 0.875em;
     font-weight: normal;
-    white-space: nowrap;
+}
+
+span.radio-list.no-padding {
+    padding: 0px;
 }
 
 .ws-nowrap {
@@ -671,6 +722,22 @@ currency-input > input.form-control {
     border-bottom: 1px solid #ddd;
 }
 
+div.remaining-amount-notification {
+    padding: 10px 15px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+}
+
+tr.remaining-amount-notification {
+    background-color: #f9f9f9;
+}
+
+tr.remaining-amount-notification td,
+div.remaining-amount-notification {
+    text-align: center;
+    font-weight: bold;
+}
+
 a.add-account-link,
 a.delete-account-link {
     float: right;
@@ -737,7 +804,6 @@ a.delete-account-link {
 
 .desktop-account-list-table {
     display: table;
-    /*border-spacing: 90px 0;*/
 }
 
 .desktop-account-list-row {
@@ -752,6 +818,37 @@ a.delete-account-link {
 .account-list-heading {
     font-weight: bold;
 }
+
+.payroll-status-wrapper {
+    position: absolute;
+    top: 12px;
+    right: 0;
+}
+
+.ap-status-wrapper {
+    position: absolute;
+    top: 44px;
+    right: 15px;
+}
+
+.status-chiclet {
+    font-size: .9em;
+    text-align: center;
+    padding: 4px 0;
+    width: 66px;
+    border-radius: 4px;
+}
+
+.status-prenote {
+    background: #FFCDAA;
+    border: 1px solid #E19F72;
+}
+
+.status-active {
+    background: #C9F0C7;
+    border: 1px solid #4EC76A;
+}
+
 
 /*  Custom modal  */
 .modal.edit-account-modal.in .modal-dialog {
@@ -890,6 +987,10 @@ table tr.account-total-footer:hover {
     background: #f9f9f9 !important;
 }
 
+table tr.remaining-amount-notification:hover {
+    background: #f9f9f9 !important;
+}
+
 table tr:hover th:last-child, .dashboard tr:hover th:nth-of-type(8) {
     background: #ffffff;
 }
@@ -910,16 +1011,17 @@ table tr td {
     padding: 15px 16px 15px 16px;
 }
 
-
+/***********************/
 /* Media Query Section */
+/***********************/
 
-@media(max-width:1024px){
+@media screen and (max-width:1024px) {
     .account-heading {
         margin-right: 40px;
     }
 }
 
-@media(min-width:768px){
+@media screen and (min-width:768px) {
     .account-heading {
         margin-bottom: 15px;
     }
@@ -946,5 +1048,12 @@ table tr td {
 
     .pad-dialog-lr {
         padding: 0em 1.7em;
+    }
+}
+
+/*Tablet device*/
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .payroll-status-wrapper {
+        top: 28px;
     }
 }

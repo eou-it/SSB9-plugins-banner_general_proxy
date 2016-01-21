@@ -1,10 +1,10 @@
 /*******************************************************************************
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '$modal', '$filter',
-    'ddListingService', 'ddEditAccountService', 'notificationCenterService',
-    function ($scope, $state, $modal, $filter, ddListingService, ddEditAccountService,
-              notificationCenterService){
+generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope', '$state', '$modal', '$filter',
+    '$q', 'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
+    function ($scope, $rootScope, $state, $modal, $filter, $q, ddListingService, ddEditAccountService,
+              directDepositService, notificationCenterService){
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -38,15 +38,23 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             // if the listing controller has already been initialized, then abort
             if(ddListingService.isInit()) return;
 
-            ddListingService.getApListing().$promise.then(
+            ddEditAccountService.setSyncedAccounts(false);
+            
+            var acctPromises = [ddListingService.getApListing().$promise,
+                                ddListingService.getUserPayrollAllocationListing().$promise];
+
+            // getApListing
+            acctPromises[0].then(
                 function (response) {
                     // By default, set A/P account as currently active account, as it can be edited inline (in desktop
                     // view), while payroll accounts can not be.
-                    $scope.account = self.getApAccountFromResponse(response);
-                    $scope.hasApAccount = !!$scope.account;
+                    $scope.apAccount = self.getApAccountFromResponse(response);
+                    $scope.hasApAccount = !!$scope.apAccount;
                     $scope.accountLoaded = true;
 
-                    self.syncAccounts();
+                    // Flag whether AP account exists in rootScope, as certain styling for elements
+                    // not using this controller (e.g. breadcrumb panel) depends on knowing this.
+                    $rootScope.apAccountExists = $scope.hasApAccount;
             });
 
             $scope.distributions = {
@@ -61,47 +69,60 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                     $scope.distributions.mostRecent = response;
                     $scope.hasPayAccountsMostRecent = !!response.docAccts
                     $scope.payAccountsMostRecentLoaded = true;
-
-                    self.syncAccounts();
                 }
             });
 
-            ddListingService.getUserPayrollAllocationListing().$promise.then( function (response) {
+            // getUserPayrollAllocationListing
+            acctPromises[1].then( function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
                 } else {
                     $scope.distributions.proposed = response;
-                    $scope.hasPayAccountsProposed = !!response.allocations.length
+                    $scope.hasPayAccountsProposed = !!response.allocations.length;
                     $scope.payAccountsProposedLoaded = true;
 
-                    self.syncAccounts();
+                    if($scope.hasPayAccountsProposed){
+                        ddEditAccountService.setupPriorities(response.allocations);
+                    }
+
+                    $scope.updatePayrollState();
+
+                    // If any allocation is flagged for delete (happens via user checking a checkbox, which
+                    // in turn sets the deleteMe property to true), set selectedForDelete.payroll to true,
+                    // enabling the "Delete" button.
+                    $scope.$watch('distributions.proposed', function () {
+                        // Determine if any payroll allocations are selected for delete
+                        $scope.selectedForDelete.payroll = _.any($scope.distributions.proposed.allocations, function(alloc) {
+                            return alloc.deleteMe;
+                        });
+                    }, true);
                 }
+            });
+            
+            $q.all(acctPromises).then(function() {
+                self.syncAccounts();
             });
         };
         
-        // if an account is used for AP and Payroll, have scope.account and allocation[x] point to same
-        // account object so that they are always in sync in the UI. The backend will save the changes
-        // to both records if it needs to.
-        this.isSynced = false;
+        // if an account is used for AP and Payroll, have scope.apAccount and allocation[x] point to same
+        // account object so that they are always in sync. The frontend will save and delete the synced
+        // accounts at the same time so the backend can save the changes to both records if it needs to
+        // and handle deletion logic.
         this.syncAccounts = function () {
-            if(!this.isSynced){
-                if(!$scope.isEmployee){
-                    //should be no need to sync pure student, only has an AP account
-                    this.isSynced = true;
-                }
-                else {
-                    // make sure AP and Payroll accounts are loaded before trying to sync them
-                    if($scope.payAccountsProposedLoaded && $scope.hasPayAccountsProposed && $scope.accountLoaded && $scope.hasApAccount) {
-    
-                        var allocs = $scope.distributions.proposed.allocations, i;
-                        for(i = 0; i < allocs.length; i++) {
-                            if(allocs[i].bankRoutingInfo.bankRoutingNum === $scope.account.bankRoutingInfo.bankRoutingNum 
-                                    && allocs[i].bankAccountNum === $scope.account.bankAccountNum){
 
-                                $scope.account = allocs[i];
-                            }
+            if($scope.isEmployee) {
+                // make sure user has AP and Payroll accounts before trying to sync them
+                if($scope.hasPayAccountsProposed && $scope.hasApAccount){
+
+                    var allocs = $scope.distributions.proposed.allocations, i;
+                    for(i = 0; i < allocs.length; i++) {
+                        if(allocs[i].bankRoutingInfo.bankRoutingNum === $scope.apAccount.bankRoutingInfo.bankRoutingNum
+                                && allocs[i].bankAccountNum === $scope.apAccount.bankAccountNum){
+
+                            // sync accounts
+                            $scope.apAccount = allocs[i];
+                            ddEditAccountService.setSyncedAccounts(true);
                         }
-                        this.isSynced = true;
                     }
                 }
             }
@@ -117,13 +138,19 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
         $scope.payPanelMostRecentCollapsed = false;
         $scope.payPanelProposedCollapsed = false;
 
+        $scope.account = null; // Account currently in edit. Could be A/P or payroll.
         $scope.distributions = null;
-        $scope.account = null; // Currently active account.  Could be A/P or payroll.
+        $scope.apAccount = null; // Currently active A/P account.
         $scope.accountLoaded = false;
         $scope.hasApAccount = false;
         $scope.panelCollapsed = false;
         $scope.authorizedChanges = false;
-        $scope.apAccountSelectedForDelete = false;
+        $scope.hasMaxPayrollAccounts = false;
+        $scope.isLastPayrollRemainingAmount = false;
+        $scope.selectedForDelete = {
+            payroll: false,
+            ap:      false
+        };
 
         // CONTROLLER FUNCTIONS
         // --------------------
@@ -175,61 +202,131 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             { title: $filter('i18n')('directDeposit.account.label.status')}
         ];
 
-        //display add/edit account pop up
-        $scope.showEditAccount = function (typeInd, isAddNew) {
-            // If this is an AP account and an AP account already exists, this functionality is disabled
-            if(isAddNew && typeInd === 'AP' && $scope.hasApAccount) return;
+        var openAddOrEditModal = function(typeInd, isAddNew, acctList) {
 
-            // Otherwise, open modal
-            var modal = $modal.open({
+            $modal.open({
                 templateUrl: '../generalSsbApp/ddEditAccount/ddEditAccount.html',
                 windowClass: 'edit-account-modal',
                 keyboard: true,
                 controller: "ddEditAccountController",
                 scope: $scope,
                 resolve: {
-                    editAcctProperties: function(){
-                        return { typeIndicator: typeInd, creatingNew: !!isAddNew };
+                    editAcctProperties: function () {
+                        return { 
+                            typeIndicator: typeInd, 
+                            creatingNew: !!isAddNew,
+                            otherAccounts: acctList || []
+                        };
                     }
                 }
             });
+
         };
 
-        $scope.isDesktop = function () {
-            return isDesktop();
+        // Display "Add Account" pop up
+        $scope.showAddAccount = function (typeInd) {
+            // If this is an AP account and an AP account already exists, this functionality is disabled.
+            if (typeInd === 'AP' && $scope.hasApAccount) {
+                return;
+            }
+
+            // If this is an HR account and the maximum number of HR accounts already exists,
+            // this functionality is disabled.
+            if (typeInd === 'HR' && $scope.hasMaxPayrollAccounts) {
+                notificationCenterService.displayNotifications('directDeposit.max.payroll.accounts.text', 'error');
+                return;
+            }
+
+            var acctList = [];
+
+            if($scope.isEmployee){
+                var allocs = $scope.distributions.proposed.allocations;
+
+                if(typeInd === 'HR' && $scope.apAccount){
+                    acctList[0] = $scope.apAccount;
+                }
+                else if (typeInd === 'AP' && allocs.length > 0){
+                    acctList = allocs;
+                }
+            }
+
+            // Otherwise, open modal
+            openAddOrEditModal(typeInd, true, acctList);
+        };
+
+        // Display "Edit Account" pop up
+        $scope.showEditAccount = function (account, typeInd) {
+            // use a copy of the account in modal so changes don't persist in UI
+            // if a user cancels their changes
+            $scope.account = angular.copy(account);
+
+            // Otherwise, open modal
+            openAddOrEditModal(typeInd, false);
         };
 
         $scope.getNoPayAllocationsNotificationText = function () {
-            return ($scope.isDesktop()) ?
+            return ($scope.isDesktopView) ?
                 'directDeposit.notification.no.payroll.allocation.click' :
                 'directDeposit.notification.no.payroll.allocation.tap';
         };
 
         $scope.getNoApAllocationsNotificationText = function () {
-            return ($scope.isDesktop()) ?
+            return ($scope.isDesktopView) ?
                 'directDeposit.notification.no.accounts.payable.allocation.click' :
                 'directDeposit.notification.no.accounts.payable.allocation.tap';
         };
 
         $scope.updateAccounts = function () {
-            var accountSynced = false;
-            var allocs = $scope.distributions.proposed.allocations
-            if($scope.isEmployee){
-                var i;
-                for(i = 0; i < allocs.length; i++){
-                    if($scope.hasApAccount && allocs[i].id === $scope.account.id){
-                        accountSynced = true;
+            var allocs = $scope.distributions.proposed.allocations,
+                promises = [];
+
+            if(ddEditAccountService.doReorder === 'all'){
+                var deferred = $q.defer();
+                
+                _.each(allocs, function(alloc){
+                    ddEditAccountService.setAmountValues(alloc, alloc.amountType);
+                });
+                
+                ddEditAccountService.reorderAccounts().$promise.then(function (response) {
+                    if(response[0].failure) {
+                        notificationCenterService.displayNotifications(response[0].message, "error");
                     }
-                    updateAccount($scope.distributions.proposed.allocations[i]);
+                    else {
+                        notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
+
+                        ddEditAccountService.doReorder = false;
+                        
+                        deferred.resolve();
+                    }
+                });
+                
+                promises.push(deferred.promise);
+            }
+            else {
+                if($scope.isEmployee){
+                    var i;
+                    for(i = 0; i < allocs.length; i++){
+                        promises.push(updateAccount($scope.distributions.proposed.allocations[i]));
+                    }
+                }
+                // AP account will already be updated if it is synced with a Payroll account
+                if($scope.hasApAccount && !ddEditAccountService.syncedAccounts){
+                    promises.push(updateAccount($scope.apAccount));
                 }
             }
-            // AP account will already be updated if it is synced with a Payroll account
-            if($scope.hasApAccount && !accountSynced){
-                updateAccount($scope.account);
-            }
+
+            // When all updates are done, a refresh would not be necessary, as the input fields
+            // (e.g. Account Type dropdown) will have been already "updated" when the user made the
+            // change.  The *exception* to this, and the reason we do indeed refresh here, is because the
+            // "Net Pay Distribution" values may need to be recalculated, depending on the change the user made.
+            $q.all(promises).then(function() {
+                $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+            });
         };
         
         var updateAccount = function (acct) {
+            var deferred = $q.defer();
+
             if(acct.hrIndicator === 'A'){
                 ddEditAccountService.setAmountValues(acct, acct.amountType);
             }
@@ -238,46 +335,65 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
                 } else {
-                    // Refresh account info
-                    acct.version = response.version;
-
-                    // Set form back to initial "at rest" state
-                    $scope.authorizedChanges = false;
-
-                    // TODO: show confirmation message or something here?
+                    notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
                 }
+
+                deferred.resolve();
             });
+
+            return deferred.promise;
         };
 
         $scope.toggleApAccountSelectedForDelete = function () {
-            $scope.apAccountSelectedForDelete = !$scope.apAccountSelectedForDelete;
+            $scope.selectedForDelete.ap = !$scope.selectedForDelete.ap;
         };
 
         $scope.cancelNotification = function () {
             notificationCenterService.clearNotifications();
         };
 
-        $scope.deleteAccount = function () {
-            var accounts = [];
+        $scope.deletePayrollAccount = function () {
+            var allocations = $scope.distributions.proposed.allocations,
+                accountsToDelete = _.where(allocations, {deleteMe: true}),
+                index;
 
-            accounts.push($scope.account);
+            $scope.cancelNotification();
 
-            ddEditAccountService.deleteAccounts(accounts).$promise.then(function (response) {
-                if(response.failure) {
-                    notificationCenterService.displayNotifications(response.message, "error");
+            ddEditAccountService.deleteAccounts(accountsToDelete).$promise.then(function (response) {
+
+                if (response[0].failure) {
+                    notificationCenterService.displayNotifications(response[0].message, "error");
                 } else {
                     // Refresh account info
-                    $scope.account = null;
-                    $scope.cancelNotification();
-                    $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                    $scope.distributions.proposed.allocations = _.difference(allocations, accountsToDelete);
+                    $scope.updatePayrollState();
+
+
+                    // Display notification if an account also exists as AP
+                    _.find(response, function(item) {
+                        if (item.acct) {
+                            var msg = $filter('i18n')('directDeposit.account.label.account')+
+                                        ' '+ $filter('accountNumMask')(item.acct);
+
+                            if (item.activeType === 'AP'){
+                                msg += ' ' + $filter('i18n')('directDeposit.still.active.AP');
+                            }
+
+                            notificationCenterService.displayNotifications(msg, "success");
+
+                            return true;
+                        }
+
+                        return false;
+                    });
                 }
             });
         };
 
-        // Display accounts payable Delete Account confirmation modal
-        $scope.confirmAPDelete = function () {
+        // Display payroll Delete Account confirmation modal
+        $scope.confirmPayrollDelete = function () {
             // If no account is selected for deletion, this functionality is disabled
-            if (!$scope.apAccountSelectedForDelete) return;
+            if (!$scope.selectedForDelete.payroll) return;
 
             var prompts = [
                 {
@@ -286,7 +402,59 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
                 },
                 {
                     label: "Delete",
-                    action: $scope.deleteAccount
+                    action: $scope.deletePayrollAccount
+                }
+            ];
+
+            notificationCenterService.displayNotifications('directDeposit.confirm.payroll.delete.text', 'warning', false, prompts);
+        };
+
+        $scope.deleteApAccount = function () {
+            var accounts = [];
+
+            $scope.apAccount.apDelete = true;
+
+            accounts.push($scope.apAccount);
+
+            $scope.cancelNotification();
+
+            ddEditAccountService.deleteAccounts(accounts).$promise.then(function (response) {
+
+                if (response[0].failure) {
+                    notificationCenterService.displayNotifications(response[0].message, "error");
+                } else {
+                    // Refresh account info
+                    $scope.apAccount = null;
+
+                    if (response[0].acct) {
+                        var msg = $filter('i18n')('directDeposit.account.label.account')+
+                                    ' '+ $filter('accountNumMask')(response[0].acct);
+
+                        if (response[0].activeType === 'PR'){
+                            msg += ' '+ $filter('i18n')('directDeposit.still.active.payroll');
+                        }
+
+                        notificationCenterService.displayNotifications(msg, "success");
+                    }
+
+                    $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                }
+            });
+        };
+
+        // Display accounts payable Delete Account confirmation modal
+        $scope.confirmAPDelete = function () {
+            // If no account is selected for deletion, this functionality is disabled
+            if (!$scope.selectedForDelete.ap) return;
+
+            var prompts = [
+                {
+                    label: "Cancel",
+                    action: $scope.cancelNotification
+                },
+                {
+                    label: "Delete",
+                    action: $scope.deleteApAccount
                 }
             ];
 
@@ -297,8 +465,40 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$state', '
             $scope.authorizedChanges = !$scope.authorizedChanges;
         };
 
-        $scope.setAccountType = function (acctType) {
-            $scope.account.accountType = acctType;
+        $scope.setApAccountType = function (acctType) {
+            $scope.apAccount.accountType = acctType;
+        };
+
+        $scope.updateWhetherHasMaxPayrollAccounts = function () {
+            if (!$scope.distributions.proposed) {
+                $scope.hasMaxPayrollAccounts = false;
+            }
+
+            directDepositService.getConfiguration().$promise.then(
+                function(response) {
+                    var numAllocatons = $scope.distributions.proposed.allocations.length;
+
+                    $scope.hasMaxPayrollAccounts = numAllocatons >= response.MAX_USER_PAYROLL_ALLOCATIONS;
+            });
+        };
+
+        $scope.updateWhetherLastPayrollIsRemainingAmount = function () {
+            if (!$scope.hasPayAccountsProposed) {
+                $scope.isLastPayrollRemainingAmount = false;
+            }
+
+            var allocations = $scope.distributions.proposed.allocations,
+                lastAlloc = allocations[allocations.length - 1];
+
+            $scope.isLastPayrollRemainingAmount = lastAlloc.allocation === "100%";
+
+        };
+
+        // When payroll state changes, this can be called to refresh properties based on new state.
+        $scope.updatePayrollState = function() {
+            $scope.updateWhetherHasMaxPayrollAccounts();
+            $scope.updateWhetherLastPayrollIsRemainingAmount();
+
         };
 
 

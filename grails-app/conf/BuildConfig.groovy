@@ -20,8 +20,6 @@ grails.war.resources = { stagingDir ->
     grails.plugin.location.'banner-codenarc'                  = "plugins/banner_codenarc.git"
     grails.plugin.location.'banner-general-person'            = "plugins/banner_general_person.git"
     grails.plugin.location.'banner-general-common'            = "plugins/banner_general_common.git"
-    grails.plugin.location.'banner-payroll-common'            = "plugins/banner_payroll_common.git"
-    grails.plugin.location.'banner-posnctl-common'            = "plugins/banner_posnctl_common.git"
     grails.plugin.location.'banner-general-utility'           = "plugins/banner_general_utility.git"
     grails.plugin.location.'banner-seeddata-catalog'          = "plugins/banner_seeddata_catalog.git"
     grails.plugin.location.'banner-general-validation-common' = "plugins/banner_general_validation_common.git"
@@ -65,6 +63,13 @@ grails.project.dependency.resolution = {
         runtime "javax.servlet:jstl:1.1.2"
 
         runtime 'org.springframework:spring-test:3.1.0.RELEASE'
+
+        compile ('org.apache.poi:poi-ooxml:3.7') {
+            excludes 'stax-api'
+        }
+
+
+
     }
 }
 

@@ -29,9 +29,7 @@ hibernate {
          "classpath:hibernate-banner-core.cfg.xml",
          "classpath:hibernate-banner-general-person.cfg.xml",
          "classpath:hibernate-banner-general-validation-common.cfg.xml",
-         "classpath:hibernate-banner-general-common.cfg.xml",
-         "classpath:hibernate-banner-payroll-common.cfg.xml",
-         "classpath:hibernate-banner-posnctl-common.cfg.xml"
+         "classpath:hibernate-banner-general-common.cfg.xml"
     ]
 }
 

@@ -8,7 +8,8 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
 
     var link = function (scope, element, attrs) {
         element.on('click', function(event) {
-            var src = attrs.popoverImg || '';
+            var src = attrs.popoverImg || '',
+                alt = attrs.popoverAlt || 'Sample check';
 
             // Prevent the hidePopover directive from handling the event, immediately closing the popover
             event.stopImmediatePropagation();
@@ -23,7 +24,7 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
 
                 // Open popover
                 element.popover({
-                    content: '<img class="sample-check" src="' + src + '">',
+                    content: '<img class="sample-check" src="' + src + '" alt="' + alt + '">',
                     trigger: 'manual',
                     placement: 'bottom',
                     html: true
@@ -38,7 +39,7 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
                         leftOffset = flipsLeft ? -142 : 162;
 
                     popoverElement.css('left', parseInt(popoverElement.css('left')) + leftOffset + 'px');
-                    popoverElement.css('top', parseInt(popoverElement.css('top')) - 11 + 'px');
+                    popoverElement.css('top', parseInt(popoverElement.css('top')) - 1 + 'px');
                     popoverElement.find('.popover-content').css('padding', '5px');
                     popoverElement.addClass(flipClass);
                 });

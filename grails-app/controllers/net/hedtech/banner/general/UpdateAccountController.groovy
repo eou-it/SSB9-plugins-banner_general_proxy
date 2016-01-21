@@ -16,16 +16,19 @@ class UpdateAccountController {
     def directDepositAccountService
     def bankRoutingInfoService
     def directDepositAccountCompositeService
-    
+    def directDepositConfigurationService
+
     def createAccount() {
         def map = request?.JSON ?: params
         map.pidm = ControllerUtility.getPrincipalPidm()
 
         // default values for a new Direct Deposit account
         map.id = null
-        map.status = 'P'
         map.documentType = 'D'
         map.intlAchTransactionIndicator = 'N'
+
+        def configStatus = directDepositConfigurationService.getParam(directDepositConfigurationService.SHOW_USER_PRENOTE_STATUS, 'Y')
+        map.status = (configStatus == 'Y') ? 'P' : 'A'
 
         log.debug("trying to create acct: "+ map.bankAccountNum)
 
@@ -51,15 +54,54 @@ class UpdateAccountController {
             render returnFailureMessage(e) as JSON
         }
     }
+    
+    def reorderAccounts() {
+        // TODO: this needs to reorder accounts
+        def map = request?.JSON ?: params
+
+        try {
+            directDepositAccountService.syncApAndHrAccounts(map)
+            
+            render directDepositAccountService.update(map) as JSON
+
+        } catch (ApplicationException e) {
+            render returnFailureMessage(e) as JSON
+        }
+    }
+    
+    def reorderAllAccounts() {
+        def map = request?.JSON ?: params
+
+        try {
+            render directDepositAccountCompositeService.reorderAccounts(map) as JSON
+
+        } catch (ApplicationException e) {
+            def arrayResult = [];
+            arrayResult[0] = returnFailureMessage(e)
+            
+            render arrayResult as JSON
+        }
+    }
 
     def deleteAccounts() {
         def map = request?.JSON ?: params
 
         try {
-            render directDepositAccountService.delete(map)
+            def accounts = [:]
+            def model = [:]
+            accounts = directDepositAccountService.setupAccountsForDelete(map)
+            def result = directDepositAccountService.delete(accounts.toBeDeleted)
+            
+            model.messages = accounts.messages
+            model.messages.add(result)
+            
+            render model.messages as JSON
 
         } catch (ApplicationException e) {
-            render returnFailureMessage(e) as JSON
+            def arrayResult = [];
+            arrayResult[0] = returnFailureMessage(e)
+            
+            render arrayResult as JSON
         }
     }
 
@@ -113,7 +155,8 @@ class UpdateAccountController {
         model.failure = true
         log.error(e)
         try {
-            model.message = e.returnMap({ mapToLocalize -> new ValidationTagLib().message(mapToLocalize) }).message
+            def extractError = e.returnMap({ mapToLocalize -> new ValidationTagLib().message(mapToLocalize) })
+            model.message = extractError.message + (extractError.errors ? " "+ extractError.errors : "")
             return model
         } catch (ApplicationException ex) {
             log.error(ex)
@@ -171,5 +214,6 @@ class UpdateAccountController {
             }
         }
     }
+
 
 }

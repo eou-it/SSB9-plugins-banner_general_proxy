@@ -1,7 +1,7 @@
 <td class="break-word">
     <div class="delete-checkbox-wrapper-desktop">
         <label class="visuallyhidden" id="for-delete{{$index}}">{{'directDeposit.label.select.for.delete'|i18n}}</label>
-        <input type="checkbox" class="delete-checkbox-desktop" ng-click="" enter-key="" aria-labelledby="for-delete{{$index}} pro-bank-name{{$index}}">
+        <input type="checkbox" class="delete-checkbox-desktop" ng-model="allocation.deleteMe" aria-labelledby="for-delete{{$index}} pro-bank-name{{$index}}">
         <span class="lbl"></span>
     </div>
     <span id="pro-bank-name{{$index}}">{{alloc.bankRoutingInfo.bankName}}</span>
@@ -10,7 +10,7 @@
 <td class="break-word">{{alloc.bankAccountNum|accountNumMask}}</td>
 <td class="min-width-acctType">
     <div class="dropdown desktop" role="menu">
-        <button dropdown-helper="begin" class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#">
+        <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" href="#">
             <span class="float-l form-spacing">
                 <choose-account account="alloc"/>
             </span>
@@ -59,6 +59,20 @@
         </ul>
     </div>
 </td>
-<td class="break-word">{{alloc.priority}}</td>
+<td class="break-word">
+    <div class="dropdown" role="menu">
+        <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
+            <span class="float-l form-spacing" aria-live="polite">
+                {{alloc.priority}}
+            </span>
+            <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font"></span></span>
+        </button>
+        <ul class="dropdown-menu addAcct min-width-priority">
+            <li ng-repeat="i in priorities" role="presentation">
+                <a dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" ng-click="setAccountPriority(i.displayVal)" class="addAcct form-spacing" href="#" role="menuitem">{{i.displayVal}}</a>
+            </li>
+        </ul>
+    </div>
+</td>
 <td class="break-word text-rt">{{alloc.calculatedAmount}}</td>
-<td class="break-word"><account-status/></td>
+<td class="break-word"><account-status account="alloc"/></td>

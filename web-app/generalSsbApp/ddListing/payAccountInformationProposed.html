@@ -1,5 +1,5 @@
 <div class="delete-checkbox-wrapper no-margin">
-    <input type="checkbox" ng-click="toggleApAccountSelectedForDelete()" enter-key="toggleApAccountSelectedForDelete()">
+    <input type="checkbox" ng-model="alloc.deleteMe">
     <div class="lbl"></div>
 </div>
 <div class="proposed-entry">
@@ -26,12 +26,15 @@
             <div class="col-sm-4 hr-account-field no-padding">
                 {{'directDeposit.account.label.priority'|i18n}}: {{alloc.priority}}
             </div>
-            <div class="col-sm-4 hr-account-field no-padding">
-                {{'directDeposit.account.label.status'|i18n}}: <account-status account="alloc"/>
+            <div ng-if="isTabletView" class="col-sm-4 hr-account-field no-padding">
+                {{alloc.calculatedAmount}}
             </div>
         </div>
         <div class="col-xs-3 hr-amount no-padding">
-            <span>{{alloc.calculatedAmount}}</span>
+            <div class="payroll-status-wrapper clearfix">
+                <account-status account="alloc"/>
+            </div>
+            <span ng-if="!isTabletView">{{alloc.calculatedAmount}}</span>
         </div>
     </div>
 </div>
