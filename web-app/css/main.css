@@ -698,6 +698,22 @@ span.radio-list.no-padding {
     border-bottom: 1px solid #ddd;
 }
 
+div.remaining-amount-notification {
+    padding: 10px 15px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+}
+
+tr.remaining-amount-notification {
+    background-color: #f9f9f9;
+}
+
+tr.remaining-amount-notification td,
+div.remaining-amount-notification {
+    text-align: center;
+    font-weight: bold;
+}
+
 a.add-account-link,
 a.delete-account-link {
     float: right;
@@ -944,6 +960,10 @@ table tr:hover {
 }
 
 table tr.account-total-footer:hover {
+    background: #f9f9f9 !important;
+}
+
+table tr.remaining-amount-notification:hover {
     background: #f9f9f9 !important;
 }
 

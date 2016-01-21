@@ -85,7 +85,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     }
                     self.syncAccounts();
 
-                    $scope.updateWhetherHasMaxPayrollAccounts();
+                    $scope.updatePayrollState();
 
                     // If any allocation is flagged for delete (happens via user checking a checkbox, which
                     // in turn sets the deleteMe property to true), set selectedForDelete.payroll to true,
@@ -150,6 +150,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         $scope.panelCollapsed = false;
         $scope.authorizedChanges = false;
         $scope.hasMaxPayrollAccounts = false;
+        $scope.isLastPayrollRemainingAmount = false;
         $scope.selectedForDelete = {
             payroll: false,
             ap:      false
@@ -345,6 +346,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 } else {
                     // Refresh account info
                     $scope.distributions.proposed.allocations = _.difference(allocations, accountsToDelete);
+                    $scope.updatePayrollState();
 
 
                     // Display notification if an account also exists as AP
@@ -458,6 +460,25 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
                     $scope.hasMaxPayrollAccounts = numAllocatons >= response.MAX_USER_PAYROLL_ALLOCATIONS;
             });
+        };
+
+        $scope.updateWhetherLastPayrollIsRemainingAmount = function () {
+            if (!$scope.hasPayAccountsProposed) {
+                $scope.isLastPayrollRemainingAmount = false;
+            }
+
+            var allocations = $scope.distributions.proposed.allocations,
+                lastAlloc = allocations[allocations.length - 1];
+
+            $scope.isLastPayrollRemainingAmount = lastAlloc.allocation === "100%";
+
+        };
+
+        // When payroll state changes, this can be called to refresh properties based on new state.
+        $scope.updatePayrollState = function() {
+            $scope.updateWhetherHasMaxPayrollAccounts();
+            $scope.updateWhetherLastPayrollIsRemainingAmount();
+
         };
 
 
