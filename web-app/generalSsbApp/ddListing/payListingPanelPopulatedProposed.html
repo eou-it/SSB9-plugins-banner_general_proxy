@@ -1,7 +1,7 @@
 <div class="pay-entry" ng-repeat="allocation in distributions.proposed.allocations">
     <pay-account-info-proposed account="allocation"/>
 </div>
-<div ng-if="isLastPayrollRemainingAmount" class="remaining-amount-notification clearfix">
+<div ng-if="!isLastPayrollRemainingAmount" class="remaining-amount-notification clearfix">
     {{'directDeposit.remaining.amount.notification'|i18n}}
 </div>
 <div class="account-total-footer clearfix">

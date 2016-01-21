@@ -13,7 +13,7 @@
     </thead>
     <tbody>
         <tr ng-repeat="allocation in distributions.proposed.allocations" pay-account-info-proposed-desktop></tr>
-        <tr ng-if="isLastPayrollRemainingAmount" class="remaining-amount-notification">
+        <tr ng-if="!isLastPayrollRemainingAmount" class="remaining-amount-notification">
             <td colspan="7" class="no-padding">
                 {{'directDeposit.remaining.amount.notification'|i18n}}
             </td><td></td>
