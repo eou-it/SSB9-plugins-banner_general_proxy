@@ -9,6 +9,12 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
         updateAccount = $resource('../ssb/:controller/:action',
         {controller: 'UpdateAccount', action: 'updateAccount'}, {save: {method:'POST'}}),
 
+        reorderAllAccounts = $resource('../ssb/:controller/:action',
+        {controller: 'UpdateAccount', action: 'reorderAllAccounts'}, {save: {method:'POST', isArray:true}}),
+        
+        reorderAccount = $resource('../ssb/:controller/:action',
+        {controller: 'UpdateAccount', action: 'reorderAccounts'}, {save: {method:'POST'}}),
+
         deleteAccounts = $resource('../ssb/:controller/:action',
             {controller: 'UpdateAccount', action: 'deleteAccounts'}, {delete: {method:'POST', isArray:true}}),
 
@@ -17,6 +23,19 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
 
     this.saveAccount = function (account, createNew) {
         return createNew ? createAccount.save(account) : updateAccount.save(account);
+    };
+    
+    this.reorderAccounts = function (account) {
+        if(this.doReorder === 'all'){
+            var i;
+            for(i = 0; i < this.accounts.length; i++) {
+                this.accounts[i].priority = this.priorities[i].persistVal;
+            }
+            return reorderAllAccounts.save(this.accounts);
+        }
+        else if(this.doReorder === 'single'){
+            return reorderAccount.save(account);
+        }
     };
 
     this.deleteAccounts = function (accounts) {
@@ -70,18 +89,52 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
     this.setSyncedAccounts = function(val){this.syncedAccounts = val;};
 
     this.priorities = [0];
+    this.accounts = [0];
+    this.doReorder = false;
     
-    this.setPriorities = function ( accts ) {
-        // create priority list and normalize account priorities (might not be neccessary).
-    	var i;
-    	for(i = 0; i < accts.length; i++) {
+    this.setupPriorities = function ( accts ) {
+        // create priority list and normalize account priorities
+        var i;
+        for(i = 0; i < accts.length; i++){
+            var priorityInfo = {displayVal: i+1, persistVal: accts[i].priority};
             accts[i].priority = i+1;
-            this.priorities[i] = i+1;
+            this.priorities[i] = priorityInfo;
         }
+        this.accounts = accts;
     };
-
+    
     this.setAccountPriority = function (acct, priority) {
+        var i;
+        
+        if(acct.priority < priority){
+            // decrease acct's priority i.e. will be allocated later
+            for(i = 0; i < this.accounts.length; i++) {
+                if (this.accounts[i].priority <= priority) {
+                    this.accounts[i].priority--;
+                }
+            }
+        }
+        else if(acct.priority > priority){
+            // increase acct's priority i.e. will be allocated earlier
+            for(i = 0; i < this.accounts.length; i++) {
+                if(this.accounts[i].priority >= priority){
+                    this.accounts[i].priority++;
+                }
+            }
+        }
         acct.priority = priority;
+        this.accounts.sort(function(a, b){
+            return a.priority - b.priority;
+        });
+        this.accounts = this.normalize(this.accounts);
+    };
+    
+    this.normalize = function (accts) {
+        var i;
+        for(i = 0; i < accts.length; i++) {
+            accts[i].priority = i+1;
+        }
+        return accts;
     };
 
 }]);
