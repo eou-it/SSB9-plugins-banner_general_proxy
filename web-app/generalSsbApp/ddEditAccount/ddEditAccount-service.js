@@ -58,7 +58,7 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
     };
     
     this.getAmountType = function (acct) {
-        if(acct.allocation === 'Remaining'){
+        if(acct.allocation === '100%'){
             acct.percent = null;
             acct.amount = null;
             return 'remaining';
