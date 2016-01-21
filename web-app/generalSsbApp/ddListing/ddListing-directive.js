@@ -137,9 +137,17 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             };
 
             scope.priorities = ddEditAccountService.priorities;
+
             scope.setAccountPriority = function (priority) {
-                ddEditAccountService.doReorder = 'all';
-                ddEditAccountService.setAccountPriority(scope.alloc, priority);
+                if(scope.alloc.priority != priority) {
+                    if(scope.alloc.percent !== 100) {
+                        ddEditAccountService.doReorder = 'all';
+                        ddEditAccountService.setAccountPriority(scope.alloc, priority);
+                    }
+                    else{
+                        // TODO: can't reprioritize remaining
+                    }
+                }
             };
         }
     };

@@ -92,9 +92,16 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
     $scope.priorities = ddEditAccountService.priorities;
     $scope.setAccountPriority = function (priority) {
-        ddEditAccountService.doReorder = 'single';
-        //ddEditAccountService.setAccountPriority($scope.account, priority);
-        $scope.account.priority = priority;
+        if($scope.account.priority != priority) {
+            if($scope.account.percent !== 100) {
+                ddEditAccountService.doReorder = 'single';
+                //ddEditAccountService.setAccountPriority($scope.account, priority);
+                $scope.account.priority = priority;
+            }
+            else {
+                // TODO: can't reorder remaining account
+            }
+        }
     };
 
     $scope.selectOtherAcct = function (acct) {

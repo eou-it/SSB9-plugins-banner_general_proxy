@@ -34,6 +34,9 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
             return reorderAllAccounts.save(this.accounts);
         }
         else if(this.doReorder === 'single'){
+            account.newPosition = account.priority;
+            account.priority = this.priorities[account.priority-1].persistVal;
+
             return reorderAccount.save(account);
         }
     };
@@ -59,7 +62,7 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
     
     this.getAmountType = function (acct) {
         if(acct.allocation === '100%'){
-            acct.percent = null;
+            acct.percent = 100;
             acct.amount = null;
             return 'remaining';
         }
@@ -104,11 +107,20 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
     };
     
     this.setAccountPriority = function (acct, priority) {
-        var i;
+        var i,
+            numAcctsToSort = 0;
+        
+        if(this.accounts[this.accounts.length-1].percent === 100) {
+            // don't move the remaining 
+            numAcctsToSort = this.accounts.length-1;
+        }
+        else {
+            numAcctsToSort = this.accounts.length;
+        }
         
         if(acct.priority < priority){
             // decrease acct's priority i.e. will be allocated later
-            for(i = 0; i < this.accounts.length; i++) {
+            for(i = 0; i < numAcctsToSort; i++) {
                 if (this.accounts[i].priority <= priority) {
                     this.accounts[i].priority--;
                 }
@@ -116,7 +128,7 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
         }
         else if(acct.priority > priority){
             // increase acct's priority i.e. will be allocated earlier
-            for(i = 0; i < this.accounts.length; i++) {
+            for(i = 0; i < numAcctsToSort; i++) {
                 if(this.accounts[i].priority >= priority){
                     this.accounts[i].priority++;
                 }
