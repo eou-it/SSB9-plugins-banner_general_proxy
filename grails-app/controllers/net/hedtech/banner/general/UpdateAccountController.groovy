@@ -46,6 +46,9 @@ class UpdateAccountController {
 
         try {
             directDepositAccountService.syncApAndHrAccounts(map)
+
+            // Do some cleanup to prepare for update
+            removeKeyValuePairsNotWantedForUpdate(map)
             fixJSONObjectForCast(map)
 
             render directDepositAccountService.update(map) as JSON
@@ -166,54 +169,44 @@ class UpdateAccountController {
     }
 
     /**
+     * Certain key/value pairs, most notably those including dates, can get flagged as dirty, and an object that
+     * is actually clean from a functional point of view is unnecessarily updated.  Removing such fields prevents
+     * this from occurring.
+     * @param json JSONObject to fix
+     */
+    private def removeKeyValuePairsNotWantedForUpdate(JSONObject json) {
+        json.remove("lastModified")
+
+        // The bankRoutingInfo object gets flagged as dirty, apparently because it contains its own lastModified
+        // name/value pair.  We don't want to update that object here anyway, so remove it.
+        json.remove("bankRoutingInfo")
+    }
+
+    /**
      * Prepare the values in a JSONObject map to be properly cast to values that can be set on the
      * domain object (i.e. class DirectDepositAccount).
      *
      * To be specific, here's the problem:  ServiceBase.update uses InvokerHelper to set properties from
      * the JSON object onto the domain object.  In doing this, InvokerHelper.setProperties eventually
      * results in the DefaultTypeTransformation.castToType (the class is a Java one not Groovy).  This
-     * method does not know how to handle JSONObject.NULL as a true Java null nor a data string as a
-     * Date object, which results in exceptions being thrown for these.  In this method we fix those
-     * values to be of a type that castToType can handle.
-     * @param json A JSONObject
+     * method does not know how to handle JSONObject.NULL as a true Java null nor a date string as a
+     * Date object, which results in exceptions being thrown for these.  In this method we fix the null
+     * issue.  We have no date objects that we want to explicitly update, so as of this writing we don't
+     * try to fix those.
+     * @param json JSONObject to fix
      */
     private def fixJSONObjectForCast(JSONObject json) {
         json.each {entry ->
             // Make JSONObject.NULL a real Java null
             if (entry.value == JSONObject.NULL) {
                 entry.value = null
-            } else if (entry.key == "lastModified") {
-                // Make this date string a real Date object
-                entry.value = DateUtility.parseDateString(entry.value, "yyyy-MM-dd'T'HH:mm:ss'Z'")
-            } else if (entry.key == "bankRoutingInfo") {
-                def bankRoutingInfoObject = new BankRoutingInfo()
 
-                fixJSONObjectForCast(entry.value)
-                // TODO: remove this debug code
-                try {
-                    def junka = entry
-                    def junkb = entry.value
-//                    def junk0 = directDepositAccountService.fetch('BankRoutingInfo', entry.value.id, log)
-//                    directDepositAccountService.setDomainClass(BankRoutingInfo.class)
-//                    def junk0 = directDepositAccountService.fetch('BankRoutingInfo', '6', log)
-                    def junk0 = directDepositAccountService.fetch(BankRoutingInfo.class, '6', log)
-                    def junk = junk0?.getDirtyPropertyNames()
-                    def junk2 = junk0?.getDirtyPropertyNames()?.findAll { entry.value."$it" instanceof Date }?.size()
-                    def junk3 = junk0?.getPersistentValue('bankRoutingInfo')
-                    def junk4
-                } catch (Exception e) {
-                    e.printStackTrace()
-                }
-                // END debug code
-
-                use(InvokerHelper) {
-                    bankRoutingInfoObject.setProperties(entry.value)
-                }
-
-                entry.value = bankRoutingInfoObject
+//            If we ever want to fix dates, this is one possible solution
+//            } else if (entry.key == "lastModified") {
+//                // Make this date string a real Date object
+//                entry.value = DateUtility.parseDateString(entry.value, "yyyy-MM-dd'T'HH:mm:ss'Z'")
             }
         }
     }
-
 
 }
