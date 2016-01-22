@@ -3,6 +3,12 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 
 modules = {
+    /* Override UI Bootstrap 0.10.0 to use UI Bootstrap version 0.13.3 */
+    overrides {
+        'angularApp' {
+            resource id:[plugin: 'banner-ui-ss',file: 'js/angular/ui-bootstrap-tpls-0.10.0.min.js'], url: [file: 'js/angular/ui-bootstrap-tpls-0.13.3.min.js']
+        }
+    }
 
     'angular' {
         resource url:[file: 'js/angular/angular-route.min.js']

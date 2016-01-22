@@ -83,7 +83,7 @@ eventCreateWarStart = { warName, stagingDir ->
         }
 
         Ant.copy(todir: "${stagingDir}/js") {
-            fileset(dir: "${pluginDirectory}/web-app/js")
+            fileset(dir: "${pluginDirectory}/web-app/js", excludes: "angular/ui-bootstrap-tpls-0.10.0.min.js") // Remove UI Bootstrap version dependency
         }
 
         Ant.copy(todir: "${stagingDir}/WEB-INF/plugins/$name-$version/grails-app/i18n") {
