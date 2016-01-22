@@ -86,6 +86,8 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
             acct.amount = '';
         }
     };
+    
+    this.isLastPayrollRemainingAmount = false;
 
     this.syncedAccounts = false;
 

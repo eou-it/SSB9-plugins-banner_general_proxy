@@ -11,6 +11,8 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     $scope.routNumFocused = false;
     $scope.acctNumFocused = false;
     $scope.acctTypeFocused = false;
+    $scope.amountAmtFocused = false;
+    $scope.amountPctFocused = false;
     $scope.dropdownIsOpen = false;
 
     $scope.popoverElements = {}; // Used to coordinate popovers in modal
@@ -112,6 +114,40 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         $scope.setup.authorizedChanges = !$scope.setup.authorizedChanges;
     };
     
+    $scope.validateAmounts = function (){
+        var result = true;
+
+        if($scope.account.amountType === 'amount') {
+            if($scope.account.amount <= 0){
+                $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.amount');
+                $scope.amountErr = 'amt';
+                notificationCenterService.displayNotifications($scope.amountMessage, "error");
+
+                result = false;
+            }
+        }
+        else if($scope.account.amountType === 'percentage') {
+            if($scope.account.percent <= 0 || $scope.account.percent > 100){
+                $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.percent');
+                $scope.amountErr = 'pct';
+                notificationCenterService.displayNotifications($scope.amountMessage, "error");
+
+                result = false;
+            }
+        }
+        else if($scope.account.amountType === 'remaining') {
+            if(ddEditAccountService.isLastPayrollRemainingAmount){
+                $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.remaining');
+                $scope.amountErr = 'rem';
+                notificationCenterService.displayNotifications($scope.amountMessage, "error");
+                
+                result = false;
+            }
+        }
+
+        return result;
+    }
+    
     $scope.saveAccount = function() {
         var doSave = true;
         
@@ -124,10 +160,12 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             doSave = requiredFieldsValid();
         }
         
+        if($scope.typeIndicator === 'HR'){
+            doSave = $scope.validateAmounts() && doSave;
+            ddEditAccountService.setAmountValues($scope.account, $scope.account.amountType);
+        }
+
         if(doSave) {
-            if($scope.typeIndicator === 'HR'){
-                ddEditAccountService.setAmountValues($scope.account, $scope.account.amountType);
-            }
 
            if(ddEditAccountService.doReorder === 'single'){
                 ddEditAccountService.reorderAccounts($scope.account).$promise.then(function (response) {
@@ -162,6 +200,15 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                         $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
                     }
                 });
+            }
+        }
+        else {
+            // if inputs are not valid when creating from existing account, then reset account
+            // so user can start fresh
+            if($scope.setup.createFromExisting === 'yes'){
+                $scope.account.bankAccountNum = null;
+                $scope.account.bankRoutingInfo = {bankRoutingNum: null};
+                $scope.account.accountType = null;
             }
         }
     };

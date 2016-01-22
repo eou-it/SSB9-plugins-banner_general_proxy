@@ -137,6 +137,10 @@ body {
     border: 0;
 }
 
+.existing-accts-old {
+    padding-left: 2em;
+}
+
 .existing-accts {
     padding-left: 2em;
 }
@@ -193,12 +197,13 @@ body {
    color: #869FB1;
    font-weight: bold;
 }
+
 .dropdown .input-field-error,
-.input-field-error {
+.input-field-error,
+.radio-txt-input.input-field-error {
     background-color: #F6E5E6;
     border:1px solid #CD3B3E;
     box-shadow: 3px 3px #F0D3D3 inset;
-    width: 100%;
     color: #CD3B3E;
 }
 
@@ -227,6 +232,39 @@ body {
     right: 1.75em;
     top: 4.285em;
     background: #F6E5E6;
+}
+
+.amt-input-fail {
+    position: absolute;
+    float: right;
+    left: 15.65em;
+    top: 8.88em;
+    background: #F6E5E6;
+}
+
+.existing-accts-old .amt-input-fail {
+    position: relative;
+    top: 0.15em;
+    right: 2.25em;
+    left: initial;
+    float: none;
+}
+
+.pct-input-fail {
+    position: absolute;
+    float: right;
+    left: 15.65em;
+    top: 11.2em;
+    background: #F6E5E6;
+}
+
+.existing-accts-old .pct-input-fail {
+    left: 15.65em;*/
+    position: relative;
+    top: 0.15em;
+    right: 3.35em;
+    left: initial;
+    float: none;
 }
 
 .icon-error.ellucian-font,
@@ -349,15 +387,15 @@ button.closebtn {
     line-height: 136%;
 }
 
-.existing-accts .dropdown {
+.existing-accts-old .dropdown {
     max-width: 22.5em;
 }
 
-.existing-accts .dropdown .semi-bold.form-spacing {
+.existing-accts-old .dropdown .semi-bold.form-spacing {
     padding-right: 5px;
 }
 
-.existing-accts .down-caret {
+.existing-accts-old .down-caret {
     padding-left: 0px;
 }
 
@@ -566,6 +604,10 @@ span.radio-list.no-padding {
     white-space: nowrap;
 }
 
+.amount-spacing{
+    padding: 0px 20px;
+}
+
 .radio-txt-input {
     border-radius: 4px;
     background-color: #FFF;
@@ -573,7 +615,6 @@ span.radio-list.no-padding {
     box-shadow: 4px 4px #EDF3F6 inset;
     width: initial;
     color: #869FB1;
-    margin-left: 20px;
 }
 
 

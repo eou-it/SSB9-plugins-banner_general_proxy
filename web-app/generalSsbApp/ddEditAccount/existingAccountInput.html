@@ -3,7 +3,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <label class="input-field-label">{{'directDeposit.label.choose.option'|i18n}}:</label><br>
 <input ng-model="setup.createFromExisting" class="edit-radio" type="radio" name="create-option" value="yes" aria-labelledby="create-opt-existing"><span class="lbl radio-list" id="create-opt-existing">{{'directDeposit.label.create.from.exisiting'|i18n}}</span>
-<div ng-show="setup.createFromExisting === 'yes'" class="existing-accts">
+<div ng-show="setup.createFromExisting === 'yes'" class="existing-accts-old">
     <label class="visuallyhidden" id="select-existing">{{'directDeposit.label.select.from.exisiting'|i18n}}</label>
     <div ng-show="typeIndicator==='AP'" class="dropdown" role="menu">
         <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="select-existing existing-acct-btn">
@@ -24,22 +24,27 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
     <div ng-show="typeIndicator==='HR'">
         <span class="semi-bold">{{otherAccountSelected.bankRoutingInfo.bankName}}</span><br>
         {{'directDeposit.account.label.account'|i18n}}: {{otherAccountSelected.bankAccountNum|accountNumMask}}<br>
-        <label ng-class="(amountErr ? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.amount'|i18n}}</label><br>
+        <label ng-class="(amountErr && !(amountAmtFocused || amountPctFocused)? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.amount'|i18n}}</label><br>
         <input ng-model="account.amountType" class="edit-radio" type="radio" name="existing-amount-type" value="remaining" checked aria-labelledby="rem-radio-label"><span class="lbl radio-list" id="rem-radio-label">{{'directDeposit.account.amount.remaining'|i18n}}</span>
         <br>
         <input ng-model="account.amountType" class="edit-radio" type="radio" name="existing-amount-type" value="amount" aria-labelledby="amt-radio-label"><span class="lbl radio-list" id="amt-radio-label">{{'directDeposit.account.amount.amount'|i18n}}</span>
-        <div ng-show="account.amountType === 'amount'" class="">
+        <div ng-show="account.amountType === 'amount'" class="amount-spacing ws-nowrap">
             <label class="visuallyhidden" for="amt-text-input">{{'directDeposit.account.label.amount.amount'|i18n}}</label>
-            <input ng-model="account.amount" class="radio-txt-input semi-bold form-spacing" id="amt-text-input" type="text" placeholder="{{'directDeposit.label.input.amount'|i18n}}"/>
+            <input ng-model="account.amount" ng-blur="amountAmtFocused=false" ng-focus="amountAmtFocused=true" ng-class="[(amountErr === 'amt' && !amountAmtFocused ? 'input-field-error' : null)]" class="radio-txt-input semi-bold form-spacing" id="amt-text-input" type="text" placeholder="{{'directDeposit.label.input.amount'|i18n}}"/>
+            <span ng-if="amountErr === 'amt' && !amountAmtFocused" class="input icon amt-input-fail">
+                <span class="icon-error ellucian-font"></span>
+            </span>
         </div>
         <br>
         <input ng-model="account.amountType" class="edit-radio" type="radio" name="existing-amount-type" value="percentage" aria-labelledby="pct-radio-label"><span class="lbl radio-list" id="pct-radio-label">{{'directDeposit.account.amount.percentage'|i18n}}</span>
-        <div ng-show="account.amountType === 'percentage'" class="ws-nowrap">
+        <div ng-show="account.amountType === 'percentage'" class="amount-spacing ws-nowrap">
             <label class="visuallyhidden" for="pct-text-input">{{'directDeposit.account.label.amount.percent'|i18n}}</label>
-            <input ng-model="account.percent" class="radio-txt-input semi-bold form-spacing" id="pct-text-input" type="text" placeholder="{{'directDeposit.label.input.percent'|i18n}}"/> %
+            <input ng-model="account.percent" ng-blur="amountPctFocused=false" ng-focus="amountPctFocused=true" ng-class="[(amountErr === 'pct' && !amountPctFocused ? 'input-field-error' : null)]" class="radio-txt-input semi-bold form-spacing" id="pct-text-input" type="text" placeholder="{{'directDeposit.label.input.percent'|i18n}}"/> %
+            <span ng-if="amountErr === 'pct' && !amountPctFocused" class="input icon pct-input-fail">
+                <span class="icon-error ellucian-font"></span>
+            </span>
         </div>
-        <br>
-        <p ng-show="amountErr" class="input-field-label field-error error-font-size">Amount error</p>
+        <p ng-show="amountErr" class="input-field-label field-error error-font-size">{{amountMessage}}</p>
     </div>
     <modal-disclaimer ng-show="!!otherAccountSelected.bankRoutingInfo"/>
 </div>

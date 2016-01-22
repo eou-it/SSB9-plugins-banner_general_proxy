@@ -491,6 +491,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 lastAlloc = allocations[allocations.length - 1];
 
             $scope.isLastPayrollRemainingAmount = lastAlloc.allocation === "100%";
+            ddEditAccountService.isLastPayrollRemainingAmount = $scope.isLastPayrollRemainingAmount;
 
         };
 
