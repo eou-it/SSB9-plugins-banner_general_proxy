@@ -104,6 +104,23 @@ environments {
     }
 }
 
+environments {
+    test {
+        ssbEnabled = true
+        ssbOracleUsersProxied = true
+        grails.plugins.springsecurity.interceptUrlMap = [
+                '/': ['IS_AUTHENTICATED_ANONYMOUSLY'] ]
+    }
+    development {
+        ssbEnabled = true
+        ssbOracleUsersProxied = true
+    }
+    production {
+
+    }
+
+}
+
 // ******************************************************************************
 //
 //                       +++ DATA ORIGIN CONFIGURATION +++
