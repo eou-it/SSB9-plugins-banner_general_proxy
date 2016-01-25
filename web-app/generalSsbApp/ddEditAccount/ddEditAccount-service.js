@@ -22,7 +22,16 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
             {controller: 'UpdateAccount', action: 'getBankInfo'}, {query: {method:'GET', isArray:false}});
 
     this.saveAccount = function (account, createNew) {
-        return createNew ? createAccount.save(account) : updateAccount.save(account);
+        if(createNew){
+            return createAccount.save(account);
+        }
+        else {
+            // set the priority back to one received from database if updating payroll account
+            if(account.hrIndicator === 'A'){
+                account.priority = this.priorities[account.priority-1].persistVal;
+            }
+            return updateAccount.save(account);
+        }
     };
     
     this.reorderAccounts = function (account) {
