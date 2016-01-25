@@ -169,8 +169,8 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
            if(ddEditAccountService.doReorder === 'single'){
                 ddEditAccountService.reorderAccounts($scope.account).$promise.then(function (response) {
-                    if(response.failure) {
-                        notificationCenterService.displayNotifications(response.message, "error");
+                    if(response[0].failure) {
+                        notificationCenterService.displayNotifications(response[0].message, "error");
                     }
                     else {
                         notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);

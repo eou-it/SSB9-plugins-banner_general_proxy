@@ -13,7 +13,7 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
         {controller: 'UpdateAccount', action: 'reorderAllAccounts'}, {save: {method:'POST', isArray:true}}),
         
         reorderAccount = $resource('../ssb/:controller/:action',
-        {controller: 'UpdateAccount', action: 'reorderAccounts'}, {save: {method:'POST'}}),
+        {controller: 'UpdateAccount', action: 'reorderAccounts'}, {save: {method:'POST', isArray:true}}),
 
         deleteAccounts = $resource('../ssb/:controller/:action',
             {controller: 'UpdateAccount', action: 'deleteAccounts'}, {delete: {method:'POST', isArray:true}}),

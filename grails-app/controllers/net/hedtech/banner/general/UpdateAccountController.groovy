@@ -49,16 +49,18 @@ class UpdateAccountController {
     }
     
     def reorderAccounts() {
-        // TODO: this needs to reorder accounts
         def map = request?.JSON ?: params
 
         try {
+            render directDepositAccountCompositeService.rePrioritizeAccounts(map, map.newPosition) as JSON
+
             directDepositAccountService.syncApAndHrAccounts(map)
-            
-            render directDepositAccountService.update(map) as JSON
 
         } catch (ApplicationException e) {
-            render returnFailureMessage(e) as JSON
+            def arrayResult = [];
+            arrayResult[0] = returnFailureMessage(e)
+            
+            render arrayResult as JSON
         }
     }
     
