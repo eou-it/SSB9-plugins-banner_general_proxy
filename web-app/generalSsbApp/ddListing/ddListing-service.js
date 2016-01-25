@@ -36,5 +36,17 @@ generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
     this.doReload = function(){
         this.init = false;
     };
+    
+    // flag to indicate if all amounts are valid for save 
+    this.amountsValid = 0;
+    
+    this.setAmountsValid = function (valid) {
+    	if(valid){
+    		this.amountsValid++;
+    	}
+    	else{
+    		this.amountsValid--;
+    	}
+    }
 
 }]);

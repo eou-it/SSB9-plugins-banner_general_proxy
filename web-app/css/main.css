@@ -259,7 +259,6 @@ body {
 }
 
 .existing-accts-old .pct-input-fail {
-    left: 15.65em;*/
     position: relative;
     top: 0.15em;
     right: 3.35em;
@@ -429,15 +428,20 @@ button.closebtn {
 }
 
 .open > .dropdown-btn .caret-color,
-.dropdown-btn:focus .caret-color {
+.dropdown-btn:focus .caret-color,
+.desktop-listing .dropdown-btn.input-field-error:focus .caret-color {
     color: #206E9F;
 }
 
-.desktop .dropdown-btn {
+.desktop-listing .dropdown-btn {
     color: #4F585F;
 }
 
-.desktop .dropdown-btn span.icon {
+.desktop-listing .dropdown-btn.input-field-error .caret-color {
+    color: #CD3B3E;
+}
+
+.desktop-listing .dropdown-btn span.icon {
     padding-left: 0px;
 }
 
@@ -508,7 +512,7 @@ li.listing {
     border-top-left-radius: 0px;
 }
 
-.desktop .dropdown-menu > li > a.addAcct {
+.desktop-listing .dropdown-menu > li > a.addAcct {
     font-weight: normal;
 }
 

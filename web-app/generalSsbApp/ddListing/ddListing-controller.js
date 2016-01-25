@@ -38,6 +38,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             // if the listing controller has already been initialized, then abort
             if(ddListingService.isInit()) return;
 
+            ddListingService.amountsValid = 0;
+            
             ddEditAccountService.setSyncedAccounts(false);
             
             var acctPromises = [ddListingService.getApListing().$promise,
@@ -277,6 +279,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         };
 
         $scope.updateAccounts = function () {
+        	if(ddListingService.amountsValid === 0){
             var allocs = $scope.distributions.proposed.allocations,
                 promises = [];
 
@@ -322,6 +325,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             $q.all(promises).then(function() {
                 $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
             });
+        	}
         };
         
         var updateAccount = function (acct) {
