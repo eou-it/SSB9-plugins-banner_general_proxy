@@ -38,15 +38,21 @@ generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
     };
     
     // flag to indicate if all amounts are valid for save 
-    this.amountsValid = 0;
+    this.amountsValid = true;
     
+    this.numAmountsInvalid = 0; // start at one since changed initially
     this.setAmountsValid = function (valid) {
     	if(valid){
-    		this.amountsValid++;
+    		if(this.numAmountsInvalid > 0){
+    			this.numAmountsInvalid--;
+    		}
     	}
     	else{
-    		this.amountsValid--;
+    		this.numAmountsInvalid++;
     	}
+    	
+    	this.amountsValid = this.numAmountsInvalid <= 0;
+    	console.log("num: "+ this.numAmountsInvalid + ", vald: "+ this.amountsValid);
     }
 
 }]);

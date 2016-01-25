@@ -29,9 +29,9 @@
 <td class="min-width-amount">
     <div dropdown-state="amtDropdownOpen" class="dropdown desktop-listing">
         <button dropdown-helper="begin"
-            ng-class="(((amountErr === 'amt' && alloc.amountType === 'amount') || (amountErr === 'pct' && alloc.amountType === 'percentage')) && !(amountPctFocused || amountAmtFocused) && !amtDropdownOpen ? 'input-field-error' : null)" 
+            ng-class="(((amountErr === 'amt' && alloc.amountType === 'amount') || (amountErr === 'pct' && alloc.amountType === 'percentage')) && !amtDropdownOpen ? 'input-field-error' : null)" 
             class="dropdown-btn ws-nowrap" data-toggle="dropdown" href="#" role="option" id="marker{{$index}}">
-            <span class="float-l form-spacing">
+            <span ng-class="(((amountErr === 'amt' && alloc.amountType === 'amount') || (amountErr === 'pct' && alloc.amountType === 'percentage')) && !amtDropdownOpen ? 'field-error' : null)" class="float-l form-spacing">
                 {{displayAllocationVal()}}
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
@@ -48,7 +48,7 @@
                 <div ng-show="alloc.amountType === 'amount'" class="amount-spacing ws-nowrap">
                     <label class="visuallyhidden" for="amt-txt-input{{$index}}">{{'directDeposit.account.label.amount.amount'|i18n}}</label>
                     <input ng-model="alloc.amount" dropdown-helper="end" ng-blur="amountAmtFocused=false; validateAmounts()" ng-focus="amountAmtFocused=true" ng-class="[(amountErr === 'amt' && !amountAmtFocused ? 'input-field-error' : null)]" class="radio-txt-input semi-bold form-spacing" id="amt-txt-input{{$index}}" type="text" placeholder="{{'directDeposit.label.input.amount'|i18n}}"/>
-	                <span ng-if="amountErr === 'amt' && !amountAmtFocused" class="input icon pct-input-fail">
+	                <span ng-if="amountErr === 'amt' && !amountAmtFocused" class="input icon amt-input-fail">
 		                <span class="icon-error ellucian-font"></span>
 		            </span>
                 </div>

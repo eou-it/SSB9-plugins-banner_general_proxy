@@ -250,6 +250,14 @@ body {
     float: none;
 }
 
+.desktop-listing .amt-input-fail {
+    position: absolute;
+    float: right;
+    left: 15.25em;
+    top: 6.35em;
+    background: #F6E5E6;
+}
+
 .pct-input-fail {
     position: absolute;
     float: right;
@@ -264,6 +272,14 @@ body {
     right: 3.35em;
     left: initial;
     float: none;
+}
+
+.desktop-listing .pct-input-fail {
+    position: absolute;
+    float: right;
+    left: 15.2em;
+    top: 9em;
+    background: #F6E5E6;
 }
 
 .icon-error.ellucian-font,
