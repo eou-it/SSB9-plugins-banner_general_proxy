@@ -250,6 +250,14 @@ body {
     float: none;
 }
 
+.desktop-listing .amt-input-fail {
+    position: absolute;
+    float: right;
+    left: 15.25em;
+    top: 6.35em;
+    background: #F6E5E6;
+}
+
 .pct-input-fail {
     position: absolute;
     float: right;
@@ -259,12 +267,19 @@ body {
 }
 
 .existing-accts-old .pct-input-fail {
-    left: 15.65em;*/
     position: relative;
     top: 0.15em;
     right: 3.35em;
     left: initial;
     float: none;
+}
+
+.desktop-listing .pct-input-fail {
+    position: absolute;
+    float: right;
+    left: 15.2em;
+    top: 9em;
+    background: #F6E5E6;
 }
 
 .icon-error.ellucian-font,
@@ -429,15 +444,20 @@ button.closebtn {
 }
 
 .open > .dropdown-btn .caret-color,
-.dropdown-btn:focus .caret-color {
+.dropdown-btn:focus .caret-color,
+.desktop-listing .dropdown-btn.input-field-error:focus .caret-color {
     color: #206E9F;
 }
 
-.desktop .dropdown-btn {
+.desktop-listing .dropdown-btn {
     color: #4F585F;
 }
 
-.desktop .dropdown-btn span.icon {
+.desktop-listing .dropdown-btn.input-field-error .caret-color {
+    color: #CD3B3E;
+}
+
+.desktop-listing .dropdown-btn span.icon {
     padding-left: 0px;
 }
 
@@ -508,7 +528,7 @@ li.listing {
     border-top-left-radius: 0px;
 }
 
-.desktop .dropdown-menu > li > a.addAcct {
+.desktop-listing .dropdown-menu > li > a.addAcct {
     font-weight: normal;
 }
 

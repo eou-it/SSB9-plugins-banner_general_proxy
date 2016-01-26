@@ -35,14 +35,14 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
     };
     
     this.reorderAccounts = function (account) {
-        if(this.doReorder === 'all'){
+        if(this.doReorder === 'all') {
             var i;
             for(i = 0; i < this.accounts.length; i++) {
                 this.accounts[i].priority = this.priorities[i].persistVal;
             }
             return reorderAllAccounts.save(this.accounts);
         }
-        else if(this.doReorder === 'single'){
+        else if(this.doReorder === 'single') {
             account.newPosition = account.priority;
             account.priority = this.priorities[account.priority-1].persistVal;
 

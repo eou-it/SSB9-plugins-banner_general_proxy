@@ -109,7 +109,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddEditAccountServi
 /* 
  * relies on the allocation variable from the ng-repeat in payListingPanelPopulatedProposedDesktop.html 
  */
-generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccountService', '$filter', function (ddEditAccountService, $filter) {
+generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccountService', 'ddListingService', '$filter', 'notificationCenterService', function (ddEditAccountService, ddListingService, $filter, notificationCenterService) {
     return{
         restrict: 'A',
         templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposedDesktop.html',
@@ -118,6 +118,9 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             scope.alloc = scope.allocation;
             
             scope.alloc.amountType = ddEditAccountService.getAmountType(scope.alloc);
+            
+            scope.amtDropdownOpen = false;
+            scope.isValid = true;
 
             scope.setAllocationAcctType = function(type){
                 scope.alloc.accountType = type;
@@ -149,6 +152,53 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                     }
                 }
             };
+            
+            scope.validateAmounts = function (){
+                var isValid = true;
+
+                if(scope.alloc.amountType === 'amount') {
+                    if(scope.alloc.amount <= 0){
+                        scope.amountErr = 'amt';
+                        notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.amount'), "error");
+
+                        isValid = false;
+                    }
+                }
+                else if(scope.alloc.amountType === 'percentage') {
+                    if(scope.alloc.percent <= 0 || scope.alloc.percent > 100){
+                        scope.amountErr = 'pct';
+                        notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.percent'), "error");
+
+                        isValid = false;
+                    }
+                }
+                else if(scope.alloc.amountType === 'remaining') {
+                    if(ddEditAccountService.isLastPayrollRemainingAmount){
+                        scope.amountErr = 'rem';
+                        notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.remaining'), "error");
+
+                        isValid = false;
+                    }
+                }
+
+                if(isValid) {
+                    notificationCenterService.clearNotifications();
+                    scope.amountErr = false;
+                }
+
+                // update validity flags only when the validity state has changed
+                if(scope.isValid !== isValid) {
+                    ddListingService.setAmountsValid(isValid);
+                    scope.isValid = isValid;
+                }
+            };
+
+            // validate the amounts when the drop down closes
+            scope.$watch('amtDropdownOpen', function(newVal, oldVal) {
+                if (!newVal) {
+                    scope.validateAmounts();
+                }
+            });
         }
     };
 }]);
