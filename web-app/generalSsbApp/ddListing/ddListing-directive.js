@@ -157,7 +157,8 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                 var isValid = true;
 
                 if(scope.alloc.amountType === 'amount') {
-                    if(scope.alloc.amount <= 0){
+                    if(scope.alloc.amount > 0);
+                    else {
                         scope.amountErr = 'amt';
                         notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.amount'), "error");
 
@@ -165,7 +166,8 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                     }
                 }
                 else if(scope.alloc.amountType === 'percentage') {
-                    if(scope.alloc.percent <= 0 || scope.alloc.percent > 100){
+                    if(scope.alloc.percent > 0 || scope.alloc.percent <= 100);
+                    else {
                         scope.amountErr = 'pct';
                         notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.percent'), "error");
 

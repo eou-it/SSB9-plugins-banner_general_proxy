@@ -118,7 +118,8 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         var result = true;
 
         if($scope.account.amountType === 'amount') {
-            if($scope.account.amount <= 0){
+            if($scope.account.amount > 0);
+            else {
                 $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.amount');
                 $scope.amountErr = 'amt';
                 notificationCenterService.displayNotifications($scope.amountMessage, "error");
@@ -127,7 +128,8 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             }
         }
         else if($scope.account.amountType === 'percentage') {
-            if($scope.account.percent <= 0 || $scope.account.percent > 100){
+            if($scope.account.percent > 0 || $scope.account.percent <= 100);
+            else {
                 $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.percent');
                 $scope.amountErr = 'pct';
                 notificationCenterService.displayNotifications($scope.amountMessage, "error");

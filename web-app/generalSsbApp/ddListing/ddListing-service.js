@@ -61,14 +61,16 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', 'notification
             var acct = accounts[i];
 
             if(acct.amountType === 'amount') {
-                if(acct.amount <= 0){
+                if(acct.amount > 0);
+                else{
                     notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.amount'), "error");
 
                     isValid = false;
                 }
             }
             else if(acct.amountType === 'percentage') {
-                if(acct.percent <= 0 || acct.percent > 100){
+                if(acct.percent > 0 || acct.percent <= 100);
+                else {
                     notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.percent'), "error");
 
                     isValid = false;
