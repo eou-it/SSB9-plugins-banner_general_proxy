@@ -166,7 +166,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                     }
                 }
                 else if(scope.alloc.amountType === 'percentage') {
-                    if(scope.alloc.percent > 0 || scope.alloc.percent <= 100);
+                    if(scope.alloc.percent > 0 && scope.alloc.percent <= 100);
                     else {
                         scope.amountErr = 'pct';
                         notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.percent'), "error");

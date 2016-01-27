@@ -128,7 +128,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             }
         }
         else if($scope.account.amountType === 'percentage') {
-            if($scope.account.percent > 0 || $scope.account.percent <= 100);
+            if($scope.account.percent > 0 && $scope.account.percent <= 100);
             else {
                 $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.percent');
                 $scope.amountErr = 'pct';

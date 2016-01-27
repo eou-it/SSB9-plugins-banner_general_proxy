@@ -69,7 +69,7 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', 'notification
                 }
             }
             else if(acct.amountType === 'percentage') {
-                if(acct.percent > 0 || acct.percent <= 100);
+                if(acct.percent > 0 && acct.percent <= 100);
                 else {
                     notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.percent'), "error");
 

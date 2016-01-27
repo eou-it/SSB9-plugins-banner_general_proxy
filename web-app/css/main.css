@@ -430,6 +430,17 @@ button.closebtn {
     color: #4F585F;
 }
 
+.dropdown-btn:disabled {
+    background: #F6F9FA; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#F6F9FA, #EFEFEF); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#F6F9FA, #EFEFEF); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#F6F9FA, #EFEFEF); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#F6F9FA, #EFEFEF);
+    border:1px solid #869FB1;
+    box-shadow: 0px -4px #E2EAEF inset;
+    color: #869FB1;
+}
+
 .open > .dropdown-btn {
     background-color: #fff;
     border:1px solid #206E9F;
@@ -451,6 +462,10 @@ button.closebtn {
 
 .desktop-listing .dropdown-btn {
     color: #4F585F;
+}
+
+.desktop-listing .dropdown-btn:disabled {
+    color: #869FB1;
 }
 
 .desktop-listing .dropdown-btn.input-field-error .caret-color {
