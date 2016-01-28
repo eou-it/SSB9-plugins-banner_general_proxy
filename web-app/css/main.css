@@ -234,10 +234,14 @@ body {
     background: #F6E5E6;
 }
 
+.icon .icon-error {
+    font-size: 16px;
+}
+
 .amt-input-fail {
     position: absolute;
     float: right;
-    left: 15.65em;
+    left: 12.65em;
     top: 8.88em;
     background: #F6E5E6;
 }
@@ -253,7 +257,7 @@ body {
 .desktop-listing .amt-input-fail {
     position: absolute;
     float: right;
-    left: 15.25em;
+    left: 12.1em;
     top: 6.35em;
     background: #F6E5E6;
 }
@@ -261,7 +265,7 @@ body {
 .pct-input-fail {
     position: absolute;
     float: right;
-    left: 15.65em;
+    left: 12.65em;
     top: 11.2em;
     background: #F6E5E6;
 }
@@ -277,7 +281,7 @@ body {
 .desktop-listing .pct-input-fail {
     position: absolute;
     float: right;
-    left: 15.2em;
+    left: 12.1em;
     top: 9em;
     background: #F6E5E6;
 }
@@ -640,7 +644,7 @@ span.radio-list.no-padding {
 }
 
 .amount-spacing{
-    padding: 0px 20px;
+    padding: 0px 0px 0px 20px;
 }
 
 .radio-txt-input {
@@ -648,7 +652,7 @@ span.radio-list.no-padding {
     background-color: #FFF;
     border: 1px solid #869FB1;
     box-shadow: 4px 4px #EDF3F6 inset;
-    width: initial;
+    width: 12em;
     color: #869FB1;
 }
 
