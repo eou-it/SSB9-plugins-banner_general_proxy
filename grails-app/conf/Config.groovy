@@ -79,7 +79,7 @@ grails.mime.types = [
 grails.views.default.codec = "html" // none, html, base64  **** note: Setting this to html will ensure html is escaped, to prevent XSS attack ****
 grails.views.gsp.encoding = "UTF-8"
 grails.converters.encoding = "UTF-8"
-grails.plugins.springsecurity.logout.afterLogoutUrl = "/ssb/hrDashboard"
+grails.plugins.springsecurity.logout.afterLogoutUrl = "/"
 grails.converters.domain.include.version = true
 //grails.converters.json.date = "default"
 

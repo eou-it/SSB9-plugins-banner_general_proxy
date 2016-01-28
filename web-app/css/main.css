@@ -234,10 +234,14 @@ body {
     background: #F6E5E6;
 }
 
+.icon .icon-error {
+    font-size: 16px;
+}
+
 .amt-input-fail {
     position: absolute;
     float: right;
-    left: 15.65em;
+    left: 12.65em;
     top: 8.88em;
     background: #F6E5E6;
 }
@@ -250,21 +254,36 @@ body {
     float: none;
 }
 
+.desktop-listing .amt-input-fail {
+    position: absolute;
+    float: right;
+    left: 12.1em;
+    top: 6.35em;
+    background: #F6E5E6;
+}
+
 .pct-input-fail {
     position: absolute;
     float: right;
-    left: 15.65em;
+    left: 12.65em;
     top: 11.2em;
     background: #F6E5E6;
 }
 
 .existing-accts-old .pct-input-fail {
-    left: 15.65em;*/
     position: relative;
     top: 0.15em;
     right: 3.35em;
     left: initial;
     float: none;
+}
+
+.desktop-listing .pct-input-fail {
+    position: absolute;
+    float: right;
+    left: 12.1em;
+    top: 9em;
+    background: #F6E5E6;
 }
 
 .icon-error.ellucian-font,
@@ -415,6 +434,17 @@ button.closebtn {
     color: #4F585F;
 }
 
+.dropdown-btn:disabled {
+    background: #F6F9FA; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#F6F9FA, #EFEFEF); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#F6F9FA, #EFEFEF); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#F6F9FA, #EFEFEF); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#F6F9FA, #EFEFEF);
+    border:1px solid #869FB1;
+    box-shadow: 0px -4px #E2EAEF inset;
+    color: #869FB1;
+}
+
 .open > .dropdown-btn {
     background-color: #fff;
     border:1px solid #206E9F;
@@ -429,15 +459,24 @@ button.closebtn {
 }
 
 .open > .dropdown-btn .caret-color,
-.dropdown-btn:focus .caret-color {
+.dropdown-btn:focus .caret-color,
+.desktop-listing .dropdown-btn.input-field-error:focus .caret-color {
     color: #206E9F;
 }
 
-.desktop .dropdown-btn {
+.desktop-listing .dropdown-btn {
     color: #4F585F;
 }
 
-.desktop .dropdown-btn span.icon {
+.desktop-listing .dropdown-btn:disabled {
+    color: #869FB1;
+}
+
+.desktop-listing .dropdown-btn.input-field-error .caret-color {
+    color: #CD3B3E;
+}
+
+.desktop-listing .dropdown-btn span.icon {
     padding-left: 0px;
 }
 
@@ -508,7 +547,7 @@ li.listing {
     border-top-left-radius: 0px;
 }
 
-.desktop .dropdown-menu > li > a.addAcct {
+.desktop-listing .dropdown-menu > li > a.addAcct {
     font-weight: normal;
 }
 
@@ -605,7 +644,7 @@ span.radio-list.no-padding {
 }
 
 .amount-spacing{
-    padding: 0px 20px;
+    padding: 0px 0px 0px 20px;
 }
 
 .radio-txt-input {
@@ -613,7 +652,7 @@ span.radio-list.no-padding {
     background-color: #FFF;
     border: 1px solid #869FB1;
     box-shadow: 4px 4px #EDF3F6 inset;
-    width: initial;
+    width: 12em;
     color: #869FB1;
 }
 
