@@ -2,8 +2,8 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddEditAccountService', 'notificationCenterService', 'editAcctProperties',
-    function($scope, $modalInstance, $state, $filter, ddEditAccountService, notificationCenterService, editAcctProperties){
+generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddEditAccountService', 'ddListingService', 'notificationCenterService', 'editAcctProperties',
+    function($scope, $modalInstance, $state, $filter, ddEditAccountService, ddListingService, notificationCenterService, editAcctProperties){
 
     $scope.typeIndicator = editAcctProperties.typeIndicator;
     $scope.creatingNewAccount = editAcctProperties.creatingNew;
@@ -118,7 +118,14 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         var result = true;
 
         if($scope.account.amountType === 'amount') {
-            if($scope.account.amount > 0);
+            if($scope.account.amount > 0){
+                if(!ddListingService.checkIfTwoDecimalPlaces($scope.account.amount) || $scope.account.amount > 99999999.99){
+                    $scope.amountErr = 'amt';
+                    notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.amount'), "error");
+
+                    result = false;
+                }
+            }
             else {
                 $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.amount');
                 $scope.amountErr = 'amt';
@@ -128,7 +135,14 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             }
         }
         else if($scope.account.amountType === 'percentage') {
-            if($scope.account.percent > 0 && $scope.account.percent <= 100);
+            if($scope.account.percent > 0 && $scope.account.percent <= 100){
+                if(!ddListingService.checkIfTwoDecimalPlaces($scope.account.percent)){
+                    $scope.amountErr = 'pct';
+                    notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.percent'), "error");
+
+                    result = false;
+                }
+            }
             else {
                 $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.percent');
                 $scope.amountErr = 'pct';

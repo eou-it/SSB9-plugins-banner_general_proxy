@@ -2,7 +2,7 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbApp.service('ddListingService', ['$resource', '$filter', 'notificationCenterService', function ($resource, $filter, notificationCenterService) {
+generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'notificationCenterService', function ($resource, $filter, $locale, notificationCenterService) {
     var apListing = $resource('../ssb/:controller/:action',
             {controller: 'AccountListing', action: 'getApAccountsForCurrentUser'}),
         mostRecentPayrollListing = $resource('../ssb/:controller/:action',
@@ -48,9 +48,24 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', 'notification
         else{
             this.numAmountsInvalid++;
         }
-        
+
         this.amountsValid = this.numAmountsInvalid <= 0;
     };
+    
+    this.checkIfTwoDecimalPlaces = function (num) {
+        num = String(num);
+        
+        var decSpot = num.indexOf($locale.NUMBER_FORMATS.DECIMAL_SEP),
+            result = true;
+            
+        if(decSpot >= 0){
+            if(num.length - decSpot > 3){
+                result = false;
+            }
+        }
+        
+        return result;
+    }
     
     this.validateAllAmounts = function (accounts){
         var result = true,
@@ -61,15 +76,27 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', 'notification
             var acct = accounts[i];
 
             if(acct.amountType === 'amount') {
-                if(acct.amount > 0);
-                else{
+                if(acct.amount > 0){
+                    if(!this.checkIfTwoDecimalPlaces(acct.amount) || acct.amount > 99999999.99) {
+                        notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.amount'), "error");
+                        
+                        isValid = false;
+                    }
+                }
+                else {
                     notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.amount'), "error");
 
                     isValid = false;
                 }
             }
             else if(acct.amountType === 'percentage') {
-                if(acct.percent > 0 && acct.percent <= 100);
+                if(acct.percent > 0 && acct.percent <= 100){
+                    if(!this.checkIfTwoDecimalPlaces(acct.percent)) {
+                        notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.percent'), "error");
+                        
+                        isValid = false;
+                    }
+                }
                 else {
                     notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.percent'), "error");
 
@@ -79,7 +106,7 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', 'notification
 
             result = result && isValid;
         }
-        
+        console.log("result: "+result);
         return result;
     };
 

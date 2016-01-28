@@ -287,7 +287,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             }
 
             return result;
-        }
+        };
 
         $scope.updateAccounts = function () {
             if(amountsAreValid()) {

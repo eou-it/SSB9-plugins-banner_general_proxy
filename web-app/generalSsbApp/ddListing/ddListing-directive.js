@@ -152,12 +152,19 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                     }
                 }
             };
-            
+
             scope.validateAmounts = function (){
                 var isValid = true;
 
                 if(scope.alloc.amountType === 'amount') {
-                    if(scope.alloc.amount > 0);
+                    if(scope.alloc.amount > 0){
+                        if(!ddListingService.checkIfTwoDecimalPlaces(scope.alloc.amount) || scope.alloc.amount > 99999999.99){
+                            scope.amountErr = 'amt';
+                            notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.amount'), "error");
+
+                            isValid = false;
+                        }
+                    }
                     else {
                         scope.amountErr = 'amt';
                         notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.amount'), "error");
@@ -166,7 +173,14 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                     }
                 }
                 else if(scope.alloc.amountType === 'percentage') {
-                    if(scope.alloc.percent > 0 && scope.alloc.percent <= 100);
+                    if(scope.alloc.percent > 0 && scope.alloc.percent <= 100) {
+                        if(!ddListingService.checkIfTwoDecimalPlaces(scope.alloc.percent)){
+                            scope.amountErr = 'pct';
+                            notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.percent'), "error");
+
+                            isValid = false;
+                        }
+                    }
                     else {
                         scope.amountErr = 'pct';
                         notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.percent'), "error");
@@ -174,14 +188,14 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                         isValid = false;
                     }
                 }
-                else if(scope.alloc.amountType === 'remaining') {
+                /*else if(scope.alloc.amountType === 'remaining') {
                     if(ddEditAccountService.isLastPayrollRemainingAmount){
                         scope.amountErr = 'rem';
                         notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.remaining'), "error");
 
                         isValid = false;
                     }
-                }
+                }*/
 
                 if(isValid) {
                     notificationCenterService.clearNotifications();
