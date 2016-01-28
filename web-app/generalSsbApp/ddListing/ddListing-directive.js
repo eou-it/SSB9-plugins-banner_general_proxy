@@ -149,6 +149,17 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                     }
                 }
             };
+
+            // When the amount is "Remaining" for a given allocation, the business rule is that
+            // that allocation's priority needs to be set to move the allocation to the end of the
+            // list of allocations.
+            scope.updatePriorityForAmount = function(alloc) {
+                if (alloc.amountType === 'remaining') {
+                    ddEditAccountService.doReorder = 'all';
+                    ddEditAccountService.setAccountPriority(alloc, scope.priorities.length);
+                    scope.$apply();
+                }
+            };
         }
     };
 }]);

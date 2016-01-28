@@ -2,7 +2,8 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddEditAccountService', 'notificationCenterService', 'editAcctProperties',
+generalSsbAppControllers.controller('ddEditAccountController',
+    ['$scope', '$modalInstance', '$state', '$filter', 'ddEditAccountService', 'notificationCenterService', 'editAcctProperties',
     function($scope, $modalInstance, $state, $filter, ddEditAccountService, notificationCenterService, editAcctProperties){
 
     $scope.typeIndicator = editAcctProperties.typeIndicator;
@@ -108,14 +109,27 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
     $scope.selectOtherAcct = function (acct) {
         $scope.otherAccountSelected = acct;
-    }
+    };
     
     $scope.toggleAuthorizedChanges = function () {
         $scope.setup.authorizedChanges = !$scope.setup.authorizedChanges;
     };
     
     $scope.validateAmounts = function (){
-        var result = true;
+        var result = true,
+            validateNotMoreThanOneRemainingAccount = function() {
+                if(ddEditAccountService.payrollAccountWithRemainingAmount &&
+                    !isSameAccount($scope.account, ddEditAccountService.payrollAccountWithRemainingAmount)) {
+
+                    $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.remaining');
+                    $scope.amountErr = 'rem';
+                    notificationCenterService.displayNotifications($scope.amountMessage, "error");
+
+                    return false;
+                }
+                
+                return true;
+            };
 
         if($scope.account.amountType === 'amount') {
             if($scope.account.amount <= 0){
@@ -126,27 +140,36 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 result = false;
             }
         }
-        else if($scope.account.amountType === 'percentage') {
-            if($scope.account.percent <= 0 || $scope.account.percent > 100){
-                $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.percent');
-                $scope.amountErr = 'pct';
-                notificationCenterService.displayNotifications($scope.amountMessage, "error");
-
-                result = false;
-            }
-        }
         else if($scope.account.amountType === 'remaining') {
-            if(ddEditAccountService.isLastPayrollRemainingAmount){
-                $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.remaining');
-                $scope.amountErr = 'rem';
-                notificationCenterService.displayNotifications($scope.amountMessage, "error");
-                
-                result = false;
+            result = validateNotMoreThanOneRemainingAccount();
+        }
+        else if($scope.account.amountType === 'percentage') {
+            var pct = $scope.account.percent,
+                pctRegex = /^\d{0,3}(\.\d{0,2})?$/,
+                handleError = function(msg) {
+                    $scope.amountMessage = $filter('i18n')(msg);
+                    $scope.amountErr = 'pct';
+                    notificationCenterService.displayNotifications($scope.amountMessage, "error");
+
+                    result = false;
+                };
+
+            if(!pctRegex.test(pct)) {
+                handleError('directDeposit.invalid.percent.format');
+            }
+            else if(pct > 100){
+                handleError('directDeposit.invalid.amount.percent');
+            }
+            // A percentage of 100% is the same as "Remaining" from a business rules perspective.
+            // Note that the type-converting equality comparison (== as opposed to the strict ===) for
+            // percent is necessary as the value is a string, and it is being compared with a number.
+            else if(pct == 100) {
+                result = validateNotMoreThanOneRemainingAccount();
             }
         }
 
         return result;
-    }
+    };
     
     $scope.saveAccount = function() {
         var doSave = true;
@@ -239,6 +262,17 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         }
         
         return !($scope.routingNumErr || $scope.accountNumErr || $scope.accountTypeErr);
+    },
+
+    /**
+     * Are the two accounts actually the same account?
+     */
+    isSameAccount = function(a1, a2) {
+        return a1 !== null && a2 !== null &&
+               a1.bankAccountNum === a2.bankAccountNum &&
+               a1.bankRoutingInfo.bankRoutingNum === a2.bankRoutingInfo.bankRoutingNum &&
+               a1.hrIndicator === a2.hrIndicator &&
+               a1.apIndicator === a2.apIndicator;
     };
     
     $scope.cancelModal = function () {

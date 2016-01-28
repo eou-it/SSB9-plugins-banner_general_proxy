@@ -146,7 +146,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         $scope.panelCollapsed = false;
         $scope.authorizedChanges = false;
         $scope.hasMaxPayrollAccounts = false;
-        $scope.isLastPayrollRemainingAmount = false;
+        $scope.hasPayrollRemainingAmount = false;
         $scope.selectedForDelete = {
             payroll: false,
             ap:      false
@@ -482,23 +482,24 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             });
         };
 
-        $scope.updateWhetherLastPayrollIsRemainingAmount = function () {
+        $scope.updateWhetherHasPayrollRemainingAmount = function () {
             if (!$scope.hasPayAccountsProposed) {
-                $scope.isLastPayrollRemainingAmount = false;
+                $scope.hasPayrollRemainingAmount = false;
+                ddEditAccountService.payrollAccountWithRemainingAmount = null;
             }
 
             var allocations = $scope.distributions.proposed.allocations,
                 lastAlloc = allocations[allocations.length - 1];
 
-            $scope.isLastPayrollRemainingAmount = lastAlloc.allocation === "100%";
-            ddEditAccountService.isLastPayrollRemainingAmount = $scope.isLastPayrollRemainingAmount;
+            $scope.hasPayrollRemainingAmount = lastAlloc.allocation === "100%";
+            ddEditAccountService.payrollAccountWithRemainingAmount = $scope.hasPayrollRemainingAmount ? lastAlloc : null;
 
         };
 
         // When payroll state changes, this can be called to refresh properties based on new state.
         $scope.updatePayrollState = function() {
             $scope.updateWhetherHasMaxPayrollAccounts();
-            $scope.updateWhetherLastPayrollIsRemainingAmount();
+            $scope.updateWhetherHasPayrollRemainingAmount();
 
         };
 

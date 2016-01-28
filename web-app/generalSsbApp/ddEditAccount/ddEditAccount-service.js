@@ -96,8 +96,6 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
         }
     };
     
-    this.isLastPayrollRemainingAmount = false;
-
     this.syncedAccounts = false;
 
     this.setSyncedAccounts = function(val){this.syncedAccounts = val;};
