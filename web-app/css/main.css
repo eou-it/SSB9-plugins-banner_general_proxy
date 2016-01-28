@@ -110,6 +110,10 @@ body {
     padding: 0px;
 }
 
+.pad-left {
+    padding-left: 15px;
+}
+
 .semi-bold {
     font-weight: bold;
 }

@@ -92,13 +92,17 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         notificationCenterService.clearNotifications();
     };
 
-    $scope.priorities = ddEditAccountService.priorities;
     $scope.setAccountPriority = function (priority) {
         if($scope.account.priority != priority) {
             if($scope.account.percent !== 100) {
-                ddEditAccountService.doReorder = 'single';
-                //ddEditAccountService.setAccountPriority($scope.account, priority);
-                $scope.account.priority = priority;
+                if($scope.creatingNewAccount){
+                    ddEditAccountService.doReorder = 'new';
+                    $scope.account.priority = priority;
+                }
+                else {
+                    ddEditAccountService.doReorder = 'single';
+                    $scope.account.priority = priority;
+                }
             }
             else {
                 // TODO: can't reorder remaining account
@@ -265,6 +269,10 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     this.init = function() {
         $scope.setup = {}
         $scope.setup.hasOtherAccounts = false;
+        
+        // start with a 'fresh' reorder flag
+        ddEditAccountService.doReorder = false;
+        $scope.priorities = ddEditAccountService.priorities;
 
         // In initializing this controller, we could be doing an account create, edit, or delete.  For the create, no
         // account will exist and we need to instantiate a new account object.  For the edit and delete, an account will
@@ -301,6 +309,11 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 if($scope.setup.hasOtherAccounts){
                     $scope.selectOtherAcct($scope.setup.otherAccounts[0]);
                 }
+
+                $scope.priorities = angular.copy(ddEditAccountService.priorities);
+                $scope.priorities.push({displayVal: $scope.priorities.length+1, persistVal: null});
+                
+                $scope.account.priority = $scope.priorities[$scope.priorities.length-1].displayVal;
             }
         }
     };

@@ -23,6 +23,9 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
 
     this.saveAccount = function (account, createNew) {
         if(createNew){
+            if(this.doReorder === 'new') {
+                account.newPosition = account.priority;
+            }
             return createAccount.save(account);
         }
         else {
