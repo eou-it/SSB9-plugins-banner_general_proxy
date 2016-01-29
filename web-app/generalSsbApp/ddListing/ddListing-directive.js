@@ -154,48 +154,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             };
 
             scope.validateAmounts = function (){
-                var isValid = true;
-
-                if(scope.alloc.amountType === 'amount') {
-                    if(scope.alloc.amount > 0){
-                        if(!ddListingService.checkIfTwoDecimalPlaces(scope.alloc.amount) || scope.alloc.amount > 99999999.99){
-                            scope.amountErr = 'amt';
-                            notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.amount'), "error");
-
-                            isValid = false;
-                        }
-                    }
-                    else {
-                        scope.amountErr = 'amt';
-                        notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.amount'), "error");
-
-                        isValid = false;
-                    }
-                }
-                else if(scope.alloc.amountType === 'percentage') {
-                    if(scope.alloc.percent > 0 && scope.alloc.percent <= 100) {
-                        if(!ddListingService.checkIfTwoDecimalPlaces(scope.alloc.percent)){
-                            scope.amountErr = 'pct';
-                            notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.percent'), "error");
-
-                            isValid = false;
-                        }
-                    }
-                    else {
-                        scope.amountErr = 'pct';
-                        notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.percent'), "error");
-
-                        isValid = false;
-                    }
-                }
-                /*else if(scope.alloc.amountType === 'remaining') {
-                    if(ddEditAccountService.isLastPayrollRemainingAmount){
-                        scope.amountErr = 'rem';
-                        notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.remaining'), "error");
-
-                        isValid = false;
-                    }
-                }*/
+                var isValid = ddListingService.validateAmountsForAccount(scope, scope.alloc, ddEditAccountService.payrollAccountWithRemainingAmount);
 
                 if(isValid) {
                     notificationCenterService.clearNotifications();
@@ -209,10 +168,22 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                 }
             };
 
+            // When the amount is "Remaining" for a given allocation, the business rule is that
+            // that allocation's priority needs to be set to move the allocation to the end of the
+            // list of allocations.
+            scope.updatePriorityForAmount = function(alloc) {
+                if (alloc.amountType === 'remaining') {
+                    ddEditAccountService.doReorder = 'all';
+                    ddEditAccountService.setAccountPriority(alloc, scope.priorities.length);
+                    scope.$apply();
+                }
+            };
+
             // validate the amounts when the drop down closes
             scope.$watch('amtDropdownOpen', function(newVal, oldVal) {
                 if (!newVal) {
                     scope.validateAmounts();
+                    scope.updatePriorityForAmount(scope.alloc)
                 }
             });
         }

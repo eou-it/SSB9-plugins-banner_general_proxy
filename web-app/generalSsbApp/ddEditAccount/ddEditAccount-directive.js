@@ -151,24 +151,6 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
 }]);
 
 /*
- * Performs special handling needed for an amount dropdown, e.g. moving allocations with amount
- * designated as "Remaining" to the last priority position in the allocation list.
- */
-generalSsbAppDirectives.directive('amountDropdownHelper', [function () {
-    return {
-        restrict: 'A',
-        link: function (scope, elem) {
-
-            // All dropdown events are fired at the .dropdown-menu's parent element.
-            // (see http://getbootstrap.com/javascript)
-            elem.parent().on('hidden.bs.dropdown', function (event) {
-                scope.updatePriorityForAmount(scope.alloc)
-            });
-        }
-    };
-}]);
-
-/*
  * place on div that encapsulates the dropdown to bind a variable to the open/close state of the dropdown
  */
 generalSsbAppDirectives.directive('dropdownState', [function () {

@@ -113,76 +113,11 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     $scope.toggleAuthorizedChanges = function () {
         $scope.setup.authorizedChanges = !$scope.setup.authorizedChanges;
     };
-    
-    $scope.validateAmounts = function (){
-        var result = true,
-            validateNotMoreThanOneRemainingAccount = function() {
-                if(ddEditAccountService.payrollAccountWithRemainingAmount &&
-                    !isSameAccount($scope.account, ddEditAccountService.payrollAccountWithRemainingAmount)) {
 
-                    $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.remaining');
-                    $scope.amountErr = 'rem';
-                    notificationCenterService.displayNotifications($scope.amountMessage, "error");
-
-                    return false;
-                }
-                
-                return true;
-            };
-
-        if($scope.account.amountType === 'amount') {
-            if($scope.account.amount > 0){
-                if(!ddListingService.checkIfTwoDecimalPlaces($scope.account.amount) || $scope.account.amount > 99999999.99){
-                    $scope.amountErr = 'amt';
-                    notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.amount'), "error");
-
-                    result = false;
-                }
-            }
-            else {
-                $scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.amount');
-                $scope.amountErr = 'amt';
-                notificationCenterService.displayNotifications($scope.amountMessage, "error");
-
-                result = false;
-            }
-        }
-        else if($scope.account.amountType === 'remaining') {
-            result = validateNotMoreThanOneRemainingAccount();
-        }
-        else if($scope.account.amountType === 'percentage') {
-            if($scope.account.percent > 0 && $scope.account.percent <= 100){
-                if(!ddListingService.checkIfTwoDecimalPlaces($scope.account.percent)){
-                    $scope.amountErr = 'pct';
-                    notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.percent'), "error");
-
-                    result = false;
-                }
-            }
-            else {
-                    $scope.amountErr = 'pct';
-                    notificationCenterService.displayNotifications($scope.amountMessage, "error");
-
-                    result = false;
-                };
-
-            if(!pctRegex.test(pct)) {
-                handleError('directDeposit.invalid.percent.format');
-            }
-            else if(pct > 100){
-                handleError('directDeposit.invalid.amount.percent');
-            }
-            // A percentage of 100% is the same as "Remaining" from a business rules perspective.
-            // Note that the type-converting equality comparison (== as opposed to the strict ===) for
-            // percent is necessary as the value is a string, and it is being compared with a number.
-            else if(pct == 100) {
-                result = validateNotMoreThanOneRemainingAccount();
-            }
-        }
-
-        return result;
+    $scope.validateAmounts = function () {
+        return ddListingService.validateAmountsForAccount($scope, $scope.account, ddEditAccountService.payrollAccountWithRemainingAmount);
     };
-    
+
     $scope.saveAccount = function() {
         var doSave = true;
         
@@ -274,17 +209,6 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         }
         
         return !($scope.routingNumErr || $scope.accountNumErr || $scope.accountTypeErr);
-    },
-
-    /**
-     * Are the two accounts actually the same account?
-     */
-    isSameAccount = function(a1, a2) {
-        return a1 !== null && a2 !== null &&
-               a1.bankAccountNum === a2.bankAccountNum &&
-               a1.bankRoutingInfo.bankRoutingNum === a2.bankRoutingInfo.bankRoutingNum &&
-               a1.hrIndicator === a2.hrIndicator &&
-               a1.apIndicator === a2.apIndicator;
     };
     
     $scope.cancelModal = function () {
