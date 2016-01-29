@@ -68,6 +68,18 @@ class UpdateAccountController {
             render arrayResult as JSON
         }
     }
+
+    def getCurrency() {
+        def map = request?.JSON ?: params
+
+        try {
+
+            render directDepositAccountCompositeService.getCurrencySymbol()
+
+        } catch (ApplicationException e) {
+            render returnFailureMessage(e) as JSON
+        }
+    }
     
     def reorderAllAccounts() {
         def map = request?.JSON ?: params
