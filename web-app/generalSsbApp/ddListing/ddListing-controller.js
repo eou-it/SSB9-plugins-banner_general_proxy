@@ -282,8 +282,14 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             var result = true;
 
             if($scope.isEmployee && $scope.hasPayAccountsProposed){
-                result = ddListingService.amountsValid 
-                result = ddListingService.validateAllAmounts($scope.distributions.proposed.allocations) && result;
+                result = ddListingService.amountsValid;
+
+                var allocs = $scope.distributions.proposed.allocations,
+                    acctWithRemaining = ddEditAccountService.payrollAccountWithRemainingAmount;
+
+                // Even if result is false at this point, validateAmountsForAllAccounts is still called here
+                // so the notification center gets repopulated.
+                result = ddListingService.validateAmountsForAllAccountsAndSetNotification(allocs, acctWithRemaining) && result;
             }
 
             return result;
@@ -300,7 +306,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     _.each(allocs, function(alloc){
                         ddEditAccountService.setAmountValues(alloc, alloc.amountType);
                     });
-                    
+
                     ddEditAccountService.reorderAccounts().$promise.then(function (response) {
                         if(response[0].failure) {
                             notificationCenterService.displayNotifications(response[0].message, "error");

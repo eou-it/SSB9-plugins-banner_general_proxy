@@ -115,6 +115,42 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'n
     };
 
     /**
+     * Does this account have an amount of "Remaining"?
+     * @param account
+     * @returns {boolean}
+     */
+    this.isRemaining = function(account) {
+        // A percentage of 100% is the same as "Remaining" from a business rules perspective.
+        // Note that the type-converting equality comparison (== as opposed to the strict ===) for
+        // percent is necessary as the value is a string, and it is being compared with a number.
+        return (account.amountType === 'remaining' || (account.amountType === 'percentage' && account.percent == 100));
+    };
+
+    /**
+     * Determine if a remaining account already exists.
+     * If one already exists and the account that's being checked is the same account as that, return false.
+     * @param acct The account being checked
+     * @param existingPayrollAccountWithRemainingAmount Existing payroll account with remaining account, if any
+     * @returns {boolean} True if a different "Remaining" account already exists
+     */
+    this.accountWithRemainingAmountAlreadyExists = function(acct, existingPayrollAccountWithRemainingAmount) {
+        return existingPayrollAccountWithRemainingAmount &&
+               !isSameAccount(acct, existingPayrollAccountWithRemainingAmount);
+    };
+
+    this.validateNotMoreThanOneRemainingAccount = function(acct, existingPayrollAccountWithRemainingAmount) {
+        var self = this;
+
+        if(self.accountWithRemainingAmountAlreadyExists(acct, existingPayrollAccountWithRemainingAmount)) {
+            notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.remaining'), "error");
+
+            return false;
+        }
+
+        return true;
+    };
+
+    /**
      * Validate amounts in account on scope and confirm that an account with "Remaining" (aka 100%) does not
      * already exist.  Set appropriate error-related data on scope.
      * @param scope
@@ -124,35 +160,21 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'n
      */
     this.validateAmountsForAccount = function (scope, acct, existingPayrollAccountWithRemainingAmount) {
         var self = this,
-            amountErr = null,
-
-            validateNotMoreThanOneRemainingAccount = function() {
-                if(existingPayrollAccountWithRemainingAmount &&
-                    !isSameAccount(scope.account, existingPayrollAccountWithRemainingAmount)) {
-
-                    scope.amountMessage = $filter('i18n')('directDeposit.invalid.amount.remaining');
-                    amountErr = 'rem';
-                    notificationCenterService.displayNotifications(scope.amountMessage, "error");
-                }
-            };
+            amountErr = null;
 
         if(acct.amountType === 'amount') {
             if (!self.validateCurrencyAmountAndSetNotification(acct)) {
                 amountErr = 'amt';
             }
         }
-        else if(acct.amountType === 'remaining') {
-            validateNotMoreThanOneRemainingAccount();
+        else if(self.isRemaining(acct)) {
+            if (!self.validateNotMoreThanOneRemainingAccount(acct, existingPayrollAccountWithRemainingAmount)) {
+                amountErr = 'rem';
+            }
         }
         else if(acct.amountType === 'percentage') {
             if (!self.validatePercentageAndSetNotification(acct)) {
                 amountErr = 'pct';
-            }
-            // A percentage of 100% is the same as "Remaining" from a business rules perspective.
-            // Note that the type-converting equality comparison (== as opposed to the strict ===) for
-            // percent is necessary as the value is a string, and it is being compared with a number.
-            else if (acct.percent == 100) {
-                validateNotMoreThanOneRemainingAccount();
             }
         }
 
@@ -163,12 +185,17 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'n
         return !amountErr;
     };
 
-    this.validateAllAmounts = function (accounts){
+    this.validateAmountsForAllAccountsAndSetNotification = function (accounts, existingPayrollAccountWithRemainingAmount){
         var self = this;
 
         _.each(accounts, function(acct) {
             if(acct.amountType === 'amount') {
                 if (!self.validateCurrencyAmountAndSetNotification(acct)) {
+                    return false;
+                }
+            }
+            else if(self.isRemaining(acct)) {
+                if (!self.validateNotMoreThanOneRemainingAccount(acct, existingPayrollAccountWithRemainingAmount)) {
                     return false;
                 }
             }

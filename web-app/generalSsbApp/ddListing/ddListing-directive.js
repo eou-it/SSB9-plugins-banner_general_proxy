@@ -122,12 +122,14 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             scope.amtDropdownOpen = false;
             scope.isValid = true;
 
+            scope.previousAmount = null; // Holds previous amount info in case it needs to be restored
+
             scope.setAllocationAcctType = function(type){
                 scope.alloc.accountType = type;
             };
 
             scope.displayAllocationVal = function () {
-                if(scope.alloc.amountType === 'remaining'){
+                if(ddListingService.isRemaining(scope.alloc)){
                     scope.alloc.allocation = $filter('i18n')('directDeposit.account.label.remaining');
                 }
                 else if(scope.alloc.amountType === 'percentage'){
@@ -159,6 +161,15 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
                 if(isValid) {
                     notificationCenterService.clearNotifications();
                     scope.amountErr = false;
+                } else if (scope.amountErr === 'rem') {
+                    // If user set it to "Remaining" in an invalid state, return to previous amount values
+                    // to avoid issues with a "Remaining" item residing at an invalid position in the allocation list.
+                    var alloc = scope.alloc;
+
+                    alloc.amountType = scope.previousAmount.amountType;
+                    alloc.amount = scope.previousAmount.amount;
+                    alloc.percent = scope.previousAmount.percent;
+                    alloc.allocation = scope.previousAmount.allocation;
                 }
 
                 // update validity flags only when the validity state has changed
@@ -171,8 +182,12 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             // When the amount is "Remaining" for a given allocation, the business rule is that
             // that allocation's priority needs to be set to move the allocation to the end of the
             // list of allocations.
-            scope.updatePriorityForAmount = function(alloc) {
-                if (alloc.amountType === 'remaining') {
+            scope.updatePriorityForAmount = function() {
+                var alloc = scope.alloc;
+
+                if (ddListingService.isRemaining(alloc) &&
+                    !ddListingService.accountWithRemainingAmountAlreadyExists(alloc, ddEditAccountService.payrollAccountWithRemainingAmount)) {
+
                     ddEditAccountService.doReorder = 'all';
                     ddEditAccountService.setAccountPriority(alloc, scope.priorities.length);
                     scope.$apply();
@@ -181,11 +196,23 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
 
             // validate the amounts when the drop down closes
             scope.$watch('amtDropdownOpen', function(newVal, oldVal) {
-                if (!newVal) {
+                // The "newVal != oldVal" phrase keeps this from running on page initialization,
+                // (i.e. the state has not changed on the dropdown) and the "!newVal" tells us
+                // that the dropdown has closed.
+                if (newVal != oldVal && !newVal) {
                     scope.validateAmounts();
-                    scope.updatePriorityForAmount(scope.alloc)
+                    scope.updatePriorityForAmount()
                 }
             });
+
+            scope.capturePreviousAmount = function(amountType, amount, percent, allocation) {
+                scope.previousAmount = {
+                    amountType: amountType,
+                    amount:     amount ? amount : null,
+                    percent:    percent ? percent : null,
+                    allocation: allocation
+                }
+            }
         }
     };
 }]);

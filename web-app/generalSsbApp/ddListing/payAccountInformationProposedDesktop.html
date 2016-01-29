@@ -38,7 +38,7 @@
         </button>
         <ul class="dropdown-menu addAcct listing" stop-click role="radiogroup" aria-label="{{'directDeposit.label.account.amount.edit'|i18n}}">
             <li ng-class="(alloc.amountType === 'remaining' ? 'dropdown-li-focus' : '')" class="listing" role="presentation">
-                <input ng-model="alloc.amountType" class="edit-radio" type="radio" name="amount-type{{$index}}" value="remaining" checked aria-labelledby="rem-radio-lbl{{$index}}">
+                <input ng-model="alloc.amountType" ng-change="capturePreviousAmount('{{alloc.amountType}}', '{{alloc.amount}}', '{{alloc.percent}}', '{{alloc.allocation}}')" class="edit-radio" type="radio" name="amount-type{{$index}}" value="remaining" checked aria-labelledby="rem-radio-lbl{{$index}}">
                 <span class="lbl radio-list ws-nowrap" id="rem-radio-lbl{{$index}}">{{'directDeposit.account.amount.remaining'|i18n}}</span>
                 <br>
             </li>
