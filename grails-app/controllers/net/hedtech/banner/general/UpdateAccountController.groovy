@@ -3,7 +3,6 @@ package net.hedtech.banner.general
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
-import net.hedtech.banner.webtailor.WebTailorUtility
 
 class UpdateAccountController {
 
@@ -28,6 +27,12 @@ class UpdateAccountController {
 
         try {
             JSON.use( 'deep' ) {
+
+                //newPosition is set so we need to do some reodering as we insert
+                if(map.newPosition){
+                    //directDepositAccountCompositeService.rePrioritizeAccounts(map, map.newPosition)
+                }
+
                 render directDepositAccountCompositeService.addorUpdateAccount(map) as JSON
             }
         } catch (ApplicationException e) {
@@ -127,22 +132,6 @@ class UpdateAccountController {
         } catch (ApplicationException e) {
             render returnFailureMessage(e) as JSON
         }
-    }
-    
-    def getDisclaimerText() {
-        def model = [:]
-        
-        log.debug("fetching disclaimer text")
-        
-        model.disclaimer = WebTailorUtility.getInfoText("XeDirectDeposit", "XE_DIRECT_DEPOSIT")
-        
-        if(!model.disclaimer){
-            model.failure = true
-            
-            log.error("Error: Disclaimer text could not be retrieved")
-        }
-        
-        render model as JSON
     }
 
     def  returnFailureMessage(ApplicationException  e) {
