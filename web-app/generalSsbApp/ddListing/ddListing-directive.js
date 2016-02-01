@@ -191,7 +191,6 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
 
                     ddEditAccountService.doReorder = 'all';
                     ddEditAccountService.setAccountPriority(alloc, scope.priorities.length);
-                    scope.$apply();
                 }
             };
 
