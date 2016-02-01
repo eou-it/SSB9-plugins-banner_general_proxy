@@ -89,7 +89,7 @@ generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resourc
     };
     
     this.setAmountValues = function (acct, amountType){
-        if(amountType === 'remaining'){
+        if(directDepositService.isRemaining(acct)){
             acct.percent = 100;
             acct.amount = ''; // grails will ignore null values, so use empty strings instead
         }

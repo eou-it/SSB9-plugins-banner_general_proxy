@@ -67,7 +67,7 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
     this.checkIfTwoDecimalPlaces = function (num) {
         num = String(num);
 
-        var decSpot = num.indexOf($locale.NUMBER_FORMATS.DECIMAL_SEP),
+        var decSpot = num.indexOf('.'),
             result = true;
 
         if(decSpot >= 0){

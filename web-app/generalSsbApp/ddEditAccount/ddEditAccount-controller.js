@@ -2,8 +2,8 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'ddEditAccountService', 'ddListingService', 'notificationCenterService', 'editAcctProperties',
-    function($scope, $modalInstance, $state, $filter, ddEditAccountService, ddListingService, notificationCenterService, editAcctProperties){
+generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'directDepositService', 'ddEditAccountService', 'ddListingService', 'notificationCenterService', 'editAcctProperties',
+    function($scope, $modalInstance, $state, $filter, directDepositService, ddEditAccountService, ddListingService, notificationCenterService, editAcctProperties){
 
     $scope.typeIndicator = editAcctProperties.typeIndicator;
     $scope.creatingNewAccount = editAcctProperties.creatingNew;
@@ -94,18 +94,13 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
     $scope.setAccountPriority = function (priority) {
         if($scope.account.priority != priority) {
-            if($scope.account.percent !== 100) {
-                if($scope.creatingNewAccount){
-                    ddEditAccountService.doReorder = 'new';
-                    $scope.account.priority = priority;
-                }
-                else {
-                    ddEditAccountService.doReorder = 'single';
-                    $scope.account.priority = priority;
-                }
+            if($scope.creatingNewAccount){
+                ddEditAccountService.doReorder = 'new';
+                $scope.account.priority = priority;
             }
             else {
-                // TODO: can't reorder remaining account
+                ddEditAccountService.doReorder = 'single';
+                $scope.account.priority = priority;
             }
         }
     };
@@ -117,9 +112,20 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     $scope.toggleAuthorizedChanges = function () {
         $scope.setup.authorizedChanges = !$scope.setup.authorizedChanges;
     };
+    
+    $scope.isRemaining = function(){
+        return directDepositService.isRemaining($scope.account);
+    }
 
     $scope.validateAmounts = function () {
-        return ddListingService.validateAmountsForAccount($scope, $scope.account, ddEditAccountService.payrollAccountWithRemainingAmount);
+        var result = ddListingService.validateAmountsForAccount($scope, $scope.account, ddEditAccountService.payrollAccountWithRemainingAmount);
+        
+        if(result && $scope.isRemaining()){
+            //move to last position
+            $scope.setAccountPriority($scope.priorities[$scope.priorities.length-1].displayVal);
+        }
+
+        return result;
     };
 
     $scope.saveAccount = function() {

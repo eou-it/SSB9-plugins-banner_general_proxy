@@ -155,6 +155,10 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                     }
                 }
             };
+            
+            scope.isRemaining = function(){
+                return directDepositService.isRemaining(scope.alloc);
+            }
 
             scope.validateAmounts = function (){
                 var isValid = ddListingService.validateAmountsForAccount(scope, scope.alloc, ddEditAccountService.payrollAccountWithRemainingAmount);
