@@ -9,12 +9,12 @@
 <td class="break-word">{{alloc.bankRoutingInfo.bankRoutingNum|accountNumMask}}</td>
 <td class="break-word">{{alloc.bankAccountNum|accountNumMask}}</td>
 <td class="min-width-acctType">
-    <div class="dropdown desktop" role="menu">
+    <div class="dropdown desktop-listing" role="menu">
         <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" href="#">
             <span class="float-l form-spacing">
                 <choose-account account="alloc"/>
             </span>
-            <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font"></span></span>
+            <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
         <ul class="dropdown-menu addAcct" role="menu" aria-label="{{'directDeposit.label.account.type.edit'|i18n}}">
             <li role="presentation">
@@ -27,45 +27,53 @@
     </div>
 </td>
 <td class="min-width-amount">
-    <div class="dropdown desktop">
-        <button dropdown-helper="begin" class="dropdown-btn ws-nowrap" data-toggle="dropdown" href="#" role="option" id="marker{{$index}}">
-            <span class="float-l form-spacing">
+    <div dropdown-state="amtDropdownOpen" class="dropdown desktop-listing">
+        <button dropdown-helper="begin"
+            ng-class="(((amountErr === 'amt' && alloc.amountType === 'amount') || (amountErr === 'pct' && alloc.amountType === 'percentage')) && !amtDropdownOpen ? 'input-field-error' : null)" 
+            class="dropdown-btn ws-nowrap" data-toggle="dropdown" href="#" role="option" id="marker{{$index}}">
+            <span ng-class="(((amountErr === 'amt' && alloc.amountType === 'amount') || (amountErr === 'pct' && alloc.amountType === 'percentage')) && !amtDropdownOpen ? 'field-error' : null)" class="float-l form-spacing">
                 {{displayAllocationVal()}}
             </span>
-            <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font"></span></span>
+            <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
         <ul class="dropdown-menu addAcct listing" stop-click role="radiogroup" aria-label="{{'directDeposit.label.account.amount.edit'|i18n}}">
             <li ng-class="(alloc.amountType === 'remaining' ? 'dropdown-li-focus' : '')" class="listing" role="presentation">
-                <input ng-model="alloc.amountType" class="edit-radio" type="radio" name="amount-type{{$index}}" value="remaining" checked aria-labelledby="rem-radio-lbl{{$index}}">
-                <span class="lbl radio-list" id="rem-radio-lbl{{$index}}">{{'directDeposit.account.amount.remaining'|i18n}}</span>
+                <input ng-model="alloc.amountType" ng-change="capturePreviousAmount('{{alloc.amountType}}', '{{alloc.amount}}', '{{alloc.percent}}', '{{alloc.allocation}}')" class="edit-radio" type="radio" name="amount-type{{$index}}" value="remaining" checked aria-labelledby="rem-radio-lbl{{$index}}">
+                <span class="lbl radio-list ws-nowrap" id="rem-radio-lbl{{$index}}">{{'directDeposit.account.amount.remaining'|i18n}}</span>
                 <br>
             </li>
             <li ng-class="(alloc.amountType === 'amount' ? 'dropdown-li-focus' : '')" class="listing" role="presentation">
                 <input ng-model="alloc.amountType" class="edit-radio" type="radio" name="amount-type{{$index}}" value="amount" aria-labelledby="amt-radio-lbl{{$index}}">
                 <span class="lbl radio-list" id="amt-radio-lbl{{$index}}">{{'directDeposit.account.amount.amount'|i18n}}</span>
-                <div ng-show="alloc.amountType === 'amount'" class="ws-nowrap">
+                <div ng-show="alloc.amountType === 'amount'" class="amount-spacing ws-nowrap">
                     <label class="visuallyhidden" for="amt-txt-input{{$index}}">{{'directDeposit.account.label.amount.amount'|i18n}}</label>
-                    <currency-input ng-model="alloc.amount" dropdown-helper="end" decimals="2" id="amt-txt-input{{$index}}" type="text" placeholder="{{'directDeposit.label.input.amount'|i18n}}"></currency-input>
+                    <input ng-model="alloc.amount" dropdown-helper="end" ng-blur="amountAmtFocused=false; validateAmounts()" ng-focus="amountAmtFocused=true" ng-class="[(amountErr === 'amt' && !amountAmtFocused ? 'input-field-error' : null)]" class="radio-txt-input semi-bold form-spacing" id="amt-txt-input{{$index}}" type="number" placeholder="{{'directDeposit.label.input.amount'|i18n}}"/>
+                    <span ng-if="amountErr === 'amt' && !amountAmtFocused" class="input icon amt-input-fail">
+                        <span class="icon-error ellucian-font"></span>
+                    </span>
                 </div>
             </li>
             <li ng-class="(alloc.amountType === 'percentage' ? 'dropdown-li-focus' : '')" class="listing end-dropdown-radius" role="presentation">
                 <input ng-model="alloc.amountType" class="edit-radio" type="radio" name="amount-type{{$index}}" value="percentage" aria-labelledby="pct-radio-lbl{{$index}}">
                 <span class="lbl radio-list" id="pct-radio-lbl{{$index}}">{{'directDeposit.account.amount.percentage'|i18n}}</span>
-                <div ng-show="alloc.amountType === 'percentage'" class="ws-nowrap">
+                <div ng-show="alloc.amountType === 'percentage'" class="amount-spacing ws-nowrap">
                     <label class="visuallyhidden" for="pct-txt-input{{$index}}">{{'directDeposit.account.label.amount.percent'|i18n}}</label>
-                    <percent-input ng-model="alloc.percent" dropdown-helper="end" decimals="1" id="pct-txt-input{{$index}}" type="text" placeholder="{{'directDeposit.label.input.percent'|i18n}}"></percent-input>
+                    <input ng-model="alloc.percent" dropdown-helper="end" ng-blur="amountPctFocused=false; validateAmounts()" ng-focus="amountPctFocused=true" ng-class="[(amountErr === 'pct' && !amountPctFocused ? 'input-field-error' : null)]" class="radio-txt-input semi-bold form-spacing" id="pct-txt-input{{$index}}" type="number" placeholder="{{'directDeposit.label.input.percent'|i18n}}"/> %
+                    <span ng-if="amountErr === 'pct' && !amountPctFocused" class="input icon pct-input-fail">
+                        <span class="icon-error ellucian-font"></span>
+                    </span>
                 </div>
             </li>
         </ul>
     </div>
 </td>
 <td class="break-word">
-    <div class="dropdown" role="menu">
-        <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
+    <div class="dropdown desktop-listing" role="menu">
+        <button dropdown-helper="begin" ng-disabled="alloc.amountType === 'remaining'" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
             <span class="float-l form-spacing" aria-live="polite">
                 {{alloc.priority}}
             </span>
-            <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font"></span></span>
+            <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
         <ul class="dropdown-menu addAcct min-width-priority">
             <li ng-repeat="i in priorities" role="presentation">

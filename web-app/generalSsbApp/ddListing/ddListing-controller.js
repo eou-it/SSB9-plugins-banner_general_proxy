@@ -38,6 +38,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             // if the listing controller has already been initialized, then abort
             if(ddListingService.isInit()) return;
 
+            ddListingService.amountsValid = true;
+            
             ddEditAccountService.setSyncedAccounts(false);
             
             var acctPromises = [ddListingService.getApListing().$promise,
@@ -146,7 +148,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         $scope.panelCollapsed = false;
         $scope.authorizedChanges = false;
         $scope.hasMaxPayrollAccounts = false;
-        $scope.isLastPayrollRemainingAmount = false;
+        $scope.hasPayrollRemainingAmount = false;
         $scope.selectedForDelete = {
             payroll: false,
             ap:      false
@@ -275,53 +277,72 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 'directDeposit.notification.no.accounts.payable.allocation.click' :
                 'directDeposit.notification.no.accounts.payable.allocation.tap';
         };
+        
+        var amountsAreValid = function () {
+            var result = true;
+
+            if($scope.isEmployee && $scope.hasPayAccountsProposed){
+                result = ddListingService.amountsValid;
+
+                var allocs = $scope.distributions.proposed.allocations,
+                    acctWithRemaining = ddEditAccountService.payrollAccountWithRemainingAmount;
+
+                // Even if result is false at this point, validateAmountsForAllAccounts is still called here
+                // so the notification center gets repopulated.
+                result = ddListingService.validateAmountsForAllAccountsAndSetNotification(allocs, acctWithRemaining) && result;
+            }
+
+            return result;
+        };
 
         $scope.updateAccounts = function () {
-            var allocs = $scope.distributions.proposed.allocations,
-                promises = [];
+            if(amountsAreValid()) {
+                var allocs = $scope.distributions.proposed.allocations,
+                    promises = [];
+    
+                if(ddEditAccountService.doReorder === 'all'){
+                    var deferred = $q.defer();
+                    
+                    _.each(allocs, function(alloc){
+                        ddEditAccountService.setAmountValues(alloc, alloc.amountType);
+                    });
 
-            if(ddEditAccountService.doReorder === 'all'){
-                var deferred = $q.defer();
-                
-                _.each(allocs, function(alloc){
-                    ddEditAccountService.setAmountValues(alloc, alloc.amountType);
-                });
-                
-                ddEditAccountService.reorderAccounts().$promise.then(function (response) {
-                    if(response[0].failure) {
-                        notificationCenterService.displayNotifications(response[0].message, "error");
+                    ddEditAccountService.reorderAccounts().$promise.then(function (response) {
+                        if(response[0].failure) {
+                            notificationCenterService.displayNotifications(response[0].message, "error");
+                        }
+                        else {
+                            notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
+    
+                            ddEditAccountService.doReorder = false;
+                            
+                            deferred.resolve();
+                        }
+                    });
+                    
+                    promises.push(deferred.promise);
+                }
+                else {
+                    if($scope.isEmployee){
+                        var i;
+                        for(i = 0; i < allocs.length; i++){
+                            promises.push(updateAccount($scope.distributions.proposed.allocations[i]));
+                        }
                     }
-                    else {
-                        notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
-
-                        ddEditAccountService.doReorder = false;
-                        
-                        deferred.resolve();
-                    }
-                });
-                
-                promises.push(deferred.promise);
-            }
-            else {
-                if($scope.isEmployee){
-                    var i;
-                    for(i = 0; i < allocs.length; i++){
-                        promises.push(updateAccount($scope.distributions.proposed.allocations[i]));
+                    // AP account will already be updated if it is synced with a Payroll account
+                    if($scope.hasApAccount && !ddEditAccountService.syncedAccounts){
+                        promises.push(updateAccount($scope.apAccount));
                     }
                 }
-                // AP account will already be updated if it is synced with a Payroll account
-                if($scope.hasApAccount && !ddEditAccountService.syncedAccounts){
-                    promises.push(updateAccount($scope.apAccount));
-                }
+    
+                // When all updates are done, a refresh would not be necessary, as the input fields
+                // (e.g. Account Type dropdown) will have been already "updated" when the user made the
+                // change.  The *exception* to this, and the reason we do indeed refresh here, is because the
+                // "Net Pay Distribution" values may need to be recalculated, depending on the change the user made.
+                $q.all(promises).then(function() {
+                    $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                });
             }
-
-            // When all updates are done, a refresh would not be necessary, as the input fields
-            // (e.g. Account Type dropdown) will have been already "updated" when the user made the
-            // change.  The *exception* to this, and the reason we do indeed refresh here, is because the
-            // "Net Pay Distribution" values may need to be recalculated, depending on the change the user made.
-            $q.all(promises).then(function() {
-                $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
-            });
         };
         
         var updateAccount = function (acct) {
@@ -482,22 +503,24 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             });
         };
 
-        $scope.updateWhetherLastPayrollIsRemainingAmount = function () {
+        $scope.updateWhetherHasPayrollRemainingAmount = function () {
             if (!$scope.hasPayAccountsProposed) {
-                $scope.isLastPayrollRemainingAmount = false;
+                $scope.hasPayrollRemainingAmount = false;
+                ddEditAccountService.payrollAccountWithRemainingAmount = null;
             }
 
             var allocations = $scope.distributions.proposed.allocations,
                 lastAlloc = allocations[allocations.length - 1];
 
-            $scope.isLastPayrollRemainingAmount = lastAlloc.allocation === "100%";
+            $scope.hasPayrollRemainingAmount = lastAlloc.allocation === "100%";
+            ddEditAccountService.payrollAccountWithRemainingAmount = $scope.hasPayrollRemainingAmount ? lastAlloc : null;
 
         };
 
         // When payroll state changes, this can be called to refresh properties based on new state.
         $scope.updatePayrollState = function() {
             $scope.updateWhetherHasMaxPayrollAccounts();
-            $scope.updateWhetherLastPayrollIsRemainingAmount();
+            $scope.updateWhetherHasPayrollRemainingAmount();
 
         };
 

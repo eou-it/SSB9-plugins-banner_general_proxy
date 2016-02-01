@@ -31,17 +31,13 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','n
                 window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
             }
 
-            directDepositService.getDisclaimer().$promise.then(function (response) {
-                if(response.failure) {
-                    $rootScope.disclaimer = $filter('i18n')('directDeposit.disclaimer.text');
-                } else {
-                    $rootScope.disclaimer = response.disclaimer;
-                }
-            });
-            
             directDepositService.getRoles().$promise.then(function (response) {
                 $rootScope.isStudent = response.isStudent;
                 $rootScope.isEmployee = response.isEmployee;
+            });
+
+            directDepositService.getCurrencySymbol().$promise.then(function (response) {
+                $rootScope.currencySymbol = response.currencySymbol.trim();
             });
 
             $rootScope.isDesktopView = isDesktop();

@@ -8,12 +8,12 @@
 <td class="break-word">{{apAccount.bankRoutingInfo.bankRoutingNum|accountNumMask}}</td>
 <td class="break-word">{{apAccount.bankAccountNum|accountNumMask}}</td>
 <td>
-    <div class="dropdown desktop">
+    <div class="dropdown desktop-listing">
         <button dropdown-helper="begin" class="dropdown-btn ng-class: (accountTypeErr ? 'input-field-error' : null);" data-toggle="dropdown" href="#" role="option" >
             <span class="float-l form-spacing">
                 <choose-account account="apAccount"/>
             </span>
-            <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font"></span></span>
+            <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
         <ul class="dropdown-menu addAcct" role="menu" aria-label="{{'directDeposit.label.account.type.edit'|i18n}}">
             <li role="presentation">

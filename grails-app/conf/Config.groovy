@@ -79,7 +79,7 @@ grails.mime.types = [
 grails.views.default.codec = "html" // none, html, base64  **** note: Setting this to html will ensure html is escaped, to prevent XSS attack ****
 grails.views.gsp.encoding = "UTF-8"
 grails.converters.encoding = "UTF-8"
-grails.plugin.springsecurity.logout.afterLogoutUrl = "/ssb/hrDashboard"
+grails.plugin.springsecurity.logout.afterLogoutUrl = "/"
 grails.converters.domain.include.version = true
 //grails.converters.json.date = "default"
 
@@ -102,6 +102,23 @@ environments {
     development {
         grails.resources.debug = true;
     }
+}
+
+environments {
+    test {
+        ssbEnabled = true
+        ssbOracleUsersProxied = true
+        grails.plugins.springsecurity.interceptUrlMap = [
+                '/': ['IS_AUTHENTICATED_ANONYMOUSLY'] ]
+    }
+    development {
+        ssbEnabled = true
+        ssbOracleUsersProxied = true
+    }
+    production {
+
+    }
+
 }
 
 // ******************************************************************************

@@ -109,7 +109,10 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddEditAccountServi
 /* 
  * relies on the allocation variable from the ng-repeat in payListingPanelPopulatedProposedDesktop.html 
  */
-generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccountService', '$filter', function (ddEditAccountService, $filter) {
+generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDepositService', 'ddEditAccountService',
+    'ddListingService', '$filter', 'notificationCenterService',
+    function (directDepositService, ddEditAccountService, ddListingService, $filter, notificationCenterService) {
+
     return{
         restrict: 'A',
         templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposedDesktop.html',
@@ -118,29 +121,98 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             scope.alloc = scope.allocation;
             
             scope.alloc.amountType = ddEditAccountService.getAmountType(scope.alloc);
+            
+            scope.amtDropdownOpen = false;
+            scope.isValid = true;
+
+            scope.previousAmount = null; // Holds previous amount info in case it needs to be restored
 
             scope.setAllocationAcctType = function(type){
                 scope.alloc.accountType = type;
             };
 
             scope.displayAllocationVal = function () {
-                if(scope.alloc.amountType === 'remaining'){
+                if(directDepositService.isRemaining(scope.alloc)){
                     scope.alloc.allocation = $filter('i18n')('directDeposit.account.label.remaining');
                 }
                 else if(scope.alloc.amountType === 'percentage'){
-                    scope.alloc.allocation = $filter('number')((scope.alloc.percent ? scope.alloc.percent : '0'), 1) + '%';
+                    scope.alloc.allocation = $filter('number')(scope.alloc.percent ? scope.alloc.percent : '0') + '%';
                 }
                 else if(scope.alloc.amountType === 'amount'){
-                    scope.alloc.allocation = $filter('currency')((scope.alloc.amount ? scope.alloc.amount : '0'));
+                    scope.alloc.allocation = $filter('currency')((scope.alloc.amount ? scope.alloc.amount : '0'), scope.currencySymbol);
                 }
                 return scope.alloc.allocation;
             };
 
             scope.priorities = ddEditAccountService.priorities;
+
             scope.setAccountPriority = function (priority) {
-                ddEditAccountService.doReorder = 'all';
-                ddEditAccountService.setAccountPriority(scope.alloc, priority);
+                if(scope.alloc.priority != priority) {
+                    // Only amount types other than "Remaining" can be reprioritized
+                    if(!directDepositService.isRemaining(scope.alloc.percent)) {
+                        ddEditAccountService.doReorder = 'all';
+                        ddEditAccountService.setAccountPriority(scope.alloc, priority);
+                    }
+                }
             };
+
+            scope.validateAmounts = function (){
+                var isValid = ddListingService.validateAmountsForAccount(scope, scope.alloc, ddEditAccountService.payrollAccountWithRemainingAmount);
+
+                if(isValid) {
+                    notificationCenterService.clearNotifications();
+                    scope.amountErr = false;
+                } else if (scope.amountErr === 'rem') {
+                    // If user set it to "Remaining" in an invalid state, return to previous amount values
+                    // to avoid issues with a "Remaining" item residing at an invalid position in the allocation list.
+                    var alloc = scope.alloc;
+
+                    alloc.amountType = scope.previousAmount.amountType;
+                    alloc.amount = scope.previousAmount.amount;
+                    alloc.percent = scope.previousAmount.percent;
+                    alloc.allocation = scope.previousAmount.allocation;
+                }
+
+                // update validity flags only when the validity state has changed
+                if(scope.isValid !== isValid) {
+                    ddListingService.setAmountsValid(isValid);
+                    scope.isValid = isValid;
+                }
+            };
+
+            // When the amount is "Remaining" for a given allocation, the business rule is that
+            // that allocation's priority needs to be set to move the allocation to the end of the
+            // list of allocations.
+            scope.updatePriorityForAmount = function() {
+                var alloc = scope.alloc;
+
+                if (directDepositService.isRemaining(alloc) &&
+                    !ddListingService.accountWithRemainingAmountAlreadyExists(alloc, ddEditAccountService.payrollAccountWithRemainingAmount)) {
+
+                    ddEditAccountService.doReorder = 'all';
+                    ddEditAccountService.setAccountPriority(alloc, scope.priorities.length);
+                }
+            };
+
+            // validate the amounts when the drop down closes
+            scope.$watch('amtDropdownOpen', function(newVal, oldVal) {
+                // The "newVal != oldVal" phrase keeps this from running on page initialization,
+                // (i.e. the state has not changed on the dropdown) and the "!newVal" tells us
+                // that the dropdown has closed.
+                if (newVal != oldVal && !newVal) {
+                    scope.validateAmounts();
+                    scope.updatePriorityForAmount()
+                }
+            });
+
+            scope.capturePreviousAmount = function(amountType, amount, percent, allocation) {
+                scope.previousAmount = {
+                    amountType: amountType,
+                    amount:     amount ? amount : null,
+                    percent:    percent ? percent : null,
+                    allocation: allocation
+                }
+            }
         }
     };
 }]);

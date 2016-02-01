@@ -5,7 +5,6 @@ import grails.converters.JSON
 import net.hedtech.banner.DateUtility
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.crossproduct.BankRoutingInfo
-import net.hedtech.banner.webtailor.WebTailorUtility
 
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -34,6 +33,12 @@ class UpdateAccountController {
 
         try {
             JSON.use( 'deep' ) {
+
+                //newPosition is set so we need to do some reodering as we insert
+                if(map.newPosition){
+                    //directDepositAccountCompositeService.rePrioritizeAccounts(map, map.newPosition)
+                }
+
                 render directDepositAccountCompositeService.addorUpdateAccount(map) as JSON
             }
         } catch (ApplicationException e) {
@@ -59,13 +64,28 @@ class UpdateAccountController {
     }
     
     def reorderAccounts() {
-        // TODO: this needs to reorder accounts
         def map = request?.JSON ?: params
 
         try {
+            render directDepositAccountCompositeService.rePrioritizeAccounts(map, map.newPosition) as JSON
+
             directDepositAccountService.syncApAndHrAccounts(map)
+
+        } catch (ApplicationException e) {
+            def arrayResult = [];
+            arrayResult[0] = returnFailureMessage(e)
             
-            render directDepositAccountService.update(map) as JSON
+            render arrayResult as JSON
+        }
+    }
+
+    def getCurrency() {
+        try {
+            def symbol = [:]
+
+            symbol.currencySymbol = directDepositAccountCompositeService.getCurrencySymbol()
+
+            render symbol as JSON
 
         } catch (ApplicationException e) {
             render returnFailureMessage(e) as JSON
@@ -135,22 +155,6 @@ class UpdateAccountController {
         } catch (ApplicationException e) {
             render returnFailureMessage(e) as JSON
         }
-    }
-    
-    def getDisclaimerText() {
-        def model = [:]
-        
-        log.debug("fetching disclaimer text")
-        
-        model.disclaimer = WebTailorUtility.getInfoText("XeDirectDeposit", "XE_DIRECT_DEPOSIT")
-        
-        if(!model.disclaimer){
-            model.failure = true
-            
-            log.error("Error: Disclaimer text could not be retrieved")
-        }
-        
-        render model as JSON
     }
 
     def  returnFailureMessage(ApplicationException  e) {

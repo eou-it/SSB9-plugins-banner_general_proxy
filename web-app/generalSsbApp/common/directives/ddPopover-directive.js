@@ -31,7 +31,6 @@ generalSsbAppDirectives.directive('popOver', ['directDepositService', function(d
                 });
 
                 // Adjust positioning, etc. based on screen dimensions
-                // TODO: make this work for other dimensions than just portrait mobile
                 element.on('shown.bs.popover', function(event) {
                     var flipsLeft = isElementRightOfCenter(event.target),
                         flipClass = flipsLeft ? 'flipleft' : 'flipright',

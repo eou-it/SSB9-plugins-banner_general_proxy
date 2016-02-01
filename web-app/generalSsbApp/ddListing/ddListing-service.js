@@ -2,13 +2,25 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
+generalSsbApp.service('ddListingService', ['directDepositService', '$resource', '$filter', '$locale', 'notificationCenterService',
+    function (directDepositService, $resource, $filter, $locale, notificationCenterService) {
     var apListing = $resource('../ssb/:controller/:action',
             {controller: 'AccountListing', action: 'getApAccountsForCurrentUser'}),
         mostRecentPayrollListing = $resource('../ssb/:controller/:action',
             {controller: 'AccountListing', action: 'getLastPayDateInfo'}),
         userPayrollAllocationListing = $resource('../ssb/:controller/:action',
-            {controller: 'AccountListing', action: 'getUserPayrollAllocations'});
+            {controller: 'AccountListing', action: 'getUserPayrollAllocations'}),
+
+        /**
+         * Compare two accounts to determine if they're actually the same account
+         */
+        isSameAccount = function(a1, a2) {
+            return a1 !== null && a2 !== null &&
+                a1.bankAccountNum === a2.bankAccountNum &&
+                a1.bankRoutingInfo.bankRoutingNum === a2.bankRoutingInfo.bankRoutingNum &&
+                a1.hrIndicator === a2.hrIndicator &&
+                a1.apIndicator === a2.apIndicator;
+        };
 
     this.getApListing = function (){
         return apListing.query();
@@ -35,6 +47,155 @@ generalSsbApp.service('ddListingService', ['$resource', function ($resource) {
     // set init to false to force the listing controller to reload
     this.doReload = function(){
         this.init = false;
+    };
+    
+    // flag to indicate if all amounts are valid for save 
+    this.amountsValid = true;
+    
+    this.numAmountsInvalid = 0;
+    this.setAmountsValid = function (valid) {
+        if(valid){
+            this.numAmountsInvalid--;
+        }
+        else{
+            this.numAmountsInvalid++;
+        }
+
+        this.amountsValid = this.numAmountsInvalid <= 0;
+    };
+
+    this.checkIfTwoDecimalPlaces = function (num) {
+        num = String(num);
+
+        var decSpot = num.indexOf($locale.NUMBER_FORMATS.DECIMAL_SEP),
+            result = true;
+
+        if(decSpot >= 0){
+            if(num.length - decSpot > 3){
+                result = false;
+            }
+        }
+
+        return result;
+    };
+
+    // Validates amount as a valid currency amount and, if not valid, sets notification
+    this.validateCurrencyAmountAndSetNotification = function(acct) {
+        if(acct.amount > 0){
+            if(!this.checkIfTwoDecimalPlaces(acct.amount) || acct.amount > 99999999.99) {
+                notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.amount'), "error");
+
+                return false;
+            }
+        }
+        else {
+            notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.amount'), "error");
+
+            return false;
+        }
+
+        return true;
+    };
+
+    // Validates percentage and, if not valid, sets notification
+    this.validatePercentageAndSetNotification = function(acct) {
+        if(acct.percent > 0 && acct.percent <= 100){
+            if(!this.checkIfTwoDecimalPlaces(acct.percent)) {
+                notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.percent'), "error");
+
+                return false;
+            }
+        }
+        else {
+            notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.percent'), "error");
+
+            return false;
+        }
+
+        return true;
+    };
+
+    /**
+     * Determine if a remaining account already exists.
+     * If one already exists and the account that's being checked is the same account as that, return false.
+     * @param acct The account being checked
+     * @param existingPayrollAccountWithRemainingAmount Existing payroll account with remaining account, if any
+     * @returns {boolean} True if a different "Remaining" account already exists
+     */
+    this.accountWithRemainingAmountAlreadyExists = function(acct, existingPayrollAccountWithRemainingAmount) {
+        return existingPayrollAccountWithRemainingAmount &&
+               !isSameAccount(acct, existingPayrollAccountWithRemainingAmount);
+    };
+
+    this.validateNotMoreThanOneRemainingAccount = function(acct, existingPayrollAccountWithRemainingAmount) {
+        var self = this;
+
+        if(self.accountWithRemainingAmountAlreadyExists(acct, existingPayrollAccountWithRemainingAmount)) {
+            notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.remaining'), "error");
+
+            return false;
+        }
+
+        return true;
+    };
+
+    /**
+     * Validate amounts in account on scope and confirm that an account with "Remaining" (aka 100%) does not
+     * already exist.  Set appropriate error-related data on scope.
+     * @param scope
+     * @param acct Account to check
+     * @param existingPayrollAccountWithRemainingAmount Payroll account with remaining amount, if exists
+     * @returns {boolean} True if everything validates.
+     */
+    this.validateAmountsForAccount = function (scope, acct, existingPayrollAccountWithRemainingAmount) {
+        var self = this,
+            amountErr = null;
+
+        if(acct.amountType === 'amount') {
+            if (!self.validateCurrencyAmountAndSetNotification(acct)) {
+                amountErr = 'amt';
+            }
+        }
+        else if(directDepositService.isRemaining(acct)) {
+            if (!self.validateNotMoreThanOneRemainingAccount(acct, existingPayrollAccountWithRemainingAmount)) {
+                amountErr = 'rem';
+            }
+        }
+        else if(acct.amountType === 'percentage') {
+            if (!self.validatePercentageAndSetNotification(acct)) {
+                amountErr = 'pct';
+            }
+        }
+
+        if (amountErr) {
+            scope.amountErr = amountErr;
+        }
+
+        return !amountErr;
+    };
+
+    this.validateAmountsForAllAccountsAndSetNotification = function (accounts, existingPayrollAccountWithRemainingAmount){
+        var self = this;
+
+        _.each(accounts, function(acct) {
+            if(acct.amountType === 'amount') {
+                if (!self.validateCurrencyAmountAndSetNotification(acct)) {
+                    return false;
+                }
+            }
+            else if(directDepositService.isRemaining(acct)) {
+                if (!self.validateNotMoreThanOneRemainingAccount(acct, existingPayrollAccountWithRemainingAmount)) {
+                    return false;
+                }
+            }
+            else if(acct.amountType === 'percentage') {
+                if (!self.validatePercentageAndSetNotification(acct)) {
+                    return false;
+                }
+            }
+        });
+
+        return true;
     };
 
 }]);

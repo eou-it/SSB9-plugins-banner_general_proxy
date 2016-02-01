@@ -2,7 +2,9 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource) {
+generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resource',
+    function (directDepositService, $resource) {
+
     var createAccount = $resource('../ssb/:controller/:action',
         {controller: 'UpdateAccount', action: 'createAccount'}, {save: {method:'POST'}}),
 
@@ -13,7 +15,7 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
         {controller: 'UpdateAccount', action: 'reorderAllAccounts'}, {save: {method:'POST', isArray:true}}),
         
         reorderAccount = $resource('../ssb/:controller/:action',
-        {controller: 'UpdateAccount', action: 'reorderAccounts'}, {save: {method:'POST'}}),
+        {controller: 'UpdateAccount', action: 'reorderAccounts'}, {save: {method:'POST', isArray:true}}),
 
         deleteAccounts = $resource('../ssb/:controller/:action',
             {controller: 'UpdateAccount', action: 'deleteAccounts'}, {delete: {method:'POST', isArray:true}}),
@@ -22,18 +24,33 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
             {controller: 'UpdateAccount', action: 'getBankInfo'}, {query: {method:'GET', isArray:false}});
 
     this.saveAccount = function (account, createNew) {
-        return createNew ? createAccount.save(account) : updateAccount.save(account);
+        if(createNew){
+            if(this.doReorder === 'new') {
+                account.newPosition = account.priority;
+            }
+            return createAccount.save(account);
+        }
+        else {
+            // set the priority back to one received from database if updating payroll account
+            if(account.hrIndicator === 'A'){
+                account.priority = this.priorities[account.priority-1].persistVal;
+            }
+            return updateAccount.save(account);
+        }
     };
     
     this.reorderAccounts = function (account) {
-        if(this.doReorder === 'all'){
+        if(this.doReorder === 'all') {
             var i;
             for(i = 0; i < this.accounts.length; i++) {
                 this.accounts[i].priority = this.priorities[i].persistVal;
             }
             return reorderAllAccounts.save(this.accounts);
         }
-        else if(this.doReorder === 'single'){
+        else if(this.doReorder === 'single') {
+            account.newPosition = account.priority;
+            account.priority = this.priorities[account.priority-1].persistVal;
+
             return reorderAccount.save(account);
         }
     };
@@ -59,7 +76,7 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
     
     this.getAmountType = function (acct) {
         if(acct.allocation === '100%'){
-            acct.percent = null;
+            acct.percent = 100;
             acct.amount = null;
             return 'remaining';
         }
@@ -83,7 +100,7 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
             acct.amount = null;
         }
     };
-
+    
     this.syncedAccounts = false;
 
     this.setSyncedAccounts = function(val){this.syncedAccounts = val;};
@@ -104,11 +121,21 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
     };
     
     this.setAccountPriority = function (acct, priority) {
-        var i;
+        var i,
+            numAcctsToSort = 0,
+            lastAccount = this.accounts[this.accounts.length-1];
+        
+        if(directDepositService.isRemaining(lastAccount)) {
+            // don't move the remaining
+            numAcctsToSort = this.accounts.length-1;
+        }
+        else {
+            numAcctsToSort = this.accounts.length;
+        }
         
         if(acct.priority < priority){
             // decrease acct's priority i.e. will be allocated later
-            for(i = 0; i < this.accounts.length; i++) {
+            for(i = 0; i < numAcctsToSort; i++) {
                 if (this.accounts[i].priority <= priority) {
                     this.accounts[i].priority--;
                 }
@@ -116,7 +143,7 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
         }
         else if(acct.priority > priority){
             // increase acct's priority i.e. will be allocated earlier
-            for(i = 0; i < this.accounts.length; i++) {
+            for(i = 0; i < numAcctsToSort; i++) {
                 if(this.accounts[i].priority >= priority){
                     this.accounts[i].priority++;
                 }

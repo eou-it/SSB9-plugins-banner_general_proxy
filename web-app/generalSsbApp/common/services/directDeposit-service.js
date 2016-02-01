@@ -4,17 +4,13 @@
 
 generalSsbApp.service('directDepositService', ['$resource', function ($resource) {
 
-    var fetchDisclaimer = $resource('../ssb/:controller/:action',
-            {controller: 'UpdateAccount', action: 'getDisclaimerText'}, {query: {method:'GET', isArray:false}}),
-        fetchRoles = $resource('../ssb/:controller/:action',
+    var fetchRoles = $resource('../ssb/:controller/:action',
             {controller: 'General', action: 'getRoles'}, {query: {method:'GET', isArray:false}}),
         fetchConfig = $resource('../ssb/:controller/:action',
-            {controller: 'DirectDepositConfiguration', action: 'getConfig'});
+            {controller: 'DirectDepositConfiguration', action: 'getConfig'}),
+        fetchCurrencySymbol = $resource('../ssb/:controller/:action',
+            {controller: 'UpdateAccount', action: 'getCurrency'});
 
-    this.getDisclaimer = function () {
-        return fetchDisclaimer.query();
-    };
-    
     this.getRoles = function () {
         return fetchRoles.query();
     };
@@ -30,6 +26,10 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
         return this.config;
     };
 
+    this.getCurrencySymbol = function () {
+        return fetchCurrencySymbol.get();
+    }
+
     // Destroy all popovers (i.e. Bootstrap popovers)
     this.destroyAllPopovers = function (){
         // When created, the actual popover is the next sibling adjacent to the
@@ -42,6 +42,18 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
         // Thus the previous sibling (grabbed with prev()) is the
         // AngularJS popover element that needs to have 'destroy' called on it.
         $('body').find('.popover.in').prev().popover('destroy');
-    }
+    };
+
+    /**
+     * Does this account have an amount of "Remaining"?
+     * @param account
+     * @returns {boolean}
+     */
+    this.isRemaining = function(account) {
+        // A percentage of 100% is the same as "Remaining" from a business rules perspective.
+        // Note that the type-converting equality comparison (== as opposed to the strict ===) for
+        // percent is necessary as the value is a string, and it is being compared with a number.
+        return (account.amountType === 'remaining' || (account.amountType === 'percentage' && account.percent == 100));
+    };
 
 }]);
