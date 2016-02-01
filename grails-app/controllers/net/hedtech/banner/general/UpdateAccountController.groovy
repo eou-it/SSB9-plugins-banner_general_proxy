@@ -70,11 +70,12 @@ class UpdateAccountController {
     }
 
     def getCurrency() {
-        def map = request?.JSON ?: params
-
         try {
+            def symbol = [:]
 
-            render directDepositAccountCompositeService.getCurrencySymbol()
+            symbol.currencySymbol = directDepositAccountCompositeService.getCurrencySymbol()
+
+            render symbol as JSON
 
         } catch (ApplicationException e) {
             render returnFailureMessage(e) as JSON

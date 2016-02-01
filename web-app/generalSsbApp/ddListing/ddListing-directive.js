@@ -136,10 +136,10 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                     scope.alloc.allocation = $filter('i18n')('directDeposit.account.label.remaining');
                 }
                 else if(scope.alloc.amountType === 'percentage'){
-                    scope.alloc.allocation = (scope.alloc.percent ? scope.alloc.percent : '0') + '%';
+                    scope.alloc.allocation = $filter('number')(scope.alloc.percent ? scope.alloc.percent : '0') + '%';
                 }
                 else if(scope.alloc.amountType === 'amount'){
-                    scope.alloc.allocation = $filter('currency')((scope.alloc.amount ? scope.alloc.amount : '0'),'');
+                    scope.alloc.allocation = $filter('currency')((scope.alloc.amount ? scope.alloc.amount : '0'), scope.currencySymbol);
                 }
                 return scope.alloc.allocation;
             };

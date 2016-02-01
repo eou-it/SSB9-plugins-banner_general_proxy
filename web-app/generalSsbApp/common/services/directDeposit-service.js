@@ -7,7 +7,9 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
     var fetchRoles = $resource('../ssb/:controller/:action',
             {controller: 'General', action: 'getRoles'}, {query: {method:'GET', isArray:false}}),
         fetchConfig = $resource('../ssb/:controller/:action',
-            {controller: 'DirectDepositConfiguration', action: 'getConfig'});
+            {controller: 'DirectDepositConfiguration', action: 'getConfig'}),
+        fetchCurrencySymbol = $resource('../ssb/:controller/:action',
+            {controller: 'UpdateAccount', action: 'getCurrency'});
 
     this.getRoles = function () {
         return fetchRoles.query();
@@ -23,6 +25,10 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
 
         return this.config;
     };
+
+    this.getCurrencySymbol = function () {
+        return fetchCurrencySymbol.get();
+    }
 
     // Destroy all popovers (i.e. Bootstrap popovers)
     this.destroyAllPopovers = function (){

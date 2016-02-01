@@ -36,6 +36,10 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','n
                 $rootScope.isEmployee = response.isEmployee;
             });
 
+            directDepositService.getCurrencySymbol().$promise.then(function (response) {
+                $rootScope.currencySymbol = response.currencySymbol.trim();
+            });
+
             $rootScope.isDesktopView = isDesktop();
 
             // Above, we use the isDesktop function implemented in the banner_ui_ss plugin, which thus far has
