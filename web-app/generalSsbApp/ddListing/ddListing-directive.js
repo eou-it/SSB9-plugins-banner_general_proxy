@@ -109,7 +109,10 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddEditAccountServi
 /* 
  * relies on the allocation variable from the ng-repeat in payListingPanelPopulatedProposedDesktop.html 
  */
-generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccountService', 'ddListingService', '$filter', 'notificationCenterService', function (ddEditAccountService, ddListingService, $filter, notificationCenterService) {
+generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDepositService', 'ddEditAccountService',
+    'ddListingService', '$filter', 'notificationCenterService',
+    function (directDepositService, ddEditAccountService, ddListingService, $filter, notificationCenterService) {
+
     return{
         restrict: 'A',
         templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposedDesktop.html',
@@ -129,7 +132,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             };
 
             scope.displayAllocationVal = function () {
-                if(ddListingService.isRemaining(scope.alloc)){
+                if(directDepositService.isRemaining(scope.alloc)){
                     scope.alloc.allocation = $filter('i18n')('directDeposit.account.label.remaining');
                 }
                 else if(scope.alloc.amountType === 'percentage'){
@@ -145,12 +148,10 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
 
             scope.setAccountPriority = function (priority) {
                 if(scope.alloc.priority != priority) {
-                    if(scope.alloc.percent !== 100) {
+                    // Only amount types other than "Remaining" can be reprioritized
+                    if(!directDepositService.isRemaining(scope.alloc.percent)) {
                         ddEditAccountService.doReorder = 'all';
                         ddEditAccountService.setAccountPriority(scope.alloc, priority);
-                    }
-                    else{
-                        // TODO: can't reprioritize remaining
                     }
                 }
             };
@@ -185,7 +186,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             scope.updatePriorityForAmount = function() {
                 var alloc = scope.alloc;
 
-                if (ddListingService.isRemaining(alloc) &&
+                if (directDepositService.isRemaining(alloc) &&
                     !ddListingService.accountWithRemainingAmountAlreadyExists(alloc, ddEditAccountService.payrollAccountWithRemainingAmount)) {
 
                     ddEditAccountService.doReorder = 'all';

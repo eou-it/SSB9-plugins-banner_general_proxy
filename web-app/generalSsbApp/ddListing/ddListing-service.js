@@ -2,7 +2,8 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'notificationCenterService', function ($resource, $filter, $locale, notificationCenterService) {
+generalSsbApp.service('ddListingService', ['directDepositService', '$resource', '$filter', '$locale', 'notificationCenterService',
+    function (directDepositService, $resource, $filter, $locale, notificationCenterService) {
     var apListing = $resource('../ssb/:controller/:action',
             {controller: 'AccountListing', action: 'getApAccountsForCurrentUser'}),
         mostRecentPayrollListing = $resource('../ssb/:controller/:action',
@@ -115,18 +116,6 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'n
     };
 
     /**
-     * Does this account have an amount of "Remaining"?
-     * @param account
-     * @returns {boolean}
-     */
-    this.isRemaining = function(account) {
-        // A percentage of 100% is the same as "Remaining" from a business rules perspective.
-        // Note that the type-converting equality comparison (== as opposed to the strict ===) for
-        // percent is necessary as the value is a string, and it is being compared with a number.
-        return (account.amountType === 'remaining' || (account.amountType === 'percentage' && account.percent == 100));
-    };
-
-    /**
      * Determine if a remaining account already exists.
      * If one already exists and the account that's being checked is the same account as that, return false.
      * @param acct The account being checked
@@ -167,7 +156,7 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'n
                 amountErr = 'amt';
             }
         }
-        else if(self.isRemaining(acct)) {
+        else if(directDepositService.isRemaining(acct)) {
             if (!self.validateNotMoreThanOneRemainingAccount(acct, existingPayrollAccountWithRemainingAmount)) {
                 amountErr = 'rem';
             }
@@ -194,7 +183,7 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'n
                     return false;
                 }
             }
-            else if(self.isRemaining(acct)) {
+            else if(directDepositService.isRemaining(acct)) {
                 if (!self.validateNotMoreThanOneRemainingAccount(acct, existingPayrollAccountWithRemainingAmount)) {
                     return false;
                 }

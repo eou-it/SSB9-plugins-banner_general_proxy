@@ -36,6 +36,18 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
         // Thus the previous sibling (grabbed with prev()) is the
         // AngularJS popover element that needs to have 'destroy' called on it.
         $('body').find('.popover.in').prev().popover('destroy');
-    }
+    };
+
+    /**
+     * Does this account have an amount of "Remaining"?
+     * @param account
+     * @returns {boolean}
+     */
+    this.isRemaining = function(account) {
+        // A percentage of 100% is the same as "Remaining" from a business rules perspective.
+        // Note that the type-converting equality comparison (== as opposed to the strict ===) for
+        // percent is necessary as the value is a string, and it is being compared with a number.
+        return (account.amountType === 'remaining' || (account.amountType === 'percentage' && account.percent == 100));
+    };
 
 }]);
