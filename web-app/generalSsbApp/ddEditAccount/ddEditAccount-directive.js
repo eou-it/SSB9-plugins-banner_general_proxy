@@ -169,6 +169,24 @@ generalSsbAppDirectives.directive('dropdownState', [function () {
     };
 }]);
 
+// In Internet Explorer pressing the enter key while in the amount input boxes on the desktop listing page spawns
+// dropdown click events on the account type dropdown. Preventing the enter key event will stop
+// those dropdown events from generating
+generalSsbAppDirectives.directive('suppressEnterKey', [function () {
+    return {
+        restrict: 'A',
+        link: function (scope, elem) {
+            elem.on('keydown', function(event){
+                var code = event.keyCode || event.which;
+
+                if(code == 13){
+                    event.preventDefault();
+                }
+            });
+        }
+    };
+}]);
+
 generalSsbAppDirectives.directive('maskInput', ['$filter', function ($filter) {
     return {
         restrict: 'A',
