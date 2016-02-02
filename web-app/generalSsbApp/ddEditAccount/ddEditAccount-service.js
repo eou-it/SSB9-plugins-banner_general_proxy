@@ -25,7 +25,9 @@ generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resourc
 
     this.saveAccount = function (account, createNew) {
         if(createNew){
-            account.newPosition = account.priority;
+            if(account.hrIndicator === 'A'){
+                account.newPosition = account.priority;
+            }
             return createAccount.save(account);
         }
         else {
