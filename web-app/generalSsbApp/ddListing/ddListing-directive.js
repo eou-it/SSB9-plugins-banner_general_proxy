@@ -149,7 +149,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
             scope.setAccountPriority = function (priority) {
                 if(scope.alloc.priority != priority) {
                     // Only amount types other than "Remaining" can be reprioritized
-                    if(!directDepositService.isRemaining(scope.alloc.percent)) {
+                    if(!directDepositService.isRemaining(scope.alloc)) {
                         ddEditAccountService.doReorder = 'all';
                         ddEditAccountService.setAccountPriority(scope.alloc, priority);
                     }
@@ -210,10 +210,11 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
             });
 
             scope.capturePreviousAmount = function(amountType, amount, percent, allocation) {
+                // cast amount and percent to numbers to prevent ngModel numfmt errors
                 scope.previousAmount = {
                     amountType: amountType,
-                    amount:     amount ? amount : null,
-                    percent:    percent ? percent : null,
+                    amount:     amount ? Number(amount) : null,
+                    percent:    percent ? Number(percent) : null,
                     allocation: allocation
                 }
             }
