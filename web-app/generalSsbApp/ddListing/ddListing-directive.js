@@ -127,6 +127,8 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
 
             scope.previousAmount = null; // Holds previous amount info in case it needs to be restored
 
+            scope.preserveNotifications = false;
+
             scope.setAllocationAcctType = function(type){
                 scope.alloc.accountType = type;
             };
@@ -160,7 +162,10 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                 var isValid = ddListingService.validateAmountsForAccount(scope, scope.alloc, ddEditAccountService.payrollAccountWithRemainingAmount);
 
                 if(isValid) {
-                    notificationCenterService.clearNotifications();
+                    if (!scope.preserveNotifications) {
+                        notificationCenterService.clearNotifications();
+                    }
+
                     scope.amountErr = false;
                 } else if (scope.amountErr === 'rem') {
                     // If user set it to "Remaining" in an invalid state, return to previous amount values
@@ -171,6 +176,12 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                     alloc.amount = scope.previousAmount.amount;
                     alloc.percent = scope.previousAmount.percent;
                     alloc.allocation = scope.previousAmount.allocation;
+
+                    // Just above we found an invalid state and *automatically* returned it to a valid one.  However, we
+                    // still need to notify the user that their selected state was invalid.  We set this flag here so
+                    // that a subsequent call to this function, seeing that this *automatically fixed* amount is now
+                    // valid won't prematurely clear the notification.
+                    scope.preserveNotifications = true;
                 }
 
                 // update validity flags only when the validity state has changed
@@ -197,23 +208,28 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
             // validate the amounts when the drop down closes
             scope.$watch('amtDropdownOpen', function(newVal, oldVal) {
                 // The "newVal != oldVal" phrase keeps this from running on page initialization,
-                // (i.e. the state has not changed on the dropdown) and the "!newVal" tells us
-                // that the dropdown has closed.
-                if (newVal != oldVal && !newVal) {
-                    scope.validateAmounts();
-                    scope.updatePriorityForAmount()
+                // (i.e. the state has not changed on the dropdown).
+                if (newVal != oldVal) {
+                    if (newVal) { // Dropdown has opened
+                        // Save previous amount in case invalid "Remaining" is entered and we
+                        // need to return to previous values.
+                        scope.previousAmount = {
+                            amountType: scope.alloc.amountType,
+                            amount:     scope.alloc.amount ? Number(scope.alloc.amount) : null,
+                            percent:    scope.alloc.percent ? Number(scope.alloc.percent) : null,
+                            allocation: scope.alloc.allocation
+                        };
+                    } else { // Dropdown has closed
+                        scope.validateAmounts();
+
+                        // Notifications can be cleared at will now; we're past the point where we
+                        // need to make sure they hang around.
+                        scope.preserveNotifications = false;
+
+                        scope.updatePriorityForAmount();
+                    }
                 }
             });
-
-            scope.capturePreviousAmount = function(amountType, amount, percent, allocation) {
-                // cast amount and percent to numbers to prevent ngModel numfmt errors
-                scope.previousAmount = {
-                    amountType: amountType,
-                    amount:     amount ? Number(amount) : null,
-                    percent:    percent ? Number(percent) : null,
-                    allocation: allocation
-                }
-            }
         }
     };
 }]);
