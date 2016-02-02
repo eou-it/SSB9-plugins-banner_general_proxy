@@ -2,7 +2,9 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource) {
+generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resource',
+    function (directDepositService, $resource) {
+
     var createAccount = $resource('../ssb/:controller/:action',
         {controller: 'UpdateAccount', action: 'createAccount'}, {save: {method:'POST'}}),
 
@@ -87,7 +89,7 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
     };
     
     this.setAmountValues = function (acct, amountType){
-        if(amountType === 'remaining'){
+        if(directDepositService.isRemaining(acct)){
             acct.percent = 100;
             acct.amount = ''; // grails will ignore null values, so use empty strings instead
         }
@@ -120,10 +122,11 @@ generalSsbApp.service('ddEditAccountService', ['$resource', function ($resource)
     
     this.setAccountPriority = function (acct, priority) {
         var i,
-            numAcctsToSort = 0;
+            numAcctsToSort = 0,
+            lastAccount = this.accounts[this.accounts.length-1];
         
-        if(this.accounts[this.accounts.length-1].percent === 100) {
-            // don't move the remaining 
+        if(directDepositService.isRemaining(lastAccount)) {
+            // don't move the remaining
             numAcctsToSort = this.accounts.length-1;
         }
         else {

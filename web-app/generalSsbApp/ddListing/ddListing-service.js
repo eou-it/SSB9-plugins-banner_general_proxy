@@ -2,7 +2,8 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'notificationCenterService', function ($resource, $filter, $locale, notificationCenterService) {
+generalSsbApp.service('ddListingService', ['directDepositService', '$resource', '$filter', 'notificationCenterService',
+    function (directDepositService, $resource, $filter, notificationCenterService) {
     var apListing = $resource('../ssb/:controller/:action',
             {controller: 'AccountListing', action: 'getApAccountsForCurrentUser'}),
         mostRecentPayrollListing = $resource('../ssb/:controller/:action',
@@ -66,7 +67,7 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'n
     this.checkIfTwoDecimalPlaces = function (num) {
         num = String(num);
 
-        var decSpot = num.indexOf($locale.NUMBER_FORMATS.DECIMAL_SEP),
+        var decSpot = num.indexOf('.'),
             result = true;
 
         if(decSpot >= 0){
@@ -79,51 +80,39 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'n
     };
 
     // Validates amount as a valid currency amount and, if not valid, sets notification
-    this.validateCurrencyAmountAndSetNotification = function(acct) {
+    this.isInvalidCurrencyAmountAndSetNotification = function(acct) {
+        var msg = false;
+        
         if(acct.amount > 0){
             if(!this.checkIfTwoDecimalPlaces(acct.amount) || acct.amount > 99999999.99) {
-                notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.amount'), "error");
-
-                return false;
+                msg = $filter('i18n')('directDeposit.invalid.format.amount');
+                notificationCenterService.displayNotifications(msg, "error");
             }
         }
         else {
-            notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.amount'), "error");
-
-            return false;
+            msg = $filter('i18n')('directDeposit.invalid.amount.amount');
+            notificationCenterService.displayNotifications(msg, "error");
         }
 
-        return true;
+        return msg;
     };
 
     // Validates percentage and, if not valid, sets notification
-    this.validatePercentageAndSetNotification = function(acct) {
+    this.isInvalidPercentageAndSetNotification = function(acct) {
+        var msg = false;
+        
         if(acct.percent > 0 && acct.percent <= 100){
             if(!this.checkIfTwoDecimalPlaces(acct.percent)) {
-                notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.format.percent'), "error");
-
-                return false;
+                msg = $filter('i18n')('directDeposit.invalid.format.percent');
+                notificationCenterService.displayNotifications(msg, "error");
             }
         }
         else {
-            notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.percent'), "error");
-
-            return false;
+            msg = $filter('i18n')('directDeposit.invalid.amount.percent')
+            notificationCenterService.displayNotifications(msg, "error");
         }
 
-        return true;
-    };
-
-    /**
-     * Does this account have an amount of "Remaining"?
-     * @param account
-     * @returns {boolean}
-     */
-    this.isRemaining = function(account) {
-        // A percentage of 100% is the same as "Remaining" from a business rules perspective.
-        // Note that the type-converting equality comparison (== as opposed to the strict ===) for
-        // percent is necessary as the value is a string, and it is being compared with a number.
-        return (account.amountType === 'remaining' || (account.amountType === 'percentage' && account.percent == 100));
+        return msg;
     };
 
     /**
@@ -138,16 +127,16 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'n
                !isSameAccount(acct, existingPayrollAccountWithRemainingAmount);
     };
 
-    this.validateNotMoreThanOneRemainingAccount = function(acct, existingPayrollAccountWithRemainingAmount) {
-        var self = this;
+    this.hasMoreThanOneRemainingAccount = function(acct, existingPayrollAccountWithRemainingAmount) {
+        var self = this,
+            msg = false;
 
         if(self.accountWithRemainingAmountAlreadyExists(acct, existingPayrollAccountWithRemainingAmount)) {
-            notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.remaining'), "error");
-
-            return false;
+            msg = $filter('i18n')('directDeposit.invalid.amount.remaining');
+            notificationCenterService.displayNotifications(msg, "error");
         }
 
-        return true;
+        return msg;
     };
 
     /**
@@ -160,53 +149,69 @@ generalSsbApp.service('ddListingService', ['$resource', '$filter', '$locale', 'n
      */
     this.validateAmountsForAccount = function (scope, acct, existingPayrollAccountWithRemainingAmount) {
         var self = this,
-            amountErr = null;
+            amountErr = null,
+            msg = false;
 
         if(acct.amountType === 'amount') {
-            if (!self.validateCurrencyAmountAndSetNotification(acct)) {
+            msg = self.isInvalidCurrencyAmountAndSetNotification(acct);
+            if (msg) {
                 amountErr = 'amt';
             }
         }
-        else if(self.isRemaining(acct)) {
-            if (!self.validateNotMoreThanOneRemainingAccount(acct, existingPayrollAccountWithRemainingAmount)) {
+        else if(directDepositService.isRemaining(acct)) {
+            msg = self.hasMoreThanOneRemainingAccount(acct, existingPayrollAccountWithRemainingAmount);
+            if (msg) {
                 amountErr = 'rem';
             }
         }
         else if(acct.amountType === 'percentage') {
-            if (!self.validatePercentageAndSetNotification(acct)) {
+            msg = self.isInvalidPercentageAndSetNotification(acct);
+            if (msg) {
                 amountErr = 'pct';
             }
+        }
+        else {
+            amountErr = true;
         }
 
         if (amountErr) {
             scope.amountErr = amountErr;
+            scope.amountMessage = msg;
         }
 
         return !amountErr;
     };
 
     this.validateAmountsForAllAccountsAndSetNotification = function (accounts, existingPayrollAccountWithRemainingAmount){
-        var self = this;
+        var self = this,
+            result = true;
 
         _.each(accounts, function(acct) {
             if(acct.amountType === 'amount') {
-                if (!self.validateCurrencyAmountAndSetNotification(acct)) {
-                    return false;
+                if (self.isInvalidCurrencyAmountAndSetNotification(acct)) {
+                    result = false;
+                    return;
                 }
             }
-            else if(self.isRemaining(acct)) {
-                if (!self.validateNotMoreThanOneRemainingAccount(acct, existingPayrollAccountWithRemainingAmount)) {
-                    return false;
+            else if(directDepositService.isRemaining(acct)) {
+                if (self.hasMoreThanOneRemainingAccount(acct, existingPayrollAccountWithRemainingAmount)) {
+                    result = false;
+                    return;
                 }
             }
             else if(acct.amountType === 'percentage') {
-                if (!self.validatePercentageAndSetNotification(acct)) {
-                    return false;
+                if (self.isInvalidPercentageAndSetNotification(acct)) {
+                    result = false;
+                    return;
                 }
+            }
+            else {
+                result = false;
+                return;
             }
         });
 
-        return true;
+        return result;
     };
 
 }]);

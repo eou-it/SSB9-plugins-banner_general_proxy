@@ -21,7 +21,7 @@
                 {{'directDeposit.account.label.accountType'|i18n}}: <account-type account="alloc"/>
             </div>
             <div class="col-sm-4 hr-account-field no-padding">
-                {{'directDeposit.account.label.amount'|i18n}}: {{alloc.allocation}}
+                {{'directDeposit.account.label.amount'|i18n}}: {{(isRemaining(alloc) ? ('directDeposit.account.label.remaining'|i18n) : alloc.allocation)}}
             </div>
             <div class="col-sm-4 hr-account-field no-padding">
                 {{'directDeposit.account.label.priority'|i18n}}: {{alloc.priority}}

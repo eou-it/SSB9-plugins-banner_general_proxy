@@ -109,7 +109,10 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddEditAccountServi
 /* 
  * relies on the allocation variable from the ng-repeat in payListingPanelPopulatedProposedDesktop.html 
  */
-generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccountService', 'ddListingService', '$filter', 'notificationCenterService', function (ddEditAccountService, ddListingService, $filter, notificationCenterService) {
+generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDepositService', 'ddEditAccountService',
+    'ddListingService', '$filter', 'notificationCenterService',
+    function (directDepositService, ddEditAccountService, ddListingService, $filter, notificationCenterService) {
+
     return{
         restrict: 'A',
         templateUrl: '../generalSsbApp/ddListing/payAccountInformationProposedDesktop.html',
@@ -129,14 +132,14 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             };
 
             scope.displayAllocationVal = function () {
-                if(ddListingService.isRemaining(scope.alloc)){
+                if(directDepositService.isRemaining(scope.alloc)){
                     scope.alloc.allocation = $filter('i18n')('directDeposit.account.label.remaining');
                 }
                 else if(scope.alloc.amountType === 'percentage'){
-                    scope.alloc.allocation = (scope.alloc.percent ? scope.alloc.percent : '0') + '%';
+                    scope.alloc.allocation = $filter('number')(scope.alloc.percent ? scope.alloc.percent : '0') + '%';
                 }
                 else if(scope.alloc.amountType === 'amount'){
-                    scope.alloc.allocation = $filter('currency')((scope.alloc.amount ? scope.alloc.amount : '0'));
+                    scope.alloc.allocation = $filter('currency')((scope.alloc.amount ? scope.alloc.amount : '0'), scope.currencySymbol);
                 }
                 return scope.alloc.allocation;
             };
@@ -145,12 +148,10 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
 
             scope.setAccountPriority = function (priority) {
                 if(scope.alloc.priority != priority) {
-                    if(scope.alloc.percent !== 100) {
+                    // Only amount types other than "Remaining" can be reprioritized
+                    if(!directDepositService.isRemaining(scope.alloc)) {
                         ddEditAccountService.doReorder = 'all';
                         ddEditAccountService.setAccountPriority(scope.alloc, priority);
-                    }
-                    else{
-                        // TODO: can't reprioritize remaining
                     }
                 }
             };
@@ -185,12 +186,11 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             scope.updatePriorityForAmount = function() {
                 var alloc = scope.alloc;
 
-                if (ddListingService.isRemaining(alloc) &&
+                if (directDepositService.isRemaining(alloc) &&
                     !ddListingService.accountWithRemainingAmountAlreadyExists(alloc, ddEditAccountService.payrollAccountWithRemainingAmount)) {
 
                     ddEditAccountService.doReorder = 'all';
                     ddEditAccountService.setAccountPriority(alloc, scope.priorities.length);
-                    scope.$apply();
                 }
             };
 
@@ -206,10 +206,11 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['ddEditAccoun
             });
 
             scope.capturePreviousAmount = function(amountType, amount, percent, allocation) {
+                // cast amount and percent to numbers to prevent ngModel numfmt errors
                 scope.previousAmount = {
                     amountType: amountType,
-                    amount:     amount ? amount : null,
-                    percent:    percent ? percent : null,
+                    amount:     amount ? Number(amount) : null,
+                    percent:    percent ? Number(percent) : null,
                     allocation: allocation
                 }
             }
