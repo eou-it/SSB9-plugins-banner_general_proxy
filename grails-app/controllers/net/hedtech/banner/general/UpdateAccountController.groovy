@@ -27,13 +27,12 @@ class UpdateAccountController {
 
         try {
             JSON.use( 'deep' ) {
-
                 //newPosition is set so we need to do some reodering as we insert
                 if(map.newPosition){
-                    //directDepositAccountCompositeService.rePrioritizeAccounts(map, map.newPosition)
+                    directDepositAccountCompositeService.rePrioritizeAccounts(map, map.newPosition)
+                } else {
+                    render directDepositAccountCompositeService.addorUpdateAccount(map) as JSON
                 }
-
-                render directDepositAccountCompositeService.addorUpdateAccount(map) as JSON
             }
         } catch (ApplicationException e) {
             render returnFailureMessage(e) as JSON
