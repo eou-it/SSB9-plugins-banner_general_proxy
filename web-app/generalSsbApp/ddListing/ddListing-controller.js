@@ -518,7 +518,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 var allocations = $scope.distributions.proposed.allocations,
                     lastAlloc = allocations[allocations.length - 1];
 
-                $scope.hasPayrollRemainingAmount = lastAlloc.allocation === "100%";
+                $scope.hasPayrollRemainingAmount = directDepositService.isRemaining(lastAlloc);
                 ddEditAccountService.payrollAccountWithRemainingAmount = $scope.hasPayrollRemainingAmount ? lastAlloc : null;
             }
         };

@@ -213,7 +213,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                 // The "newVal != oldVal" phrase keeps this from running on page initialization,
                 // (i.e. the state has not changed on the dropdown).
                 if (newVal != oldVal) {
-                    if (newVal) { // Dropdown has opened
+                    if (newVal) { // Dropdown has OPENED
                         // Save previous amount in case invalid "Remaining" is entered and we
                         // need to return to previous values.
                         scope.previousAmount = {
@@ -222,7 +222,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                             percent:    scope.alloc.percent ? Number(scope.alloc.percent) : null,
                             allocation: scope.alloc.allocation
                         };
-                    } else { // Dropdown has closed
+                    } else { // Dropdown has CLOSED
                         scope.validateAmounts();
 
                         // Notifications can be cleared at will now; we're past the point where we
@@ -230,6 +230,10 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                         scope.preserveNotifications = false;
 
                         scope.updatePriorityForAmount();
+
+                        // Status of an account with "Remaining" status may have changed, so update
+                        var parentListingController = scope.$parent;
+                        parentListingController.updateWhetherHasPayrollRemainingAmount();
                     }
                 }
             });
