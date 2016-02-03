@@ -37,6 +37,8 @@ class UpdateAccountController {
                 // response object to keep UI happy
                 def r = [:]
 
+                fixJSONObjectForCast(map)
+
                 //newPosition is set so we need to do some reodering as we insert
                 if(map.newPosition) {
                     r.list = directDepositAccountCompositeService.rePrioritizeAccounts(map, map.newPosition)
@@ -71,6 +73,8 @@ class UpdateAccountController {
         def map = request?.JSON ?: params
 
         try {
+            fixJSONObjectForCast(map)
+
             render directDepositAccountCompositeService.rePrioritizeAccounts(map, map.newPosition) as JSON
 
             directDepositAccountService.syncApAndHrAccounts(map)
