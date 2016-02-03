@@ -25,7 +25,7 @@ generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resourc
 
     this.saveAccount = function (account, createNew) {
         if(createNew){
-            if(this.doReorder === 'new') {
+            if(account.hrIndicator === 'A'){
                 account.newPosition = account.priority;
             }
             return createAccount.save(account);
@@ -89,7 +89,7 @@ generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resourc
     };
     
     this.setAmountValues = function (acct, amountType){
-        if(amountType === 'remaining'){
+        if(directDepositService.isRemaining(acct)){
             acct.percent = 100;
             acct.amount = null;
         }

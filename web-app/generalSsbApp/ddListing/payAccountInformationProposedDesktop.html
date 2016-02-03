@@ -38,7 +38,7 @@
         </button>
         <ul class="dropdown-menu addAcct listing" stop-click role="radiogroup" aria-label="{{'directDeposit.label.account.amount.edit'|i18n}}">
             <li ng-class="(alloc.amountType === 'remaining' ? 'dropdown-li-focus' : '')" class="listing" role="presentation">
-                <input ng-model="alloc.amountType" ng-change="capturePreviousAmount('{{alloc.amountType}}', '{{alloc.amount}}', '{{alloc.percent}}', '{{alloc.allocation}}')" class="edit-radio" type="radio" name="amount-type{{$index}}" value="remaining" checked aria-labelledby="rem-radio-lbl{{$index}}">
+                <input ng-model="alloc.amountType" class="edit-radio" type="radio" name="amount-type{{$index}}" value="remaining" checked aria-labelledby="rem-radio-lbl{{$index}}">
                 <span class="lbl radio-list ws-nowrap" id="rem-radio-lbl{{$index}}">{{'directDeposit.account.amount.remaining'|i18n}}</span>
                 <br>
             </li>
@@ -47,7 +47,7 @@
                 <span class="lbl radio-list" id="amt-radio-lbl{{$index}}">{{'directDeposit.account.amount.amount'|i18n}}</span>
                 <div ng-show="alloc.amountType === 'amount'" class="amount-spacing ws-nowrap">
                     <label class="visuallyhidden" for="amt-txt-input{{$index}}">{{'directDeposit.account.label.amount.amount'|i18n}}</label>
-                    <input ng-model="alloc.amount" dropdown-helper="end" ng-blur="amountAmtFocused=false; validateAmounts()" ng-focus="amountAmtFocused=true" ng-class="[(amountErr === 'amt' && !amountAmtFocused ? 'input-field-error' : null)]" class="radio-txt-input semi-bold form-spacing" id="amt-txt-input{{$index}}" type="number" placeholder="{{'directDeposit.label.input.amount'|i18n}}"/>
+                    <input ng-model="alloc.amount" dropdown-helper="end" suppress-enter-key ng-blur="amountAmtFocused=false; validateAmounts()" ng-focus="amountAmtFocused=true" ng-class="[(amountErr === 'amt' && !amountAmtFocused ? 'input-field-error' : null)]" class="radio-txt-input semi-bold form-spacing" id="amt-txt-input{{$index}}" type="number" placeholder="{{'directDeposit.label.input.amount'|i18n}}"/>
                     <span ng-if="amountErr === 'amt' && !amountAmtFocused" class="input icon amt-input-fail">
                         <span class="icon-error ellucian-font"></span>
                     </span>
@@ -58,7 +58,7 @@
                 <span class="lbl radio-list" id="pct-radio-lbl{{$index}}">{{'directDeposit.account.amount.percentage'|i18n}}</span>
                 <div ng-show="alloc.amountType === 'percentage'" class="amount-spacing ws-nowrap">
                     <label class="visuallyhidden" for="pct-txt-input{{$index}}">{{'directDeposit.account.label.amount.percent'|i18n}}</label>
-                    <input ng-model="alloc.percent" dropdown-helper="end" ng-blur="amountPctFocused=false; validateAmounts()" ng-focus="amountPctFocused=true" ng-class="[(amountErr === 'pct' && !amountPctFocused ? 'input-field-error' : null)]" class="radio-txt-input semi-bold form-spacing" id="pct-txt-input{{$index}}" type="number" placeholder="{{'directDeposit.label.input.percent'|i18n}}"/> %
+                    <input ng-model="alloc.percent" dropdown-helper="end" suppress-enter-key ng-blur="amountPctFocused=false; validateAmounts()" ng-focus="amountPctFocused=true" ng-class="[(amountErr === 'pct' && !amountPctFocused ? 'input-field-error' : null)]" class="radio-txt-input semi-bold form-spacing" id="pct-txt-input{{$index}}" type="number" placeholder="{{'directDeposit.label.input.percent'|i18n}}"/> %
                     <span ng-if="amountErr === 'pct' && !amountPctFocused" class="input icon pct-input-fail">
                         <span class="icon-error ellucian-font"></span>
                     </span>
@@ -69,7 +69,7 @@
 </td>
 <td class="break-word">
     <div class="dropdown desktop-listing" role="menu">
-        <button dropdown-helper="begin" ng-disabled="alloc.amountType === 'remaining'" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
+        <button dropdown-helper="begin" ng-disabled="isRemaining(alloc)" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
             <span class="float-l form-spacing" aria-live="polite">
                 {{alloc.priority}}
             </span>

@@ -173,6 +173,10 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             return total;
         };
+        
+        $scope.isRemaining = function(account){
+            return directDepositService.isRemaining(account);
+        }
 
         // Accounts Payable
         $scope.apListingColumns = [
