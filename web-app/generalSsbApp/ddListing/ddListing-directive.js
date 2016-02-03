@@ -182,6 +182,9 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                     // that a subsequent call to this function, seeing that this *automatically fixed* amount is now
                     // valid won't prematurely clear the notification.
                     scope.preserveNotifications = true;
+                    
+                    // remaining errors will be auto-corrected so set this account's valid state back to whatever it was
+                    isValid = scope.isValid;
                 }
 
                 // update validity flags only when the validity state has changed
