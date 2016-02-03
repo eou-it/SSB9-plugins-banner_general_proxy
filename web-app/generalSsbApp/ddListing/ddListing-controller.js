@@ -411,6 +411,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
                         return false;
                     });
+                    
+                    $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
                 }
             });
         };
@@ -512,20 +514,21 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 $scope.hasPayrollRemainingAmount = false;
                 ddEditAccountService.payrollAccountWithRemainingAmount = null;
             }
+            else {
+                var allocations = $scope.distributions.proposed.allocations,
+                    lastAlloc = allocations[allocations.length - 1];
 
-            var allocations = $scope.distributions.proposed.allocations,
-                lastAlloc = allocations[allocations.length - 1];
-
-            $scope.hasPayrollRemainingAmount = lastAlloc.allocation === "100%";
-            ddEditAccountService.payrollAccountWithRemainingAmount = $scope.hasPayrollRemainingAmount ? lastAlloc : null;
-
+                $scope.hasPayrollRemainingAmount = lastAlloc.allocation === "100%";
+                ddEditAccountService.payrollAccountWithRemainingAmount = $scope.hasPayrollRemainingAmount ? lastAlloc : null;
+            }
         };
 
         // When payroll state changes, this can be called to refresh properties based on new state.
         $scope.updatePayrollState = function() {
+            $scope.hasPayAccountsProposed = !!$scope.distributions.proposed.allocations.length;
+
             $scope.updateWhetherHasMaxPayrollAccounts();
             $scope.updateWhetherHasPayrollRemainingAmount();
-
         };
 
 

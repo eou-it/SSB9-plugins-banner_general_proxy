@@ -105,7 +105,7 @@ generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resourc
 
     this.setSyncedAccounts = function(val){this.syncedAccounts = val;};
 
-    this.priorities = [0];
+    this.priorities = [];
     this.accounts = [0];
     this.doReorder = false;
     
