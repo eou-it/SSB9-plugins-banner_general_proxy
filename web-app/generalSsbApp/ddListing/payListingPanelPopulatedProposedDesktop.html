@@ -14,9 +14,9 @@
     <tbody>
         <tr ng-repeat="allocation in distributions.proposed.allocations" pay-account-info-proposed-desktop></tr>
         <tr ng-if="!hasPayrollRemainingAmount" class="remaining-amount-notification">
-            <td colspan="7" class="no-padding">
+            <td colspan="8" class="low-profile-notification">
                 {{'directDeposit.remaining.amount.paid.by.check.notification'|i18n}}
-            </td><td></td>
+            </td>
         </tr>
         <tr class="account-total-footer">
             <td colspan="7" class="no-padding">
@@ -26,11 +26,11 @@
            </td><td></td>
         </tr>
         <tr class="account-total-footer">
-            <td colspan="7" class="no-padding">
+            <td colspan="8" class="no-padding">
                 <div class="notification-box-wrapper">
                     <notification-box notification-text={{'directDeposit.label.total.net.pay.message'|i18n}} />
                 </div>
-            </td><td></td>
+            </td>
         </tr>
     </tbody>
 </table>

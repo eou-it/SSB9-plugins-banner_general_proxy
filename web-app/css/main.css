@@ -864,12 +864,23 @@ a.delete-account-link {
 }
 
 .dd-notification-box {
+    display: table;
+    margin: 12px;
+}
+
+.dd-notification-row {
+    display: table-row;
+}
+
+.dd-notification-cell {
+    display: table-cell;
+}
+
+.dd-notification-content {
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin: 12px;
     padding: 10px;
     background-color: #fffeea;
-    display: table;
 }
 
 .notification-icon {
@@ -881,6 +892,11 @@ a.delete-account-link {
 
 .notification-text {
     display: table-cell;
+}
+
+.low-profile-notification {
+    padding-top: 7px;
+    padding-bottom: 7px;
 }
 
 .desktop-account-list-table {
