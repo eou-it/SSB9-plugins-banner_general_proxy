@@ -510,7 +510,7 @@ button.closebtn {
 
 .dropdown-menu.addAcct.listing {
     min-width: 100%;
-    width: unset;
+    width: auto;
 }
 
 li.listing {
