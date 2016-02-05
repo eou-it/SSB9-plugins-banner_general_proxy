@@ -6,6 +6,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
     function ($scope, $rootScope, $state, $modal, $filter, $q, ddListingService, ddEditAccountService,
               directDepositService, notificationCenterService){
 
+        // CONSTANTS
+        var REMAINING_NONE = directDepositService.REMAINING_NONE,
+            REMAINING_ONE = directDepositService.REMAINING_ONE,
+            REMAINING_MULTIPLE = directDepositService.REMAINING_MULTIPLE;
+
         // LOCAL FUNCTIONS
         // ---------------
         /**
@@ -38,8 +43,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             // if the listing controller has already been initialized, then abort
             if(ddListingService.isInit()) return;
 
-            ddListingService.amountsValid = true;
-            
+            ddListingService.mainListingControllerScope = $scope;
+
             ddEditAccountService.setSyncedAccounts(false);
             
             var acctPromises = [ddListingService.getApListing().$promise,
@@ -173,10 +178,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             return total;
         };
-        
-        $scope.isRemaining = function(account){
-            return directDepositService.isRemaining(account);
-        }
 
         // Accounts Payable
         $scope.apListingColumns = [
@@ -286,14 +287,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             var result = true;
 
             if($scope.isEmployee && $scope.hasPayAccountsProposed){
-                result = ddListingService.amountsValid;
+                var allocs = $scope.distributions.proposed.allocations;
 
-                var allocs = $scope.distributions.proposed.allocations,
-                    acctWithRemaining = ddEditAccountService.payrollAccountWithRemainingAmount;
-
-                // Even if result is false at this point, validateAmountsForAllAccounts is still called here
-                // so the notification center gets repopulated.
-                result = ddListingService.validateAmountsForAllAccountsAndSetNotification(allocs, acctWithRemaining) && result;
+                result = ddListingService.validateAmountsForAllAccountsAndSetNotification(allocs);
             }
 
             return result;
@@ -509,18 +505,38 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             });
         };
 
-        $scope.updateWhetherHasPayrollRemainingAmount = function () {
+        $scope.getRemainingAmountAllocationStatus = function() {
             if (!$scope.hasPayAccountsProposed) {
-                $scope.hasPayrollRemainingAmount = false;
-                ddEditAccountService.payrollAccountWithRemainingAmount = null;
+                return REMAINING_NONE;
             }
-            else {
-                var allocations = $scope.distributions.proposed.allocations,
-                    lastAlloc = allocations[allocations.length - 1];
 
-                $scope.hasPayrollRemainingAmount = directDepositService.isRemaining(lastAlloc);
-                ddEditAccountService.payrollAccountWithRemainingAmount = $scope.hasPayrollRemainingAmount ? lastAlloc : null;
-            }
+            var allocations = $scope.distributions.proposed.allocations,
+                hasAccountWithRemaining = false,
+                secondAlloc;
+
+            // Check for invalid case: there are multiple allocations with an amount of "Remaining".
+            // (Find first duplicate allocation, then stop iterating.)
+            secondAlloc = _.find(allocations, function(alloc) {
+                if (directDepositService.isRemaining(alloc)) {
+                    if (hasAccountWithRemaining) {
+                        // We already found a "Remaining" one; this is a second one!
+                        return true;
+                    } else {
+                        // This is first one we've found; one such allocation is fine.
+                        hasAccountWithRemaining = true;
+                    }
+                }
+            });
+
+            return secondAlloc ? REMAINING_MULTIPLE : hasAccountWithRemaining ? REMAINING_ONE : REMAINING_NONE;
+        };
+
+        $scope.hasMultipleRemainingAmountAllocations = function() {
+            return $scope.getRemainingAmountAllocationStatus() === REMAINING_MULTIPLE;
+        };
+
+        $scope.updateWhetherHasPayrollRemainingAmount = function () {
+            $scope.hasPayrollRemainingAmount = $scope.getRemainingAmountAllocationStatus() !== REMAINING_NONE;
         };
 
         // When payroll state changes, this can be called to refresh properties based on new state.

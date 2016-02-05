@@ -118,8 +118,8 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     }
 
     $scope.validateAmounts = function () {
-        var result = ddListingService.validateAmountsForAccount($scope, $scope.account, ddEditAccountService.payrollAccountWithRemainingAmount);
-        
+        var result = ddListingService.validateAmountForAccount($scope, $scope.account);
+
         if(result && $scope.isRemaining()){
             //move to last position
             $scope.setAccountPriority($scope.priorities[$scope.priorities.length-1].displayVal);

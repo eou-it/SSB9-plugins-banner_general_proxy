@@ -22,6 +22,11 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
                 a1.apIndicator === a2.apIndicator;
         };
 
+    // Scope for main listing controller, which contains all allocations (as opposed to *child* listing
+    // controllers created by, for example, directive payAccountInfoProposedDesktop, which do not contain
+    // all allocations).
+    this.mainListingControllerScope = null;
+
     this.getApListing = function (){
         return apListing.query();
     };
@@ -49,21 +54,6 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
         this.init = false;
     };
     
-    // flag to indicate if all amounts are valid for save 
-    this.amountsValid = true;
-    
-    this.numAmountsInvalid = 0;
-    this.setAmountsValid = function (valid) {
-        if(valid){
-            this.numAmountsInvalid--;
-        }
-        else{
-            this.numAmountsInvalid++;
-        }
-
-        this.amountsValid = this.numAmountsInvalid <= 0;
-    };
-
     this.checkIfTwoDecimalPlaces = function (num) {
         num = String(num);
 
@@ -116,22 +106,40 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
     };
 
     /**
-     * Determine if a remaining account already exists.
-     * If one already exists and the account that's being checked is the same account as that, return false.
+     * Determine if more than one account with "Remaining" amount exists.
      * @param acct The account being checked
-     * @param existingPayrollAccountWithRemainingAmount Existing payroll account with remaining account, if any
-     * @returns {boolean} True if a different "Remaining" account already exists
+     * @returns {boolean} True if more than one "Remaining" account exists
      */
-    this.accountWithRemainingAmountAlreadyExists = function(acct, existingPayrollAccountWithRemainingAmount) {
-        return existingPayrollAccountWithRemainingAmount &&
-               !isSameAccount(acct, existingPayrollAccountWithRemainingAmount);
+    this.accountWithRemainingAmountAlreadyExists = function(acct) {
+        var self = this,
+            mainListScope = self.mainListingControllerScope,
+            allocations,
+            found;
+
+        if (!mainListScope.hasPayAccountsProposed) {
+            return false;
+        }
+
+        allocations = mainListScope.distributions.proposed.allocations;
+
+        found = _.find(allocations, function(alloc) {
+            return directDepositService.isRemaining(alloc) && !isSameAccount(acct, alloc)
+        });
+
+        return !!found;
     };
 
-    this.hasMoreThanOneRemainingAccount = function(acct, existingPayrollAccountWithRemainingAmount) {
-        var self = this,
-            msg = false;
+    this.hasMultipleRemainingAmountAllocations = function() {
+        var self = this;
 
-        if(self.accountWithRemainingAmountAlreadyExists(acct, existingPayrollAccountWithRemainingAmount)) {
+        return self.mainListingControllerScope.hasMultipleRemainingAmountAllocations();
+    };
+
+    this.accountWithRemainingAmountAlreadyExistsAndSetNotification = function(acct) {
+        var self = this,
+            msg = null;
+
+        if(self.accountWithRemainingAmountAlreadyExists(acct)) {
             msg = $filter('i18n')('directDeposit.invalid.amount.remaining');
             notificationCenterService.displayNotifications(msg, "error");
         }
@@ -142,12 +150,11 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
     /**
      * Validate amounts in account on scope and confirm that an account with "Remaining" (aka 100%) does not
      * already exist.  Set appropriate error-related data on scope.
-     * @param scope
+     * @param scope Scope on which to set error-related data
      * @param acct Account to check
-     * @param existingPayrollAccountWithRemainingAmount Payroll account with remaining amount, if exists
-     * @returns {boolean} True if everything validates.
+     * @returns {boolean} True if everything validates
      */
-    this.validateAmountsForAccount = function (scope, acct, existingPayrollAccountWithRemainingAmount) {
+    this.validateAmountForAccount = function (scope, acct) {
         var self = this,
             amountErr = null,
             msg = false;
@@ -159,7 +166,7 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
             }
         }
         else if(directDepositService.isRemaining(acct)) {
-            msg = self.hasMoreThanOneRemainingAccount(acct, existingPayrollAccountWithRemainingAmount);
+            msg = self.accountWithRemainingAmountAlreadyExistsAndSetNotification(acct);
             if (msg) {
                 amountErr = 'rem';
             }
@@ -182,36 +189,44 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
         return !amountErr;
     };
 
-    this.validateAmountsForAllAccountsAndSetNotification = function (accounts, existingPayrollAccountWithRemainingAmount){
+    this.validateAmountsForAllAccountsAndSetNotification = function(accounts) {
         var self = this,
-            result = true;
+            invalidAcct,
+            isInvalidRemainingPositionAndSetNotification = function(alloc) {
+                if (alloc.priority !== accounts.length) {
+                    // It's not in the last position, as is required
+                    var msg = 'directDeposit.invalid.amount.remaining.placement';
+                    notificationCenterService.displayNotifications(msg, "error");
 
-        _.each(accounts, function(acct) {
-            if(acct.amountType === 'amount') {
-                if (self.isInvalidCurrencyAmountAndSetNotification(acct)) {
-                    result = false;
-                    return;
+                    return true;
                 }
+
+                return false;
+            };
+
+        invalidAcct = _.find(accounts, function(acct) {
+            if(acct.amountType === 'amount') {
+                return self.isInvalidCurrencyAmountAndSetNotification(acct);
             }
             else if(directDepositService.isRemaining(acct)) {
-                if (self.hasMoreThanOneRemainingAccount(acct, existingPayrollAccountWithRemainingAmount)) {
-                    result = false;
-                    return;
-                }
+                return self.accountWithRemainingAmountAlreadyExistsAndSetNotification(acct) ||
+                       isInvalidRemainingPositionAndSetNotification(acct);
             }
             else if(acct.amountType === 'percentage') {
-                if (self.isInvalidPercentageAndSetNotification(acct)) {
-                    result = false;
-                    return;
-                }
+                return self.isInvalidPercentageAndSetNotification(acct);
             }
             else {
-                result = false;
-                return;
+                return true;
             }
         });
 
-        return result;
+        return !invalidAcct;
+    };
+
+    this.updateWhetherHasPayrollRemainingAmount = function() {
+        var self = this;
+
+        self.mainListingControllerScope.updateWhetherHasPayrollRemainingAmount();
     };
 
 }]);

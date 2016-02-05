@@ -11,6 +11,13 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
         fetchCurrencySymbol = $resource('../ssb/:controller/:action',
             {controller: 'UpdateAccount', action: 'getCurrency'});
 
+
+    // CONSTANTS
+    this.REMAINING_NONE = 0;
+    this.REMAINING_ONE = 1;
+    this.REMAINING_MULTIPLE = 2;
+
+
     this.getRoles = function () {
         return fetchRoles.query();
     };
@@ -50,14 +57,16 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
      * @returns {boolean}
      */
     this.isRemaining = function(account) {
+        var amountType = account.amountType;
+
         // CASE 1: Allocation returned from ddListingService function getUserPayrollAllocationListing in this way.
         // CASE 2: Self-explanatory
         // CASE 3: A percentage of 100% is the same as "Remaining" from a business rules perspective.
         // Note that the type-converting equality comparison (== as opposed to the strict ===) for
         // percent is necessary as the value is a string, and it is being compared with a number.
-        return account.allocation === "100%" ||                                 // CASE 1
-               account.amountType === 'remaining' ||                            // CASE 2
-               (account.amountType === 'percentage' && account.percent == 100); // CASE 3
+        return !amountType && account.allocation === "100%" ||          // CASE 1
+               amountType === 'remaining' ||                            // CASE 2
+               (amountType === 'percentage' && account.percent == 100); // CASE 3
     };
 
 }]);
