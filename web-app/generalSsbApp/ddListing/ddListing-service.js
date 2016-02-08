@@ -193,7 +193,7 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
         var self = this,
             invalidAcct,
             isInvalidRemainingPositionAndSetNotification = function(alloc) {
-                if (alloc.priority !== accounts.length) {
+                if (!directDepositService.isLastPriority(alloc, accounts)) {
                     // It's not in the last position, as is required
                     var msg = 'directDeposit.invalid.amount.remaining.placement';
                     notificationCenterService.displayNotifications(msg, "error");

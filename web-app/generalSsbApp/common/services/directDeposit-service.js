@@ -69,4 +69,46 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
                (amountType === 'percentage' && account.percent == 100); // CASE 3
     };
 
+    this.getRemainingAmountAllocationStatus = function(allocations) {
+        var self = this,
+            hasAccountWithRemaining = false,
+            secondAlloc;
+
+        if (!(allocations && allocations.length)) {
+            return self.REMAINING_NONE;
+        }
+
+        // Check for invalid case: there are multiple allocations with an amount of "Remaining".
+        // (Find first duplicate allocation, then stop iterating.)
+        secondAlloc = _.find(allocations, function(alloc) {
+            if (self.isRemaining(alloc)) {
+                if (hasAccountWithRemaining) {
+                    // We already found a "Remaining" one; this is a second one!
+                    return true;
+                } else {
+                    // This is first one we've found; one such allocation is fine.
+                    hasAccountWithRemaining = true;
+                }
+            }
+        });
+
+        return secondAlloc ? self.REMAINING_MULTIPLE : hasAccountWithRemaining ? self.REMAINING_ONE : self.REMAINING_NONE;
+    };
+
+    /**
+     * According to its priority, is account the last one in the allocation list?
+     * @param acct Account to check
+     * @param accounts List of accounts to check it against
+     * @returns {boolean}
+     */
+    this.isLastPriority = function(acct, accounts) {
+        var numAccounts = accounts && accounts.length;
+
+        if (!(numAccounts && acct)) {
+            return false;
+        }
+
+        return acct.priority === numAccounts;
+    };
+
 }]);

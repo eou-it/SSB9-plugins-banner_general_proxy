@@ -202,22 +202,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
             };
 
             scope.isValidRemainingAmountAllocation = function(account){
-                var isLast = scope.priorities.length === account.priority;
-
-                return isLast && directDepositService.isRemaining(account);
-            };
-
-            // When the amount is "Remaining" for a given allocation, the business rule is that
-            // that allocation's priority needs to be set to move the allocation to the end of the
-            // list of allocations.
-            scope.updatePriorityForAmount = function() {
-                var alloc = scope.alloc;
-                if (directDepositService.isRemaining(alloc) &&
-                    !ddListingService.accountWithRemainingAmountAlreadyExists(alloc)) {
-
-                    ddEditAccountService.doReorder = 'all';
-                    ddEditAccountService.setAccountPriority(alloc, scope.priorities.length);
-                }
+                return directDepositService.isLastPriority(account, ddEditAccountService.accounts) && directDepositService.isRemaining(account);
             };
 
             // validate the amounts when the drop down closes
@@ -241,7 +226,9 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                         // need to make sure they hang around.
                         scope.preserveNotifications = false;
 
-                        scope.updatePriorityForAmount();
+                        // If there is one "Remaining" account out of order, whether one just
+                        // edited or one already existing that was pulled from the database, fix it.
+                        ddEditAccountService.fixOrderForAccountWithRemainingAmount();
 
                         // Status of an account with "Remaining" status may have changed, so update
                         ddListingService.updateWhetherHasPayrollRemainingAmount();

@@ -505,38 +505,12 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             });
         };
 
-        $scope.getRemainingAmountAllocationStatus = function() {
-            if (!$scope.hasPayAccountsProposed) {
-                return REMAINING_NONE;
-            }
-
-            var allocations = $scope.distributions.proposed.allocations,
-                hasAccountWithRemaining = false,
-                secondAlloc;
-
-            // Check for invalid case: there are multiple allocations with an amount of "Remaining".
-            // (Find first duplicate allocation, then stop iterating.)
-            secondAlloc = _.find(allocations, function(alloc) {
-                if (directDepositService.isRemaining(alloc)) {
-                    if (hasAccountWithRemaining) {
-                        // We already found a "Remaining" one; this is a second one!
-                        return true;
-                    } else {
-                        // This is first one we've found; one such allocation is fine.
-                        hasAccountWithRemaining = true;
-                    }
-                }
-            });
-
-            return secondAlloc ? REMAINING_MULTIPLE : hasAccountWithRemaining ? REMAINING_ONE : REMAINING_NONE;
-        };
-
         $scope.hasMultipleRemainingAmountAllocations = function() {
-            return $scope.getRemainingAmountAllocationStatus() === REMAINING_MULTIPLE;
+            return directDepositService.getRemainingAmountAllocationStatus($scope.distributions.proposed.allocations) === REMAINING_MULTIPLE;
         };
 
         $scope.updateWhetherHasPayrollRemainingAmount = function () {
-            $scope.hasPayrollRemainingAmount = $scope.getRemainingAmountAllocationStatus() !== REMAINING_NONE;
+            $scope.hasPayrollRemainingAmount = directDepositService.getRemainingAmountAllocationStatus($scope.distributions.proposed.allocations) !== REMAINING_NONE;
         };
 
         // When payroll state changes, this can be called to refresh properties based on new state.

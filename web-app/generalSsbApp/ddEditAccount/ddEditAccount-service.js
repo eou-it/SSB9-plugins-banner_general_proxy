@@ -164,4 +164,33 @@ generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resourc
         return accts;
     };
 
+    /**
+     * Move account with "Remaining" amount to last position.
+     * If multiple such "Remaining" accounts exist, no action is taken as *user* must first fix this.
+     * Note: A previous implementation would check for a specific account that was just edited to
+     * see if it had been changed to "Remaining" and, if so, move it to the last position.  However,
+     * one case can exist that that doesn't catch: the user has *two* Remaining accounts, and they
+     * fix one to no longer be Remaining.  In this case, the one Remaining account left should
+     * automatically move to the last position, even though it hasn't explicitly been edited.  This
+     * implementation handles that case as well.
+     */
+    this.fixOrderForAccountWithRemainingAmount = function() {
+        var self = this,
+            remainingAcct;
+
+        // If there are no Remaining or there are multiple Remaining, there is no need to go further
+        if (directDepositService.getRemainingAmountAllocationStatus(self.accounts) !== directDepositService.REMAINING_ONE) {
+            return;
+        }
+
+        remainingAcct = _.find(self.accounts, function(alloc) {
+            return directDepositService.isRemaining(alloc);
+        });
+
+        if (remainingAcct && !directDepositService.isLastPriority(remainingAcct, self.accounts)) {
+            self.doReorder = 'all';
+            self.setAccountPriority(remainingAcct, self.priorities.length);
+        }
+    };
+
 }]);
