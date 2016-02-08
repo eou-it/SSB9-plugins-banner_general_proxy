@@ -116,8 +116,17 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     $scope.isRemaining = function(){
         return directDepositService.isRemaining($scope.account);
     }
+    
+    var resetAccountPriority = function () {
+        _.find(ddEditAccountService.priorities, function(priorityObj) {
+            if(priorityObj.persistVal === $scope.account.priority){
+                $scope.account.priority = priorityObj.displayVal;
+                return true;
+            }
+        });
+    };
 
-    $scope.validateAmounts = function () {
+    var validateAmounts = function () {
         var result = ddListingService.validateAmountForAccount($scope, $scope.account);
 
         if(result && $scope.isRemaining()){
@@ -141,7 +150,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         }
         
         if($scope.typeIndicator === 'HR'){
-            doSave = $scope.validateAmounts() && doSave;
+            doSave = validateAmounts() && doSave;
             ddEditAccountService.setAmountValues($scope.account, $scope.account.amountType);
         }
 
@@ -151,6 +160,9 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 ddEditAccountService.reorderAccounts($scope.account).$promise.then(function (response) {
                     if(response[0].failure) {
                         notificationCenterService.displayNotifications(response[0].message, "error");
+
+                        $scope.setup.authorizedChanges = false;
+                        resetAccountPriority();
                     }
                     else {
                         notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
@@ -165,7 +177,12 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 ddEditAccountService.saveAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
                     if(response.failure) {
                         notificationCenterService.displayNotifications(response.message, "error");
-                        
+
+                        $scope.setup.authorizedChanges = false;
+                        if($scope.typeIndicator === 'HR'){
+                            resetAccountPriority();
+                        }
+
                         // if there is an error when creating from existing account, then reset account
                         // so user can start fresh
                         if($scope.setup.createFromExisting === 'yes'){

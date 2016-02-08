@@ -80,7 +80,7 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
             }
         }
         else {
-            msg = $filter('i18n')('directDeposit.invalid.amount.amount');
+            msg = $filter('i18n')('directDeposit.invalid.format.amount');
             notificationCenterService.displayNotifications(msg, "error");
         }
 
