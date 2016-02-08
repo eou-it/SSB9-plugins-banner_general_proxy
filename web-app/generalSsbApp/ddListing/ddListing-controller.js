@@ -310,12 +310,14 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     ddEditAccountService.reorderAccounts().$promise.then(function (response) {
                         if(response[0].failure) {
                             notificationCenterService.displayNotifications(response[0].message, "error");
+
+                            deferred.reject();
                         }
                         else {
                             notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
-    
+
                             ddEditAccountService.doReorder = false;
-                            
+
                             deferred.resolve();
                         }
                     });
@@ -341,6 +343,10 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 // "Net Pay Distribution" values may need to be recalculated, depending on the change the user made.
                 $q.all(promises).then(function() {
                     $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                },
+                function() {
+                    $scope.authorizedChanges = false;
+                    ddEditAccountService.setupPriorities($scope.distributions.proposed.allocations);
                 });
             }
         };
@@ -355,11 +361,14 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             ddEditAccountService.saveAccount(acct).$promise.then(function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
+
+                    deferred.reject();
                 } else {
                     notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
+
+                    deferred.resolve();
                 }
 
-                deferred.resolve();
             });
 
             return deferred.promise;
