@@ -158,6 +158,10 @@ body {
     color: #CD3B3E;
 }
 
+.field-warning {
+    color: #8B572A;
+}
+
 .error-font-size {
     font-weight: normal;
 }
@@ -403,6 +407,7 @@ button.closebtn {
     padding: 15px 15px 0;
 }
 
+
 /*  Dropdown menu  */
 .form-spacing,
 .dropdown-menu > li > a.form-spacing {
@@ -438,7 +443,7 @@ button.closebtn {
     color: #4F585F;
 }
 
-.dropdown-btn:disabled {
+.dropdown-btn.disabled {
     background: #F6F9FA; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#F6F9FA, #EFEFEF); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(#F6F9FA, #EFEFEF); /* For Opera 11.1 to 12.0 */
@@ -472,7 +477,8 @@ button.closebtn {
     color: #4F585F;
 }
 
-.desktop-listing .dropdown-btn:disabled {
+.desktop-listing .dropdown-btn.disabled,
+.dropdown-btn.disabled:focus .caret-color {
     color: #869FB1;
 }
 

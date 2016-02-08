@@ -2,8 +2,8 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', 'directDepositService', 'ddEditAccountService', 'ddListingService', 'notificationCenterService', 'editAcctProperties',
-    function($scope, $modalInstance, $state, $filter, directDepositService, ddEditAccountService, ddListingService, notificationCenterService, editAcctProperties){
+generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$modalInstance', '$state', '$filter', '$timeout', 'directDepositService', 'ddEditAccountService', 'ddListingService', 'notificationCenterService', 'editAcctProperties',
+    function($scope, $modalInstance, $state, $filter, $timeout, directDepositService, ddEditAccountService, ddListingService, notificationCenterService, editAcctProperties){
 
     $scope.typeIndicator = editAcctProperties.typeIndicator;
     $scope.creatingNewAccount = editAcctProperties.creatingNew;
@@ -30,6 +30,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 $scope.routingNumMessage = $filter('i18n')('directDeposit.invalid.chars.routing');
                 $scope.account.bankRoutingInfo.bankName = null;
                 notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
+                clearMiscMessage();
             }
             else {
                 $scope.account.bankRoutingInfo.bankRoutingNum = $scope.account.bankRoutingInfo.bankRoutingNum.toUpperCase();
@@ -40,6 +41,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                         $scope.routingNumMessage = $filter('i18n')('directDeposit.invalid.routing.number');
                         $scope.account.bankRoutingInfo.bankName = null;
                         notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
+                        clearMiscMessage();
                     }
                     else {
                         $scope.account.bankRoutingInfo.bankName = response.bankName;
@@ -64,6 +66,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 $scope.accountNumErr = true;
                 $scope.accountNumMessage = $filter('i18n')('directDeposit.invalid.chars.account');
                 notificationCenterService.displayNotifications($scope.accountNumMessage, "error");
+                clearMiscMessage();
             }
             else {
                 $scope.account.bankAccountNum = $scope.account.bankAccountNum.toUpperCase();
@@ -73,6 +76,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                         $scope.accountNumErr = true;
                         $scope.accountNumMessage = $filter('i18n')('directDeposit.invalid.account.number');
                         notificationCenterService.displayNotifications($scope.accountNumMessage, "error");
+                        clearMiscMessage();
                     }
                     else {
                         $scope.accountNumMessage = null;
@@ -115,8 +119,34 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     
     $scope.isRemaining = function(){
         return directDepositService.isRemaining($scope.account);
-    }
+    };
     
+    $scope.showReprioritizeRemainingMessage = function() {
+        $scope.displayReprioritizeRemainingWarning(); 
+        
+        $scope.miscMessage = $filter('i18n')('directDeposit.invalid.reprioritze.remaining');
+        $scope.miscError = false;
+        
+        var clearRemainingMessage = function () {
+            if($scope.miscMessage === $filter('i18n')('directDeposit.invalid.reprioritze.remaining')){
+                $scope.miscMessage = null;
+            }
+        };
+        
+        $timeout(clearRemainingMessage, 5000);
+    };
+    
+    $scope.miscError = false;
+    var displayMiscError = function (msg) {
+        $scope.miscMessage = msg;
+        $scope.miscError = true;
+    };
+    
+    var clearMiscMessage = function () {
+        $scope.miscMessage = null;
+        $scope.miscError = false;
+    };
+
     var resetAccountPriority = function () {
         _.find(ddEditAccountService.priorities, function(priorityObj) {
             if(priorityObj.persistVal === $scope.account.priority){
@@ -160,6 +190,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 ddEditAccountService.reorderAccounts($scope.account).$promise.then(function (response) {
                     if(response[0].failure) {
                         notificationCenterService.displayNotifications(response[0].message, "error");
+                        displayMiscError(response[0].message);
 
                         $scope.setup.authorizedChanges = false;
                         resetAccountPriority();
@@ -177,6 +208,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 ddEditAccountService.saveAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
                     if(response.failure) {
                         notificationCenterService.displayNotifications(response.message, "error");
+                        displayMiscError(response.message);
 
                         $scope.setup.authorizedChanges = false;
                         if($scope.typeIndicator === 'HR'){
@@ -216,6 +248,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             $scope.routingNumMessage = $filter('i18n')('directDeposit.invalid.missing.routing.number');
             $scope.account.bankRoutingInfo.bankName = null;
             notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
+            clearMiscMessage();
         } 
         else if($scope.routingNumErr){
             notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
@@ -225,6 +258,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             $scope.accountNumErr = true;
             $scope.accountNumMessage = $filter('i18n')('directDeposit.invalid.missing.account.number');
             notificationCenterService.displayNotifications($scope.accountNumMessage, "error");
+            clearMiscMessage();
         } 
         else if($scope.accountNumErr){
             notificationCenterService.displayNotifications($scope.accountNumMessage, "error");
@@ -233,6 +267,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         if(!$scope.account.accountType) {
             $scope.accountTypeErr = true;
             notificationCenterService.displayNotifications('directDeposit.invalid.missing.account.type', "error");
+            clearMiscMessage();
         }
         
         return !($scope.routingNumErr || $scope.accountNumErr || $scope.accountTypeErr);
