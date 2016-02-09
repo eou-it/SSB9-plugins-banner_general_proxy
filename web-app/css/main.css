@@ -666,6 +666,11 @@ span.radio-list.no-padding {
     color: #869FB1;
 }
 
+.misc-message {
+    padding-top: 15px;
+    display: inline-block;
+}
+
 
 /* Account Listing Page Styles */
 .pay-entry {
