@@ -49,6 +49,10 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','n
             $rootScope.isTabletView = isTablet.matches;
 
             $rootScope.apAccountExists = false;
+            
+            $rootScope.displayReprioritizeRemainingWarning = function(){
+                notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.reprioritze.remaining'),'warning', true);
+            };
         }
     ]
 );

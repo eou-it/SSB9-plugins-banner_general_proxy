@@ -69,13 +69,21 @@
 </td>
 <td class="break-word">
     <div class="dropdown desktop-listing" role="menu">
-        <button dropdown-helper="begin" ng-disabled="isValidRemainingAmountAllocation(alloc)" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
+        <button dropdown-helper="begin"
+            ng-if="!isValidRemainingAmountAllocation(alloc)" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
             <span class="float-l form-spacing" aria-live="polite">
                 {{alloc.priority}}
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
-        <ul class="dropdown-menu addAcct min-width-priority">
+        <button dropdown-helper="begin" ng-click="displayReprioritizeRemainingWarning()"
+            ng-if="isValidRemainingAmountAllocation(alloc)" class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="">
+            <span class="float-l form-spacing" aria-live="polite">
+                {{alloc.priority}}
+            </span>
+            <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
+        </button>
+        <ul ng-if="!isValidRemainingAmountAllocation(alloc)" class="dropdown-menu addAcct min-width-priority">
             <li ng-repeat="i in priorities" role="presentation">
                 <a dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" ng-click="setAccountPriority(i.displayVal)" class="addAcct form-spacing" href="#" role="menuitem">{{i.displayVal}}</a>
             </li>

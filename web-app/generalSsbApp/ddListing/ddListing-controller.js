@@ -88,9 +88,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     $scope.hasPayAccountsProposed = !!response.allocations.length;
                     $scope.payAccountsProposedLoaded = true;
 
-                    if($scope.hasPayAccountsProposed){
-                        ddEditAccountService.setupPriorities(response.allocations);
-                    }
+                    ddEditAccountService.setupPriorities(response.allocations);
 
                     $scope.updatePayrollState();
 
