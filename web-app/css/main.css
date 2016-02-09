@@ -793,20 +793,8 @@ span.radio-list.no-padding {
     border-bottom: 1px solid #ddd;
 }
 
-div.remaining-amount-notification {
-    padding: 10px 15px;
-    background-color: #f9f9f9;
-    border-bottom: 1px solid #ddd;
-}
-
-tr.remaining-amount-notification {
-    background-color: #f9f9f9;
-}
-
-tr.remaining-amount-notification td,
-div.remaining-amount-notification {
-    text-align: center;
-    font-weight: bold;
+.desktop-listing-check {
+    padding-left: 33px;
 }
 
 a.add-account-link,
@@ -929,6 +917,10 @@ a.delete-account-link {
 @media(min-width:768px){
     .edit-account-modal .modal-dialog {
         width: auto;
+    }
+    
+    .hr-amount > span {
+        text-align: left;
     }
 }
 
@@ -1055,10 +1047,6 @@ table tr:hover {
 }
 
 table tr.account-total-footer:hover {
-    background: #f9f9f9 !important;
-}
-
-table tr.remaining-amount-notification:hover {
     background: #f9f9f9 !important;
 }
 
