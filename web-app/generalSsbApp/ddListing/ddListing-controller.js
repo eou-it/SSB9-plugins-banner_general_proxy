@@ -101,7 +101,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 } else {
                     $scope.distributions.mostRecent = response;
                     $scope.distributions.mostRecent.totalNetFormatted = formatCurrency($scope.distributions.mostRecent.totalNet);
-                    $scope.hasPayAccountsMostRecent = !!response.docAccts
+                    $scope.hasPayAccountsMostRecent = !!response.docAccts;
                     $scope.payAccountsMostRecentLoaded = true;
                 }
             });
@@ -116,11 +116,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     $scope.hasPayAccountsProposed = !!allocations.length;
                     $scope.payAccountsProposedLoaded = true;
 
-                    if($scope.hasPayAccountsProposed){
-                        setupAmountTypes(allocations);
-                        ddEditAccountService.setupPriorities(allocations);
-                    }
-
+                    setupAmountTypes(allocations);
+                    ddEditAccountService.setupPriorities(allocations);
                     $scope.updatePayrollState();
 
                     // If any allocation is flagged for delete (happens via user checking a checkbox, which
@@ -530,6 +527,13 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         $scope.setApAccountType = function (acctType) {
             $scope.apAccount.accountType = acctType;
         };
+
+        $scope.getCheckAmount = function(){
+            var proposedTotal = 4000; //TODO: calculate the sum of proposed amounts
+            var totalNet = $scope.distributions.mostRecent.totalNet;
+
+            return $filter('currency')(Number(totalNet.replace(/[^0-9\.]+/g,"")) - proposedTotal, $scope.currencySymbol);
+        }
 
         $scope.updateWhetherHasMaxPayrollAccounts = function () {
             if (!$scope.distributions.proposed) {

@@ -13,15 +13,20 @@
     </thead>
     <tbody>
         <tr ng-repeat="allocation in distributions.proposed.allocations" pay-account-info-proposed-desktop></tr>
-        <tr ng-if="!hasPayrollRemainingAmount" class="remaining-amount-notification">
-            <td colspan="7" class="no-padding">
-                {{'directDeposit.remaining.amount.paid.by.check.notification'|i18n}}
-            </td><td></td>
+        <tr ng-if="!hasPayrollRemainingAmount">
+            <td class="break-word" colspan="4">
+                <span class="desktop-listing-check">{{'directDeposit.label.live.check'|i18n}}</span>
+            </td>
+            <td class="min-width-amount desktop-listing">
+                <div class="dropdown-btn form-spacing disabled">{{'directDeposit.account.label.remaining'|i18n}}</div>
+            </td>
+            <td class="break-word text-rt" colspan="2">{{getCheckAmount()}}</td>
+            <td/>
         </tr>
         <tr class="account-total-footer">
             <td colspan="7" class="no-padding">
                 <div class="amount-right">
-                    <span class="amount-total-label">{{'directDeposit.label.total.net.pay'|i18n}}</span><span class="amount-total">{{distributions.proposed.totalAmount}}</span>
+                    <span class="amount-total-label">{{'directDeposit.label.total.net.pay'|i18n}}</span><span class="amount-total">{{distributions.mostRecent.totalNet}}</span>
                </div>
            </td><td></td>
         </tr>

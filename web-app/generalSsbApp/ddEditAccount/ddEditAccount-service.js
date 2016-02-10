@@ -97,6 +97,8 @@ generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resourc
     
     this.setupPriorities = function ( accts ) {
         // create priority list and normalize account priorities
+        this.priorities = [];
+
         var i;
         for(i = 0; i < accts.length; i++){
             var priorityInfo = {displayVal: i+1, persistVal: accts[i].priority};
