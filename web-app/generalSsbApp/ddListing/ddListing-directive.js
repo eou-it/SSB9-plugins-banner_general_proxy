@@ -144,12 +144,22 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
             scope.priorities = ddEditAccountService.priorities;
 
             scope.setAccountPriority = function (priority) {
-                if(scope.alloc.priority != priority) {
+                var alloc = scope.alloc;
+
+                if(alloc.priority != priority) {
                     if (ddListingService.hasMultipleRemainingAmountAllocations()) {
                         notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.remaining', "error"));
                     } else {
                         ddEditAccountService.doReorder = 'all';
-                        ddEditAccountService.setAccountPriority(scope.alloc, priority);
+
+                        // If this is a "Remaining" account, don't bother reprioritizing here, it will be done below
+                        if (!directDepositService.isRemaining(alloc)) {
+                            ddEditAccountService.setAccountPriority(alloc, priority);
+                        }
+
+                        // If there is one "Remaining" account out of order, whether the one currently under
+                        // consideration or one already existing that was pulled from the database, fix it.
+                        ddEditAccountService.fixOrderForAccountWithRemainingAmount();
 
                         // Reprioritization can change allocation amounts -- recalculate
                         ddListingService.calculateAmountsBasedOnPayHistory();
