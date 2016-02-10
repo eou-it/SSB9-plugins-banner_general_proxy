@@ -97,8 +97,6 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddEditAccountServi
         link: function(scope, elem, attrs, ctrl){
             scope.alloc = scope.allocation;
             
-            scope.alloc.amountType = ddEditAccountService.getAmountType(scope.alloc);
-
             scope.showEditPayroll = function(){
                 scope.showEditAccount(scope.alloc, 'HR');
             };
@@ -119,8 +117,6 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
         controller: 'ddListingController',
         link: function(scope, elem, attrs, ctrl){
             scope.alloc = scope.allocation;
-            
-            scope.alloc.amountType = ddEditAccountService.getAmountType(scope.alloc);
             
             scope.amtDropdownOpen = false;
 
@@ -232,6 +228,10 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
 
                         // Status of an account with "Remaining" status may have changed, so update
                         ddListingService.updateWhetherHasPayrollRemainingAmount();
+
+                        // The amounts for each proposed distribution, based on
+                        // most recent pay, may have now changed -- recalculate them.
+                        ddListingService.calculateAmountsBasedOnPayHistory();
                     }
                 }
             });

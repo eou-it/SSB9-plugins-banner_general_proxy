@@ -229,4 +229,10 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
         self.mainListingControllerScope.updateWhetherHasPayrollRemainingAmount();
     };
 
+    this.calculateAmountsBasedOnPayHistory = function() {
+        var self =this;
+
+        self.mainListingControllerScope.calculateAmountsBasedOnPayHistory();
+    };
+
 }]);

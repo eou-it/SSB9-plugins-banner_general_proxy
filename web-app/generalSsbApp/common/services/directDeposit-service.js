@@ -111,4 +111,13 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
         return acct.priority === numAccounts;
     };
 
+    /**
+     * Round to two decimal places
+     * @param amt
+     * @returns {number}
+     */
+    this.roundAsCurrency = function(amt) {
+        return +(Math.round(amt + "e+2")  + "e-2");
+    };
+
 }]);

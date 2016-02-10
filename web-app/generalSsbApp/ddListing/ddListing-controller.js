@@ -9,7 +9,31 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         // CONSTANTS
         var REMAINING_NONE = directDepositService.REMAINING_NONE,
             REMAINING_ONE = directDepositService.REMAINING_ONE,
-            REMAINING_MULTIPLE = directDepositService.REMAINING_MULTIPLE;
+            REMAINING_MULTIPLE = directDepositService.REMAINING_MULTIPLE,
+
+            formatCurrency = function(amount) {
+                return $filter('currency')(amount, $scope.currencySymbol);
+            },
+
+            getAmountType = function(acct) {
+                if(acct.allocation === '100%'){
+                    acct.percent = 100;
+                    acct.amount = null;
+                    return 'remaining';
+                }
+                else if(acct.amount != null){
+                    return 'amount';
+                }
+                else if(acct.percent != null){
+                    return 'percentage';
+                }
+            },
+
+            setupAmountTypes = function(allocations) {
+                _.each(allocations, function(alloc) {
+                    alloc.amountType = getAmountType(alloc);
+                });
+            };
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -38,7 +62,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
          */
         this.init = function() {
 
-            var self = this;
+            var self = this,
+                allocations;
             
             // if the listing controller has already been initialized, then abort
             if(ddListingService.isInit()) return;
@@ -48,6 +73,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             ddEditAccountService.setSyncedAccounts(false);
             
             var acctPromises = [ddListingService.getApListing().$promise,
+                                ddListingService.getMostRecentPayrollListing().$promise,
                                 ddListingService.getUserPayrollAllocationListing().$promise];
 
             // getApListing
@@ -69,27 +95,29 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 proposed: null
             };
 
-            ddListingService.getMostRecentPayrollListing().$promise.then( function (response) {
+            acctPromises[1].then( function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
                 } else {
                     $scope.distributions.mostRecent = response;
-                    $scope.hasPayAccountsMostRecent = !!response.docAccts
+                    $scope.distributions.mostRecent.totalNetFormatted = formatCurrency($scope.distributions.mostRecent.totalNet);
+                    $scope.hasPayAccountsMostRecent = !!response.docAccts;
                     $scope.payAccountsMostRecentLoaded = true;
                 }
             });
 
             // getUserPayrollAllocationListing
-            acctPromises[1].then( function (response) {
+            acctPromises[2].then( function (response) {
                 if(response.failure) {
                     notificationCenterService.displayNotifications(response.message, "error");
                 } else {
                     $scope.distributions.proposed = response;
-                    $scope.hasPayAccountsProposed = !!response.allocations.length;
+                    allocations = response.allocations;
+                    $scope.hasPayAccountsProposed = !!allocations.length;
                     $scope.payAccountsProposedLoaded = true;
 
-                    ddEditAccountService.setupPriorities(response.allocations);
-
+                    setupAmountTypes(allocations);
+                    ddEditAccountService.setupPriorities(allocations);
                     $scope.updatePayrollState();
 
                     // If any allocation is flagged for delete (happens via user checking a checkbox, which
@@ -97,7 +125,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     // enabling the "Delete" button.
                     $scope.$watch('distributions.proposed', function () {
                         // Determine if any payroll allocations are selected for delete
-                        $scope.selectedForDelete.payroll = _.any($scope.distributions.proposed.allocations, function(alloc) {
+                        $scope.selectedForDelete.payroll = _.any(allocations, function(alloc) {
                             return alloc.deleteMe;
                         });
                     }, true);
@@ -105,6 +133,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             });
             
             $q.all(acctPromises).then(function() {
+                $scope.calculateAmountsBasedOnPayHistory();
                 self.syncAccounts();
             });
         };
@@ -152,10 +181,13 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         $scope.authorizedChanges = false;
         $scope.hasMaxPayrollAccounts = false;
         $scope.hasPayrollRemainingAmount = false;
+
         $scope.selectedForDelete = {
             payroll: false,
             ap:      false
         };
+
+        $scope.checkAmount = ''; // Amount to be disbursed via paper check
 
         // CONTROLLER FUNCTIONS
         // --------------------
@@ -499,13 +531,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             $scope.apAccount.accountType = acctType;
         };
 
-        $scope.getCheckAmount = function(){
-            var proposedTotal = 4000; //TODO: calculate the sum of proposed amounts
-            var totalNet = $scope.distributions.mostRecent.totalNet;
-
-            return $filter('currency')(Number(totalNet.replace(/[^0-9\.]+/g,"")) - proposedTotal, $scope.currencySymbol);
-        }
-
         $scope.updateWhetherHasMaxPayrollAccounts = function () {
             if (!$scope.distributions.proposed) {
                 $scope.hasMaxPayrollAccounts = false;
@@ -533,6 +558,55 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             $scope.updateWhetherHasMaxPayrollAccounts();
             $scope.updateWhetherHasPayrollRemainingAmount();
+        };
+
+        $scope.calculateAmountsBasedOnPayHistory = function() {
+            var totalNet = $scope.distributions.mostRecent.totalNet,
+                totalLeft = totalNet, // The amount left and the amount total are the same at this point
+                proposed = $scope.distributions.proposed,
+                allocations = proposed.allocations,
+                amt, pct, calcAmt, rawAmt,
+                allocationByUser,
+                totalAmt = 0;
+
+            _.each(allocations, function(alloc) {
+                if(alloc.amountType === 'amount') {
+                    // Clear out percent in case type changed from percent or Remaining to amount
+                    alloc.percent = null;
+
+                    amt = alloc.amount;
+                    calcAmt = (amt > totalLeft) ? totalLeft : amt;
+                    allocationByUser = formatCurrency(amt);
+                } else if (directDepositService.isRemaining(alloc)) {
+                    // Clear out amount in case type changed from amount to remaining
+                    alloc.amount = null;
+
+                    calcAmt = totalLeft;
+                    allocationByUser = '100%';
+                } else if (alloc.amountType === 'percentage') {
+                    // Clear out amount in case changed from amount to percent
+                    alloc.amount = null;
+
+                    pct = alloc.percent;
+                    rawAmt = totalLeft * pct / 100;
+                    calcAmt = directDepositService.roundAsCurrency(rawAmt);
+
+                    if (calcAmt > totalLeft) {
+                        calcAmt = totalLeft;
+                    }
+
+                    allocationByUser = pct + '%';
+                }
+
+                totalLeft -= calcAmt;
+                totalAmt += calcAmt;
+
+                alloc.calculatedAmount = formatCurrency(calcAmt);
+                alloc.allocation = allocationByUser;
+            });
+
+            $scope.checkAmount = formatCurrency(totalNet - totalAmt); // Amount left to be disbursed via paper check
+            proposed.totalAmount = formatCurrency(totalNet);
         };
 
 
