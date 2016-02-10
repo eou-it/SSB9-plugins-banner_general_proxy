@@ -16,15 +16,13 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             },
 
             getAmountType = function(acct) {
-                if(acct.allocation === '100%'){
-                    acct.percent = 100;
-                    acct.amount = null;
+                if(acct.percent === 100) {
                     return 'remaining';
                 }
-                else if(acct.amount != null){
+                else if(acct.amount !== null) {
                     return 'amount';
                 }
-                else if(acct.percent != null){
+                else if(acct.percent !== null) {
                     return 'percentage';
                 }
             },
@@ -116,8 +114,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     $scope.hasPayAccountsProposed = !!allocations.length;
                     $scope.payAccountsProposedLoaded = true;
 
-                    setupAmountTypes(allocations);
                     ddEditAccountService.setupPriorities(allocations);
+                    setupAmountTypes(allocations);
                     $scope.updatePayrollState();
 
                     // If any allocation is flagged for delete (happens via user checking a checkbox, which
