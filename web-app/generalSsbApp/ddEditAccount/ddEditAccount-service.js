@@ -73,21 +73,7 @@ generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resourc
     this.setAccountType = function (acct, acctType) {
         acct.accountType = acctType;
     };
-    
-    this.getAmountType = function (acct) {
-        if(acct.allocation === '100%'){
-            acct.percent = 100;
-            acct.amount = null;
-            return 'remaining';
-        }
-        else if(acct.amount != null){
-            return 'amount';
-        }
-        else if(acct.percent != null){
-            return 'percentage';
-        }
-    };
-    
+
     this.setAmountValues = function (acct, amountType){
         if(directDepositService.isRemaining(acct)){
             acct.percent = 100;
