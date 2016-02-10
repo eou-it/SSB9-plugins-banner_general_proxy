@@ -148,11 +148,11 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                     if (ddListingService.hasMultipleRemainingAmountAllocations()) {
                         notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.remaining', "error"));
                     } else {
-                        // Only amount types other than "Remaining" can be reprioritized
-                        //if(!directDepositService.isRemaining(scope.alloc)) {
                         ddEditAccountService.doReorder = 'all';
                         ddEditAccountService.setAccountPriority(scope.alloc, priority);
-                       //}
+
+                        // Reprioritization can change allocation amounts -- recalculate
+                        ddListingService.calculateAmountsBasedOnPayHistory();
                     }
                 }
             };
