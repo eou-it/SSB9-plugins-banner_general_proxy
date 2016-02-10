@@ -222,16 +222,16 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                         // need to make sure they hang around.
                         scope.preserveNotifications = false;
 
-                        // The amounts for each proposed distribution, based on
-                        // most recent pay, may have now changed -- recalculate them.
-                        ddListingService.calculateAmountsBasedOnPayHistory();
-
                         // If there is one "Remaining" account out of order, whether one just
                         // edited or one already existing that was pulled from the database, fix it.
                         ddEditAccountService.fixOrderForAccountWithRemainingAmount();
 
                         // Status of an account with "Remaining" status may have changed, so update
                         ddListingService.updateWhetherHasPayrollRemainingAmount();
+
+                        // The amounts for each proposed distribution, based on
+                        // most recent pay, may have now changed -- recalculate them.
+                        ddListingService.calculateAmountsBasedOnPayHistory();
                     }
                 }
             });

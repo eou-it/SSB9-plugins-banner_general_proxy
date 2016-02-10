@@ -181,10 +181,13 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         $scope.authorizedChanges = false;
         $scope.hasMaxPayrollAccounts = false;
         $scope.hasPayrollRemainingAmount = false;
+
         $scope.selectedForDelete = {
             payroll: false,
             ap:      false
         };
+
+        $scope.checkAmount = ''; // Amount to be disbursed via paper check
 
         // CONTROLLER FUNCTIONS
         // --------------------
@@ -528,13 +531,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             $scope.apAccount.accountType = acctType;
         };
 
-        $scope.getCheckAmount = function(){
-            var proposedTotal = 4000; //TODO: calculate the sum of proposed amounts
-            var totalNet = $scope.distributions.mostRecent.totalNet;
-
-            return $filter('currency')(Number(totalNet.replace(/[^0-9\.]+/g,"")) - proposedTotal, $scope.currencySymbol);
-        }
-
         $scope.updateWhetherHasMaxPayrollAccounts = function () {
             if (!$scope.distributions.proposed) {
                 $scope.hasMaxPayrollAccounts = false;
@@ -565,7 +561,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         };
 
         $scope.calculateAmountsBasedOnPayHistory = function() {
-            var totalLeft = $scope.distributions.mostRecent.totalNet,
+            var totalNet = $scope.distributions.mostRecent.totalNet,
+                totalLeft = totalNet, // The amount left and the amount total are the same at this point
                 proposed = $scope.distributions.proposed,
                 allocations = proposed.allocations,
                 amt, pct, calcAmt, rawAmt,
@@ -608,7 +605,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 alloc.allocation = allocationByUser;
             });
 
-            proposed.totalAmount = totalAmt ? formatCurrency(totalAmt) : '';
+            $scope.checkAmount = formatCurrency(totalNet - totalAmt); // Amount left to be disbursed via paper check
+            proposed.totalAmount = formatCurrency(totalNet);
         };
 
 
