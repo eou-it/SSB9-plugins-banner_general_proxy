@@ -457,11 +457,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             var prompts = [
                 {
-                    label: "Cancel",
+                    label: $filter('i18n')('directDeposit.button.cancel'),
                     action: $scope.cancelNotification
                 },
                 {
-                    label: "Delete",
+                    label: $filter('i18n')('directDeposit.button.delete'),
                     action: $scope.deletePayrollAccount
                 }
             ];
@@ -509,11 +509,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             var prompts = [
                 {
-                    label: "Cancel",
+                    label: $filter('i18n')('directDeposit.button.cancel'),
                     action: $scope.cancelNotification
                 },
                 {
-                    label: "Delete",
+                    label: $filter('i18n')('directDeposit.button.delete'),
                     action: $scope.deleteApAccount
                 }
             ];
