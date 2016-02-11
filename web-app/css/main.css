@@ -87,6 +87,7 @@ body {
 
 .desktop-save {
     float: right;
+    clear: right;
     margin: 15px;
 }
 
