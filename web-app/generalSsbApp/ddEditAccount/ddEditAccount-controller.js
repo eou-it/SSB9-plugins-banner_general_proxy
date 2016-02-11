@@ -118,12 +118,10 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         return directDepositService.isRemaining($scope.account);
     };
 
-    $scope.miscError = false;
     $scope.showReprioritizeRemainingMessage = function() {
         $scope.displayReprioritizeRemainingWarning(); 
         
         $scope.miscMessage = $filter('i18n')('directDeposit.invalid.reprioritze.remaining');
-        $scope.miscError = false;
         
         var clearRemainingMessage = function () {
             if($scope.miscMessage === $filter('i18n')('directDeposit.invalid.reprioritze.remaining')){
@@ -136,12 +134,10 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
     var displayMiscError = function (msg) {
         $scope.miscMessage = msg;
-        $scope.miscError = true;
     };
     
     var clearMiscMessage = function () {
         $scope.miscMessage = null;
-        $scope.miscError = false;
     };
 
     var resetAccountPriority = function () {
