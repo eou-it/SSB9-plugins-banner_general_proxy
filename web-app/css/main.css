@@ -158,6 +158,10 @@ body {
     color: #CD3B3E;
 }
 
+.field-warning {
+    color: #8B572A;
+}
+
 .error-font-size {
     font-weight: normal;
 }
@@ -413,6 +417,7 @@ button.closebtn {
     padding: 15px 15px 0;
 }
 
+
 /*  Dropdown menu  */
 .form-spacing,
 .dropdown-menu > li > a.form-spacing {
@@ -448,7 +453,7 @@ button.closebtn {
     color: #4F585F;
 }
 
-.dropdown-btn:disabled {
+.dropdown-btn.disabled {
     background: #F6F9FA; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#F6F9FA, #EFEFEF); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(#F6F9FA, #EFEFEF); /* For Opera 11.1 to 12.0 */
@@ -482,7 +487,8 @@ button.closebtn {
     color: #4F585F;
 }
 
-.desktop-listing .dropdown-btn:disabled {
+.desktop-listing .dropdown-btn.disabled,
+.dropdown-btn.disabled:focus .caret-color {
     color: #869FB1;
 }
 
@@ -520,7 +526,7 @@ button.closebtn {
 
 .dropdown-menu.addAcct.listing {
     min-width: 100%;
-    width: unset;
+    width: auto;
 }
 
 li.listing {
@@ -681,6 +687,11 @@ span.radio-list.no-padding {
     color: #869FB1;
 }
 
+.misc-message {
+    padding-top: 15px;
+    display: inline-block;
+}
+
 
 /* Account Listing Page Styles */
 .pay-entry {
@@ -803,20 +814,8 @@ span.radio-list.no-padding {
     border-bottom: 1px solid #ddd;
 }
 
-div.remaining-amount-notification {
-    padding: 10px 15px;
-    background-color: #f9f9f9;
-    border-bottom: 1px solid #ddd;
-}
-
-tr.remaining-amount-notification {
-    background-color: #f9f9f9;
-}
-
-tr.remaining-amount-notification td,
-div.remaining-amount-notification {
-    text-align: center;
-    font-weight: bold;
+.desktop-listing-check {
+    padding-left: 33px;
 }
 
 a.add-account-link,
@@ -956,6 +955,10 @@ a.delete-account-link {
     .edit-account-modal .modal-dialog {
         width: auto;
     }
+    
+    .hr-amount > span {
+        text-align: left;
+    }
 }
 
 @media(min-width:1024px){
@@ -1081,10 +1084,6 @@ table tr:hover {
 }
 
 table tr.account-total-footer:hover {
-    background: #f9f9f9 !important;
-}
-
-table tr.remaining-amount-notification:hover {
     background: #f9f9f9 !important;
 }
 

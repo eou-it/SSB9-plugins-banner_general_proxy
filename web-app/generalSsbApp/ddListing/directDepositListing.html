@@ -91,11 +91,11 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
             </div>
         </div>
     </div>
-    <div ng-show="isDesktopView" class="desktop-disclaimer">
+    <div ng-show="isDesktopView && (hasApAccount || hasPayAccountsProposed)" class="desktop-disclaimer">
         <input type="checkbox" class="main-nav-check" id="disclaimer-check" aria-label="{{'directDeposit.label.disclaimer.ack'|i18n}}" ng-checked="authorizedChanges" ng-click="toggleAuthorizedChanges()"/>
         <p class="lbl">{{'directDeposit.disclaimer.text'|i18n}}</p>
     </div>
-    <div ng-show="isDesktopView" class="desktop-save">
+    <div ng-show="isDesktopView && (hasApAccount || hasPayAccountsProposed)" class="desktop-save">
         <button class="btn save-btn" ng-disabled="!authorizedChanges" ng-click="updateAccounts()">{{'directDeposit.save.changes.button.label'|i18n}}</button>
     </div>
 </div>

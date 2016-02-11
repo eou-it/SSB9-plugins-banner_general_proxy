@@ -72,8 +72,6 @@ class AccountListingController  {
 
         model = directDepositAccountCompositeService.getLastPayDistribution(pidm)
 
-        model.totalNet = formatCurrency(model.totalNet)
-
         model.docAccts.each { it ->
             it.net = formatCurrency(it.net)
         }

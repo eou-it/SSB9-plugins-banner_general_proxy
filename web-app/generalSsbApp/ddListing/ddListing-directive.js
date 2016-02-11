@@ -97,8 +97,6 @@ generalSsbAppDirectives.directive('payAccountInfoProposed', ['ddEditAccountServi
         link: function(scope, elem, attrs, ctrl){
             scope.alloc = scope.allocation;
             
-            scope.alloc.amountType = ddEditAccountService.getAmountType(scope.alloc);
-
             scope.showEditPayroll = function(){
                 scope.showEditAccount(scope.alloc, 'HR');
             };
@@ -120,10 +118,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
         link: function(scope, elem, attrs, ctrl){
             scope.alloc = scope.allocation;
             
-            scope.alloc.amountType = ddEditAccountService.getAmountType(scope.alloc);
-            
             scope.amtDropdownOpen = false;
-            scope.isValid = true;
 
             scope.previousAmount = null; // Holds previous amount info in case it needs to be restored
 
@@ -149,60 +144,71 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
             scope.priorities = ddEditAccountService.priorities;
 
             scope.setAccountPriority = function (priority) {
-                if(scope.alloc.priority != priority) {
-                    // Only amount types other than "Remaining" can be reprioritized
-                    if(!directDepositService.isRemaining(scope.alloc)) {
+                var alloc = scope.alloc;
+
+                if(alloc.priority != priority) {
+                    if (ddListingService.hasMultipleRemainingAmountAllocations()) {
+                        notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.remaining', "error"));
+                    } else {
                         ddEditAccountService.doReorder = 'all';
-                        ddEditAccountService.setAccountPriority(scope.alloc, priority);
+
+                        // If this is a "Remaining" account, don't bother reprioritizing here, it will be done below
+                        if (!directDepositService.isRemaining(alloc)) {
+                            ddEditAccountService.setAccountPriority(alloc, priority);
+                        }
+
+                        // If there is one "Remaining" account out of order, whether the one currently under
+                        // consideration or one already existing that was pulled from the database, fix it.
+                        ddEditAccountService.fixOrderForAccountWithRemainingAmount();
+
+                        // Reprioritization can change allocation amounts -- recalculate
+                        ddListingService.calculateAmountsBasedOnPayHistory();
                     }
                 }
+            };
+
+            scope.restorePreviousAmount = function() {
+                var alloc = scope.alloc;
+
+                alloc.amountType = scope.previousAmount.amountType;
+                alloc.amount = scope.previousAmount.amount;
+                alloc.percent = scope.previousAmount.percent;
+                alloc.allocation = scope.previousAmount.allocation;
+
+                // Just above we *automatically* returned an invalid state to a valid one.  However, we
+                // still need to notify the user that their selected state was invalid.  We set this flag here so
+                // that a subsequent call to this function, seeing that this *automatically fixed* amount is now
+                // valid won't prematurely clear the notification.
+                scope.preserveNotifications = true;
             };
 
             scope.validateAmounts = function (){
-                var isValid = ddListingService.validateAmountsForAccount(scope, scope.alloc, ddEditAccountService.payrollAccountWithRemainingAmount);
+                if (ddListingService.hasMultipleRemainingAmountAllocations()) {
+                    // In addition to a user *attempting* (in *bold* because we won't allow them to do it) to create
+                    // two "Remaining" accounts, this case can also happen when more than one "Remaining" account was
+                    // created outside of this app (e.g. INB)
+                    scope.restorePreviousAmount();
+                    notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.remaining', "error"));
+                } else {
+                    // Current overall allocation state is valid.  Specifically check the current account.
+                    var isValid = ddListingService.validateAmountForAccount(scope, scope.alloc);
 
-                if(isValid) {
-                    if (!scope.preserveNotifications) {
-                        notificationCenterService.clearNotifications();
+                    if(isValid) {
+                        if (!scope.preserveNotifications) {
+                            notificationCenterService.clearNotifications();
+                        }
+
+                        scope.amountErr = false;
+                    } else if (scope.amountErr === 'rem') {
+                        // If user set it to "Remaining" in an invalid state, return to previous amount values
+                        // to avoid issues with a "Remaining" item residing at an invalid position in the allocation list.
+                        scope.restorePreviousAmount();
                     }
-
-                    scope.amountErr = false;
-                } else if (scope.amountErr === 'rem') {
-                    // If user set it to "Remaining" in an invalid state, return to previous amount values
-                    // to avoid issues with a "Remaining" item residing at an invalid position in the allocation list.
-                    var alloc = scope.alloc;
-
-                    alloc.amountType = scope.previousAmount.amountType;
-                    alloc.amount = scope.previousAmount.amount;
-                    alloc.percent = scope.previousAmount.percent;
-                    alloc.allocation = scope.previousAmount.allocation;
-
-                    // Just above we found an invalid state and *automatically* returned it to a valid one.  However, we
-                    // still need to notify the user that their selected state was invalid.  We set this flag here so
-                    // that a subsequent call to this function, seeing that this *automatically fixed* amount is now
-                    // valid won't prematurely clear the notification.
-                    scope.preserveNotifications = true;
-                }
-
-                // update validity flags only when the validity state has changed
-                if(scope.isValid !== isValid) {
-                    ddListingService.setAmountsValid(isValid);
-                    scope.isValid = isValid;
                 }
             };
 
-            // When the amount is "Remaining" for a given allocation, the business rule is that
-            // that allocation's priority needs to be set to move the allocation to the end of the
-            // list of allocations.
-            scope.updatePriorityForAmount = function() {
-                var alloc = scope.alloc;
-
-                if (directDepositService.isRemaining(alloc) &&
-                    !ddListingService.accountWithRemainingAmountAlreadyExists(alloc, ddEditAccountService.payrollAccountWithRemainingAmount)) {
-
-                    ddEditAccountService.doReorder = 'all';
-                    ddEditAccountService.setAccountPriority(alloc, scope.priorities.length);
-                }
+            scope.isValidRemainingAmountAllocation = function(account){
+                return directDepositService.isLastPriority(account, ddEditAccountService.accounts) && directDepositService.isRemaining(account);
             };
 
             // validate the amounts when the drop down closes
@@ -210,7 +216,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                 // The "newVal != oldVal" phrase keeps this from running on page initialization,
                 // (i.e. the state has not changed on the dropdown).
                 if (newVal != oldVal) {
-                    if (newVal) { // Dropdown has opened
+                    if (newVal) { // Dropdown has OPENED
                         // Save previous amount in case invalid "Remaining" is entered and we
                         // need to return to previous values.
                         scope.previousAmount = {
@@ -219,14 +225,23 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                             percent:    scope.alloc.percent ? Number(scope.alloc.percent) : null,
                             allocation: scope.alloc.allocation
                         };
-                    } else { // Dropdown has closed
+                    } else { // Dropdown has CLOSED
                         scope.validateAmounts();
 
                         // Notifications can be cleared at will now; we're past the point where we
                         // need to make sure they hang around.
                         scope.preserveNotifications = false;
 
-                        scope.updatePriorityForAmount();
+                        // If there is one "Remaining" account out of order, whether one just
+                        // edited or one already existing that was pulled from the database, fix it.
+                        ddEditAccountService.fixOrderForAccountWithRemainingAmount();
+
+                        // Status of an account with "Remaining" status may have changed, so update
+                        ddListingService.updateWhetherHasPayrollRemainingAmount();
+
+                        // The amounts for each proposed distribution, based on
+                        // most recent pay, may have now changed -- recalculate them.
+                        ddListingService.calculateAmountsBasedOnPayHistory();
                     }
                 }
             });

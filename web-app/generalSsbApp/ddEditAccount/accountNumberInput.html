@@ -75,13 +75,19 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
     <div ng-show="typeIndicator==='HR'" class="col-xs-6 col-sm-4 col-md-4 pad-right-sm xs-fix">
         <label class="input-field-label">{{'directDeposit.account.label.priority'|i18n}}</label><br>
         <div class="dropdown" role="menu">
-            <button dropdown-helper="begin" ng-disabled="isRemaining()" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
+            <button dropdown-helper="begin" ng-if="!isRemaining()" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
                 <span class="float-l semi-bold form-spacing" aria-live="polite">
                     {{account.priority}}
                 </span>
                 <span class="float-r form-spacing down-caret caret-color"></span>
             </button>
-            <ul class="dropdown-menu addAcct">
+            <button dropdown-helper="begin" ng-if="isRemaining()" ng-click="showReprioritizeRemainingMessage()" class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="">
+                <span class="float-l semi-bold form-spacing" aria-live="polite">
+                    {{account.priority}}
+                </span>
+                <span class="float-r form-spacing down-caret caret-color"></span>
+            </button>
+            <ul ng-if="!isRemaining()" class="dropdown-menu addAcct">
                 <li ng-repeat="i in priorities" role="presentation">
                     <a ng-click="setAccountPriority(i.displayVal)" dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" class="addAcct form-spacing" href="#" role="menuitem">{{i.displayVal}}</a>
                 </li>
@@ -89,4 +95,5 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </div>
     </div>
 </div>
+<span ng-if="!!miscMessage" ng-class="(miscError ? 'field-error':'field-warning')" class="misc-message">{{miscMessage}}</span>
 <modal-disclaimer/>
