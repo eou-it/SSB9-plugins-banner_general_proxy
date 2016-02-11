@@ -85,17 +85,22 @@ generalSsbAppDirectives.directive('truncatedBankName',[function () {
         restrict: 'E',
         link: function(scope, elem){
             scope.getTruncatedBankName = function(){
-                var bankName = scope.account.bankRoutingInfo.bankName;
-                var truncated = bankName;
-                var inputWidth = 0;
-                
+                var bankName = scope.account.bankRoutingInfo.bankName,
+                    routNum = scope.account.bankRoutingInfo.bankRoutingNum,
+                    truncated = bankName,
+                    inputWidth = 0,
+                    factor = 8;
+
+                if(routNum && routNum.length > 9)
+                    factor = 9;
+
                 if(bankName){
                     inputWidth = $('#routing-number').width();
                     
                     // magic formula to truncate bank name to fit text in box based on estimated
                     // icon width and character widths
-                    if(inputWidth - ((truncated.length*8) + 100) < 0){
-                        var num = (-(inputWidth - ((truncated.length*8) + 100)))/10;
+                    if(inputWidth - ((truncated.length*factor) + 100) < 0){
+                        var num = (-(inputWidth - ((truncated.length*factor) + 100)))/10;
     
                         truncated = bankName.substring(0, bankName.length-num);
                         truncated += '...';

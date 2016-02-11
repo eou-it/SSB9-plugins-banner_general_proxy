@@ -963,7 +963,7 @@ a.delete-account-link {
 
 @media(min-width:1024px){
     .edit-account-modal .modal-dialog {
-        width: 768px;
+        width: 832px;
     }
 }
 
