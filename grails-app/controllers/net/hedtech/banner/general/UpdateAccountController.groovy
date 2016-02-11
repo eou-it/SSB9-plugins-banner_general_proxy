@@ -73,6 +73,8 @@ class UpdateAccountController {
         def map = request?.JSON ?: params
 
         try {
+            // Do some cleanup to prepare for update
+            removeKeyValuePairsNotWantedForUpdate(map)
             fixJSONObjectForCast(map)
 
             render directDepositAccountCompositeService.rePrioritizeAccounts(map, map.newPosition) as JSON
@@ -189,9 +191,11 @@ class UpdateAccountController {
     private def removeKeyValuePairsNotWantedForUpdate(JSONObject json) {
         json.remove("lastModified")
 
-        // The bankRoutingInfo object gets flagged as dirty, apparently because it contains its own lastModified
-        // name/value pair.  We don't want to update that object here anyway, so remove it.
-        json.remove("bankRoutingInfo")
+        def bankRoutingInfo = json.get("bankRoutingInfo")
+
+        if (bankRoutingInfo) {
+            bankRoutingInfo.remove("lastModified")
+        }
     }
 
     /**
