@@ -953,7 +953,7 @@ a.delete-account-link {
         width: auto;
     }
     
-    .hr-amount > span {
+    span.check-amount {
         text-align: left;
     }
 }
