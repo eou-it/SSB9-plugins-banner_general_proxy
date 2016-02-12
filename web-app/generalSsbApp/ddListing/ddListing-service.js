@@ -69,40 +69,22 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
         return result;
     };
 
-    // Validates amount as a valid currency amount and, if not valid, sets notification
-    this.isInvalidCurrencyAmountAndSetNotification = function(acct) {
-        var msg = false;
-        
-        if(acct.amount > 0){
-            if(!this.checkIfTwoDecimalPlaces(acct.amount) || acct.amount > 99999999.99) {
-                msg = $filter('i18n')('directDeposit.invalid.format.amount');
-                notificationCenterService.displayNotifications(msg, "error");
-            }
-        }
-        else {
-            msg = $filter('i18n')('directDeposit.invalid.format.amount');
-            notificationCenterService.displayNotifications(msg, "error");
+    // Validates amount as a valid currency amount and, if not valid, returns error message
+    this.getErrorForInvalidCurrencyAmount = function(acct) {
+        if(acct.amount <= 0 || !this.checkIfTwoDecimalPlaces(acct.amount) || acct.amount > 99999999.99) {
+            return $filter('i18n')('directDeposit.invalid.format.amount');
         }
 
-        return msg;
+        return null;
     };
 
-    // Validates percentage and, if not valid, sets notification
-    this.isInvalidPercentageAndSetNotification = function(acct) {
-        var msg = false;
-        
-        if(acct.percent > 0 && acct.percent <= 100){
-            if(!this.checkIfTwoDecimalPlaces(acct.percent)) {
-                msg = $filter('i18n')('directDeposit.invalid.format.percent');
-                notificationCenterService.displayNotifications(msg, "error");
-            }
-        }
-        else {
-            msg = $filter('i18n')('directDeposit.invalid.amount.percent')
-            notificationCenterService.displayNotifications(msg, "error");
+    // Validates percentage and, if not valid, returns error message
+    this.getErrorForInvalidPercentage = function(acct) {
+        if(acct.percent <= 0 || acct.percent > 100 || !this.checkIfTwoDecimalPlaces(acct.percent)){
+            return $filter('i18n')('directDeposit.invalid.format.percent');
         }
 
-        return msg;
+        return null;
     };
 
     /**
@@ -135,16 +117,26 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
         return self.mainListingControllerScope.hasMultipleRemainingAmountAllocations();
     };
 
-    this.accountWithRemainingAmountAlreadyExistsAndSetNotification = function(acct) {
-        var self = this,
-            msg = null;
+    this.getErrorForInvalidCaseWhereAccountWithRemainingAmountAlreadyExists = function(acct) {
+        var self = this;
 
         if(self.accountWithRemainingAmountAlreadyExists(acct)) {
-            msg = $filter('i18n')('directDeposit.invalid.amount.remaining');
-            notificationCenterService.displayNotifications(msg, "error");
+            return $filter('i18n')('directDeposit.invalid.amount.remaining');
         }
 
-        return msg;
+        return null;
+    };
+
+    this.getErrorForInvalidRemainingPosition = function(acct) {
+        var self = this,
+            allocations = self.mainListingControllerScope.distributions.proposed.allocations;
+
+        if (!directDepositService.isLastPriority(acct, allocations)) {
+            // It's not in the last position, as is required
+            return 'directDeposit.invalid.amount.remaining.placement';
+        }
+
+        return null;
     };
 
     /**
@@ -160,25 +152,29 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
             msg = false;
 
         if(acct.amountType === 'amount') {
-            msg = self.isInvalidCurrencyAmountAndSetNotification(acct);
+            msg = self.getErrorForInvalidCurrencyAmount(acct);
             if (msg) {
                 amountErr = 'amt';
             }
         }
         else if(directDepositService.isRemaining(acct)) {
-            msg = self.accountWithRemainingAmountAlreadyExistsAndSetNotification(acct);
+            msg = self.getErrorForInvalidCaseWhereAccountWithRemainingAmountAlreadyExists(acct);
             if (msg) {
                 amountErr = 'rem';
             }
         }
         else if(acct.amountType === 'percentage') {
-            msg = self.isInvalidPercentageAndSetNotification(acct);
+            msg = self.getErrorForInvalidPercentage(acct);
             if (msg) {
                 amountErr = 'pct';
             }
         }
         else {
             amountErr = true;
+        }
+        
+        if (msg) {
+            notificationCenterService.addNotification(msg, "error");
         }
 
         if (amountErr) {
@@ -191,36 +187,42 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
 
     this.validateAmountsForAllAccountsAndSetNotification = function(accounts) {
         var self = this,
-            invalidAcct,
-            isInvalidRemainingPositionAndSetNotification = function(alloc) {
-                if (!directDepositService.isLastPriority(alloc, accounts)) {
-                    // It's not in the last position, as is required
-                    var msg = 'directDeposit.invalid.amount.remaining.placement';
-                    notificationCenterService.displayNotifications(msg, "error");
+            allValid = true,
+            displayedMessages = {
+                null: true // Don't add a notification if there is no message (i.e. message is null)
+            },
 
-                    return true;
+            handleValidityCheck = function(msg) {
+                // Update overall validity (taking into account all validations thus far)
+                // If there is a message, then the validation failed.
+                allValid = allValid && !msg;
+
+                // Display message if same message is not already being displayed
+                if (!displayedMessages[msg]) {
+                    displayedMessages[msg] = true; // Flag as "displayed"
+
+                    notificationCenterService.addNotification(msg, "error");
                 }
-
-                return false;
             };
 
-        invalidAcct = _.find(accounts, function(acct) {
+        // Start fresh
+        notificationCenterService.clearNotifications();
+
+        // Validate each account
+        _.each(accounts, function(acct) {
             if(acct.amountType === 'amount') {
-                return self.isInvalidCurrencyAmountAndSetNotification(acct);
+                handleValidityCheck(self.getErrorForInvalidCurrencyAmount(acct));
             }
             else if(directDepositService.isRemaining(acct)) {
-                return self.accountWithRemainingAmountAlreadyExistsAndSetNotification(acct) ||
-                       isInvalidRemainingPositionAndSetNotification(acct);
+                handleValidityCheck(self.getErrorForInvalidCaseWhereAccountWithRemainingAmountAlreadyExists(acct));
+                handleValidityCheck(self.getErrorForInvalidRemainingPosition(acct));
             }
             else if(acct.amountType === 'percentage') {
-                return self.isInvalidPercentageAndSetNotification(acct);
-            }
-            else {
-                return true;
+                handleValidityCheck(self.getErrorForInvalidPercentage(acct));
             }
         });
 
-        return !invalidAcct;
+        return allValid;
     };
 
     this.updateWhetherHasPayrollRemainingAmount = function() {

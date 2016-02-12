@@ -148,7 +148,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
 
                 if(alloc.priority != priority) {
                     if (ddListingService.hasMultipleRemainingAmountAllocations()) {
-                        notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.remaining'), "error");
+                        notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining', "error");
                     } else {
                         ddEditAccountService.doReorder = 'all';
 
@@ -183,12 +183,16 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
             };
 
             scope.validateAmounts = function (){
+                // Start fresh
+                notificationCenterService.clearNotifications();
+
                 if (ddListingService.hasMultipleRemainingAmountAllocations()) {
                     // In addition to a user *attempting* (in *bold* because we won't allow them to do it) to create
                     // two "Remaining" accounts, this case can also happen when more than one "Remaining" account was
                     // created outside of this app (e.g. INB)
                     scope.restorePreviousAmount();
-                    notificationCenterService.displayNotifications($filter('i18n')('directDeposit.invalid.amount.remaining'), "error");
+
+                    notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining', "error");
                 } else {
                     // Current overall allocation state is valid.  Specifically check the current account.
                     var isValid = ddListingService.validateAmountForAccount(scope, scope.alloc);

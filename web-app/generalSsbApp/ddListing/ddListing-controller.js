@@ -11,6 +11,17 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             REMAINING_ONE = directDepositService.REMAINING_ONE,
             REMAINING_MULTIPLE = directDepositService.REMAINING_MULTIPLE,
 
+            amountsAreValid = function () {
+                var result = true,
+                    allocs = $scope.distributions.proposed.allocations;
+
+                if($scope.isEmployee && $scope.hasPayAccountsProposed){
+                    result = ddListingService.validateAmountsForAllAccountsAndSetNotification(allocs);
+                }
+
+                return result;
+            },
+
             formatCurrency = function(amount) {
                 return $filter('currency')(amount, $scope.currencySymbol);
             },
@@ -95,7 +106,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             acctPromises[1].then( function (response) {
                 if(response.failure) {
-                    notificationCenterService.displayNotifications(response.message, "error");
+                    notificationCenterService.displayNotification(response.message, "error");
                 } else {
                     $scope.distributions.mostRecent = response;
                     $scope.distributions.mostRecent.totalNetFormatted = formatCurrency($scope.distributions.mostRecent.totalNet);
@@ -107,7 +118,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             // getUserPayrollAllocationListing
             acctPromises[2].then( function (response) {
                 if(response.failure) {
-                    notificationCenterService.displayNotifications(response.message, "error");
+                    notificationCenterService.displayNotification(response.message, "error");
                 } else {
                     $scope.distributions.proposed = response;
                     allocations = response.allocations;
@@ -117,6 +128,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     ddEditAccountService.setupPriorities(allocations);
                     setupAmountTypes(allocations);
                     $scope.updatePayrollState();
+
+                    amountsAreValid();
 
                     // If any allocation is flagged for delete (happens via user checking a checkbox, which
                     // in turn sets the deleteMe property to true), set selectedForDelete.payroll to true,
@@ -268,7 +281,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             // If this is an HR account and the maximum number of HR accounts already exists,
             // this functionality is disabled.
             if (typeInd === 'HR' && $scope.hasMaxPayrollAccounts) {
-                notificationCenterService.displayNotifications('directDeposit.max.payroll.accounts.text', 'error');
+                notificationCenterService.displayNotification('directDeposit.max.payroll.accounts.text', 'error');
                 return;
             }
 
@@ -310,18 +323,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 'directDeposit.notification.no.accounts.payable.allocation.click' :
                 'directDeposit.notification.no.accounts.payable.allocation.tap';
         };
-        
-        var amountsAreValid = function () {
-            var result = true;
-
-            if($scope.isEmployee && $scope.hasPayAccountsProposed){
-                var allocs = $scope.distributions.proposed.allocations;
-
-                result = ddListingService.validateAmountsForAllAccountsAndSetNotification(allocs);
-            }
-
-            return result;
-        };
 
         $scope.updateAccounts = function () {
             if(amountsAreValid()) {
@@ -337,12 +338,12 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
                     ddEditAccountService.reorderAccounts().$promise.then(function (response) {
                         if(response[0].failure) {
-                            notificationCenterService.displayNotifications(response[0].message, "error");
+                            notificationCenterService.displayNotification(response[0].message, "error");
 
                             deferred.reject();
                         }
                         else {
-                            notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
+                            notificationCenterService.displayNotification('default.save.success.message', $scope.notificationSuccessType, $scope.flashNotification);
 
                             ddEditAccountService.doReorder = false;
 
@@ -388,11 +389,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             ddEditAccountService.saveAccount(acct).$promise.then(function (response) {
                 if(response.failure) {
-                    notificationCenterService.displayNotifications(response.message, "error");
+                    notificationCenterService.displayNotification(response.message, "error");
 
                     deferred.reject();
                 } else {
-                    notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
+                    notificationCenterService.displayNotification('default.save.success.message', $scope.notificationSuccessType, $scope.flashNotification);
 
                     deferred.resolve();
                 }
@@ -420,7 +421,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             ddEditAccountService.deleteAccounts(accountsToDelete).$promise.then(function (response) {
 
                 if (response[0].failure) {
-                    notificationCenterService.displayNotifications(response[0].message, "error");
+                    notificationCenterService.displayNotification(response[0].message, "error");
                 } else {
                     // Refresh account info
                     $scope.distributions.proposed.allocations = _.difference(allocations, accountsToDelete);
@@ -437,7 +438,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                                 msg += ' ' + $filter('i18n')('directDeposit.still.active.AP');
                             }
 
-                            notificationCenterService.displayNotifications(msg, "success");
+                            notificationCenterService.displayNotification(msg, "success");
 
                             return true;
                         }
@@ -466,7 +467,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 }
             ];
 
-            notificationCenterService.displayNotifications('directDeposit.confirm.payroll.delete.text', 'warning', false, prompts);
+            notificationCenterService.displayNotification('directDeposit.confirm.payroll.delete.text', 'warning', false, prompts);
         };
 
         $scope.deleteApAccount = function () {
@@ -481,7 +482,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             ddEditAccountService.deleteAccounts(accounts).$promise.then(function (response) {
 
                 if (response[0].failure) {
-                    notificationCenterService.displayNotifications(response[0].message, "error");
+                    notificationCenterService.displayNotification(response[0].message, "error");
                 } else {
                     // Refresh account info
                     $scope.apAccount = null;
@@ -494,7 +495,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                             msg += ' '+ $filter('i18n')('directDeposit.still.active.payroll');
                         }
 
-                        notificationCenterService.displayNotifications(msg, "success");
+                        notificationCenterService.displayNotification(msg, "success");
                     }
 
                     $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
@@ -518,7 +519,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 }
             ];
 
-            notificationCenterService.displayNotifications('directDeposit.confirm.ap.delete.text', 'warning', false, prompts);
+            notificationCenterService.displayNotification('directDeposit.confirm.ap.delete.text', 'warning', false, prompts);
         };
 
         $scope.toggleAuthorizedChanges = function () {
