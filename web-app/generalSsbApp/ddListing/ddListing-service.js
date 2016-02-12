@@ -98,7 +98,7 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
             }
         }
         else {
-            msg = $filter('i18n')('directDeposit.invalid.amount.percent')
+            msg = $filter('i18n')('directDeposit.invalid.amount.percent');
             notificationCenterService.displayNotifications(msg, "error");
         }
 

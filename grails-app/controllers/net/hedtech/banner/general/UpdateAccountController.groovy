@@ -37,6 +37,7 @@ class UpdateAccountController {
                 // response object to keep UI happy
                 def r = [:]
 
+                removeKeyValuePairsNotWantedForUpdate(map)
                 fixJSONObjectForCast(map)
 
                 //newPosition is set so we need to do some reodering as we insert
