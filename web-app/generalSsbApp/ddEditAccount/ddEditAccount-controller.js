@@ -26,7 +26,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         $scope.routingNumErr = true;
         $scope.routingNumMessage = message;
         $scope.account.bankRoutingInfo.bankName = null;
-        notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
+        notificationCenterService.displayNotification($scope.routingNumMessage, "error");
         clearMiscMessage();
     };
 
@@ -62,7 +62,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     var setAccountNumError = function (message) {
         $scope.accountNumErr = true;
         $scope.accountNumMessage = message
-        notificationCenterService.displayNotifications($scope.accountNumMessage, "error");
+        notificationCenterService.displayNotification($scope.accountNumMessage, "error");
         clearMiscMessage();
     };
     
@@ -192,13 +192,13 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
            if(ddEditAccountService.doReorder === 'single'){
                 ddEditAccountService.reorderAccounts($scope.account).$promise.then(function (response) {
                     if(response[0].failure) {
-                        notificationCenterService.displayNotifications(response[0].message, "error");
+                        notificationCenterService.displayNotification(response[0].message, "error");
                         displayMiscError(response[0].message);
 
                         resetAccountPriority();
                     }
                     else {
-                        notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
+                        notificationCenterService.displayNotification('default.save.success.message', $scope.notificationSuccessType, $scope.flashNotification);
 
                         ddEditAccountService.doReorder = false;
 
@@ -209,7 +209,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             else {
                 ddEditAccountService.saveAccount($scope.account, $scope.creatingNewAccount).$promise.then(function (response) {
                     if(response.failure) {
-                        notificationCenterService.displayNotifications(response.message, "error");
+                        notificationCenterService.displayNotification(response.message, "error");
                         displayMiscError(response.message);
 
                         if($scope.typeIndicator === 'HR'){
@@ -225,7 +225,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                         }
                     }
                     else {
-                        notificationCenterService.displayNotifications($filter('i18n')('default.save.success.message'), $scope.notificationSuccessType, $scope.flashNotification);
+                        notificationCenterService.displayNotification('default.save.success.message', $scope.notificationSuccessType, $scope.flashNotification);
     
                         $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
                     }
@@ -248,19 +248,19 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             setRoutingNumError($filter('i18n')('directDeposit.invalid.missing.routing.number'));
         } 
         else if($scope.routingNumErr){
-            notificationCenterService.displayNotifications($scope.routingNumMessage, "error");
+            notificationCenterService.displayNotification($scope.routingNumMessage, "error");
         }
         
         if(!$scope.account.bankAccountNum) {
             setAccountNumError($filter('i18n')('directDeposit.invalid.missing.account.number'));
         }
         else if($scope.accountNumErr){
-            notificationCenterService.displayNotifications($scope.accountNumMessage, "error");
+            notificationCenterService.displayNotification($scope.accountNumMessage, "error");
         }
         
         if(!$scope.account.accountType) {
             $scope.accountTypeErr = true;
-            notificationCenterService.displayNotifications('directDeposit.invalid.missing.account.type', "error");
+            notificationCenterService.displayNotification('directDeposit.invalid.missing.account.type', "error");
             clearMiscMessage();
         }
         
