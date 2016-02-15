@@ -155,6 +155,10 @@ body {
     margin: 0px;
 }
 
+.rout-num-lbl {
+    max-width: 90%;
+}
+
 .field-error {
     color: #CD3B3E;
 }
@@ -764,6 +768,29 @@ span.radio-list.no-padding {
     width: 100%;
 }
 
+.edit-flex-div1 {
+    display: flex;
+}
+
+.edit-flex-div2 {
+    width: 100%;
+    display: flex;
+}
+
+.flex-end {
+    display: flex;
+    align-items: flex-end;
+}
+
+.unflex {
+    display: inline-block;
+    width: 100%;
+}
+
+.menu-fix {
+    margin-bottom: -5px;
+}
+
 .table-fmt{
     clear: both;
 }
@@ -1114,6 +1141,26 @@ table tr td {
     }
 }
 
+@media(max-width:568px){
+    .xs-fix {
+        width: 100%;
+    }
+
+    .edit-flex-div2 {
+        display: inline;
+    }
+}
+
+@media screen and (max-width:767px) {
+    .edit-flex-div1 {
+        display: inline;
+    }
+
+    .clear-xs-sm {
+        clear: both;
+    }
+}
+
 @media screen and (min-width:768px) {
     .account-heading {
         margin-bottom: 15px;
@@ -1141,6 +1188,10 @@ table tr td {
 
     .pad-dialog-lr {
         padding: 0em 1.7em;
+    }
+
+    .edit-flex-div2 {
+        width: 66.666666666%;
     }
 }
 
