@@ -65,6 +65,14 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         notificationCenterService.displayNotification($scope.accountNumMessage, "error");
         clearMiscMessage();
     };
+
+    $scope.checkBrowserLocale = function(localeIn) {
+        if (localeIn ===  (navigator.language || navigator.userLanguage)) {
+            return true
+        } else {
+            return false
+        }
+    }
     
     $scope.validateAccountNum = function () {
         if($scope.account.bankAccountNum){
