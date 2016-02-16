@@ -246,8 +246,8 @@ percent-input > input.form-control:-ms-input-placeholder,
 .input-fail {
     position: absolute;
     float: right;
-    right: 1.75em;
-    bottom: 1.1em;
+    right: 0.75em;
+    bottom: 1.0em;
     background: #F6E5E6;
 }
 
@@ -322,8 +322,8 @@ currency-input > input.form-control:focus{
 .input-bank-name {
     position: absolute;
     float: right;
-    right: 1.75em;
-    top: 4.285em;
+    right: 0.75em;
+    bottom: 1.15em;
     color: #869FB1;
     line-height: 118%;
 }
@@ -787,6 +787,10 @@ span.radio-list.no-padding {
     width: 100%;
 }
 
+.pos-relative {
+    position: relative;
+}
+
 .menu-fix {
     margin-bottom: -5px;
 }
@@ -1150,11 +1154,6 @@ table tr td {
 }
 
 @media(max-width:568px){
-    .input-fail {
-        top: 4.285em;
-        bottom: initial;
-    }
-
     .xs-fix {
         width: 100%;
     }
