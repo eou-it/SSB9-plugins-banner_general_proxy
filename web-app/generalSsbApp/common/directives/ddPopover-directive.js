@@ -2,9 +2,9 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppDirectives.directive('popOver', ['directDepositService', function(directDepositService) {
+generalSsbAppDirectives.directive('popOver', ['$filter', 'directDepositService', function($filter, directDepositService) {
 
-    var template = '<button class="icon-info-CO"></button>';
+    var template = '<button class="icon-info-CO" aria-label="'+$filter("i18n")("directDeposit.label.show.check")+'"></button>';
 
     var link = function (scope, element, attrs) {
         element.on('click', function(event) {
