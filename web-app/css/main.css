@@ -323,7 +323,7 @@ currency-input > input.form-control:focus{
     position: absolute;
     float: right;
     right: 0.75em;
-    bottom: 1.15em;
+    bottom: 1.185em;
     color: #869FB1;
     line-height: 118%;
 }

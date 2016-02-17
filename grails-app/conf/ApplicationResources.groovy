@@ -12,7 +12,6 @@ modules = {
 
     'angular' {
         resource url:[file: 'js/angular/angular-route.min.js']
-        resource url:[file: 'js/angular/angular-aria.min.js']
     }
 
    'generalSsbApp' {
