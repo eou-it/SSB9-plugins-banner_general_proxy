@@ -77,6 +77,9 @@ generalSsbApp.config(function($stateProvider, $urlRouterProvider){
             },
             data: {
                 breadcrumbs: []
+            },
+            params: {
+                onLoadNotifications: []
             }
         });
 });

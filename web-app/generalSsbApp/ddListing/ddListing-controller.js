@@ -1,9 +1,9 @@
 /*******************************************************************************
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope', '$state', '$modal', '$filter',
-    '$q', 'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
-    function ($scope, $rootScope, $state, $modal, $filter, $q, ddListingService, ddEditAccountService,
+generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope', '$state', '$stateParams', '$modal',
+    '$filter', '$q', 'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
+    function ($scope, $rootScope, $state, $stateParams, $modal, $filter, $q, ddListingService, ddEditAccountService,
               directDepositService, notificationCenterService){
 
         // CONSTANTS
@@ -42,6 +42,22 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 _.each(allocations, function(alloc) {
                     alloc.amountType = getAmountType(alloc);
                 });
+            },
+
+            /**
+             * Show any notifications slated to be shown on state load.
+             * (The timeout is needed in cases where the common platform control bar needs time to load. It
+             * may be that it's not a typical concern -- would only affect showing notifications on initial
+             * page load -- but it's barely noticeable so doesn't hurt to leave it.)
+             */
+            displayNotificationsOnStateLoad = function() {
+                setTimeout(function() {
+                    notifications.clearNotifications();
+
+                    _.each($stateParams.onLoadNotifications, function(notification) {
+                        notificationCenterService.addNotification(notification.message, notification.messageType);
+                    });
+                }, 200);
             };
 
         // LOCAL FUNCTIONS
@@ -73,7 +89,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             var self = this,
                 allocations;
-            
+
             // if the listing controller has already been initialized, then abort
             if(ddListingService.isInit()) return;
 
@@ -147,8 +163,10 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 $scope.calculateAmountsBasedOnPayHistory();
                 self.syncAccounts();
             });
+
+            displayNotificationsOnStateLoad();
         };
-        
+
         // if an account is used for AP and Payroll, have scope.apAccount and allocation[x] point to same
         // account object so that they are always in sync. The frontend will save and delete the synced
         // accounts at the same time so the backend can save the changes to both records if it needs to
@@ -419,6 +437,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             $scope.cancelNotification();
 
             ddEditAccountService.deleteAccounts(accountsToDelete).$promise.then(function (response) {
+                var notifications = [];
 
                 if (response[0].failure) {
                     notificationCenterService.displayNotification(response[0].message, "error");
@@ -438,7 +457,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                                 msg += ' ' + $filter('i18n')('directDeposit.still.active.AP');
                             }
 
-                            notificationCenterService.displayNotification(msg, "success");
+                            notifications.push({message: msg, messageType: "success"});
 
                             return true;
                         }
@@ -446,7 +465,10 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                         return false;
                     });
                     
-                    $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                    $state.go('directDepositListing',
+                              {onLoadNotifications: notifications},
+                              {reload: true, inherit: false, notify: true}
+                    );
                 }
             });
         };
@@ -480,6 +502,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             $scope.cancelNotification();
 
             ddEditAccountService.deleteAccounts(accounts).$promise.then(function (response) {
+                var notifications = [];
 
                 if (response[0].failure) {
                     notificationCenterService.displayNotification(response[0].message, "error");
@@ -495,10 +518,13 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                             msg += ' '+ $filter('i18n')('directDeposit.still.active.payroll');
                         }
 
-                        notificationCenterService.displayNotification(msg, "success");
+                        notifications.push({message: msg, messageType: "success"});
                     }
 
-                    $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                    $state.go('directDepositListing',
+                        {onLoadNotifications: notifications},
+                        {reload: true, inherit: false, notify: true}
+                    );
                 }
             });
         };
