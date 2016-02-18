@@ -7,6 +7,7 @@ modules = {
     overrides {
         'angularApp' {
             resource id:[plugin: 'banner-ui-ss',file: 'js/angular/ui-bootstrap-tpls-0.10.0.min.js'], url: [file: 'js/angular/ui-bootstrap-tpls-0.13.3.min.js']
+            resource id:[plugin: 'banner-ui-ss',file: 'js/angular/angular-ui-router.min.js'], url: [file: 'js/angular/angular-ui-router.min.js']
         }
     }
 
