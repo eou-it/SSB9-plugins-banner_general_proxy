@@ -17,8 +17,8 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
     $scope.popoverElements = {}; // Used to coordinate popovers in modal
 
-    //routing and account number should only contain upper case letters and digits
-    var invalidCharRegEx = /[^A-Za-z0-9]/i;
+    //routing and account number should only contain upper case letters, digits, or the allowed special characters ^!_@#$%&,*:./+-
+    var invalidCharRegEx = /[^A-Za-z0-9\^!_@#\$%&,\*:\./\+-]/i;
     $scope.routingNumErr = false;
     $scope.routingNumMessage;
     
@@ -67,23 +67,9 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     };
 
     $scope.checkBrowserLocale = function(localeIn) {
-    //    console.log((navigator.language || navigator.userLanguage).toUpperCase());
-    //    console.log(localeIn.toUpperCase());
-
-        var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-        var browserLang
-        if (isChrome) {
-             browserLang = (navigator.languages[0] ||
-                            navigator.language ||
-                            navigator.browserLanguage ||
-                            navigator.userLanguage )
-        } else {
-             browserLang = (navigator.language ||
-                            navigator.browserLanguage ||
-                            navigator.userLanguage);
-        }
-
-        if (localeIn.toUpperCase() === browserLang.toUpperCase() ) {
+        var locale = $('meta[name=locale]').attr("content");
+        console.log(locale)
+        if (localeIn.toUpperCase() === locale.toUpperCase() ) {
             return true;
         } else {
             return false;

@@ -124,7 +124,7 @@ body {
 }
 
 .no-display {
-    display: none;
+    display: none !important;
 }
 
 .clear-both {
@@ -153,6 +153,10 @@ body {
 .input-field-label {
     padding: 0.875em 0em;
     margin: 0px;
+}
+
+.rout-num-lbl {
+    max-width: 90%;
 }
 
 .field-error {
@@ -242,8 +246,8 @@ percent-input > input.form-control:-ms-input-placeholder,
 .input-fail {
     position: absolute;
     float: right;
-    right: 1.75em;
-    top: 4.285em;
+    right: 0.75em;
+    bottom: 1.0em;
     background: #F6E5E6;
 }
 
@@ -318,8 +322,8 @@ currency-input > input.form-control:focus{
 .input-bank-name {
     position: absolute;
     float: right;
-    right: 1.75em;
-    top: 4.285em;
+    right: 0.75em;
+    bottom: 1.185em;
     color: #869FB1;
     line-height: 118%;
 }
@@ -764,6 +768,41 @@ span.radio-list.no-padding {
     width: 100%;
 }
 
+.edit-flex-div1 {
+    display: flex;
+}
+
+.edit-flex-div2 {
+    width: 100%;
+    display: flex;
+}
+
+.flex-end {
+    display: flex;
+    align-items: flex-end;
+}
+
+.unflex {
+    display: inline-block;
+    width: 100%;
+}
+
+.pos-relative {
+    position: relative;
+}
+
+.menu-fix {
+    margin-bottom: -5px;
+}
+
+.mobile-errors-acType {
+    display: inline-block;
+}
+
+.mobile-errors {
+    display: none;
+}
+
 .table-fmt{
     clear: both;
 }
@@ -1114,6 +1153,34 @@ table tr td {
     }
 }
 
+@media(max-width:568px){
+    .xs-fix {
+        width: 100%;
+    }
+
+    .edit-flex-div2 {
+        display: inline;
+    }
+
+    .mobile-errors {
+        display: inline-block;
+    }
+
+    .xs-errors-visible {
+        display: none;
+    }
+}
+
+@media screen and (max-width:767px) {
+    .edit-flex-div1 {
+        display: inline;
+    }
+
+    .clear-xs-sm {
+        clear: both;
+    }
+}
+
 @media screen and (min-width:768px) {
     .account-heading {
         margin-bottom: 15px;
@@ -1141,6 +1208,18 @@ table tr td {
 
     .pad-dialog-lr {
         padding: 0em 1.7em;
+    }
+
+    .edit-flex-div2 {
+        width: 66.666666666%;
+    }
+
+    .mobile-errors-acType {
+        display: none;
+    }
+
+    .xs-errors-visible {
+        display: none;
     }
 }
 

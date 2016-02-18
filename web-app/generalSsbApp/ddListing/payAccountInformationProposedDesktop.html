@@ -9,10 +9,11 @@
 <td class="break-word">{{alloc.bankRoutingInfo.bankRoutingNum|accountNumMask}}</td>
 <td class="break-word">{{alloc.bankAccountNum|accountNumMask}}</td>
 <td class="min-width-acctType">
+    <label class="visuallyhidden" id="select-acct-type{{$index}}">{{'directDeposit.label.account.type.select'|i18n}}</label>
     <div class="dropdown desktop-listing" role="menu">
-        <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" href="#">
+        <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" href="#" aria-labelledby="select-acct-type{{$index}} account-type{{$index}}">
             <span class="float-l form-spacing">
-                <choose-account account="alloc"/>
+                <choose-account account="alloc" id="account-type{{$index}}"/>
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
@@ -30,13 +31,13 @@
     <div dropdown-state="amtDropdownOpen" class="dropdown desktop-listing">
         <button dropdown-helper="begin"
             ng-class="(((amountErr === 'amt' && alloc.amountType === 'amount') || (amountErr === 'pct' && alloc.amountType === 'percentage')) && !amtDropdownOpen ? 'input-field-error' : null)" 
-            class="dropdown-btn ws-nowrap" data-toggle="dropdown" href="#" role="option" id="marker{{$index}}">
-            <span ng-class="(((amountErr === 'amt' && alloc.amountType === 'amount') || (amountErr === 'pct' && alloc.amountType === 'percentage')) && !amtDropdownOpen ? 'field-error' : null)" class="float-l form-spacing">
+            class="dropdown-btn ws-nowrap" data-toggle="dropdown" href="#" aria-labelledby="amount{{$index}} radios{{$index}}">
+            <span ng-class="(((amountErr === 'amt' && alloc.amountType === 'amount') || (amountErr === 'pct' && alloc.amountType === 'percentage')) && !amtDropdownOpen ? 'field-error' : null)" class="float-l form-spacing" id="amount{{$index}}">
                 {{displayAllocationVal()}}
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
-        <ul class="dropdown-menu addAcct listing" stop-click role="radiogroup" aria-label="{{'directDeposit.label.account.amount.edit'|i18n}}">
+        <ul class="dropdown-menu addAcct listing" stop-click role="radiogroup" aria-label="{{'directDeposit.label.account.amount.edit'|i18n}}" id="radios{{$index}}">
             <li ng-class="(alloc.amountType === 'remaining' ? 'dropdown-li-focus' : '')" class="listing" role="presentation">
                 <input ng-model="alloc.amountType" dropdown-helper="end" class="edit-radio" type="radio" name="amount-type{{$index}}" value="remaining" checked aria-labelledby="rem-radio-lbl{{$index}}">
                 <span class="lbl radio-list ws-nowrap" id="rem-radio-lbl{{$index}}">{{'directDeposit.account.amount.remaining'|i18n}}</span>
@@ -68,22 +69,23 @@
     </div>
 </td>
 <td class="break-word">
+    <label class="visuallyhidden" id="priority-menu{{$index}}">{{'directDeposit.label.account.priority.edit'|i18n}}</label>
     <div class="dropdown desktop-listing" role="menu">
         <button dropdown-helper="begin"
-            ng-if="!isValidRemainingAmountAllocation(alloc)" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
-            <span class="float-l form-spacing" aria-live="polite">
+            ng-if="!isValidRemainingAmountAllocation(alloc)" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="priority-en{{$index}} priority-menu{{$index}}">
+            <span class="float-l form-spacing" id="priority-en{{$index}}" aria-live="polite">
                 {{alloc.priority}}
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
         <button dropdown-helper="begin" ng-click="displayReprioritizeRemainingWarning()"
-            ng-if="isValidRemainingAmountAllocation(alloc)" class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="">
-            <span class="float-l form-spacing" aria-live="polite">
+            ng-if="isValidRemainingAmountAllocation(alloc)" class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="priority-dis{{$index}} priority-menu{{$index}}">
+            <span class="float-l form-spacing" id="priority-dis{{$index}}" aria-live="polite">
                 {{alloc.priority}}
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
-        <ul ng-if="!isValidRemainingAmountAllocation(alloc)" class="dropdown-menu addAcct min-width-priority">
+        <ul ng-if="!isValidRemainingAmountAllocation(alloc)" class="dropdown-menu addAcct min-width-priority" role="menu" aria-labelledby="priority-menu{{$index}}">
             <li ng-repeat="i in priorities" role="presentation">
                 <a dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" ng-click="setAccountPriority(i.displayVal)" class="addAcct form-spacing" href="#" role="menuitem">{{i.displayVal}}</a>
             </li>

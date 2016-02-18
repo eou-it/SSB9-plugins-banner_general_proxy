@@ -9,7 +9,8 @@
             </div>
         </div>
         <div class="delete-checkbox-wrapper">
-            <input type="checkbox" ng-click="toggleApAccountSelectedForDelete()" enter-key="toggleApAccountSelectedForDelete()">
+            <label class="visuallyhidden" id="for-delete-ap">{{'directDeposit.label.select.for.delete'|i18n}}</label>
+            <input type="checkbox" ng-click="toggleApAccountSelectedForDelete()" enter-key="toggleApAccountSelectedForDelete()" aria-labelledby="for-delete-ap ap-bank-name">
             <div class="lbl"></div>
         </div>
         <div class="entry">
