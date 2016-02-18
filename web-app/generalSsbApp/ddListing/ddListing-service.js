@@ -71,19 +71,21 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
 
     // Validates amount as a valid currency amount and, if not valid, returns error message
     this.getErrorForInvalidCurrencyAmount = function(acct) {
-        if(isNaN(acct.amount) || acct.amount <= 0 || !this.checkIfTwoDecimalPlaces(acct.amount) || acct.amount > 99999999.99) {
-            return $filter('i18n')('directDeposit.invalid.format.amount');
-        }
-
+       if (acct.amount) {
+           if(isNaN(acct.amount) || acct.amount <= 0 || !this.checkIfTwoDecimalPlaces(acct.amount) || acct.amount > 99999999.99) {
+               return $filter('i18n')('directDeposit.invalid.format.amount');
+           }
+       }
         return null;
     };
 
     // Validates percentage and, if not valid, returns error message
     this.getErrorForInvalidPercentage = function(acct) {
-        if(isNaN(acct.percent) || acct.percent <= 0 || acct.percent > 100 || !this.checkIfTwoDecimalPlaces(acct.percent)){
-            return $filter('i18n')('directDeposit.invalid.format.percent');
+        if (acct.percent) {
+            if(isNaN(acct.percent) || acct.percent <= 0 || acct.percent > 100 || !this.checkIfTwoDecimalPlaces(acct.percent)){
+                return $filter('i18n')('directDeposit.invalid.format.percent');
+            }
         }
-
         return null;
     };
 
