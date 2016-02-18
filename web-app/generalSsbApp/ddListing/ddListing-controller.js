@@ -55,7 +55,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     notifications.clearNotifications();
 
                     _.each($stateParams.onLoadNotifications, function(notification) {
-                        notificationCenterService.addNotification(notification.message, notification.messageType);
+                        notificationCenterService.addNotification(notification.message, notification.messageType, notification.flashType);
                     });
                 }, 200);
             };
@@ -345,7 +345,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         $scope.updateAccounts = function () {
             if(amountsAreValid()) {
                 var allocs = $scope.distributions.proposed.allocations,
-                    promises = [];
+                    promises = [],
+                    notifications = [];
     
                 if(ddEditAccountService.doReorder === 'all'){
                     var deferred = $q.defer();
@@ -361,7 +362,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                             deferred.reject();
                         }
                         else {
-                            notificationCenterService.displayNotification('default.save.success.message', $scope.notificationSuccessType, $scope.flashNotification);
+                            notifications.push({message: 'default.save.success.message',
+                                                messageType: $scope.notificationSuccessType,
+                                                flashType: $scope.flashNotification});
 
                             ddEditAccountService.doReorder = false;
 
@@ -389,7 +392,10 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 // change.  The *exception* to this, and the reason we do indeed refresh here, is because the
                 // "Net Pay Distribution" values may need to be recalculated, depending on the change the user made.
                 $q.all(promises).then(function() {
-                    $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                    $state.go('directDepositListing',
+                        {onLoadNotifications: notifications},
+                        {reload: true, inherit: false, notify: true}
+                    );
                 },
                 function() {
                     $scope.authorizedChanges = false;

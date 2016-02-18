@@ -179,7 +179,18 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
     };
 
     $scope.saveAccount = function() {
-        var doSave = true;
+        var doSave = true,
+            notifications = [],
+            doStateGoSuccess = function() {
+                notifications.push({message: 'default.save.success.message',
+                    messageType: $scope.notificationSuccessType,
+                    flashType: $scope.flashNotification});
+
+                $state.go('directDepositListing',
+                    {onLoadNotifications: notifications},
+                    {reload: true, inherit: false, notify: true}
+                );
+            };
 
         $scope.setup.authorizedChanges = false;
 
@@ -208,11 +219,9 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                         resetAccountPriority();
                     }
                     else {
-                        notificationCenterService.displayNotification('default.save.success.message', $scope.notificationSuccessType, $scope.flashNotification);
-
                         ddEditAccountService.doReorder = false;
 
-                        $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                        doStateGoSuccess();
                     }
                 });
             }
@@ -235,9 +244,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                         }
                     }
                     else {
-                        notificationCenterService.displayNotification('default.save.success.message', $scope.notificationSuccessType, $scope.flashNotification);
-    
-                        $state.go('directDepositListing', {}, {reload: true, inherit: false, notify: true});
+                        doStateGoSuccess();
                     }
                 });
             }
