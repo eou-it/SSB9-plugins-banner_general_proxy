@@ -195,7 +195,7 @@ generalSsbAppDirectives.directive('suppressEnterKey', [function () {
 generalSsbAppDirectives.directive('maskInput', ['$filter', function ($filter) {
     return {
         restrict: 'A',
-        require: '?ngModel', 
+        require: '?ngModel',
         link: function (scope, elem, attrs, ngModel) {
             
             // do nothing if ng-model is not present
