@@ -213,6 +213,11 @@ generalSsbAppDirectives.directive('maskInput', ['$filter', function ($filter) {
 generalSsbAppDirectives.directive('modalDisclaimer', [function () {
     return {
         restrict: 'E',
-        templateUrl: '../generalSsbApp/ddEditAccount/modalDisclaimer.html'
+        templateUrl: '../generalSsbApp/ddEditAccount/modalDisclaimer.html',
+        link: function (scope, elem, attrs){
+            scope.disclaimerId = attrs.id;
+
+            elem.removeAttr('id');
+        }
     };
 }]);
