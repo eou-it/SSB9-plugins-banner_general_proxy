@@ -68,7 +68,6 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
     $scope.checkBrowserLocale = function(localeIn) {
         var locale = $('meta[name=locale]').attr("content");
-        console.log(locale)
         if (localeIn.toUpperCase() === locale.toUpperCase() ) {
             return true;
         } else {
