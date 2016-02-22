@@ -57,7 +57,7 @@ class UpdateAccountController {
         def map = request?.JSON ?: params
 
         try {
-            directDepositAccountService.syncApAndHrAccounts(map)
+            //directDepositAccountService.syncApAndHrAccounts(map)
 
             // Do some cleanup to prepare for update
             removeKeyValuePairsNotWantedForUpdate(map)

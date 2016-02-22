@@ -754,30 +754,48 @@ span.radio-list.no-padding {
 }
 
 .hr-amount {
+    /* IE 10 flex */
+    display: -ms-flexbox;
+    -ms-flex-align: end;
+
     display: flex;
     align-items: flex-end;
 }
 
 .hr-amount > span {
     width: 100%;
+    float: right;
     text-align: right;
 }
 
 .flex-div {
+    /* IE 10 flex */
+    display: -ms-flexbox;
+
     display: flex;
     width: 100%;
 }
 
 .edit-flex-div1 {
+    /* IE 10 flex */
+    display: -ms-flexbox;
+
     display: flex;
 }
 
 .edit-flex-div2 {
+    /* IE 10 flex */
+    display: -ms-flexbox;
+
     width: 100%;
     display: flex;
 }
 
 .flex-end {
+    /* IE 10 flex */
+    display: -ms-flexbox;
+    -ms-flex-align: end;
+
     display: flex;
     align-items: flex-end;
 }

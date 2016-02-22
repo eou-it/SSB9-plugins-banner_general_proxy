@@ -171,7 +171,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         // account object so that they are always in sync. The frontend will save and delete the synced
         // accounts at the same time so the backend can save the changes to both records if it needs to
         // and handle deletion logic.
-        this.syncAccounts = function () {
+        this.syncAccounts = function () {/*
 
             if($scope.isEmployee) {
                 // make sure user has AP and Payroll accounts before trying to sync them
@@ -188,7 +188,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                         }
                     }
                 }
-            }
+            }*/
         };
 
 

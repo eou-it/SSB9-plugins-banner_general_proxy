@@ -73,7 +73,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </div>
     </div>
     <span ng-if="!!miscMessage" class="misc-message field-error">{{miscMessage}}</span>
-    <modal-disclaimer ng-show="!!otherAccountSelected.bankRoutingInfo"/>
+    <modal-disclaimer ng-show="!!otherAccountSelected.bankRoutingInfo" id="existing-disclaimer"/>
 </div>
 <br>
 <input ng-model="setup.createFromExisting" class="edit-radio" type="radio" name="create-option" value="no" aria-labelledby="create-opt-new"><span class="lbl radio-list no-padding" id="create-opt-new">{{'directDeposit.label.create.new'|i18n}}</span>
