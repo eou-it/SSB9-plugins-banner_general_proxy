@@ -126,6 +126,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
 
             scope.setAllocationAcctType = function(type){
                 scope.alloc.accountType = type;
+                this.editForm.$setDirty();
             };
 
             scope.displayAllocationVal = function () {
@@ -163,6 +164,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
 
                         // Reprioritization can change allocation amounts -- recalculate
                         ddListingService.calculateAmountsBasedOnPayHistory();
+                        this.editForm.$setDirty();
                     }
                 }
             };

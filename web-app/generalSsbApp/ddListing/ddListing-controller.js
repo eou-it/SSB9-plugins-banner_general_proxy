@@ -342,6 +342,32 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 'directDeposit.notification.no.accounts.payable.allocation.tap';
         };
 
+
+        $scope.cancelChanges = function () {
+            if ($scope.editForm.$dirty) {
+                var newWarning = new Notification({
+                    message: $filter('i18n')('default.cancel.message'),
+                    type: "warning"
+                });
+                newWarning.addPromptAction($filter('i18n')("default.no.label"), function () {
+                    notifications.remove(newWarning);
+                });
+                newWarning.addPromptAction($filter('i18n')("default.yes.label"), function () {
+                    notifications.remove(newWarning);
+                    $state.go('directDepositListing',
+                        {onLoadNotifications: notifications},
+                        {reload: true, inherit: false, notify: true}
+                    );
+                    $scope.editForm.$setPristine();
+
+                });
+                notifications.addNotification(newWarning);
+            }
+
+        };
+
+
+
         $scope.updateAccounts = function () {
             if(amountsAreValid()) {
                 var allocs = $scope.distributions.proposed.allocations,
