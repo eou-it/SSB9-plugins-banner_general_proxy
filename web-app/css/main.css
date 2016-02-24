@@ -80,6 +80,10 @@ body {
     position: relative;
 }
 
+.max-width-account {
+    max-width: 180px;
+}
+
 .desktop-disclaimer {
     float: right;
     margin: 40px 15px 0 0;
@@ -357,6 +361,7 @@ button.closebtn {
     padding: 2.85em;
     display: block;
     border: none;
+    float: right;
 }
 
 .modal-footer.addAcct {

@@ -61,6 +61,7 @@ modules = {
       dependsOn "bannerWebRTL, generalSsbApp"
       
        // CSS
+       resource url:[plugin: 'banner-ui-ss',file: '/bootstrap/css/bootstrap-rtl.css'], attrs: [media: 'screen, projection']
        resource url:[file: 'css/main-rtl.css'],   attrs: [media: 'screen, projection']
        resource url:[file: 'css/responsive-rtl.css'],   attrs: [media: 'screen, projection']
        resource url:[file: 'css/banner-icon-font-rtl.css'],   attrs: [media: 'screen, projection']
