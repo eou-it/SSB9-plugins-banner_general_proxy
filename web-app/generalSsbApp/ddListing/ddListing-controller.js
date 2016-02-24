@@ -287,35 +287,66 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
         };
 
+        // event callback
+        var callback = function(result) {
+            console.log('callback', result);
+        };
+
         // Display "Add Account" pop up
         $scope.showAddAccount = function (typeInd) {
-            // If this is an AP account and an AP account already exists, this functionality is disabled.
-            if (typeInd === 'AP' && $scope.hasApAccount) {
-                return;
-            }
 
-            // If this is an HR account and the maximum number of HR accounts already exists,
-            // this functionality is disabled.
-            if (typeInd === 'HR' && $scope.hasMaxPayrollAccounts) {
-                notificationCenterService.displayNotification('directDeposit.max.payroll.accounts.text', 'error');
-                return;
-            }
+            if ($scope.editForm.$dirty) {
 
-            var acctList = [];
+                var newWarning = new Notification({
+                    message: $filter('i18n')('default.savecancel.message'),
+                    type: "warning"
+                });
+                newWarning.addPromptAction($filter('i18n')("default.ok.label"), function () {
+                    notifications.remove(newWarning);
+                });
+//                newWarning.addPromptAction($filter('i18n')("default.yes.label"), function () {
+//                    notifications.remove(newWarning);
+//                    $state.go('directDepositListing',
+//                        {onLoadNotifications: notifications},
+//                        {reload: true, inherit: false, notify: true}
+//                    );
+//                    $scope.editForm.$setPristine();
+//
+//                });
+                notifications.addNotification(newWarning);
 
-            if($scope.isEmployee){
-                var allocs = $scope.distributions.proposed.allocations;
-
-                if(typeInd === 'HR' && $scope.apAccount){
-                    acctList[0] = $scope.apAccount;
+            } else {
+                //  $rootScope.$broadcast('addNewEvent', callback);
+                // If this is an AP account and an AP account already exists, this functionality is disabled.
+                if (typeInd === 'AP' && $scope.hasApAccount) {
+                    return;
                 }
-                else if (typeInd === 'AP' && allocs.length > 0){
-                    acctList = allocs;
+
+                // If this is an HR account and the maximum number of HR accounts already exists,
+                // this functionality is disabled.
+                if (typeInd === 'HR' && $scope.hasMaxPayrollAccounts) {
+                    notificationCenterService.displayNotification('directDeposit.max.payroll.accounts.text', 'error');
+                    return;
                 }
+
+                var acctList = [];
+
+                if($scope.isEmployee){
+                    var allocs = $scope.distributions.proposed.allocations;
+
+                    if(typeInd === 'HR' && $scope.apAccount){
+                        acctList[0] = $scope.apAccount;
+                    }
+                    else if (typeInd === 'AP' && allocs.length > 0){
+                        acctList = allocs;
+                    }
+                }
+
+                // Otherwise, open modal
+                openAddOrEditModal(typeInd, true, acctList);
             }
 
-            // Otherwise, open modal
-            openAddOrEditModal(typeInd, true, acctList);
+
         };
 
         // Display "Edit Account" pop up
@@ -339,6 +370,32 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 'directDeposit.notification.no.accounts.payable.allocation.click' :
                 'directDeposit.notification.no.accounts.payable.allocation.tap';
         };
+
+
+        $scope.cancelChanges = function () {
+            if ($scope.editForm.$dirty) {
+                var newWarning = new Notification({
+                    message: $filter('i18n')('default.cancel.message'),
+                    type: "warning"
+                });
+                newWarning.addPromptAction($filter('i18n')("default.no.label"), function () {
+                    notifications.remove(newWarning);
+                });
+                newWarning.addPromptAction($filter('i18n')("default.yes.label"), function () {
+                    notifications.remove(newWarning);
+                    $state.go('directDepositListing',
+                        {onLoadNotifications: notifications},
+                        {reload: true, inherit: false, notify: true}
+                    );
+                    $scope.editForm.$setPristine();
+
+                });
+                notifications.addNotification(newWarning);
+            }
+
+        };
+
+
 
         $scope.updateAccounts = function () {
             if(!amountsAreValid()) {
@@ -576,6 +633,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
         $scope.setApAccountType = function (acctType) {
             $scope.apAccount.accountType = acctType;
+            this.editForm.$setDirty();
         };
 
         $scope.updateWhetherHasMaxPayrollAccounts = function () {

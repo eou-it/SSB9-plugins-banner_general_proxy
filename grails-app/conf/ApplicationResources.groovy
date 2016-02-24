@@ -16,8 +16,26 @@ modules = {
         resource url:[file: 'js/angular/angular-route.min.js']
     }
 
+    'bootstrapLTR' {
+        dependsOn "jquery"
+        defaultBundle environment == "development" ? false : "bootstrap"
+
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/bootstrap.css'], attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/bootstrap-fixes.css'], attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/js/bootstrap.js']
+    }
+
+    'bootstrapRTL' {
+        dependsOn "jquery"
+        defaultBundle environment == "development" ? false : "bootstrap"
+
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/css/bootstrap-rtl.css'], attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'css/bootstrap-fixes-rtl.css'], attrs: [media: 'screen, projection']
+        resource url:[plugin: 'banner-ui-ss', file: 'bootstrap/js/bootstrap.js']
+    }
+
    'generalSsbApp' {
-       dependsOn "angular,glyphicons,bootstrap"
+       dependsOn "angular,glyphicons"
 
        defaultBundle environment == "development" ? false : "generalSsbApp"
 
@@ -49,7 +67,7 @@ modules = {
    }
    
    'generalSsbAppLTR' {
-      dependsOn "bannerWebLTR, generalSsbApp"
+      dependsOn "bannerWebLTR, generalSsbApp, bootstrapLTR"
       
        // CSS
        resource url:[file: 'css/main.css'],   attrs: [media: 'screen, projection']
@@ -58,7 +76,7 @@ modules = {
    }
    
    'generalSsbAppRTL' {
-      dependsOn "bannerWebRTL, generalSsbApp"
+      dependsOn "bannerWebRTL, generalSsbApp, bootstrapRTL"
       
        // CSS
        resource url:[file: 'css/main-rtl.css'],   attrs: [media: 'screen, projection']
