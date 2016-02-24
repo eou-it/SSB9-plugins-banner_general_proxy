@@ -52,8 +52,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
              */
             displayNotificationsOnStateLoad = function() {
                 setTimeout(function() {
-                    notifications.clearNotifications();
-
                     _.each($stateParams.onLoadNotifications, function(notification) {
                         notificationCenterService.addNotification(notification.message, notification.messageType, notification.flashType);
                     });
