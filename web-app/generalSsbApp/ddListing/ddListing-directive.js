@@ -305,3 +305,30 @@ generalSsbAppDirectives.directive('notificationBox',[function () {
         }
     };
 }]);
+
+generalSsbAppDirectives.directive('confirmOnExit', function() {
+    return {
+        link: function($scope, elem, attrs) {
+            window.onbeforeunload = function(){
+                if ($scope.editForm.$dirty) {
+                    return "The form is dirty, do you want to stay on the page?";
+                }
+            }
+            $scope.$on('$locationChangeStart', function(event, next, current) {
+                if ($scope.editForm.$dirty) {
+                    if(!confirm("The form is dirty, do you want to stay on the page?")) {
+                        event.preventDefault();
+                    }
+                }
+            });
+            $scope.$on('addNewEvent', function(event, callback) {
+                if ($scope.editForm.$dirty) {
+                    console.log('received', event.name);
+                    if(!confirm("The form is dirty, do you want to stay on the page?")) {
+                        event.preventDefault();
+                    }
+                }
+            });
+        }
+    };
+});
