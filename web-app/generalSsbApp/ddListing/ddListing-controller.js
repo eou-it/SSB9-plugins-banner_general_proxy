@@ -2,8 +2,8 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope', '$state', '$stateParams', '$modal',
-    '$filter', '$q', 'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
-    function ($scope, $rootScope, $state, $stateParams, $modal, $filter, $q, ddListingService, ddEditAccountService,
+    '$filter', '$q', '$timeout', 'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
+    function ($scope, $rootScope, $state, $stateParams, $modal, $filter, $q, $timeout, ddListingService, ddEditAccountService,
               directDepositService, notificationCenterService){
 
         // CONSTANTS
@@ -51,9 +51,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
              * page load -- but it's barely noticeable so doesn't hurt to leave it.)
              */
             displayNotificationsOnStateLoad = function() {
-                setTimeout(function() {
-                    notifications.clearNotifications();
-
+                $timeout(function() {
                     _.each($stateParams.onLoadNotifications, function(notification) {
                         notificationCenterService.addNotification(notification.message, notification.messageType, notification.flashType);
                     });
@@ -122,7 +120,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             acctPromises[1].then( function (response) {
                 if(response.failure) {
-                    notificationCenterService.displayNotification(response.message, "error");
+                    notificationCenterService.displayNotification(response.message, $scope.notificationErrorType);
                 } else {
                     $scope.distributions.mostRecent = response;
                     $scope.distributions.mostRecent.totalNetFormatted = formatCurrency($scope.distributions.mostRecent.totalNet);
@@ -134,7 +132,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             // getUserPayrollAllocationListing
             acctPromises[2].then( function (response) {
                 if(response.failure) {
-                    notificationCenterService.displayNotification(response.message, "error");
+                    notificationCenterService.displayNotification(response.message, $scope.notificationErrorType);
                 } else {
                     $scope.distributions.proposed = response;
                     allocations = response.allocations;
@@ -162,9 +160,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             $q.all(acctPromises).then(function() {
                 $scope.calculateAmountsBasedOnPayHistory();
                 self.syncAccounts();
+                displayNotificationsOnStateLoad();
             });
-
-            displayNotificationsOnStateLoad();
         };
 
         // if an account is used for AP and Payroll, have scope.apAccount and allocation[x] point to same
@@ -412,82 +409,100 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
 
         $scope.updateAccounts = function () {
-            if(amountsAreValid()) {
-                var allocs = $scope.distributions.proposed.allocations,
-                    promises = [],
-                    notifications = [];
-    
-                if(ddEditAccountService.doReorder === 'all'){
-                    var deferred = $q.defer();
-                    
-                    _.each(allocs, function(alloc){
-                        ddEditAccountService.setAmountValues(alloc, alloc.amountType);
-                    });
+            if(!amountsAreValid()) {
+                return;
+            }
 
-                    ddEditAccountService.reorderAccounts().$promise.then(function (response) {
-                        if(response[0].failure) {
-                            notificationCenterService.displayNotification(response[0].message, "error");
+            var allocs = $scope.distributions.proposed.allocations,
+                promises = [];
 
-                            deferred.reject();
-                        }
-                        else {
-                            notifications.push({message: 'default.save.success.message',
-                                                messageType: $scope.notificationSuccessType,
-                                                flashType: $scope.flashNotification});
+            if(ddEditAccountService.doReorder === 'all'){
+                var deferred = $q.defer();
 
-                            ddEditAccountService.doReorder = false;
+                _.each(allocs, function(alloc){
+                    ddEditAccountService.setAmountValues(alloc, alloc.amountType);
+                });
 
-                            deferred.resolve();
-                        }
-                    });
-                    
-                    promises.push(deferred.promise);
-                }
-                else {
-                    if($scope.isEmployee){
-                        var i;
-                        for(i = 0; i < allocs.length; i++){
-                            promises.push(updateAccount($scope.distributions.proposed.allocations[i]));
-                        }
+                ddEditAccountService.reorderAccounts().$promise.then(function (response) {
+                    if(response[0].failure) {
+                        notificationCenterService.displayNotification(response[0].message, $scope.notificationErrorType);
+
+                        deferred.reject();
                     }
-                    // AP account will already be updated if it is synced with a Payroll account
-                    if($scope.hasApAccount && !ddEditAccountService.syncedAccounts){
-                        promises.push(updateAccount($scope.apAccount));
+                    else {
+                        ddEditAccountService.doReorder = false;
+
+                        deferred.resolve();
+                    }
+                });
+
+                promises.push(deferred.promise);
+            }
+            else {
+                if($scope.isEmployee){
+                    var i;
+                    for(i = 0; i < allocs.length; i++){
+                        promises.push(updateAccount($scope.distributions.proposed.allocations[i]));
                     }
                 }
-    
-                // When all updates are done, a refresh would not be necessary, as the input fields
-                // (e.g. Account Type dropdown) will have been already "updated" when the user made the
-                // change.  The *exception* to this, and the reason we do indeed refresh here, is because the
-                // "Net Pay Distribution" values may need to be recalculated, depending on the change the user made.
-                $q.all(promises).then(function() {
+                // AP account will already be updated if it is synced with a Payroll account
+                if($scope.hasApAccount && !ddEditAccountService.syncedAccounts){
+                    promises.push(updateAccount($scope.apAccount));
+                }
+            }
+
+            // Handle all promises for updated accounts.
+            //
+            // NOTE 1: REGARDING REFRESH
+            // When all updates are done, a refresh would not be necessary, as the input fields
+            // (e.g. Account Type dropdown) will have been already "updated" when the user made the
+            // change.  The *exception* to this, and the reason we do indeed refresh here, is because the
+            // "Net Pay Distribution" values may need to be recalculated, depending on the change the user made.
+            //
+            // NOTE 2: REGARDING NOTIFICATIONS
+            // If all updates succeed, a page refresh (read $state.go) will be done, with a single "success" message
+            // passed in with the $state.go call.
+            // If ANY updates fail, the "failure" messages are already displayed.  No page refresh is done, so they
+            // will remain displayed to the user.
+            $q.all(promises).then(
+                // SUCCESSFULLY RESOLVE
+                function() {
+                    var notifications = [{
+                        message: 'default.save.success.message',
+                        messageType: $scope.notificationSuccessType,
+                        flashType: $scope.flashNotification
+                    }];
+
                     $state.go('directDepositListing',
                         {onLoadNotifications: notifications},
                         {reload: true, inherit: false, notify: true}
                     );
                 },
+                // REJECTED RESOLVE
                 function() {
                     $scope.authorizedChanges = false;
                     ddEditAccountService.setupPriorities($scope.distributions.proposed.allocations);
-                });
-            }
+                }
+            );
         };
-        
+
         var updateAccount = function (acct) {
             var deferred = $q.defer();
 
-            if(acct.hrIndicator === 'A'){
+            if (acct.hrIndicator === 'A') {
                 ddEditAccountService.setAmountValues(acct, acct.amountType);
             }
 
             ddEditAccountService.saveAccount(acct).$promise.then(function (response) {
-                if(response.failure) {
-                    notificationCenterService.displayNotification(response.message, "error");
+                if (response.failure) {
+                    // Using addNotification results in displaying stacked error messages if there are more than one.
+                    notificationCenterService.addNotification(response.message, "error");
 
                     deferred.reject();
                 } else {
-                    notificationCenterService.displayNotification('default.save.success.message', $scope.notificationSuccessType, $scope.flashNotification);
-
+                    // No notification done here as, upon successful resolution of all account updates, the
+                    // page will be refreshed, wiping out any notification that would be shown here.  So we
+                    // handle any notification in the calling function.
                     deferred.resolve();
                 }
 
@@ -515,7 +530,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 var notifications = [];
 
                 if (response[0].failure) {
-                    notificationCenterService.displayNotification(response[0].message, "error");
+                    notificationCenterService.displayNotification(response[0].message, $scope.notificationErrorType);
                 } else {
                     // Refresh account info
                     $scope.distributions.proposed.allocations = _.difference(allocations, accountsToDelete);
@@ -539,7 +554,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
                         return false;
                     });
-                    
+
                     $state.go('directDepositListing',
                               {onLoadNotifications: notifications},
                               {reload: true, inherit: false, notify: true}
@@ -598,7 +613,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 var notifications = [];
 
                 if (response[0].failure) {
-                    notificationCenterService.displayNotification(response[0].message, "error");
+                    notificationCenterService.displayNotification(response[0].message, $scope.notificationErrorType);
                 } else {
                     // Refresh account info
                     $scope.apAccount = null;

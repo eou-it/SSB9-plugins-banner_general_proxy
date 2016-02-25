@@ -22,7 +22,7 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','g
             });
             $(document.body).removeAttr("role");
             $("html").attr("dir", $filter('i18n')('default.language.direction') === 'ltr' ? "ltr" : "rtl");
-            $rootScope.notificationErrorType = "failure";
+            $rootScope.notificationErrorType = "error";
             $rootScope.notificationSuccessType = "success";
             $rootScope.notificationWarningType = "warning";
             $rootScope.flashNotification = true;
