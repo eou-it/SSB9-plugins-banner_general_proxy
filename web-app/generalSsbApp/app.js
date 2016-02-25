@@ -51,7 +51,7 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','g
             $rootScope.apAccountExists = false;
             
             $rootScope.displayReprioritizeRemainingWarning = function(){
-                notificationCenterService.displayNotification('directDeposit.invalid.reprioritze.remaining','error', true);
+                notificationCenterService.addNotification('directDeposit.invalid.reprioritze.remaining','error');
             };
         }
     ]
