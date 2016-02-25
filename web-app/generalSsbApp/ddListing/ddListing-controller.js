@@ -91,6 +91,34 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             // if the listing controller has already been initialized, then abort
             if(ddListingService.isInit()) return;
 
+            var addAlertRoleToNotificationCenter = function(){
+                var work = function(){
+                    // check if notification center is in DOM yet
+                    if($( "div.notification-center-flyout > ul").attr("class") !== undefined) {
+                        $("div.notification-center-flyout > ul").attr({
+                            role: "alert",
+                            'aria-live': "assertive"
+                        });
+
+                        return true;
+                    }
+                    else {
+
+                        return false;
+                    }
+                };
+
+                $timeout(work,0).then(
+                    function(result){
+                        // keep trying to add attributes until it works
+                        if(!result){
+                            addAlertRoleToNotificationCenter();
+                        }
+                    }
+                );
+            };
+            addAlertRoleToNotificationCenter();
+
             ddListingService.mainListingControllerScope = $scope;
 
             var acctPromises = [ddListingService.getApListing().$promise,
@@ -345,7 +373,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
 
         $scope.cancelChanges = function () {
-            if ($scope.editForm.$dirty) {
+            if ($scope.editForm.$dirty || $scope.selectedForDelete.payroll) {
                 var newWarning = new Notification({
                     message: $filter('i18n')('default.cancel.message'),
                     type: "warning"
@@ -367,6 +395,18 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
         };
 
+        $scope.disableSave = function() {
+
+            var isDisable = false;
+
+            if (!$scope.authorizedChanges ) {
+                isDisable = true;
+            }
+            if (!$scope.editForm.$dirty) {
+                isDisable = true;
+            }
+            return isDisable;
+        }
 
 
         $scope.updateAccounts = function () {
@@ -529,9 +569,27 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             // If no account is selected for deletion, this functionality is disabled
             if (!$scope.selectedForDelete.payroll) return;
 
+
+            if ($scope.editForm.$dirty) {
+
+                var newWarning = new Notification({
+                    message: $filter('i18n')('default.savecancel.message'),
+                    type: "warning"
+                });
+                newWarning.addPromptAction($filter('i18n')("default.ok.label"), function () {
+                    notifications.remove(newWarning);
+                });
+
+                notifications.addNotification(newWarning);
+
+            }
+
+            if ($scope.editForm.$dirty) return;
+
+
             var prompts = [
                 {
-                    label: $filter('i18n')('directDeposit.button.cancel'),
+                    label: $filter('i18n')('directDeposit.button.prompt.cancel'),
                     action: $scope.cancelNotification
                 },
                 {
@@ -587,7 +645,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             var prompts = [
                 {
-                    label: $filter('i18n')('directDeposit.button.cancel'),
+                    label: $filter('i18n')('directDeposit.button.prompt.cancel'),
                     action: $scope.cancelNotification
                 },
                 {
