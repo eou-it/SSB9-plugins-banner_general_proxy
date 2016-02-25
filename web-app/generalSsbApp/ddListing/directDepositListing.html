@@ -3,7 +3,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 
 <div role="tablist">
-    <form name="editForm" role="form" confirm-on-exit>
+    <form name="editForm" role="form" >
     <div ng-show="isEmployee">
         <!-- PAYROLL MOST RECENT -->
         <div id="payTabMostRecent" class="row tile">
@@ -102,6 +102,6 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         <input type="button" aria-label="{{'directDeposit.cancel.changes.button.label'|i18n}}" title="{{'directDeposit.cancel.changes.button.label'|i18n}}"
                class="btn save-btn" value="{{'directDeposit.cancel.changes.button.label'|i18n}}"  ng-click="cancelChanges();"/>
 
-        <button class="btn save-btn" ng-disabled="!authorizedChanges" ng-click="updateAccounts()">{{'directDeposit.save.changes.button.label'|i18n}}</button>
+        <button class="btn save-btn" ng-disabled="disableSave()" ng-click="updateAccounts()">{{'directDeposit.save.changes.button.label'|i18n}}</button>
     </div>
 </div>

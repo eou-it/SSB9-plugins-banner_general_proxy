@@ -375,7 +375,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
 
         $scope.cancelChanges = function () {
-            if ($scope.editForm.$dirty) {
+            if ($scope.editForm.$dirty || $scope.selectedForDelete.payroll) {
                 var newWarning = new Notification({
                     message: $filter('i18n')('default.cancel.message'),
                     type: "warning"
@@ -397,6 +397,18 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
         };
 
+        $scope.disableSave = function() {
+
+            var isDisable = false;
+
+            if (!$scope.authorizedChanges ) {
+                isDisable = true;
+            }
+            if (!$scope.editForm.$dirty) {
+                isDisable = true;
+            }
+            return isDisable;
+        }
 
 
         $scope.updateAccounts = function () {
@@ -540,6 +552,24 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         $scope.confirmPayrollDelete = function () {
             // If no account is selected for deletion, this functionality is disabled
             if (!$scope.selectedForDelete.payroll) return;
+
+
+            if ($scope.editForm.$dirty) {
+
+                var newWarning = new Notification({
+                    message: $filter('i18n')('default.savecancel.message'),
+                    type: "warning"
+                });
+                newWarning.addPromptAction($filter('i18n')("default.ok.label"), function () {
+                    notifications.remove(newWarning);
+                });
+
+                notifications.addNotification(newWarning);
+
+            }
+
+            if ($scope.editForm.$dirty) return;
+
 
             var prompts = [
                 {
