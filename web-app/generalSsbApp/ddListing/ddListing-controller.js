@@ -2,8 +2,8 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope', '$state', '$stateParams', '$modal',
-    '$filter', '$q', 'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
-    function ($scope, $rootScope, $state, $stateParams, $modal, $filter, $q, ddListingService, ddEditAccountService,
+    '$filter', '$q', '$timeout', 'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
+    function ($scope, $rootScope, $state, $stateParams, $modal, $filter, $q, $timeout, ddListingService, ddEditAccountService,
               directDepositService, notificationCenterService){
 
         // CONSTANTS
@@ -51,7 +51,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
              * page load -- but it's barely noticeable so doesn't hurt to leave it.)
              */
             displayNotificationsOnStateLoad = function() {
-                setTimeout(function() {
+                $timeout(function() {
                     _.each($stateParams.onLoadNotifications, function(notification) {
                         notificationCenterService.addNotification(notification.message, notification.messageType, notification.flashType);
                     });
