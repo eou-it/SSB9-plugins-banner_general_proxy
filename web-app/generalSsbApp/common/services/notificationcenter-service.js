@@ -72,4 +72,9 @@ generalSsbApp.service('notificationCenterService', ['$filter', function ($filter
 
         return notification;
     };
+
+    this.removeNotification = function(notification) {
+        notifications.remove(notification);
+    };
+
 }]);

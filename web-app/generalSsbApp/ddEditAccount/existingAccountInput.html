@@ -7,7 +7,8 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
     <label class="visuallyhidden" id="select-existing">{{'directDeposit.label.select.from.exisiting'|i18n}}</label>
     <div ng-show="typeIndicator==='AP'" class="dropdown" role="menu">
         <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="select-existing existing-acct-btn">
-            <span class="float-l semi-bold form-spacing" aria-live="polite">
+            <span class="float-l semi-bold form-spacing">
+
                 <select-bank-acct id="existing-acct-btn"/>
             </span>
             <span class="float-r form-spacing down-caret caret-color"></span>
@@ -53,13 +54,13 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
             <label class="input-field-label">{{'directDeposit.account.label.priority'|i18n}}</label><br>
             <div class="dropdown" role="menu">
                 <button dropdown-helper="begin" ng-if="!isRemaining()" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
-                    <span class="float-l semi-bold form-spacing" aria-live="polite">
+                    <span class="float-l semi-bold form-spacing">
                         {{account.priority}}
                     </span>
                     <span class="float-r form-spacing down-caret caret-color"></span>
                 </button>
                 <button dropdown-helper="begin" ng-if="isRemaining()" ng-click="showReprioritizeRemainingMessage()" class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="">
-                    <span class="float-l semi-bold form-spacing" aria-live="polite">
+                    <span class="float-l semi-bold form-spacing">
                         {{account.priority}}
                     </span>
                     <span class="float-r form-spacing down-caret caret-color"></span>

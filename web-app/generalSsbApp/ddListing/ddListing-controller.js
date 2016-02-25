@@ -2,8 +2,8 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope', '$state', '$stateParams', '$modal',
-    '$filter', '$q', 'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
-    function ($scope, $rootScope, $state, $stateParams, $modal, $filter, $q, ddListingService, ddEditAccountService,
+    '$filter', '$q', '$timeout', 'ddListingService', 'ddEditAccountService', 'directDepositService', 'notificationCenterService',
+    function ($scope, $rootScope, $state, $stateParams, $modal, $filter, $q, $timeout, ddListingService, ddEditAccountService,
               directDepositService, notificationCenterService){
 
         // CONSTANTS
@@ -90,6 +90,34 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             // if the listing controller has already been initialized, then abort
             if(ddListingService.isInit()) return;
+
+            var addAlertRoleToNotificationCenter = function(){
+                var work = function(){
+                    // check if notification center is in DOM yet
+                    if($( "div.notification-center-flyout > ul").attr("class") !== undefined) {
+                        $("div.notification-center-flyout > ul").attr({
+                            role: "alert",
+                            'aria-live': "assertive"
+                        });
+
+                        return true;
+                    }
+                    else {
+
+                        return false;
+                    }
+                };
+
+                $timeout(work,0).then(
+                    function(result){
+                        // keep trying to add attributes until it works
+                        if(!result){
+                            addAlertRoleToNotificationCenter();
+                        }
+                    }
+                );
+            };
+            addAlertRoleToNotificationCenter();
 
             ddListingService.mainListingControllerScope = $scope;
 
@@ -559,7 +587,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             var prompts = [
                 {
-                    label: $filter('i18n')('directDeposit.button.cancel'),
+                    label: $filter('i18n')('directDeposit.button.prompt.cancel'),
                     action: $scope.cancelNotification
                 },
                 {
@@ -615,7 +643,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             var prompts = [
                 {
-                    label: $filter('i18n')('directDeposit.button.cancel'),
+                    label: $filter('i18n')('directDeposit.button.prompt.cancel'),
                     action: $scope.cancelNotification
                 },
                 {
