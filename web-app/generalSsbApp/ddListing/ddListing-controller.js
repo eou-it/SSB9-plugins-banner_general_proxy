@@ -160,9 +160,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             $q.all(acctPromises).then(function() {
                 $scope.calculateAmountsBasedOnPayHistory();
                 self.syncAccounts();
+                displayNotificationsOnStateLoad();
             });
-
-            displayNotificationsOnStateLoad();
         };
 
         // if an account is used for AP and Payroll, have scope.apAccount and allocation[x] point to same
