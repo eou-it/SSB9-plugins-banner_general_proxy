@@ -87,10 +87,6 @@ generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resourc
         }
     };
     
-    this.syncedAccounts = false;
-
-    this.setSyncedAccounts = function(val){this.syncedAccounts = val;};
-
     this.priorities = [];
     this.accounts = [0];
     this.doReorder = false;

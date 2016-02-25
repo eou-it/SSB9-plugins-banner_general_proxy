@@ -9,18 +9,7 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
         mostRecentPayrollListing = $resource('../ssb/:controller/:action',
             {controller: 'AccountListing', action: 'getLastPayDateInfo'}),
         userPayrollAllocationListing = $resource('../ssb/:controller/:action',
-            {controller: 'AccountListing', action: 'getUserPayrollAllocations'}),
-
-        /**
-         * Compare two accounts to determine if they're actually the same account
-         */
-        isSameAccount = function(a1, a2) {
-            return a1 !== null && a2 !== null &&
-                a1.bankAccountNum === a2.bankAccountNum &&
-                a1.bankRoutingInfo.bankRoutingNum === a2.bankRoutingInfo.bankRoutingNum &&
-                a1.hrIndicator === a2.hrIndicator &&
-                a1.apIndicator === a2.apIndicator;
-        };
+            {controller: 'AccountListing', action: 'getUserPayrollAllocations'});
 
     // Scope for main listing controller, which contains all allocations (as opposed to *child* listing
     // controllers created by, for example, directive payAccountInfoProposedDesktop, which do not contain
@@ -53,7 +42,11 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
     this.doReload = function(){
         this.init = false;
     };
-    
+
+    this.getApAccount = function() {
+        return this.mainListingControllerScope.apAccount;
+    };
+
     this.checkIfTwoDecimalPlaces = function (num) {
         num = String(num);
 
@@ -67,6 +60,13 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
         }
 
         return result;
+    };
+
+    /**
+     * Compare two accounts to determine if they're actually the same account
+     */
+    this.isSameAccount = function(a1, a2) {
+        return a1 !== null && a2 !== null && a1.id === a2.id;
     };
 
     // Validates amount as a valid currency amount and, if not valid, returns error message
@@ -107,7 +107,7 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
         allocations = mainListScope.distributions.proposed.allocations;
 
         found = _.find(allocations, function(alloc) {
-            return directDepositService.isRemaining(alloc) && !isSameAccount(acct, alloc)
+            return directDepositService.isRemaining(alloc) && !self.isSameAccount(acct, alloc)
         });
 
         return !!found;

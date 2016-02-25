@@ -127,6 +127,20 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
             scope.setAllocationAcctType = function(type){
                 scope.alloc.accountType = type;
                 this.editForm.$setDirty();
+
+                // Sync with AP, if applicable
+                var apAcct = ddListingService.getApAccount(),
+                    prompts = [
+                        {
+                            label: $filter('i18n')('default.ok.label'),
+                            action: scope.cancelNotification
+                        }
+                    ];
+
+                if (apAcct && apAcct.id === scope.alloc.id) {
+                    apAcct.accountType = type;
+                    notificationCenterService.displayNotification('directDeposit.notification.ap.also.updated', scope.notificationWarningType, false, prompts);
+                }
             };
 
             scope.displayAllocationVal = function () {

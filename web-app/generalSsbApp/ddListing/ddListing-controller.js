@@ -93,8 +93,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             ddListingService.mainListingControllerScope = $scope;
 
-            ddEditAccountService.setSyncedAccounts(false);
-            
             var acctPromises = [ddListingService.getApListing().$promise,
                                 ddListingService.getMostRecentPayrollListing().$promise,
                                 ddListingService.getUserPayrollAllocationListing().$promise];
@@ -159,33 +157,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             
             $q.all(acctPromises).then(function() {
                 $scope.calculateAmountsBasedOnPayHistory();
-                self.syncAccounts();
                 displayNotificationsOnStateLoad();
             });
-        };
-
-        // if an account is used for AP and Payroll, have scope.apAccount and allocation[x] point to same
-        // account object so that they are always in sync. The frontend will save and delete the synced
-        // accounts at the same time so the backend can save the changes to both records if it needs to
-        // and handle deletion logic.
-        this.syncAccounts = function () {/*
-
-            if($scope.isEmployee) {
-                // make sure user has AP and Payroll accounts before trying to sync them
-                if($scope.hasPayAccountsProposed && $scope.hasApAccount){
-
-                    var allocs = $scope.distributions.proposed.allocations, i;
-                    for(i = 0; i < allocs.length; i++) {
-                        if(allocs[i].bankRoutingInfo.bankRoutingNum === $scope.apAccount.bankRoutingInfo.bankRoutingNum
-                                && allocs[i].bankAccountNum === $scope.apAccount.bankAccountNum){
-
-                            // sync accounts
-                            $scope.apAccount = allocs[i];
-                            ddEditAccountService.setSyncedAccounts(true);
-                        }
-                    }
-                }
-            }*/
         };
 
 
@@ -433,8 +406,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                         promises.push(updateAccount($scope.distributions.proposed.allocations[i]));
                     }
                 }
-                // AP account will already be updated if it is synced with a Payroll account
-                if($scope.hasApAccount && !ddEditAccountService.syncedAccounts){
+                // AP account will already be updated if it has a corresponding Payroll account
+                if($scope.hasApAccount && !$scope.getMatchingPayrollForApAccount()){
                     promises.push(updateAccount($scope.apAccount));
                 }
             }
@@ -633,6 +606,20 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
         $scope.setApAccountType = function (acctType) {
             $scope.apAccount.accountType = acctType;
             this.editForm.$setDirty();
+
+            // Sync with payroll, if applicable
+            var matchingPayroll = $scope.getMatchingPayrollForApAccount(),
+                prompts = [
+                    {
+                        label: $filter('i18n')('default.ok.label'),
+                        action: $scope.cancelNotification
+                    }
+                ];
+
+            if (matchingPayroll) {
+                matchingPayroll.accountType = acctType;
+                notificationCenterService.displayNotification('directDeposit.notification.payroll.also.updated', $scope.notificationWarningType, false, prompts);
+            }
         };
 
         $scope.updateWhetherHasMaxPayrollAccounts = function () {
@@ -711,6 +698,19 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             $scope.checkAmount = formatCurrency(totalNet - totalAmt); // Amount left to be disbursed via paper check
             proposed.totalAmount = formatCurrency(totalNet);
+        };
+
+        // Determine if AP account also exists in proposed allocations
+        $scope.getMatchingPayrollForApAccount = function() {
+            var allocs = $scope.distributions.proposed.allocations;
+
+            if (!(allocs && $scope.apAccount)) {
+                return undefined; // Same as what _.find returns for no hits
+            }
+
+            return _.find(allocs, function(alloc) {
+                return $scope.apAccount.id === alloc.id;
+            });
         };
 
 

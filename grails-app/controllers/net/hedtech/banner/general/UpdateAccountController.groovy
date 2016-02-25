@@ -57,8 +57,6 @@ class UpdateAccountController {
         def map = request?.JSON ?: params
 
         try {
-            //directDepositAccountService.syncApAndHrAccounts(map)
-
             // Do some cleanup to prepare for update
             removeKeyValuePairsNotWantedForUpdate(map)
             fixJSONObjectForCast(map)
@@ -79,8 +77,6 @@ class UpdateAccountController {
             fixJSONObjectForCast(map)
 
             render directDepositAccountCompositeService.rePrioritizeAccounts(map, map.newPosition) as JSON
-
-            directDepositAccountService.syncApAndHrAccounts(map)
 
         } catch (ApplicationException e) {
             def arrayResult = [];
