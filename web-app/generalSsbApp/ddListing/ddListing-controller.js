@@ -373,7 +373,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
 
         $scope.cancelChanges = function () {
-            if ($scope.editForm.$dirty || $scope.selectedForDelete.payroll) {
+            if ($scope.editForm.$dirty || $scope.selectedForDelete.payroll || $scope.selectedForDelete.ap || $scope.authorizedChanges) {
                 var newWarning = new Notification({
                     message: $filter('i18n')('default.cancel.message'),
                     type: "warning"
@@ -408,6 +408,17 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             return isDisable;
         }
 
+
+        $scope.disableCancel = function() {
+
+            var isDisable = true;
+
+            if ($scope.editForm.$dirty || $scope.selectedForDelete.payroll || $scope.selectedForDelete.ap || $scope.authorizedChanges) {
+                isDisable = false;
+            }
+
+            return isDisable;
+        }
 
         $scope.updateAccounts = function () {
             if(!amountsAreValid()) {

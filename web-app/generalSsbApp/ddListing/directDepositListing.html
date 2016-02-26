@@ -100,7 +100,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
     <div ng-show="isDesktopView && (hasApAccount || hasPayAccountsProposed)" class="desktop-save">
 
         <input type="button" aria-label="{{'directDeposit.cancel.changes.button.label'|i18n}}" title="{{'directDeposit.cancel.changes.button.label'|i18n}}"
-               class="btn save-btn" value="{{'directDeposit.cancel.changes.button.label'|i18n}}"  ng-click="cancelChanges();"/>
+               class="btn save-btn" ng-disabled="disableCancel()" value="{{'directDeposit.cancel.changes.button.label'|i18n}}"  ng-click="cancelChanges();"/>
 
         <button class="btn save-btn" ng-disabled="disableSave()" ng-click="updateAccounts()">{{'directDeposit.save.changes.button.label'|i18n}}</button>
     </div>
