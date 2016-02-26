@@ -510,14 +510,6 @@ button.closebtn {
     padding-left: 0px;
 }
 
-.min-width-acctType {
-    min-width: 15%;
-}
-
-.min-width-amount {
-    min-width: 20%;
-}
-
 .min-width-priority {
     min-width: 0px;
 }
@@ -531,7 +523,6 @@ button.closebtn {
     border: 0;
     padding: 0;
     margin: 0;
-    width: 100%;
 }
 
 .dropdown-menu.addAcct.listing {
@@ -548,6 +539,7 @@ li.listing {
     border-width: 1px;
     border-color: #206E9F;
     top: 3.175em;
+    min-width: 100%;
 }
 
 .dropdown-menu > li > a.addAcct,

@@ -8,7 +8,7 @@
 </td>
 <td class="break-word">{{alloc.bankRoutingInfo.bankRoutingNum|accountNumMask}}</td>
 <td class="max-width-account break-word">{{alloc.bankAccountNum|accountNumMask}}</td>
-<td class="min-width-acctType">
+<td>
     <label class="visuallyhidden" id="select-acct-type{{$index}}">{{'directDeposit.label.account.type.select'|i18n}}</label>
     <div class="dropdown desktop-listing" role="menu">
         <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" href="#" aria-labelledby="select-acct-type{{$index}} account-type{{$index}}">
@@ -27,7 +27,7 @@
         </ul>
     </div>
 </td>
-<td class="min-width-amount">
+<td>
     <div dropdown-state="amtDropdownOpen" class="dropdown desktop-listing">
         <button dropdown-helper="begin"
             ng-class="(((amountErr === 'amt' && alloc.amountType === 'amount') || (amountErr === 'pct' && alloc.amountType === 'percentage')) && !amtDropdownOpen ? 'input-field-error' : null)" 
