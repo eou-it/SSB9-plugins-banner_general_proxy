@@ -20,6 +20,10 @@ body {
     padding: 0 15px;
 }
 
+#signOut {
+    background-color: #FFFFFF;
+}
+
 /* Remove breadcrumb panel bottom border where it clashes with elements below it */
 .employee.desktop #breadcrumb-panel,
 .student.desktop.no-ap #breadcrumb-panel{
