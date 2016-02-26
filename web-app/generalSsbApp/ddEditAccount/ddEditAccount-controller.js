@@ -14,6 +14,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         $scope.amountAmtFocused = false;
         $scope.amountPctFocused = false;
         $scope.dropdownIsOpen = false;
+        $scope.isDisplayPriority = true;
 
         $scope.popoverElements = {}; // Used to coordinate popovers in modal
 
@@ -212,7 +213,15 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             if(doSave) {
 
                if(ddEditAccountService.doReorder === 'single'){
+                    // Temporarily hide priority during this transition. This is because the persisted priority,
+                    // often different from that displayed to the user, will be set in the account object to save
+                    // it to the database. However, this results in its being briefly displayed to the user,
+                    // which could be disconcerting.
+                    $scope.isDisplayPriority = false;
+
                     ddEditAccountService.reorderAccounts($scope.account).$promise.then(function (response) {
+                        $scope.isDisplayPriority = true; // Set priority display back to normal state
+
                         if(response[0].failure) {
                             notificationCenterService.displayNotification(response[0].message, "error");
                             displayMiscError(response[0].message);
