@@ -687,7 +687,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             if (matchingPayroll) {
                 matchingPayroll.accountType = acctType;
-                notificationCenterService.displayNotification('directDeposit.notification.payroll.also.updated', $scope.notificationWarningType, false, prompts);
+                notificationCenterService.displayNotification('directDeposit.notification.change.applied.to.both', $scope.notificationWarningType, false, prompts);
             }
         };
 

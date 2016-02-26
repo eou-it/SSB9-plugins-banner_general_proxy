@@ -139,7 +139,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
 
                 if (apAcct && apAcct.id === scope.alloc.id) {
                     apAcct.accountType = type;
-                    notificationCenterService.displayNotification('directDeposit.notification.ap.also.updated', scope.notificationWarningType, false, prompts);
+                    notificationCenterService.displayNotification('directDeposit.notification.change.applied.to.both', scope.notificationWarningType, false, prompts);
                 }
             };
 
