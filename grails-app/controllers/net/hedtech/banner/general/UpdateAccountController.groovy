@@ -40,6 +40,8 @@ class UpdateAccountController {
                 removeKeyValuePairsNotWantedForUpdate(map)
                 fixJSONObjectForCast(map)
 
+                directDepositAccountService.validateAccountAmounts(map)
+
                 //newPosition is set so we need to do some reodering as we insert
                 if(map.newPosition) {
                     r.list = directDepositAccountCompositeService.rePrioritizeAccounts(map, map.newPosition)
@@ -60,6 +62,8 @@ class UpdateAccountController {
             // Do some cleanup to prepare for update
             removeKeyValuePairsNotWantedForUpdate(map)
             fixJSONObjectForCast(map)
+
+            directDepositAccountService.validateAccountAmounts(map)
 
             render directDepositAccountService.update(map) as JSON
 
