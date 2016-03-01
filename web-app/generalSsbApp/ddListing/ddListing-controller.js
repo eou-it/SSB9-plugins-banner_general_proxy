@@ -798,6 +798,10 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             });
         };
 
+        $scope.isRemaining = function(alloc) {
+            return directDepositService.isRemaining(alloc);
+        };
+
 
         // INITIALIZE
         // ----------
