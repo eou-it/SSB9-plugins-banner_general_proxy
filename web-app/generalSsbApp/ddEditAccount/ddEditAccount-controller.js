@@ -373,6 +373,20 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                     clearErrors();
                     $scope.setup.authorizedChanges = false;
                 });
+
+                // clear amount value and error when the user changes amount type
+                $scope.$watch('account.amountType', function(){
+                    if($scope.amountErr === 'pct'){
+                        $scope.account.percent = null;
+                    }
+                    else if($scope.amountErr === 'amt'){
+                        $scope.account.amount = null;
+                    }
+
+                    notificationCenterService.removeNotification($scope.amountMessage);
+                    $scope.amountErr = false;
+                    $scope.amountMessage = null;
+                });
             }
         };
 

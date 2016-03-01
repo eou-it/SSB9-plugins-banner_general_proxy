@@ -275,7 +275,7 @@ percent-input > input.form-control:-ms-input-placeholder,
     position: relative;
     top: 0.15em;
     right: 2.25em;
-    left: initial;
+    left: auto;
     float: none;
 }
 
@@ -299,7 +299,7 @@ percent-input > input.form-control:-ms-input-placeholder,
     position: relative;
     top: 0.15em;
     right: 3.35em;
-    left: initial;
+    left: auto;
     float: none;
 }
 

@@ -74,7 +74,24 @@ generalSsbApp.service('notificationCenterService', ['$filter', function ($filter
     };
 
     this.removeNotification = function(notification) {
-        notifications.remove(notification);
+        // make sure argument is a Notification object, if it is not, then find the Notification object by
+        // its message, then remove it
+        if(notification instanceof Notification) {
+            notifications.remove(notification);
+        }
+        else {
+            var i18nDisplayMessage = $filter('i18n')(notification);
+
+            var msg = i18nDisplayMessage !== undefined ? i18nDisplayMessage : notification;
+
+            var identByMsg = _.find(notifications.models, function(n) {
+                return n.get('message') === msg;
+            });
+
+            if(identByMsg) {
+                notifications.remove(identByMsg);
+            }
+        }
     };
 
 }]);
