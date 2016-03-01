@@ -297,6 +297,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             if ($scope.editForm.$dirty) {
 
+                $scope.cancelNotification();
+
                 var newWarning = new Notification({
                     message: $filter('i18n')('default.savecancel.message'),
                     type: "warning"
@@ -374,6 +376,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
         $scope.cancelChanges = function () {
             if ($scope.editForm.$dirty || $scope.selectedForDelete.payroll || $scope.selectedForDelete.ap || $scope.authorizedChanges) {
+                $scope.cancelNotification();
+                
                 var newWarning = new Notification({
                     message: $filter('i18n')('default.cancel.message'),
                     type: "warning"
@@ -583,6 +587,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
             if ($scope.editForm.$dirty) {
 
+                $scope.cancelNotification();
+
                 var newWarning = new Notification({
                     message: $filter('i18n')('default.savecancel.message'),
                     type: "warning"
@@ -655,6 +661,8 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             if (!$scope.selectedForDelete.ap) return;
 
             if ($scope.editForm.$dirty) {
+
+                $scope.cancelNotification();
 
                 var newWarning = new Notification({
                     message: $filter('i18n')('default.savecancel.message'),
