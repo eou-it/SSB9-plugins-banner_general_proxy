@@ -654,6 +654,22 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             // If no account is selected for deletion, this functionality is disabled
             if (!$scope.selectedForDelete.ap) return;
 
+            if ($scope.editForm.$dirty) {
+
+                var newWarning = new Notification({
+                    message: $filter('i18n')('default.savecancel.message'),
+                    type: "warning"
+                });
+                newWarning.addPromptAction($filter('i18n')("default.ok.label"), function () {
+                    notifications.remove(newWarning);
+                });
+
+                notifications.addNotification(newWarning);
+
+            }
+
+            if ($scope.editForm.$dirty) return;
+
             var prompts = [
                 {
                     label: $filter('i18n')('directDeposit.button.prompt.cancel'),
