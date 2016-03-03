@@ -85,9 +85,10 @@ grails {
                 proxyReceptorUrl = '/secure/receptor'
                 useSingleSignout = true
                 key = 'grails-spring-security-cas'
-                artifactParameter = 'ticket'
-                serviceParameter = 'service'
+                artifactParameter = 'SAMLart'
+                serviceParameter = 'TARGET'
                 filterProcessesUrl = '/j_spring_cas_security_check'
+                serverUrlEncoding = 'UTF-8'
             }
             logout {
                    afterLogoutUrl = '/'

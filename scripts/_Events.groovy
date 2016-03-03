@@ -189,6 +189,8 @@ eventCreateWarStart = { warName, stagingDir ->
     ant.delete(dir: "${stagingDir}/WEB-INF/plugins/selenium-rc*")
     ant.delete(dir: "${stagingDir}/WEB-INF/plugins/tomcat*")
 
+    ant.delete(file:"${stagingDir}/WEB-INF/lib/com.springsource.org.jasig.cas.client-3.1.8.jar")
+
     def grailsXmlFile = new File("${stagingDir}/WEB-INF/grails.xml")
     if (grailsXmlFile.exists()) {
         String textToRemove = "<plugin>FunctionalTestGrailsPlugin</plugin>"
