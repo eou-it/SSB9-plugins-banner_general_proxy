@@ -33,6 +33,8 @@ generalSsbApp.service('notificationCenterService', ['$filter', function ($filter
             }
         );
         notifications.addNotification(notification);
+
+        focusNotificationCenter(messageType);
     };
 
     /**
@@ -70,8 +72,27 @@ generalSsbApp.service('notificationCenterService', ['$filter', function ($filter
             notifications.addNotification(notification);
         }
 
+        focusNotificationCenter(messageType);
         return notification;
     };
+
+    function focusNotificationCenter(messageType) {
+        var notifCenterElems;
+ 
+        if(messageType === "error") {
+            notifCenterElems = $("div.notification-center-flyout > ul.error-container");
+        }
+        else if(messageType === "warning") {
+            notifCenterElems = $("div.notification-center-flyout > ul.prompt-container > li > div.notification-item-prompts > button:first-child");
+        }
+        else {
+            notifCenterElems = $("div.notification-center-flyout > ul > li > div");
+        }
+
+        notifCenterElems.attr("tabindex", 0);
+        notifCenterElems.focus();
+        notifCenterElems.removeAttr("tabindex");
+    }
 
     this.removeNotification = function(notification) {
         // make sure argument is a Notification object, if it is not, then find the Notification object by

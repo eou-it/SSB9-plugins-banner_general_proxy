@@ -292,30 +292,21 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             console.log('callback', result);
         };
 
+        var showSaveCancelMessage = function(){
+            var prompt = [{
+                label: $filter('i18n')('default.ok.label'),
+                action: function () {
+                    notificationCenterService.removeNotification('default.savecancel.message');
+                }
+            }];
+            notificationCenterService.displayNotification('default.savecancel.message', 'warning', false, prompt);
+        };
+
         // Display "Add Account" pop up
         $scope.showAddAccount = function (typeInd) {
 
             if ($scope.editForm.$dirty) {
-
-                $scope.cancelNotification();
-
-                var newWarning = new Notification({
-                    message: $filter('i18n')('default.savecancel.message'),
-                    type: "warning"
-                });
-                newWarning.addPromptAction($filter('i18n')("default.ok.label"), function () {
-                    notifications.remove(newWarning);
-                });
-//                newWarning.addPromptAction($filter('i18n')("default.yes.label"), function () {
-//                    notifications.remove(newWarning);
-//                    $state.go('directDepositListing',
-//                        {onLoadNotifications: notifications},
-//                        {reload: true, inherit: false, notify: true}
-//                    );
-//                    $scope.editForm.$setPristine();
-//
-//                });
-                notifications.addNotification(newWarning);
+                showSaveCancelMessage();
 
             } else {
                 //  $rootScope.$broadcast('addNewEvent', callback);
@@ -586,23 +577,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
 
             if ($scope.editForm.$dirty) {
-
-                $scope.cancelNotification();
-
-                var newWarning = new Notification({
-                    message: $filter('i18n')('default.savecancel.message'),
-                    type: "warning"
-                });
-                newWarning.addPromptAction($filter('i18n')("default.ok.label"), function () {
-                    notifications.remove(newWarning);
-                });
-
-                notifications.addNotification(newWarning);
-
+                showSaveCancelMessage();
+                return;
             }
-
-            if ($scope.editForm.$dirty) return;
-
 
             var prompts = [
                 {
@@ -661,22 +638,9 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
             if (!$scope.selectedForDelete.ap) return;
 
             if ($scope.editForm.$dirty) {
-
-                $scope.cancelNotification();
-
-                var newWarning = new Notification({
-                    message: $filter('i18n')('default.savecancel.message'),
-                    type: "warning"
-                });
-                newWarning.addPromptAction($filter('i18n')("default.ok.label"), function () {
-                    notifications.remove(newWarning);
-                });
-
-                notifications.addNotification(newWarning);
-
+                showSaveCancelMessage();
+                return;
             }
-
-            if ($scope.editForm.$dirty) return;
 
             var prompts = [
                 {

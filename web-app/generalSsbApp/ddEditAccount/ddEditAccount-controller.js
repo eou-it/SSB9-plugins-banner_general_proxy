@@ -311,6 +311,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             $scope.amountMessage = null;
 
             clearMiscMessage();
+            notificationCenterService.clearNotifications();
         };
 
         $scope.cancelModal = function () {
