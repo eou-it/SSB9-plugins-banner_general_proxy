@@ -89,6 +89,9 @@ grails {
                 serviceParameter = 'TARGET'
                 filterProcessesUrl = '/j_spring_cas_security_check'
                 serverUrlEncoding = 'UTF-8'
+                if (useSingleSignout){
+                    grails.plugin.springsecurity.useSessionFixationPrevention = false
+                }
             }
             logout {
                    afterLogoutUrl = '/'

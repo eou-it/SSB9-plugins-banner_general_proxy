@@ -15,7 +15,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </button>
         <ul class="dropdown-menu addAcct">
             <li ng-repeat="existingAcct in setup.otherAccounts" role="presentation">
-                <a dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" ng-click="selectOtherAcct(existingAcct)" class="addAcct form-spacing" href="#" role="menuitem">
+                <a dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" ng-click="selectOtherAcct(existingAcct)" class="addAcct form-spacing" role="menuitem">
                    {{existingAcct.bankRoutingInfo.bankName}}<br>
                    <span class="no-bold">{{'directDeposit.account.label.account'|i18n}}: {{existingAcct.bankAccountNum|accountNumMask}}</span>
                 </a>
@@ -67,7 +67,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                 </button>
                 <ul ng-if="!isRemaining()" class="dropdown-menu addAcct">
                     <li ng-repeat="i in priorities" role="presentation">
-                        <a ng-click="setAccountPriority(i.displayVal)" dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" class="addAcct form-spacing" href="#" role="menuitem">{{i.displayVal}}</a>
+                        <a ng-click="setAccountPriority(i.displayVal)" dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" class="addAcct form-spacing" role="menuitem">{{i.displayVal}}</a>
                     </li>
                 </ul>
             </div>
