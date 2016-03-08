@@ -137,6 +137,8 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
                             //close dropdown if it is open when shift+tab off element
                             if(elem.parent().hasClass('open')){
                                 elem.dropdown('toggle');
+
+                                event.preventDefault();
                             }
                         }
                     }
@@ -144,6 +146,8 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
                         if(!event.shiftKey){
                             //close dropdown when tab off element, toggle button so events fire as expected
                             elem.parents('ul.dropdown-menu').siblings('button.dropdown-btn').dropdown('toggle');
+
+                            event.preventDefault();
                         }
                     }
                 }
