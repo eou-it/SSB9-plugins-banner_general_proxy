@@ -16,6 +16,8 @@ generalSsbApp.service('ddListingService', ['directDepositService', '$resource', 
     // all allocations).
     this.mainListingControllerScope = null;
 
+    this.shouldDisplayPriority = true;
+
     this.getApListing = function (){
         return apListing.query();
     };

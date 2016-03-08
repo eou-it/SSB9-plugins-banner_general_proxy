@@ -216,6 +216,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
 
         $scope.checkAmount = ''; // Amount to be disbursed via paper check
 
+
         // CONTROLLER FUNCTIONS
         // --------------------
 
@@ -430,7 +431,15 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     ddEditAccountService.setAmountValues(alloc, alloc.amountType);
                 });
 
+                // Temporarily hide priority during this transition. This is because the persisted priority,
+                // often different from that displayed to the user, will be set in the account object to save
+                // it to the database. However, this results in its being briefly displayed to the user,
+                // which could be disconcerting.
+                ddListingService.shouldDisplayPriority = false;
+
                 ddEditAccountService.reorderAccounts().$promise.then(function (response) {
+                    ddListingService.shouldDisplayPriority = true; // Set priority display back to normal state
+
                     if(response[0].failure) {
                         notificationCenterService.displayNotification(response[0].message, $scope.notificationErrorType);
 

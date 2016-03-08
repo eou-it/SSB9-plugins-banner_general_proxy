@@ -144,15 +144,26 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
             };
 
             scope.displayAllocationVal = function () {
+                var getFracSize = function(number){
+                    if(number) {
+                        var amtInt = String(Math.floor(number));
+                        var amtStr = String(number);
+
+                        //If number has less than 2 decimal places display the default number of decimal places AKA undefined
+                        return (amtStr.length - amtInt.length - 1) > 1 ? (amtStr.length - amtInt.length - 1) : undefined;
+                    }
+                };
+
                 if(directDepositService.isRemaining(scope.alloc)){
                     scope.alloc.allocation = $filter('i18n')('directDeposit.account.label.remaining');
                 }
                 else if(scope.alloc.amountType === 'percentage'){
-                    scope.alloc.allocation = $filter('number')(scope.alloc.percent ? scope.alloc.percent : '0') + '%';
+                    scope.alloc.allocation = $filter('number')((scope.alloc.percent ? scope.alloc.percent : '0'), getFracSize(scope.alloc.percent)) + '%';
                 }
                 else if(scope.alloc.amountType === 'amount'){
-                    scope.alloc.allocation = $filter('currency')((scope.alloc.amount ? scope.alloc.amount : '0'), scope.currencySymbol);
+                    scope.alloc.allocation = $filter('currency')((scope.alloc.amount ? scope.alloc.amount : '0'), scope.currencySymbol, getFracSize(scope.alloc.amount));
                 }
+
                 return scope.alloc.allocation;
             };
 
@@ -265,6 +276,10 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                     }
                 }
             });
+
+            scope.getShouldDisplayPriority = function() {
+                return ddListingService.shouldDisplayPriority;
+            };
         }
     };
 }]);
