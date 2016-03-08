@@ -7,6 +7,11 @@ body {
     word-wrap: break-word;
 }
 
+.force-break-word {
+    word-wrap: break-word !important;
+    white-space: normal !important;
+}
+
 .no-margin {
     margin: 0 !important;
 }

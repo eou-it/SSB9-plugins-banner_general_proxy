@@ -15,7 +15,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </button>
         <ul class="dropdown-menu addAcct">
             <li ng-repeat="existingAcct in setup.otherAccounts" role="presentation">
-                <a dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" ng-click="selectOtherAcct(existingAcct)" class="addAcct form-spacing" role="menuitem">
+                <a dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" ng-click="selectOtherAcct(existingAcct)" class="addAcct form-spacing force-break-word" role="menuitem">
                    {{existingAcct.bankRoutingInfo.bankName}}<br>
                    <span class="no-bold">{{'directDeposit.account.label.account'|i18n}}: {{existingAcct.bankAccountNum|accountNumMask}}</span>
                 </a>
