@@ -73,14 +73,14 @@
     <div class="dropdown desktop-listing" role="menu">
         <button dropdown-helper="begin"
             ng-if="!isValidRemainingAmountAllocation(alloc)" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="priority-en{{$index}} priority-menu{{$index}}">
-            <span class="float-l form-spacing" id="priority-en{{$index}}">
+            <span ng-if="getShouldDisplayPriority()" class="float-l form-spacing" id="priority-en{{$index}}">
                 {{alloc.priority}}
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
         <button dropdown-helper="begin" ng-click="displayReprioritizeRemainingWarning()"
             ng-if="isValidRemainingAmountAllocation(alloc)" class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="priority-dis{{$index}} priority-menu{{$index}}">
-            <span class="float-l form-spacing" id="priority-dis{{$index}}">
+            <span ng-if="getShouldDisplayPriority()" class="float-l form-spacing" id="priority-dis{{$index}}">
                 {{alloc.priority}}
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>

@@ -265,6 +265,10 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                     }
                 }
             });
+
+            scope.getShouldDisplayPriority = function() {
+                return ddListingService.shouldDisplayPriority;
+            };
         }
     };
 }]);
