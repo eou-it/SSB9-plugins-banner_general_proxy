@@ -71,6 +71,9 @@ generalSsbApp.service('notificationCenterService', ['$filter', function ($filter
 
             notifications.addNotification(notification);
         }
+        else {
+            notificationCenter.openNotificationFlyout();
+        }
 
         focusNotificationCenter(messageType);
         return notification;

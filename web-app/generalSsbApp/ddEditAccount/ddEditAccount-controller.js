@@ -173,6 +173,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 clearMiscMessage();
             }
             else {
+                notificationCenterService.removeNotification($scope.amountMessage);
                 $scope.amountErr = false;
                 $scope.amountMessage = null;
             }
@@ -288,8 +289,6 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             }
 
             if(!$scope.account.accountType) {
-                notificationCenterService.removeNotification(typeNotification);
-
                 $scope.accountTypeErr = true;
                 typeNotification = notificationCenterService.addNotification('directDeposit.invalid.missing.account.type', "error");
                 clearMiscMessage();
