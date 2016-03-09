@@ -162,19 +162,29 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
         };
 
         var validateAmounts = function () {
-            var result = ddListingService.validateAmountForAccount($scope, $scope.account);
+            var result = false;
 
-            if(result && $scope.isRemaining()){
-                //move to last position
-                $scope.setAccountPriority($scope.priorities[$scope.priorities.length-1].displayVal);
-            }
+            if (ddListingService.hasMultipleRemainingAmountAllocations()) {
+                // In addition to a user *attempting* (in *bold* because we won't allow them to do it) to create
+                // two "Remaining" accounts, this case can also happen when more than one "Remaining" account was
+                // created outside of this app (e.g. INB)
+                $scope.cancelModal();
+                notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining', "error");
+            } else {
+                result = ddListingService.validateAmountForAccount($scope, $scope.account);
 
-            if(!result) {
-                clearMiscMessage();
-            }
-            else {
-                $scope.amountErr = false;
-                $scope.amountMessage = null;
+                if (result && $scope.isRemaining()) {
+                    //move to last position
+                    $scope.setAccountPriority($scope.priorities[$scope.priorities.length - 1].displayVal);
+                }
+
+                if (!result) {
+                    clearMiscMessage();
+                }
+                else {
+                    $scope.amountErr = false;
+                    $scope.amountMessage = null;
+                }
             }
 
             return result;
