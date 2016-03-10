@@ -271,7 +271,7 @@ percent-input > input.form-control:-ms-input-placeholder,
 .amt-input-fail {
     position: absolute;
     float: right;
-    left: 12.65em;
+    left: 13.65em;
     top: 8.88em;
     background: #F6E5E6;
 }
@@ -287,7 +287,7 @@ percent-input > input.form-control:-ms-input-placeholder,
 .desktop-listing .amt-input-fail {
     position: absolute;
     float: right;
-    left: 12.1em;
+    left: 13.1em;
     top: 6.35em;
     background: #F6E5E6;
 }
@@ -295,7 +295,7 @@ percent-input > input.form-control:-ms-input-placeholder,
 .pct-input-fail {
     position: absolute;
     float: right;
-    left: 12.65em;
+    left: 13.65em;
     top: 11.2em;
     background: #F6E5E6;
 }
@@ -311,7 +311,7 @@ percent-input > input.form-control:-ms-input-placeholder,
 .desktop-listing .pct-input-fail {
     position: absolute;
     float: right;
-    left: 12.1em;
+    left: 13.1em;
     top: 9em;
     background: #F6E5E6;
 }

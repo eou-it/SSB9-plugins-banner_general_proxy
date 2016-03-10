@@ -178,13 +178,13 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                     $scope.setAccountPriority($scope.priorities[$scope.priorities.length - 1].displayVal);
                 }
 
-                if (!result) {
-                    clearMiscMessage();
-                }
-                else {
-                    $scope.amountErr = false;
-                    $scope.amountMessage = null;
-                }
+            if(!result) {
+                clearMiscMessage();
+            }
+            else {
+                notificationCenterService.removeNotification($scope.amountMessage);
+                $scope.amountErr = false;
+                $scope.amountMessage = null;
             }
 
             return result;
@@ -298,8 +298,6 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             }
 
             if(!$scope.account.accountType) {
-                notificationCenterService.removeNotification(typeNotification);
-
                 $scope.accountTypeErr = true;
                 typeNotification = notificationCenterService.addNotification('directDeposit.invalid.missing.account.type', "error");
                 clearMiscMessage();
