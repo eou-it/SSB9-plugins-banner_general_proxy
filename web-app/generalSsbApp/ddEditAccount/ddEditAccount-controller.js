@@ -178,13 +178,14 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                     $scope.setAccountPriority($scope.priorities[$scope.priorities.length - 1].displayVal);
                 }
 
-            if(!result) {
-                clearMiscMessage();
-            }
-            else {
-                notificationCenterService.removeNotification($scope.amountMessage);
-                $scope.amountErr = false;
-                $scope.amountMessage = null;
+                if (!result) {
+                    clearMiscMessage();
+                }
+                else {
+                    notificationCenterService.removeNotification($scope.amountMessage);
+                    $scope.amountErr = false;
+                    $scope.amountMessage = null;
+                }
             }
 
             return result;
