@@ -1168,6 +1168,19 @@ table tr td {
     padding: 15px 16px 15px 16px;
 }
 
+/**************/
+/* Animations */
+/**************/
+@keyframes notification-fadein {
+    from {opacity: 0;}
+    to   {opacity: 1;}
+}
+
+.inline-notification {
+    animation-name: notification-fadein;
+    animation-duration: 1s;
+}
+
 /***********************/
 /* Media Query Section */
 /***********************/
