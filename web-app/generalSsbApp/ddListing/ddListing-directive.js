@@ -287,6 +287,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
 generalSsbAppDirectives.directive('stopClick', [function () {
     return {
         restrict: 'A',
+        scope: false,
         link: function (scope, elem, attrs) {
 
             elem.on('click', function(event) {

@@ -59,10 +59,10 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                     </button>
                     <ul class="dropdown-menu addAcct">
                         <li role="presentation">
-                            <a ng-click="setAccountType('C')" class="addAcct form-spacing" role="menuitem">{{'directDeposit.account.type.checking'|i18n}}</a>
+                            <a ng-click="setAccountType('C')" class="addAcct form-spacing" role="menuitem" tabindex="0">{{'directDeposit.account.type.checking'|i18n}}</a>
                         </li>
                         <li role="presentation">
-                            <a dropdown-helper="end" ng-click="setAccountType('S')" class="addAcct end-dropdown-radius form-spacing" role="menuitem">{{'directDeposit.account.type.savings'|i18n}}</a>
+                            <a dropdown-helper="end" ng-click="setAccountType('S')" class="addAcct end-dropdown-radius form-spacing" role="menuitem" tabindex="0">{{'directDeposit.account.type.savings'|i18n}}</a>
                         </li>
                     </ul>
                 </div>
@@ -123,7 +123,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
             </button>
             <ul ng-if="!isRemaining()" class="dropdown-menu addAcct">
                 <li ng-repeat="i in priorities" role="presentation">
-                    <a ng-click="setAccountPriority(i.displayVal)" dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" class="addAcct form-spacing" role="menuitem">{{i.displayVal}}</a>
+                    <a ng-click="setAccountPriority(i.displayVal)" dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" class="addAcct form-spacing" role="menuitem" tabindex="0">{{i.displayVal}}</a>
                 </li>
             </ul>
         </div>

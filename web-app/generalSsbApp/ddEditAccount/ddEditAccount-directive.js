@@ -138,7 +138,7 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
                             if(elem.parent().hasClass('open')){
                                 elem.dropdown('toggle');
 
-                                event.preventDefault();
+                                //event.preventDefault();
                             }
                         }
                     }
@@ -147,9 +147,116 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
                             //close dropdown when tab off element, toggle button so events fire as expected
                             elem.parents('ul.dropdown-menu').siblings('button.dropdown-btn').dropdown('toggle');
 
-                            event.preventDefault();
+                            //event.preventDefault();
                         }
                     }
+                }
+            });
+            scope.$on('$destroy', function () {
+                elem.unbind('keydown');
+            });
+        }
+    };
+}]);
+
+/*
+ * usage:
+ * place on ul element in dropdown div so that tab acts similiarly to what one would expect to happen natively
+ */
+generalSsbAppDirectives.directive('amountMenuControls', [function () {
+    return {
+        restrict: 'A',
+        scope: {
+            isError: '=error',
+            amtType: '=selection'
+        },
+        link: function (scope, elem, attrs) {
+
+            var listItems = elem.find('li > input[type=radio]');
+            /*var selected = 0;
+            listItems.each(function(index){
+                console.log("hi "+index);
+                console.dir(this);
+                if($(this).prop('checked')){
+                    selected = index;
+                    return false;
+                }
+            });
+
+            var selectNextItem = function(){
+                console.log("selN "+selected);
+                listItems.eq(selected++).prop('checked', false);
+                if(selected > 2){
+                    selected = 0;
+                }
+                listItems.eq(selected).focus();
+                listItems.eq(selected).prop('checked', true);
+            };
+            var selectPrevItem = function(){
+                console.log("selP "+selected);
+                listItems.eq(selected--).prop('checked', false);
+                if(selected < 0){
+                    selected = 2;
+                }
+                listItems.eq(selected).focus();
+                listItems.eq(selected).prop('checked', true);
+            };*/
+            console.log(scope.isError+" "+scope.amtType);
+            //var selected = 0;//(scope.amtType === 'remaining' ? 0: (scope.amtType === 'amount' ? 1 : 2));
+            var amountTypes = ['remaining', 'amount', 'percentage'];
+            var PREV = -1, NEXT = 1;
+
+            var selectItem = function(direction){
+                console.log("selN "+selected);
+                var selected = (scope.amtType === 'remaining' ? 0: (scope.amtType === 'amount' ? 1 : 2)) + direction;
+
+                if(selected > 2){
+                    selected = 0;
+                }
+                else if(selected < 0){
+                    selected = 2;
+                }
+
+                scope.amtType = amountTypes[selected];
+                listItems.eq(selected).focus();
+                scope.$apply();
+            };
+
+            /*var navWithTab = function() {
+                if (!event.shiftKey) {
+                    //close dropdown when tab off element, toggle button so events fire as expected
+                    elem.siblings('button.dropdown-btn').dropdown('toggle');
+                }
+            };*/
+
+            elem.bind('keydown', function(event) {
+                var code = event.keyCode || event.which;
+
+                switch (code){
+                    case 37: //left arrow key
+                    case 38: //up arrow key
+                        console.log("prev "+code);
+                        selectItem(PREV);
+                        event.preventDefault();
+                        break;
+                    case 39: //right arrow key
+                    case 40: //down arrow key
+                        console.log("next "+code);
+                        selectItem(NEXT);
+                        event.preventDefault();
+                        break;
+                    case 9: //tab key
+                        if (!event.shiftKey) {
+                            if(focusedOnTheProperInputs()) {
+                                //close dropdown when tab off element, toggle button so events fire as expected
+                                elem.siblings('button.dropdown-btn').dropdown('toggle');
+                                if (scope.isError) {
+                                    event.preventDefault();
+                                }
+                                console.log("tab");
+                            }
+                        }
+                        break;
                 }
             });
             scope.$on('$destroy', function () {
@@ -184,6 +291,7 @@ generalSsbAppDirectives.directive('dropdownState', [function () {
 generalSsbAppDirectives.directive('suppressEnterKey', [function () {
     return {
         restrict: 'A',
+        scope: false,
         link: function (scope, elem) {
             elem.on('keydown', function(event){
                 var code = event.keyCode || event.which;
