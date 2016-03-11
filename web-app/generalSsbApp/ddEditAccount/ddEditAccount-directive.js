@@ -159,75 +159,64 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
     };
 }]);
 
-/*
- * usage:
- * place on ul element in dropdown div so that tab acts similiarly to what one would expect to happen natively
- */
-generalSsbAppDirectives.directive('amountMenuControls', [function () {
+generalSsbAppDirectives.directive('amountMenuControls', ['ddEditAccountService', function (ddEditAccountService) {
+    var amountTypes = ['remaining', 'amount', 'percentage'];
+    var PREV = -1, NEXT = 1;
+
     return {
         restrict: 'A',
         scope: {
-            isError: '=error',
             amtType: '=selection'
         },
         link: function (scope, elem, attrs) {
-
             var listItems = elem.find('li > input[type=radio]');
-            /*var selected = 0;
-            listItems.each(function(index){
-                console.log("hi "+index);
-                console.dir(this);
-                if($(this).prop('checked')){
-                    selected = index;
-                    return false;
-                }
-            });
-
-            var selectNextItem = function(){
-                console.log("selN "+selected);
-                listItems.eq(selected++).prop('checked', false);
-                if(selected > 2){
-                    selected = 0;
-                }
-                listItems.eq(selected).focus();
-                listItems.eq(selected).prop('checked', true);
-            };
-            var selectPrevItem = function(){
-                console.log("selP "+selected);
-                listItems.eq(selected--).prop('checked', false);
-                if(selected < 0){
-                    selected = 2;
-                }
-                listItems.eq(selected).focus();
-                listItems.eq(selected).prop('checked', true);
-            };*/
-            console.log(scope.isError+" "+scope.amtType);
-            //var selected = 0;//(scope.amtType === 'remaining' ? 0: (scope.amtType === 'amount' ? 1 : 2));
-            var amountTypes = ['remaining', 'amount', 'percentage'];
-            var PREV = -1, NEXT = 1;
+            var endItemFocused = false;
 
             var selectItem = function(direction){
-                console.log("selN "+selected);
-                var selected = (scope.amtType === 'remaining' ? 0: (scope.amtType === 'amount' ? 1 : 2)) + direction;
+                var selected = (scope.amtType === 'remaining' ? 0: (scope.amtType === 'amount' ? 1 : 2));
 
-                if(selected > 2){
-                    selected = 0;
+                if(selected !== 0 && endItemFocused){
+                    // use default arrow key behavior if focused on input number box
+                    return false;
                 }
-                else if(selected < 0){
-                    selected = 2;
-                }
+                else {
+                    selected += direction;
 
-                scope.amtType = amountTypes[selected];
-                listItems.eq(selected).focus();
-                scope.$apply();
+                    if (selected > 2) {
+                        selected = 0;
+                    }
+                    else if (selected < 0) {
+                        selected = 2;
+                    }
+
+                    scope.amtType = amountTypes[selected];
+                    listItems.eq(selected).focus();
+                    scope.$apply();
+
+                    return true;
+                }
             };
 
-            /*var navWithTab = function() {
-                if (!event.shiftKey) {
-                    //close dropdown when tab off element, toggle button so events fire as expected
-                    elem.siblings('button.dropdown-btn').dropdown('toggle');
+            var recvdFocus = function(){
+                endItemFocused = true;
+            };
+            var lostFocus = function(){
+                endItemFocused = false;
+            };
+
+            listItems.each(function(index){
+                if(index === 0){
+                    // add focus event handling to Remaining radio button
+                    $(this).focus(recvdFocus);
+                    $(this).blur(lostFocus);
                 }
-            };*/
+                else{
+                    // add focus event handling to the input number boxes
+                    var inputBox = $(this).siblings("div").children("input[type=number]");
+                    inputBox.focus(recvdFocus);
+                    inputBox.blur(lostFocus);
+                }
+            });
 
             elem.bind('keydown', function(event) {
                 var code = event.keyCode || event.which;
@@ -235,25 +224,26 @@ generalSsbAppDirectives.directive('amountMenuControls', [function () {
                 switch (code){
                     case 37: //left arrow key
                     case 38: //up arrow key
-                        console.log("prev "+code);
-                        selectItem(PREV);
-                        event.preventDefault();
+                        if(selectItem(PREV)){
+                            event.preventDefault();
+                        }
                         break;
                     case 39: //right arrow key
                     case 40: //down arrow key
-                        console.log("next "+code);
-                        selectItem(NEXT);
-                        event.preventDefault();
+                        if(selectItem(NEXT)){
+                            event.preventDefault();
+                        }
                         break;
                     case 9: //tab key
                         if (!event.shiftKey) {
-                            if(focusedOnTheProperInputs()) {
+                            if(endItemFocused) {
+                                // If an error occurs we want to focus on the notification center, not do the default
+                                // tab key behavior. To accomplish this we keep the event around until amount validation
+                                // has finished. We will then know whether we should call preventDefault() or not.
+                                ddEditAccountService.setTabEvent(event);
+
                                 //close dropdown when tab off element, toggle button so events fire as expected
                                 elem.siblings('button.dropdown-btn').dropdown('toggle');
-                                if (scope.isError) {
-                                    event.preventDefault();
-                                }
-                                console.log("tab");
                             }
                         }
                         break;

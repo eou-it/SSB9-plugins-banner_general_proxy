@@ -177,4 +177,16 @@ generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resourc
         }
     };
 
+    this.tabEvent = null;
+
+    this.setTabEvent = function(event){
+        this.tabEvent = event;
+    };
+
+    this.tabPreventDefault = function(){
+        if(!this.tabEvent) return;
+
+        this.tabEvent.preventDefault();
+    };
+
 }]);

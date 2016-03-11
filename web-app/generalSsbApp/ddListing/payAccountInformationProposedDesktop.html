@@ -37,7 +37,7 @@
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
-        <ul stop-click suppress-enter-key amount-menu-controls error="amountErr" selection="alloc.amountType" class="dropdown-menu addAcct listing" role="radiogroup" aria-label="{{'directDeposit.label.account.amount.edit'|i18n}}" id="radios{{$index}}">
+        <ul stop-click suppress-enter-key amount-menu-controls selection="alloc.amountType" class="dropdown-menu addAcct listing" role="radiogroup" aria-label="{{'directDeposit.label.account.amount.edit'|i18n}}" id="radios{{$index}}">
             <li ng-class="(alloc.amountType === 'remaining' ? 'dropdown-li-focus' : '')" class="listing" role="presentation">
                 <input ng-model="alloc.amountType" class="edit-radio" type="radio" name="amount-type{{$index}}" value="remaining" tabindex="0" aria-labelledby="rem-radio-lbl{{$index}}">
                 <span class="lbl radio-list ws-nowrap" id="rem-radio-lbl{{$index}}">{{'directDeposit.account.amount.remaining'|i18n}}</span>
