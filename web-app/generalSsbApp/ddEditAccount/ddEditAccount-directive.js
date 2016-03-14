@@ -137,8 +137,6 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
                             //close dropdown if it is open when shift+tab off element
                             if(elem.parent().hasClass('open')){
                                 elem.dropdown('toggle');
-
-                                //event.preventDefault();
                             }
                         }
                     }
@@ -146,8 +144,6 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
                         if(!event.shiftKey){
                             //close dropdown when tab off element, toggle button so events fire as expected
                             elem.parents('ul.dropdown-menu').siblings('button.dropdown-btn').dropdown('toggle');
-
-                            //event.preventDefault();
                         }
                     }
                 }
@@ -168,7 +164,7 @@ generalSsbAppDirectives.directive('amountMenuControls', ['ddEditAccountService',
         scope: {
             amtType: '=selection'
         },
-        link: function (scope, elem, attrs) {
+        link: function (scope, elem) {
             var listItems = elem.find('li > input[type=radio]');
             var endItemFocused = false;
 
@@ -246,6 +242,81 @@ generalSsbAppDirectives.directive('amountMenuControls', ['ddEditAccountService',
                                 elem.siblings('button.dropdown-btn').dropdown('toggle');
                             }
                         }
+                        break;
+                }
+            });
+            scope.$on('$destroy', function () {
+                elem.unbind('keydown');
+            });
+        }
+    };
+}]);
+
+generalSsbAppDirectives.directive('menuControls', [function () {
+    var PREV = -1, NEXT = 1;
+
+    return {
+        restrict: 'A',
+        scope: false,
+        link: function (scope, elem) {
+            var listItems;
+
+            var getSelectedItem = function(){
+                var selected = 0;
+
+                listItems = elem.find('li > a');
+
+                listItems.each(function(index){
+                    if($(this).is(':focus')){
+                        selected = index;
+                        return false;
+                    }
+                });
+
+                return selected;
+            };
+
+            var selectItem = function(direction){
+                var selected = getSelectedItem();
+
+                selected += direction;
+
+                if (selected >= listItems.length) {
+                    selected = 0;
+                }
+                else if (selected < 0) {
+                    selected = listItems.length - 1;
+                }
+
+                listItems.eq(selected).focus();
+            };
+
+            var clickSelectedItem = function(direction){
+                var selected = getSelectedItem();
+
+                listItems.eq(selected).click();
+            };
+
+            elem.bind('keydown', function(event) {
+                var code = event.keyCode || event.which;
+
+                switch (code){
+                    case 37: //left arrow key
+                    case 38: //up arrow key
+                        selectItem(PREV);
+                        event.preventDefault();
+                        event.stopPropagation();
+                        break;
+                    case 39: //right arrow key
+                    case 40: //down arrow key
+                        selectItem(NEXT);
+                        event.preventDefault();
+                        event.stopPropagation();
+                        break;
+                    case 13: //enter key
+                        clickSelectedItem();
+                        event.preventDefault();
+                        event.stopPropagation();
                         break;
                 }
             });
