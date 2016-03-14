@@ -137,8 +137,6 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
                             //close dropdown if it is open when shift+tab off element
                             if(elem.parent().hasClass('open')){
                                 elem.dropdown('toggle');
-
-                                event.preventDefault();
                             }
                         }
                     }
@@ -146,10 +144,180 @@ generalSsbAppDirectives.directive('dropdownHelper', [function () {
                         if(!event.shiftKey){
                             //close dropdown when tab off element, toggle button so events fire as expected
                             elem.parents('ul.dropdown-menu').siblings('button.dropdown-btn').dropdown('toggle');
-
-                            event.preventDefault();
                         }
                     }
+                }
+            });
+            scope.$on('$destroy', function () {
+                elem.unbind('keydown');
+            });
+        }
+    };
+}]);
+
+generalSsbAppDirectives.directive('amountMenuControls', ['ddEditAccountService', function (ddEditAccountService) {
+    var amountTypes = ['remaining', 'amount', 'percentage'];
+    var PREV = -1, NEXT = 1;
+
+    return {
+        restrict: 'A',
+        scope: {
+            amtType: '=selection'
+        },
+        link: function (scope, elem) {
+            var listItems = elem.find('li > input[type=radio]');
+            var endItemFocused = false;
+
+            var selectItem = function(direction){
+                var selected = (scope.amtType === 'remaining' ? 0: (scope.amtType === 'amount' ? 1 : 2));
+
+                if(selected !== 0 && endItemFocused){
+                    // use default arrow key behavior if focused on input number box
+                    return false;
+                }
+                else {
+                    selected += direction;
+
+                    if (selected > 2) {
+                        selected = 0;
+                    }
+                    else if (selected < 0) {
+                        selected = 2;
+                    }
+
+                    scope.amtType = amountTypes[selected];
+                    listItems.eq(selected).focus();
+                    scope.$apply();
+
+                    return true;
+                }
+            };
+
+            var recvdFocus = function(){
+                endItemFocused = true;
+            };
+            var lostFocus = function(){
+                endItemFocused = false;
+            };
+
+            listItems.each(function(index){
+                if(index === 0){
+                    // add focus event handling to Remaining radio button
+                    $(this).focus(recvdFocus);
+                    $(this).blur(lostFocus);
+                }
+                else{
+                    // add focus event handling to the input number boxes
+                    var inputBox = $(this).siblings("div").children("input[type=number]");
+                    inputBox.focus(recvdFocus);
+                    inputBox.blur(lostFocus);
+                }
+            });
+
+            elem.bind('keydown', function(event) {
+                var code = event.keyCode || event.which;
+
+                switch (code){
+                    case 37: //left arrow key
+                    case 38: //up arrow key
+                        if(selectItem(PREV)){
+                            event.preventDefault();
+                        }
+                        break;
+                    case 39: //right arrow key
+                    case 40: //down arrow key
+                        if(selectItem(NEXT)){
+                            event.preventDefault();
+                        }
+                        break;
+                    case 9: //tab key
+                        if (!event.shiftKey) {
+                            if(endItemFocused) {
+                                // If an error occurs we want to focus on the notification center, not do the default
+                                // tab key behavior. To accomplish this we keep the event around until amount validation
+                                // has finished. We will then know whether we should call preventDefault() or not.
+                                ddEditAccountService.setTabEvent(event);
+
+                                //close dropdown when tab off element, toggle button so events fire as expected
+                                elem.siblings('button.dropdown-btn').dropdown('toggle');
+                            }
+                        }
+                        break;
+                }
+            });
+            scope.$on('$destroy', function () {
+                elem.unbind('keydown');
+            });
+        }
+    };
+}]);
+
+generalSsbAppDirectives.directive('menuControls', [function () {
+    var PREV = -1, NEXT = 1;
+
+    return {
+        restrict: 'A',
+        scope: false,
+        link: function (scope, elem) {
+            var listItems;
+
+            var getSelectedItem = function(){
+                var selected = 0;
+
+                listItems = elem.find('li > a');
+
+                listItems.each(function(index){
+                    if($(this).is(':focus')){
+                        selected = index;
+                        return false;
+                    }
+                });
+
+                return selected;
+            };
+
+            var selectItem = function(direction){
+                var selected = getSelectedItem();
+
+                selected += direction;
+
+                if (selected >= listItems.length) {
+                    selected = 0;
+                }
+                else if (selected < 0) {
+                    selected = listItems.length - 1;
+                }
+
+                listItems.eq(selected).focus();
+            };
+
+            var clickSelectedItem = function(direction){
+                var selected = getSelectedItem();
+
+                listItems.eq(selected).click();
+            };
+
+            elem.bind('keydown', function(event) {
+                var code = event.keyCode || event.which;
+
+                switch (code){
+                    case 37: //left arrow key
+                    case 38: //up arrow key
+                        selectItem(PREV);
+                        event.preventDefault();
+                        event.stopPropagation();
+                        break;
+                    case 39: //right arrow key
+                    case 40: //down arrow key
+                        selectItem(NEXT);
+                        event.preventDefault();
+                        event.stopPropagation();
+                        break;
+                    case 13: //enter key
+                        clickSelectedItem();
+                        event.preventDefault();
+                        event.stopPropagation();
+                        break;
                 }
             });
             scope.$on('$destroy', function () {
@@ -184,6 +352,7 @@ generalSsbAppDirectives.directive('dropdownState', [function () {
 generalSsbAppDirectives.directive('suppressEnterKey', [function () {
     return {
         restrict: 'A',
+        scope: false,
         link: function (scope, elem) {
             elem.on('keydown', function(event){
                 var code = event.keyCode || event.which;

@@ -219,6 +219,8 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                     // created outside of this app (e.g. INB)
                     scope.restorePreviousAmount();
 
+                    ddEditAccountService.tabPreventDefault();
+
                     notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining', "error");
                 } else {
                     // Current overall allocation state is valid.  Specifically check the current account.
@@ -230,10 +232,15 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
                         }
 
                         scope.amountErr = false;
-                    } else if (scope.amountErr === 'rem') {
-                        // If user set it to "Remaining" in an invalid state, return to previous amount values
-                        // to avoid issues with a "Remaining" item residing at an invalid position in the allocation list.
-                        scope.restorePreviousAmount();
+                    }
+                    else {
+                        ddEditAccountService.tabPreventDefault();
+
+                        if (scope.amountErr === 'rem') {
+                            // If user set it to "Remaining" in an invalid state, return to previous amount values
+                            // to avoid issues with a "Remaining" item residing at an invalid position in the allocation list.
+                            scope.restorePreviousAmount();
+                        }
                     }
                 }
             };
@@ -287,6 +294,7 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
 generalSsbAppDirectives.directive('stopClick', [function () {
     return {
         restrict: 'A',
+        scope: false,
         link: function (scope, elem, attrs) {
 
             elem.on('click', function(event) {

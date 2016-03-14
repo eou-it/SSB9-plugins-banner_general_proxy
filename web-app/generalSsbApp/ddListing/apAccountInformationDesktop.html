@@ -16,12 +16,12 @@
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
-        <ul class="dropdown-menu addAcct" role="menu" aria-label="{{'directDeposit.label.account.type.edit'|i18n}}">
+        <ul menu-controls class="dropdown-menu addAcct" role="menu" aria-label="{{'directDeposit.label.account.type.edit'|i18n}}">
             <li role="presentation">
-                <a ng-click="setApAccountType('C')" class="addAcct form-spacing" role="menuitem" href="">{{'directDeposit.account.type.checking'|i18n}}</a>
+                <a ng-click="setApAccountType('C')" class="addAcct form-spacing" role="menuitem" tabindex="0">{{'directDeposit.account.type.checking'|i18n}}</a>
             </li>
             <li role="presentation">
-                <a dropdown-helper="end" ng-click="setApAccountType('S')" class="addAcct end-dropdown-radius form-spacing" role="menuitem" href="">{{'directDeposit.account.type.savings'|i18n}}</a>
+                <a dropdown-helper="end" ng-click="setApAccountType('S')" class="addAcct end-dropdown-radius form-spacing" role="menuitem" tabindex="0">{{'directDeposit.account.type.savings'|i18n}}</a>
             </li>
         </ul>
     </div>

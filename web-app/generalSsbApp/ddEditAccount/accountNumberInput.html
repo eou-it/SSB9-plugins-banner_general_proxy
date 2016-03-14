@@ -57,12 +57,12 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                         </span>
                         <span class="float-r form-spacing down-caret caret-color"></span>
                     </button>
-                    <ul class="dropdown-menu addAcct">
+                    <ul menu-controls class="dropdown-menu addAcct">
                         <li role="presentation">
-                            <a ng-click="setAccountType('C')" class="addAcct form-spacing" role="menuitem">{{'directDeposit.account.type.checking'|i18n}}</a>
+                            <a ng-click="setAccountType('C')" class="addAcct form-spacing" role="menuitem" tabindex="0">{{'directDeposit.account.type.checking'|i18n}}</a>
                         </li>
                         <li role="presentation">
-                            <a dropdown-helper="end" ng-click="setAccountType('S')" class="addAcct end-dropdown-radius form-spacing" role="menuitem">{{'directDeposit.account.type.savings'|i18n}}</a>
+                            <a dropdown-helper="end" ng-click="setAccountType('S')" class="addAcct end-dropdown-radius form-spacing" role="menuitem" tabindex="0">{{'directDeposit.account.type.savings'|i18n}}</a>
                         </li>
                     </ul>
                 </div>
@@ -109,21 +109,22 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
     <div ng-show="typeIndicator==='HR'" class="col-xs-6 col-sm-4 col-md-4 xs-fix">
         <label class="input-field-label">{{'directDeposit.account.label.priority'|i18n}}</label><br>
         <div class="dropdown" role="menu">
-            <button dropdown-helper="begin" ng-if="!isRemaining()" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="">
-                <span ng-if="shouldDisplayPriority" class="float-l semi-bold form-spacing">
+            <label class="visuallyhidden" id="priority-menu">{{'directDeposit.label.account.priority.edit'|i18n}}</label>
+            <button dropdown-helper="begin" ng-if="!isRemaining()" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="priorty-en priority-menu">
+                <span ng-if="shouldDisplayPriority" class="float-l semi-bold form-spacing" id="priorty-en">
                     {{account.priority}}
                 </span>
                 <span class="float-r form-spacing down-caret caret-color"></span>
             </button>
-            <button dropdown-helper="begin" ng-if="isRemaining()" ng-click="showReprioritizeRemainingMessage()" class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="">
-                <span ng-if="shouldDisplayPriority" class="float-l semi-bold form-spacing">
+            <button dropdown-helper="begin" ng-if="isRemaining()" ng-click="showReprioritizeRemainingMessage()" class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="priorty-dis priority-menu">
+                <span ng-if="shouldDisplayPriority" class="float-l semi-bold form-spacing" id="priorty-dis">
                     {{account.priority}}
                 </span>
                 <span class="float-r form-spacing down-caret caret-color"></span>
             </button>
-            <ul ng-if="!isRemaining()" class="dropdown-menu addAcct">
+            <ul menu-controls ng-if="!isRemaining()" class="dropdown-menu addAcct">
                 <li ng-repeat="i in priorities" role="presentation">
-                    <a ng-click="setAccountPriority(i.displayVal)" dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" class="addAcct form-spacing" role="menuitem">{{i.displayVal}}</a>
+                    <a ng-click="setAccountPriority(i.displayVal)" dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" class="addAcct form-spacing" role="menuitem" tabindex="0">{{i.displayVal}}</a>
                 </li>
             </ul>
         </div>
