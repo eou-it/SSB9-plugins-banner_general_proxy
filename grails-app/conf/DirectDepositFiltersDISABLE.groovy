@@ -1,6 +1,6 @@
 import net.hedtech.banner.general.DirectDepositUtility
 
-class DirectDepositFilters {
+class DirectDepositFiltersDISABLE {
     def filters = {
         // Sanitize all parameter values for all requests in the Direct Deposit application.
         sanitizeFilter(controller:'*', action:'*') {
