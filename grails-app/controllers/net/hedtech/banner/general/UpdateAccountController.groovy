@@ -51,7 +51,7 @@ class UpdateAccountController {
                 }
             }
         } catch (ApplicationException e) {
-            render returnFailureMessage(e) as JSON
+            render ControllerUtility.returnFailureMessage(e) as JSON
         }
     }
 
@@ -68,7 +68,7 @@ class UpdateAccountController {
             render directDepositAccountService.update(map) as JSON
 
         } catch (ApplicationException e) {
-            render returnFailureMessage(e) as JSON
+            render ControllerUtility.returnFailureMessage(e) as JSON
         }
     }
     
@@ -84,7 +84,7 @@ class UpdateAccountController {
 
         } catch (ApplicationException e) {
             def arrayResult = [];
-            arrayResult[0] = returnFailureMessage(e)
+            arrayResult[0] = ControllerUtility.returnFailureMessage(e)
             
             render arrayResult as JSON
         }
@@ -99,7 +99,7 @@ class UpdateAccountController {
             render symbol as JSON
 
         } catch (ApplicationException e) {
-            render returnFailureMessage(e) as JSON
+            render ControllerUtility.returnFailureMessage(e) as JSON
         }
     }
     
@@ -111,7 +111,7 @@ class UpdateAccountController {
 
         } catch (ApplicationException e) {
             def arrayResult = [];
-            arrayResult[0] = returnFailureMessage(e)
+            arrayResult[0] = ControllerUtility.returnFailureMessage(e)
             
             render arrayResult as JSON
         }
@@ -133,7 +133,7 @@ class UpdateAccountController {
 
         } catch (ApplicationException e) {
             def arrayResult = [];
-            arrayResult[0] = returnFailureMessage(e)
+            arrayResult[0] = ControllerUtility.returnFailureMessage(e)
             
             render arrayResult as JSON
         }
@@ -148,7 +148,7 @@ class UpdateAccountController {
             render bankRoutingInfoService.validateRoutingNumber(map.bankRoutingNum)[0] as JSON
 
         } catch (ApplicationException e) {
-            render returnFailureMessage(e) as JSON
+            render ControllerUtility.returnFailureMessage(e) as JSON
         }
     }
     
@@ -164,22 +164,7 @@ class UpdateAccountController {
             render model as JSON
 
         } catch (ApplicationException e) {
-            render returnFailureMessage(e) as JSON
-        }
-    }
-
-    def  returnFailureMessage(ApplicationException  e) {
-        def model = [:]
-        model.failure = true
-        log.error(e)
-        try {
-            def extractError = e.returnMap({ mapToLocalize -> new ValidationTagLib().message(mapToLocalize) })
-            model.message = extractError.message + (extractError.errors ? " "+ extractError.errors : "")
-            return model
-        } catch (ApplicationException ex) {
-            log.error(ex)
-            model.message = e.message
-            return model
+            render ControllerUtility.returnFailureMessage(e) as JSON
         }
     }
 

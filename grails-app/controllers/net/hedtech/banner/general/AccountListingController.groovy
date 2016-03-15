@@ -8,7 +8,6 @@ import net.hedtech.banner.general.person.PersonUtility
 class AccountListingController  {
 
     def directDepositAccountService
- //   def directDepositPayrollHistoryService
     def directDepositAccountCompositeService
     def currencyFormatService
 
@@ -26,7 +25,7 @@ class AccountListingController  {
             try {
                 model = directDepositAccountService.getActiveApAccounts(person.pidm)
             } catch (ApplicationException e) {
-                render returnFailureMessage(e) as JSON
+                render ControllerUtility.returnFailureMessage(e) as JSON
             }
         }
 
@@ -34,23 +33,6 @@ class AccountListingController  {
             render model as JSON
         }
     }
-    
-    /*def getHrAccountsForCurrentUser() {
-        def person = findPerson()
-        def model = [:]
-
-        if (person) {
-            try {
-                model = directDepositAccountService.getActiveHrAccounts(person.pidm)
-            } catch (ApplicationException e) {
-                render returnFailureMessage(e) as JSON
-            }
-        }
-
-        JSON.use("deep") {
-            render model as JSON
-        }
-    }*/
 
     def getUserPayrollAllocations() {
         def person = findPerson()
@@ -61,7 +43,7 @@ class AccountListingController  {
                     render directDepositAccountCompositeService.getUserHrAllocations(person.pidm) as JSON
                 }
             } catch (ApplicationException e) {
-                render returnFailureMessage(e) as JSON
+                render ControllerUtility.returnFailureMessage(e) as JSON
             }
         }
     }

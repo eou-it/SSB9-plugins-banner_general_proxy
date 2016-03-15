@@ -44,7 +44,7 @@ class UpdateAccountControllerTests extends BaseIntegrationTestCase {
             hrIndicator:"A",
             bankAccountNum:"0822051515",
             amount:null,
-            percent:100,
+            percent:10,
             accountType:"C",
             bankRoutingInfo:{
                 bankName:"First Fidelity",
@@ -107,12 +107,44 @@ class UpdateAccountControllerTests extends BaseIntegrationTestCase {
 
     @Test
     void testReturnFailureMessage() {
-        ApplicationException e = new ApplicationException(DirectDepositAccount, "@@r1:invalidAccountNumFmt@@")
+        loginSSB 'MYE000001', '111111'
 
-        def failureMessageModel = controller.returnFailureMessage(e)
+        controller.request.json = '{bankAccountNum: "123456789x123456789x123456789x12345"}'
+        controller.validateAccountNum()
 
+        def failureMessageModel = controller.response.json
         assert(failureMessageModel.failure)
         assertEquals("Invalid bank account number format.", failureMessageModel.message)
+    }
+
+    @Test
+    void testReturnFailureMessageBadData() {
+        loginSSB 'MYE000001', '111111'
+
+        controller.request.contentType = "text/json"
+        controller.request.json = '''{
+            pidm:null,
+            status:null,
+            apIndicator:"I",
+            hrIndicator:"blahblahblah",
+            bankAccountNum:"0822051515",
+            amount:null,
+            percent:10,
+            accountType:"C",
+            bankRoutingInfo:{
+                bankName:"First Fidelity",
+                bankRoutingNum:"123478902",
+            },
+            amountType:"amount",
+            priority:"2",
+            newPosition:"2"
+        }'''
+
+        controller.createAccount()
+
+        def failureMessageModel = controller.response.json
+        assert(failureMessageModel.failure)
+        assertEquals(failureMessageModel.message.contains('ORA'), false)
     }
 
 }
