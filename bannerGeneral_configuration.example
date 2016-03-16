@@ -56,7 +56,15 @@ ssbOracleUsersProxied = true
 ssbPassword.reset.enabled = true //true  - allow Pidm users to reset their password.
                                  //false - throws functionality disabled error message
 
+  guestAuthenticationEnabled = true
+ // This entry is required to ensure that 'Sign In' link takes you to corresponding login i.e. for CAS, any other authentication system or Default (Banner).
+  loginEndpoint='http://localhost:8080/PlatformSandboxApp/ssb/uiCatalog/index'
 
+  // IN cas mode. This entry will update the provider list if guest sign is required
+ //grails.plugin.springsecurity.providerNames = ['casBannerAuthenticationProvider','selfServiceBannerAuthenticationProvider']
+
+  // IN SAML mode. This entry will update the provider list if guest sign is required
+  //grails.plugin.springsecurity.providerNames = ['samlAuthenticationProvider','selfServiceBannerAuthenticationProvider']
 
 
 // ******************************************************************************
@@ -67,15 +75,17 @@ ssbPassword.reset.enabled = true //true  - allow Pidm users to reset their passw
 
 banner {
     sso {
-		authenticationProvider = 'default'
+        authenticationProvider = 'default'
         authenticationAssertionAttribute = 'UDC_IDENTIFIER'
-	}
+    }
 }
 
+grails.plugin.springsecurity.saml.active = false
 grails {
     plugin {
         springsecurity {
             cas {
+                active           = false
                 serverUrlPrefix  = 'http://CAS_HOST:PORT/cas'
                 serviceUrl       = 'http://BANNER9_HOST:PORT/APP_NAME/j_spring_cas_security_check'
                 serverName       = 'http://BANNER9_HOST:PORT'
@@ -93,12 +103,49 @@ grails {
                     grails.plugin.springsecurity.useSessionFixationPrevention = false
                 }
             }
-            logout {
-                   afterLogoutUrl = '/'
+			logout {
+                afterLogoutUrl    = '/'
             }
         }
     }
 }
+
+
+/** *****************************************************************************
+ *                                                                              *
+ *                 SAML2 SSO CONFIGURATION                                      *
+ *set saml.active = true if  Application Navigator is configured with SAML2 SSO *
+ *                                                                              *
+ ***************************************************************************** **/
+ /**
+ *
+ *
+
+grails.plugin.springsecurity.auth.loginFormUrl = '/saml/login'
+grails.plugin.springsecurity.saml.afterLogoutUrl ='/logout/customLogout'
+
+banner.sso.authentication.saml.localLogout='false'     // To disable single logout set this to true.
+
+grails.plugin.springsecurity.saml.keyManager.storeFile = 'classpath:security/samlkeystore.jks'  // for unix based 'file:/home/u02/samlkeystore.jks'
+grails.plugin.springsecurity.saml.keyManager.storePass = 'changeit'
+grails.plugin.springsecurity.saml.keyManager.passwords = [ 'banner-appname-sp': 'changeit' ]        // banner-appname-sp is the value set in EIS Service provider setup
+grails.plugin.springsecurity.saml.keyManager.defaultKey = 'banner-appname-sp'                       // banner-appname-sp is the value set in EIS Service provider setup
+
+grails.plugin.springsecurity.saml.metadata.sp.file = 'security/banner-appname-sp.xml'               // for unix based '/home/u02/banner-appname-sp.xml'
+grails.plugin.springsecurity.saml.metadata.providers = [adfs: 'security/banner-appname-idp.xml']    // for unix based '/home/u02/banner-appname-idp.xml'
+grails.plugin.springsecurity.saml.metadata.defaultIdp = 'adfs'
+grails.plugin.springsecurity.saml.metadata.sp.defaults = [
+        local: true,
+        alias: 'banner-appname-sp',                                                                  // banner-appname-sp is the value set in EIS Service provider setup
+        securityProfile: 'metaiop',
+        signingKey: 'banner-appname-sp',                                                             // banner-appname-sp is the value set in EIS Service provider setup
+        encryptionKey: 'banner-appname-sp',                                                          // banner-appname-sp is the value set in EIS Service provider setup
+        tlsKey: 'banner-appname-sp',                                                                 // banner-appname-sp is the value set in EIS Service provider setup
+        requireArtifactResolveSigned: false,
+        requireLogoutRequestSigned: false,
+        requireLogoutResponseSigned: false
+]
+**/
 
 // ******************************************************************************
 //
@@ -234,6 +281,9 @@ banner8.SS.url = 'http://<host_name>:<port_number>/<banner8>/'
  *                                                                              *
  ***************************************************************************** **/
 webAppExtensibility {
-    // Comma separated list of roles
+    locations {
+         extensions = "path to the directory location where extensions JSON files will be written to and read from"
+         resources = "path to the directory location where i18n files will be written to and read from"
+    }
     adminRoles = "ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M"
 }
