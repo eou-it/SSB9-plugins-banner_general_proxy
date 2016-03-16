@@ -163,14 +163,7 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
 
         var validateAmounts = function () {
             var result = false;
-
-            if (ddListingService.hasMultipleRemainingAmountAllocations()) {
-                // In addition to a user *attempting* (in *bold* because we won't allow them to do it) to create
-                // two "Remaining" accounts, this case can also happen when more than one "Remaining" account was
-                // created outside of this app (e.g. INB)
-                $scope.cancelModal();
-                notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining', "error");
-            } else {
+            var accountAmountValidation = function() {
                 result = ddListingService.validateAmountForAccount($scope, $scope.account);
 
                 if (result && $scope.isRemaining()) {
@@ -186,6 +179,39 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                     $scope.amountErr = false;
                     $scope.amountMessage = null;
                 }
+            };
+
+            if (ddListingService.hasMultipleRemainingAmountAllocations()) {
+                // In addition to a user *attempting* (in *bold* because we won't allow them to do it) to create
+                // two "Remaining" accounts, this case can also happen when more than one "Remaining" account was
+                // created outside of this app (e.g. INB)
+                if(ddEditAccountService.getAccountsRemainingCount() > 2){
+                    // can't edit, too many Remaining's exist
+                    $scope.cancelModal();
+                    notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining.admin', "error");
+                }
+                else {
+                    if(!$scope.creatingNewAccount) {
+                        var origAcct = _.find(ddEditAccountService.accounts, function(acct){
+                            return (acct.id === $scope.account.id);
+                        });
+                        if(origAcct.amountType === 'remaining') {
+                            // $scope.account is one of the Remaining accounts, allow edits
+                            accountAmountValidation();
+                        }
+                        else {
+                            $scope.cancelModal();
+                            notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining', "error");
+                        }
+                    }
+                    else {
+                        $scope.cancelModal();
+                        notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining', "error");
+                    }
+                }
+            }
+            else {
+                accountAmountValidation();
             }
 
             return result;
