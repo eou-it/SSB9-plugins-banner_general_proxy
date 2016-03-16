@@ -177,6 +177,22 @@ generalSsbApp.service('ddEditAccountService', ['directDepositService', '$resourc
         }
     };
 
+    this.getAccountsRemainingCount = function() {
+        var count = 0;
+
+        if (!(this.accounts && this.accounts.length)) {
+            return 0;
+        }
+
+        _.each(this.accounts, function(alloc) {
+            if (directDepositService.isRemaining(alloc)) {
+                count++;
+            }
+        });
+
+        return count;
+    };
+
     this.tabEvent = null;
 
     this.setTabEvent = function(event){

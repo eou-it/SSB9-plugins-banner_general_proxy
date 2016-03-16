@@ -169,7 +169,14 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
                 // two "Remaining" accounts, this case can also happen when more than one "Remaining" account was
                 // created outside of this app (e.g. INB)
                 $scope.cancelModal();
-                notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining', "error");
+                if(ddEditAccountService.getAccountsRemainingCount() > 2){
+                    // can't edit, too many Remaining's exist
+                    notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining.admin', "error");
+                }
+                else {
+                    notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining', "error");
+                }
+
             } else {
                 result = ddListingService.validateAmountForAccount($scope, $scope.account);
 

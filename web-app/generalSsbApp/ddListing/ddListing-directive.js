@@ -221,7 +221,14 @@ generalSsbAppDirectives.directive('payAccountInfoProposedDesktop',['directDeposi
 
                     ddEditAccountService.tabPreventDefault();
 
-                    notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining', "error");
+                    if(ddEditAccountService.getAccountsRemainingCount() > 2){
+                        // can't edit, too many Remaining's exist
+                        notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining.admin', "error");
+                    }
+                    else {
+                        notificationCenterService.displayNotification('directDeposit.invalid.amount.remaining', "error");
+                    }
+
                 } else {
                     // Current overall allocation state is valid.  Specifically check the current account.
                     var isValid = ddListingService.validateAmountForAccount(scope, scope.alloc);
