@@ -295,6 +295,8 @@ generalSsbAppDirectives.directive('menuControls', [function () {
                 var selected = getSelectedItem();
 
                 listItems.eq(selected).click();
+
+                elem.siblings("button.dropdown-btn").focus();
             };
 
             elem.bind('keydown', function(event) {
