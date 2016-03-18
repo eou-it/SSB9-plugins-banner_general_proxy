@@ -43,8 +43,8 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
         // AngularJS popover element.  The actual popover has the '.popover.in'
         // CSS selector.  Here's a diagram:
         //
-        //     ANGULARJS ELEMENT        ACTUAL POPOVER VISIBLE TO USER
-        //     <pop-over ...></pop-over><div class="popover in" ...> ... </div>
+        //     ANGULARJS ELEMENT              ACTUAL POPOVER VISIBLE TO USER
+        //     <dd-pop-over ...></dd-pop-over><div class="popover in" ...> ... </div>
         //
         // Thus the previous sibling (grabbed with prev()) is the
         // AngularJS popover element that needs to have 'destroy' called on it.

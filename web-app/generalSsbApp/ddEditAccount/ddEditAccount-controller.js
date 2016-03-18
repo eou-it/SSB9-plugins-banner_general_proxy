@@ -138,12 +138,6 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             return directDepositService.isRemaining($scope.account);
         };
 
-        $scope.showReprioritizeRemainingMessage = function() {
-            $scope.displayReprioritizeRemainingWarning();
-
-            $scope.miscMessage = $filter('i18n')('directDeposit.invalid.reprioritze.remaining');
-        };
-
         var displayMiscError = function (msg) {
             $scope.miscMessage = msg;
         };

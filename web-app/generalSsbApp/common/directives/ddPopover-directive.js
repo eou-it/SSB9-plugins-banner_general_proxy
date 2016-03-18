@@ -2,7 +2,7 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbAppDirectives.directive('popOver', ['$filter', 'directDepositService', function($filter, directDepositService) {
+generalSsbAppDirectives.directive('sampleCheckPopOver', ['$filter', 'directDepositService', function($filter, directDepositService) {
 
     var template = '<button class="icon-info-CO" aria-label="'+$filter("i18n")("directDeposit.label.show.check")+'"></button>';
 
@@ -69,6 +69,45 @@ generalSsbAppDirectives.directive('popOver', ['$filter', 'directDepositService',
     return {
         restrict: 'E',
         template: template,
+        link : link
+    };
+}]);
+
+generalSsbAppDirectives.directive('ddPopOver', ['$filter', 'directDepositService', function($filter, directDepositService) {
+
+    var link = function (scope, element, attrs) {
+        var width = attrs.popoverWidth || '300px',
+            position = attrs.popoverPosition || 'top',
+            template = '<div class="popover dd-tooltip" style="width: ' + width + ';"><div class="popover-content"></div><div class="arrow"></div></div>';
+
+        element.on('click', function(event) {
+            // Prevent the hidePopover directive from handling the event, immediately closing the popover
+            event.stopImmediatePropagation();
+
+            // Toggle popover open/closed
+            if (element.next('.popover.in').length !== 0) {
+                // Popover is already open, toggle it closed
+                element.popover('destroy');
+            } else {
+                // Destroy any existing popovers
+                directDepositService.destroyAllPopovers();
+
+                // Open popover
+                element.popover({
+                    template: template,
+                    content: $filter('i18n')(attrs.popoverMsg),
+                    trigger: 'manual',
+                    placement: position,
+                    html: true
+                });
+
+                element.popover('show');
+            }
+        });
+    };
+
+    return {
+        restrict: 'A',
         link : link
     };
 }]);

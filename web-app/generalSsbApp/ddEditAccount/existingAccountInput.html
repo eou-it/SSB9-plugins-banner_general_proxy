@@ -60,7 +60,8 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                     </span>
                     <span class="float-r form-spacing down-caret caret-color"></span>
                 </button>
-                <button dropdown-helper="begin" ng-if="isRemaining()" ng-click="showReprioritizeRemainingMessage()" class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="ex-priorty-dis ex-priority-menu">
+                <button dropdown-helper="begin" ng-if="isRemaining()" dd-pop-over popover-msg="directDeposit.invalid.reprioritize.remaining.popover" popover-width="225px"
+                        class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="ex-priorty-dis ex-priority-menu">
                     <span class="float-l semi-bold form-spacing" id="ex-priorty-dis">
                         {{account.priority}}
                     </span>

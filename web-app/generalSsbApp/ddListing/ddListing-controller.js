@@ -316,13 +316,6 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                     return;
                 }
 
-                // If this is an HR account and the maximum number of HR accounts already exists,
-                // this functionality is disabled.
-                if (typeInd === 'HR' && $scope.hasMaxPayrollAccounts) {
-                    notificationCenterService.displayNotification('directDeposit.max.payroll.accounts.text', 'error');
-                    return;
-                }
-
                 var acctList = [];
 
                 if($scope.isEmployee){

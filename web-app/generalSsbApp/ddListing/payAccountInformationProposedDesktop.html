@@ -78,7 +78,7 @@
             </span>
             <span class="icon float-r form-spacing"><span class="icon-caret-down ellucian-font caret-color"></span></span>
         </button>
-        <button dropdown-helper="begin" ng-click="displayReprioritizeRemainingWarning()"
+        <button dropdown-helper="begin" dd-pop-over popover-msg="directDeposit.invalid.reprioritize.remaining.popover" popover-width="225px"
             ng-if="isValidRemainingAmountAllocation(alloc)" class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="priority-dis{{$index}} priority-menu{{$index}}">
             <span ng-if="getShouldDisplayPriority()" class="float-l form-spacing" id="priority-dis{{$index}}">
                 {{alloc.priority}}

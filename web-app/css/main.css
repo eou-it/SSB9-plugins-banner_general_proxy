@@ -1111,6 +1111,13 @@ img.sample-check {
     margin-left: 1px;
 }
 
+.dd-tooltip {
+    font-weight: normal;
+    padding: 5px;
+    background: #fffeea;
+    border: 1px solid #e0d397;
+}
+
 
 /*Table and grid section styles*/
 table {
