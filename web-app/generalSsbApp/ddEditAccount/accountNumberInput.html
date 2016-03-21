@@ -49,11 +49,12 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
             <div class="unflex">
                 <label ng-class="(accountTypeErr && !dropdownIsOpen && !acctTypeFocused? 'input-field-label field-error' : 'input-field-label')" >{{'directDeposit.account.label.accountType'|i18n}}</label>
                 <label class="visuallyhidden" id="select-acct-type">{{'directDeposit.label.account.type.select'|i18n}}</label>
+                <span><choose-account account="account" class="visuallyhidden" id="account-type" tabindex="-1"/></span>
                 <div dropdown-state="dropdownIsOpen" class="dropdown" role="menu">
                     <button dropdown-helper="begin" ng-focus="acctTypeFocused=true" ng-blur="acctTypeFocused=false"
                         ng-class="(accountTypeErr ? 'dropdown-btn input-field-error' : 'dropdown-btn')" data-toggle="dropdown" aria-labelledby="select-acct-type account-type">
                         <span class="float-l semi-bold form-spacing">
-                            <choose-account account="account" id="account-type"/>
+                            <choose-account account="account"/>
                         </span>
                         <span class="float-r form-spacing down-caret caret-color"></span>
                     </button>
@@ -66,7 +67,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                         </li>
                     </ul>
                 </div>
-                <p ng-show="accountTypeErr" class="input-field-label field-error error-font-size mobile-errors-acType" role="alert" aria-live="assertive">{{'directDeposit.invalid.missing.account.type'|i18n}}</p-->
+                <p ng-show="accountTypeErr" class="input-field-label field-error error-font-size mobile-errors-acType" role="alert" aria-live="assertive">{{'directDeposit.invalid.missing.account.type'|i18n}}</p>
             </div>
         </div>
     </div>
@@ -108,17 +109,18 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
     <div ng-show="typeIndicator==='HR'" class="clearfix visible-xs-block hidden-sm hidden-md hidden-lg"></div>
     <div ng-show="typeIndicator==='HR'" class="col-xs-6 col-sm-4 col-md-4 xs-fix">
         <label class="input-field-label">{{'directDeposit.account.label.priority'|i18n}}</label><br>
+        <label class="visuallyhidden" id="priority-menu">{{'directDeposit.label.account.priority.edit'|i18n}}</label>
+        <span class="visuallyhidden" id="priority" tabindex="-1">{{account.priority}}</span>
         <div class="dropdown" role="menu">
-            <label class="visuallyhidden" id="priority-menu">{{'directDeposit.label.account.priority.edit'|i18n}}</label>
-            <button dropdown-helper="begin" ng-if="!isRemaining()" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="priorty-en priority-menu">
-                <span ng-if="shouldDisplayPriority" class="float-l semi-bold form-spacing" id="priorty-en">
+            <button dropdown-helper="begin" ng-if="!isRemaining()" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="priority priority-menu">
+                <span ng-if="shouldDisplayPriority" class="float-l semi-bold form-spacing">
                     {{account.priority}}
                 </span>
                 <span class="float-r form-spacing down-caret caret-color"></span>
             </button>
             <button dropdown-helper="begin" ng-if="isRemaining()" dd-pop-over popover-msg="directDeposit.invalid.reprioritize.remaining.popover" popover-width="225px"
-                    class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="priorty-dis priority-menu">
-                <span ng-if="shouldDisplayPriority" class="float-l semi-bold form-spacing" id="priorty-dis">
+                    class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="priority priority-menu">
+                <span ng-if="shouldDisplayPriority" class="float-l semi-bold form-spacing">
                     {{account.priority}}
                 </span>
                 <span class="float-r form-spacing down-caret caret-color"></span>

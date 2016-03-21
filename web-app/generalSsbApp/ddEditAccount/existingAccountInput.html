@@ -5,11 +5,11 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 <input ng-model="setup.createFromExisting" class="edit-radio" type="radio" name="create-option" value="yes" aria-labelledby="create-opt-existing"><span class="lbl radio-list" id="create-opt-existing">{{'directDeposit.label.create.from.exisiting'|i18n}}</span>
 <div ng-show="setup.createFromExisting === 'yes'" class="existing-accts-old">
     <label class="visuallyhidden" id="select-existing">{{'directDeposit.label.select.from.exisiting'|i18n}}</label>
+    <span><select-bank-acct class="visuallyhidden" id="existing-acct" tabindex="-1"/></span>
     <div ng-show="typeIndicator==='AP'" class="dropdown" role="menu">
-        <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="select-existing existing-acct-btn">
+        <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="select-existing existing-acct">
             <span class="float-l semi-bold form-spacing">
-
-                <select-bank-acct id="existing-acct-btn"/>
+                <select-bank-acct/>
             </span>
             <span class="float-r form-spacing down-caret caret-color"></span>
         </button>
@@ -52,17 +52,18 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </div>
         <div class="col-xs-6 col-sm-4 col-md-4 xs-fix">
             <label class="input-field-label">{{'directDeposit.account.label.priority'|i18n}}</label><br>
+            <label class="visuallyhidden" id="ex-priority-menu">{{'directDeposit.label.account.priority.edit'|i18n}}</label>
+            <span class="visuallyhidden" id="ex-priority" tabindex="-1">{{account.priority}}</span>
             <div class="dropdown" role="menu">
-                <label class="visuallyhidden" id="ex-priorty-menu">{{'directDeposit.label.account.priority.edit'|i18n}}</label>
-                <button dropdown-helper="begin" ng-if="!isRemaining()" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="ex-priorty-en ex-priority-menu">
-                    <span class="float-l semi-bold form-spacing" id="ex-priorty-en">
+                <button dropdown-helper="begin" ng-if="!isRemaining()" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="ex-priority ex-priority-menu">
+                    <span class="float-l semi-bold form-spacing">
                         {{account.priority}}
                     </span>
                     <span class="float-r form-spacing down-caret caret-color"></span>
                 </button>
                 <button dropdown-helper="begin" ng-if="isRemaining()" dd-pop-over popover-msg="directDeposit.invalid.reprioritize.remaining.popover" popover-width="225px"
-                        class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="ex-priorty-dis ex-priority-menu">
-                    <span class="float-l semi-bold form-spacing" id="ex-priorty-dis">
+                        class="dropdown-btn disabled" data-toggle="dropdown" aria-labelledby="ex-priority ex-priority-menu">
+                    <span class="float-l semi-bold form-spacing">
                         {{account.priority}}
                     </span>
                     <span class="float-r form-spacing down-caret caret-color"></span>
