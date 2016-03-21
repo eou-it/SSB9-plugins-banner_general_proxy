@@ -1033,8 +1033,12 @@ a.delete-account-link {
 }
 
 /* Icons */
-.edit-account-link {
+.edit-account-link,
+a:hover.edit-account-link,
+a:focus.edit-account-link {
     color: #333;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .edit-account-link .icon-edit {
