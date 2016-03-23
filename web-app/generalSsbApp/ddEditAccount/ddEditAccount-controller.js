@@ -108,6 +108,10 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             notificationCenterService.removeNotification(typeNotification);
         };
 
+        $scope.setCreateFromExisting = function (value) {
+            $scope.setup.createFromExisting = value;
+        };
+
         $scope.checkBrowserLocale = function(localeIn) {
             var locale = $('meta[name=locale]').attr("content");
             if (localeIn.toUpperCase() === locale.toUpperCase() ) {
