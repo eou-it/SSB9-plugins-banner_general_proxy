@@ -350,6 +350,42 @@ generalSsbAppDirectives.directive('notificationBox',[function () {
     };
 }]);
 
+generalSsbAppDirectives.directive('footer',[function () {
+    return {
+        restrict: 'A',
+        link: function (scope, elem) {
+            var footer = $("#buttonFooter");
+            var chunk = $("#footerChunk");
+
+            footer.width(chunk.width() + 30);
+            chunk.height(footer.height() + 7);
+
+            scope.$watch(function(){
+                return chunk.width();
+            }, function(newVal, oldVal){
+                footer.width(newVal + 30);
+            });
+
+            scope.$watch(function(){
+                return footer.height();
+            }, function(newVal, oldVal){
+                chunk.height(newVal + 7);
+            });
+
+            var postChangeApply = _.debounce(function(){
+                scope.$apply();
+            }, 500);
+
+            $(window).mousedown(postChangeApply);
+            $(window).resize(postChangeApply);
+
+            scope.$on('$destroy', function () {
+                $(window).off('mousedown resize');
+            });
+        }
+    };
+}]);
+
 generalSsbAppDirectives.directive('confirmOnExit', function() {
     return {
         link: function($scope, elem, attrs) {
