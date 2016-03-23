@@ -110,6 +110,12 @@ body {
     z-index: 13;
 }
 
+/* Webkit (e.g. iPhone) tweak to make text darker in a disabled input */
+input:disabled {
+    -webkit-opacity: 1;
+    -webkit-text-fill-color:#869FB1;
+}
+
 
 /********************************/
 /* Add/Edit Account Page Styles */
