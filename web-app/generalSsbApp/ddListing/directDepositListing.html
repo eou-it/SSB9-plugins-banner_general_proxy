@@ -95,15 +95,17 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </div>
     </div>
     </form>
-    <div ng-show="isDesktopView && (hasApAccount || hasPayAccountsProposed)" class="desktop-disclaimer">
-        <input type="checkbox" class="main-nav-check" id="disclaimer-check" aria-label="{{'directDeposit.label.disclaimer.ack'|i18n}}" ng-checked="authorizedChanges" ng-click="toggleAuthorizedChanges()"/>
-        <p class="lbl">{{'directDeposit.disclaimer.text'|i18n}}</p>
-    </div>
-    <div ng-show="isDesktopView && (hasApAccount || hasPayAccountsProposed)" class="desktop-save">
-
-        <input type="button" aria-label="{{'directDeposit.cancel.changes.button.label'|i18n}}" title="{{'directDeposit.cancel.changes.button.label'|i18n}}"
-               class="btn save-btn" ng-disabled="disableCancel()" value="{{'directDeposit.cancel.changes.button.label'|i18n}}"  ng-click="cancelChanges();"/>
-
-        <button class="btn save-btn" ng-disabled="disableSave()" ng-click="updateAccounts()">{{'directDeposit.save.changes.button.label'|i18n}}</button>
-    </div>
+    <div ng-if="isDesktopView && (hasApAccount || hasPayAccountsProposed)" id="footerChunk"></div>
+</div>
+<div footer id="buttonFooter" ng-if="isDesktopView && (hasApAccount || hasPayAccountsProposed)">
+    <span class="desktop-save">
+        <input type="checkbox" class="main-nav-check" id="disclaimer-check" aria-label="{{'directDeposit.label.disclaimer.ack'|i18n}}"
+               ng-checked="authorizedChanges" ng-click="toggleAuthorizedChanges()"/><span class="lbl"></span>
+        <span class="lbl-text">{{'directDeposit.disclaimer.text'|i18n}}</span>
+    </span>
+    <span class="buttons-desktop-save">
+        <button ng-click="cancelChanges()" ng-disabled="disableCancel()" class="btn save-btn" aria-label="{{'directDeposit.cancel.changes.button.label'|i18n}}"
+                title="{{'directDeposit.cancel.changes.button.label'|i18n}}">{{'directDeposit.cancel.changes.button.label'|i18n}}</button>
+        <button ng-click="updateAccounts()" ng-disabled="disableSave()" class="btn save-btn" >{{'directDeposit.save.changes.button.label'|i18n}}</button>
+    </span>
 </div>

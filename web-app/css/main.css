@@ -94,14 +94,16 @@ body {
 }
 
 .desktop-disclaimer {
-    float: right;
-    margin: 40px 15px 0 0;
+    float: left;
 }
 
 .desktop-save {
-    float: right;
-    clear: right;
-    margin: 15px;
+    padding: 0.5em 0em 0.5em 1.75em;
+    /* IE 10 flex */
+    display: -ms-flexbox;
+    -ms-flex: 0 1 auto;
+
+    display: flex;
 }
 
 .direct-deposit #outerFooter {
@@ -201,28 +203,20 @@ body {
     }
 }
 
-currency-input > input.form-control::-webkit-input-placeholder,
-percent-input > input.form-control::-webkit-input-placeholder,
 .text-input-field::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color: #869FB1;
     font-weight: bold;
 }
-currency-input > input.form-control:-moz-placeholder,
-percent-input > input.form-control:-moz-placeholder,
 .text-input-field:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
    color: #869FB1;
    font-weight: bold;
    opacity:  1;
 }
-currency-input > input.form-control::-moz-placeholder,
-percent-input > input.form-control::-moz-placeholder,
 .text-input-field::-moz-placeholder { /* Mozilla Firefox 19+ */
    color: #869FB1;
    font-weight: bold;
    opacity:  1;
 }
-currency-input > input.form-control:-ms-input-placeholder,
-percent-input > input.form-control:-ms-input-placeholder,
 .text-input-field:-ms-input-placeholder { /* Internet Explorer 10-11 */
    color: #869FB1;
    font-weight: bold;
@@ -322,9 +316,7 @@ percent-input > input.form-control:-ms-input-placeholder,
 }
 
 .text-input-field:focus,
-.radio-txt-input:focus,
-percent-input > input.form-control:focus,
-currency-input > input.form-control:focus{
+.radio-txt-input:focus, {
     border-style: solid;
     border-width: 1px;
     border-color: #206E9F;
@@ -396,6 +388,42 @@ button.closebtn {
     padding: 1em;
 }
 
+#buttonFooter {
+    background: #f6f6f6;
+    position: fixed;
+    bottom: 30px;
+    left: 0px;
+    width: 98%;
+    z-index: 15;
+    border: 2px #ddd;
+    border-style: solid;
+    border-bottom: none;
+
+    /* IE 10 flex */
+    display: -ms-flexbox;
+    -ms-flex-align: center;
+    -ms-flex-pack: justify;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#footerChunk {
+    width: 100%;
+    height: 30px;
+}
+
+#buttonFooter input[type="checkbox"] {
+    top: 8px;
+}
+
+.desktop-save .lbl-text {
+    width: 98%;
+    display: inline-block\9; /* \9 hack - make this IE only */
+    line-height: 20px;
+}
+
 .save-btn {
     padding: 0em;
 }
@@ -404,14 +432,25 @@ button.closebtn {
     color: #869FB1;
 }
 
-.desktop-save .save-btn {
+.buttons-desktop-save {
+    padding: 0.5em 1.75em 0.5em 0em;
+
+    /* IE 10 flex */
+    display: -ms-flexbox;
+
+    display: flex;
+}
+
+.buttons-desktop-save .save-btn {
     color: #fff;
     background-color: #428bca;
     border-color: #357ebd;
-    padding: 8px 25px;
+    padding: 0.438em 1.5em;
+    float: right;
+    margin: 0em 0em 0em 0.625em;
 }
 
-.desktop-save .save-btn[disabled] {
+.buttons-desktop-save .save-btn[disabled] {
     color: #C6DFF1;
     opacity: 0.65;
 }
@@ -602,14 +641,14 @@ currency-input > input.form-control {
 input[type=checkbox],input[type=radio] {
     opacity: 0;
     position: absolute;
-    z-index: 12;
+    z-index: 2;
     width: 2.25em;
     height: 1.25em;
 }
 
 input[type=checkbox]+.lbl,input[type=radio]+.lbl {
     position: relative;
-    z-index: 11;
+    z-index: 1;
     display: inline-block;
     margin: 0;
     line-height: 20px;
