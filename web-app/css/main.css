@@ -1285,4 +1285,8 @@ table tr td {
     .dd-notification-content {
         line-height: normal
     }
+
+    .input-layer {
+        z-index: 1;
+    }
 }
