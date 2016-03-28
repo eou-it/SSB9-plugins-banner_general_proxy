@@ -28,3 +28,8 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         </button>
     </div>
 </div>
+<!-- Audible message div made visible when audible message is to be read by screen reader. Designed to be used with tooltips/popovers that may
+     not work correctly with readers. -->
+<div ng-class="{'audible-message': true, 'audible-message-hidden': !playAudibleMessage, 'audible-message-visible': playAudibleMessage}" role="alert" aria-live="assertive">
+    {{playAudibleMessage}}
+</div>

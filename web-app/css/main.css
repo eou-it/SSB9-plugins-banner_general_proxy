@@ -116,6 +116,24 @@ input:disabled {
     -webkit-text-fill-color:#869FB1;
 }
 
+.audible-message {
+    position: absolute;
+    top:0;
+    left: -500px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    color: transparent;
+}
+.audible-message-hidden {
+    display: none;
+    visibility: hidden;
+}
+.audible-message-visible {
+    display: block;
+    visibility: visible;
+}
+
 
 /********************************/
 /* Add/Edit Account Page Styles */

@@ -360,6 +360,11 @@ generalSsbAppControllers.controller('ddEditAccountController', ['$scope', '$moda
             ddEditAccountService.doReorder = false;
             $scope.priorities = ddEditAccountService.priorities;
 
+            // Ensure templates are updated when audible message is updated
+            $scope.$on(directDepositService.AUDIBLE_MSG_UPDATED, function() {
+                $scope.$apply();
+            });
+
             // In initializing this controller, we could be doing an account create, edit, or delete.  For the create, no
             // account will exist and we need to instantiate a new account object.  For the edit and delete, an account will
             // already exist on scope, so use that.  (At the time of this writing, the edit and delete cases happen only

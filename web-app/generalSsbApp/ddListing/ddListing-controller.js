@@ -187,6 +187,11 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 $scope.calculateAmountsBasedOnPayHistory();
                 displayNotificationsOnStateLoad();
             });
+
+            // Ensure templates are updated when audible message is updated
+            $scope.$on(directDepositService.AUDIBLE_MSG_UPDATED, function() {
+                $scope.$apply();
+            });
         };
 
 

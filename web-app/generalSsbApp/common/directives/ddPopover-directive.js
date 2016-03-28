@@ -44,6 +44,11 @@ generalSsbAppDirectives.directive('sampleCheckPopOver', ['$filter', 'directDepos
                 });
 
                 element.popover('show');
+
+                // Make message available to screen reader.  This function call results in message being
+                // set in audible message div as well as that div being made visibile, which causes readers
+                // to pick up on the role=alert and aria-live=assertive attributes, reading the message.
+                directDepositService.setPlayAudibleMessage(alt, element);
             }
         });
     };
@@ -73,11 +78,13 @@ generalSsbAppDirectives.directive('sampleCheckPopOver', ['$filter', 'directDepos
     };
 }]);
 
-generalSsbAppDirectives.directive('ddPopOver', ['$filter', 'directDepositService', function($filter, directDepositService) {
+generalSsbAppDirectives.directive('ddPopOver', ['$filter', 'directDepositService', 'ddListingService',
+    function($filter, directDepositService, ddListingService) {
 
     var link = function (scope, element, attrs) {
         var width = attrs.popoverWidth || '300px',
             position = attrs.popoverPosition || 'top',
+            msg = $filter('i18n')(attrs.popoverMsg),
             template = '<div class="popover dd-tooltip" style="width: ' + width + ';"><div class="popover-content"></div><div class="arrow"></div></div>';
 
         element.on('click', function(event) {
@@ -95,13 +102,18 @@ generalSsbAppDirectives.directive('ddPopOver', ['$filter', 'directDepositService
                 // Open popover
                 element.popover({
                     template: template,
-                    content: $filter('i18n')(attrs.popoverMsg),
+                    content: msg,
                     trigger: 'manual',
                     placement: position,
                     html: true
                 });
 
                 element.popover('show');
+
+                // Make message available to screen reader.  This function call results in message being
+                // set in audible message div as well as that div being made visibile, which causes readers
+                // to pick up on the role=alert and aria-live=assertive attributes, reading the message.
+                directDepositService.setPlayAudibleMessage(msg, element);
             }
         });
     };
@@ -113,6 +125,7 @@ generalSsbAppDirectives.directive('ddPopOver', ['$filter', 'directDepositService
 }]);
 
 generalSsbAppDirectives.directive('hidePopover', ['directDepositService', function(directDepositService) {
+
     var link = function(scope, element) {
         element.on('click', function(event) {
             // If not clicking on the modal (the check for ".parents('.popover.in')" checks for that),
