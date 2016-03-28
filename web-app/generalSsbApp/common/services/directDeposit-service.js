@@ -2,7 +2,7 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbApp.service('directDepositService', ['$resource', function ($resource) {
+generalSsbApp.service('directDepositService', ['$rootScope', '$resource', function ($rootScope, $resource) {
 
     var fetchRoles = $resource('../ssb/:controller/:action',
             {controller: 'General', action: 'getRoles'}, {query: {method:'GET', isArray:false}}),
@@ -16,6 +16,7 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
     this.REMAINING_NONE = 0;
     this.REMAINING_ONE = 1;
     this.REMAINING_MULTIPLE = 2;
+    this.AUDIBLE_MSG_UPDATED = 'audible-msg-updated';
 
 
     this.getRoles = function () {
@@ -118,6 +119,24 @@ generalSsbApp.service('directDepositService', ['$resource', function ($resource)
      */
     this.roundAsCurrency = function(amt) {
         return +(Math.round(amt + "e+2")  + "e-2");
+    };
+
+    /**
+     * Set up an audible message for a screen reader, if any, to read.
+     * @param msg The message to voice
+     * @param popoverElement Element to which popover is anchored
+     */
+    this.setPlayAudibleMessage = function (msg, popoverElement) {
+        var self = this;
+
+        // Set up audible message to reset when Bootstrap popover closes
+        popoverElement.on('hide.bs.popover', function(event) {
+            $rootScope.playAudibleMessage = null; // Reset
+            $rootScope.$broadcast(self.AUDIBLE_MSG_UPDATED);
+        });
+
+        $rootScope.playAudibleMessage = msg;
+        $rootScope.$broadcast(self.AUDIBLE_MSG_UPDATED);
     };
 
 }]);

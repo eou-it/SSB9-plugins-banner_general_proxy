@@ -2,8 +2,8 @@
  Copyright 2015 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbApp.service('ddListingService', ['directDepositService', '$resource', '$filter', 'notificationCenterService',
-    function (directDepositService, $resource, $filter, notificationCenterService) {
+generalSsbApp.service('ddListingService', ['directDepositService', '$resource', '$filter', '$timeout', 'notificationCenterService',
+    function (directDepositService, $resource, $filter, $timeout, notificationCenterService) {
     var apListing = $resource('../ssb/:controller/:action',
             {controller: 'AccountListing', action: 'getApAccountsForCurrentUser'}),
         mostRecentPayrollListing = $resource('../ssb/:controller/:action',

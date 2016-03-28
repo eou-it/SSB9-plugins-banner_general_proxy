@@ -53,6 +53,8 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','g
             $rootScope.displayReprioritizeRemainingWarning = function(){
                 notificationCenterService.displayNotification('directDeposit.invalid.reprioritze.remaining','error');
             };
+
+            $rootScope.playAudibleMessage = null;
         }
     ]
 );
