@@ -188,7 +188,7 @@ generalSsbAppControllers.controller('ddListingController',['$scope', '$rootScope
                 displayNotificationsOnStateLoad();
             });
 
-            // Ensure templates are updated when audible message is updated
+            // Ensure view is updated when audible message div is updated
             $scope.$on(directDepositService.AUDIBLE_MSG_UPDATED, function() {
                 $scope.$apply();
             });
