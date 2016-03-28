@@ -131,7 +131,11 @@ generalSsbApp.service('directDepositService', ['$rootScope', '$resource', functi
 
         // Set up audible message to reset when Bootstrap popover closes
         popoverElement.on('hide.bs.popover', function(event) {
-            $rootScope.playAudibleMessage = null; // Reset
+            // Reset message
+            $rootScope.playAudibleMessage = null;
+
+            // Broadcast event to notify controllers to update views, as changes to the value of
+            // $rootScope.playAudibleMessage are not always implicitly "noticed" by views.
             $rootScope.$broadcast(self.AUDIBLE_MSG_UPDATED);
         });
 
