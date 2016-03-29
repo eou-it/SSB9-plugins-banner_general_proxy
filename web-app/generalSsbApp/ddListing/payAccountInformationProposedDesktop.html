@@ -12,7 +12,8 @@
     <label class="visuallyhidden" id="select-acct-type{{$index}}">{{'directDeposit.label.account.type.select'|i18n}}</label>
     <span><choose-account account="alloc" class="visuallyhidden" id="account-type{{$index}}" tabindex="-1"/></span>
     <div class="dropdown desktop-listing" role="menu">
-        <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="select-acct-type{{$index}} account-type{{$index}}">
+        <button dropdown-helper="begin" class="dropdown-btn" data-toggle="dropdown" aria-haspopup="true"
+                aria-labelledby="select-acct-type{{$index}} account-type{{$index}}">
             <span class="float-l form-spacing">
                 <choose-account account="alloc"/>
             </span>
@@ -20,10 +21,16 @@
         </button>
         <ul menu-controls class="dropdown-menu addAcct" aria-label="{{'directDeposit.label.account.type.edit'|i18n}}">
             <li role="presentation">
-                <a ng-click="setAllocationAcctType('C')" class="addAcct form-spacing" role="menuitem" tabindex="0">{{'directDeposit.account.type.checking'|i18n}}</a>
+                <a ng-click="setAllocationAcctType('C')" class="addAcct form-spacing" role="menuitem" aria-label=""
+                   aria-describedby="" aria-labelledby="checking-lbl" tabindex="0">
+                    {{'directDeposit.account.type.checking'|i18n}}
+                </a>
             </li>
             <li role="presentation">
-                <a dropdown-helper="end" ng-click="setAllocationAcctType('S')" class="addAcct end-dropdown-radius form-spacing" role="menuitem" tabindex="0">{{'directDeposit.account.type.savings'|i18n}}</a>
+                <a dropdown-helper="end" ng-click="setAllocationAcctType('S')" class="addAcct end-dropdown-radius form-spacing"
+                   role="menuitem" aria-label="" aria-describedby="" aria-labelledby="savings-lbl" tabindex="0">
+                    {{'directDeposit.account.type.savings'|i18n}}
+                </a>
             </li>
         </ul>
     </div>
@@ -75,7 +82,7 @@
     <span class="visuallyhidden" id="priority-{{$index}}" tabindex="-1">{{alloc.priority}}</span>
     <div class="dropdown desktop-listing" role="menu">
         <button dropdown-helper="begin"
-            ng-if="!isValidRemainingAmountAllocation(alloc)" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="priority-{{$index}} priority-menu{{$index}}">
+            ng-if="!isValidRemainingAmountAllocation(alloc)" class="dropdown-btn" data-toggle="dropdown" aria-haspopup="true" aria-labelledby="priority-{{$index}} priority-menu{{$index}}">
             <span ng-if="getShouldDisplayPriority()" class="float-l form-spacing">
                 {{alloc.priority}}
             </span>
@@ -90,7 +97,11 @@
         </button>
         <ul ng-if="!isValidRemainingAmountAllocation(alloc)" menu-controls class="dropdown-menu addAcct min-width-priority" aria-labelledby="priority-menu{{$index}}">
             <li ng-repeat="i in priorities" role="presentation">
-                <a dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" ng-click="setAccountPriority(i.displayVal)" class="addAcct form-spacing" role="menuitem" tabindex="0">{{i.displayVal}}</a>
+                <a dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]"
+                   ng-click="setAccountPriority(i.displayVal)" class="addAcct form-spacing" id="desktop-pri{{$index}}"
+                   role="menuitem" aria-label="" aria-describedby="" aria-labelledby="desktop-pri{{$index}}" tabindex="0">
+                    {{i.displayVal}}
+                </a>
             </li>
         </ul>
     </div>

@@ -52,7 +52,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                 <span><choose-account account="account" class="visuallyhidden" id="account-type" tabindex="-1"/></span>
                 <div dropdown-state="dropdownIsOpen" class="dropdown" role="menu">
                     <button dropdown-helper="begin" ng-focus="acctTypeFocused=true" ng-blur="acctTypeFocused=false"
-                        ng-class="(accountTypeErr ? 'dropdown-btn input-field-error' : 'dropdown-btn')" data-toggle="dropdown" aria-labelledby="select-acct-type account-type">
+                        ng-class="(accountTypeErr ? 'dropdown-btn input-field-error' : 'dropdown-btn')" data-toggle="dropdown" aria-haspopup="true" aria-labelledby="select-acct-type account-type">
                         <span class="float-l semi-bold form-spacing">
                             <choose-account account="account"/>
                         </span>
@@ -60,10 +60,10 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
                     </button>
                     <ul menu-controls class="dropdown-menu addAcct">
                         <li role="presentation">
-                            <a ng-click="setAccountType('C')" class="addAcct form-spacing" role="menuitem" tabindex="0">{{'directDeposit.account.type.checking'|i18n}}</a>
+                            <a ng-click="setAccountType('C')" class="addAcct form-spacing" role="menuitem" aria-label="" aria-describedby="" aria-labelledby="checking-lbl" tabindex="0">{{'directDeposit.account.type.checking'|i18n}}</a>
                         </li>
                         <li role="presentation">
-                            <a dropdown-helper="end" ng-click="setAccountType('S')" class="addAcct end-dropdown-radius form-spacing" role="menuitem" tabindex="0">{{'directDeposit.account.type.savings'|i18n}}</a>
+                            <a dropdown-helper="end" ng-click="setAccountType('S')" class="addAcct end-dropdown-radius form-spacing" role="menuitem" aria-label="" aria-describedby="" aria-labelledby="savings-lbl" tabindex="0">{{'directDeposit.account.type.savings'|i18n}}</a>
                         </li>
                     </ul>
                 </div>
@@ -112,7 +112,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         <label class="visuallyhidden" id="priority-menu">{{'directDeposit.label.account.priority.edit'|i18n}}</label>
         <span class="visuallyhidden" id="priority" tabindex="-1">{{account.priority}}</span>
         <div class="dropdown" role="menu">
-            <button dropdown-helper="begin" ng-if="!isRemaining()" class="dropdown-btn" data-toggle="dropdown" aria-labelledby="priority priority-menu">
+            <button dropdown-helper="begin" ng-if="!isRemaining()" class="dropdown-btn" data-toggle="dropdown" aria-haspopup="true" aria-labelledby="priority priority-menu">
                 <span ng-if="shouldDisplayPriority" class="float-l semi-bold form-spacing">
                     {{account.priority}}
                 </span>
@@ -127,7 +127,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
             </button>
             <ul menu-controls ng-if="!isRemaining()" class="dropdown-menu addAcct">
                 <li ng-repeat="i in priorities" role="presentation">
-                    <a ng-click="setAccountPriority(i.displayVal)" dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" class="addAcct form-spacing" role="menuitem" tabindex="0">{{i.displayVal}}</a>
+                    <a ng-click="setAccountPriority(i.displayVal)" dropdown-helper="{{($last ? 'end': null)}}" ng-class="[($last ? 'end-dropdown-radius' : null)]" class="addAcct form-spacing" id="acct-inpPri{{$index}}" role="menuitem" aria-label="" aria-describedby="" aria-labelledby="acct-inpPri{{$index}}" tabindex="0">{{i.displayVal}}</a>
                 </li>
             </ul>
         </div>
