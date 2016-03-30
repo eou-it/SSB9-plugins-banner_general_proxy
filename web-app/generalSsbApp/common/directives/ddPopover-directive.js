@@ -87,9 +87,11 @@ generalSsbAppDirectives.directive('ddPopOver', ['$filter', 'directDepositService
             msg = $filter('i18n')(attrs.popoverMsg),
             template = '<div class="popover dd-tooltip" style="width: ' + width + ';"><div class="popover-content"></div><div class="arrow"></div></div>';
 
-        element.on('click', function(event) {
+        scope.togglePopover = function() {
             // Prevent the hidePopover directive from handling the event, immediately closing the popover
-            event.stopImmediatePropagation();
+            if (event) {
+                event.stopImmediatePropagation();
+            }
 
             // Toggle popover open/closed
             if (element.next('.popover.in').length !== 0) {
@@ -115,6 +117,10 @@ generalSsbAppDirectives.directive('ddPopOver', ['$filter', 'directDepositService
                 // to pick up on the role=alert and aria-live=assertive attributes, reading the message.
                 directDepositService.setPlayAudibleMessage(msg, element);
             }
+        };
+
+        element.on('click', function(event) {
+            togglePopover(event);
         });
     };
 
