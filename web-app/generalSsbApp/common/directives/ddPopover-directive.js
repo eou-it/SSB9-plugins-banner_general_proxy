@@ -120,7 +120,7 @@ generalSsbAppDirectives.directive('ddPopOver', ['$filter', 'directDepositService
         };
 
         element.on('click', function(event) {
-            togglePopover(event);
+            scope.togglePopover(event);
         });
     };
 
