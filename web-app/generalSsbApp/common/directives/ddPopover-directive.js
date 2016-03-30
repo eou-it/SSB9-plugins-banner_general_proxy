@@ -87,7 +87,7 @@ generalSsbAppDirectives.directive('ddPopOver', ['$filter', 'directDepositService
             msg = $filter('i18n')(attrs.popoverMsg),
             template = '<div class="popover dd-tooltip" style="width: ' + width + ';"><div class="popover-content"></div><div class="arrow"></div></div>';
 
-        scope.togglePopover = function() {
+        scope.togglePopover = function(event) {
             // Prevent the hidePopover directive from handling the event, immediately closing the popover
             console.log('In togglePopover');
             if (event) {
