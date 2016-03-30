@@ -89,15 +89,18 @@ generalSsbAppDirectives.directive('ddPopOver', ['$filter', 'directDepositService
 
         scope.togglePopover = function() {
             // Prevent the hidePopover directive from handling the event, immediately closing the popover
+            console.log('In togglePopover');
             if (event) {
                 event.stopImmediatePropagation();
             }
 
             // Toggle popover open/closed
             if (element.next('.popover.in').length !== 0) {
+                console.log('In togglePopover: closing popover');
                 // Popover is already open, toggle it closed
                 element.popover('destroy');
             } else {
+                console.log('In togglePopover: opening popover');
                 // Destroy any existing popovers
                 directDepositService.destroyAllPopovers();
 
@@ -120,6 +123,7 @@ generalSsbAppDirectives.directive('ddPopOver', ['$filter', 'directDepositService
         };
 
         element.on('click', function(event) {
+            console.log('In ddPopOver directive click event handler');
             scope.togglePopover(event);
         });
     };
