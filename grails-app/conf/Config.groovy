@@ -24,7 +24,7 @@ grails.config.locations = [] // leave this initialized to an empty list, and add
 def locationAdder = ConfigFinder.&addLocation.curry(grails.config.locations)
 
 [ BANNER_APP_CONFIG:            "banner_configuration.groovy",
-  BANNER_GENERAL_SSB_APP:       "${appName}_configuration.groovy",
+  BANNER_GENERAL_SSB_CONFIG:    "${appName}_configuration.groovy",
   WEB_APP_EXTENSIBILITY_CONFIG: "WebAppExtensibilityConfig.class"
 ].each { envName, defaultFileName -> locationAdder( envName, defaultFileName ) }
 
