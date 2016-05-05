@@ -1,12 +1,12 @@
 /*******************************************************************************
-Copyright 2013 Ellucian Company L.P. and its affiliates.
-*******************************************************************************/ 
+ Copyright 2013 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
 
 
 
- /**
-  * Specifies all of the URL mappings supported by the application.
-  */
+/**
+ * Specifies all of the URL mappings supported by the application.
+ */
 class UrlMappings {
 
     static mappings = {
@@ -50,10 +50,10 @@ class UrlMappings {
         }
 
         "/ssb/$controller/$action?/$id?"{
-			constraints {
-				// apply constraints here
-			}
-		}
+            constraints {
+                // apply constraints here
+            }
+        }
 
         "/login/auth" {
             controller = "login"

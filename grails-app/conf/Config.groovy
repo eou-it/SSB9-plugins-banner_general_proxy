@@ -1,6 +1,6 @@
 /*******************************************************************************
-Copyright 2013 Ellucian Company L.P. and its affiliates.
-*******************************************************************************/
+ Copyright 2013 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
 
 
 import net.hedtech.banner.configuration.ApplicationConfigurationUtils as ConfigFinder
@@ -175,7 +175,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/login/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/index**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/logout/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/ssb/logout/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],                
+        '/ssb/logout/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/menu':['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/js/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/css/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
@@ -187,7 +187,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/i18n/**':  ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/selfServiceMenu/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/menu**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/generalSsbApp/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/directDepositApp/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/keepAlive/data**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         // ALL URIs specified with the BannerAccessDecisionVoter.ROLE_DETERMINED_DYNAMICALLY
         // 'role' (it's not a real role) will result in authorization being determined based
@@ -207,6 +207,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/ssb/survey/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
         '/ssb/userAgreement/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
         '/ssb/general/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
+        '/ssb/directDeposit/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
         '/ssb/UpdateAccount/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
         '/ssb/accountListing/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
         '/ssb/DirectDepositConfiguration/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M']
