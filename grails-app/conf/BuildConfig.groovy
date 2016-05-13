@@ -14,7 +14,7 @@ grails.project.test.reports.dir = "target/test-reports"
 grails.war.resources = { stagingDir ->
 }
 
-grails.plugin.location.'banner-direct-deposit-ui' = "plugins/banner_direct_deposit_ui.git"
+grails.plugin.location.'banner-general-direct-deposit-ui' = "plugins/banner_general_direct_deposit_ui.git"
 
 grails.project.dependency.resolution = {
 
