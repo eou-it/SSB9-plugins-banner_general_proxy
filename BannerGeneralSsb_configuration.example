@@ -29,6 +29,12 @@ This configuration file contains the following sections:
 
 logAppName = "BannerGeneralSsb"
 
+// Product and application name to refer to this app for name display rules
+productName="General"
+banner.applicationName="GeneralSsb"
+
+footerFadeAwayTime=30000
+
 // ******************************************************************************
 //
 //                       +++ JMX Bean Names +++
