@@ -33,3 +33,4 @@ grails-app/i18n/messages_en_PS.properties
 **-rtl.css
 *-catalina.*
 bannerTransform.jar
+.slcache/
