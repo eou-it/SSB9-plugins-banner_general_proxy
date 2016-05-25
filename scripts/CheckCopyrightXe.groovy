@@ -12,8 +12,18 @@ includeTargets << grailsScript("_GrailsInit")
  *
  */
 
-target(checkCopyrightXe: "Find incorrect copyright years") {
-    def ln = File.separator
+target(checkCopyrightXe: "Find incorrect copyright years. Use \"-fix\" to correct files with incorrect copyright years.") {
+    if(argsMap.containsKey('fix')) {
+        println " Modifying files with incorrect copyright years"
+        doCheckCopyrightXe(true)
+    }
+    else{
+        doCheckCopyrightXe(false)
+    }
+}
+
+def doCheckCopyrightXe(fixIt){
+    def ln = File.separator == '\\' ? '\\\\' : File.separator
     def appDirectoryName = new File(System.properties['base.dir'])
     def appDirectoryName_txt = appDirectoryName.toString()
     def output = new File(appDirectoryName_txt + ln + "target" + ln + "copyrighterrors-report.html")
@@ -46,13 +56,15 @@ target(checkCopyrightXe: "Find incorrect copyright years") {
         def directoryname = it
         def command = "git diff --name-only origin/master"
         def proc = command.execute(null, directoryname)
-        proc.waitFor()
+        StringBuffer out = new StringBuffer()
+        StringBuffer err = new StringBuffer()
+        proc.waitForProcessOutput(out, err)
         if (proc.exitValue() != 0) {
-            println "Error, ${proc.err.text}"
+            println "Error, ${err.toString()}"
             System.exit(-1)
         }
 
-        changes = proc.in.text.readLines().collect {
+        changes = out.toString().readLines().collect {
             it.replaceAll(/[a-z0-9]*\trefs\/heads\//, '')
         }
 
@@ -66,6 +78,14 @@ target(checkCopyrightXe: "Find incorrect copyright years") {
             if (!(filename_txt =~ "CheckCopyrightXe.groovy" || fileNameExt == "rst" || fileNameExt == "properties" ||
                     filename_txt =~ ".git")) {
                 if (!filename.isDirectory() && filename.exists()) {
+                    def fileIoStream = new RandomAccessFile(filename_dir_txt, "rw")
+                    File tempFile
+                    def tempStream
+                    if(fixIt) {
+                        tempFile = new File("tmpCCXE_" + System.currentTimeMillis())
+                        tempStream = new RandomAccessFile(tempFile, "rw")
+                    }
+
                     def commitDetail = findCommitDetail(filename_txt, directoryname)
                     def yearChanged = getYearChanged(commitDetail)
                     if (!yearChanged) yearChanged = year
@@ -73,20 +93,60 @@ target(checkCopyrightXe: "Find incorrect copyright years") {
                     numberFiles += 1
                     def lineNo = 1
                     def copyRightLine = 1
-                    filename.eachLine { line ->
-                        lineNo++
-                        if (line.toString().toUpperCase() =~ "COPYRIGHT") {
-                            copyRightLine = 0
-                            if (!(line =~ yearChanged)) {
+                    try {
+                        use(RandomAccessFileEach) {
+                            def firstXmlLine = ''
+
+                            fileIoStream.eachLine { line ->
+                                if(!firstXmlLine && fileNameExt == 'xml' && line.toString().toUpperCase() =~ /<\?XML/) {
+                                    firstXmlLine = line + '\r\n';
+                                }
+                                lineNo++
+                                if (line.toString().toUpperCase() =~ "COPYRIGHT") {
+                                    copyRightLine = 0
+                                    if (!(line =~ yearChanged)) {
+                                        def correctedLine = getCorrectedCopyright(line, yearChanged)
+                                        if(fixIt) {
+                                            def numBytes = line.size()
+                                            def writeOffset = fileIoStream.getFilePointer() - numBytes - 2 // 2 bytes for CRLF
+                                            def toEOF = fileIoStream.length() - fileIoStream.getFilePointer()
+                                            def newFileLength = fileIoStream.length() - numBytes + correctedLine.size()
+
+                                            fileIoStream.getChannel().transferTo(0, writeOffset, tempStream.getChannel())
+                                            tempStream.writeBytes correctedLine
+                                            fileIoStream.getChannel().transferTo(fileIoStream.getFilePointer(), toEOF, tempStream.getChannel())
+                                            tempStream.seek 0
+                                            fileIoStream.getChannel().transferFrom(tempStream.getChannel(), 0, newFileLength)
+                                        }
+
+                                        numberErrors += 1
+                                        copyrightBody += "<tr><td>${directoryname.toString()}</td><td>${filename_txt}</td><td>${line}</td><td>${correctedLine}</td><td>${commitDetail.toString()}</td></tr>"
+                                    }
+                                }
+                                copyRightLine
+                            }
+                            if (copyRightLine) {
+                                def noCopyRightLine = "No copyright statement identified in file"
+                                def correctedLine = firstXmlLine + getNewCopyrightText(fileNameExt, yearChanged)
+
+                                if(fixIt) {
+                                    tempStream.writeBytes correctedLine
+                                    fileIoStream.getChannel().transferTo(firstXmlLine.size(), fileIoStream.length(), tempStream.getChannel())
+                                    tempStream.seek 0
+                                    fileIoStream.getChannel().transferFrom(tempStream.getChannel(), 0, tempStream.length())
+                                }
+
                                 numberErrors += 1
-                                copyrightBody += "<tr><td>${directoryname.toString()}</td><td>${filename_txt}</td><td>${line}</td><td>${commitDetail.toString()}</td></tr>"
+                                copyrightBody += "<tr><td>${directoryname.toString()}</td><td>${filename_txt}</td><td>${noCopyRightLine}</td><td>${groovy.xml.XmlUtil.escapeXml(correctedLine)}</td><td>${commitDetail.toString()}</td></tr>"
                             }
                         }
                     }
-                    if (copyRightLine) {
-                        numberErrors += 1
-                        def noCopyRightLine = "No copyright statement identified in file"
-                        copyrightBody += "<tr><td>${directoryname.toString()}</td><td>${filename_txt}</td><td>${noCopyRightLine}</td><td>${commitDetail.toString()}</td></tr>"
+                    finally {
+                        fileIoStream.close()
+                        if(fixIt) {
+                            tempStream.close()
+                            tempFile.delete()
+                        }
                     }
                 }
             }
@@ -132,6 +192,7 @@ target(checkCopyrightXe: "Find incorrect copyright years") {
                         <th>Path</th>
 	                    <th>File</th>
 	                    <th>Copyright Statement</th>
+                        <th>Correction</th>
                         <th>Commit Details</th>
 	                </thead>
 	                <tfoot>
@@ -152,7 +213,6 @@ target(checkCopyrightXe: "Find incorrect copyright years") {
     if (numberErrors > 0) {
         System.exit(-1)
     }
-
 }
 
 // target for process, execute as:   grails checkCopyrightXe
@@ -258,4 +318,76 @@ def findPlugins(def directoryname, def pathSep, def appBranch) {
         }
     }
     return pluginPaths
+}
+
+
+def getCorrectedCopyright(String line, year){
+    def firstYearMatcher = line =~ /\d{4}/
+    def correctedLine
+    if (firstYearMatcher.find()) {
+        def firstYear = firstYearMatcher.group(0)
+        correctedLine = line.replaceFirst(/\d{4}(.*\d{4})*/, firstYear + '-' + year) + "\r\n"
+    }
+    else {
+        throw new RuntimeException('No copyright year in copyright line')
+        //correctedLine = 'Copyright '+ year +' Ellucian Company L.P. and its affiliates.\n'
+    }
+    return correctedLine
+}
+
+def getNewCopyrightText(fileExt, year){
+    def text = '*******************************************************************************\r\n  Copyright ' +
+            year + ' Ellucian Company L.P. and its affiliates.\r\n*******************************************************************************'
+    def delim
+    switch(fileExt) {
+        case ["groovy", "java", "js", "css"]:
+            delim = ['/*', '*/']
+            break
+        case ["html", "xml"]:
+            delim = ['<!--', '-->']
+            break
+        case "gsp":
+            delim = ['%{--', '--}%']
+            break
+        case "sql":
+            delim = ['--', '']
+            text = text.replaceAll(/\n/, "\n--")
+            break
+        default:
+            throw new RuntimeException('Unrecognized file extension: '+ fileExt)
+    }
+    text = delim[0] + text + delim[1] + '\r\n'
+
+    return text;
+}
+
+@Category(RandomAccessFile)
+class RandomAccessFileEach {
+    /**
+    * Iterates through the given RandomAccessFile line by line
+    *
+    * @param self    a RandomAccessFile
+    * @param closure a closure
+    * @throws IOException
+    */
+    public static void eachLine(RandomAccessFile self, Closure closure) throws IOException {
+        try {
+            while (true) {
+                String line = self.readLine()
+
+                if (line) {
+                    if(!closure.call(line)) break
+                } else {
+                    break
+                }
+            }
+        } catch (IOException e) {
+            try {
+                self?.close()
+            } catch (e2) {
+                // ignore as we're already throwing
+            }
+            throw e
+        }
+    }
 }
