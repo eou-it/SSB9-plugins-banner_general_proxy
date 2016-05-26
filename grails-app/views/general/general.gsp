@@ -1,64 +1,63 @@
-<!DOCTYPE html>
-<%--
-/*******************************************************************************
+%{--*******************************************************************************
 Copyright 2015 Ellucian Company L.P. and its affiliates.
-*******************************************************************************/
---%>
-<html>
+*******************************************************************************--}%
+<!DOCTYPE html>
+<!--[if IE 9 ]>    <html xmlns:ng="http://angularjs.org" ng-app="generalSsbApp" id="ng-app" class="ie9"> <![endif]-->
+<html xmlns:ng="http://angularjs.org" ng-app="generalSsbApp" id="ng-app">
 <head>
-    <g:applyLayout name="bannerWebPage">
-        <title><g:message code="banner.general.common.title"/></title>
+    <script type="text/javascript">
+        var superUser=${session['SUPER_USER_INDICATOR'] ?: 'undefined'};
+        var proxyUser=${session['PROXY_USER_INDICATOR'] ?: 'undefined'};
+        var proxyUserName = '${session.PROXY_USER_NAME ?: 'undefined'}';
+        var adminFlag=${session['adminFlag'] ?: 'undefined'};
+        var employeeFlag=${session['EmployeeFlag'] ?: 'undefined'};
+        var proxyFlag=${session['proxyFlag'] ?: 'undefined'};
+        var originatorFlag =${session['originatorFlag'] ?: 'undefined'};
+        var approverFlag =${session['approverFlag'] ?: 'undefined'};
+        var url = '${url}'
 
+    </script>
+    <g:applyLayout name="bannerSelfServicePage">
+        <meta name="locale" content="${request.locale.toLanguageTag()}" >
         <meta name="menuEndPoint" content="${request.contextPath}/ssb/menu"/>
         <meta name="menuBaseURL" content="${request.contextPath}/ssb"/>
-    %{--<meta name="menuDefaultBreadcrumbId" content=""/>--}%
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <META HTTP-EQUIV="X-Frame-Options" CONTENT="deny">
-        <g:set var="appName" value= "${System.properties['BANNERXE_APP_NAME']}"/>
-        <g:set var="mep" value="${params?.mepCode}"/>
-        <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="${message(code: 'default.character.encoding')}">
+
+        <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
+            <r:require modules="generalSsbAppRTL"/>
+        </g:if>
+        <g:else>
+            <r:require modules="generalSsbAppLTR"/>
+        </g:else>
 
     </g:applyLayout>
 
+    <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
 
     <script type="text/javascript">
         <g:i18n_setup/>
     </script>
-    <!--[if lte IE 8]>
-      <script>
-        document.createElement('ng-include');
-        document.createElement('ng-pluralize');
-        document.createElement('ng-view');
-
-
-      </script>
-    <![endif]-->
 </head>
 
-<body>
+<body ng-class="{'direct-deposit': true, employee: isEmployee, student: isStudent, desktop: isDesktopView, 'no-ap': !apAccountExists}">
 
-<div class=" container wrapper" id="content" class="container-fluid" aria-live="polite" aria-atomic="true"
-        aria-relevant="additions" role="main">
-
-    <h1 class="pull-centre ng-binding" id="effort-report-header" align="centre">
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-
-        <a class="breadcrumbButton leaf-breadcrumb" data-id="2" href=${createLink(uri: '/ssb/directDeposit')}>
-            Banner Direct Deposit App</a><span class="breadcrumb-separator"></span></h1>
-
-
+<div class="body-overlay"></div>
+<div id="content" class="container-fluid" aria-relevant="additions" role="main">
+    <div ui-view></div>
 </div>
-</body>
-
-</html>
-<script type="text/javascript">
-    function showPage(element) {
-        //alert('show' + element);
-        window.location.href=$(element).attr('data-url');R
+<script  type="text/javascript">
+    function tellAngular() {
+        var domElt = document.getElementsByClassName('page-header');
+        scope = angular.element(domElt).scope();
+        scope.$apply(function() {
+            if(window.innerWidth > 768)
+            {
+                scope.searchView = false;
+            }
+        });
     }
+    window.onresize = tellAngular;
 </script>
+</body>
+</html>

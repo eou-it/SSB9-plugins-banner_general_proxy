@@ -1,20 +1,17 @@
 /*******************************************************************************
- Copyright 2013 Ellucian Company L.P. and its affiliates.
- *******************************************************************************/
+Copyright 2013 Ellucian Company L.P. and its affiliates.
+*******************************************************************************/
 
-
-import grails.converters.JSON
-import grails.util.Environment
 import net.hedtech.banner.converters.json.JSONBeanMarshaller
 import net.hedtech.banner.converters.json.JSONDomainMarshaller
 import net.hedtech.banner.i18n.LocalizeUtil
+import grails.converters.JSON
+import grails.util.Environment
 import org.apache.commons.logging.LogFactory
 import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.commons.ApplicationAttributes
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
-import org.codehaus.groovy.grails.web.converters.configuration.ConverterConfiguration
-import org.codehaus.groovy.grails.web.converters.configuration.ConvertersConfigurationHolder
-import org.codehaus.groovy.grails.web.converters.configuration.DefaultConverterConfiguration
+import org.springframework.context.i18n.LocaleContextHolder as LCH
 
 /**
  * Executes arbitrary code at bootstrap time.
@@ -24,7 +21,6 @@ import org.codehaus.groovy.grails.web.converters.configuration.DefaultConverterC
 class BootStrap {
 
     def log = Logger.getLogger(this.getClass())
-    def dateConverterService
 
     def localizer = { mapToLocalize ->
         new ValidationTagLib().message(mapToLocalize)
@@ -32,6 +28,7 @@ class BootStrap {
 
     def grailsApplication
     def resourceService
+    def dateConverterService
 
     def init = { servletContext ->
         def ctx = servletContext.getAttribute(ApplicationAttributes.APPLICATION_CONTEXT)
@@ -88,47 +85,24 @@ class BootStrap {
         registerJSONMarshallers()
 
         resourceService.reloadAll()
-
-
-        List.metaClass.sortAndPaginate = { max, offset = 0, sortColumn, sortDirection = "asc" ->
-
-            List delegateList = new ArrayList(delegate);
-            def sorted = delegateList.sort { a, b ->
-                a[sortColumn].compareToIgnoreCase b[sortColumn]
-            }
-
-            if (sortDirection == "desc")
-                sorted = sorted.reverse()
-
-            sorted.subList( offset, Math.min( offset + max, delegate.size() ) )
-        }
-
-}
-
-
-def destroy = {
-    // no-op
-}
-
-
-private def registerJSONMarshallers() {
-    Closure marshaller = { it ->
-        dateConverterService.parseGregorianToDefaultCalendar(LocalizeUtil.formatDate(it))
     }
 
-    JSON.registerObjectMarshaller(Date, marshaller)
 
-    ConverterConfiguration cfg = ConvertersConfigurationHolder.getNamedConverterConfiguration ("deep", JSON.class);
-    ((DefaultConverterConfiguration) cfg).registerObjectMarshaller(Date, marshaller);
-
-
-    def localizeMap = [
-            'attendanceHour': LocalizeUtil.formatNumber,
-    ]
-
-    JSON.registerObjectMarshaller(new JSONBeanMarshaller( localizeMap ), 1) // for decorators and maps
-    JSON.registerObjectMarshaller(new JSONDomainMarshaller( localizeMap, true), 2) // for domain objects
-}
+    def destroy = {
+        // no-op
+    }
 
 
+    private def registerJSONMarshallers() {
+        JSON.registerObjectMarshaller(Date) {
+           dateConverterService.parseGregorianToDefaultCalendar(LocalizeUtil.formatDate(it))
+        }
+
+        def localizeMap = [
+                'attendanceHour': LocalizeUtil.formatNumber,
+        ]
+
+        JSON.registerObjectMarshaller(new JSONBeanMarshaller( localizeMap ), 1) // for decorators and maps
+        JSON.registerObjectMarshaller(new JSONDomainMarshaller( localizeMap, true), 2) // for domain objects
+    }
 }
