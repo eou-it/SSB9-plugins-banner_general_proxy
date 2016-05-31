@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2009-2012 Ellucian Company L.P. and its affiliates.
+ Copyright 2009-2016 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 import grails.util.Environment
@@ -71,6 +71,30 @@ eventCreateWarStart = { warName, stagingDir ->
     ant.move( file:"${stagingDir}/WEB-INF/lib/ojdbc6-11.2.0.1.0.jar", toFile:"$basedir/target/ojdbc6.jar" )
     ant.move( file:"${stagingDir}/WEB-INF/lib/xdb6-11.2.0.4.jar", toFile:"$basedir/target/xdb6.jar" )
 
+    preparePlugin("banner-general-direct-deposit-ui") { name, version, pluginDirectory ->
+        println "Copying CSS, image, and JavaScript files from banner-general-direct-deposit-ui plugin"
+
+        Ant.copy(todir: "${stagingDir}/css") {
+            fileset(dir: "${pluginDirectory}/web-app/css")
+        }
+
+        Ant.copy(todir: "${stagingDir}/directDepositApp") {
+            fileset(dir: "${pluginDirectory}/web-app/directDepositApp")
+        }
+
+        Ant.copy(todir: "${stagingDir}/images") {
+            fileset(dir: "${pluginDirectory}/web-app/images")
+        }
+
+        Ant.copy(todir: "${stagingDir}/js") {
+            fileset(dir: "${pluginDirectory}/web-app/js")
+        }
+
+        Ant.copy(todir: "${stagingDir}/WEB-INF/plugins/$name-$version/grails-app/i18n") {
+            fileset(dir: "${pluginDirectory}/grails-app/i18n")
+        }
+    }
+
     preparePlugin("banner-ui-ss") { name, version, pluginDirectory ->
         println "Copying CSS, image, and JavaScript files from banner-ui-ss plugin"
 
@@ -91,7 +115,7 @@ eventCreateWarStart = { warName, stagingDir ->
             fileset(dir: "${pluginDirectory}/grails-app/i18n")
         }
     }
-    
+
     preparePlugin("banner-general-common-ui-ss") { name, version, pluginDirectory ->
         println "Copying CSS, image, and JavaScript files from banner-ui-ss plugin"
 
@@ -131,12 +155,6 @@ eventCreateWarStart = { warName, stagingDir ->
         }
     }
 
-/*    preparePlugin("banner-payroll-common") { name, version, pluginDirectory ->
-        Ant.copy(todir: "${stagingDir}/WEB-INF/plugins/$name-$version/grails-app/i18n") {
-            fileset(dir: "${pluginDirectory}/grails-app/i18n")
-        }
-    }
-*/
     preparePlugin("banner-general-common") { name, version, pluginDirectory ->
         Ant.copy(todir: "${stagingDir}/WEB-INF/plugins/$name-$version/grails-app/i18n") {
             fileset(dir: "${pluginDirectory}/grails-app/i18n")
