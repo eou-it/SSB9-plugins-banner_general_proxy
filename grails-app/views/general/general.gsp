@@ -41,16 +41,16 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
 <div class=" container wrapper" id="content" class="container-fluid" aria-live="polite" aria-atomic="true"
         aria-relevant="additions" role="main">
 
-    <h1 class="pull-centre ng-binding" id="effort-report-header" align="centre">
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-
-        <a class="breadcrumbButton leaf-breadcrumb" data-id="2" href=${createLink(uri: '/ssb/directDeposit')}>
-            Banner Direct Deposit App</a><span class="breadcrumb-separator"></span></h1>
-
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1><a class="breadcrumbButton leaf-breadcrumb" data-id="2" href=${createLink(uri: '/ssb/directDeposit')}>
+        Banner Direct Deposit App</a></h1>
+    <br>
+    <h1><a class="breadcrumbButton leaf-breadcrumb" data-id="2" href=${createLink(uri: '/ssb/personProfile')}>
+        Banner Person Profile App</a></span></h1>
 
 </div>
 </body>
