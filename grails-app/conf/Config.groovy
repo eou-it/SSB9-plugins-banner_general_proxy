@@ -152,6 +152,7 @@ formControllerMap = [
         'securityqa': ['SELFSERVICE'],
         'general': ['SELFSERVICE'],
         'directdeposit': ['SELFSERVICE'],
+        'personprofile': ['SELFSERVICE'],
         'updateaccount': ['SELFSERVICE'],
         'accountlisting': ['SELFSERVICE'],
         'directdepositconfiguration': ['SELFSERVICE']
