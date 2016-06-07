@@ -5,7 +5,17 @@
     <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
     <g:set var="mep" value="${params?.mepCode}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta HTTP-EQUIV="REFRESH" content="0; url=${!mep ? 'ssb/general' : 'ssb/general?mepCode='+mep}">
+    <g:set var="appName" value= "${System.properties['BANNERXE_APP_NAME']}"/>
+    <g:if test="${appName.equals('DirectDeposit')}">
+        <meta HTTP-EQUIV="REFRESH" content="0; url=${!mep ? 'ssb/directDeposit' : 'ssb/directDeposit?mepCode='+mep}">
+    </g:if>
+    <g:elseif test="${appName.equals('PersonProfile')}">
+        %{-- TODO: Set to proper Person Profile URL --}%
+        <meta HTTP-EQUIV="REFRESH" content="0; url=${!mep ? 'ssb/personProfile' : 'ssb/personProfile?mepCode='+mep}">
+    </g:elseif>
+    <g:else>
+        <meta HTTP-EQUIV="REFRESH" content="0; url=${!mep ? 'ssb/general' : 'ssb/general?mepCode='+mep}">
+    </g:else>
 </head>
 <body>
 </body>
