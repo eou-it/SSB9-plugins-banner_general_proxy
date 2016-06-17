@@ -83,6 +83,7 @@ grails.war.copyToWebApp = { args ->
         include(name: "js/**")
         include(name: "css/**")
         include(name: "images/**")
+        include(name: "fonts/**")
         include(name: "WEB-INF/**")
     }
 }
