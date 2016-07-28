@@ -10,7 +10,7 @@
         <meta HTTP-EQUIV="REFRESH" content="0; url=${!mep ? 'ssb/directDeposit' : 'ssb/directDeposit?mepCode='+mep}">
     </g:if>
     <g:elseif test="${appName.equals('PersonProfile')}">
-        <meta HTTP-EQUIV="REFRESH" content="0; url=${!mep ? 'ssb/personProfile' : 'ssb/personProfile?mepCode='+mep}">
+        <meta HTTP-EQUIV="REFRESH" content="0; url=${!mep ? 'ssb/personalInformation' : 'ssb/personalInformation?mepCode='+mep}">
     </g:elseif>
     <g:else>
         <meta HTTP-EQUIV="REFRESH" content="0; url=${!mep ? 'ssb/general' : 'ssb/general?mepCode='+mep}">
