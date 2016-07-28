@@ -50,7 +50,7 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
         Banner Direct Deposit App</a></h1>
     <br>
     <h1><a class="breadcrumbButton leaf-breadcrumb" data-id="2" href=${createLink(uri: '/ssb/personalInformation')}>
-        Banner Person Profile App</a></span></h1>
+        Banner Personal Information App</a></span></h1>
 
 </div>
 </body>
