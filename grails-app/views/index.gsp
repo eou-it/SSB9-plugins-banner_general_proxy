@@ -9,7 +9,7 @@
     <g:if test="${appName.equals('DirectDeposit')}">
         <meta HTTP-EQUIV="REFRESH" content="0; url=${!mep ? 'ssb/directDeposit' : 'ssb/directDeposit?mepCode='+mep}">
     </g:if>
-    <g:elseif test="${appName.equals('PersonProfile')}">
+    <g:elseif test="${appName.equals('PersonalInformation')}">
         <meta HTTP-EQUIV="REFRESH" content="0; url=${!mep ? 'ssb/personalInformation' : 'ssb/personalInformation?mepCode='+mep}">
     </g:elseif>
     <g:else>
