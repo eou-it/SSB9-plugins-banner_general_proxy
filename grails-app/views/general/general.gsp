@@ -49,8 +49,8 @@ Copyright 2015 Ellucian Company L.P. and its affiliates.
     <h1><a class="breadcrumbButton leaf-breadcrumb" data-id="2" href=${createLink(uri: '/ssb/directDeposit')}>
         Banner Direct Deposit App</a></h1>
     <br>
-    <h1><a class="breadcrumbButton leaf-breadcrumb" data-id="2" href=${createLink(uri: '/ssb/personProfile')}>
-        Banner Person Profile App</a></span></h1>
+    <h1><a class="breadcrumbButton leaf-breadcrumb" data-id="2" href=${createLink(uri: '/ssb/personalInformation')}>
+        Banner Personal Information App</a></span></h1>
 
 </div>
 </body>

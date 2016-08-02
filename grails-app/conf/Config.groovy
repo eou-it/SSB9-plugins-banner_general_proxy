@@ -152,11 +152,11 @@ formControllerMap = [
         'securityqa': ['SELFSERVICE'],
         'general': ['SELFSERVICE'],
         'directdeposit': ['SELFSERVICE'],
-        'personprofile': ['SELFSERVICE'],
+        'personalinformation': ['SELFSERVICE'],
         'updateaccount': ['SELFSERVICE'],
         'accountlisting': ['SELFSERVICE'],
         'directdepositconfiguration': ['SELFSERVICE'],
-        'personprofiledetails': ['SELFSERVICE']
+        'personalinformationdetails': ['SELFSERVICE']
 ]
 
 
@@ -214,8 +214,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/ssb/UpdateAccount/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
         '/ssb/accountListing/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
         '/ssb/DirectDepositConfiguration/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/personProfile/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/PersonProfileDetails/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M']
+        '/ssb/personalInformation/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
+        '/ssb/PersonalInformationDetails/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M']
 ]
 
 // CodeNarc rulesets

@@ -95,15 +95,15 @@ eventCreateWarStart = { warName, stagingDir ->
         }
     }
 
-    preparePlugin("banner-general-person-profile-ui") { name, version, pluginDirectory ->
-        println "Copying CSS, image, and JavaScript files from banner-general-person-profile-ui plugin"
+    preparePlugin("banner-general-personal-information-ui") { name, version, pluginDirectory ->
+        println "Copying CSS, image, and JavaScript files from banner-general-personal-information-ui plugin"
 
         Ant.copy(todir: "${stagingDir}/css") {
             fileset(dir: "${pluginDirectory}/web-app/css")
         }
 
         Ant.copy(todir: "${stagingDir}/directDepositApp") {
-            fileset(dir: "${pluginDirectory}/web-app/personProfileApp")
+            fileset(dir: "${pluginDirectory}/web-app/personalInformationApp")
         }
 
         Ant.copy(todir: "${stagingDir}/images") {
