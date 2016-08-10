@@ -271,3 +271,9 @@ webAppExtensibility {
     }
     adminRoles = "ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M"
 }
+
+// ********************************************************************************
+// Cross-frame scripting vulnerability when integrating with Application Navigator.
+// ********************************************************************************
+grails.plugin.xframeoptions.urlPattern = '/login/auth'
+grails.plugin.xframeoptions.deny = true
