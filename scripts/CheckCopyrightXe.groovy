@@ -51,6 +51,7 @@ def doCheckCopyrightXe(fixIt){
     def numberErrors = 0
     def numberFiles = 0
     def copyrightBody = ""
+    def correction = fixIt ? '<th>Correction</th>' : ''
 
     appPlugins.each {
         def directoryname = it
@@ -92,52 +93,87 @@ def doCheckCopyrightXe(fixIt){
 
                     numberFiles += 1
                     def lineNo = 1
-                    def copyRightLine = 1
+                    def noCopyRightLine = true
+                    def firstXmlLine = ''
+                    String EOL = '\r\n'
                     try {
                         use(RandomAccessFileEach) {
-                            def firstXmlLine = ''
-
                             fileIoStream.eachLine { line ->
                                 if(!firstXmlLine && fileNameExt == 'xml' && line.toString().toUpperCase() =~ /<\?XML/) {
                                     firstXmlLine = line + '\r\n';
                                 }
-                                lineNo++
+                                if(filename_txt =~ 'test/integration/net/hedtech/banner/DateUtilityIntegrationTests.groovy')
+                                    lineNo++
+                                else
+                                    ++lineNo
                                 if (line.toString().toUpperCase() =~ "COPYRIGHT") {
-                                    copyRightLine = 0
+                                    noCopyRightLine = false
                                     if (!(line =~ yearChanged)) {
-                                        def correctedLine = getCorrectedCopyright(line, yearChanged)
                                         if(fixIt) {
+                                            fileIoStream.seek(fileIoStream.getFilePointer()-2)
+                                            char testChar1 = fileIoStream.read() as char
+                                            char testChar2 = fileIoStream.read() as char
+                                            char CR = '\r', LF = '\n'
+                                            if(testChar2 == LF){
+                                                if(testChar1 == CR) {
+                                                    // EOL is CRLF
+                                                    EOL = ''+CR+LF
+                                                }
+                                                else {
+                                                    // EOL is LF
+                                                    EOL = LF
+                                                }
+                                            }
+                                            else if(testChar2 == CR){
+                                                // EOL is CR
+                                                EOL = CR
+                                            }
+
+                                            def correctedLine = getCorrectedCopyright(line, yearChanged, EOL)
                                             def numBytes = line.size()
-                                            def writeOffset = fileIoStream.getFilePointer() - numBytes - 2 // 2 bytes for CRLF
+                                            def writeOffset = fileIoStream.getFilePointer() - numBytes - EOL.size()
                                             def toEOF = fileIoStream.length() - fileIoStream.getFilePointer()
                                             def newFileLength = fileIoStream.length() - numBytes + correctedLine.size()
 
-                                            fileIoStream.getChannel().transferTo(0, writeOffset, tempStream.getChannel())
+                                            fileIoStream.getChannel().transferTo(0 as int, writeOffset as int, tempStream.getChannel())
                                             tempStream.writeBytes correctedLine
                                             fileIoStream.getChannel().transferTo(fileIoStream.getFilePointer(), toEOF, tempStream.getChannel())
                                             tempStream.seek 0
                                             fileIoStream.getChannel().transferFrom(tempStream.getChannel(), 0, newFileLength)
-                                        }
 
+                                            copyrightBody += "<tr><td>${directoryname.toString()}</td><td>${filename_txt}</td><td>${line}</td><td>${correctedLine}</td><td>${commitDetail.toString()}</td></tr>"
+                                        }
+                                        else {
+                                            copyrightBody += "<tr><td>${directoryname.toString()}</td><td>${filename_txt}</td><td>${line}</td><td>${commitDetail.toString()}</td></tr>"
+                                        }
                                         numberErrors += 1
-                                        copyrightBody += "<tr><td>${directoryname.toString()}</td><td>${filename_txt}</td><td>${line}</td><td>${correctedLine}</td><td>${commitDetail.toString()}</td></tr>"
                                     }
                                 }
-                                copyRightLine
+                                noCopyRightLine
                             }
-                            if (copyRightLine) {
-                                def noCopyRightLine = "No copyright statement identified in file"
-                                def correctedLine = firstXmlLine + getNewCopyrightText(fileNameExt, yearChanged)
+
+                            if (noCopyRightLine) {
+                                def noCopyRightLineText = "No copyright statement identified in file"
 
                                 if(fixIt) {
-                                    tempStream.writeBytes correctedLine
-                                    fileIoStream.getChannel().transferTo(firstXmlLine.size(), fileIoStream.length(), tempStream.getChannel())
-                                    tempStream.seek 0
-                                    fileIoStream.getChannel().transferFrom(tempStream.getChannel(), 0, tempStream.length())
-                                }
+                                    try {
+                                        def correctedLine = firstXmlLine + getNewCopyrightText(fileNameExt, yearChanged, EOL)
 
+                                        tempStream.writeBytes correctedLine
+                                        fileIoStream.getChannel().transferTo(firstXmlLine.size(), fileIoStream.length(), tempStream.getChannel())
+                                        tempStream.seek 0
+                                        fileIoStream.getChannel().transferFrom(tempStream.getChannel(), 0, tempStream.length())
+
+                                        copyrightBody += "<tr><td>${directoryname.toString()}</td><td>${filename_txt}</td><td>${noCopyRightLineText}</td><td>${groovy.xml.XmlUtil.escapeXml(correctedLine)}</td><td>${commitDetail.toString()}</td></tr>"
+                                    }
+                                    catch (RuntimeException ex) {
+                                        copyrightBody += "<tr><td>${directoryname.toString()}</td><td>${filename_txt}</td><td>${noCopyRightLineText}</td><td>File extension was not recognized<td>${commitDetail.toString()}</td></tr>"
+                                    }
+                                }
+                                else {
+                                    copyrightBody += "<tr><td>${directoryname.toString()}</td><td>${filename_txt}</td><td>${noCopyRightLineText}</td><td>${commitDetail.toString()}</td></tr>"
+                                }
                                 numberErrors += 1
-                                copyrightBody += "<tr><td>${directoryname.toString()}</td><td>${filename_txt}</td><td>${noCopyRightLine}</td><td>${groovy.xml.XmlUtil.escapeXml(correctedLine)}</td><td>${commitDetail.toString()}</td></tr>"
                             }
                         }
                     }
@@ -192,7 +228,7 @@ def doCheckCopyrightXe(fixIt){
                         <th>Path</th>
 	                    <th>File</th>
 	                    <th>Copyright Statement</th>
-                        <th>Correction</th>
+                        ${correction}
                         <th>Commit Details</th>
 	                </thead>
 	                <tfoot>
@@ -321,12 +357,12 @@ def findPlugins(def directoryname, def pathSep, def appBranch) {
 }
 
 
-def getCorrectedCopyright(String line, year){
+def getCorrectedCopyright(String line, year, EOL){
     def firstYearMatcher = line =~ /\d{4}/
     def correctedLine
     if (firstYearMatcher.find()) {
         def firstYear = firstYearMatcher.group(0)
-        correctedLine = line.replaceFirst(/\d{4}(.*\d{4})*/, firstYear + '-' + year) + "\r\n"
+        correctedLine = line.replaceFirst(/\d{4}(.*\d{4})*/, firstYear + '-' + year) + EOL
     }
     else {
         throw new RuntimeException('No copyright year in copyright line')
@@ -335,9 +371,9 @@ def getCorrectedCopyright(String line, year){
     return correctedLine
 }
 
-def getNewCopyrightText(fileExt, year){
-    def text = '*******************************************************************************\r\n  Copyright ' +
-            year + ' Ellucian Company L.P. and its affiliates.\r\n*******************************************************************************'
+def getNewCopyrightText(fileExt, year, EOL){
+    def text = '*******************************************************************************'+EOL+'  Copyright ' +
+            year + ' Ellucian Company L.P. and its affiliates.'+EOL+'*******************************************************************************'
     def delim
     switch(fileExt) {
         case ["groovy", "java", "js", "css"]:
@@ -351,12 +387,12 @@ def getNewCopyrightText(fileExt, year){
             break
         case "sql":
             delim = ['--', '']
-            text = text.replaceAll(/\n/, "\n--")
+            text = text.replaceAll(EOL, EOL+"--")
             break
         default:
             throw new RuntimeException('Unrecognized file extension: '+ fileExt)
     }
-    text = delim[0] + text + delim[1] + '\r\n'
+    text = delim[0] + text + delim[1] + EOL
 
     return text;
 }
@@ -377,6 +413,8 @@ class RandomAccessFileEach {
 
                 if (line) {
                     if(!closure.call(line)) break
+                } else if(self.getFilePointer() < self.length()) {
+                    continue
                 } else {
                     break
                 }
