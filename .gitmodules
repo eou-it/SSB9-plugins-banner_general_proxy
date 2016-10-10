@@ -51,7 +51,7 @@
 	url = https://git.ellucian.com/scm/banxeplug/banner_spring_security_saml.git
 [submodule "plugins/banner_general_direct_deposit_ui.git"]
 	path = plugins/banner_general_direct_deposit_ui.git
-	url = ssh://git@git.ellucian.com:7999/banxeplug/banner_general_direct_deposit_ui.git
+	url = https://git.ellucian.com/scm/banxeplug/banner_general_direct_deposit_ui.git
 [submodule "plugins/banner_general_personal_information_ui.git"]
 	path = plugins/banner_general_personal_information_ui.git
 	url = https://git.ellucian.com/scm/banxeplug/banner_general_personal_information_ui.git
