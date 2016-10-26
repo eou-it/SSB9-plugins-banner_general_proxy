@@ -16,26 +16,15 @@ class GeneralController {
     static defaultAction = "landingPage"
 
 
-    def fetchDate() {
-        def map = ['date': new Date(), 'dateFormat': LocalizeUtil.dateFormat]
-        render map as JSON
-    }
-
 
     def landingPage() {
         try {
-            //TODO: call fetch roles
-            def model = [:]
-            def url = g.message( code: 'default.url.landing.page.for.roles' )
-
-            model = ['url': url]
-//            render model: model, view: "generalSsb"
-            render model: model, view: "general"
+            render view: "general"
         } catch (ApplicationException e) {
             render returnFailureMessage( e ) as JSON
         }
     }
-    
+
     def getRoles() {
         def model = [:]
         model.isStudent = hasUserRole("STUDENT")
