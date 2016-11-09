@@ -277,3 +277,9 @@ webAppExtensibility {
 // ********************************************************************************
 grails.plugin.xframeoptions.urlPattern = '/login/auth'
 grails.plugin.xframeoptions.deny = true
+
+// Location of users' profile picture image files
+banner {
+  picturesPath=System.getProperty('base.dir') + '/test/images'
+  defaultPhoto=System.getProperty('base.dir') + '/test/images/no_photo_available.png'
+}
