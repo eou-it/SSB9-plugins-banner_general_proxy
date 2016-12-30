@@ -193,6 +193,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/ssb/menu**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/directDepositApp/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/keepAlive/data**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/dateConverter/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/ssb/dateConverter/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         // ALL URIs specified with the BannerAccessDecisionVoter.ROLE_DETERMINED_DYNAMICALLY
         // 'role' (it's not a real role) will result in authorization being determined based
         // upon a user's role assignments to the corresponding form (see 'formControllerMap' above).
