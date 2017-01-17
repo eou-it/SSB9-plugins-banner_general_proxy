@@ -89,6 +89,11 @@ class UrlMappings {
             controller = "logout"
             action = "timeout"
         }
+        
+        "/resetPassword/changeExpiredPassword" {
+           controller = "resetPassword"
+           action = "changeExpiredPassword"
+        }        
 
         "/ssb/$controller/logout" {
             controller = "logout"

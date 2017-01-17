@@ -157,7 +157,8 @@ formControllerMap = [
         'accountlisting': ['SELFSERVICE'],
         'directdepositconfiguration': ['SELFSERVICE'],
         'personalinformationdetails': ['SELFSERVICE'],
-        'personalinformationpicture': ['SELFSERVICE']
+        'personalinformationpicture': ['SELFSERVICE'],
+        'about': ['GUAGMNU']
 ]
 
 
@@ -191,6 +192,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/i18n/**':  ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/selfServiceMenu/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/menu**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/ssb/about/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/directDepositApp/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/keepAlive/data**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/dateConverter/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
