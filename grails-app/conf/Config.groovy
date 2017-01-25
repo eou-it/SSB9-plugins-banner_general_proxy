@@ -151,11 +151,11 @@ formControllerMap = [
         'useragreement': ['SELFSERVICE'],
         'securityqa': ['SELFSERVICE'],
         'general': ['SELFSERVICE'],
-        'directdeposit': ['SELFSERVICE'],
+        'directdeposit': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
         'personalinformation': ['SELFSERVICE'],
-        'updateaccount': ['SELFSERVICE'],
-        'accountlisting': ['SELFSERVICE'],
-        'directdepositconfiguration': ['SELFSERVICE'],
+        'updateaccount': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
+        'accountlisting': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
+        'directdepositconfiguration': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
         'personalinformationdetails': ['SELFSERVICE'],
         'personalinformationpicture': ['SELFSERVICE'],
         'about': ['GUAGMNU']
@@ -211,17 +211,17 @@ grails.plugin.springsecurity.interceptUrlMap = [
         //
         // '/**': [ 'ROLE_DETERMINED_DYNAMICALLY' ]
         //'/**': [ 'ROLE_SELFSERVICE-FACULTY_BAN_DEFAULT_M' ]
-        '/ssb/securityQA/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/survey/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/userAgreement/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/general/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/directDeposit/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/UpdateAccount/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/accountListing/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/DirectDepositConfiguration/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/personalInformation/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationDetails/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationPicture/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M']
+        '/ssb/securityQA/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/survey/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/userAgreement/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/general/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/directDeposit/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
+        '/ssb/UpdateAccount/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
+        '/ssb/accountListing/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
+        '/ssb/DirectDepositConfiguration/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
+        '/ssb/personalInformation/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/PersonalInformationDetails/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/PersonalInformationPicture/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M']
 ]
 
 // CodeNarc rulesets
@@ -230,7 +230,7 @@ codenarc.reportName="target/CodeNarcReport.html"
 codenarc.propertiesFile="grails-app/conf/codenarc.properties"
 codenarc.extraIncludeDirs=["grails-app/composers"]
 
-grails.validateable.packages=['net.hedtech.banner.student.registration']
+//grails.validateable.packages=['net.hedtech.banner.student.registration']
 
 // placeholder for real configuration
 // base.dir is probably not defined for .war file deployments
