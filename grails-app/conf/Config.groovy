@@ -108,7 +108,7 @@ environments {
     test {
         ssbEnabled = true
         ssbOracleUsersProxied = true
-        grails.plugins.springsecurity.interceptUrlMap = [
+        grails.plugin.springsecurity.interceptUrlMap = [
                 '/': ['IS_AUTHENTICATED_ANONYMOUSLY'] ]
     }
     development {
