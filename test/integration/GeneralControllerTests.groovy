@@ -76,4 +76,28 @@ class GeneralControllerTests extends BaseIntegrationTestCase {
         assertFalse data
     }
 
+    @Test
+    void testFacultyUserCanLogin(){
+        loginSSB 'HOF00714', '111111'
+
+        controller.request.contentType = "text/json"
+        assertFalse(controller.hasUserRole('STUDENT'))
+        assertFalse(controller.hasUserRole('EMPLOYEE'))
+        assertTrue(controller.hasUserRole('FACULTY'))
+
+    }
+
+    @Test
+    void testWebTailorRoleOnlyUserCanLogin(){
+        loginSSB 'BCMADMIN', '111111'
+
+        controller.request.contentType = "text/json"
+        assertFalse(controller.hasUserRole('STUDENT'))
+        assertFalse(controller.hasUserRole('EMPLOYEE'))
+        assertFalse(controller.hasUserRole('FACULTY'))
+        assertTrue(controller.hasUserRole('COMMUNICATIONADMIN'))
+
+    }
+
+
 }

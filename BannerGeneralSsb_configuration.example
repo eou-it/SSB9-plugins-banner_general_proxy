@@ -107,12 +107,13 @@ grails {
                 serviceParameter = 'TARGET'
                 serverUrlEncoding = 'UTF-8'
                 filterProcessesUrl = '/j_spring_cas_security_check'
-                if (useSingleSignout){
+                if (active && useSingleSignout){
                     grails.plugin.springsecurity.useSessionFixationPrevention = false
                 }
             }
             logout {
-                afterLogoutUrl = 'https://cas-server/logout?url=http://myportal/main_page.html'
+                // if CAS active, afterLogoutUrl = 'https://cas-server/logout?url=http://myportal/main_page.html'
+                afterLogoutUrl = '/'
             }
         }
     }

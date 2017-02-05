@@ -59,5 +59,10 @@ class GeneralController {
         }
     }
 
+    def denied403() {
+        render(status: 403)
+    }
+
+
 
 }
