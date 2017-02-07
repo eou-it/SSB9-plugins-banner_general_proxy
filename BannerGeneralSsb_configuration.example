@@ -329,5 +329,5 @@ banner {
 ***********************************************************************************/
 /*
 banner.analytics.trackerId=[institution's google analytics tracker ID - default blank]
-banner.analytics.allowEllucianTracker=[true|false - default true]
 */
+banner.analytics.allowEllucianTracker=false
