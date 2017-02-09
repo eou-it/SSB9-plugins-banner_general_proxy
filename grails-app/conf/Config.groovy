@@ -158,6 +158,7 @@ formControllerMap = [
         'directdepositconfiguration': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
         'personalinformationdetails': ['SELFSERVICE'],
         'personalinformationpicture': ['SELFSERVICE'],
+        'personalinformationqa': ['SELFSERVICE'],
         'about': ['GUAGMNU']
 ]
 
@@ -221,7 +222,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/ssb/DirectDepositConfiguration/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
         '/ssb/personalInformation/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/PersonalInformationDetails/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationPicture/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M']
+        '/ssb/PersonalInformationPicture/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/PersonalInformationQA/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M']
 ]
 
 // CodeNarc rulesets
