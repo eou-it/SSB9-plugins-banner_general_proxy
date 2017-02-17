@@ -44,6 +44,7 @@ modules = {
 
         // Services
         resource url:[file: 'generalSsbApp/common/services/breadcrumb-service.js']
+        resource url:[file: 'generalSsbApp/common/services/generalSsb-service.js']
 
         // Controllers
         resource url:[file: 'generalSsbApp/landingPage/gssLandingPage-controller.js']

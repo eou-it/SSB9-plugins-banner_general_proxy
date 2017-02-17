@@ -1,16 +1,57 @@
 /*******************************************************************************
  Copyright 2017 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-@media screen and (max-width: 767px) {
+/* Mobile device */
+@media screen and (max-width:568px){
+    .gen-app-tile {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+@media screen and (min-width: 569px) and (max-width: 767px) {
     .breadcrumbButton {
         float: left;
         padding-top: 8px;
     }
+
+    .gen-home-content {
+        width: 70%;
+    }
+
+    .gen-home-content.single-tile {
+        width: 50%;
+    }
+
+    .gen-app-tile {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }
 
+/* Tablet device */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .gen-home-content {
+        width: 650px;
+    }
+
+    .gen-home-content.single-tile {
+        width: 310px;
+    }
+
+    .gen-app-tile {
+        width: 310px;
+    }
+}
+
+/* Desktop */
 @media screen and (min-width:1024px) {
     .gen-home-content {
         width: 850px;
+    }
+
+    .gen-home-content.single-tile {
+        width: 410px;
     }
 
     .gen-app-tile {

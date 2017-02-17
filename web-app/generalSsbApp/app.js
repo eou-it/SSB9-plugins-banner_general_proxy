@@ -9,8 +9,8 @@ var generalSsbAppDirectives = angular.module('generalSsbAppDirectives', []);
 var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','generalSsbAppControllers',
         'generalSsbAppDirectives','ui.bootstrap','I18n'])
     .run(
-        ['$rootScope', '$state', '$stateParams', '$filter', 'breadcrumbService',
-            function ($rootScope, $state, $stateParams, $filter, breadcrumbService) {
+        ['$rootScope', '$state', '$stateParams', '$filter', 'breadcrumbService', 'generalSsbService',
+            function ($rootScope, $state, $stateParams, $filter, breadcrumbService, generalSsbService) {
                 $rootScope.$state = $state;
                 $rootScope.$stateParams = $stateParams;
                 $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
@@ -31,6 +31,11 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','g
                 if (!window.location.origin) {
                     window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
                 }
+
+                generalSsbService.getRoles().$promise.then(function (response) {
+                    $rootScope.isStudent = response.isStudent;
+                    $rootScope.isEmployee = response.isEmployee;
+                });
 
                 $rootScope.isDesktopView = isDesktop();
 
@@ -58,7 +63,7 @@ generalSsbApp.config(function($stateProvider, $urlRouterProvider){
     $stateProvider
         .state('home', {
             url: "/home",
-            templateUrl: '../generalSsbApp/landingPage/landingPage.html',
+            templateUrl: '../generalSsbApp/landingPage/gssLandingPage.html',
             controller: 'gssLandingPageController',
             data: {
                 breadcrumbs: []
