@@ -1,0 +1,13 @@
+<div ng-click="goApp(tileData.url)" class="gen-app-tile">
+    <div class="tile-icon">
+        <ng-include src="tileData.icon"></ng-include>
+    </div>
+    <div class="tile-content">
+        <div class="tile-title">
+            {{tileData.title|i18n}}
+        </div>
+        <div class="tile-desc">
+            {{tileData.desc|i18n}}
+        </div>
+    </div>
+</div>
