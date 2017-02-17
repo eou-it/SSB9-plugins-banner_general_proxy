@@ -1,0 +1,84 @@
+/* General Styles */
+body {
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+    font-size: 14px;
+}
+
+#content {
+    height: 100%;
+}
+
+.gen-home-main-view {
+    height: 100%;
+    background: #EFF4F8;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+.gen-home-content {
+    position: absolute;
+    display: inline-block;
+    margin: 25px auto;
+    right: 0;
+    left: 0;
+}
+
+.gen-app-tile {
+    float: left;
+    margin-right: 15px;
+    padding: 15px 15px 0;
+    text-align: center;
+    border-bottom: 4px solid #ddd;
+    overflow: hidden;
+    background: white;
+    cursor: pointer;
+}
+
+.tile-icon {
+    float: left;
+    width: 25%;
+}
+
+.gen-app-tile svg {
+    margin: -10px 0 0 -10px;
+}
+
+.tile-content {
+    float: left;
+    width: 75%;
+}
+
+.tile-title {
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.tile-desc {
+    text-align: left;
+    font-size: 14px;
+}
+
+/* Accessibility */
+.audible-message {
+    position: absolute;
+    top:0;
+    left: -500px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    color: transparent;
+}
+.audible-message-hidden {
+    display: none;
+    visibility: hidden;
+}
+.audible-message-visible {
+    display: block;
+    visibility: visible;
+}
