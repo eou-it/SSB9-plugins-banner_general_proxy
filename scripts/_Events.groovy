@@ -72,7 +72,7 @@ eventCreateWarStart = { warName, stagingDir ->
     ant.move( file:"${stagingDir}/WEB-INF/lib/xdb6-11.2.0.4.jar", toFile:"$basedir/target/xdb6.jar" )
 
     preparePlugin("banner-general-direct-deposit-ui") { name, version, pluginDirectory ->
-        println "Copying CSS, image, and JavaScript files from banner-general-direct-deposit-ui plugin"
+        println "Copying i18n files from banner-general-direct-deposit-ui plugin"
 
         Ant.copy(todir: "${stagingDir}/WEB-INF/plugins/$name-$version/grails-app/i18n") {
             fileset(dir: "${pluginDirectory}/grails-app/i18n")
@@ -80,7 +80,7 @@ eventCreateWarStart = { warName, stagingDir ->
     }
 
     preparePlugin("banner-general-personal-information-ui") { name, version, pluginDirectory ->
-        println "Copying CSS, image, and JavaScript files from banner-general-personal-information-ui plugin"
+        println "Copying i18n files from banner-general-personal-information-ui plugin"
 
         Ant.copy(todir: "${stagingDir}/WEB-INF/plugins/$name-$version/grails-app/i18n") {
             fileset(dir: "${pluginDirectory}/grails-app/i18n")
