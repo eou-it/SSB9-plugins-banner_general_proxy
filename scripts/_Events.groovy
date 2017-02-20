@@ -74,22 +74,6 @@ eventCreateWarStart = { warName, stagingDir ->
     preparePlugin("banner-general-direct-deposit-ui") { name, version, pluginDirectory ->
         println "Copying CSS, image, and JavaScript files from banner-general-direct-deposit-ui plugin"
 
-        Ant.copy(todir: "${stagingDir}/css") {
-            fileset(dir: "${pluginDirectory}/web-app/css")
-        }
-
-        Ant.copy(todir: "${stagingDir}/directDepositApp") {
-            fileset(dir: "${pluginDirectory}/web-app/directDepositApp")
-        }
-
-        Ant.copy(todir: "${stagingDir}/images") {
-            fileset(dir: "${pluginDirectory}/web-app/images")
-        }
-
-        Ant.copy(todir: "${stagingDir}/js") {
-            fileset(dir: "${pluginDirectory}/web-app/js")
-        }
-
         Ant.copy(todir: "${stagingDir}/WEB-INF/plugins/$name-$version/grails-app/i18n") {
             fileset(dir: "${pluginDirectory}/grails-app/i18n")
         }
@@ -97,22 +81,6 @@ eventCreateWarStart = { warName, stagingDir ->
 
     preparePlugin("banner-general-personal-information-ui") { name, version, pluginDirectory ->
         println "Copying CSS, image, and JavaScript files from banner-general-personal-information-ui plugin"
-
-        Ant.copy(todir: "${stagingDir}/css") {
-            fileset(dir: "${pluginDirectory}/web-app/css")
-        }
-
-        Ant.copy(todir: "${stagingDir}/directDepositApp") {
-            fileset(dir: "${pluginDirectory}/web-app/personalInformationApp")
-        }
-
-        Ant.copy(todir: "${stagingDir}/images") {
-            fileset(dir: "${pluginDirectory}/web-app/images")
-        }
-
-        Ant.copy(todir: "${stagingDir}/js") {
-            fileset(dir: "${pluginDirectory}/web-app/js")
-        }
 
         Ant.copy(todir: "${stagingDir}/WEB-INF/plugins/$name-$version/grails-app/i18n") {
             fileset(dir: "${pluginDirectory}/grails-app/i18n")
