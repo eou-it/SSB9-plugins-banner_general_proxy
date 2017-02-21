@@ -61,16 +61,16 @@ modules = {
         dependsOn "bannerWebLTR, generalSsbApp, bootstrapLTR"
 
         // CSS
-        resource url:[file: 'css/main.css'],   attrs: [media: 'screen, projection']
-        resource url:[file: 'css/responsive.css'],   attrs: [media: 'screen, projection']
+        resource url:[file: 'css/generalSsbMain.css'],   attrs: [media: 'screen, projection']
+        resource url:[file: 'css/generalSsbResponsive.css'],   attrs: [media: 'screen, projection']
     }
 
     'generalSsbAppRTL' {
         dependsOn "bannerWebRTL, generalSsbApp, bootstrapRTL"
 
         // CSS
-        resource url:[file: 'css/main-rtl.css'],   attrs: [media: 'screen, projection']
-        resource url:[file: 'css/responsive-rtl.css'],   attrs: [media: 'screen, projection']
+        resource url:[file: 'css/generalSsbMain-rtl.css'],   attrs: [media: 'screen, projection']
+        resource url:[file: 'css/generalSsbResponsive-rtl.css'],   attrs: [media: 'screen, projection']
     }
 
 }

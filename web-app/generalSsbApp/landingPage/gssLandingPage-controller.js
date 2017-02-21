@@ -1,5 +1,5 @@
-generalSsbAppControllers.controller('gssLandingPageController',['$scope',
-    function ($scope) {
+generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'generalSsbService',
+    function ($scope, generalSsbService) {
 
         // LOCAL VARIABLES
         // ---------------
@@ -29,8 +29,12 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope',
             },
 
             init = function() {
-                $scope.appTilesForRole = getAppTilesForRole($scope.appTiles);
-                $scope.isSingleTile = $scope.appTilesForRole.length === 1;
+                generalSsbService.getRoles().$promise.then(function (response) {
+                    $scope.isStudent = response.isStudent;
+                    $scope.isEmployee = response.isEmployee;
+                    $scope.appTilesForRole = getAppTilesForRole($scope.appTiles);
+                    $scope.isSingleTile = $scope.appTilesForRole.length === 1;
+                });
             };
 
 
@@ -54,6 +58,8 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope',
             }
         ];
 
+        $scope.isStudent;
+        $scope.isEmployee;
         $scope.appTilesForRole;
         $scope.isSingleTile;
 
