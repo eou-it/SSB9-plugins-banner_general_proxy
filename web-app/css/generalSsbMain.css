@@ -19,12 +19,68 @@ h2 {
     font-size: 24px;
 }
 
+.gen-home-heading,
 .gen-home-content {
     position: absolute;
     display: inline-block;
-    margin: 25px auto;
+    margin-left: auto;
+    margin-right: auto;
     right: 0;
     left: 0;
+}
+
+.gen-home-heading {
+    top: 25px;
+}
+
+.gen-home-heading-spacer {
+    display: none;
+}
+
+.gen-home-content {
+    top: 220px;
+}
+
+.gen-home-heading .title {
+    font-size: 28px;
+    color: #888D91;
+    padding-bottom: 25px;
+}
+
+.gen-home-heading .greeting-wrapper {
+    clear: both;
+    padding-top: 15px;
+}
+
+.gen-home-heading .avatar {
+    width: 66px;
+    height: 80px;
+    margin-right: 25px;
+    float: left;
+}
+
+.gen-home-heading .avatar-spacer {
+    display: none;
+}
+
+.gen-home-heading .greeting {
+    float: left;
+    font-size: 16px;
+    color: #888D91;
+    margin-top: 10px;
+}
+
+.gen-home-title-divider {
+    width: 30px;
+    height: 2px;
+}
+
+.gen-home-title-divider span {
+    border-bottom: 2px solid #989DA2;
+    width: 100%;
+    float: left;
+    margin-top: 1.0em;
+    margin-bottom: 0.675em;
 }
 
 .gen-app-tile {
