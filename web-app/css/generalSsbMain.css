@@ -59,6 +59,11 @@ h2 {
     float: left;
 }
 
+.gen-home-heading .avatar svg {
+    width: 66px;
+    height: 80px;
+}
+
 .gen-home-heading .avatar-spacer {
     display: none;
 }
