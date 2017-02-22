@@ -88,6 +88,7 @@ h2 {
     margin-right: 15px;
     padding: 15px 15px 0;
     text-align: center;
+    border: none;
     border-bottom: 4px solid #ddd;
     overflow: hidden;
     background: white;
