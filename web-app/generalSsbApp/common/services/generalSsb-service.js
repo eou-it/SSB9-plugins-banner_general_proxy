@@ -12,4 +12,9 @@ generalSsbApp.service('generalSsbService', ['$rootScope', '$resource', function 
         return fetchRoles.query();
     };
 
+    this.getFromPersonalInfo = function (entityName, params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'PersonalInformationDetails', action: 'get'+entityName}).get(params);
+    };
+
 }]);

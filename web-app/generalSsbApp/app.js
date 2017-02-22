@@ -60,6 +60,11 @@ generalSsbApp.config(function($stateProvider, $urlRouterProvider){
             url: "/home",
             templateUrl: '../generalSsbApp/landingPage/gssLandingPage.html',
             controller: 'gssLandingPageController',
+            resolve: {
+                piConfigResolve: function (generalSsbService) {
+                    return generalSsbService.getFromPersonalInfo('PiConfig').$promise;
+                }
+            },
             data: {
                 breadcrumbs: []
             }
