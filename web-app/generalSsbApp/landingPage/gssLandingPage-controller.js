@@ -1,5 +1,5 @@
-generalSsbAppControllers.controller('gssLandingPageController',['$scope',
-    function ($scope) {
+generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'generalSsbService', 'piConfigResolve',
+    function ($scope, generalSsbService, piConfigResolve) {
 
         // LOCAL VARIABLES
         // ---------------
@@ -29,11 +29,37 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope',
             },
 
             init = function() {
-                $scope.appTilesForRole = getAppTilesForRole($scope.appTiles);
-                $scope.isSingleTile = $scope.appTilesForRole.length === 1;
+                $scope.piConfig = piConfigResolve;
+
+                generalSsbService.getRoles().$promise.then(function (response) {
+                    $scope.isStudent = response.isStudent;
+                    $scope.isEmployee = response.isEmployee;
+                    $scope.appTilesForRole = getAppTilesForRole($scope.appTiles);
+                    $scope.isSingleTile = $scope.appTilesForRole.length === 1;
+                });
+
+                // Get user name for display
+                generalSsbService.getFromPersonalInfo('PersonalDetails').$promise.then(function (response) {
+                    var firstName = response && response.preferenceFirstName;
+
+                    if (firstName) {
+                        $scope.firstName = firstName;
+                    } else {
+                        generalSsbService.getFromPersonalInfo('UserName').$promise.then(function (response) {
+                            firstName = response && response.firstName;
+
+                            if (firstName) {
+                                $scope.firstName = firstName;
+                            }
+                        });
+                    }
+                });
+
+                generalSsbService.getFromPersonalInfo('BannerId').$promise.then(function (response) {
+                    $scope.bannerId = response.bannerId;
+                });
+
             };
-
-
 
 
         // CONTROLLER VARIABLES
@@ -54,8 +80,13 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope',
             }
         ];
 
+        $scope.piConfig = {};
+        $scope.isStudent;
+        $scope.isEmployee;
         $scope.appTilesForRole;
         $scope.isSingleTile;
+        $scope.firstName = '';
+        $scope.bannerId;
 
 
         // INITIALIZE
