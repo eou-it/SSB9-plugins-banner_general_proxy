@@ -1,3 +1,6 @@
+/********************************************************************************
+  Copyright 2017 Ellucian Company L.P. and its affiliates.
+********************************************************************************/
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
 import org.junit.After

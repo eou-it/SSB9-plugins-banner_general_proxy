@@ -1,3 +1,6 @@
+/********************************************************************************
+  Copyright 2017 Ellucian Company L.P. and its affiliates.
+********************************************************************************/
 generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'generalSsbService', 'piConfigResolve',
     function ($scope, generalSsbService, piConfigResolve) {
 
