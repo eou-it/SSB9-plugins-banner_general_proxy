@@ -77,7 +77,8 @@ def doCheckCopyrightXe(fixIt){
 
 
             if (!(filename_txt =~ "CheckCopyrightXe.groovy" || fileNameExt == "rst" || fileNameExt == "properties" ||
-                    filename_txt =~ ".git")) {
+                    filename_txt =~ ".git" || fileNameExt == "svg" || fileNameExt == "scss" || fileNameExt == "ttf" ||
+                    fileNameExt == "woff")) {
                 if (!filename.isDirectory() && filename.exists()) {
                     def fileIoStream = new RandomAccessFile(filename_dir_txt, "rw")
                     File tempFile
