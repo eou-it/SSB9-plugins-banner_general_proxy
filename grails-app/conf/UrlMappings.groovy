@@ -80,9 +80,19 @@ class UrlMappings {
             action = "authfail"
         }
 
+        "/login/error" {
+            controller = "login"
+            action = "error"
+        }
+
         "/logout" {
             controller = "logout"
             action = "index"
+        }
+
+        "/logout/customLogout" {
+            controller = "logout"
+            action = "customLogout"
         }
 
         "/logout/timeout" {
@@ -109,6 +119,7 @@ class UrlMappings {
         "/index.gsp"(view:"/index")
         "500"(controller: "error", action: "internalServerError")
         "403"(controller: "error", action: "accessForbidden")
+        "404"(controller: "error", action: "pageNotFoundError")
 
         "/login/resetPassword" {
             controller = "login"
