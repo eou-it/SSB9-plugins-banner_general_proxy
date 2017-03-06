@@ -147,3 +147,9 @@ h2 {
     display: block;
     visibility: visible;
 }
+
+/* Breadcrumbs */
+a.breadcrumbButton.leaf-breadcrumb {
+    text-decoration: none;
+    cursor: default;
+}
