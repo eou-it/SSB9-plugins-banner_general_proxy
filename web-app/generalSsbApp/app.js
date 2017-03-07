@@ -1,7 +1,6 @@
 /*******************************************************************************
  Copyright 2017 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-//TODO: CLEAN UP UNNECESSARY STUFF IN HERE. Jim C
 var generalSsbAppControllers = angular.module('generalSsbAppControllers', []);
 var generalSsbAppDirectives = angular.module('generalSsbAppDirectives', []);
 
@@ -54,7 +53,6 @@ generalSsbApp.config(function($stateProvider, $urlRouterProvider){
     /*************************************************************************
      * Defining all the different states of the generalSsbApp landing pages. *
      *************************************************************************/
-    //TODO: need controller here? Jim c
     $stateProvider
         .state('home', {
             url: "/home",
