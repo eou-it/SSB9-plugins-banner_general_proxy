@@ -117,9 +117,9 @@ class UrlMappings {
 
         "/"(view:"/index")
         "/index.gsp"(view:"/index")
-        "500"(controller:"error",action:"internalServerError")
-        "403"(controller:"error",action:"accessForbidden")
-        "404"(controller:"error",action:"pageNotFoundError")
+        "500"(controller: "error", action: "internalServerError")
+        "403"(controller: "error", action: "accessForbidden")
+        "404"(controller: "error", action: "pageNotFoundError")
 
         "/login/resetPassword" {
             controller = "login"
