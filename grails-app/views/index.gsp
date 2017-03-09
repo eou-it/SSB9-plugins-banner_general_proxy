@@ -24,6 +24,9 @@
     <g:elseif test="${hideSSBHeaderComps}">
         <g:set var="url" value="${url+'?hideSSBHeaderComps='+hideSSBHeaderComps}" />
     </g:elseif>
+    <script>
+        document.cookie = 'generalCallingPage=' + document.referrer + '; path=/BannerGeneralSsb';
+    </script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta HTTP-EQUIV="REFRESH" content="0; url=${url}">
 </head>
