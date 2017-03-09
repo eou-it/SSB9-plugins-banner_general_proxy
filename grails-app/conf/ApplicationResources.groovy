@@ -12,8 +12,10 @@ modules = {
         }
     }
 
-    'angular' {
-        resource url:[file: 'js/angular/angular-route.min.js']
+    'angularGeneral' {
+        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-route.min.js']
+        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-cookies.min.js']
+
     }
 
     'bootstrapLTR' {
@@ -35,7 +37,7 @@ modules = {
     }
 
     'generalSsbApp' {
-        dependsOn "angular,glyphicons"
+        dependsOn "angularGeneral,glyphicons"
 
         defaultBundle environment == "development" ? false : "generalSsbApp"
 

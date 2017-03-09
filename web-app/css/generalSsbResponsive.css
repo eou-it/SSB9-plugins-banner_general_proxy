@@ -60,6 +60,10 @@
         position: static;
         margin-top: 20px;
     }
+
+    #breadcrumb-panel #breadcrumbHeader{
+        transform: translateY(-30%);
+    }
 }
 
 @media screen and (min-width: 569px) and (max-width: 767px) {
