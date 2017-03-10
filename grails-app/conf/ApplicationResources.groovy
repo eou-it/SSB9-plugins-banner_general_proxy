@@ -14,7 +14,6 @@ modules = {
 
     'angularGeneral' {
         resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-route.min.js']
-        resource url:[plugin: 'banner-ui-ss', file: 'js/angular/angular-cookies.min.js']
 
     }
 

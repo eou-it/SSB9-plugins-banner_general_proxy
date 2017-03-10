@@ -6,7 +6,7 @@ var generalSsbAppDirectives = angular.module('generalSsbAppDirectives', []);
 
 
 var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','generalSsbAppControllers',
-        'generalSsbAppDirectives','ui.bootstrap','I18n', 'ngCookies'])
+        'generalSsbAppDirectives','ui.bootstrap','I18n'])
     .run(
         ['$rootScope', '$state', '$stateParams', '$filter', 'breadcrumbService',
             function ($rootScope, $state, $stateParams, $filter, breadcrumbService) {
