@@ -2,7 +2,7 @@
  Copyright 2016-2017 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-generalSsbApp.service( 'breadcrumbService', ['$filter', '$cookies', function ($filter, $cookies) {
+generalSsbApp.service( 'breadcrumbService', ['$filter',function ($filter) {
     var constantBreadCrumb = [],
         callingUrl,
         CALLING_URL = 1;
@@ -15,7 +15,7 @@ generalSsbApp.service( 'breadcrumbService', ['$filter', '$cookies', function ($f
             }
         ];
 
-        callingUrl = $cookies.get('generalCallingPage');
+        callingUrl = sessionStorage.getItem('genMainCallingPage');
 
         if (callingUrl) {
             constantBreadCrumb.splice(0, 0, {
