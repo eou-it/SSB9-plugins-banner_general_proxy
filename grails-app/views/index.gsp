@@ -24,7 +24,7 @@
     <g:elseif test="${hideSSBHeaderComps}">
         <g:set var="url" value="${url+'?hideSSBHeaderComps='+hideSSBHeaderComps}" />
     </g:elseif>
-    <script>
+    <script type="text/javascript">
         sessionStorage.setItem('genMainCallingPage', document.referrer);
     </script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
