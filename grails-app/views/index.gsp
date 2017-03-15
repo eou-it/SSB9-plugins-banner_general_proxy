@@ -25,7 +25,23 @@
         <g:set var="url" value="${url+'?hideSSBHeaderComps='+hideSSBHeaderComps}" />
     </g:elseif>
     <script type="text/javascript">
-        sessionStorage.setItem('genMainCallingPage', document.referrer);
+        // Track calling page for breadcrumbs
+        (function () {
+            // URL pattern to exclude from updating genMainCallingPage.  No breadcrumbs for "/BannerGeneralSsb/" URLs
+            // should be created for the landing page.
+            var referrerUrl = document.referrer,
+                    excludedRegex = /\/BannerGeneralSsb\//,
+                    isExcluded;
+
+            if (referrerUrl) {
+                isExcluded = excludedRegex.test(referrerUrl);
+
+                if (!isExcluded) {
+                    // Track this page
+                    sessionStorage.setItem('genMainCallingPage', referrerUrl);
+                }
+            }
+        })();
     </script>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta HTTP-EQUIV="REFRESH" content="0; url=${url}">
