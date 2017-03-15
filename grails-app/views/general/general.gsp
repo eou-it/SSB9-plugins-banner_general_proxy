@@ -36,6 +36,25 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
         document.createElement('ng-pluralize');
         document.createElement('ng-view');
     </script>
+    <script type="text/javascript">
+        // Track calling page for breadcrumbs
+        (function () {
+            // URL pattern to exclude from updating genMainCallingPage.  No breadcrumbs for "/BannerGeneralSsb/" URLs
+            // should be created for the landing page.
+            var referrerUrl = document.referrer,
+                excludedRegex = /\/BannerGeneralSsb\//,
+                isExcluded;
+
+            if (referrerUrl) {
+                isExcluded = excludedRegex.test(referrerUrl);
+
+                if (!isExcluded) {
+                    // Track this page
+                    sessionStorage.setItem('genMainCallingPage', referrerUrl);
+                }
+            }
+        })();
+    </script>
 </head>
 
 <body>
