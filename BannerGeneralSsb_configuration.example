@@ -74,7 +74,7 @@ ssbPassword.reset.enabled = true //true  - allow Pidm users to reset their passw
 //
 banner {
     sso {
-        authenticationProvider           = 'default' //  Valid values are: 'default' and 'cas' for SSO to work.
+        authenticationProvider           = 'default' //  Valid values are: 'default', 'cas', or 'saml'
         authenticationAssertionAttribute = 'UDC_IDENTIFIER'
         if(authenticationProvider != 'default') {
             grails.plugin.springsecurity.failureHandler.defaultFailureUrl = '/login/error'
@@ -154,6 +154,13 @@ grails.plugin.springsecurity.saml.metadata.sp.defaults = [
 ]
 */
 
+// ******************************************************************************
+//                                                                              *
+//                       +++ HOME PAGE URL CONFIGURATION +++                    *
+//             Home page link when error happens during authentication.         *
+//                                                                              *
+// ******************************************************************************
+/*grails.plugin.springsecurity.homePageUrl='http://HOST:PORT/' */
 
 // ******************************************************************************
 //
