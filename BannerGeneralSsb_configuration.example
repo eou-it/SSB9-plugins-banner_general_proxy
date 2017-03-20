@@ -330,5 +330,5 @@ banner {
  *                          Google Analytics                                   *
  *                                                                             *
  *******************************************************************************/
-banner.analytics.trackerId=
+banner.analytics.trackerId=''
 banner.analytics.allowEllucianTracker=true
