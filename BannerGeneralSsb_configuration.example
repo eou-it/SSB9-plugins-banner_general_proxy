@@ -331,10 +331,11 @@ banner {
   picturesPath=System.getProperty('base.dir') + '/test/images'
   defaultPhoto=System.getProperty('base.dir') + '/test/images/no_photo_available.png'
 }
-/**********************************************************************************
-***    Google Analytics                                                            *
-***********************************************************************************/
-/*
-banner.analytics.trackerId=[institution's google analytics tracker ID - default blank]
-*/
-banner.analytics.allowEllucianTracker=false
+
+/*******************************************************************************
+ *                                                                             *
+ *                          Google Analytics                                   *
+ *                                                                             *
+ *******************************************************************************/
+banner.analytics.trackerId=''
+banner.analytics.allowEllucianTracker=true
