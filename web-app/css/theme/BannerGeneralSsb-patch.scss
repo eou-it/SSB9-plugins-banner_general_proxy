@@ -1,0 +1,36 @@
+/* Personal Information
+   ========================= */
+.pi-desktop-contents {
+    background: #EFF4F8;
+}
+
+.input-field-label  {
+    color: $themecolor2-3; /*#4F585F*/
+}
+
+path#Phone-Icon-2 {
+    stroke: $themecolor1; /*#206E9F*/
+}
+
+path#Shape-Copy-Copy-4 {
+    fill: $themecolor1; /*#206E9F*/
+}
+
+path#Path {
+    fill: $themecolor1; /*#206E9F*/
+}
+
+.overview-line.addr > .pi-icon-align {
+    color: $themecolor1; /*#206E9F*/
+}
+
+.save-btn {
+    box-shadow: none;
+}
+
+
+/* Direct Deposit
+   ========================= */
+.buttons-desktop-save .save-btn {
+    color: $themecolor2-3;
+}
