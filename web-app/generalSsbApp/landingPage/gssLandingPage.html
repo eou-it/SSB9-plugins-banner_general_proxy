@@ -7,8 +7,8 @@
     <div class="greeting-wrapper">
         <ng-include ng-if="piConfig.isProfilePicDisplayable" src="'../generalSsbApp/landingPage/gssLandingPagePicture.html'"></ng-include>
         <div class="greeting">
-            {{'banner.generalssb.landingpage.greeting'|i18n:[firstName]}}<br>
-            {{'banner.generalssb.landingpage.description'|i18n}}
+            <div class="break-long-words">{{'banner.generalssb.landingpage.greeting'|i18n:[firstName]}}</div>
+            <div class="landingDesc break-long-words">{{'banner.generalssb.landingpage.description'|i18n}}</div>
         </div>
     </div>
 </div>
