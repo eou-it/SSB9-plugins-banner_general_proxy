@@ -3,7 +3,7 @@
 *******************************************************************************-->
 <button ng-click="goApp(tileData.url)" class="gen-app-tile">
     <div class="tile-icon">
-        <ng-include src="tileData.icon"></ng-include>
+        <img ng-src="{{tileData.icon}}"/>
     </div>
     <div class="tile-content">
         <div class="tile-title">

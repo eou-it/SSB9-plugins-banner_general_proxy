@@ -318,6 +318,16 @@ webAppExtensibility {
     adminRoles = "ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M"
 }
 
+/** *****************************************************************************
+ *                                                                              *
+ *                   Theme Server Support                                       *
+ *                                                                              *
+ ***************************************************************************** **/
+banner.theme.url="http://BANNER9_HOST:PORT/ExampleApp/ssb/theme"
+banner.theme.name="default"
+banner.theme.template="all"
+banner.theme.path="/Users/Extz/temp/themingCSS"
+
 // ********************************************************************************
 // Cross-frame scripting vulnerability when integrating with Application Navigator.
 // ********************************************************************************
