@@ -13,7 +13,8 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
         <meta name="menuEndPoint" content="${request.contextPath}/ssb/menu"/>
         <meta name="menuBaseURL" content="${request.contextPath}/ssb"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <g:set var="appName" value= "${System.properties['BANNERXE_APP_NAME']}"/>
+        <g:set var="applicationName" value= "${grails.util.Metadata.current.getApplicationName()}"/>
+        <meta name="applicationName" content="${applicationName}">
         <g:set var="mep" value="${params?.mepCode}"/>
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -42,7 +43,7 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
             // URL pattern to exclude from updating genMainCallingPage.  No breadcrumbs for "/BannerGeneralSsb/" URLs
             // should be created for the landing page.
             var referrerUrl = document.referrer,
-                excludedRegex = /\/BannerGeneralSsb\//,
+                excludedRegex = /\/${applicationName}\//,
                 isExcluded;
 
             if (referrerUrl) {

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
     <g:set var="mep" value="${params?.mepCode}"/>
     <g:set var="hideSSBHeaderComps" value="${params?.hideSSBHeaderComps}" />
+    <g:set var="applicationName" value= "${grails.util.Metadata.current.getApplicationName()}"/>
     <g:set var="appName" value= "${System.properties['BANNERXE_APP_NAME']}"/>
     <g:if test="${appName.equals('DirectDeposit')}">
         <g:set var="url" value="${'ssb/directDeposit'}"/>
@@ -30,7 +31,7 @@
             // URL pattern to exclude from updating genMainCallingPage.  No breadcrumbs for "/BannerGeneralSsb/" URLs
             // should be created for the landing page.
             var referrerUrl = document.referrer,
-                    excludedRegex = /\/BannerGeneralSsb\//,
+                    excludedRegex = /\/${applicationName}\//,
                     isExcluded;
 
             if (referrerUrl) {
