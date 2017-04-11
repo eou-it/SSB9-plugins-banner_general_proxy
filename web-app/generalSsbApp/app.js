@@ -40,6 +40,8 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','g
                 $rootScope.isTabletView = isTablet.matches;
 
                 $rootScope.playAudibleMessage = null;
+
+                $rootScope.applicationName = $('meta[name=applicationName]').attr("content");
             }
         ]
     );

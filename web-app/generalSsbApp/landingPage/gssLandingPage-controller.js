@@ -71,13 +71,13 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
             {
                 title: 'banner.generalssb.landingpage.personalinfo.title',
                 desc: 'banner.generalssb.landingpage.personalinfo.description',
-                url: '/BannerGeneralSsb/ssb/personalInformation',
+                url: '/'+ $scope.applicationName +'/ssb/personalInformation',
                 icon: '../images/personal_info.svg'
             },
             {
                 title: 'banner.generalssb.landingpage.directdeposit.title',
                 desc: 'banner.generalssb.landingpage.directdeposit.description',
-                url: '/BannerGeneralSsb/ssb/directDeposit',
+                url: '/'+ $scope.applicationName +'/ssb/directDeposit',
                 icon: '../images/direct_deposit.svg',
                 roles: [STUDENT, EMPLOYEE]
             }
