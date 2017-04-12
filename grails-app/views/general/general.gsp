@@ -40,14 +40,19 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
     <script type="text/javascript">
         // Track calling page for breadcrumbs
         (function () {
-            // URL pattern to exclude from updating genMainCallingPage.  No breadcrumbs for "/BannerGeneralSsb/" URLs
-            // should be created for the landing page.
+            // URLs to exclude from updating genMainCallingPage.  No breadcrumbs for "/BannerGeneralSsb/" URLs
+            // (i.e. the applicationName variable below) or App Nav should be created for the landing page.
             var referrerUrl = document.referrer,
-                excludedRegex = /\/${applicationName}\//,
+                excludedRegex = [
+                    /\/${applicationName}\//,
+                    /\/seamless/
+                ],
                 isExcluded;
 
             if (referrerUrl) {
-                isExcluded = excludedRegex.test(referrerUrl);
+                isExcluded = _.find(excludedRegex, function (regex) {
+                    return regex.test(referrerUrl);
+                });
 
                 if (!isExcluded) {
                     // Track this page

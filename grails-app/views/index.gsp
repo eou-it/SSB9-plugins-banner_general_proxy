@@ -28,14 +28,24 @@
     <script type="text/javascript">
         // Track calling page for breadcrumbs
         (function () {
-            // URL pattern to exclude from updating genMainCallingPage.  No breadcrumbs for "/BannerGeneralSsb/" URLs
-            // should be created for the landing page.
+            // URLs to exclude from updating genMainCallingPage.  No breadcrumbs for "/BannerGeneralSsb/" URLs
+            // (i.e. the applicationName variable below) or App Nav should be created for the landing page.
             var referrerUrl = document.referrer,
-                    excludedRegex = /\/${applicationName}\//,
-                    isExcluded;
+                excludedRegex = [
+                    /\/${applicationName}\//,
+                    /\/seamless/
+                ],
+                isExcluded = false,
+                i = 0,
+                regexLen = excludedRegex.length;
 
             if (referrerUrl) {
-                isExcluded = excludedRegex.test(referrerUrl);
+                for (; i < regexLen; i++) {
+                    if (excludedRegex[i].test(referrerUrl)) {
+                        isExcluded = true;
+                        break;
+                    }
+                }
 
                 if (!isExcluded) {
                     // Track this page
