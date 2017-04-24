@@ -322,10 +322,9 @@ webAppExtensibility {
  *                   Theme Server Support                                       *
  *                                                                              *
  ***************************************************************************** **/
-banner.theme.url="http://BANNER9_HOST:PORT/ExampleApp/ssb/theme"
+banner.theme.url="http://BANNER9_HOST:PORT/ExampleApp/theme"
 banner.theme.name="default"
-banner.theme.template="all"
-banner.theme.path="/Users/Extz/temp/themingCSS"
+banner.theme.template="BannerGeneralSsb"
 
 // ********************************************************************************
 // Cross-frame scripting vulnerability when integrating with Application Navigator.
