@@ -338,7 +338,7 @@ grails.plugin.xframeoptions.deny = true
 // ********************************************************************************
 banner {
   picturesPath=System.getProperty('base.dir') + '/test/images'
-  defaultPhoto=System.getProperty('base.dir') + '/test/images/no_photo_available.png'
+  // defaultPhoto = <Fully qualified path to the photo to use if no user photo is available.>
 }
 
 /*******************************************************************************
