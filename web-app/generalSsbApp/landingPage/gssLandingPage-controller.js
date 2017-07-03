@@ -67,21 +67,44 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
 
         // CONTROLLER VARIABLES
         // --------------------
-        $scope.appTiles = [
-            {
-                title: 'banner.generalssb.landingpage.personalinfo.title',
-                desc: 'banner.generalssb.landingpage.personalinfo.description',
-                url: '/'+ $scope.applicationName +'/ssb/personalInformation',
-                icon: '../images/personal_info.svg'
-            },
-            {
-                title: 'banner.generalssb.landingpage.directdeposit.title',
-                desc: 'banner.generalssb.landingpage.directdeposit.description',
-                url: '/'+ $scope.applicationName +'/ssb/directDeposit',
-                icon: '../images/direct_deposit.svg',
-                roles: [STUDENT, EMPLOYEE]
-            }
-        ];
+        if(generalAppName === 'DirectDeposit') {
+            $scope.appTiles = [
+                {
+                    title: 'banner.generalssb.landingpage.directdeposit.title',
+                    desc: 'banner.generalssb.landingpage.directdeposit.description',
+                    url: '/'+ $scope.applicationName +'/ssb/directDeposit',
+                    icon: '../images/direct_deposit.svg',
+                    roles: [STUDENT, EMPLOYEE]
+                }
+            ];
+        }
+        else if(generalAppName === 'PersonalInformation') {
+            $scope.appTiles = [
+                {
+                    title: 'banner.generalssb.landingpage.personalinfo.title',
+                    desc: 'banner.generalssb.landingpage.personalinfo.description',
+                    url: '/'+ $scope.applicationName +'/ssb/personalInformation',
+                    icon: '../images/personal_info.svg'
+                }
+            ];
+        }
+        else {
+            $scope.appTiles = [
+                {
+                    title: 'banner.generalssb.landingpage.personalinfo.title',
+                    desc: 'banner.generalssb.landingpage.personalinfo.description',
+                    url: '/' + $scope.applicationName + '/ssb/personalInformation',
+                    icon: '../images/personal_info.svg'
+                },
+                {
+                    title: 'banner.generalssb.landingpage.directdeposit.title',
+                    desc: 'banner.generalssb.landingpage.directdeposit.description',
+                    url: '/' + $scope.applicationName + '/ssb/directDeposit',
+                    icon: '../images/direct_deposit.svg',
+                    roles: [STUDENT, EMPLOYEE]
+                }
+            ];
+        }
 
         $scope.piConfig = {};
         $scope.isStudent;

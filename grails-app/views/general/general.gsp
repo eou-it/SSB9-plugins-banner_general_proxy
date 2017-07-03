@@ -18,6 +18,7 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
         <g:set var="mep" value="${params?.mepCode}"/>
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <g:set var="appName" value= ""/>
 
         <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
             <r:require modules="generalSsbAppRTL"/>
@@ -28,6 +29,9 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
 
     </g:applyLayout>
 
+    <script type="text/javascript">
+        var generalAppName = '${System.properties['BANNERXE_APP_NAME']}';
+    </script>
 
     <script type="text/javascript">
         <g:i18n_setup/>
