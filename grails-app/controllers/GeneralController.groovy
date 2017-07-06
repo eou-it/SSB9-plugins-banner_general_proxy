@@ -5,6 +5,7 @@
 
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
+import net.hedtech.banner.general.GeneralSsbConfigService
 import net.hedtech.banner.i18n.LocalizeUtil
 import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
@@ -15,6 +16,7 @@ class GeneralController {
     def log = Logger.getLogger( this.getClass() )
     static defaultAction = "landingPage"
 
+    def generalSsbConfigService
 
 
     def landingPage() {
@@ -31,6 +33,20 @@ class GeneralController {
         model.isEmployee = hasUserRole("EMPLOYEE")
         
         render model as JSON
+    }
+
+    def getGeneralConfig() {
+        def model = [:]
+
+        try {
+            model.isDirectDepositEnabled = generalSsbConfigService.getParamFromSession(GeneralSsbConfigService.ENABLE_DIRECT_DEPOSIT, 'Y') == 'Y'
+            model.isPersonalInformationEnabled = generalSsbConfigService.getParamFromSession(GeneralSsbConfigService.ENABLE_PERSONAL_INFORMATION, 'Y') == 'Y'
+
+            render model as JSON
+        }
+        catch (ApplicationException e) {
+            render returnFailureMessage( e ) as JSON
+        }
     }
 
 

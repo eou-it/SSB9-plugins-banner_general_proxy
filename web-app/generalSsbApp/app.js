@@ -63,6 +63,9 @@ generalSsbApp.config(function($stateProvider, $urlRouterProvider){
             resolve: {
                 piConfigResolve: function (generalSsbService) {
                     return generalSsbService.getFromPersonalInfo('PiConfig').$promise;
+                },
+                generalConfigResolve: function (generalSsbService) {
+                    return generalSsbService.getGeneralConfig().$promise;
                 }
             },
             data: {

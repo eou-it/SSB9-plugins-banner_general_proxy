@@ -1,8 +1,8 @@
 /********************************************************************************
   Copyright 2017 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'generalSsbService', 'piConfigResolve',
-    function ($scope, generalSsbService, piConfigResolve) {
+generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'generalSsbService', 'piConfigResolve', 'generalConfigResolve',
+    function ($scope, generalSsbService, piConfigResolve, generalConfigResolve) {
 
         // LOCAL VARIABLES
         // ---------------
@@ -33,6 +33,29 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
 
             init = function() {
                 $scope.piConfig = piConfigResolve;
+
+                if(generalConfigResolve.isPersonalInformationEnabled) {
+                    $scope.appTiles.push(
+                        {
+                            title: 'banner.generalssb.landingpage.personalinfo.title',
+                            desc: 'banner.generalssb.landingpage.personalinfo.description',
+                            url: '/'+ $scope.applicationName +'/ssb/personalInformation',
+                            icon: '../images/personal_info.svg'
+                        }
+                    );
+                }
+
+                if(generalConfigResolve.isDirectDepositEnabled) {
+                    $scope.appTiles.push(
+                        {
+                            title: 'banner.generalssb.landingpage.directdeposit.title',
+                            desc: 'banner.generalssb.landingpage.directdeposit.description',
+                            url: '/'+ $scope.applicationName +'/ssb/directDeposit',
+                            icon: '../images/direct_deposit.svg',
+                            roles: [STUDENT, EMPLOYEE]
+                        }
+                    );
+                }
 
                 generalSsbService.getRoles().$promise.then(function (response) {
                     $scope.isStudent = response.isStudent;
@@ -67,46 +90,8 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
 
         // CONTROLLER VARIABLES
         // --------------------
-        if(generalAppName === 'DirectDeposit') {
-            $scope.appTiles = [
-                {
-                    title: 'banner.generalssb.landingpage.directdeposit.title',
-                    desc: 'banner.generalssb.landingpage.directdeposit.description',
-                    url: '/'+ $scope.applicationName +'/ssb/directDeposit',
-                    icon: '../images/direct_deposit.svg',
-                    roles: [STUDENT, EMPLOYEE]
-                }
-            ];
-        }
-        else if(generalAppName === 'PersonalInformation') {
-            $scope.appTiles = [
-                {
-                    title: 'banner.generalssb.landingpage.personalinfo.title',
-                    desc: 'banner.generalssb.landingpage.personalinfo.description',
-                    url: '/'+ $scope.applicationName +'/ssb/personalInformation',
-                    icon: '../images/personal_info.svg'
-                }
-            ];
-        }
-        else {
-            $scope.appTiles = [
-                {
-                    title: 'banner.generalssb.landingpage.personalinfo.title',
-                    desc: 'banner.generalssb.landingpage.personalinfo.description',
-                    url: '/' + $scope.applicationName + '/ssb/personalInformation',
-                    icon: '../images/personal_info.svg'
-                },
-                {
-                    title: 'banner.generalssb.landingpage.directdeposit.title',
-                    desc: 'banner.generalssb.landingpage.directdeposit.description',
-                    url: '/' + $scope.applicationName + '/ssb/directDeposit',
-                    icon: '../images/direct_deposit.svg',
-                    roles: [STUDENT, EMPLOYEE]
-                }
-            ];
-        }
-
         $scope.piConfig = {};
+        $scope.appTiles = [];
         $scope.isStudent;
         $scope.isEmployee;
         $scope.appTilesForRole;
