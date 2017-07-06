@@ -30,10 +30,6 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
     </g:applyLayout>
 
     <script type="text/javascript">
-        var generalAppName = '${System.properties['BANNERXE_APP_NAME']}';
-    </script>
-
-    <script type="text/javascript">
         <g:i18n_setup/>
     </script>
     <script>

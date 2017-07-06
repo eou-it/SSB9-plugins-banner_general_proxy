@@ -60,6 +60,19 @@ class GeneralControllerTests extends BaseIntegrationTestCase {
     }
 
     @Test
+    void testGetGeneralConfig(){
+        loginSSB 'GDP000005', '111111'
+
+        controller.request.contentType = "text/json"
+        controller.getGeneralConfig()
+        def dataForNullCheck = controller.response.contentAsString
+        def data = JSON.parse(dataForNullCheck)
+        assertNotNull data
+        assertTrue(data.isDirectDepositEnabled)
+        assertTrue(data.isPersonalInformationEnabled)
+    }
+
+    @Test
     void testReturnFailureMessage(){
         loginSSB 'MYE000001', '111111'
 
