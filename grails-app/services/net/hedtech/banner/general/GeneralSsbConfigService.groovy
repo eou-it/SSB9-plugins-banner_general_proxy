@@ -14,7 +14,7 @@ class GeneralSsbConfigService extends BasePersonConfigService {
     }
 
     @Override
-    protected String getProccessCode() {
+    protected String getProcessCode() {
         return 'GENERAL_SSB'
     }
 
