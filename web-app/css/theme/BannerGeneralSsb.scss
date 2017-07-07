@@ -6145,6 +6145,59 @@ path#Path {
     color: #FFFFFF;
 }
 /* BannerGeneralSsb-patch.scss */
+.placeholder-theme-name {
+    content:  $themename;
+}
+
+/*** Branding Logo ***/
+.institutionalBranding {
+    background-image: url("$themelogo");
+    width: 20em;
+}
+
+#banner-header-main-section,
+#header-main-section {
+    background-color: $themecolor1; /* use selected color */
+    color: $themecolor1_text;
+}
+
+.notification-center-anchor {
+    background-color: $themecolor2;
+}
+
+.notification-center-count {
+    color: $themecolor2_text;
+}
+
+:focus {
+    outline-color: $themecolor3-4;
+}
+
+/*** Tweaks to base UI */
+#header-main-section-east-part #username,
+#header-main-section-east-part #mepDiv {
+    padding-right:0.5em; /* space before and after name and mepDiv */
+    padding-left:0.5em;
+}
+
+#header-main-section-east-part #mepDiv,
+#header-main-section-east-part #signInButton,
+#header-main-section-east-part #userDiv,
+#header-main-section-east-part #toolsButton {
+    border-left: 0px; /* Removed 1px unneeded line  */
+    border-right: 0px;
+}
+
+#toolsList .canvas-item:hover,
+#toolsList .canvas-item:focus {
+    background-color: $themecolor3-5 ;
+}
+
+#header-main-section-east-part #userDiv {
+    background-color: $themecolor1-2;
+}
+
+
 /* Personal Information
    ========================= */
 .pi-desktop-contents {
