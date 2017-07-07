@@ -5,11 +5,17 @@
 generalSsbApp.service('generalSsbService', ['$rootScope', '$resource', function ($rootScope, $resource) {
 
     var fetchRoles = $resource('../ssb/:controller/:action',
-            {controller: 'General', action: 'getRoles'}, {query: {method:'GET', isArray:false}});
+            {controller: 'General', action: 'getRoles'}, {query: {method:'GET', isArray:false}}),
+        fetchConfig = $resource('../ssb/:controller/:action',
+            {controller: 'General', action: 'getGeneralConfig'}, {query: {method:'GET', isArray:false}});
 
 
     this.getRoles = function () {
         return fetchRoles.query();
+    };
+
+    this.getGeneralConfig = function () {
+        return fetchConfig.query();
     };
 
     this.getFromPersonalInfo = function (entityName, params) {
