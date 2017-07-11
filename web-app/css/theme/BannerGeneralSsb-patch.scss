@@ -50,6 +50,47 @@
   background-color: $themecolor1-2;
 }
 
+/* Login page style overrides */
+.ie-warning DIV {
+  color: #ffffff;
+}
+
+.pageBg {
+  background-color: $themecolor1-4; /*#4c8db5;*/
+  background-image: linear-gradient( $themecolor1-1 /*#015d96*/, $themecolor1-4 /*#4c8db5*/ );
+}
+
+.splashBg {
+  background-color: $themecolor1-3 /*#4e8bbb*/; /* center section background */
+  border-color: $themecolor1-1 /*#00579a*/;
+}
+
+.splashBg:before {
+  background-color: $themecolor1-3 /*#70a4c4*/;
+  background-image: linear-gradient( to right, $themecolor1-4 /*#70a4c4*/, $themecolor1-2 /*#337dab*/ );
+  border-image: linear-gradient( to right, $themecolor1-2 /*#4287b1*/, $themecolor1-1 /*#005c96*/ ) 1;
+}
+
+.splashBg .copyright {
+  background-image: linear-gradient( to right, $themecolor1-3 /*#3f85b0*/, $themecolor1-1 /*#0d649b*/ );
+  border-image: linear-gradient( to right, $themecolor1-2 /*#367fac*/, $themecolor1-1 /*#005c96*/ ) 1;
+}
+
+.signin-button {
+  background: $themecolor2-3;
+  background-image:linear-gradient($themecolor2-3, $themecolor2-2);
+  border-color: $themecolor2-1;
+}
+
+.signin-button:hover {
+  background: $themecolor2-4;
+  background-image:linear-gradient($themecolor2-4, $themecolor2-3);
+}
+
+.signin-button:active {
+  background: $themecolor2-2;
+  background-image:linear-gradient($themecolor2-2, $themecolor2-3);
+}
 
 /* Personal Information
    ========================= */
