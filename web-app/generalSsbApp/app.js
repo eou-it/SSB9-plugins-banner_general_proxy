@@ -41,7 +41,7 @@ var generalSsbApp = angular.module('generalSsbApp', ['ngResource','ui.router','g
 
                 $rootScope.playAudibleMessage = null;
 
-                $rootScope.applicationName = $('meta[name=applicationName]').attr("content");
+                $rootScope.applicationContextRoot = $('meta[name=applicationContextRoot]').attr("content");
             }
         ]
     );
