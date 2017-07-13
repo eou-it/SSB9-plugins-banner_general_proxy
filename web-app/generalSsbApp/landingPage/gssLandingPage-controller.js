@@ -39,7 +39,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                         {
                             title: 'banner.generalssb.landingpage.personalinfo.title',
                             desc: 'banner.generalssb.landingpage.personalinfo.description',
-                            url: '/'+ $scope.applicationName +'/ssb/personalInformation',
+                            url: $scope.applicationContextRoot +'/ssb/personalInformation',
                             icon: '../images/personal_info.svg'
                         }
                     );
@@ -50,7 +50,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                         {
                             title: 'banner.generalssb.landingpage.directdeposit.title',
                             desc: 'banner.generalssb.landingpage.directdeposit.description',
-                            url: '/'+ $scope.applicationName +'/ssb/directDeposit',
+                            url: $scope.applicationContextRoot +'/ssb/directDeposit',
                             icon: '../images/direct_deposit.svg',
                             roles: [STUDENT, EMPLOYEE]
                         }

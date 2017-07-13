@@ -13,8 +13,8 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
         <meta name="menuEndPoint" content="${request.contextPath}/ssb/menu"/>
         <meta name="menuBaseURL" content="${request.contextPath}/ssb"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <g:set var="applicationName" value= "${grails.util.Metadata.current.getApplicationName()}"/>
-        <meta name="applicationName" content="${applicationName}">
+        <g:set var="applicationContextRoot" value= "${application.contextPath}"/>
+        <meta name="applicationContextRoot" content="${applicationContextRoot}">
         <g:set var="mep" value="${params?.mepCode}"/>
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -44,7 +44,7 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
             // (i.e. the applicationName variable below) or App Nav should be created for the landing page.
             var referrerUrl = document.referrer,
                 excludedRegex = [
-                    /\/${applicationName}\//,
+                    /\${applicationContextRoot}\//,
                     /\/seamless/
                 ],
                 isExcluded;
