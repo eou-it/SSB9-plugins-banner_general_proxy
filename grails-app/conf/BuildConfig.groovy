@@ -16,6 +16,10 @@ grails.war.resources = { stagingDir ->
 
 grails.plugin.location.'banner-general-direct-deposit-ui' = "plugins/banner_general_direct_deposit_ui.git"
 grails.plugin.location.'banner-general-personal-information-ui' = "plugins/banner_general_personal_information_ui.git"
+grails.plugin.location.'banner-aip'                       = "plugins/banner_aip.git"
+grails.plugin.location.'banner-aip-ui'                    = "plugins/banner_aip_ui.git"
+grails.plugin.location.'banner-restful-api-support'     = "plugins/banner-restful-api-support.git"
+grails.plugin.location.'banner-sspb'                    = "plugins/banner-sspb.git"
 
 grails.project.dependency.resolution = {
 
