@@ -167,6 +167,7 @@ formControllerMap = [
         'aipPageBuilder'            : ['SELFSERVICE', 'GUAGMNU'],
 
         //from PB///////
+        'theme'                     : ['SELFSERVICE'],
         'virtualdomaincomposer'   : ['GPBADMN'],
         'cssmanager'              : ['GPBADMN'],
         'visualpagemodelcomposer' : ['GPBADMN'],

@@ -13,7 +13,7 @@ grails.project.test.reports.dir = "target/test-reports"
 // "Cannot cast object 'oracle.jdbc.driver.T4CConnection@6469adc7'... to class 'oracle.jdbc.OracleConnection'
 grails.war.resources = { stagingDir ->
 }
-
+grails.plugin.location.'banner-ui-ss' = "plugins/banner_ui_ss.git"
 grails.plugin.location.'banner-general-direct-deposit-ui' = "plugins/banner_general_direct_deposit_ui.git"
 grails.plugin.location.'banner-general-personal-information-ui' = "plugins/banner_general_personal_information_ui.git"
 grails.plugin.location.'banner-aip'                       = "plugins/banner_aip.git"

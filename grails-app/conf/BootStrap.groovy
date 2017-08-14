@@ -33,7 +33,36 @@ class BootStrap {
     def grailsApplication
     def resourceService
 
+    //PB
+    def pageSecurityService
+    def pageUtilService
+    def virtualDomainUtilService
+    def cssUtilService
+
     def init = { servletContext ->
+
+        //TODO: add pbEnabled option in app config and handle here
+        // Install metadata required for page builder
+        def pbConfig = grails.util.Holders.getConfig().pageBuilder
+        cssUtilService.importInitially(cssUtilService.loadOverwriteExisting)
+        pageUtilService.importInitially(pageUtilService.loadOverwriteExisting)
+        virtualDomainUtilService.importInitially(virtualDomainUtilService.loadOverwriteExisting)
+
+        // Install metadata from configured directories
+        pageUtilService.importAllFromDir()
+        virtualDomainUtilService.importAllFromDir()
+        cssUtilService.importAllFromDir()
+
+
+        //Initialize the request map (page security)
+        pageSecurityService.init()
+
+        // For IE 9 with help of es5-shim.js, the default date marshaller does not work.
+            JSON.registerObjectMarshaller(Date) {
+                return it?.format("yyyy-MM-dd'T'HH:mm:ss'Z'",TimeZone.getTimeZone('UTC'))
+            }
+
+
         def ctx = servletContext.getAttribute(ApplicationAttributes.APPLICATION_CONTEXT)
 
         /**
@@ -54,6 +83,18 @@ class BootStrap {
         if (Environment.current != Environment.TEST) {
             // println("Reading format from ${servletContext.getRealPath("/xml/application.navigation.conf.xml" )}")
             // NavigationConfigReader.readConfigFile( servletContext.getRealPath("/xml/application.navigation.conf.xml" ) )
+        }
+
+        if (Environment.current == Environment.DEVELOPMENT) {
+            //Code below avoids exceptions after changing source code for non-domain objects in development
+            //and avoids the need to restart the application in many cases.
+            def pm = grails.util.Holders.pluginManager;
+            for (plugin in pm.getAllPlugins()) {
+                for (wp in plugin.getWatchedResourcePatterns()) {
+                    if ("plugins" == wp.getDirectory()?.getName() && "groovy" == wp.getExtension())
+                        wp.extension = "groovyXX";
+                }
+            }
         }
 
 
