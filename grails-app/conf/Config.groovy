@@ -26,6 +26,7 @@ def locationAdder = ConfigFinder.&addLocation.curry(grails.config.locations)
 [ BANNER_APP_CONFIG:            "banner_configuration.groovy",
   BANNER_GENERAL_SSB_CONFIG:    "${appName}_configuration.groovy",
   WEB_APP_EXTENSIBILITY_CONFIG: "WebAppExtensibilityConfig.class"
+  //PAGEBUILDER_APP_CONFIG:   "BannerExtensibility_configuration.groovy",
 ].each { envName, defaultFileName -> locationAdder( envName, defaultFileName ) }
 
 grails.config.locations.each {
@@ -49,7 +50,7 @@ grails.config.locations.each {
 //
 // DO NOT EDIT THIS UUID UNLESS YOU ARE AUTHORIZED TO DO SO AND KNOW WHAT YOU ARE DOING
 //
-build.number.uuid = "5b2d0947-541b-4d00-b709-ba31a464feb0" // specific UUID for FGE solution
+build.number.uuid = "f23ea34b-6469-4aa9-9778-e7efbba5de7b" // specific UUID for //TODO Need to regenerate
 build.number.base.url = "http://m039198.ellucian.com:8080/BuildNumberServer/buildNumber?method=getNextBuildNumber&uuid="
 
 grails.project.groupId = "net.hedtech" // used when deploying to a maven repo
@@ -108,7 +109,7 @@ environments {
     test {
         ssbEnabled = true
         ssbOracleUsersProxied = true
-        grails.plugin.springsecurity.interceptUrlMap = [
+        grails.plugins.springsecurity.interceptUrlMap = [
                 '/': ['IS_AUTHENTICATED_ANONYMOUSLY'] ]
     }
     development {
@@ -146,41 +147,41 @@ dataOrigin = "Banner"
 // connection is attained and the user has the necessary role, the role is enabled
 // for that user and Banner object.
 formControllerMap = [
-        'selfservicemenu' : ['SELFSERVICE-EMPLOYEE'],
+        'banner'                  : ['SCACRSE'],
+        'mainpage'                : ['SELFSERVICE'],
+        'menu'                    : ['SELFSERVICE'],
+        'selfservicemenu' : ['SELFSERVICE-EMPLOYEE','SELFSERVICE'],
         'survey': ['SELFSERVICE'],
         'useragreement': ['SELFSERVICE'],
         'securityqa': ['SELFSERVICE'],
         'general': ['SELFSERVICE'],
-        'directdeposit': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
-        'personalinformation': ['SELFSERVICE'],
-        'updateaccount': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
-        'accountlisting': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
-        'directdepositconfiguration': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
-        'personalinformationdetails': ['SELFSERVICE'],
-        'personalinformationpicture': ['SELFSERVICE'],
-        'personalinformationqa': ['SELFSERVICE'],
-        'about': ['GUAGMNU'],
+        'updateaccount': ['SELFSERVICE'],
+        'accountlisting': ['SELFSERVICE'],
+        'directdepositconfiguration': ['SELFSERVICE'],
+
         //AIP//
-        'aip'                     : ['SELFSERVICE', 'GUAGMNU'],
-        'aipgroup'                : ['SELFSERVICE'],
+        'aip'                       : ['SELFSERVICE', 'GUAGMNU'],
+        'aipgroup'                  : ['SELFSERVICE'],
         'aipadmin'                  : ['SELFSERVICE'],
+        'bcm'                       : ['SELFSERVICE'],
         'aipPageBuilder'            : ['SELFSERVICE', 'GUAGMNU'],
 
         //from PB///////
-        'theme'                     : ['SELFSERVICE'],
         'virtualdomaincomposer'   : ['GPBADMN'],
         'cssmanager'              : ['GPBADMN'],
         'visualpagemodelcomposer' : ['GPBADMN'],
-        'cssrender'               : ['SELFSERVICE','GUAGMNU'] // added guagmnu to allow getting css by grails_user (admin only user)
+        'cssrender'               : ['SELFSERVICE','GUAGMNU'], // added guagmnu to allow getting css by grails_user (admin only user)
         // 'restfulapi'              : ['SELFSERVICE','GPBADMN'],
         ////////////////
 ]
-
 
 grails.plugin.springsecurity.useRequestMapDomainClass = false
 //grails.plugin.springsecurity.rejectIfNoRule = true
 
 grails.plugin.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
+
+grails.plugin.springsecurity.logout.afterLogoutUrl = "/"
+grails.plugin.springsecurity.logout.mepErrorLogoutUrl = '/logout/logoutPage'
 
 
 // ******************************************************************************
@@ -188,9 +189,7 @@ grails.plugin.springsecurity.securityConfigType = SecurityConfigType.InterceptUr
 //                       +++ INTERCEPT-URL MAP +++
 //
 // ******************************************************************************
-
 pageBuilder.adminRoles = 'ROLE_GPBADMN_BAN_DEFAULT_PAGEBUILDER_M'
-
 
 grails.plugin.springsecurity.interceptUrlMap = [
         '/': ['IS_AUTHENTICATED_ANONYMOUSLY'],
@@ -210,11 +209,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/i18n/**':  ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/selfServiceMenu/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/menu**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/ssb/about/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/generalSsbApp/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/keepAlive/data**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/dateConverter/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/ssb/dateConverter/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
         // ALL URIs specified with the BannerAccessDecisionVoter.ROLE_DETERMINED_DYNAMICALLY
         // 'role' (it's not a real role) will result in authorization being determined based
         // upon a user's role assignments to the corresponding form (see 'formControllerMap' above).
@@ -229,18 +225,14 @@ grails.plugin.springsecurity.interceptUrlMap = [
         //
         // '/**': [ 'ROLE_DETERMINED_DYNAMICALLY' ]
         //'/**': [ 'ROLE_SELFSERVICE-FACULTY_BAN_DEFAULT_M' ]
-        '/ssb/securityQA/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/survey/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/userAgreement/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/general/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/directDeposit/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
-        '/ssb/UpdateAccount/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
-        '/ssb/accountListing/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
-        '/ssb/DirectDepositConfiguration/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
-        '/ssb/personalInformation/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationDetails/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationPicture/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationQA/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/securityQA/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
+        '/ssb/survey/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
+        '/ssb/userAgreement/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
+        '/ssb/general/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
+        '/ssb/UpdateAccount/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
+        '/ssb/accountListing/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M','ROLE_SELFSERVICE_BAN_DEFAULT_M'],
+        '/ssb/DirectDepositConfiguration/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M', 'ROLE_SELFSERVICE_BAN_DEFAULT_M'],
+
         //Page Builder specific
         '/internalPb/virtualDomains.*/**'      : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/adminPb/virtualDomains.*/**'         : [pageBuilder.adminRoles],
@@ -257,6 +249,16 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/cssRender/**'                        : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         //For now use a page builder dummy page for cas auth
         '/customPage/page/pbadm.ssoauth/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+
+        //Theming specific
+        '/theme/**'             : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/themeEditor/**'             : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
+        //I18N TranMan interface
+        '/admin/i18n/**'              : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
+        //some demo domains
+        //'/internalPb/todos/**'    : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        //'/internalPb/projects/**' : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+
         '/**'                         : ['ROLE_SELFSERVICE-FACULTY_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M', pageBuilder.adminRoles]
 ]
 
@@ -266,7 +268,14 @@ codenarc.reportName="target/CodeNarcReport.html"
 codenarc.propertiesFile="grails-app/conf/codenarc.properties"
 codenarc.extraIncludeDirs=["grails-app/composers"]
 
-//grails.validateable.packages=['net.hedtech.banner.student.registration']
+grails.validateable.packages=['net.hedtech.banner.student.registration']
+
+/*
+grails.plugin.springsecurity.filterChain.chainMap = [
+        '/api/**': 'authenticationProcessingFilter,basicAuthenticationFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor',
+        '/**'    : 'securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor'
+]
+*/
 
 // placeholder for real configuration
 // base.dir is probably not defined for .war file deployments
@@ -302,8 +311,57 @@ grails {
 }
 remove this line */
 
-useRestApiAuthenticationEntryPoint = true
 
+// request parameters to mask when logging exceptions
+grails.exceptionresolver.params.exclude = ['password']
+
+// ******************************************************************************
+//                          Client Caching Configuration
+// ******************************************************************************
+//
+cache.headers.enabled = false // Uncomment to disable
+
+// ******************************************************************************
+// DB Connection Caching Configuration
+// ******************************************************************************
+// Note: The BannerDS will cache database connections for administrative users,
+// however for RESTful APIs we do not want this behavior (even when
+// authenticated as an 'administrative' user). RESTful APIs should be stateless.
+//
+// IMPORTANT:
+// When exposing RESTful endpoints, exclude database caching for those URLs.
+// Also, if using a prefix other than 'api' and 'qapi' you will need to ensure
+// the spring security filter chain is configured to avoid creating a session.
+//
+avoidSessionsFor = [ 'api', 'qapi' ]
+
+
+// ******************************************************************************
+//                              CORS Configuration
+// ******************************************************************************
+// Note: If changing custom header names, remember to reflect them here.
+//
+cors.url.pattern        = '/api/*'
+cors.allow.origin.regex ='.*'
+cors.expose.headers     ='content-type,X-hedtech-totalCount,X-hedtech-pageOffset,X-hedtech-pageMaxSize,X-hedtech-message,X-hedtech-Media-Type'
+
+// ******************************************************************************
+//                           RESTful API MEP Support
+// ******************************************************************************
+// Note: The BannerDS will use 'setSsbMep' even when getting an
+//       administrative connection if the web request is an 'api'
+//       request. Specify the 'api' prefixes using apiUrlPrefixes.
+//
+apiUrlPrefixes = [ 'api', 'qapi', 'rest', 'ui' ]
+
+// ******************************************************************************
+//                  RESTful API Authentication Entry Configuration
+// ******************************************************************************
+// Note: Specifies whether a 'restApiAuthenticationEntryPoint' bean should be used.
+//       Note the 'restApiAuthenticationEntryPoint' bean *must* be registered
+//       within your resources.groovy if this configuration is set to true.
+//
+useRestApiAuthenticationEntryPoint = true
 
 // ******************************************************************************
 //             RESTful API Custom Response Header Name Configuration
@@ -342,7 +400,7 @@ restfulApiConfig = {
             mediaTypes = ["application/json"]
             marshallers {
                 marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
                     priority = 100
                 }
             }
@@ -351,12 +409,12 @@ restfulApiConfig = {
     }
 
     resource 'pagesecurity' config {
-        serviceName = 'pageSecurityService'
+        serviceName= 'pageSecurityService'
         representation {
             mediaTypes = ["application/json"]
             marshallers {
                 marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
                     priority = 100
                 }
             }
@@ -364,7 +422,7 @@ restfulApiConfig = {
         }
     }
 
-    resource 'pages' config {
+    resource  'pages' config {
         representation {
             mediaTypes = ["application/json"]
             marshallers {
@@ -384,7 +442,7 @@ restfulApiConfig = {
             mediaTypes = ["application/json"]
             marshallers {
                 marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
                     priority = 100
                 }
             }
@@ -393,12 +451,12 @@ restfulApiConfig = {
     }
 
     resource 'pageexports' config {
-        serviceName = 'pageExportService'
+        serviceName= 'pageExportService'
         representation {
             mediaTypes = ["application/json"]
             marshallers {
                 marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
                     priority = 100
                 }
             }
@@ -406,12 +464,12 @@ restfulApiConfig = {
         }
     }
     resource 'virtualdomainexports' config {
-        serviceName = 'virtualDomainExportService'
+        serviceName= 'virtualDomainExportService'
         representation {
             mediaTypes = ["application/json"]
             marshallers {
                 marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
                     priority = 100
                 }
             }
@@ -419,12 +477,12 @@ restfulApiConfig = {
         }
     }
     resource 'cssexports' config {
-        serviceName = 'cssExportService'
+        serviceName= 'cssExportService'
         representation {
             mediaTypes = ["application/json"]
             marshallers {
                 marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
                     priority = 100
                 }
             }
@@ -449,7 +507,7 @@ restfulApiConfig = {
             mediaTypes = ["application/json"]
             marshallers {
                 marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
                     priority = 100
                 }
             }
@@ -457,48 +515,50 @@ restfulApiConfig = {
         }
     }
 
-    resource 'projects' config {
+    resource 'projects'  config {
         representation {
             mediaTypes = ["application/json"]
             marshallers {
                 marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
                     priority = 100
                 }
             }
             extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
         }
-
-        // Resources for web_app_extensibility plugin
-        resource 'extensions' config {
-            serviceName = 'webAppExtensibilityExtensionService'   // In some cases the service name has to be prepended with the plugin name
-            representation {
-                mediaTypes = ["application/json"]
-                marshallers {
-                    marshaller {
-                        instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
-                        priority = 100
-                    }
-                }
-                extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-            }
-        }
-        resource 'resources' config {
-            serviceName = 'webAppExtensibilityResourceService'   // In some cases the service name has to be prepended with the plugin name
-            representation {
-                mediaTypes = ["application/json"]
-                marshallers {
-                    marshaller {
-                        instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
-                        priority = 100
-                    }
-                }
-                extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-            }
-        }
-        // End Resources for web_app_extensibility plugin
     }
     //END of pagebuilder configuration
+
+
+    // Resources for web_app_extensibility plugin
+    resource 'extensions' config {
+        serviceName = 'webAppExtensibilityExtensionService'   // In some cases the service name has to be prepended with the plugin name
+        representation {
+            mediaTypes = ["application/json"]
+            marshallers {
+                marshaller {
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app: grailsApplication)
+                    priority = 100
+                }
+            }
+            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+        }
+    }
+    resource 'resources' config {
+        serviceName = 'webAppExtensibilityResourceService'   // In some cases the service name has to be prepended with the plugin name
+        representation {
+            mediaTypes = ["application/json"]
+            marshallers {
+                marshaller {
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
+                    priority = 100
+                }
+            }
+            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+        }
+    }
+    // End Resources for web_app_extensibility plugin
 }
-    grails.plugin.springsecurity.cas.active = false
-    grails.plugin.springsecurity.saml.active = false
+
+grails.plugin.springsecurity.cas.active=false
+grails.plugin.springsecurity.saml.active=false
