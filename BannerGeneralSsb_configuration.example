@@ -265,11 +265,3 @@ webAppExtensibility {
     }
     adminRoles = "ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M"
 }
-
-
-/** *****************************************************************************
- *                                                                              *
- *                 Configuration for AIP application                     *
- *                                                                              *
- ***************************************************************************** **/
-//general.aip.bcm.locaiton.url=<HOST_NAME>:<PORT>/CommunicationManagement // Example localhost:8080/CommunicationManagement
