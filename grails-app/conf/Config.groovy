@@ -51,7 +51,7 @@ grails.config.locations.each {
 // DO NOT EDIT THIS UUID UNLESS YOU ARE AUTHORIZED TO DO SO AND KNOW WHAT YOU ARE DOING
 //
 build.number.uuid = "f23ea34b-6469-4aa9-9778-e7efbba5de7b" // specific UUID for //TODO Need to regenerate
-build.number.base.url = "http://m039198.ellucian.com:8080/BuildNumberServer/buildNumber?method=getNextBuildNumber&uuid="
+build.number.base.url = "http://m039200.sungardhe.com:8080/BuildNumberServer/buildNumber?method=getNextBuildNumber&uuid="
 
 grails.project.groupId = "net.hedtech" // used when deploying to a maven repo
 grails.databinding.useSpringBinder=true
