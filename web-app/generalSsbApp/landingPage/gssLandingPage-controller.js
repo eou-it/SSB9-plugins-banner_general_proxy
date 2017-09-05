@@ -56,6 +56,17 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                         }
                     );
                 }
+                if(generalConfigResolve.isActionItemEnabled) {
+                    $scope.appTiles.push(
+                        {
+                            title: 'banner.generalssb.landingpage.actionsitem.title',
+                            desc: 'banner.generalssb.landingpage.actionsitem.description',
+                            url: $scope.applicationContextRoot +'/aip/list',
+                            icon: '../images/direct_deposit.svg',
+                            roles: [STUDENT, EMPLOYEE]
+                        }
+                    );
+                }
 
                 generalSsbService.getRoles().$promise.then(function (response) {
                     $scope.isStudent = response.isStudent;

@@ -5,12 +5,13 @@
 
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
-import net.hedtech.banner.general.GeneralSsbConfigService
-import net.hedtech.banner.i18n.LocalizeUtil
 import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 import org.springframework.security.core.context.SecurityContextHolder
 
+/**
+ * Controller for General
+ */
 class GeneralController {
 
     def log = Logger.getLogger( this.getClass() )
@@ -29,19 +30,19 @@ class GeneralController {
 
     def getRoles() {
         def model = [:]
-        model.isStudent = hasUserRole("STUDENT")
-        model.isEmployee = hasUserRole("EMPLOYEE")
-        
+        model.isStudent = hasUserRole( "STUDENT" )
+        model.isEmployee = hasUserRole( "EMPLOYEE" )
+
         render model as JSON
     }
 
+    /**
+     * Get General Configuration
+     * @return
+     */
     def getGeneralConfig() {
-        def model = [:]
-
         try {
-            model.isDirectDepositEnabled = generalSsbConfigService.getParamFromSession(GeneralSsbConfigService.ENABLE_DIRECT_DEPOSIT, 'Y') == 'Y'
-            model.isPersonalInformationEnabled = generalSsbConfigService.getParamFromSession(GeneralSsbConfigService.ENABLE_PERSONAL_INFORMATION, 'Y') == 'Y'
-
+            def model = generalSsbConfigService.getGeneralConfig()
             render model as JSON
         }
         catch (ApplicationException e) {
@@ -50,35 +51,35 @@ class GeneralController {
     }
 
 
-    def  returnFailureMessage(ApplicationException  e) {
+    def returnFailureMessage( ApplicationException e ) {
         def model = [:]
         model.failure = true
-        log.error(e)
+        log.error( e )
         try {
-            model.message = e.returnMap({ mapToLocalize -> new ValidationTagLib().message(mapToLocalize) }).message
+            model.message = e.returnMap( {mapToLocalize -> new ValidationTagLib().message( mapToLocalize )} ).message
             return model
         } catch (ApplicationException ex) {
-            log.error(ex)
+            log.error( ex )
             model.message = e.message
             return model
         }
     }
 
-    def hasUserRole(String role) {
+    def hasUserRole( String role ) {
         try {
             def authorities = SecurityContextHolder?.context?.authentication?.principal?.authorities
-            return authorities.any { it.getAssignedSelfServiceRole().contains(role) }
+            return authorities.any {it.getAssignedSelfServiceRole().contains( role )}
         } catch (MissingPropertyException it) {
-            log.error("principal lacks authorities - may be unauthenticated or session expired. Principal: ${SecurityContextHolder?.context?.authentication?.principal}")
-            log.error(it)
-            throw new ApplicationException('DirectDepositAccountCompositeService', it)
+            log.error( "principal lacks authorities - may be unauthenticated or session expired. Principal: ${SecurityContextHolder?.context?.authentication?.principal}" )
+            log.error( it )
+            throw new ApplicationException( 'DirectDepositAccountCompositeService', it )
         }
     }
 
-    def denied403() {
-        render(status: 403)
-    }
 
+    def denied403() {
+        render( status: 403 )
+    }
 
 
 }
