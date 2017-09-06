@@ -29,12 +29,6 @@ This configuration file contains the following sections:
 
 logAppName = "BannerGeneralSsb"
 
-// Product and application name to refer to this app for name display rules
-productName="General"
-banner.applicationName="GeneralSsb"
-
-footerFadeAwayTime=30000
-
 // ******************************************************************************
 //
 //                       +++ JMX Bean Names +++
@@ -74,7 +68,7 @@ ssbPassword.reset.enabled = true //true  - allow Pidm users to reset their passw
 //
 banner {
     sso {
-        authenticationProvider           = 'default' //  Valid values are: 'default', 'cas', or 'saml'
+        authenticationProvider           = 'default' //  Valid values are: 'default' and 'cas' for SSO to work.
         authenticationAssertionAttribute = 'UDC_IDENTIFIER'
         if(authenticationProvider != 'default') {
             grails.plugin.springsecurity.failureHandler.defaultFailureUrl = '/login/error'
@@ -107,7 +101,7 @@ grails {
                 serviceParameter = 'TARGET'
                 serverUrlEncoding = 'UTF-8'
                 filterProcessesUrl = '/j_spring_cas_security_check'
-                if (active && useSingleSignout){
+                if (useSingleSignout){
                     grails.plugin.springsecurity.useSessionFixationPrevention = false
                 }
             }
@@ -117,49 +111,6 @@ grails {
         }
     }
 }
-
-
-/** *****************************************************************************
- *                                                                              *
- *                        SAML CONFIGURATION                                    *
- *        Un-comment the below code when authentication mode is saml.           *
- *                                                                              *
- ***************************************************************************** **/
-// set active = true when authentication provider section configured for saml
-/*
-grails.plugin.springsecurity.saml.active = false
-grails.plugin.springsecurity.auth.loginFormUrl = '/saml/login'
-grails.plugin.springsecurity.saml.afterLogoutUrl ='/logout/customLogout'
-banner.sso.authentication.saml.localLogout='false'                                                    // To disable single logout set this to true,default 'false'.
-
-grails.plugin.springsecurity.saml.keyManager.storeFile = 'classpath:security/<KEY_NAME>.jks'          // for unix File based Example:- 'file:/home/u02/samlkeystore.jks'
-grails.plugin.springsecurity.saml.keyManager.storePass = 'test1234'
-grails.plugin.springsecurity.saml.keyManager.passwords = [ 'banner-<short-appName>-sp': 'test1234' ]  // banner-<short-appName>-sp is the value set in EIS Service provider setup
-grails.plugin.springsecurity.saml.keyManager.defaultKey = 'banner-<short-appName>-sp'                 // banner-<short-appName>-sp is the value set in EIS Service provider setup
-
-grails.plugin.springsecurity.saml.metadata.sp.file = 'security/banner-<Application_Name>-sp.xml'     // for unix file based Example:-'/home/u02/sp-local.xml'
-grails.plugin.springsecurity.saml.metadata.providers = [adfs: 'security/banner-<Application_Name>-idp.xml'] // for unix file based Example: '/home/u02/idp-local.xml'
-grails.plugin.springsecurity.saml.metadata.defaultIdp = 'adfs'
-grails.plugin.springsecurity.saml.metadata.sp.defaults = [
-        local: true,
-        alias: 'banner-<short-appName>-sp',                                   // banner-<short-appName>-sp is the value set in EIS Service provider setup
-        securityProfile: 'metaiop',
-        signingKey: 'banner-<short-appName>-sp',                              // banner-<short-appName>-sp is the value set in EIS Service provider setup
-        encryptionKey: 'banner-<short-appName>-sp',                           // banner-<short-appName>-sp is the value set in EIS Service provider setup
-        tlsKey: 'banner-<short-appName>-sp',                                  // banner-<short-appName>-sp is the value set in EIS Service provider setup
-        requireArtifactResolveSigned: false,
-        requireLogoutRequestSigned: false,
-        requireLogoutResponseSigned: false
-]
-*/
-
-// ******************************************************************************
-//                                                                              *
-//                       +++ HOME PAGE URL CONFIGURATION +++                    *
-//             Home page link when error happens during authentication.         *
-//                                                                              *
-// ******************************************************************************
-grails.plugin.springsecurity.homePageUrl='http://HOST:PORT/'
 
 // ******************************************************************************
 //
@@ -283,23 +234,21 @@ log4j = {
 grails.resources.adhoc.includes = ['/images/**', '/css/**', '/js/**', '/plugins/**', '/fonts/**']
 grails.resources.adhoc.excludes = ['/WEB-INF/**']
 
+
+
 banner8.SS.url = 'http://<host_name>:<port_number>/<banner8>/'
-
-// ********************************************************************************
-//    MEP Setup
-// ********************************************************************************
 //To use MEP context sensitive 8.x SSB URLs in menus uncomment the mep.banner8.SS.url lines
-//  For example, if we have Banner 9 General Self Service App deployed with two
+//  For example, if we have Banner 9 Faculty Attendance Tracking App deployed with two
 //  MEP institutions (GVU and BANNER) having the following URL syntax.
-//  http://example.ellucian.com:8105/BannerGeneralSsb?mepCode=BANNER
-//  http://example.ellucian.com:8105/BannerGeneralSsb?mepCode=GVU
+//  http://example.ellucian.com:8105/FacultyAttendanceTrackingSsb/ssb/facultyAttendanceTracking?mepCode=BANNER
+//  http://example.ellucian.com:8105/FacultyAttendanceTrackingSsb/ssb/facultyAttendanceTracking?mepCode=GVU
 
-/***********************************************************************
-mep.banner8.SS.url = [
-    GVU : 'http://example.ellucian.com:8888/ssomanager/c/SSB?pkg=http://example.ellucian.com:9020/SMPL_GVU/',
-    BANNER : 'http://example.ellucian.com:8888/ssomanager/c/SSB?pkg=http://example.ellucian.com:9020/SMPL_BANNER/'
-]
-************************************************************************/
+//mep.banner8.SS.url = [
+//    GVU : 'http://example.ellucian.com:8888/ssomanager/c/SSB?pkg=http://example.ellucian.com:9020/SMPL_GVU/',
+//    BANNER : 'http://example.ellucian.com:8888/ssomanager/c/SSB?pkg=http://example.ellucian.com:9020/SMPL_BANNER/'
+//]
+
+
 
 /** *****************************************************************************
  *                                                                              *
@@ -316,34 +265,3 @@ webAppExtensibility {
     }
     adminRoles = "ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M"
 }
-
-/** *****************************************************************************
- *                                                                              *
- *                   Theme Server Support                                       *
- *                                                                              *
- ***************************************************************************** **/
-banner.theme.url="http://BANNER9_HOST:PORT/ExampleApp/theme"
-banner.theme.name="default"
-banner.theme.template="BannerGeneralSsb"
-
-// ********************************************************************************
-// Cross-frame scripting vulnerability when integrating with Application Navigator.
-// ********************************************************************************
-grails.plugin.xframeoptions.urlPattern = '/login/auth'
-grails.plugin.xframeoptions.deny = true
-
-// ********************************************************************************
-// Location of users' profile picture image files
-// ********************************************************************************
-banner {
-  picturesPath=System.getProperty('base.dir') + '/test/images'
-  // defaultPhoto = <Fully qualified path to the photo to use if no user photo is available.>
-}
-
-/*******************************************************************************
- *                                                                             *
- *                          Google Analytics                                   *
- *                                                                             *
- *******************************************************************************/
-banner.analytics.trackerId=''
-banner.analytics.allowEllucianTracker=true
