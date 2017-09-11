@@ -49,9 +49,9 @@ class BootStrap {
         virtualDomainUtilService.importInitially(virtualDomainUtilService.loadOverwriteExisting)
 
         // Install metadata from configured directories
-        pageUtilService.importAllFromDir()
-        virtualDomainUtilService.importAllFromDir()
-        cssUtilService.importAllFromDir()
+        pageUtilService.importAllFromDir(pbConfig.locations.page, pageUtilService.loadIfNew)
+        virtualDomainUtilService.importAllFromDir(pbConfig.locations.virtualDomain, virtualDomainUtilService.loadIfNew)
+        cssUtilService.importAllFromDir(pbConfig.locations.css, cssUtilService.loadIfNew)
 
 
         //Initialize the request map (page security)
