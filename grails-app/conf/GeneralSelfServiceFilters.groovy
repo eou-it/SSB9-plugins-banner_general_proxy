@@ -30,7 +30,7 @@ class GeneralSelfServiceFilters {
             }
         }
 
-        controlAccessToActionIteam( controller: 'aip|aipAdmin', action: '*' ) {
+        controlAccessToActionIteam( controller: 'aip', action: '*' ) {
             before = {
                 if (generalSsbConfigService.getParamFromSession( GeneralSsbConfigService.ENABLE_ACTION_ITEM, 'Y' ) != 'Y') {
                     redirect( controller: "error", action: "accessForbidden" )

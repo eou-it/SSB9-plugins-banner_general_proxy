@@ -41,7 +41,7 @@ class BootStrap {
 
     def init = { servletContext ->
 
-        //TODO: add pbEnabled option in app config and handle here
+        /*//TODO: add pbEnabled option in app config and handle here
         // Install metadata required for page builder
         def pbConfig = grails.util.Holders.getConfig().pageBuilder
         cssUtilService.importInitially(cssUtilService.loadOverwriteExisting)
@@ -55,7 +55,7 @@ class BootStrap {
 
 
         //Initialize the request map (page security)
-        pageSecurityService.init()
+        pageSecurityService.init()*/
 
         // For IE 9 with help of es5-shim.js, the default date marshaller does not work.
             JSON.registerObjectMarshaller(Date) {
