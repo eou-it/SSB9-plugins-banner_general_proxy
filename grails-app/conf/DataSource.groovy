@@ -31,10 +31,10 @@ hibernate {
             "classpath:hibernate-banner-general-person.cfg.xml",
             "classpath:hibernate-banner-general-validation-common.cfg.xml",
             "classpath:hibernate-banner-general-common.cfg.xml",
-	    "classpath:hibernate-banner-aip.cfg.xml"
+            "classpath:hibernate-banner-aip.cfg.xml",
+            "classpath:hibernate-banner-general-utility.cfg.xml"
     ]
 }
-
 
 // environment specific settings
 environments {

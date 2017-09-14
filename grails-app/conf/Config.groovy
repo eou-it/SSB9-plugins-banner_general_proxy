@@ -21,13 +21,13 @@ import grails.plugin.springsecurity.SecurityConfigType
 
 grails.config.locations = [] // leave this initialized to an empty list, and add your locations in the map below.
 
-def locationAdder = ConfigFinder.&addLocation.curry(grails.config.locations)
+def locationAdder = ConfigFinder.&addLocation.curry( grails.config.locations )
 
-[ BANNER_APP_CONFIG:            "banner_configuration.groovy",
-  BANNER_GENERAL_SSB_CONFIG:    "${appName}_configuration.groovy",
-  WEB_APP_EXTENSIBILITY_CONFIG: "WebAppExtensibilityConfig.class"
-  //PAGEBUILDER_APP_CONFIG:   "BannerExtensibility_configuration.groovy",
-].each { envName, defaultFileName -> locationAdder( envName, defaultFileName ) }
+[BANNER_APP_CONFIG           : "banner_configuration.groovy",
+ BANNER_GENERAL_SSB_CONFIG   : "${appName}_configuration.groovy",
+ WEB_APP_EXTENSIBILITY_CONFIG: "WebAppExtensibilityConfig.class"
+ //PAGEBUILDER_APP_CONFIG:   "BannerExtensibility_configuration.groovy",
+].each {envName, defaultFileName -> locationAdder( envName, defaultFileName )}
 
 grails.config.locations.each {
     println "configuration: " + it
@@ -54,26 +54,26 @@ build.number.uuid = "f23ea34b-6469-4aa9-9778-e7efbba5de7b" // specific UUID for 
 build.number.base.url = "http://m039198.ellucian.com:8080/BuildNumberServer/buildNumber?method=getNextBuildNumber&uuid="
 
 grails.project.groupId = "net.hedtech" // used when deploying to a maven repo
-grails.databinding.useSpringBinder=true
+grails.databinding.useSpringBinder = true
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
 grails.mime.types = [
-        html: ['text/html', 'application/xhtml+xml'],
-        xml: ['text/xml', 'application/xml', 'application/vnd.sungardhe.student.v0.01+xml'],
-        text: 'text/plain',
-        js: 'text/javascript',
-        rss: 'application/rss+xml',
-        atom: 'application/atom+xml',
-        css: 'text/css',
-        csv: 'text/csv',
-        all: '*/*',
-        json: ['application/json', 'text/json'],
-        form: 'application/x-www-form-urlencoded',
+        html         : ['text/html', 'application/xhtml+xml'],
+        xml          : ['text/xml', 'application/xml', 'application/vnd.sungardhe.student.v0.01+xml'],
+        text         : 'text/plain',
+        js           : 'text/javascript',
+        rss          : 'application/rss+xml',
+        atom         : 'application/atom+xml',
+        css          : 'text/css',
+        csv          : 'text/csv',
+        all          : '*/*',
+        json         : ['application/json', 'text/json'],
+        form         : 'application/x-www-form-urlencoded',
         multipartForm: 'multipart/form-data',
-        jpg: 'image/jpeg',
-        png: 'image/png',
-        gif: 'image/gif',
-        bmp: 'image/bmp',
+        jpg          : 'image/jpeg',
+        png          : 'image/png',
+        gif          : 'image/gif',
+        bmp          : 'image/bmp',
 ]
 
 // The default codec used to encode data with ${}
@@ -110,7 +110,7 @@ environments {
         ssbEnabled = true
         ssbOracleUsersProxied = true
         grails.plugin.springsecurity.interceptUrlMap = [
-                '/': ['IS_AUTHENTICATED_ANONYMOUSLY'] ]
+                '/': ['IS_AUTHENTICATED_ANONYMOUSLY']]
     }
     development {
         ssbEnabled = true
@@ -147,40 +147,41 @@ dataOrigin = "Banner"
 // connection is attained and the user has the necessary role, the role is enabled
 // for that user and Banner object.
 formControllerMap = [
-        'selfservicemenu' : ['SELFSERVICE-EMPLOYEE'],
-        'survey': ['SELFSERVICE'],
-        'useragreement': ['SELFSERVICE'],
-        'securityqa': ['SELFSERVICE'],
-        'general': ['SELFSERVICE'],
-        'directdeposit': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
-        'personalinformation': ['SELFSERVICE'],
-        'updateaccount': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
-        'accountlisting': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
-        'directdepositconfiguration': ['SELFSERVICE-STUDENT','SELFSERVICE-EMPLOYEE'],
+        'selfservicemenu'           : ['SELFSERVICE-EMPLOYEE'],
+        'survey'                    : ['SELFSERVICE'],
+        'uploadproperties'          : ['SELFSERVICE'],
+        'useragreement'             : ['SELFSERVICE'],
+        'securityqa'                : ['SELFSERVICE'],
+        'general'                   : ['SELFSERVICE'],
+        'theme'                     : ['SELFSERVICE'],
+        'themeeditor'               : ['SELFSERVICE'],
+        'directdeposit'             : ['SELFSERVICE-STUDENT', 'SELFSERVICE-EMPLOYEE'],
+        'personalinformation'       : ['SELFSERVICE'],
+        'updateaccount'             : ['SELFSERVICE-STUDENT', 'SELFSERVICE-EMPLOYEE'],
+        'accountlisting'            : ['SELFSERVICE-STUDENT', 'SELFSERVICE-EMPLOYEE'],
+        'directdepositconfiguration': ['SELFSERVICE-STUDENT', 'SELFSERVICE-EMPLOYEE'],
         'personalinformationdetails': ['SELFSERVICE'],
         'personalinformationpicture': ['SELFSERVICE'],
-        'personalinformationqa': ['SELFSERVICE'],
-        'about': ['GUAGMNU'],
-	 //AIP//
+        'personalinformationqa'     : ['SELFSERVICE'],
+        'about'                     : ['GUAGMNU'],
+        //AIP//
         'aip'                       : ['SELFSERVICE', 'GUAGMNU'],
-        'aipgroup'                  : ['SELFSERVICE'],
         'aipadmin'                  : ['SELFSERVICE'],
         'bcm'                       : ['SELFSERVICE'],
         'aipPageBuilder'            : ['SELFSERVICE', 'GUAGMNU'],
-	
-	//from PB///////
-        'virtualdomaincomposer'   : ['GPBADMN'],
-        'cssmanager'              : ['GPBADMN'],
-        'visualpagemodelcomposer' : ['GPBADMN'],
-        'cssrender'               : ['SELFSERVICE','GUAGMNU']
+
+        //from PB///////
+        'virtualdomaincomposer'     : ['GPBADMN'],
+        'cssmanager'                : ['GPBADMN'],
+        'visualpagemodelcomposer'   : ['GPBADMN'],
+        'cssrender'                 : ['SELFSERVICE', 'GUAGMNU']
 ]
 
 
 grails.plugin.springsecurity.useRequestMapDomainClass = false
 //grails.plugin.springsecurity.rejectIfNoRule = true
 
-grails.plugin.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
-
+grails.plugin.springsecurity.securityConfigType = SecurityConfigType.Requestmap
 
 // ******************************************************************************
 //
@@ -190,28 +191,31 @@ grails.plugin.springsecurity.securityConfigType = SecurityConfigType.InterceptUr
 pageBuilder.adminRoles = 'ROLE_GPBADMN_BAN_DEFAULT_PAGEBUILDER_M'
 
 grails.plugin.springsecurity.interceptUrlMap = [
-        '/': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/resetPassword/**': [ 'IS_AUTHENTICATED_ANONYMOUSLY' ] ,
-        '/login/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/index**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/logout/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/ssb/logout/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/ssb/menu':['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/js/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/css/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/images/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/fonts/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/plugins/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/errors/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/help/**':  ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/i18n/**':  ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/ssb/selfServiceMenu/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/ssb/menu**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/ssb/about/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/generalSsbApp/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/ssb/keepAlive/data**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/dateConverter/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/ssb/dateConverter/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/aipApp/**'                         : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/directDepositApp/**'               : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/personalInformationApp/**'         : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/'                                  : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/resetPassword/**'                  : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/login/**'                          : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/index**'                           : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/logout/**'                         : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/ssb/logout/**'                     : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/ssb/menu'                          : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/js/**'                             : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/css/**'                            : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/images/**'                         : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/fonts/**'                          : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/plugins/**'                        : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/errors/**'                         : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/help/**'                           : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/i18n/**'                           : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/ssb/selfServiceMenu/**'            : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/ssb/menu**'                        : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/ssb/about/**'                      : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/generalSsbApp/**'                  : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/ssb/keepAlive/data**'              : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/dateConverter/**'                  : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/ssb/dateConverter/**'              : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         // ALL URIs specified with the BannerAccessDecisionVoter.ROLE_DETERMINED_DYNAMICALLY
         // 'role' (it's not a real role) will result in authorization being determined based
         // upon a user's role assignments to the corresponding form (see 'formControllerMap' above).
@@ -226,57 +230,57 @@ grails.plugin.springsecurity.interceptUrlMap = [
         //
         // '/**': [ 'ROLE_DETERMINED_DYNAMICALLY' ]
         //'/**': [ 'ROLE_SELFSERVICE-FACULTY_BAN_DEFAULT_M' ]
-        '/ssb/securityQA/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/survey/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/userAgreement/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/general/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/directDeposit/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
-        '/ssb/UpdateAccount/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
-        '/ssb/accountListing/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
-        '/ssb/DirectDepositConfiguration/**': ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M','ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
-        '/ssb/personalInformation/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationDetails/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationPicture/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationQA/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-	
-	//Page Builder specific
-        '/internalPb/virtualDomains.*/**'      : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/adminPb/virtualDomains.*/**'         : [pageBuilder.adminRoles],
-        '/internalPb/pages/**'                 : [pageBuilder.adminRoles],
-        '/internalPb/csses/**'                 : [pageBuilder.adminRoles],
-        '/internalPb/pagesecurity/**'          : [pageBuilder.adminRoles],
-        '/internalPb/pageexports/**'           : [pageBuilder.adminRoles],
-        '/internalPb/virtualdomainexports/**'  : [pageBuilder.adminRoles],
-        '/internalPb/cssexports/**'            : [pageBuilder.adminRoles],
-        '/internalPb/admintasks/**'            : [pageBuilder.adminRoles],
-        '/virtualDomainComposer/**'            : [pageBuilder.adminRoles],
-        '/visualPageModelComposer/**'          : [pageBuilder.adminRoles],
-        '/cssManager/**'                       : [pageBuilder.adminRoles],
-        '/cssRender/**'                        : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-	
-	//For now use a page builder dummy page for cas auth
-        '/customPage/page/pbadm.ssoauth/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/securityQA/**'                 : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/survey/**'                     : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/userAgreement/**'              : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/general/**'                    : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/directDeposit/**'              : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
+        '/ssb/UpdateAccount/**'              : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
+        '/ssb/accountListing/**'             : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
+        '/ssb/DirectDepositConfiguration/**' : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
+        '/ssb/personalInformation/**'        : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/PersonalInformationDetails/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/PersonalInformationPicture/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/PersonalInformationQA/**'      : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+
+        //Page Builder specific
+        '/internalPb/virtualDomains.*/**'    : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/adminPb/virtualDomains.*/**'       : [pageBuilder.adminRoles],
+        '/internalPb/pages/**'               : [pageBuilder.adminRoles],
+        '/internalPb/csses/**'               : [pageBuilder.adminRoles],
+        '/internalPb/pagesecurity/**'        : [pageBuilder.adminRoles],
+        '/internalPb/pageexports/**'         : [pageBuilder.adminRoles],
+        '/internalPb/virtualdomainexports/**': [pageBuilder.adminRoles],
+        '/internalPb/cssexports/**'          : [pageBuilder.adminRoles],
+        '/internalPb/admintasks/**'          : [pageBuilder.adminRoles],
+        '/virtualDomainComposer/**'          : [pageBuilder.adminRoles],
+        '/visualPageModelComposer/**'        : [pageBuilder.adminRoles],
+        '/cssManager/**'                     : [pageBuilder.adminRoles],
+        '/cssRender/**'                      : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+
+        //For now use a page builder dummy page for cas auth
+        '/customPage/page/pbadm.ssoauth/**'  : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
 
         //Theming specific
-        '/theme/**'             : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/themeEditor/**'             : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
-	
+        '/ssb/theme/**'                      : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/ssb/themeEditor/**'                : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
+
         //I18N TranMan interface
-        '/admin/i18n/**'              : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
-        
-	//some demo domains
+        '/admin/i18n/**'                     : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
+
+        //some demo domains
         //'/internalPb/todos/**'    : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         //'/internalPb/projects/**' : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        
-	'/**'                         : ['ROLE_SELFSERVICE-FACULTY_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M', pageBuilder.adminRoles]
+
+        '/**'                                : ['ROLE_SELFSERVICE-FACULTY_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M', pageBuilder.adminRoles]
 
 ]
 
 // CodeNarc rulesets
-codenarc.ruleSetFiles="rulesets/banner.groovy"
-codenarc.reportName="target/CodeNarcReport.html"
-codenarc.propertiesFile="grails-app/conf/codenarc.properties"
-codenarc.extraIncludeDirs=["grails-app/composers"]
+codenarc.ruleSetFiles = "rulesets/banner.groovy"
+codenarc.reportName = "target/CodeNarcReport.html"
+codenarc.propertiesFile = "grails-app/conf/codenarc.properties"
+codenarc.extraIncludeDirs = ["grails-app/composers"]
 
 //grails.validateable.packages=['net.hedtech.banner.student.registration']
 
@@ -320,33 +324,35 @@ remove this line */
 restfulApiConfig = {
     // Resources for web_app_extensibility plugin
     resource 'extensions' config {
-        serviceName = 'webAppExtensibilityExtensionService'   // In some cases the service name has to be prepended with the plugin name
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app: grailsApplication)
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                     serviceName = 'webAppExtensibilityExtensionService'
+                                     // In some cases the service name has to be prepended with the plugin name
+                                     representation {
+                                         mediaTypes = ["application/json"]
+                                         marshallers {
+                                             marshaller {
+                                                 instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                 priority = 100
+                                             }
+                                         }
+                                         extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                     }
+                                 }
     resource 'resources' config {
-        serviceName = 'webAppExtensibilityResourceService'   // In some cases the service name has to be prepended with the plugin name
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                    serviceName = 'webAppExtensibilityResourceService'
+                                    // In some cases the service name has to be prepended with the plugin name
+                                    representation {
+                                        mediaTypes = ["application/json"]
+                                        marshallers {
+                                            marshaller {
+                                                instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                priority = 100
+                                            }
+                                        }
+                                        extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                    }
+                                }
     // End Resources for web_app_extensibility plugin
 }
 
-grails.plugin.springsecurity.cas.active=false
-grails.plugin.springsecurity.saml.active=false
+grails.plugin.springsecurity.cas.active = false
+grails.plugin.springsecurity.saml.active = false
