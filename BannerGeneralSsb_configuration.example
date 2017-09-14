@@ -29,6 +29,12 @@ This configuration file contains the following sections:
 
 logAppName = "BannerGeneralSsb"
 
+// Product and application name to refer to this app for name display rules
+productName="General"
+banner.applicationName="GeneralSsb"
+defaultWebSessionTimeout = 1400
+footerFadeAwayTime=30000
+
 // ******************************************************************************
 //
 //                       +++ JMX Bean Names +++
@@ -398,15 +404,3 @@ configJob.delay = 60000
 configJob.interval = 120000
 configJob.actualCount = -1
 
-
-/*******************************************************************************
- *                                                                             *
- *                          Config Job                                         *
- *                                                                             *
- *******************************************************************************/
-ssconfig.app.seeddata.keys = [
-['ssbPassword.reset.enabled': true],
-['allowEllucianTracker': false],
-['clientTrackerId': 'UA-83915850-1'],
-['defaultWebSessionTimeout': 400000]
-]
