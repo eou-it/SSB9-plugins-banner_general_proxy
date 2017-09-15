@@ -2,7 +2,7 @@
  Copyright 2015-2017 Ellucian Company L.P. and its affiliates.
  *********************************************************************************/
 
- /** ****************************************************************************
+/** ****************************************************************************
  *                                                                              *
  *          Self-Service Banner 9 General Self-Service Configuration            *
  *                                                                              *
@@ -10,36 +10,47 @@
 
 /** ****************************************************************************
 
-This file contains configuration needed by the Self-Service Banner 9 General
-web application. Please refer to the administration guide for
-additional information regarding the configuration items contained within this file.
+ This file contains configuration needed by the Self-Service Banner 9 General
+ web application. Please refer to the administration guide for
+ additional information regarding the configuration items contained within this file.
 
-This configuration file contains the following sections:
+ This configuration file contains the following sections:
 
-    * Self Service Support
 
-    * Logging Configuration (Note: Changes here require restart -- use JMX to avoid the need restart)
+ * JMX Bean Names
+ * Logging Configuration (Note: Changes here require restart -- use JMX to avoid the need restart)
+ * Self Service Support
+ * Supplemental Data Support Enablement
+ * CAS SSO Configuration (supporting administrative and self service users)
+ * SAML SSO Configuration (supporting administrative and self service users)
+ * Web Application Extensibility
+ * Home page link when error happens during authentication
+ * Configuration to use themes served by the Theme Server
+ * Google Analytics
+ * Eliminate access to the WEB-INF folder
+ * Banner 8 SS URLs
+ * MEP Setup
+ * Location of users' profile picture image files
+ * Config Job configuration
 
-    * CAS SSO Configuration (supporting administrative and self service users)
 
-     NOTE: DataSource and JNDI configuration resides in the cross-module
-           'banner_configuration.groovy' file.
 
-***************************************************************************** **/
+ NOTE: DataSource and JNDI configuration resides in the cross-module
+ 'banner_configuration.groovy' file.
 
-logAppName = "BannerGeneralSsb"
+ * Self Service Support
 
-// Product and application name to refer to this app for name display rules
-productName="General"
-banner.applicationName="GeneralSsb"
-defaultWebSessionTimeout = 1400
-footerFadeAwayTime=30000
+ * Logging Configuration (Note: Changes here require restart -- use JMX to avoid the need restart)
 
-// ******************************************************************************
-//
-//                       +++ JMX Bean Names +++
-//
-// ******************************************************************************
+ * CAS SSO Configuration (supporting administrative and self service users)
+
+ ***************************************************************************** **/
+
+/** ****************************************************************************
+ *                                                                             *
+ *                              JMX Bean Names                                 *
+ *                                                                             *
+ *******************************************************************************/
 
 // The names used to register Mbeans must be unique for all applications deployed
 // into the JVM.  This configuration should be updated for each instance of each
@@ -50,136 +61,14 @@ jmx {
     }
 }
 
-// ******************************************************************************
-//
-//                       +++ Self Service Support +++
-//
-// ******************************************************************************
-
-
-ssbEnabled = true
-ssbOracleUsersProxied = true
-ssbPassword.reset.enabled = true //true  - allow Pidm users to reset their password.
-                                 //false - throws functionality disabled error message
-
-
-
-/** *****************************************************************************
- *                                                                              *
- *               Supplemental Data Support Enablement                           *
- *                                                                              *
- ***************************************************************************** **/
-// Default is false for ssbapplications.
-sdeEnabled=false
-
-
-/** *****************************************************************************
- *                                                                              *
- *                AUTHENTICATION PROVIDER CONFIGURATION                         *
- *                                                                              *
- ***************************************************************************** **/
-//
-// Set authenticationProvider to either default or cas.
-// If using cas, the CAS CONFIGURATION
-// will also need configured/uncommented as well as set to active.
-//
-banner {
-    sso {
-        authenticationProvider           = 'default' //  Valid values are: 'default', 'cas', or 'saml'
-        authenticationAssertionAttribute = 'UDC_IDENTIFIER'
-        if(authenticationProvider != 'default') {
-            grails.plugin.springsecurity.failureHandler.defaultFailureUrl = '/login/error'
-        }
-    }
-}
-
-
-/** *****************************************************************************
- *                                                                              *
- *                             CAS CONFIGURATION                                *
- *                                                                              *
- ***************************************************************************** **/
-// set active = true when authentication provider section configured for cas
-grails {
-    plugin {
-        springsecurity {
-            cas {
-                active = false
-                serverUrlPrefix  = 'http://CAS_HOST:PORT/cas'
-                serviceUrl       = 'http://BANNER9_HOST:PORT/APP_NAME/j_spring_cas_security_check'
-                serverName       = 'http://BANNER9_HOST:PORT'
-                proxyCallbackUrl = 'http://BANNER9_HOST:PORT/APP_NAME/secure/receptor'
-                loginUri         = '/login'
-                sendRenew        = false
-                proxyReceptorUrl = '/secure/receptor'
-                useSingleSignout = true
-                key = 'grails-spring-security-cas'
-                artifactParameter = 'SAMLart'
-                serviceParameter = 'TARGET'
-                serverUrlEncoding = 'UTF-8'
-                filterProcessesUrl = '/j_spring_cas_security_check'
-                if (active && useSingleSignout){
-                    grails.plugin.springsecurity.useSessionFixationPrevention = false
-                }
-            }
-            logout {
-                afterLogoutUrl = 'https://cas-server/logout?url=http://myportal/main_page.html'
-            }
-        }
-    }
-}
-
-
-/** *****************************************************************************
- *                                                                              *
- *                        SAML CONFIGURATION                                    *
- *        Un-comment the below code when authentication mode is saml.           *
- *                                                                              *
- ***************************************************************************** **/
-// set active = true when authentication provider section configured for saml
-/*
-grails.plugin.springsecurity.saml.active = false
-grails.plugin.springsecurity.auth.loginFormUrl = '/saml/login'
-grails.plugin.springsecurity.saml.afterLogoutUrl ='/logout/customLogout'
-banner.sso.authentication.saml.localLogout='false'                                                    // To disable single logout set this to true,default 'false'.
-
-grails.plugin.springsecurity.saml.keyManager.storeFile = 'classpath:security/<KEY_NAME>.jks'          // for unix File based Example:- 'file:/home/u02/samlkeystore.jks'
-grails.plugin.springsecurity.saml.keyManager.storePass = 'test1234'
-grails.plugin.springsecurity.saml.keyManager.passwords = [ 'banner-<short-appName>-sp': 'test1234' ]  // banner-<short-appName>-sp is the value set in EIS Service provider setup
-grails.plugin.springsecurity.saml.keyManager.defaultKey = 'banner-<short-appName>-sp'                 // banner-<short-appName>-sp is the value set in EIS Service provider setup
-
-grails.plugin.springsecurity.saml.metadata.sp.file = 'security/banner-<Application_Name>-sp.xml'     // for unix file based Example:-'/home/u02/sp-local.xml'
-grails.plugin.springsecurity.saml.metadata.providers = [adfs: 'security/banner-<Application_Name>-idp.xml'] // for unix file based Example: '/home/u02/idp-local.xml'
-grails.plugin.springsecurity.saml.metadata.defaultIdp = 'adfs'
-grails.plugin.springsecurity.saml.metadata.sp.defaults = [
-        local: true,
-        alias: 'banner-<short-appName>-sp',                                   // banner-<short-appName>-sp is the value set in EIS Service provider setup
-        securityProfile: 'metaiop',
-        signingKey: 'banner-<short-appName>-sp',                              // banner-<short-appName>-sp is the value set in EIS Service provider setup
-        encryptionKey: 'banner-<short-appName>-sp',                           // banner-<short-appName>-sp is the value set in EIS Service provider setup
-        tlsKey: 'banner-<short-appName>-sp',                                  // banner-<short-appName>-sp is the value set in EIS Service provider setup
-        requireArtifactResolveSigned: false,
-        requireLogoutRequestSigned: false,
-        requireLogoutResponseSigned: false
-]
-*/
-
-// ******************************************************************************
-//                                                                              *
-//                       +++ HOME PAGE URL CONFIGURATION +++                    *
-//             Home page link when error happens during authentication.         *
-//                                                                              *
-// ******************************************************************************
-grails.plugin.springsecurity.homePageUrl='http://HOST:PORT/'
-
-// ******************************************************************************
-//
-//                       +++ LOGGER CONFIGURATION +++
-//
-// ******************************************************************************
-String loggingFileDir =  "target/logs"
+/** ****************************************************************************
+ *                                                                             *
+ *                          Logging Configuration                              *
+ *                                                                             *
+ **************************************************************************** **/
+logAppName = "BannerGeneralSsb"
+String loggingFileDir = "target/logs"
 String loggingFileName = "${loggingFileDir}/${logAppName}.log".toString()
-
 
 // Note that logging is configured separately for each environment ('development', 'test', and 'production').
 // By default, all 'root' logging is 'off'.  Logging levels for root, or specific packages/artifacts, should be configured via JMX.
@@ -193,22 +82,22 @@ String loggingFileName = "${loggingFileDir}/${logAppName}.log".toString()
 //
 log4j = {
     appenders {
-        rollingFile name:'appLog', file:loggingFileName, maxFileSize:"${10*1024*1024}", maxBackupIndex:10, layout:pattern( conversionPattern: '%d{[EEE, dd-MMM-yyyy @ HH:mm:ss.SSS]} [%t] %-5p %c %x - %m%n' )
+        rollingFile name: 'appLog', file: loggingFileName, maxFileSize: "${10 * 1024 * 1024}", maxBackupIndex: 10, layout: pattern( conversionPattern: '%d{[EEE, dd-MMM-yyyy @ HH:mm:ss.SSS]} [%t] %-5p %c %x - %m%n' )
     }
 
-    switch( grails.util.Environment.current.name.toString() ) {
+    switch (grails.util.Environment.current.name.toString()) {
         case 'development':
             root {
-                off 'stdout','appLog'
+                off 'stdout', 'appLog'
                 additivity = true
             }
-            info  'net.hedtech.banner.configuration.ApplicationConfigurationUtils'
+            info 'net.hedtech.banner.configuration.ApplicationConfigurationUtils'
             error 'net.hedtech.banner.representations'
             error 'net.hedtech.banner.supplemental.SupplementalDataService'
             break
         case 'test':
             root {
-                error 'stdout','appLog'
+                error 'stdout', 'appLog'
                 additivity = true
             }
             break
@@ -285,64 +174,130 @@ log4j = {
     //                   domain     - For domain entities
 }
 
+/** *****************************************************************************
+ *                                                                              *
+ *                         Self Service Support                                 *
+ *                                                                              *
+ ***************************************************************************** **/
+
+
+ssbEnabled = true
+ssbOracleUsersProxied = true
+ssbPassword.reset.enabled = true //true  - allow Pidm users to reset their password.
+//false - throws functionality disabled error message
+
+// Product and application name to refer to this app for name display rules
+productName = "General"
+banner.applicationName = "GeneralSsb"
+defaultWebSessionTimeout = 1400
+footerFadeAwayTime = 30000
 
 /** *****************************************************************************
  *                                                                              *
- *                 Eliminate access to the WEB-INF folder                       *
+ *   This setting is needed if the application needs to work inside             *
+ *   Application Navigator and the secured application pages will be accessible *
+ *   as part of the single-sign on solution.                                    *
  *                                                                              *
  ***************************************************************************** **/
-grails.resources.adhoc.includes = ['/images/**', '/css/**', '/js/**', '/plugins/**', '/fonts/**']
-grails.resources.adhoc.excludes = ['/WEB-INF/**']
+grails.plugin.xframeoptions.urlPattern = '/login/auth'
+grails.plugin.xframeoptions.deny = true
 
+/** *****************************************************************************
+ *                                                                              *
+ *               Supplemental Data Support Enablement                           *
+ *                                                                              *
+ ***************************************************************************** **/
+// Default is false for ssbapplications.
+sdeEnabled = false
 
-banner8.SS.url = 'http://<host_name>:<port_number>/<banner8>/'
-banner8.SS.locale.url =[
-default : 'http://<host_name>:<port_number>/<banner8>/DEFAULT/',
-en      : 'http://<host_name>:<port_number>/<banner8>/EN/',
-en_US   : 'http://<host_name>:<port_number>/<banner8>/enUS/',
-en_AU   : 'http://<host_name>:<port_number>/<banner8>/enAU/',
-en_GB   : 'http://<host_name>:<port_number>/<banner8>/enGB/',
-en_IE   : 'http://<host_name>:<port_number>/<banner8>/enIE/',
-en_IN   : 'http://<host_name>:<port_number>/<banner8>/enIN/',
-fr      : 'http://<host_name>:<port_number>/<banner8>/FR/',
-fr_CA   : 'http://<host_name>:<port_number>/<banner8>/frCA/',
-pt      : 'http://<host_name>:<port_number>/<banner8>/PT/',
-es      : 'http://<host_name>:<port_number>/<banner8>/ES/',
-ar      : 'http://<host_name>:<port_number>/<banner8>/AR/'
+/** *****************************************************************************
+ *                                                                              *
+ *                AUTHENTICATION PROVIDER CONFIGURATION                         *
+ *                                                                              *
+ ***************************************************************************** **/
+//
+// Set authenticationProvider to either default or cas.
+// If using cas, the CAS CONFIGURATION
+// will also need configured/uncommented as well as set to active.
+//
+banner {
+    sso {
+        authenticationProvider = 'default' //  Valid values are: 'default', 'cas', or 'saml'
+        authenticationAssertionAttribute = 'UDC_IDENTIFIER'
+        if (authenticationProvider != 'default') {
+            grails.plugin.springsecurity.failureHandler.defaultFailureUrl = '/login/error'
+        }
+    }
+}
+
+/** *****************************************************************************
+ *                                                                              *
+ *                             CAS CONFIGURATION                                *
+ *                                                                              *
+ ***************************************************************************** **/
+// set active = true when authentication provider section configured for cas
+grails {
+    plugin {
+        springsecurity {
+            cas {
+                active = false
+                serverUrlPrefix = 'http://CAS_HOST:PORT/cas'
+                serviceUrl = 'http://BANNER9_HOST:PORT/APP_NAME/j_spring_cas_security_check'
+                serverName = 'http://BANNER9_HOST:PORT'
+                proxyCallbackUrl = 'http://BANNER9_HOST:PORT/APP_NAME/secure/receptor'
+                loginUri = '/login'
+                sendRenew = false
+                proxyReceptorUrl = '/secure/receptor'
+                useSingleSignout = true
+                key = 'grails-spring-security-cas'
+                artifactParameter = 'SAMLart'
+                serviceParameter = 'TARGET'
+                serverUrlEncoding = 'UTF-8'
+                filterProcessesUrl = '/j_spring_cas_security_check'
+                if (active && useSingleSignout) {
+                    grails.plugin.springsecurity.useSessionFixationPrevention = false
+                }
+            }
+            logout {
+                afterLogoutUrl = 'https://cas-server/logout?url=http://myportal/main_page.html'
+            }
+        }
+    }
+}
+
+/** *****************************************************************************
+ *                                                                              *
+ *                        SAML CONFIGURATION                                    *
+ *        Un-comment the below code when authentication mode is saml.           *
+ *                                                                              *
+ ***************************************************************************** **/
+// set active = true when authentication provider section configured for saml
+/*
+grails.plugin.springsecurity.saml.active = false
+grails.plugin.springsecurity.auth.loginFormUrl = '/saml/login'
+grails.plugin.springsecurity.saml.afterLogoutUrl ='/logout/customLogout'
+banner.sso.authentication.saml.localLogout='false'                                                    // To disable single logout set this to true,default 'false'.
+
+grails.plugin.springsecurity.saml.keyManager.storeFile = 'classpath:security/<KEY_NAME>.jks'          // for unix File based Example:- 'file:/home/u02/samlkeystore.jks'
+grails.plugin.springsecurity.saml.keyManager.storePass = 'test1234'
+grails.plugin.springsecurity.saml.keyManager.passwords = [ 'banner-<short-appName>-sp': 'test1234' ]  // banner-<short-appName>-sp is the value set in EIS Service provider setup
+grails.plugin.springsecurity.saml.keyManager.defaultKey = 'banner-<short-appName>-sp'                 // banner-<short-appName>-sp is the value set in EIS Service provider setup
+
+grails.plugin.springsecurity.saml.metadata.sp.file = 'security/banner-<Application_Name>-sp.xml'     // for unix file based Example:-'/home/u02/sp-local.xml'
+grails.plugin.springsecurity.saml.metadata.providers = [adfs: 'security/banner-<Application_Name>-idp.xml'] // for unix file based Example: '/home/u02/idp-local.xml'
+grails.plugin.springsecurity.saml.metadata.defaultIdp = 'adfs'
+grails.plugin.springsecurity.saml.metadata.sp.defaults = [
+        local: true,
+        alias: 'banner-<short-appName>-sp',                                   // banner-<short-appName>-sp is the value set in EIS Service provider setup
+        securityProfile: 'metaiop',
+        signingKey: 'banner-<short-appName>-sp',                              // banner-<short-appName>-sp is the value set in EIS Service provider setup
+        encryptionKey: 'banner-<short-appName>-sp',                           // banner-<short-appName>-sp is the value set in EIS Service provider setup
+        tlsKey: 'banner-<short-appName>-sp',                                  // banner-<short-appName>-sp is the value set in EIS Service provider setup
+        requireArtifactResolveSigned: false,
+        requireLogoutRequestSigned: false,
+        requireLogoutResponseSigned: false
 ]
-
-// ********************************************************************************
-//    MEP Setup
-// ********************************************************************************
-//To use MEP context sensitive 8.x SSB URLs in menus uncomment the mep.banner8.SS.url lines
-//  For example, if we have Banner 9 General Self Service App deployed with two
-//  MEP institutions (GVU and BANNER) having the following URL syntax.
-//  http://example.ellucian.com:8105/BannerGeneralSsb?mepCode=BANNER
-//  http://example.ellucian.com:8105/BannerGeneralSsb?mepCode=GVU
-
-/***********************************************************************
-mep.banner8.SS.url = [
-    GVU : 'http://example.ellucian.com:8888/ssomanager/c/SSB?pkg=http://example.ellucian.com:9020/SMPL_GVU/',
-    BANNER : 'http://example.ellucian.com:8888/ssomanager/c/SSB?pkg=http://example.ellucian.com:9020/SMPL_BANNER/'
-]
-
-mep.banner8.SS.locale.url=[
-      GVU:
-               [
-                    ?default? : 'sampleUrlDefault ',
-                    "ar": 'sampleUrlAR ',
-                    "fr": 'sampleUrlfr',
-                    "fr_CA": 'sampleUrlfrca'
-               ],
-      BANNER :
-               [
-                     ?default? : 'sampleUrlDefault',
-                     "ar": 'sampleUrlAR',
-                     "fr": 'sampleUrlfr ',
-                     "fr_CA": 'sampleUrlfrca'
-               ]
-]
-************************************************************************/
+*/
 
 /** *****************************************************************************
  *                                                                              *
@@ -354,11 +309,19 @@ mep.banner8.SS.locale.url=[
  ***************************************************************************** **/
 webAppExtensibility {
     locations {
-         extensions = "path to the directory location where extensions JSON files will be written to and read from"
-         resources = "path to the directory location where i18n files will be written to and read from"
+        extensions = "path to the directory location where extensions JSON files will be written to and read from"
+        resources = "path to the directory location where i18n files will be written to and read from"
     }
     adminRoles = "ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M"
 }
+
+// ******************************************************************************
+//                                                                              *
+//                       +++ HOME PAGE URL CONFIGURATION +++                    *
+//             Home page link when error happens during authentication.         *
+//                                                                              *
+// ******************************************************************************
+grails.plugin.springsecurity.homePageUrl = 'http://HOST:PORT/'
 
 /** *****************************************************************************
  *                                                                              *
@@ -371,36 +334,87 @@ banner.theme.name = '<UPDATE_ME>' // This is the desired theme name to use. In a
 banner.theme.template = 'BannerGeneralSsb' // This is the name of the scss file containing the theme settings in war file.
 banner.theme.cacheTimeOut = 120 // seconds, required only if the app is theme server. The value indicates how long the CSS file that was generated using the template and the theme is cached.
 
+/******************************************************************************
+ *                               Google Analytics                              *
+ *******************************************************************************/
+banner.analytics.trackerId = ''            //institution's google analytics tracker ID - default blank
+banner.analytics.allowEllucianTracker = true    //true|false - default true
 
-// ********************************************************************************
-// Cross-frame scripting vulnerability when integrating with Application Navigator.
-// ********************************************************************************
-grails.plugin.xframeoptions.urlPattern = '/login/auth'
-grails.plugin.xframeoptions.deny = true
+/*******************************************************************************
+ *                                                                              *
+ *                 Eliminate access to the WEB-INF folder                       *
+ *                                                                              *
+ ***************************************************************************** **/
+grails.resources.adhoc.includes = ['/images/**', '/css/**', '/js/**', '/plugins/**', '/fonts/**']
+grails.resources.adhoc.excludes = ['/WEB-INF/**']
 
-// ********************************************************************************
-// Location of users' profile picture image files
-// ********************************************************************************
+/** *****************************************************************************
+ *                                                                              *
+ *                 Banner 8 SS URLs                                             *
+ *                                                                              *
+ ***************************************************************************** **/
+
+banner8.SS.url = 'http://<host_name>:<port_number>/<banner8>/'
+banner8.SS.locale.url = [
+        default: 'http://<host_name>:<port_number>/<banner8>/DEFAULT/',
+        en     : 'http://<host_name>:<port_number>/<banner8>/EN/',
+        en_US  : 'http://<host_name>:<port_number>/<banner8>/enUS/',
+        en_AU  : 'http://<host_name>:<port_number>/<banner8>/enAU/',
+        en_GB  : 'http://<host_name>:<port_number>/<banner8>/enGB/',
+        en_IE  : 'http://<host_name>:<port_number>/<banner8>/enIE/',
+        en_IN  : 'http://<host_name>:<port_number>/<banner8>/enIN/',
+        fr     : 'http://<host_name>:<port_number>/<banner8>/FR/',
+        fr_CA  : 'http://<host_name>:<port_number>/<banner8>/frCA/',
+        pt     : 'http://<host_name>:<port_number>/<banner8>/PT/',
+        es     : 'http://<host_name>:<port_number>/<banner8>/ES/',
+        ar     : 'http://<host_name>:<port_number>/<banner8>/AR/'
+]
+
+/**********************************************************************************
+ *    MEP Setup                                                                    *
+ /**********************************************************************************/
+//To use MEP context sensitive 8.x SSB URLs in menus uncomment the mep.banner8.SS.url lines
+//  For example, if we have Banner 9 General Self Service App deployed with two
+//  MEP institutions (GVU and BANNER) having the following URL syntax.
+//  http://example.ellucian.com:8105/BannerGeneralSsb?mepCode=BANNER
+//  http://example.ellucian.com:8105/BannerGeneralSsb?mepCode=GVU
+
+mep.banner8.SS.url = [
+        GVU   : 'http://example.ellucian.com:8888/ssomanager/c/SSB?pkg=http://example.ellucian.com:9020/SMPL_GVU/',
+        BANNER: 'http://example.ellucian.com:8888/ssomanager/c/SSB?pkg=http://example.ellucian.com:9020/SMPL_BANNER/'
+]
+
+mep.banner8.SS.locale.url = [
+        GVU   :
+                [
+                        default: 'sampleUrlDefault ',
+                        "ar"   : 'sampleUrlAR ',
+                        "fr"   : 'sampleUrlfr',
+                        "fr_CA": 'sampleUrlfrca'
+                ],
+        BANNER:
+                [
+                        default: 'sampleUrlDefault',
+                        "ar"   : 'sampleUrlAR',
+                        "fr"   : 'sampleUrlfr ',
+                        "fr_CA": 'sampleUrlfrca'
+                ]
+]
+
+/**********************************************************************************
+ *    Location of users' profile picture image files                               *
+ /**********************************************************************************/
+
 banner {
-  picturesPath=System.getProperty('base.dir') + '/test/images'
-  // defaultPhoto = <Fully qualified path to the photo to use if no user photo is available.>
+    picturesPath = System.getProperty( 'base.dir' ) + '/test/images'
+    // defaultPhoto = <Fully qualified path to the photo to use if no user photo is available.>
 }
 
 /*******************************************************************************
  *                                                                             *
- *                          Google Analytics                                   *
- *                                                                             *
- *******************************************************************************/
-banner.analytics.trackerId=[institution's google analytics tracker ID - default blank]
-banner.analytics.allowEllucianTracker=[true|false - default true]
-
-
-/*******************************************************************************
- *                                                                             *
- *                          Config Job                                         *
+ *        Config Job  Configurations                                            *
  *                                                                             *
  *******************************************************************************/
 configJob.delay = 60000
 configJob.interval = 120000
 configJob.actualCount = -1
-
