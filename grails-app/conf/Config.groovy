@@ -168,7 +168,7 @@ formControllerMap = [
         'aip'                       : ['SELFSERVICE', 'GUAGMNU'],
         'aipadmin'                  : ['SELFSERVICE'],
         'bcm'                       : ['SELFSERVICE'],
-        'aipPageBuilder'            : ['SELFSERVICE', 'GUAGMNU'],
+        'aippagebuilder'            : ['SELFSERVICE', 'GUAGMNU'],
 
         //from PB///////
         'virtualdomaincomposer'     : ['GPBADMN'],
