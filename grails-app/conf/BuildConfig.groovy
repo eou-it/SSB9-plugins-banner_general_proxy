@@ -43,7 +43,6 @@ grails.project.dependency.resolution = {
         runtime ":rendering:1.0.0"
         compile ':csv:0.3.1'
         compile ':feeds:1.5'
-	compile ':restful-api:1.0.0'
     }
 
     dependencies {
