@@ -323,6 +323,144 @@ remove this line */
 // ******************************************************************************
 restfulApiConfig = {
     // Resources for web_app_extensibility plugin
+    // Pagebuilder resources
+
+    // generic resource for virtual domains
+
+    anyResource {
+        serviceName = 'virtualDomainService'
+        representation {
+            mediaTypes = ["application/json"]
+            marshallers {
+                marshaller {
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                    priority = 100
+                }
+            }
+            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+        }
+    }
+
+    resource 'pagesecurity' config {
+                                       serviceName = 'pageSecurityService'
+                                       representation {
+                                           mediaTypes = ["application/json"]
+                                           marshallers {
+                                               marshaller {
+                                                   instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                   priority = 100
+                                               }
+                                           }
+                                           extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                       }
+                                   }
+
+    resource 'pages' config {
+                                representation {
+                                    mediaTypes = ["application/json"]
+                                    marshallers {
+                                        jsonDomainMarshaller {
+                                            priority = 101
+                                        }
+                                        jsonBeanMarshaller {
+                                            priority = 100
+                                        }
+                                    }
+                                    jsonExtractor {}
+                                }
+                            }
+
+    resource 'csses' config {
+                                representation {
+                                    mediaTypes = ["application/json"]
+                                    marshallers {
+                                        marshaller {
+                                            instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                            priority = 100
+                                        }
+                                    }
+                                    extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                }
+                            }
+
+    resource 'pageexports' config {
+                                      serviceName = 'pageExportService'
+                                      representation {
+                                          mediaTypes = ["application/json"]
+                                          marshallers {
+                                              marshaller {
+                                                  instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                  priority = 100
+                                              }
+                                          }
+                                          extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                      }
+                                  }
+    resource 'virtualdomainexports' config {
+                                               serviceName = 'virtualDomainExportService'
+                                               representation {
+                                                   mediaTypes = ["application/json"]
+                                                   marshallers {
+                                                       marshaller {
+                                                           instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                           priority = 100
+                                                       }
+                                                   }
+                                                   extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                               }
+                                           }
+    resource 'cssexports' config {
+                                     serviceName = 'cssExportService'
+                                     representation {
+                                         mediaTypes = ["application/json"]
+                                         marshallers {
+                                             marshaller {
+                                                 instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                 priority = 100
+                                             }
+                                         }
+                                         extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                     }
+                                 }
+
+    // This pseudo resource is used when issuing a query using a POST. Such a POST is made
+    // against the actual resource being queried, but using a different URL prefix (e.g., qapi)
+    // so the request is routed to the 'list' method (versus the normal 'create' method).
+    resource 'query-filters' config {
+                                        // TODO: Add support for 'application/x-www-form-urlencoded'
+                                        representation {
+                                            mediaTypes = ["application/json"]
+                                            jsonExtractor {}
+                                        }
+                                    }
+
+    // 2 demo resources
+    resource 'todos' config {
+                                representation {
+                                    mediaTypes = ["application/json"]
+                                    marshallers {
+                                        marshaller {
+                                            instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                            priority = 100
+                                        }
+                                    }
+                                    extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                }
+                            }
+
+    resource 'projects' config {
+                                   representation {
+                                       mediaTypes = ["application/json"]
+                                       marshallers {
+                                           marshaller {
+                                               instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                               priority = 100
+                                           }
+                                       }
+                                       extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                   }
+                               }
+    //END of pagebuilder configuration
     resource 'extensions' config {
                                      serviceName = 'webAppExtensibilityExtensionService'
                                      // In some cases the service name has to be prepended with the plugin name
