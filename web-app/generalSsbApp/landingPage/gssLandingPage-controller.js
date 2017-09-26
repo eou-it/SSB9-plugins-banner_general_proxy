@@ -62,7 +62,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                             title: 'banner.generalssb.landingpage.actionsitem.title',
                             desc: 'banner.generalssb.landingpage.actionsitem.description',
                             url: $scope.applicationContextRoot +'/aip/list',
-                            icon: '../images/direct_deposit.svg',
+                            icon: '../images/action_items_icon.svg',
                             roles: [STUDENT, EMPLOYEE]
                         }
                     );
