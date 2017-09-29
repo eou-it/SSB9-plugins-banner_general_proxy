@@ -159,7 +159,8 @@ formControllerMap = [
         'personalinformationdetails': ['SELFSERVICE'],
         'personalinformationpicture': ['SELFSERVICE'],
         'personalinformationqa': ['SELFSERVICE'],
-        'about': ['GUAGMNU']
+        'about': ['GUAGMNU'],
+        'jobsub-pending-print': ['GUAGMNU', 'SELFSERVICE']
 ]
 
 
@@ -168,6 +169,10 @@ grails.plugin.springsecurity.useRequestMapDomainClass = false
 
 grails.plugin.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
 
+grails.plugin.springsecurity.filterChain.chainMap = [
+        '/api/**': 'authenticationProcessingFilter,basicAuthenticationFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor',
+        '/**'    : 'securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor'
+]
 
 // ******************************************************************************
 //
@@ -223,7 +228,11 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/ssb/personalInformation/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/PersonalInformationDetails/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/PersonalInformationPicture/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationQA/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M']
+        '/ssb/PersonalInformationQA/**': ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/api/**'      : ['ROLE_DETERMINED_DYNAMICALLY'],
+        '/qapi/**'     : ['ROLE_DETERMINED_DYNAMICALLY'],
+        '/api/about'          : ['IS_AUTHENTICATED_FULLY'],
+        '/api/healthcheck'    : ['IS_AUTHENTICATED_FULLY'],
 ]
 
 // CodeNarc rulesets
@@ -267,11 +276,141 @@ grails {
     }
 }
 remove this line */
+// ******************************************************************************
+// DB Connection Caching Configuration
+// ******************************************************************************
+// Note: The BannerDS will cache database connections for administrative users,
+// however for RESTful APIs we do not want this behavior (even when
+// authenticated as an 'administrative' user). RESTful APIs should be stateless.
+//
+// IMPORTANT:
+// When exposing RESTful endpoints, exclude database caching for those URLs.
+// Also, if using a prefix other than 'api' and 'qapi' you will need to ensure
+// the spring security filter chain is configured to avoid creating a session.
+//
+avoidSessionsFor = [ 'api', 'qapi' ]
+
+// ******************************************************************************
+//                           RESTful API MEP Support
+// ******************************************************************************
+// Note: The BannerDS will use 'setSsbMep' even when getting an
+//       administrative connection if the web request is an 'api'
+//       request. Specify the 'api' prefixes using apiUrlPrefixes.
+//
+apiUrlPrefixes = [ 'api', 'qapi', 'rest', 'ui' ]
+
+// ******************************************************************************
+//                  RESTful API Authentication Entry Configuration
+// ******************************************************************************
+// Note: Specifies whether a 'restApiAuthenticationEntryPoint' bean should be used.
+//       Note the 'restApiAuthenticationEntryPoint' bean *must* be registered
+//       within your resources.groovy if this configuration is set to true.
+//
+useRestApiAuthenticationEntryPoint = true
+
+// ******************************************************************************
+//             RESTful API Custom Response Header Name Configuration
+// ******************************************************************************
+//
+restfulApi.header.pageOffset = 'X-hedtech-pageOffset'
+restfulApi.header.pageMaxSize = 'X-hedtech-pageMaxSize'
+restfulApi.header.message = 'X-hedtech-message'
+restfulApi.header.mediaType = 'X-Media-Type'
+restfulApi.header.totalCount = 'X-Total-Count'
+restfulApi.header.contentRestricted = 'X-Content-Restricted'
+
+// ******************************************************************************
+//             RESTful API 'Paging' Query Parameter Name Configuration
+// ******************************************************************************
+//
+restfulApi.page.max = 'limit'
+restfulApi.page.offset = 'offset'
+
+// Force all marshallers to remove null fields and empty collections
+restfulApi.marshallers.removeNullFields = true
+restfulApi.marshallers.removeEmptyCollections = true
+
 
 // ******************************************************************************
 //                       RESTful API Endpoint Configuration
 // ******************************************************************************
 restfulApiConfig = {
+    // Resources for web_app_extensibility plugin
+    marshallerGroups {
+        group 'json_date' marshallers {
+            marshaller {
+                instance = new org.codehaus.groovy.grails.web.converters.marshaller.ClosureObjectMarshaller<grails.converters.JSON>(
+                        java.util.Date, { return it?.format("yyyy-MM-dd") })
+            }
+        }
+
+        group 'xml_date' marshallers {
+            marshaller {
+                instance = new org.codehaus.groovy.grails.web.converters.marshaller.ClosureObjectMarshaller<grails.converters.XML>(
+                        java.util.Date, { return it?.format("yyyy-MM-dd") })
+            }
+        }
+    }
+    // Begin - Query-with-POST
+    resource 'query-filters' config {
+        representation {
+            mediaTypes = ["application/json"]
+            jsonExtractor {}
+        }
+        representation {
+            mediaTypes = ["application/xml"]
+            xmlExtractor {}
+        }
+    }
+
+
+    resource 'jobsub-pending-print' config {
+        serviceName = 'jobsubOutputCompositeService'
+        methods = ['list', 'show', 'update']
+        representation {
+            mediaTypes = ["application/json", "APPLICATION/OCTET-STREAM"]
+            marshallers {
+                marshallerGroup 'json_date'             //for date related fields
+                jsonBeanMarshaller {
+                    supports net.hedtech.banner.general.jobsub.JobsubExternalPrinter
+                    includesFields {
+                        field 'id'
+                        field 'version'
+                        field 'job'
+                        field 'oneUpNo'
+                        field 'fileName'
+                        field 'printer'
+                        field 'printForm'
+                        field 'printDate'
+                        field 'creatorId'
+                        field 'printerCommand'
+                        field 'mime'
+                    }
+                }
+                jsonBeanMarshaller {
+                    supports net.hedtech.banner.general.jobsub.JobsubSavedOutput
+                    includesFields {
+                        field 'id'
+                        field 'version'
+                        field 'job'
+                        field 'fileName'
+                        field 'printer'
+                        field 'printForm'
+                        field 'printDate'
+                        field 'jobsubOutput'
+                    }
+                }
+
+            }
+            jsonExtractor {
+                property 'job' name 'job'
+                property 'id' name 'id'
+                property 'printer' name 'printer'
+                property 'jobsubOutput' name 'jobsubOutput'
+            }
+        }
+
+    }
     // Resources for web_app_extensibility plugin
     resource 'extensions' config {
         serviceName = 'webAppExtensibilityExtensionService'   // In some cases the service name has to be prepended with the plugin name

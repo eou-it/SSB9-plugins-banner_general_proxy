@@ -173,5 +173,92 @@ class UrlMappings {
             controller = "logout"
             action = "timeout"
         }
+
+        // ------------------- RESTful API end points - BEGIN --------------------
+        "/api/configuration/$pluralizedResourceName/$id"(controller:'restfulApi') {
+            action = [GET: "show"]
+            parseRequest = false
+            constraints {
+                // to constrain the id to numeric, uncomment the following:
+                // id matches: /\d+/
+            }
+        }
+
+        "/api/qapi/$pluralizedResourceName"(controller:'restfulApi') {
+            action = [GET: "list", POST: "list"]
+            parseRequest = false
+        }
+
+        "/$mepCode/api/qapi/$pluralizedResourceName"(controller:'restfulApi') {
+            action = [GET: "list", POST: "list"]
+            parseRequest = false
+        }
+
+        "/api/$pluralizedResourceName/$id"(controller:'restfulApi') {
+            action = [GET: "show", PUT: "update", DELETE: "delete"]
+            parseRequest = false
+            constraints {
+                // to constrain the id to numeric, uncomment the following:
+                // id matches: /\d+/
+            }
+        }
+
+        "/api/$pluralizedResourceName"(controller:'restfulApi') {
+            action = [GET: "list", POST: "create"]
+            parseRequest = false
+        }
+
+        "/api/$parentPluralizedResourceName/$parentId/$pluralizedResourceName/$id"(controller:'restfulApi') {
+            action = [GET: "show", PUT: "update", DELETE: "delete"]
+            parseRequest = false
+            constraints {
+                // to constrain the id to numeric, uncomment the following:
+                // id matches: /\d+/
+            }
+        }
+
+        "/api/$parentPluralizedResourceName/$parentId/$pluralizedResourceName"(controller:'restfulApi') {
+            action = [GET: "list", POST: "create"]
+            parseRequest = false
+        }
+
+        "/qapi/$pluralizedResourceName"(controller:'restfulApi') {
+            action = [GET: "list", POST: "list"]
+            parseRequest = false
+        }
+
+
+        "/$mepCode/api/$pluralizedResourceName/$id"(controller:'restfulApi') {
+            action = [GET: "show", PUT: "update", DELETE: "delete"]
+            parseRequest = false
+            constraints {
+                // to constrain the id to numeric, uncomment the following:
+                // id matches: /\d+/
+            }
+        }
+
+        "/$mepCode/api/$pluralizedResourceName"(controller:'restfulApi') {
+            action = [GET: "list", POST: "create"]
+            parseRequest = false
+        }
+        "/$mepCode/api/$parentPluralizedResourceName/$parentId/$pluralizedResourceName/$id"(controller:'restfulApi') {
+            action = [GET: "show", PUT: "update", DELETE: "delete"]
+            parseRequest = false
+            constraints {
+                // to constrain the id to numeric, uncomment the following:
+                // id matches: /\d+/
+            }
+        }
+        "/$mepCode/api/$parentPluralizedResourceName/$parentId/$pluralizedResourceName"(controller:'restfulApi') {
+            action = [GET: "list", POST: "create"]
+            parseRequest = false
+        }
+        "/$mepCode/qapi/$pluralizedResourceName"(controller:'restfulApi') {
+            action = [GET: "list", POST: "list"]
+            parseRequest = false
+        }
+
+
+        // ------------------- RESTful API end points - END ----------------------
     }
 }
