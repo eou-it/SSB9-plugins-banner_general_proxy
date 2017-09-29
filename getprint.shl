@@ -1,0 +1,5 @@
+rm saradms_6256.lis
+auth=`echo -n 'grails_user:u_pick_it' | base64`
+response=`curl -X GET -H "Accept: application/json" -H "Authorization: Basic $auth" -H "Content-Type: APPLICATION/OCTET-STREAM" -H "Content-Disposition: Attachment;Filename=saradms_6256.lis" "http://localhost:8080/BannerGeneralSsb/api/jobsub-pending-print/3"`
+echo "response:  $response"
+ls -l saradms_6256.lis
