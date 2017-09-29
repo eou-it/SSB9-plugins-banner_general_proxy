@@ -368,7 +368,7 @@ restfulApiConfig = {
         serviceName = 'jobsubOutputCompositeService'
         methods = ['list', 'show', 'update']
         representation {
-            mediaTypes = ["application/json", "APPLICATION/OCTET-STREAM"]
+            mediaTypes = ["application/json"]
             marshallers {
                 marshallerGroup 'json_date'             //for date related fields
                 jsonBeanMarshaller {
@@ -400,7 +400,6 @@ restfulApiConfig = {
                         field 'jobsubOutput'
                     }
                 }
-
             }
             jsonExtractor {
                 property 'job' name 'job'
@@ -409,7 +408,10 @@ restfulApiConfig = {
                 property 'jobsubOutput' name 'jobsubOutput'
             }
         }
-
+        representation {
+            mediaTypes = ["application/octet-stream"]
+            marshallerFramework = 'jobsubOutputCompositeService'
+        }
     }
     // Resources for web_app_extensibility plugin
     resource 'extensions' config {
