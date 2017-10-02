@@ -5,7 +5,7 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 --%>
 <!--[if IE 9 ]>    <html xmlns:ng="http://angularjs.org" ng-app="generalSsbApp" id="ng-app" class="ie9"> <![endif]-->
-<html xmlns:ng="http://angularjs.org" ng-app="generalSsbApp" id="ng-app">
+<html xmlns:ng="http://angularjs.org" id="ng-app">
 <head>
     <g:applyLayout name="bannerWebPage">
         <title><g:message code="banner.general.common.title"/></title>
@@ -65,9 +65,10 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
 
 <body>
 
-<div class="body-overlay"></div>
-<div id="content" class="container-fluid" aria-relevant="additions" role="main">
+
+<div id="content" ng-app="generalSsbApp" class="container-fluid" aria-relevant="additions" role="main">
     <div ui-view class="gen-home-main-view"></div>
 </div>
+<div class="body-overlay"></div>
 </body>
 </html>

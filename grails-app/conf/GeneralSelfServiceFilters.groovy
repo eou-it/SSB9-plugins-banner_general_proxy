@@ -4,33 +4,45 @@
 
 import net.hedtech.banner.general.GeneralSsbConfigService
 
+/**
+ * Security Filter class for General Self Service
+ */
 class GeneralSelfServiceFilters {
 
     def generalSsbConfigService
 
     def filters = {
-        controlAccessToDirectDeposit(controller:'directDeposit|accountListing|updateAccount', action:'*') {
+        controlAccessToDirectDeposit( controller: 'directDeposit|accountListing|updateAccount', action: '*' ) {
             before = {
-                if(generalSsbConfigService.getParamFromSession(GeneralSsbConfigService.ENABLE_DIRECT_DEPOSIT, 'Y') != 'Y') {
-                    redirect(controller: "error", action: "accessForbidden")
+                if (generalSsbConfigService.getParamFromSession( GeneralSsbConfigService.ENABLE_DIRECT_DEPOSIT, 'Y' ) != 'Y') {
+                    redirect( controller: "error", action: "accessForbidden" )
                     return false
                 }
             }
         }
 
-        controlAccessToPersonalInformation(controller:'personalInformation|personalInformationQA', action:'*') {
+        controlAccessToPersonalInformation( controller: 'personalInformation|personalInformationQA', action: '*' ) {
             before = {
-                if(generalSsbConfigService.getParamFromSession(GeneralSsbConfigService.ENABLE_PERSONAL_INFORMATION, 'Y') != 'Y') {
-                    redirect(controller: "error", action: "accessForbidden")
+                if (generalSsbConfigService.getParamFromSession( GeneralSsbConfigService.ENABLE_PERSONAL_INFORMATION, 'Y' ) != 'Y') {
+                    redirect( controller: "error", action: "accessForbidden" )
                     return false
                 }
             }
         }
 
-        controlAccessToPersonalInformationDetails(controller:'personalInformationDetails', action:'*', actionExclude: 'getPersonalDetails|getBannerId|getUserName|getPiConfig') {
+        controlAccessToActionIteam( controller: 'aip', action: '*', actionExclude: 'admin|adminGroupStatus' ) {
             before = {
-                if(generalSsbConfigService.getParamFromSession(GeneralSsbConfigService.ENABLE_PERSONAL_INFORMATION, 'Y') != 'Y') {
-                    redirect(controller: "error", action: "accessForbidden")
+                if (generalSsbConfigService.getParamFromSession( GeneralSsbConfigService.ENABLE_ACTION_ITEM, 'Y' ) != 'Y') {
+                    redirect( controller: "error", action: "accessForbidden" )
+                    return false
+                }
+            }
+        }
+
+        controlAccessToPersonalInformationDetails( controller: 'personalInformationDetails', action: '*', actionExclude: 'getPersonalDetails|getBannerId|getUserName|getPiConfig' ) {
+            before = {
+                if (generalSsbConfigService.getParamFromSession( GeneralSsbConfigService.ENABLE_PERSONAL_INFORMATION, 'Y' ) != 'Y') {
+                    redirect( controller: "error", action: "accessForbidden" )
                     return false
                 }
             }

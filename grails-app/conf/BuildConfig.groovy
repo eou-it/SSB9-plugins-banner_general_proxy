@@ -1,6 +1,6 @@
-/*********************************************************************************
- Copyright 2015-2017 Ellucian.
- *********************************************************************************/
+/*******************************************************************************
+ Copyright 2015-2017 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
 
 grails.project.dependency.resolver = "maven"
 grails.project.class.dir        = "target/classes"
@@ -12,8 +12,11 @@ grails.project.test.reports.dir = "target/test-reports"
 // result in the all-too-familiar exception:
 // "Cannot cast object 'oracle.jdbc.driver.T4CConnection@6469adc7'... to class 'oracle.jdbc.OracleConnection'
 grails.war.resources = { stagingDir ->
+    delete( file: "${stagingDir}/WEB-INF/lib/ojdbc6.jar" )
 }
 
+grails.plugin.location.'banner-packaging'                   = "plugins/banner_packaging.git"
+grails.plugin.location.'banner-aip-ui'                      = "plugins/banner_aip_ui.git"
 grails.plugin.location.'banner-general-direct-deposit-ui' = "plugins/banner_general_direct_deposit_ui.git"
 grails.plugin.location.'banner-general-personal-information-ui' = "plugins/banner_general_personal_information_ui.git"
 
@@ -34,11 +37,12 @@ grails.project.dependency.resolution = {
     plugins {
         compile ':zipped-resources:1.0'
         compile ':cached-resources:1.0'
-        compile ':yui-minify-resources:0.1.4'
+        compile ':yui-minify-resources:0.1.5'
         compile ':cache-headers:1.1.7'
         test ':code-coverage:2.0.3-3'
         runtime ":rendering:1.0.0"
-        compile ':restful-api:1.0.0'
+        compile ':csv:0.3.1'
+        compile ':feeds:1.5'
     }
 
     dependencies {
@@ -121,3 +125,9 @@ reportMessages {
     dynamicKeys = [
     ]
 }
+
+// CodeNarc rulesets
+codenarc.ruleSetFiles = "rulesets/banner.groovy"
+codenarc.reportName = "target/CodeNarcReport.html"
+codenarc.propertiesFile = "grails-app/conf/codenarc.properties"
+codenarc.extraIncludeDirs = ["grails-app/composers"]

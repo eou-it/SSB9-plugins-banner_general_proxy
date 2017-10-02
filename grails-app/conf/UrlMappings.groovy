@@ -203,12 +203,12 @@ class UrlMappings {
             }
         }
 
-        "/api/$pluralizedResourceName"(controller:'restfulApi') {
+        "/api/$pluralizedResourceName"( controller: 'restfulApi' ) {
             action = [GET: "list", POST: "create"]
             parseRequest = false
         }
 
-        "/api/$parentPluralizedResourceName/$parentId/$pluralizedResourceName/$id"(controller:'restfulApi') {
+        "/api/$parentPluralizedResourceName/$parentId/$pluralizedResourceName/$id"( controller: 'restfulApi' ) {
             action = [GET: "show", PUT: "update", DELETE: "delete"]
             parseRequest = false
             constraints {
@@ -217,18 +217,17 @@ class UrlMappings {
             }
         }
 
-        "/api/$parentPluralizedResourceName/$parentId/$pluralizedResourceName"(controller:'restfulApi') {
+        "/api/$parentPluralizedResourceName/$parentId/$pluralizedResourceName"( controller: 'restfulApi' ) {
             action = [GET: "list", POST: "create"]
             parseRequest = false
         }
 
-        "/qapi/$pluralizedResourceName"(controller:'restfulApi') {
+        "/qapi/$pluralizedResourceName"( controller: 'restfulApi' ) {
             action = [GET: "list", POST: "list"]
             parseRequest = false
         }
 
-
-        "/$mepCode/api/$pluralizedResourceName/$id"(controller:'restfulApi') {
+        "/$mepCode/api/$pluralizedResourceName/$id"( controller: 'restfulApi' ) {
             action = [GET: "show", PUT: "update", DELETE: "delete"]
             parseRequest = false
             constraints {
@@ -236,12 +235,19 @@ class UrlMappings {
                 // id matches: /\d+/
             }
         }
+
 
         "/$mepCode/api/$pluralizedResourceName"(controller:'restfulApi') {
             action = [GET: "list", POST: "create"]
             parseRequest = false
         }
-        "/$mepCode/api/$parentPluralizedResourceName/$parentId/$pluralizedResourceName/$id"(controller:'restfulApi') {
+
+        "/$mepCode/api/$pluralizedResourceName"( controller: 'restfulApi' ) {
+            action = [GET: "list", POST: "create"]
+            parseRequest = false
+        }
+
+        "/$mepCode/api/$parentPluralizedResourceName/$parentId/$pluralizedResourceName/$id"( controller: 'restfulApi' ) {
             action = [GET: "show", PUT: "update", DELETE: "delete"]
             parseRequest = false
             constraints {
@@ -249,15 +255,16 @@ class UrlMappings {
                 // id matches: /\d+/
             }
         }
-        "/$mepCode/api/$parentPluralizedResourceName/$parentId/$pluralizedResourceName"(controller:'restfulApi') {
+
+        "/$mepCode/api/$parentPluralizedResourceName/$parentId/$pluralizedResourceName"( controller: 'restfulApi' ) {
             action = [GET: "list", POST: "create"]
             parseRequest = false
         }
-        "/$mepCode/qapi/$pluralizedResourceName"(controller:'restfulApi') {
+
+        "/$mepCode/qapi/$pluralizedResourceName"( controller: 'restfulApi' ) {
             action = [GET: "list", POST: "list"]
             parseRequest = false
         }
-
 
         // ------------------- RESTful API end points - END ----------------------
     }

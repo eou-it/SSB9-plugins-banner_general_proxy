@@ -55,3 +55,19 @@
 [submodule "plugins/banner_general_personal_information_ui.git"]
 	path = plugins/banner_general_personal_information_ui.git
 	url = https://git.ellucian.com/scm/banxeplug/banner_general_personal_information_ui.git
+[submodule "plugins/banner-sspb.git"]
+    	path = plugins/banner-sspb.git
+    	url = https://git.ellucian.com/scm/banxeframe/banner-sspb.git
+[submodule "plugins/banner-restful-api-support.git"]
+    	path = plugins/banner-restful-api-support.git
+    	url = https://git.ellucian.com/scm/banxeplug/banner-restful-api-support.git
+[submodule "plugins/banner_aip.git"]
+    	path = plugins/banner_aip.git
+    	url = https://git.ellucian.com/scm/banxeplug/banner_aip.git
+ [submodule "plugins/banner_aip_ui.git"]
+    	path = plugins/banner_aip_ui.git
+    	url = https://git.ellucian.com/scm/banxeplug/banner_aip_ui.git
+
+[submodule "plugins/restful-api.git"]
+	path = plugins/restful-api.git
+	url = https://github.com/restfulapi/restful-api.git
