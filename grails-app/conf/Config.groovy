@@ -162,7 +162,7 @@ formControllerMap = [
         'directdepositconfiguration': ['SELFSERVICE-STUDENT', 'SELFSERVICE-EMPLOYEE'],
         'personalinformationdetails': ['SELFSERVICE'],
         'personalinformationpicture': ['SELFSERVICE'],
-        'jobsub-pending-print': ['GUAGMNU', 'SELFSERVICE']
+        'jobsub-pending-print'      : ['GUAGMNU', 'SELFSERVICE'],
         'personalinformationqa'     : ['SELFSERVICE'],
         'about'                     : ['GUAGMNU'],
         //AIP//
@@ -464,14 +464,9 @@ restfulApiConfig = {
             marshallerFramework = 'jobsubOutputMarshaller'
         }
     }
-    // Resources for web_app_extensibility plugin
-    resource 'extensions' config {
-        serviceName = 'webAppExtensibilityExtensionService'   // In some cases the service name has to be prepended with the plugin name
 
     // Pagebuilder resources
-
     // generic resource for virtual domains
-
     anyResource {
         serviceName = 'virtualDomainService'
         representation {
