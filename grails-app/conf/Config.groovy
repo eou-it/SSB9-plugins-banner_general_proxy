@@ -410,7 +410,7 @@ restfulApiConfig = {
         }
         representation {
             mediaTypes = ["application/octet-stream"]
-            marshallerFramework = 'jobsubOutputCompositeService'
+            marshallerFramework = 'jobsubOutputMarshaller'
         }
     }
     // Resources for web_app_extensibility plugin
