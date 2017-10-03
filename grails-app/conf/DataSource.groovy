@@ -33,6 +33,7 @@ hibernate {
             "classpath:hibernate-banner-general-common.cfg.xml",
             "classpath:hibernate-banner-aip.cfg.xml",
             "classpath:hibernate-banner-general-utility.cfg.xml"
+            "classpath:hibernate-banner-sspb.cfg.xml"
     ]
 }
 
