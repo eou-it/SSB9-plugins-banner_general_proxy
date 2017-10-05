@@ -1,0 +1,72 @@
+{
+   "codePut": "update GCRAACT \r\nset GCRAACT_STATUS_ID = :GCRAACT_STATUS_ID,\r\nGCRAACT_COMPLETED_DATE = sysdate,\r\nGCRAACT_ACTIVITY_DATE = sysdate\r\nwhere gcraact_pidm = :parm_user_pidm\r\nand gcraact_action_item_id = :id",
+   "virtualDomainRoles": [
+      {
+         "allowDelete": true,
+         "allowPost": true,
+         "allowPut": true,
+         "roleName": "ALLROLES",
+         "id": null,
+         "allowGet": true,
+         "virtualDomain": {
+            "_ref": "../..",
+            "class": "net.hedtech.banner.virtualDomain.VirtualDomain"
+         },
+         "class": "net.hedtech.banner.virtualDomain.VirtualDomainRole",
+         "version": null
+      },
+      {
+         "allowDelete": true,
+         "allowPost": true,
+         "allowPut": true,
+         "roleName": "ADMIN-GPBADMN",
+         "id": null,
+         "allowGet": true,
+         "virtualDomain": {
+            "_ref": "../..",
+            "class": "net.hedtech.banner.virtualDomain.VirtualDomain"
+         },
+         "class": "net.hedtech.banner.virtualDomain.VirtualDomainRole",
+         "version": null
+      },
+      {
+         "allowDelete": true,
+         "allowPost": true,
+         "allowPut": false,
+         "roleName": "EMPLOYEE",
+         "id": null,
+         "allowGet": true,
+         "virtualDomain": {
+            "_ref": "../..",
+            "class": "net.hedtech.banner.virtualDomain.VirtualDomain"
+         },
+         "class": "net.hedtech.banner.virtualDomain.VirtualDomainRole",
+         "version": null
+      },
+      {
+         "allowDelete": true,
+         "allowPost": true,
+         "allowPut": true,
+         "roleName": "WTAILORADMIN",
+         "id": null,
+         "allowGet": true,
+         "virtualDomain": {
+            "_ref": "../..",
+            "class": "net.hedtech.banner.virtualDomain.VirtualDomain"
+         },
+         "class": "net.hedtech.banner.virtualDomain.VirtualDomainRole",
+         "version": null
+      }
+   ],
+   "codeGet": "SELECT ACTION_ITEM_ID \"id\", ACTION_ITEM_NAME, ACTION_ITEM_CONTENT, (select count(status_id) from gvq_gcraisr where status_rule_action_item_id = :actionitemid and status_active_ind = 'Y') status_count\r\n FROM GVQ_GCBACTM WHERE ACTION_ITEM_PAGE_NAME=:pageid\r\nAND ACTION_ITEM_ID=:actionitemid",
+   "codePost": "update GCRAACT \r\nset GCRAACT_STATUS_ID = 1,\r\nGCRAACT_COMPLETED_DATE = sysdate\r\nwhere gcraact_pidm = :parm_user_pidm\r\nand gcraact_action_item_id = :id",
+   "serviceName": "ActionItemContent",
+   "version": null,
+   "codeDelete": null,
+   "lastUpdated": null,
+   "dateCreated": null,
+   "id": null,
+   "fileTimestamp": "2016-11-29T20:18:51Z",
+   "typeOfCode": "S",
+   "class": "net.hedtech.banner.virtualDomain.VirtualDomain"
+}

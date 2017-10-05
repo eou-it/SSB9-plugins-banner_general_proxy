@@ -1,0 +1,123 @@
+{
+   "constantName": "ActionItemPolicy",
+   "extendsPage": null,
+   "modelView": {
+      "components": [
+         {
+            "resource": "virtualDomains.ActionItemContent",
+            "name": "ActionItemContent",
+            "type": "resource",
+            "staticData": []
+         },
+         {
+            "resource": "virtualDomains.ActionItemStatus",
+            "name": "ActionItemStatus",
+            "type": "resource",
+            "staticData": []
+         },
+         {
+            "components": [
+               {
+                  "readonly": false,
+                  "name": "ActionItemId",
+                  "onLoad": "",
+                  "model": "",
+                  "style": "hidden",
+                  "loadInitially": true,
+                  "type": "text",
+                  "onUpdate": "$ActionItemContentDetail.$load(); $ActionItemStatusAgree.$load();",
+                  "parameters": {},
+                  "value": "3",
+                  "required": false,
+                  "validation": {}
+               },
+               {
+                  "allowDelete": false,
+                  "components": [
+                     {
+                        "name": "ActionItemNameHeader",
+                        "type": "literal",
+                        "value": "<h4>$ActionItemContentDetail.ACTION_ITEM_NAME<\/h4>"
+                     },
+                     {
+                        "asHtml": true,
+                        "name": "ActionItemContentDisplay",
+                        "onLoad": "$ActionItemStatusAgree.$load();",
+                        "model": "ACTION_ITEM_CONTENT",
+                        "loadInitially": false,
+                        "type": "display",
+                        "value": ""
+                     },
+                     {
+                        "sourceParameters": {
+                           "sys_required": "\"Y\"",
+                           "actionitemid": "$ActionItemId"
+                        },
+                        "name": "ActionItemStatusAgree",
+                        "onLoad": "$ActionItemContentDetail.$load();\nsetTimeout(function() {\n   console.log($ActionItemContentDetail.STATUS_COUNT);\n   if ( $ActionItemContentDetail.STATUS_COUNT == 1) {\n     // console.log(\"need checkbox\");\n   var radio = document.getElementById(\"pbid-ActionItemStatusAgree-radio-0-0\");\n   radio.type = \"checkbox\"; \n  }\n}, 200);",
+                        "model": "GCRAACT_STATUS_ID",
+                        "sourceModel": "ActionItemStatus",
+                        "style": "",
+                        "loadInitially": false,
+                        "labelKey": "STATUS_RULE_LABEL_TEXT",
+                        "type": "radio",
+                        "valueKey": "STATUS_ID",
+                        "value": "",
+                        "required": true
+                     }
+                  ],
+                  "onError": "var errorMessage =response.data.errors? response.data.errors.errorMessage: null;if (errorMessage && errorMessage.indexOf(\"ORA-20000\") > -1) {  alert(\"An entry already exists for this virtual domain and role, cannot add a duplicate\", {type:\"error\"});} else {   alert( errorMessage?errorMessage:response.data, {type:\"error\"});}",
+                  "onSave": "",
+                  "allowNew": false,
+                  "documentation": "Displays data from virtual domain ActionItemContent",
+                  "onSaveSuccess": "alert('Save successful!', {type:\"success\", flash:true});\nwindow.params.saved=true;",
+                  "pageSize": 1,
+                  "label": "",
+                  "loadInitially": true,
+                  "type": "detail",
+                  "newRecordLabel": "",
+                  "name": "ActionItemContentDetail",
+                  "allowModify": true,
+                  "onLoad": "$(\"#pbid-ActionItemContentDetail-save-button\").removeClass('btn-sm').addClass('btn-primary').addClass('btn-md').html('Save and Continue');\n$(\"#pbid-ActionItemId\").val(window.params.actionItemId).change();",
+                  "model": "ActionItemContent",
+                  "allowReload": false,
+                  "parameters": {
+                     "actionitemid": "$ActionItemId",
+                     "pageid": "$$params.id"
+                  }
+               }
+            ],
+            "name": "PolicyBlock",
+            "showInitially": true,
+            "label": "",
+            "type": "block"
+         }
+      ],
+      "name": "ActionItemPolicy",
+      "label": "",
+      "type": "page"
+   },
+   "fileTimestamp": "2016-11-28T20:33:33Z",
+   "pageRoles": [
+      {
+         "allow": true,
+         "roleName": "ADMIN-GPBADMN"
+      },
+      {
+         "allow": true,
+         "roleName": "ALLROLES"
+      },
+      {
+         "allow": false,
+         "roleName": "DEVELOPMENTOFFICER"
+      },
+      {
+         "allow": true,
+         "roleName": "EMPLOYEE"
+      },
+      {
+         "allow": true,
+         "roleName": "WEBUSER"
+      }
+   ]
+}

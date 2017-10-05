@@ -410,6 +410,31 @@ banner {
     // defaultPhoto = <Fully qualified path to the photo to use if no user photo is available.>
 }
 
+
+
+pageBuilder.enabled = true
+if (!pageBuilder.enabled) {
+  grails.plugin.springsecurity.securityConfigType = grails.plugin.springsecurity.SecurityConfigType.InterceptUrlMap
+}
+/*******************************************************************************
+ *                                                                              *
+ *              Page Builder Artifact File Location Configuration               *
+ *                                                                              *
+ *******************************************************************************/
+// initial load location on file system. Files located in "pb" directory. pb directory located at root of app as sibling to the config files
+pbRoot = "/temp/pb"
+pageBuilder {
+    locations {
+      bundle        = "${pbRoot}/i18n"
+      page          = "${pbRoot}/page"
+      css           = "${pbRoot}/css"
+      virtualDomain = "${pbRoot}/virtdom"
+    }
+    // Uncomment debugRoles to reveal detailed SQL error messages for
+    // Virtual domains to users with any of the comma separated roles
+    // debugRoles = "ROLE_GPBADMN_BAN_DEFAULT_PAGEBUILDER_M"
+}
+
 /*******************************************************************************
  *                                                                             *
  *        Config Job  Configurations                                            *
