@@ -1,3 +1,6 @@
+/*******************************************************************************
+ Copyright 2017 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
 package net.hedtech.banner.converters
 
 import net.hedtech.restfulapi.config.RepresentationConfig
@@ -13,12 +16,13 @@ class JobsubOutputMarshaller {
     InputStream marshalObject(Object o, RepresentationConfig config) {
         InputStream result;
 
-        if (o instanceof Collection) {
-            throw new UnsupportedOperationException("don't Marshal Collections please")
-        }
-        else {
+        if (o instanceof InputStream) {
             result = (InputStream) o
         }
+        else {
+            throw new UnsupportedOperationException("only input streams can be marshalled")
+        }
+
         return result
     }
 }
