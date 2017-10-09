@@ -55,7 +55,7 @@
                         },
                         "name": "ActionItemStatusAgree",
                         "onLoad": "$ActionItemContentDetail.$load();",
-                        "model": "GCRAACT_STATUS_ID",
+                        "model": "GCRAACT_GCVASTS_ID",
                         "sourceModel": "ActionItemStatus",
                         "style": "",
                         "loadInitially": false,
