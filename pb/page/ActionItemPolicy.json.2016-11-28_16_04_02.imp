@@ -55,7 +55,7 @@
                         },
                         "name": "ActionItemStatusAgree",
                         "onLoad": "$ActionItemContentDetail.$load();\nsetTimeout(function() {\n   console.log($ActionItemContentDetail.STATUS_COUNT);\n   if ( $ActionItemContentDetail.STATUS_COUNT == 1) {\n     // console.log(\"need checkbox\");\n   var radio = document.getElementById(\"pbid-ActionItemStatusAgree-radio-0-0\");\n   radio.type = \"checkbox\"; \n  }\n}, 200);",
-                        "model": "GCRAACT_STATUS_ID",
+                        "model": "GCRAACT_GCVASTS_ID",
                         "sourceModel": "ActionItemStatus",
                         "style": "",
                         "loadInitially": false,

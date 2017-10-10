@@ -1,5 +1,5 @@
 {
-   "codePut": "update GCRAACT \r\nset GCRAACT_STATUS_ID = :GCRAACT_STATUS_ID,\r\nGCRAACT_COMPLETED_DATE = sysdate\r\nwhere gcraact_pidm = :parm_user_pidm\r\nand gcraact_action_item_id = :id",
+   "codePut": "update GCRAACT \r\nset GCRAACT_GCVASTS_ID = :GCRAACT_GCVASTS_ID,\r\nGCRAACT_USER_RESPONSE_DATE = sysdate\r\nwhere gcraact_pidm = :parm_user_pidm\r\nand gcraact_gcbactm_id = :id",
    "virtualDomainRoles": [
       {
          "allowDelete": true,
@@ -59,7 +59,7 @@
       }
    ],
    "codeGet": "SELECT ACTION_ITEM_ID \"id\", ACTION_ITEM_NAME, ACTION_ITEM_CONTENT, (select count(status_id) from gvq_gcraisr where status_rule_action_item_id = :actionitemid and status_active_ind = 'Y') status_count\r\n FROM GVQ_GCBACTM WHERE ACTION_ITEM_PAGE_NAME=:pageid\r\nAND ACTION_ITEM_ID=:actionitemid",
-   "codePost": "update GCRAACT \r\nset GCRAACT_STATUS_ID = 1,\r\nGCRAACT_COMPLETED_DATE = sysdate\r\nwhere gcraact_pidm = :parm_user_pidm\r\nand gcraact_action_item_id = :id",
+   "codePost": "update GCRAACT \r\nset GCRAACT_GCVASTS_ID = 1,\r\nGCRAACT_USER_RESPONSE_DATE = sysdate\r\nwhere gcraact_pidm = :parm_user_pidm\r\nand gcraact_gcbactm_id = :id",
    "serviceName": "ActionItemContent",
    "version": null,
    "codeDelete": null,
