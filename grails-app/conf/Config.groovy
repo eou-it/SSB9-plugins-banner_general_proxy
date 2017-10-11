@@ -162,7 +162,7 @@ formControllerMap = [
         'directdepositconfiguration': ['SELFSERVICE-STUDENT', 'SELFSERVICE-EMPLOYEE'],
         'personalinformationdetails': ['SELFSERVICE'],
         'personalinformationpicture': ['SELFSERVICE'],
-        'jobsub-pending-print'      : ['GUAGMNU', 'SELFSERVICE'],
+        'jobsub-pending-print'      : ['JOBSUB-PRINT-API'],
         'personalinformationqa'     : ['SELFSERVICE'],
         'about'                     : ['GUAGMNU'],
         'restfulapi'                : ['SELFSERVICE','GPBADMN'],
