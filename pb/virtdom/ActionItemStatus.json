@@ -1,0 +1,46 @@
+{
+   "codePost": null,
+   "virtualDomainRoles": [
+      {
+         "allowGet": true,
+         "allowPost": true,
+         "allowPut": true,
+         "roleName": "ALLROLES",
+         "allowDelete": true
+      },
+      {
+         "allowGet": true,
+         "allowPost": true,
+         "allowPut": true,
+         "roleName": "WTAILORADMIN",
+         "allowDelete": false
+      },
+      {
+         "allowGet": true,
+         "allowPost": true,
+         "allowPut": true,
+         "roleName": "WEBUSER",
+         "allowDelete": true
+      },
+      {
+         "allowGet": true,
+         "allowPost": true,
+         "allowPut": true,
+         "roleName": "GUEST",
+         "allowDelete": true
+      },
+      {
+         "allowGet": true,
+         "allowPost": true,
+         "allowPut": true,
+         "roleName": "ADMIN-GPBADMN",
+         "allowDelete": true
+      }
+   ],
+   "codePut": null,
+   "fileTimestamp": "2017-10-09T19:33:43Z",
+   "codeDelete": null,
+   "codeGet": "select status_rule_id \"id\", status_id,  status_name, status_rule_label_text, status_rule_seq_order, status_block_process_ind\r\nfrom gvq_gcraisr\r\nwhere STATUS_RULE_ACTION_ITEM_ID = :actionitemid\r\nand STATUS_ACTIVE_IND = 'Y'",
+   "typeOfCode": "S",
+   "serviceName": "ActionItemStatus"
+}
