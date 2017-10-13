@@ -168,6 +168,8 @@ formControllerMap = [
         //AIP//
         'aip'                       : ['SELFSERVICE', 'GUAGMNU'],
         'aipadmin'                  : ['SELFSERVICE'],
+        'aipactionitemposting'         : ['SELFSERVICE'],
+
         'bcm'                       : ['SELFSERVICE'],
         'aippagebuilder'            : ['SELFSERVICE', 'GUAGMNU'],
 
@@ -236,10 +238,10 @@ grails.plugin.springsecurity.interceptUrlMap = [
         //
         // '/**': [ 'ROLE_DETERMINED_DYNAMICALLY' ]
         //'/**': [ 'ROLE_SELFSERVICE-FACULTY_BAN_DEFAULT_M' ]
-        '/api/**'      : ['ROLE_DETERMINED_DYNAMICALLY'],
-        '/qapi/**'     : ['ROLE_DETERMINED_DYNAMICALLY'],
-        '/api/about'          : ['IS_AUTHENTICATED_FULLY'],
-        '/api/healthcheck'    : ['IS_AUTHENTICATED_FULLY'],
+        '/api/**'                            : ['ROLE_DETERMINED_DYNAMICALLY'],
+        '/qapi/**'                           : ['ROLE_DETERMINED_DYNAMICALLY'],
+        '/api/about'                         : ['IS_AUTHENTICATED_FULLY'],
+        '/api/healthcheck'                   : ['IS_AUTHENTICATED_FULLY'],
         '/ssb/securityQA/**'                 : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/survey/**'                     : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/userAgreement/**'              : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
@@ -339,7 +341,7 @@ remove this line */
 // Also, if using a prefix other than 'api' and 'qapi' you will need to ensure
 // the spring security filter chain is configured to avoid creating a session.
 //
-avoidSessionsFor = [ 'api', 'qapi' ]
+avoidSessionsFor = ['api', 'qapi']
 
 // ******************************************************************************
 //                           RESTful API MEP Support
@@ -348,7 +350,7 @@ avoidSessionsFor = [ 'api', 'qapi' ]
 //       administrative connection if the web request is an 'api'
 //       request. Specify the 'api' prefixes using apiUrlPrefixes.
 //
-apiUrlPrefixes = [ 'api', 'qapi', 'rest', 'ui' ]
+apiUrlPrefixes = ['api', 'qapi', 'rest', 'ui']
 
 // ******************************************************************************
 //                  RESTful API Authentication Entry Configuration
@@ -381,7 +383,6 @@ restfulApi.page.offset = 'offset'
 restfulApi.marshallers.removeNullFields = true
 restfulApi.marshallers.removeEmptyCollections = true
 
-
 // ******************************************************************************
 //                       RESTful API Endpoint Configuration
 // ******************************************************************************
@@ -389,81 +390,81 @@ restfulApiConfig = {
     // Resources for web_app_extensibility plugin
     marshallerGroups {
         group 'json_date' marshallers {
-            marshaller {
-                instance = new org.codehaus.groovy.grails.web.converters.marshaller.ClosureObjectMarshaller<grails.converters.JSON>(
-                        java.util.Date, { return it?.format("yyyy-MM-dd") })
-            }
-        }
+                                          marshaller {
+                                              instance = new org.codehaus.groovy.grails.web.converters.marshaller.ClosureObjectMarshaller<grails.converters.JSON>(
+                                                      java.util.Date, {return it?.format( "yyyy-MM-dd" )} )
+                                          }
+                                      }
 
         group 'xml_date' marshallers {
-            marshaller {
-                instance = new org.codehaus.groovy.grails.web.converters.marshaller.ClosureObjectMarshaller<grails.converters.XML>(
-                        java.util.Date, { return it?.format("yyyy-MM-dd") })
-            }
-        }
+                                         marshaller {
+                                             instance = new org.codehaus.groovy.grails.web.converters.marshaller.ClosureObjectMarshaller<grails.converters.XML>(
+                                                     java.util.Date, {return it?.format( "yyyy-MM-dd" )} )
+                                         }
+                                     }
     }
     // Begin - Query-with-POST
     resource 'query-filters' config {
-        representation {
-            mediaTypes = ["application/json"]
-            jsonExtractor {}
-        }
-        representation {
-            mediaTypes = ["application/xml"]
-            xmlExtractor {}
-        }
-    }
+                                        representation {
+                                            mediaTypes = ["application/json"]
+                                            jsonExtractor {}
+                                        }
+                                        representation {
+                                            mediaTypes = ["application/xml"]
+                                            xmlExtractor {}
+                                        }
+                                    }
 
 
     resource 'jobsub-pending-print' config {
-        serviceName = 'jobsubOutputCompositeService'
-        methods = ['list', 'show', 'update']
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshallerGroup 'json_date'             //for date related fields
-                jsonBeanMarshaller {
-                    supports net.hedtech.banner.general.jobsub.JobsubExternalPrinter
-                    includesFields {
-                        field 'id'
-                        field 'version'
-                        field 'job'
-                        field 'oneUpNo'
-                        field 'fileName'
-                        field 'printer'
-                        field 'printForm'
-                        field 'printDate'
-                        field 'creatorId'
-                        field 'printerCommand'
-                        field 'mime'
-                    }
-                }
-                jsonBeanMarshaller {
-                    supports net.hedtech.banner.general.jobsub.JobsubSavedOutput
-                    includesFields {
-                        field 'id'
-                        field 'version'
-                        field 'job'
-                        field 'fileName'
-                        field 'printer'
-                        field 'printForm'
-                        field 'printDate'
-                        field 'jobsubOutput'
-                    }
-                }
-            }
-            jsonExtractor {
-                property 'job' name 'job'
-                property 'id' name 'id'
-                property 'printer' name 'printer'
-                property 'jobsubOutput' name 'jobsubOutput'
-            }
-        }
-        representation {
-            mediaTypes = ["application/octet-stream"]
-            marshallerFramework = 'jobsubOutputMarshaller'
-        }
-    }
+                                               serviceName = 'jobsubOutputCompositeService'
+                                               methods = ['list', 'show', 'update']
+                                               representation {
+                                                   mediaTypes = ["application/json"]
+                                                   marshallers {
+                                                       marshallerGroup 'json_date'             //for date related fields
+                                                       jsonBeanMarshaller {
+                                                           supports net.hedtech.banner.general.jobsub.JobsubExternalPrinter
+                                                           includesFields {
+                                                               field 'id'
+                                                               field 'version'
+                                                               field 'job'
+                                                               field 'oneUpNo'
+                                                               field 'fileName'
+                                                               field 'printer'
+                                                               field 'printForm'
+                                                               field 'printDate'
+                                                               field 'creatorId'
+                                                               field 'printerCommand'
+                                                               field 'mime'
+                                                           }
+                                                       }
+                                                       jsonBeanMarshaller {
+                                                           supports net.hedtech.banner.general.jobsub.JobsubSavedOutput
+                                                           includesFields {
+                                                               field 'id'
+                                                               field 'version'
+                                                               field 'job'
+                                                               field 'fileName'
+                                                               field 'printer'
+                                                               field 'printForm'
+                                                               field 'printDate'
+                                                               field 'jobsubOutput'
+                                                           }
+                                                       }
+                                                   }
+                                                   jsonExtractor {
+                                                       property 'job' name 'job'
+                                                       property 'id' name 'id'
+                                                       property 'printer' name 'printer'
+                                                       property 'jobsubOutput' name 'jobsubOutput'
+                                                   }
+                                               }
+                                               representation {
+                                                   mediaTypes = ["application/octet-stream"]
+                                                   marshallerFramework = 'jobsubOutputMarshaller'
+                                               }
+                                           }
 
     // Pagebuilder resources
     // generic resource for virtual domains
