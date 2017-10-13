@@ -1,7 +1,7 @@
 {
    "constantName": "ActionItemPolicy",
    "extendsPage": null,
-   "fileTimestamp": "2017-10-11T21:51:41Z",
+   "fileTimestamp": "2017-10-13T18:38:48Z",
    "modelView": {
       "components": [
          {
@@ -113,23 +113,7 @@
    },
    "pageRoles": [
       {
-         "roleName": "ADMIN-GPBADMN",
-         "allow": true
-      },
-      {
          "roleName": "ALLROLES",
-         "allow": true
-      },
-      {
-         "roleName": "DEVELOPMENTOFFICER",
-         "allow": false
-      },
-      {
-         "roleName": "EMPLOYEE",
-         "allow": true
-      },
-      {
-         "roleName": "WEBUSER",
          "allow": true
       }
    ]

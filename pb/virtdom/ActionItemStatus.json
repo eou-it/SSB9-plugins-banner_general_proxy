@@ -3,38 +3,10 @@
    "virtualDomainRoles": [
       {
          "allowGet": true,
-         "allowPost": true,
-         "allowPut": true,
+         "allowPost": false,
+         "allowPut": false,
          "roleName": "ALLROLES",
-         "allowDelete": true
-      },
-      {
-         "allowGet": true,
-         "allowPost": true,
-         "allowPut": true,
-         "roleName": "WTAILORADMIN",
          "allowDelete": false
-      },
-      {
-         "allowGet": true,
-         "allowPost": true,
-         "allowPut": true,
-         "roleName": "WEBUSER",
-         "allowDelete": true
-      },
-      {
-         "allowGet": true,
-         "allowPost": true,
-         "allowPut": true,
-         "roleName": "GUEST",
-         "allowDelete": true
-      },
-      {
-         "allowGet": true,
-         "allowPost": true,
-         "allowPut": true,
-         "roleName": "ADMIN-GPBADMN",
-         "allowDelete": true
       }
    ],
    "codePut": null,

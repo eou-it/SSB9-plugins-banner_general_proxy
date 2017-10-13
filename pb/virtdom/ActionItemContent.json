@@ -3,31 +3,10 @@
    "virtualDomainRoles": [
       {
          "allowGet": true,
-         "allowPost": true,
-         "allowPut": true,
-         "roleName": "WTAILORADMIN",
-         "allowDelete": true
-      },
-      {
-         "allowGet": true,
-         "allowPost": true,
+         "allowPost": false,
          "allowPut": true,
          "roleName": "ALLROLES",
-         "allowDelete": true
-      },
-      {
-         "allowGet": true,
-         "allowPost": true,
-         "allowPut": false,
-         "roleName": "EMPLOYEE",
-         "allowDelete": true
-      },
-      {
-         "allowGet": true,
-         "allowPost": true,
-         "allowPut": true,
-         "roleName": "ADMIN-GPBADMN",
-         "allowDelete": true
+         "allowDelete": false
       }
    ],
    "codePut": "update GCRAACT \r\nset GCRAACT_GCVASTS_ID = :STATUS_ID,\r\nGCRAACT_USER_RESPONSE_DATE = sysdate,\r\nGCRAACT_ACTIVITY_DATE = sysdate\r\nwhere gcraact_pidm = :parm_user_pidm\r\nand gcraact_gcbactm_id = :id",
