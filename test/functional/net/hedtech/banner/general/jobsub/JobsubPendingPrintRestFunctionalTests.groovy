@@ -23,6 +23,7 @@ class JobsubPendingPrintRestFunctionalTests extends RestSpecification {
 
     static final String localBase = "http://127.0.0.1:8080/BannerGeneralSsb"
     static final String pluralizedResourceName = "jobsub-pending-print"
+    static final String badPluralizedResourceName = "jobsubpendingprint"
     static final String printer = "saas1"
     def jobsubSavedOutputService
     def dataSource
@@ -67,22 +68,22 @@ class JobsubPendingPrintRestFunctionalTests extends RestSpecification {
         401 == response.status
     }
 
-//    def "Test bad resource"() {
-//
-//        when:
-//        post("$localBase/qapi/$pluralizedResourceName/") {
-//            headers['Accept'] = 'application/json'
-//            headers['Content-Type'] = 'application/json'
-//            headers['Authorization'] = badAuthHeader()
-//            body {
-//                """{  "printer" :  "saas1" }"""
-//            }
-//        }
-//
-//        then:
-//        403 == response.status
-//    }
-//
+    def "Test bad resource"() {
+
+        when:
+        post("$localBase/qapi/$badPluralizedResourceName/") {
+            headers['Accept'] = 'application/json'
+            headers['Content-Type'] = 'application/json'
+            headers['Authorization'] = authHeader()
+            body {
+                """{  "printer" :  "saas1" }"""
+            }
+        }
+
+        then:
+        403 == response.status
+    }
+
 
     def "Test list pending print single printer"() {
         given:
@@ -223,6 +224,31 @@ class JobsubPendingPrintRestFunctionalTests extends RestSpecification {
         "SARADMS" == json[0].job
         "saas1" == json[0].printer
         "saradms_6256.lis" == json[0].fileName
+    }
+
+    def "Test get pending print file"() {
+        given:
+        def printers = JobsubExternalPrinter.fetchPendingPrintByPrinter("saas1")
+        printers.size() == 1
+        printers[0].printer == "saas1"
+        printers[0].job == "SARADMS"
+        printers[0].fileName == "saradms_6256.lis"
+        def id =  printers[0].id
+        def filename = printers[0].fileName
+
+        when:
+        get("$localBase/api/$pluralizedResourceName/${id}") {
+            headers['Accept'] = 'application/octet-stream'
+            headers['Content-Type'] = 'application/octet-stream'
+            headers['Content-Disposition'] = 'Inline;Filename="${fileName}"'
+            headers['Authorization'] = authHeader()
+        }
+
+        then:
+        200 == response.status
+        "application/octet-stream" == responseHeader("x-media-type")
+        'Details for the jobsub-pending-print resource' == responseHeader('X-hedtech-message')
+
     }
 
     // keep test at end, it is destructive
