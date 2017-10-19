@@ -5,21 +5,15 @@ package net.hedtech.banner.general.jobsub
 
 
 import grails.converters.JSON
-import grails.util.Holders
-import net.hedtech.restfulapi.spock.RestSpecification
+import net.hedtech.banner.testing.BaseFunctionalSpec
 import org.codehaus.groovy.grails.plugins.GrailsPluginUtils
 import org.codehaus.groovy.grails.plugins.codecs.Base64Codec
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
-import org.springframework.test.annotation.Rollback
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
-
+import spock.lang.Stepwise
 
 import static org.codehaus.groovy.grails.plugins.GrailsPluginUtils.*
 
-
-class JobsubPendingPrintRestFunctionalTests extends RestSpecification {
+@Stepwise
+class JobsubPendingPrintRestFunctionalTests extends BaseFunctionalSpec {
 
     static final String localBase = "http://127.0.0.1:8080/BannerGeneralSsb"
     static final String pluralizedResourceName = "jobsub-pending-print"
@@ -45,9 +39,10 @@ class JobsubPendingPrintRestFunctionalTests extends RestSpecification {
 
 
 
-
+    // runs stepwise so first test will setup the data for all the rest
     def "Test list bad Auth"() {
         given:
+        runSeedData('jobsub')
         def printers = JobsubExternalPrinter.fetchPendingPrintByPrinter("saas1")
         printers.size() == 1
         printers[0].printer == "saas1"
@@ -275,7 +270,28 @@ class JobsubPendingPrintRestFunctionalTests extends RestSpecification {
 
         then:
         200 == response.status
-
-
     }
+
+    def runSeedData(String seedTestTarget) {
+        def clazzInputData = Thread.currentThread().contextClassLoader.loadClass("net.hedtech.banner.seeddata.InputData")
+        def inputData = clazzInputData.newInstance([dataSource: dataSource])
+
+        def xmlFiles = inputData.targets.find { it.key == seedTestTarget }?.value
+        if (!xmlFiles) xmlFiles = inputData.seleniumTargets.find { it.key == seedTestTarget }?.value
+
+        def basedir = System.properties['base.dir']
+        xmlFiles.each { xmlFileName ->
+            inputData.xmlFile = GrailsPluginUtils.getPluginDirForName('banner-seeddata-catalog').path + xmlFileName.value
+            inputData.tableCnts = []
+            inputData.username = "baninst1"
+            inputData.password = "u_pick_it"
+            inputData.tableSize = 0
+            def inputFile = new File(inputData.xmlFile)
+            if (!inputFile.exists())
+                inputData.xmlFile = "${basedir}${xmlFileName.value}"
+            def seedDataLoader = new net.hedtech.banner.seeddata.SeedDataLoader(inputData)
+            seedDataLoader.execute()
+        }
+    }
+
 }
