@@ -7,6 +7,7 @@ import grails.converters.JSON
 import grails.util.Environment
 import net.hedtech.banner.converters.json.JSONBeanMarshaller
 import net.hedtech.banner.converters.json.JSONDomainMarshaller
+import net.hedtech.banner.aip.ActionItemGroupAssignReadOnly
 import net.hedtech.banner.i18n.LocalizeUtil
 import org.apache.commons.logging.LogFactory
 import org.apache.log4j.Logger
@@ -169,6 +170,27 @@ private def registerJSONMarshallers() {
 
     JSON.registerObjectMarshaller(new JSONBeanMarshaller( localizeMap ), 1) // for decorators and maps
     JSON.registerObjectMarshaller(new JSONDomainMarshaller( localizeMap, true), 2) // for domain objects
+//    JSON.registerObjectMarshaller(ActionItemGroupAssignReadOnly) { it ->
+//        def returnArray = [:]
+//        returnArray['id']=it.id
+//        returnArray['sequenceNumber'] = it.sequenceNumber
+//        returnArray['actionItemId'] = it.actionItemId
+////        returnArray['actionItemFolderId'] = it.actionItemFolderId
+////        returnArray['actionItemFolderName'] = it.actionItemFolderName
+////        returnArray['actionItemName'] = it.actionItemName
+////        returnArray['actionItemTitle'] = it.actionItemTitle
+////        returnArray['actionItemStatus'] = it.actionItemStatus
+////        returnArray['actionItemPostingIndicator'] = it.actionItemPostingIndicator
+////        returnArray['actionItemDescription'] = it.actionItemDescription
+////        returnArray['actionItemGroupId'] = it.actionItemGroupId
+////        returnArray['Long actionGroupFolderId'] = it.Long actionGroupFolderId
+////        returnArray['actionItemGroupFolderName'] = it.actionItemGroupFolderName
+////        returnArray['groupName'] = it.groupName
+////        returnArray['groupTitle'] = it.groupTitle
+////        returnArray['groupStatus'] = it.groupStatus
+////        returnArray['groupPostedIndicator'] = it.groupPostedIndicator
+//        return returnArray
+//    }
 }
 
 

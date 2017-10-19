@@ -6422,8 +6422,17 @@ path#Path {
     background-color: #88AADD;
     color: #FFFFFF;
 }
+          .groupOpenContainer .groupInfo .groupInfoRow .groupElement .xe-tab-container .contentInfo table  {
+    border-color: #B3B3B3;
+}
+            .groupOpenContainer .groupInfo .groupInfoRow .groupElement .xe-tab-container .contentInfo table caption  {
+    border-color: #B3B3B3;
+}
             .groupOpenContainer .groupInfo .groupInfoRow .groupElement .xe-tab-container .contentInfo table tr  {
-    border-top-color: #000000;
+    border-color: #B3B3B3;
+}
+          .groupOpenContainer .groupInfo .groupInfoRow .groupElement .xe-tab-container .contentInfo hr  {
+    border-color: #B3B3B3;
 }
         .groupOpenContainer .groupInfo .groupInfoRow .groupElement .groupDetail  {
     border-right-color: #444444;
@@ -10780,6 +10789,53 @@ mark {
 }.xeColorsContainer .grey-color4 {
     background-color: #D5D5D5;
     border-color: #A9A9A9;
+}.ui-select-container .select2-choice,.ui-select-multiple .select2-choices {
+    border-color: $themecolor1-3; /*#869FB1*/
+}.ui-select-container.select2-container-active>.select2-choice {
+    border-color: $themecolor1-4 !important; /*#5897fb*/
+}.select2-dropdown-open .select2-choice {
+    border-color: $themecolor1; /*#206E9F*/
+}.ui-select-multiple .select2-choices .select2-search-choice {
+    border-color: #BECCD9;
+    background-color: #F9F9F9;
+}.ui-select-container .select2-choice>.select2-chosen {
+    color: $themecolor1-3; /*#869FB1*/
+}.ui-select-dropdown .select2-search input,.ui-select-multiple .select2-choices .select2-search-field input {
+    color: $themecolor2-3; /*#4F585F*/
+}.ui-select-dropdown .select2-search input {
+    border-color: $themecolor1-3 !important; /*#869FB1*/
+}.ui-select-multiple .select2-choices .select2-search-field input::-webkit-input-placeholder {
+    color: $themecolor1-3; /*#869FB1*/
+}.ui-select-multiple .select2-choices .select2-search-field input:-moz-placeholder {
+    color: $themecolor1-3; /*#869FB1*/
+}.ui-select-multiple .select2-choices .select2-search-field input::-moz-placeholder {
+    color: $themecolor1-3; /*#869FB1*/
+}.ui-select-multiple .select2-choices .select2-search-field input:-ms-input-placeholder {
+    color: $themecolor1-3; /*#869FB1*/
+}.ui-select-choices {
+    border-top-color: $themecolor1; /*#206E9F*/
+}.ui-select-choices li {
+    border-bottom-color: #BECCD9;
+}.ui-select-choices ul li:first-child {
+    border-top-color: #BECCD9;
+}.ui-select-choices .select2-result-label {
+    color: $themecolor2-3; /*#4F585F*/
+}.ui-select-choices .select2-highlighted {
+    background-color: #F1F4F6;
+    border-color: #BECCD9;
+}.ui-select-choices li.ui-select-choices-group>.ui-select-choices-group-label {
+    color: $themecolor2-3; /*#4F585F*/
+}.ui-select-choices ul li:hover {
+    background-color: $themecolor1-5; /*#F3FCFF*/
+    border-color: $themecolor1-4; /*#B0DEEC*/
+}.ui-select-container .select2-choice>.select2-chosen .ng-binding {
+    color: $themecolor1; /*#206E9F*/
+}.ui-select-choices .select2-no-results {
+    color: $themecolor2-3; /*#4F585F*/
+}.select2-search-choice-focus {
+    background-color: #D4D4D4 !important;
+}.ui-select-container[theme=select2].direction-up.select2-dropdown-open .ui-select-match {
+    border-bottom-color: $themecolor1-4; /*#5897fb*/
 }.pagination-container .pagination-controls button,.pagination-container .pagination-controls input,.pagination-container .pagination-controls select {
     border-color: $themecolor1-3; /*#869FB1*/
 }.pagination-container .pagination-controls button,.pagination-container .pagination-controls select {
@@ -11395,6 +11451,98 @@ xe-switch .label  {
 .xeColorsContainer .grey-color4  {
     background-color: #D5D5D5;
     border-color: #A9A9A9;
+}
+
+.ui-select-container .select2-choice, .ui-select-multiple .select2-choices  {
+    border-color: $themecolor1-3; /*#869FB1*/
+}
+
+.ui-select-container.select2-container-active > .select2-choice  {
+    border-color: $themecolor1-4 !important; /*#5897fb*/
+}
+
+.select2-dropdown-open .select2-choice  {
+    border-color: $themecolor1; /*#206E9F*/
+}
+
+.ui-select-multiple .select2-choices .select2-search-choice  {
+    border-color: #BECCD9;
+    background-color: #F9F9F9;
+}
+
+.ui-select-container .select2-choice > .select2-chosen  {
+    color: $themecolor1-3; /*#869FB1*/
+}
+
+.ui-select-dropdown .select2-search input  {
+    color: $themecolor2-3; /*#4F585F*/
+    border-color: $themecolor1-3 !important; /*#869FB1*/
+}
+
+.ui-select-multiple .select2-choices .select2-search-field input  {
+    color: $themecolor2-3; /*#4F585F*/
+}
+
+.ui-select-multiple .select2-choices .select2-search-field input::-webkit-input-placeholder  {
+    color: $themecolor1-3; /*#869FB1*/
+}
+
+.ui-select-multiple .select2-choices .select2-search-field input:-moz-placeholder  {
+    color: $themecolor1-3; /*#869FB1*/
+}
+
+.ui-select-multiple .select2-choices .select2-search-field input::-moz-placeholder  {
+    color: $themecolor1-3; /*#869FB1*/
+}
+
+.ui-select-multiple .select2-choices .select2-search-field input:-ms-input-placeholder  {
+    color: $themecolor1-3; /*#869FB1*/
+}
+
+.ui-select-choices  {
+    border-top-color: $themecolor1; /*#206E9F*/
+}
+
+.ui-select-choices li  {
+    border-bottom-color: #BECCD9;
+}
+
+.ui-select-choices ul li:first-child  {
+    border-top-color: #BECCD9;
+}
+
+.ui-select-choices .select2-result-label  {
+    color: $themecolor2-3; /*#4F585F*/
+}
+
+.ui-select-choices .select2-highlighted  {
+    background-color: #F1F4F6;
+    border-color: #BECCD9;
+}
+
+.ui-select-choices li.ui-select-choices-group > .ui-select-choices-group-label  {
+    color: $themecolor2-3; /*#4F585F*/
+}
+
+.ui-select-choices ul li:hover  {
+    background-color: $themecolor1-5; /*#F3FCFF*/
+    border-color: $themecolor1-4; /*#B0DEEC*/
+}
+
+.ui-select-container .select2-choice > .select2-chosen .ng-binding  {
+    color: $themecolor1; /*#206E9F*/
+}
+
+.ui-select-choices .select2-no-results  {
+    color: $themecolor2-3; /*#4F585F*/
+}
+
+.select2-search-choice-focus  {
+    background-color: #D4D4D4 !important;
+}
+
+.ui-select-container[theme="select2"].direction-up.select2-dropdown-open .ui-select-match  {
+    border-bottom-color: $themecolor1-4; /*#5897fb*/
 }
 
 .pagination-container .pagination-controls button,
