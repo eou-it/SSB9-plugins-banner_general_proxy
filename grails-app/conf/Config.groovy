@@ -145,7 +145,7 @@ dataOrigin = "Banner"
 // connection is attained and the user has the necessary role, the role is enabled
 // for that user and Banner object.
 formControllerMap = [
-        'selfservicemenu'           : ['SELFSERVICE','GUAGMNU'],
+        'selfservicemenu'           : ['SELFSERVICE', 'GUAGMNU'],
         'survey'                    : ['SELFSERVICE'],
         'uploadproperties'          : ['SELFSERVICE'],
         'useragreement'             : ['SELFSERVICE'],
@@ -163,10 +163,10 @@ formControllerMap = [
         'jobsub-pending-print'      : ['JOBSUB-PRINT-API'],
         'personalinformationqa'     : ['SELFSERVICE'],
         'about'                     : ['GUAGMNU'],
-        'restfulapi'                : ['SELFSERVICE','GPBADMN'],
+        'restfulapi'                : ['SELFSERVICE', 'GPBADMN'],
         'keepalive'                 : ['SELFSERVICE'],
-        'dateconverter'             : ['SELFSERVICE','GUAGMNU'],
-        'menu'                      : ['SELFSERVICE','GUAGMNU'],
+        'dateconverter'             : ['SELFSERVICE', 'GUAGMNU'],
+        'menu'                      : ['SELFSERVICE', 'GUAGMNU'],
         //AIP//
         'aip'                       : ['SELFSERVICE'],
         'aipadmin'                  : ['SELFSERVICE'],
@@ -180,7 +180,7 @@ formControllerMap = [
         'cssmanager'                : ['GPBADMN'],
         'visualpagemodelcomposer'   : ['GPBADMN'],
         'cssrender'                 : ['SELFSERVICE', 'GUAGMNU'],
-        'custompage'                : ['SELFSERVICE','GPBADMN'],
+        'custompage'                : ['SELFSERVICE', 'GPBADMN'],
         'uploadproperties'          : ['SELFSERVICE']
 
 ]
@@ -265,35 +265,38 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/aipPageBuilder/**'                 : ['IS_AUTHENTICATED_FULLY'],
         '/ssb/aipPageBuilder/**'             : ['IS_AUTHENTICATED_FULLY'],
         '/ssb/aip/**'                        : ['IS_AUTHENTICATED_FULLY'],
+        '/aip/**'                            : ['IS_AUTHENTICATED_FULLY'],
+        '/ssb/admin/**'                      : ['IS_AUTHENTICATED_FULLY'],
+        '/ssb/aipActionItemPosting/**'       : ['IS_AUTHENTICATED_FULLY'],
         '/ssb/aipApp/**'                     : ['IS_AUTHENTICATED_FULLY'],
-        '/ssb/aip/admin/**'                  : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/aip/**'                        : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/aipAdmin/**'                   : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/BCM/**'                        : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
 
         //Page Builder specific
-        '/internalPb/virtualDomains.*/**'      : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/adminPb/virtualDomains.*/**'         : [pageBuilder.adminRoles],
-        '/internalPb/pages/**'                 : [pageBuilder.adminRoles],
-        '/internalPb/csses/**'                 : [pageBuilder.adminRoles],
-        '/internalPb/virtualdomains/**'        : [pageBuilder.adminRoles],
-        '/internalPb/pagesecurity/**'          : [pageBuilder.adminRoles],
-        '/internalPb/pageexports/**'           : [pageBuilder.adminRoles],
-        '/internalPb/virtualdomainexports/**'  : [pageBuilder.adminRoles],
-        '/internalPb/cssexports/**'            : [pageBuilder.adminRoles],
-        '/internalPb/admintasks/**'            : [pageBuilder.adminRoles],
-        '/virtualDomainComposer/**'            : [pageBuilder.adminRoles],
-        '/visualPageModelComposer/**'          : [pageBuilder.adminRoles],
-        '/cssManager/**'                       : [pageBuilder.adminRoles],
-        '/admin/i18n/**'                       : [pageBuilder.adminRoles],
-        '/cssRender/**'                        : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/internalPb/virtualDomains.*/**'    : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/adminPb/virtualDomains.*/**'       : [pageBuilder.adminRoles],
+        '/internalPb/pages/**'               : [pageBuilder.adminRoles],
+        '/internalPb/csses/**'               : [pageBuilder.adminRoles],
+        '/internalPb/virtualdomains/**'      : [pageBuilder.adminRoles],
+        '/internalPb/pagesecurity/**'        : [pageBuilder.adminRoles],
+        '/internalPb/pageexports/**'         : [pageBuilder.adminRoles],
+        '/internalPb/virtualdomainexports/**': [pageBuilder.adminRoles],
+        '/internalPb/cssexports/**'          : [pageBuilder.adminRoles],
+        '/internalPb/admintasks/**'          : [pageBuilder.adminRoles],
+        '/virtualDomainComposer/**'          : [pageBuilder.adminRoles],
+        '/visualPageModelComposer/**'        : [pageBuilder.adminRoles],
+        '/cssManager/**'                     : [pageBuilder.adminRoles],
+        '/admin/i18n/**'                     : [pageBuilder.adminRoles],
+        '/cssRender/**'                      : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         //Restict access to newly created pages, it will be overriden once role is assigned
-        '/customPage/page/**'                  : ['IS_AUTHENTICATED_FULLY'],
+        '/customPage/page/**'                : ['IS_AUTHENTICATED_FULLY'],
         //For now use a page builder dummy page for cas aut
-        '/customPage/page/pbadm.ssoauth/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M', pageBuilder.adminRoles],
+        '/customPage/page/pbadm.ssoauth/**'  : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M', pageBuilder.adminRoles],
         //Theming specific
-        '/theme/**'                   : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/themeEditor/**'             : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
-        '/uploadProperties/**'        : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M']
+        '/theme/**'                          : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/themeEditor/**'                    : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
+        '/uploadProperties/**'               : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M']
 ]
 
 // CodeNarc rulesets
@@ -398,81 +401,81 @@ restfulApiConfig = {
     // Resources for web_app_extensibility plugin
     marshallerGroups {
         group 'json_date' marshallers {
-            marshaller {
-                instance = new org.codehaus.groovy.grails.web.converters.marshaller.ClosureObjectMarshaller<grails.converters.JSON>(
-                        java.util.Date, {return it?.format( "yyyy-MM-dd" )} )
-            }
-        }
+                                          marshaller {
+                                              instance = new org.codehaus.groovy.grails.web.converters.marshaller.ClosureObjectMarshaller<grails.converters.JSON>(
+                                                      java.util.Date, {return it?.format( "yyyy-MM-dd" )} )
+                                          }
+                                      }
 
         group 'xml_date' marshallers {
-            marshaller {
-                instance = new org.codehaus.groovy.grails.web.converters.marshaller.ClosureObjectMarshaller<grails.converters.XML>(
-                        java.util.Date, {return it?.format( "yyyy-MM-dd" )} )
-            }
-        }
+                                         marshaller {
+                                             instance = new org.codehaus.groovy.grails.web.converters.marshaller.ClosureObjectMarshaller<grails.converters.XML>(
+                                                     java.util.Date, {return it?.format( "yyyy-MM-dd" )} )
+                                         }
+                                     }
     }
     // Begin - Query-with-POST
     resource 'query-filters' config {
-        representation {
-            mediaTypes = ["application/json"]
-            jsonExtractor {}
-        }
-        representation {
-            mediaTypes = ["application/xml"]
-            xmlExtractor {}
-        }
-    }
+                                        representation {
+                                            mediaTypes = ["application/json"]
+                                            jsonExtractor {}
+                                        }
+                                        representation {
+                                            mediaTypes = ["application/xml"]
+                                            xmlExtractor {}
+                                        }
+                                    }
 
 
     resource 'jobsub-pending-print' config {
-        serviceName = 'jobsubOutputCompositeService'
-        methods = ['list', 'show', 'update']
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshallerGroup 'json_date'             //for date related fields
-                jsonBeanMarshaller {
-                    supports net.hedtech.banner.general.jobsub.JobsubExternalPrinter
-                    includesFields {
-                        field 'id'
-                        field 'version'
-                        field 'job'
-                        field 'oneUpNo'
-                        field 'fileName'
-                        field 'printer'
-                        field 'printForm'
-                        field 'printDate'
-                        field 'creatorId'
-                        field 'printerCommand'
-                        field 'mime'
-                    }
-                }
-                jsonBeanMarshaller {
-                    supports net.hedtech.banner.general.jobsub.JobsubSavedOutput
-                    includesFields {
-                        field 'id'
-                        field 'version'
-                        field 'job'
-                        field 'fileName'
-                        field 'printer'
-                        field 'printForm'
-                        field 'printDate'
-                        field 'jobsubOutput'
-                    }
-                }
-            }
-            jsonExtractor {
-                property 'job' name 'job'
-                property 'id' name 'id'
-                property 'printer' name 'printer'
-                property 'jobsubOutput' name 'jobsubOutput'
-            }
-        }
-        representation {
-            mediaTypes = ["application/octet-stream"]
-            marshallerFramework = 'jobsubOutputMarshaller'
-        }
-    }
+                                               serviceName = 'jobsubOutputCompositeService'
+                                               methods = ['list', 'show', 'update']
+                                               representation {
+                                                   mediaTypes = ["application/json"]
+                                                   marshallers {
+                                                       marshallerGroup 'json_date'             //for date related fields
+                                                       jsonBeanMarshaller {
+                                                           supports net.hedtech.banner.general.jobsub.JobsubExternalPrinter
+                                                           includesFields {
+                                                               field 'id'
+                                                               field 'version'
+                                                               field 'job'
+                                                               field 'oneUpNo'
+                                                               field 'fileName'
+                                                               field 'printer'
+                                                               field 'printForm'
+                                                               field 'printDate'
+                                                               field 'creatorId'
+                                                               field 'printerCommand'
+                                                               field 'mime'
+                                                           }
+                                                       }
+                                                       jsonBeanMarshaller {
+                                                           supports net.hedtech.banner.general.jobsub.JobsubSavedOutput
+                                                           includesFields {
+                                                               field 'id'
+                                                               field 'version'
+                                                               field 'job'
+                                                               field 'fileName'
+                                                               field 'printer'
+                                                               field 'printForm'
+                                                               field 'printDate'
+                                                               field 'jobsubOutput'
+                                                           }
+                                                       }
+                                                   }
+                                                   jsonExtractor {
+                                                       property 'job' name 'job'
+                                                       property 'id' name 'id'
+                                                       property 'printer' name 'printer'
+                                                       property 'jobsubOutput' name 'jobsubOutput'
+                                                   }
+                                               }
+                                               representation {
+                                                   mediaTypes = ["application/octet-stream"]
+                                                   marshallerFramework = 'jobsubOutputMarshaller'
+                                               }
+                                           }
 
     // Pagebuilder resources
 
@@ -483,7 +486,7 @@ restfulApiConfig = {
             mediaTypes = ["application/json"]
             marshallers {
                 marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
+                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
                     priority = 100
                 }
             }
@@ -492,181 +495,181 @@ restfulApiConfig = {
     }
 
     resource 'pagesecurity' config {
-        serviceName= 'pageSecurityService'
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                       serviceName = 'pageSecurityService'
+                                       representation {
+                                           mediaTypes = ["application/json"]
+                                           marshallers {
+                                               marshaller {
+                                                   instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                   priority = 100
+                                               }
+                                           }
+                                           extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                       }
+                                   }
 
-    resource  'pages' config {
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                jsonDomainMarshaller {
-                    priority = 101
-                }
-                jsonBeanMarshaller {
-                    priority = 100
-                }
-            }
-            jsonExtractor {}
-        }
-    }
+    resource 'pages' config {
+                                representation {
+                                    mediaTypes = ["application/json"]
+                                    marshallers {
+                                        jsonDomainMarshaller {
+                                            priority = 101
+                                        }
+                                        jsonBeanMarshaller {
+                                            priority = 100
+                                        }
+                                    }
+                                    jsonExtractor {}
+                                }
+                            }
 
     resource 'csses' config {
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                representation {
+                                    mediaTypes = ["application/json"]
+                                    marshallers {
+                                        marshaller {
+                                            instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                            priority = 100
+                                        }
+                                    }
+                                    extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                }
+                            }
 
     resource 'virtualdomains' config {
-        serviceName= 'virtualDomainService'
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                         serviceName = 'virtualDomainService'
+                                         representation {
+                                             mediaTypes = ["application/json"]
+                                             marshallers {
+                                                 marshaller {
+                                                     instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                     priority = 100
+                                                 }
+                                             }
+                                             extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                         }
+                                     }
 
     resource 'pageexports' config {
-        serviceName= 'pageExportService'
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                      serviceName = 'pageExportService'
+                                      representation {
+                                          mediaTypes = ["application/json"]
+                                          marshallers {
+                                              marshaller {
+                                                  instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                  priority = 100
+                                              }
+                                          }
+                                          extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                      }
+                                  }
 
     resource 'virtualdomainexports' config {
-        serviceName= 'virtualDomainExportService'
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                               serviceName = 'virtualDomainExportService'
+                                               representation {
+                                                   mediaTypes = ["application/json"]
+                                                   marshallers {
+                                                       marshaller {
+                                                           instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                           priority = 100
+                                                       }
+                                                   }
+                                                   extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                               }
+                                           }
     resource 'cssexports' config {
-        serviceName= 'cssExportService'
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                     serviceName = 'cssExportService'
+                                     representation {
+                                         mediaTypes = ["application/json"]
+                                         marshallers {
+                                             marshaller {
+                                                 instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                 priority = 100
+                                             }
+                                         }
+                                         extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                     }
+                                 }
 
     resource 'admintasks' config {
-        serviceName= 'adminTaskService'
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller(app:grailsApplication)
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                     serviceName = 'adminTaskService'
+                                     representation {
+                                         mediaTypes = ["application/json"]
+                                         marshallers {
+                                             marshaller {
+                                                 instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                 priority = 100
+                                             }
+                                         }
+                                         extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                     }
+                                 }
     // This pseudo resource is used when issuing a query using a POST. Such a POST is made
     // against the actual resource being queried, but using a different URL prefix (e.g., qapi)
     // so the request is routed to the 'list' method (versus the normal 'create' method).
     resource 'query-filters' config {
-        // TODO: Add support for 'application/x-www-form-urlencoded'
-        representation {
-            mediaTypes = ["application/json"]
-            jsonExtractor {}
-        }
-    }
+                                        // TODO: Add support for 'application/x-www-form-urlencoded'
+                                        representation {
+                                            mediaTypes = ["application/json"]
+                                            jsonExtractor {}
+                                        }
+                                    }
 
     // 2 demo resources
     resource 'todos' config {
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                representation {
+                                    mediaTypes = ["application/json"]
+                                    marshallers {
+                                        marshaller {
+                                            instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                            priority = 100
+                                        }
+                                    }
+                                    extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                }
+                            }
 
     resource 'projects' config {
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                   representation {
+                                       mediaTypes = ["application/json"]
+                                       marshallers {
+                                           marshaller {
+                                               instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                               priority = 100
+                                           }
+                                       }
+                                       extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                   }
+                               }
     //END of pagebuilder configuration
     resource 'extensions' config {
-        serviceName = 'webAppExtensibilityExtensionService'
-        // In some cases the service name has to be prepended with the plugin name
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                     serviceName = 'webAppExtensibilityExtensionService'
+                                     // In some cases the service name has to be prepended with the plugin name
+                                     representation {
+                                         mediaTypes = ["application/json"]
+                                         marshallers {
+                                             marshaller {
+                                                 instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                 priority = 100
+                                             }
+                                         }
+                                         extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                     }
+                                 }
     resource 'resources' config {
-        serviceName = 'webAppExtensibilityResourceService'
-        // In some cases the service name has to be prepended with the plugin name
-        representation {
-            mediaTypes = ["application/json"]
-            marshallers {
-                marshaller {
-                    instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
-                    priority = 100
-                }
-            }
-            extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
-        }
-    }
+                                    serviceName = 'webAppExtensibilityResourceService'
+                                    // In some cases the service name has to be prepended with the plugin name
+                                    representation {
+                                        mediaTypes = ["application/json"]
+                                        marshallers {
+                                            marshaller {
+                                                instance = new net.hedtech.restfulapi.marshallers.json.BasicDomainClassMarshaller( app: grailsApplication )
+                                                priority = 100
+                                            }
+                                        }
+                                        extractor = new net.hedtech.restfulapi.extractors.json.DefaultJSONExtractor()
+                                    }
+                                }
     // End Resources for web_app_extensibility plugin
 }
 grails.plugin.springsecurity.cas.active = false
