@@ -435,6 +435,14 @@ pageBuilder {
     // debugRoles = "ROLE_GPBADMN_BAN_DEFAULT_PAGEBUILDER_M"
 }
 
+
+/** *****************************************************************************
+ *                                                                              *
+ *                 Configuration for AIP application                     *
+ *                                                                              *
+ ***************************************************************************** **/
+BCMLOCATION=<HOST_NAME>:<PORT>/CommunicationManagement // Example localhost:8080/CommunicationManagement
+ssconfig.app.seeddata.keys = [['BCMLOCATION']]
 /*******************************************************************************
  *                                                                             *
  *        Config Job  Configurations                                            *
