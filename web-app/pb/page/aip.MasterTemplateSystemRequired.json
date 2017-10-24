@@ -1,5 +1,5 @@
 {
-   "constantName": "ActionItemPolicy",
+   "constantName": "aip.MasterTemplateSystemRequired",
    "extendsPage": null,
    "fileTimestamp": "2017-10-13T18:38:48Z",
    "modelView": {
@@ -108,7 +108,7 @@
          }
       ],
       "label": "",
-      "name": "ActionItemPolicy",
+      "name": "aip.MasterTemplateSystemRequired",
       "type": "page"
    },
    "pageRoles": [
