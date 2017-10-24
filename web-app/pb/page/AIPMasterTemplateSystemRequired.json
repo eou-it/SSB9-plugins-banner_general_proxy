@@ -1,7 +1,7 @@
 {
-   "constantName": "aip.MasterTemplateSystemRequired",
+   "constantName": "AIPMasterTemplateSystemRequired",
    "extendsPage": null,
-   "fileTimestamp": "2017-10-13T18:38:48Z",
+   "fileTimestamp": "2017-10-13T19:38:48Z",
    "modelView": {
       "components": [
          {
@@ -108,7 +108,7 @@
          }
       ],
       "label": "",
-      "name": "aip.MasterTemplateSystemRequired",
+      "name": "AIPMasterTemplateSystemRequired",
       "type": "page"
    },
    "pageRoles": [
