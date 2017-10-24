@@ -273,6 +273,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/ssb/aip/**'                        : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/aipAdmin/**'                   : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/BCM/**'                        : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        //pb master template included to allow for users to pass in without needing role applied in requestmap table in extz app.
+        '/customPage/page/AIPMasterTemplateSystemRequired/**'   : ['IS_AUTHENTICATED_FULLY'],
 
         //Page Builder specific
         '/internalPb/virtualDomains.*/**'    : ['IS_AUTHENTICATED_ANONYMOUSLY'],
