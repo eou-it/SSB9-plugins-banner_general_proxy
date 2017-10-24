@@ -266,6 +266,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/ssb/aipPageBuilder/**'             : ['IS_AUTHENTICATED_FULLY'],
         '/ssb/aip/**'                        : ['IS_AUTHENTICATED_FULLY'],
         '/aip/**'                            : ['IS_AUTHENTICATED_FULLY'],
+        '/ssb/aip/admin/**'                  : ['IS_AUTHENTICATED_FULLY'],
         '/ssb/admin/**'                      : ['IS_AUTHENTICATED_FULLY'],
         '/ssb/aipActionItemPosting/**'       : ['IS_AUTHENTICATED_FULLY'],
         '/ssb/aipApp/**'                     : ['IS_AUTHENTICATED_FULLY'],
