@@ -34,30 +34,9 @@ class BootStrap {
     def grailsApplication
     def resourceService
 
-    //PB
-    def pageSecurityService
-    def pageUtilService
-    def virtualDomainUtilService
-    def cssUtilService
-
     def init = { servletContext ->
 
         //TODO: add pbEnabled option in app config and handle here
-        // Install metadata required for page builder
-        def pbConfig = grails.util.Holders.getConfig().pageBuilder
-        cssUtilService.importInitially(cssUtilService.loadOverwriteExisting)
-        pageUtilService.importInitially(pageUtilService.loadOverwriteExisting)
-        virtualDomainUtilService.importInitially(virtualDomainUtilService.loadOverwriteExisting)
-
-        // Install metadata from configured directories
-        pageUtilService.importAllFromDir(pbConfig.locations.page, pageUtilService.loadIfNew)
-        virtualDomainUtilService.importAllFromDir(pbConfig.locations.virtualDomain, virtualDomainUtilService.loadIfNew)
-        cssUtilService.importAllFromDir(pbConfig.locations.css, cssUtilService.loadIfNew)
-
-
-        //Initialize the request map (page security)
-        pageSecurityService.init()
-
         // For IE 9 with help of es5-shim.js, the default date marshaller does not work.
             JSON.registerObjectMarshaller(Date) {
                 return it?.format("yyyy-MM-dd'T'HH:mm:ss'Z'",TimeZone.getTimeZone('UTC'))
