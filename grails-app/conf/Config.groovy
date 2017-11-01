@@ -162,20 +162,23 @@ formControllerMap = [
         'personalinformationpicture': ['SELFSERVICE'],
         'jobsub-pending-print'      : ['API-JOBSUB-PRINT'],
         'personalinformationqa'     : ['SELFSERVICE'],
+        //AIP//
+        'aip'                       : ['SELFSERVICE'],
+        'aipadmin'                  : ['SELFSERVICE-ACTIONITEMADMIN'],
+        'aipactionitemposting'      : ['SELFSERVICE-ACTIONITEMADMIN'],
+        'aippagebuilder'            : ['SELFSERVICE'],
+        'bcm'                       : ['SELFSERVICE-ACTIONITEMADMIN',
+                                       'SELFSERVICE-COMMUNICATIONUSER',
+                                       'SELFSERVICE-COMMUNICATIONCONTENTADMIN',
+                                       'SELFSERVICE-COMMUNICATIONADMIN' ],
         'about'                     : ['GUAGMNU'],
         'restfulapi'                : ['SELFSERVICE', 'GPBADMN'],
         'keepalive'                 : ['SELFSERVICE'],
         'dateconverter'             : ['SELFSERVICE', 'GUAGMNU'],
         'menu'                      : ['SELFSERVICE', 'GUAGMNU'],
-        //AIP//
-        'aip'                       : ['SELFSERVICE'],
-        'aipadmin'                  : ['SELFSERVICE'],
-        'aipactionitemposting'      : ['SELFSERVICE'],
 
-        'bcm'                       : ['SELFSERVICE'],
-        'aippagebuilder'            : ['SELFSERVICE'],
 
-        //from PB///////
+        //PAGEBUILDER///////
         'virtualdomaincomposer'     : ['GPBADMN'],
         'cssmanager'                : ['GPBADMN'],
         'visualpagemodelcomposer'   : ['GPBADMN'],
@@ -243,40 +246,16 @@ grails.plugin.springsecurity.interceptUrlMap = [
         //
         // '/**': [ 'ROLE_DETERMINED_DYNAMICALLY' ]
         //'/**': [ 'ROLE_SELFSERVICE-FACULTY_BAN_DEFAULT_M' ]
-        '/api/**'                            : ['ROLE_DETERMINED_DYNAMICALLY'],
-        '/qapi/**'                           : ['ROLE_DETERMINED_DYNAMICALLY'],
-        '/api/about'                         : ['IS_AUTHENTICATED_FULLY'],
-        '/api/healthcheck'                   : ['IS_AUTHENTICATED_FULLY'],
-        '/ssb/securityQA/**'                 : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/survey/**'                     : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/userAgreement/**'              : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/general/**'                    : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/directDeposit/**'              : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
-        '/ssb/UpdateAccount/**'              : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
-        '/ssb/accountListing/**'             : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
-        '/ssb/DirectDepositConfiguration/**' : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
-        '/ssb/personalInformation/**'        : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationDetails/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationPicture/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationQA/**'      : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
 
-        //FIXME: these roles for AIP are just a placeholder until security is determined in a future user story
-        '/aipApp/**'                         : ['IS_AUTHENTICATED_FULLY'],
-        '/aipPageBuilder/**'                 : ['IS_AUTHENTICATED_FULLY'],
-        '/ssb/aipPageBuilder/**'             : ['IS_AUTHENTICATED_FULLY'],
-        '/ssb/aip/**'                        : ['IS_AUTHENTICATED_FULLY'],
-        '/aip/**'                            : ['IS_AUTHENTICATED_FULLY'],
-        '/ssb/aip/admin/**'                  : ['IS_AUTHENTICATED_FULLY'],
-        '/ssb/admin/**'                      : ['IS_AUTHENTICATED_FULLY'],
-        '/ssb/aipActionItemPosting/**'       : ['IS_AUTHENTICATED_FULLY'],
-        '/ssb/aipApp/**'                     : ['IS_AUTHENTICATED_FULLY'],
+        //AIP
+        '/ssb/aip/admin/**'                  : ['ROLE_SELFSERVICE-ACTIONITEMADMIN_BAN_DEFAULT_M'],
+        '/ssb/aipAdmin/**'                   : ['ROLE_SELFSERVICE-ACTIONITEMADMIN_BAN_DEFAULT_M'],
+        '/ssb/BCM/**'                        : ['ROLE_SELFSERVICE-ACTIONITEMADMIN_BAN_DEFAULT_M'],
+        '/ssb/aipActionItemPosting/**'       : ['ROLE_SELFSERVICE-ACTIONITEMADMIN_BAN_DEFAULT_M'],
         '/ssb/aip/**'                        : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/aipAdmin/**'                   : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/BCM/**'                        : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        //pb master template included to allow for users to pass in without needing role applied in requestmap table in extz app.
-        '/customPage/page/AIPMasterTemplateSystemRequired/**'   : ['IS_AUTHENTICATED_FULLY'],
+        '/ssb/aipPageBuilder/**'             : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
 
-        //Page Builder specific
+        //Page Builder
         '/internalPb/virtualDomains.*/**'    : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/adminPb/virtualDomains.*/**'       : [pageBuilder.adminRoles],
         '/internalPb/pages/**'               : [pageBuilder.adminRoles],
@@ -294,12 +273,31 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/cssRender/**'                      : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         //Restict access to newly created pages, it will be overriden once role is assigned
         '/customPage/page/**'                : ['IS_AUTHENTICATED_FULLY'],
+        //Page Builder master template included to allow for users to pass in without needing role applied in requestmap table in extz app.
+        '/customPage/page/AIPMasterTemplateSystemRequired/**'   : ['IS_AUTHENTICATED_FULLY'],
         //For now use a page builder dummy page for cas aut
         '/customPage/page/pbadm.ssoauth/**'  : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M', pageBuilder.adminRoles],
         //Theming specific
         '/theme/**'                          : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/themeEditor/**'                    : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
-        '/uploadProperties/**'               : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M']
+        '/uploadProperties/**'               : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
+
+        '/api/**'                            : ['ROLE_DETERMINED_DYNAMICALLY'],
+        '/qapi/**'                           : ['ROLE_DETERMINED_DYNAMICALLY'],
+        '/api/about'                         : ['IS_AUTHENTICATED_FULLY'],
+        '/api/healthcheck'                   : ['IS_AUTHENTICATED_FULLY'],
+        '/ssb/securityQA/**'                 : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/survey/**'                     : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/userAgreement/**'              : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/general/**'                    : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/directDeposit/**'              : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
+        '/ssb/UpdateAccount/**'              : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
+        '/ssb/accountListing/**'             : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
+        '/ssb/DirectDepositConfiguration/**' : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
+        '/ssb/personalInformation/**'        : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/PersonalInformationDetails/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/PersonalInformationPicture/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/PersonalInformationQA/**'      : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M']
 ]
 
 // CodeNarc rulesets
