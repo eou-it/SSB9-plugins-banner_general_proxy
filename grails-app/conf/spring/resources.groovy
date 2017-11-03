@@ -50,12 +50,12 @@ beans = {
         bean.initMethod = 'init'
         jobManager = ref('actionItemPostWorkTaskManagerService')
         asynchronousBannerAuthenticationSpoofer = ref('asynchronousBannerAuthenticationSpoofer')
-        maxThreads = Holders.config.aip?.aipGroupSendItemProcessingEngine?.maxThreads ?: 10
-        maxQueueSize = Holders.config.aip?.aipGroupSendItemProcessingEngine?.maxQueueSize ?: 5000
-        continuousPolling = Holders.config.aip?.aipGroupSendItemProcessingEngine?.continuousPolling ?: true
-        enabled = Holders.config.aip?.aipGroupSendItemProcessingEngine?.enabled ?: true
-        pollingInterval = Holders.config.aip?.aipGroupSendItemProcessingEngine?.pollingInterval ?: 2000
-        deleteSuccessfullyCompleted = Holders.config.aip?.aipGroupSendItemProcessingEngine?.deleteSuccessfullyCompleted ?: false
+        maxThreads = Holders.config.aip?.actionItemPostWorkProcessingEngine?.maxThreads ?: 10
+        maxQueueSize = Holders.config.aip?.actionItemPostWorkProcessingEngine?.maxQueueSize ?: 5000
+        continuousPolling = Holders.config.aip?.actionItemPostWorkProcessingEngine?.continuousPolling ?: true
+        enabled = Holders.config.aip?.actionItemPostWorkProcessingEngine?.enabled ?: true
+        pollingInterval = Holders.config.aip?.actionItemPostWorkProcessingEngine?.pollingInterval ?: 2000
+        deleteSuccessfullyCompleted = Holders.config.aip?.actionItemPostWorkProcessingEngine?.deleteSuccessfullyCompleted ?: false
     }
 
     actionItemJobProcessingEngine (ActionItemAsynchronousTaskProcessingEngineImpl) { bean ->
@@ -63,12 +63,11 @@ beans = {
         bean.initMethod = 'init'
         jobManager = ref('actionItemJobTaskManagerService')
         asynchronousBannerAuthenticationSpoofer = ref('asynchronousBannerAuthenticationSpoofer')
-        maxThreads = Holders.config.aip?.aipJobProcessingEngine?.maxThreads ?: 10
-        maxQueueSize = Holders.config.aip?.aipJobProcessingEngine?.maxQueueSize ?: 5000
-        continuousPolling = Holders.config.aip?.aipJobProcessingEngine?.continuousPolling ?: true
-        enabled = Holders.config.aip?.aipJobProcessingEngine?.enabled ?: true
-        pollingInterval = Holders.config.aip?.aipJobProcessingEngine?.pollingInterval ?: 2000
-        deleteSuccessfullyCompleted = Holders.config.aip?.aipJobProcessingEngine?.deleteSuccessfullyCompleted ?: false
+        maxThreads = Holders.config.aip?.actionItemJobProcessingEngine?.maxThreads ?: 10
+        maxQueueSize = Holders.config.aip?.actionItemJobProcessingEngine?.maxQueueSize ?: 5000
+        continuousPolling = Holders.config.aip?.actionItemJobProcessingEngine?.continuousPolling ?: true
+        enabled = Holders.config.aip?.actionItemJobProcessingEngine?.enabled ?: true
+        pollingInterval = Holders.config.aip?.actionItemJobProcessingEngine?.pollingInterval ?: 2000
+        deleteSuccessfullyCompleted = Holders.config.aip?.actionItemJobProcessingEngine?.deleteSuccessfullyCompleted ?: false
     }
-
 }
