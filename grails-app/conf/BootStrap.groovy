@@ -2,9 +2,9 @@
  Copyright 2013-2017 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-
 import grails.converters.JSON
 import grails.util.Environment
+import grails.util.Holders
 import net.hedtech.banner.converters.json.JSONBeanMarshaller
 import net.hedtech.banner.converters.json.JSONDomainMarshaller
 import net.hedtech.banner.aip.ActionItemGroupAssignReadOnly
@@ -34,6 +34,10 @@ class BootStrap {
     def grailsApplication
     def resourceService
 
+    def actionItemPostMonitor
+    def actionItemPostWorkProcessingEngine
+    def actionItemJobProcessingEngine
+
     def init = { servletContext ->
 
         //TODO: add pbEnabled option in app config and handle here
@@ -44,6 +48,18 @@ class BootStrap {
 
 
         def ctx = servletContext.getAttribute(ApplicationAttributes.APPLICATION_CONTEXT)
+
+        if( Holders.config.aip?.actionItemPostMonitor?.enabled && (Environment.current != Environment.TEST) ) {
+            actionItemPostMonitor.startMonitoring()
+        }
+
+        if( actionItemPostWorkProcessingEngine?.enabled && (Environment.current != Environment.TEST) ) {
+            actionItemPostWorkProcessingEngine.startRunning()
+        }
+
+        if( actionItemJobProcessingEngine?.enabled && (Environment.current != Environment.TEST) ) {
+            actionItemJobProcessingEngine.startRunning()
+        }
 
         /**
          * Using dataSource to set properties is not allowed after grails 1.3. dataSourceUnproxied should be used instead
@@ -124,12 +140,15 @@ class BootStrap {
             sorted.subList( offset, Math.min( offset + max, delegate.size() ) )
         }
 
-}
+    }
 
+    def destroy = {
+        log.info( "Executing Bootstrap.destroy" )
+        actionItemPostMonitor.shutdown()
+        actionItemPostWorkProcessingEngine.stopRunning()
+        actionItemPostJobProcessingEngine.stopRunning()
+    }
 
-def destroy = {
-    // no-op
-}
 
 
 private def registerJSONMarshallers() {
