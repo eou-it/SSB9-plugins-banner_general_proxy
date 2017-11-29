@@ -8,8 +8,8 @@ quartz {
     props {
         scheduler.skipUpdateCheck = true
         scheduler.instanceName = 'Action Item Quartz Scheduler'
-//        scheduler.instanceId = 'AIP' // new instance ID for AIP?
-        scheduler.instanceId = 'AUTO' // new instance ID for AIP?
+        scheduler.instanceId = 'AIP' // new instance ID for AIP?
+//        scheduler.instanceId = 'AUTO' // new instance ID for AIP?
 
         if (grails.util.Holders.getConfig()?.aip?.scheduler?.idleWaitTime) {
             scheduler.idleWaitTime = grails.util.Holders.getConfig().aip.scheduler.idleWaitTime
