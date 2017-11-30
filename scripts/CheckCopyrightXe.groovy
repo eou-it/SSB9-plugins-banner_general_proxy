@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2015 Ellucian Company L.P. and its affiliates.
+ Copyright 2015-2017 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -69,16 +69,17 @@ def doCheckCopyrightXe(fixIt){
             it.replaceAll(/[a-z0-9]*\trefs\/heads\//, '')
         }
 
+        def excludedFileExts = ["rst", "properties", "svg", "scss", "ttf", "woff", "woff2", "eot", "png", "gif", "map",
+                                "jar"]
+        def excludedFiles = "CheckCopyrightXe.groovy|.git|xe-ui-components|ckeditor|d3.min.js"
+
         changes.unique().each {
             def filename_dir_txt = directoryname.toString() + ln + it
             def filename = new File(filename_dir_txt)
             def filename_txt = it
             def fileNameExt = filename.name.tokenize('.').last()
 
-
-            if (!(filename_txt =~ "CheckCopyrightXe.groovy" || fileNameExt == "rst" || fileNameExt == "properties" ||
-                    filename_txt =~ ".git" || fileNameExt == "svg" || fileNameExt == "scss" || fileNameExt == "ttf" ||
-                    fileNameExt == "woff")) {
+            if (!(filename_txt =~ excludedFiles || excludedFileExts.contains(fileNameExt))) {
                 if (!filename.isDirectory() && filename.exists()) {
                     def fileIoStream = new RandomAccessFile(filename_dir_txt, "rw")
                     File tempFile
@@ -366,7 +367,8 @@ def getCorrectedCopyright(String line, year, EOL){
         correctedLine = line.replaceFirst(/\d{4}(.*\d{4})*/, firstYear + '-' + year) + EOL
     }
     else {
-        throw new RuntimeException('No copyright year in copyright line')
+        println('No copyright year in copyright line. Line not corrected: '+line)
+        correctedLine = line + EOL
         //correctedLine = 'Copyright '+ year +' Ellucian Company L.P. and its affiliates.\n'
     }
     return correctedLine
@@ -377,7 +379,7 @@ def getNewCopyrightText(fileExt, year, EOL){
             year + ' Ellucian Company L.P. and its affiliates.'+EOL+'*******************************************************************************'
     def delim
     switch(fileExt) {
-        case ["groovy", "java", "js", "css"]:
+        case ["groovy", "java", "js", "ts", "css"]:
             delim = ['/*', '*/']
             break
         case ["html", "xml"]:

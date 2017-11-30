@@ -184,7 +184,6 @@ formControllerMap = [
         'visualpagemodelcomposer'   : ['GPBADMN'],
         'cssrender'                 : ['SELFSERVICE', 'GUAGMNU'],
         'custompage'                : ['SELFSERVICE', 'GPBADMN'],
-        'uploadproperties'          : ['SELFSERVICE']
 
 ]
 
