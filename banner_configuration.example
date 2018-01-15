@@ -101,21 +101,61 @@ bannerSsbDataSource {
     //elvyx.driver = "com.elvyx.Driver" 
     //elvyx.url    = "jdbc:elvyx://localhost:4448/?elvyx.real_driver=${bannerSsbDataSource.driver}&elvyx.real_jdbc=${bannerSsbDataSource.url}&user=${bannerSsbDataSource.username}&password=${bannerSsbDataSource.password}"
 }
+/**********************************************************************************
+ *    Location of users' profile picture image files                               *
+ /**********************************************************************************/
+banner {
+    picturesPath = System.getProperty( 'base.dir' ) + '/test/images'
+    // defaultPhoto = <Fully qualified path to the photo to use if no user photo is available.>
+}
+
+/********************************************************************************
+ *                                                                              *
+ *                 Banner 8 SS URLs                                             *
+ *                                                                              *
+ ***************************************************************************** **/
 
 banner8.SS.url = 'http://<host_name>:<port_number>/<banner8>/'
+banner8.SS.locale.url = [
+        default: 'http://<host_name>:<port_number>/<banner8>/DEFAULT/',
+        en     : 'http://<host_name>:<port_number>/<banner8>/EN/',
+        en_US  : 'http://<host_name>:<port_number>/<banner8>/enUS/',
+        en_AU  : 'http://<host_name>:<port_number>/<banner8>/enAU/',
+        en_GB  : 'http://<host_name>:<port_number>/<banner8>/enGB/',
+        en_IE  : 'http://<host_name>:<port_number>/<banner8>/enIE/',
+        en_IN  : 'http://<host_name>:<port_number>/<banner8>/enIN/',
+        fr     : 'http://<host_name>:<port_number>/<banner8>/FR/',
+        fr_CA  : 'http://<host_name>:<port_number>/<banner8>/frCA/',
+        pt     : 'http://<host_name>:<port_number>/<banner8>/PT/',
+        es     : 'http://<host_name>:<port_number>/<banner8>/ES/',
+        ar     : 'http://<host_name>:<port_number>/<banner8>/AR/'
+]
 
 // ********************************************************************************
 //    MEP Setup
 // ********************************************************************************
-//To use MEP context sensitive 8.x SSB URLs in menus uncomment the mep.banner8.SS.url lines
-//  For example, if we have Banner 9 General Self Service App deployed with two
-//  MEP institutions (GVU and BANNER) having the following URL syntax.
-//  http://example.ellucian.com:8105/BannerGeneralSsb?mepCode=BANNER
-//  http://example.ellucian.com:8105/BannerGeneralSsb?mepCode=GVU
-
+//To use MEP context sensitive 8.x SSB URLs in menus uncomment the mep.banner8.locale.SS.url lines
 /***********************************************************************
 mep.banner8.SS.url = [
     GVU : 'http://example.ellucian.com:8888/ssomanager/c/SSB?pkg=http://example.ellucian.com:9020/SMPL_GVU/',
     BANNER : 'http://example.ellucian.com:8888/ssomanager/c/SSB?pkg=http://example.ellucian.com:9020/SMPL_BANNER/'
 ]
+
+mep.banner8.SS.locale.url = [
+        GVU   :
+                [
+                        default: 'sampleUrlDefault ',
+                        "ar"   : 'sampleUrlAR ',
+                        "fr"   : 'sampleUrlfr',
+                        "fr_CA": 'sampleUrlfrca'
+                ],
+        BANNER:
+                [
+                        default: 'sampleUrlDefault',
+                        "ar"   : 'sampleUrlAR',
+                        "fr"   : 'sampleUrlfr ',
+                        "fr_CA": 'sampleUrlfrca'
+                ]
+]
+
 ************************************************************************/
