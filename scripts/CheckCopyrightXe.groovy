@@ -277,7 +277,7 @@ def findCommitDetail(def filename_txt, def directoryname) {
 
 def getYearChanged(commitDetail) {
     def valueDate
-    def date
+    def date = ""
     commitDetail.each {
         if (it =~ "Date:") {
             date = it.replace("Date:", "")
