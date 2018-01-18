@@ -19,6 +19,7 @@ grails.plugin.location.'banner-packaging'                   = "plugins/banner_pa
 grails.plugin.location.'banner-aip-ui'                      = "plugins/banner_aip_ui.git"
 grails.plugin.location.'banner-general-direct-deposit-ui' = "plugins/banner_general_direct_deposit_ui.git"
 grails.plugin.location.'banner-general-personal-information-ui' = "plugins/banner_general_personal_information_ui.git"
+grails.plugin.location.'banner-restful-api-support' = "plugins/banner-restful-api-support.git"
 
 grails.project.dependency.resolution = {
 
