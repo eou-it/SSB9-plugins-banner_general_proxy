@@ -184,6 +184,12 @@ eventCreateWarStart = { warName, stagingDir ->
         fileset(dir: "${stagingDir}/WEB-INF/lib", includes: "com.springsource.org.apache.xml.security-1.0.5.D2.jar")
     }
 
+    // Conflicts in Weblogic
+    ant.delete(file:"${stagingDir}/WEB-INF/lib/xml-apis-1.4.01.jar")
+    ant.delete(file:"${stagingDir}/WEB-INF/lib/xml-apis-1.3.04.jar")
+    ant.delete(file:"${stagingDir}/WEB-INF/lib/xercesImpl-2.10.0.jar")
+    ant.delete(file:"${stagingDir}/WEB-INF/lib/xercesImpl-2.11.0.jar")
+
     ant.delete(dir: "${stagingDir}/WEB-INF/classes/functionaltestplugin")
     ant.delete(dir: "${stagingDir}/plugins/functional-test-2.0.0")
     ant.delete(file: "${stagingDir}/WEB-INF/classes/FunctionalTest.class")
