@@ -378,6 +378,9 @@ pageBuilder {
  *                                                                              *
  ***************************************************************************** **/
 BCMLOCATION='<HOST_NAME>:<PORT>/CommunicationManagement' // Example localhost:8080/CommunicationManagement
+banner.aip.block.process.persona=['Prepare for Registration':['Student', 'Faculty'],
+'Plan Ahead':['Student', 'Faculty'],'View Registration Information':['Student', 'Faculty'],
+'Register for Classes':['Student', 'Faculty']]
 ssconfig.app.seeddata.keys = [['BCMLOCATION']]
 /*******************************************************************************
  *                                                                             *
