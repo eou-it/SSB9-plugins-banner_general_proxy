@@ -17,6 +17,7 @@ grails.war.resources = { stagingDir ->
 
 grails.plugin.location.'banner-packaging'                   = "plugins/banner_packaging.git"
 grails.plugin.location.'banner-aip-ui'                      = "plugins/banner_aip_ui.git"
+grails.plugin.location.'banner-aip-gate-keeper'                      = "plugins/banner_aip_gate_keeper.git"
 grails.plugin.location.'banner-general-direct-deposit-ui' = "plugins/banner_general_direct_deposit_ui.git"
 grails.plugin.location.'banner-general-personal-information-ui' = "plugins/banner_general_personal_information_ui.git"
 
