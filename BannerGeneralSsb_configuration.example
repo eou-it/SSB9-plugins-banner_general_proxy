@@ -379,7 +379,10 @@ pageBuilder {
  ***************************************************************************** **/
 BCMLOCATION='<HOST_NAME>:<PORT>/CommunicationManagement' // Example localhost:8080/CommunicationManagement
 BANNER_AIP_BLOCK_PROCESS_PERSONA=[]// List of Supported Persona  Exmaple : ['EVERYONE', 'STUDENT', 'REGISTRAR', 'FACULTYINSTRUCTOR', 'FACULTYADVISOR', 'FACULTYBOTH']
-ssconfig.app.seeddata.keys = [['BCMLOCATION']]
+GENERALLOCATION='<HOST_NAME>:<PORT>/BannerGeneralSsb' // Example localhost:8080/BannerGeneralSsb
+
+ssconfig.app.seeddata.keys = [['GENERALLOCATION'], ['BCMLOCATION']]
+
 /*******************************************************************************
  *                                                                             *
  *        Config Job  Configurations                                            *
