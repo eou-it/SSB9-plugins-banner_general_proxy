@@ -186,6 +186,9 @@ ssbOracleUsersProxied = true
 ssbPassword.reset.enabled = true //true  - allow Pidm users to reset their password.
 //false - throws functionality disabled error message
 
+// In CAS and SAML modes, set to true to allow API calls to bypass single sign-on authentication
+guestAuthenticationEnabled = false
+
 // Product and application name to refer to this app for name display rules
 productName = "General"
 banner.applicationName = "GeneralSsb"
