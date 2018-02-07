@@ -32,6 +32,7 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
     <script type="text/javascript">
         <g:i18n_setup/>
     </script>
+    <g:bannerMessages/>
     <script>
         document.createElement('ng-include');
         document.createElement('ng-pluralize');
