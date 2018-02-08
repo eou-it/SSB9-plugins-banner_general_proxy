@@ -2,7 +2,7 @@
  * component-library
  * 
 
- * Version: 0.0.1 - 2017-11-23
+ * Version: 0.0.1 - 2018-02-07
  * License: ISC
  */
 angular.module("xe-ui-components", ['badge','button','checkbox','dropdown','label','radiobutton','simpleTextbox','statusLabel','switch','textarea','textbox','ui.select','xeUISelect','external-resouces','utils','columnFilter','pagination','search','dataTableModule','aboutModal','pieChartModule','popupModal','tabnav','xe-ui-components-tpls']);
@@ -113,7 +113,7 @@ angular.module("templates/dialog_default.html", []).run(["$templateCache", funct
 
 angular.module("templates/modal.html", []).run(["$templateCache", function ($templateCache) {
   $templateCache.put("templates/modal.html",
-    "<div id=\"xeModalMask\" class=\"xe-popup-mask\" ng-show=\"show\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"xePopTitle\"><div class=\"xe-popup-wrapper\"><div id=\"xeModalContainer\" class=\"xe-popup-container\"><div id=\"xeModalHeader\" class=\"xe-popup-header\"><h5 id=\"xePopTitle\" class=\"xe-app-title\" role=\"heading\" data-ng-bind=\"popupTitle\"></h5><span id=\"xeModalClose\" class=\"xe-popup-close\" ng-click=\"hide()\" tabindex=\"0\" role=\"button\" aria-label=\"{{'userpreference.popup.language.close' | xei18n}}\" alt=\"{{'userpreference.popup.language.close' | xei18n}}\" title=\"{{'userpreference.popup.language.close' | xei18n}}\"></span></div><div id=\"xePopupContent\" class=\"xe-pop-content\" ng-transclude=\"popupContent\"></div><div id=\"buttonContainer\" class=\"buttonContainer\" ng-transclude=\"popupButtons\"></div><div tabindex=\"0\" id=\"tabOrdering\"></div></div></div></div>");
+    "<div id=\"xeModalMask\" class=\"xe-popup-mask\" ng-show=\"show\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"xePopTitle\"><div class=\"xe-popup-wrapper\"><div class=\"xe-popup-container\"><div id=\"xeModalHeader\" class=\"xe-popup-header\"><h5 id=\"xePopTitle\" class=\"xe-app-title\" role=\"heading\" data-ng-bind=\"popupTitle\"></h5><span id=\"xePopupClose\" class=\"xe-popup-close\" ng-click=\"hide()\" tabindex=\"0\" role=\"button\" aria-label=\"{{'userpreference.popup.language.close' | xei18n}}\" alt=\"{{'userpreference.popup.language.close' | xei18n}}\" title=\"{{'userpreference.popup.language.close' | xei18n}}\"></span></div><div id=\"xePopupContent\" class=\"xe-pop-content\" ng-transclude=\"popupContent\"></div><div id=\"buttonContainer\" class=\"buttonContainer\" ng-transclude=\"popupButtons\"></div><div tabindex=\"0\" id=\"tabOrdering\"></div></div></div></div>");
 }]);
 
 angular.module("templates/tabNav.html", []).run(["$templateCache", function ($templateCache) {
@@ -3005,6 +3005,291 @@ angular.module("external-resouces", ['pascalprecht.translate', 'ngSanitize']);
             $rootScope.isMAC = ($window.navigator.userAgent.indexOf("Mac") !== -1);
             $rootScope.isRtl = Language.isRtl();
             $translate.use(getlocale.getUserLocale());
+        }]);
+}());
+/*
+ File is used to provide i18n support for components.
+ */
+(function () {
+    'use strict';
+    var translations = {
+        en: {
+            "pieChart.title": "Pie Chart",
+            "pieChart.subtitle": "Demo Pie Slices",
+            "pieChart.svg.title": "Pie Chart Title",
+            "pieChart.svg.desc": "Pie Chart Description",
+            "pieChart.pie.ariaLabel": "Pie Chart",
+            "pieChart.pie.group.main.ariaLabel": "Enter to Main Group",
+            "pieChart.pie.group.other.ariaLabel": "Enter to Other Group",
+            "pieChart.table.label": "label",
+            "pieChart.table.value": "value",
+            "pieChart.table.percentage": "percentage",
+            "pieChart.table.ariaLabel": "A tabular view of the data in the chart.",
+            "pieChart.main.label.other": "Other",
+            "search.label": "Search",
+            "dataTable.columnFilter.label": "Show/Hide Column",
+            "dataTable.columnFilter.selectAll": "Select All",
+            "dataTable.sortable.label": "Sortable",
+            "dataTable.sort.descending.label": "descending",
+            "dataTable.sort.ascending.label": "ascending",
+            "dataTable.no.record.found": "No records found",
+            "pagination.record.found": "Results found",
+            "pagination.first.label": "First page",
+            "pagination.previous.label": "Previous page",
+            "pagination.last.label": "Last page",
+            "pagination.next.label": "Next page",
+            "pagination.per.page.label": "Per Page",
+            "pagination.page.label": "Page",
+            "pagination.page.shortcut.label": "Go To Page (End)",
+            "pagination.page.aria.label": "Go To Page. Short cut is End",
+            "pagination.page.of.label": "of",
+            "search.title": "Search (Alt+Y)",
+            "search.aria.label": "Search text field. Short cut is Alt+Y.",
+            "angular-ui.select.items.group1.label": "From A - M",
+            "angular-ui.select.items.group2.label": "From N - Z",
+            "angular-ui.select.items.without.section.heading": "Items not grouped under section heading",
+            "angular-ui.select.items.with.section.heading": "Items grouped under section",
+            "angular-ui.select.items.with.long.text": "Items grouped here has long text",
+            "angular-ui.select.items.remote.data.placeholder": "Enter a term to search",
+            "angular-ui.select.remote.data":  "Minimum input search, Infinite scroll, Placeholder",
+            "angular-ui-select": "Single Select",
+            "angular-ui-select-search-disabled": "Single Select with search disabled",
+            "angular-ui-select-multiple": "Multiple Select",
+            "uiselect.minimum.input.text": "Please enter {{arg1}} or more characters",
+            "uiselect.no.results.found.text": "No Result Found!",
+            "uiselect.search.results": "Searching ... {{arg1}} results are available, use up and down arrow keys to navigate.",
+            "uiselect.option.selected": "{{arg1}}",
+            "about.component.tab.general" : "General",
+            "about.component.plugin.information" : "Plugin information",
+            "about.component.plugin.other.information" : "Other Plugin information",
+            "popup.component.information" : "Other Plugin information",
+            "popup.preference.locale.heading":"Language Setting ",
+            "userpreference.popup.language.close":"Close",
+            "textbox.validation.required": "This field is required",
+            "textbox.validation.maxlength": "Maximum Character length should be",
+            "xe.text.chars.left": "Remaining Characters",
+            "xe.text.max.chars": "Characters Max",
+            "xe.text.limit.over": "Character Limit of {{arg1}} has been reached",
+            "xe.text.chars.remaining.aria": "Remaining Characters : {{arg1}}",
+            "angular-textarea-label": "Comments Label",
+            "angular-textarea-placeholder-text": "Enter your comments here",
+            "angular-textarea-placeholder-text-readonly": "Read only comments",
+            "description-textarea-label": "Description",
+            "description-textarea-placeholder": "Enter your description here",
+            "textarea-readonly-comments": "This content is secured.",
+            "textInput": "Text Input",
+            "text": "Text",
+            "rtlText": "Switch to LTR",
+            "ltrText": "Switch to RTL",
+            "uiselect.search.disabled.results": "Use up and down arrow keys to navigate."
+        },
+        ar: {
+            "search.label": "\u0627\u0644\u0628\u062D\u062B",
+            "dataTable.columnFilter.label": "\u0625\u0638\u0647\u0627\u0631/\u0625\u062E\u0641\u0627\u0621 \u0627\u0644\u0639\u0645\u0648\u062F",
+            "dataTable.columnFilter.selectAll": "\u0627\u062E\u062A\u064A\u0627\u0631 \u0627\u0644\u0643\u0644",
+            "dataTable.sortable.label": "\u0642\u0627\u0628\u0644 \u0644\u0644\u062A\u0631\u062A\u064A\u0628",
+            "dataTable.sort.descending.label": "\u062A\u0646\u0627\u0632\u0644\u064A\u0627",
+            "dataTable.sort.ascending.label": "\u062A\u0635\u0627\u0639\u062F\u064A\u0627",
+            "dataTable.no.record.found": "\u0644\u0645 \u064A\u062A\u0645 \u0627\u0644\u0639\u062B\u0648\u0631 \u0639\u0644\u0649 \u0633\u062C\u0644\u0627\u062A",
+            "pagination.record.found": "\u0627\u0644\u0646\u062A\u0627\u0626\u062C \u0627\u0644\u062A\u064A \u062A\u0645 \u0627\u0644\u0639\u062B\u0648\u0631 \u0639\u0644\u064A\u0647\u0627",
+            "pagination.first.label": "\u0627\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u0623\u0648\u0644\u0649",
+            "pagination.previous.label": "\u0627\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u0633\u0627\u0628\u0642\u0629",
+            "pagination.last.label": "\u0627\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u0623\u062E\u064A\u0631\u0629",
+            "pagination.next.label": "\u0627\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u062A\u0627\u0644\u064A\u0629",
+            "pagination.per.page.label": "\u0641\u064A \u0643\u0644 \u0635\u0641\u062D\u0629",
+            "pagination.page.label": "\u0627\u0644\u0635\u0641\u062D\u0629",
+            "pagination.page.shortcut.label": "\u0627\u0644\u0630\u0647\u0627\u0628 \u0644\u0644\u0635\u0641\u062D\u0629 (End)",
+            "pagination.page.aria.label": "\u0627\u0644\u0630\u0647\u0627\u0628 \u0625\u0644\u0649 \u0627\u0644\u0635\u0641\u062D\u0629. \u0627\u0644\u0627\u062E\u062A\u0635\u0627\u0631 \u0647\u0648 End",
+            "pagination.page.of.label": "\u0645\u0646",
+            "search.title": "\u0627\u0644\u0628\u062D\u062B (Alt+Y)",
+            "search.aria.label": "\u0627\u0644\u0628\u062D\u062B \u0641\u064A \u062D\u0642\u0644 \u0627\u0644\u0646\u0635. \u0645\u0641\u062A\u0627\u062D \u0627\u0644\u0627\u062E\u062A\u0635\u0627\u0631 Alt+Y."
+        },
+        en_AU: {
+            "search.label": "Search",
+            "dataTable.columnFilter.label": "Show/Hide Column",
+            "dataTable.columnFilter.selectAll": "Select All",
+            "dataTable.sortable.label": "Sortable",
+            "dataTable.sort.descending.label": "descending",
+            "dataTable.sort.ascending.label": "ascending",
+            "dataTable.no.record.found": "No records found",
+            "pagination.record.found": "Results found",
+            "pagination.first.label": "First page",
+            "pagination.previous.label": "Previous page",
+            "pagination.last.label": "Last page",
+            "pagination.next.label": "Next page",
+            "pagination.per.page.label": "Per Page",
+            "pagination.page.label": "Page",
+            "pagination.page.shortcut.label": "Go To Page (End)",
+            "pagination.page.aria.label": "Go To Page. Short cut is End",
+            "pagination.page.of.label": "of",
+            "search.title": "Search (Alt+Y)",
+            "search.aria.label": "Search text field. Short cut is Alt+Y."
+        },
+        en_GB: {
+            "search.label": "Search",
+            "dataTable.columnFilter.label": "Show/Hide Column",
+            "dataTable.columnFilter.selectAll": "Select All",
+            "dataTable.sortable.label": "Sortable",
+            "dataTable.sort.descending.label": "descending",
+            "dataTable.sort.ascending.label": "ascending",
+            "dataTable.no.record.found": "No records found",
+            "pagination.record.found": "Results found",
+            "pagination.first.label": "First page",
+            "pagination.previous.label": "Previous page",
+            "pagination.last.label": "Last page",
+            "pagination.next.label": "Next page",
+            "pagination.per.page.label": "Per Page",
+            "pagination.page.label": "Page",
+            "pagination.page.shortcut.label": "Go To Page (End)",
+            "pagination.page.aria.label": "Go To Page. Short cut is End",
+            "pagination.page.of.label": "of",
+            "search.title": "Search (Alt+Y)",
+            "search.aria.label": "Search text field. Short cut is Alt+Y."
+        },
+        en_IE: {
+            "search.label": "Search",
+            "dataTable.columnFilter.label": "Show/Hide Column",
+            "dataTable.columnFilter.selectAll": "Select All",
+            "dataTable.sortable.label": "Sortable",
+            "dataTable.sort.descending.label": "descending",
+            "dataTable.sort.ascending.label": "ascending",
+            "dataTable.no.record.found": "No records found",
+            "pagination.record.found": "Results found",
+            "pagination.first.label": "First page",
+            "pagination.previous.label": "Previous page",
+            "pagination.last.label": "Last page",
+            "pagination.next.label": "Next page",
+            "pagination.per.page.label": "Per Page",
+            "pagination.page.label": "Page",
+            "pagination.page.shortcut.label": "Go To Page (End)",
+            "pagination.page.aria.label": "Go To Page. Short cut is End",
+            "pagination.page.of.label": "of",
+            "search.title": "Search (Alt+Y)",
+            "search.aria.label": "Search text field. Short cut is Alt+Y."
+        },
+        en_IN: {
+            "search.label": "Search",
+            "dataTable.columnFilter.label": "Show/Hide Column",
+            "dataTable.columnFilter.selectAll": "Select All",
+            "dataTable.sortable.label": "Sortable",
+            "dataTable.sort.descending.label": "descending",
+            "dataTable.sort.ascending.label": "ascending",
+            "dataTable.no.record.found": "No records found",
+            "pagination.record.found": "Results found",
+            "pagination.first.label": "First page",
+            "pagination.previous.label": "Previous page",
+            "pagination.last.label": "Last page",
+            "pagination.next.label": "Next page",
+            "pagination.per.page.label": "Per Page",
+            "pagination.page.label": "Page",
+            "pagination.page.shortcut.label": "Go To Page (End)",
+            "pagination.page.aria.label": "Go To Page. Short cut is End",
+            "pagination.page.of.label": "of",
+            "search.title": "Search (Alt+Y)",
+            "search.aria.label": "Search text field. Short cut is Alt+Y."
+        },
+        es: {
+            "search.label": "Buscar",
+            "dataTable.columnFilter.label": "Mostrar/Ocultar columna",
+            "dataTable.columnFilter.selectAll": "Seleccionar todo",
+            "dataTable.sortable.label": "Que pueda ordenarse",
+            "dataTable.sort.descending.label": "descendente",
+            "dataTable.sort.ascending.label": "ascendente",
+            "dataTable.no.record.found": "No se encontraron registros.",
+            "pagination.record.found": "Resultados encontrados",
+            "pagination.first.label": "Primera p\u00E1gina",
+            "pagination.previous.label": "P\u00E1gina anterior",
+            "pagination.last.label": "\u00DAltima p\u00E1gina",
+            "pagination.next.label": "P\u00E1gina siguiente",
+            "pagination.per.page.label": "Por p\u00E1gina",
+            "pagination.page.label": "P\u00E1gina",
+            "pagination.page.shortcut.label": "Ir a la p\u00E1gina (Fin)",
+            "pagination.page.aria.label": "Ir a p\u00E1gina. Atajo es Fin",
+            "pagination.page.of.label": "de",
+            "search.title": "Buscar (Alt+Y)",
+            "search.aria.label": "Campo de b\u00FAsqueda de texto. El atajo es Alt+Y."
+        },
+        fr: {
+            "search.label": "Rechercher",
+            "dataTable.columnFilter.label": "Afficher/cacher colonne",
+            "dataTable.columnFilter.selectAll": "Tout s\u00E9lectionner",
+            "dataTable.sortable.label": "Peut \u00EAtre tri\u00E9",
+            "dataTable.sort.descending.label": "descendant",
+            "dataTable.sort.ascending.label": "ascendant",
+            "dataTable.no.record.found": "Aucun enregistrement trouv\u00E9",
+            "pagination.record.found": "R\u00E9sultats trouv\u00E9s",
+            "pagination.first.label": "Premi\u00E8re page",
+            "pagination.previous.label": "Page pr\u00E9c\u00E9dente",
+            "pagination.last.label": "Derni\u00E8re page",
+            "pagination.next.label": "Page suivante",
+            "pagination.per.page.label": "Par page",
+            "pagination.page.label": "Page",
+            "pagination.page.shortcut.label": "Aller \u00E0 page (Fin)",
+            "pagination.page.aria.label": "Aller \u00E0 la page. Le raccourci est Fin.",
+            "pagination.page.of.label": "de",
+            "search.title": "Rechercher (Alt+Y)",
+            "search.aria.label": "Recherche de champ de texte. Raccourci Alt+Y."
+        },
+        fr_CA: {
+            "search.label": "Rechercher",
+            "dataTable.columnFilter.label": "Afficher/cacher colonne",
+            "dataTable.columnFilter.selectAll": "Tout s\u00E9lectionner",
+            "dataTable.sortable.label": "Peut \u00EAtre tri\u00E9",
+            "dataTable.sort.descending.label": "descendant",
+            "dataTable.sort.ascending.label": "ascendant",
+            "dataTable.no.record.found": "Aucun enregistrement trouv\u00E9",
+            "pagination.record.found": "R\u00E9sultats trouv\u00E9s",
+            "pagination.first.label": "Premi\u00E8re page",
+            "pagination.previous.label": "Page pr\u00E9c\u00E9dente",
+            "pagination.last.label": "Derni\u00E8re page",
+            "pagination.next.label": "Page suivante",
+            "pagination.per.page.label": "Par page",
+            "pagination.page.label": "Page",
+            "pagination.page.shortcut.label": "Aller \u00E0 page (Fin)",
+            "pagination.page.aria.label": "Aller \u00E0 la page. Le raccourci est Fin.",
+            "pagination.page.of.label": "de",
+            "search.title": "Rechercher (Alt+Y)",
+            "search.aria.label": "Recherche de champ de texte. Raccourci Alt+Y."
+        },
+        pt: {
+            "search.label": "Pesquisar",
+            "dataTable.columnFilter.label": "Exibir/ocultar coluna",
+            "dataTable.columnFilter.selectAll": "Selecionar todos",
+            "dataTable.sortable.label": "Classific\u00E1vel",
+            "dataTable.sort.descending.label": "decrescente",
+            "dataTable.sort.ascending.label": "crescente",
+            "dataTable.no.record.found": "N\u00E3o foram encontrados registros",
+            "pagination.record.found": "Resultados encontrados",
+            "pagination.first.label": "Primeira p\u00E1gina",
+            "pagination.previous.label": "P\u00E1gina anterior",
+            "pagination.last.label": "\u00DAltima p\u00E1gina",
+            "pagination.next.label": "pagination.next.label=Pr\u00F3xima p\u00E1gina",
+            "pagination.per.page.label": "Por p\u00E1gina",
+            "pagination.page.label": "P\u00E1gina",
+            "pagination.page.shortcut.label": "V\u00E1 para p\u00E1gina (End)",
+            "pagination.page.aria.label": "V\u00E1 para P\u00E1gina. A tecla de atalho \u00E9 End",
+            "pagination.page.of.label": "de",
+            "search.title": "Pesquisar (Alt+Y)",
+            "search.aria.label": "Campo para texto de busca. A tecla de atalho \u00E9 Alt+Y."
+        }
+    };
+
+    angular.module("xe-ui-components")
+        .config(['$translateProvider', function ($translateProvider) {
+            $translateProvider
+                .translations('en', translations.en)
+                .translations('ar', translations.ar)
+                .translations('en_AU', translations.en_AU)
+                .translations('en_GB', translations.en_GB)
+                .translations('en_IE', translations.en_IE)
+                .translations('en_IN', translations.en_IN)
+                .translations('es', translations.es)
+                .translations('fr', translations.fr)
+                .translations('fr_CA', translations.fr_CA)
+                .translations('pt', translations.pt)
+                .determinePreferredLanguage() // Determines user local by checking different local variable from the browser.
+                .fallbackLanguage('en')
+                .useSanitizeValueStrategy('escape');
         }]);
 }());
 (function () {
@@ -6813,10 +7098,10 @@ clearFocus = function (e) {
 
                     $timeout(function () {
                         angular.element("#tabOrdering").on('focus', function (event) {
-                            angular.element("#xeModalClose").focus();
+                            angular.element("#xePopupClose").focus();
                         });
 
-                        angular.element("#xeModalClose").on('keydown', function (event) {
+                        angular.element("#xePopupClose").on('keydown', function (event) {
                             if (event.shiftKey) {
                                 if (event.keyCode === 9) {
                                     if (angular.element("#buttonContainer").find('xe-button').length > 1) {
@@ -6933,7 +7218,9 @@ clearFocus = function (e) {
         .directive('xeTabNav', function () {
             return {
                 restrict: 'EA',
-                scope: {},
+                scope: {
+                    xeSection: '@?'
+                },
                 transclude: true,
                 templateUrl: 'templates/tabNav.html',
                 controllerAs: 'tabnav',
@@ -6941,8 +7228,28 @@ clearFocus = function (e) {
                     var self = this;
                     self.currentActive = null;
                     self.tabs = [];
-                    self.addTab = function addTab(tabScope) {
-                        self.tabs.push(tabScope);
+                    self.extendTab = function(attr, tabScope) {
+                        var hideTab;
+                        if (typeof xe !== 'undefined' && xe.extensionsFound) {
+                            var tabSectionExtns = _.find(xe.extensions.sections, function (section) {
+                                return section.name == $scope.xeSection;
+                            });
+                            if (tabSectionExtns) {
+                                tabSectionExtns.fields.forEach(function (field, key) {
+                                    if (field.name === tabScope.xeField) {
+                                        if (field.label) {
+                                            attr.heading = xe.i18n(field.label);
+                                        }
+                                        if (field.exclude) {
+                                            hideTab = true;
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                        if(!hideTab) {
+                            self.tabs.push(tabScope);
+                        }
                     };
                     self.loadDynamicContent = function (userMethod, selectedTab) {
                         if (Object.prototype.toString.call(userMethod) === '[object Function]' && !selectedTab.hasTranscludedContent && !selectedTab.dynamicContent) {
@@ -6972,12 +7279,13 @@ clearFocus = function (e) {
                     heading: '@',
                     state: '@',
                     loadDataOnClick: '&',
-                    jsLazyLoad: '@'
+                    jsLazyLoad: '@',
+                    xeField: '@?'
                 },
                 templateUrl: 'templates/tabPanel.html',
                 require: '^xeTabNav',
                 link: function (scope, ele, attr, xeTabNavCtrl, $transclude) {
-                    xeTabNavCtrl.addTab(scope);
+                    xeTabNavCtrl.extendTab(attr, scope);
                     scope.element = ele;
                     scope.tabIndex = xeTabNavCtrl.tabs.indexOf(scope) + 1;
                     scope.lazyLoadJs = function (activeTab) {

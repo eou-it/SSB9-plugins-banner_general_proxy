@@ -1029,6 +1029,14 @@ xe-simple-text-box {
   background-color: #D5D5D5;
   border: 1px solid #A9A9A9; }
 
+@media screen and (max-width: 768px) {
+  .select2-results {
+    max-height: 5.65em; } }
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .select2-results {
+    max-height: 5.65em; } }
+
 .ui-select-container {
   font-family: "Open Sans";
   width: 18em; }
@@ -2310,7 +2318,7 @@ li.ui-select-choices-row {
   .xe-popup-container .xe-popup-header {
     padding: 0 0 0em;
     margin-right: 3em; }
-    .xe-popup-container .xe-popup-header span#xeModalClose:focus {
+    .xe-popup-container .xe-popup-header span#xePopupClose:focus {
       outline: 1px solid #4d90fe;
       -ms-user-select: none; }
   .xe-popup-header {
