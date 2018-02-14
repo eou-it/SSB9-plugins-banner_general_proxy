@@ -8,6 +8,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
         // ---------------
         var STUDENT = 0,
             EMPLOYEE = 1,
+            AIPADMIN =2,
 
 
         // LOCAL FUNCTIONS
@@ -19,7 +20,8 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                     // If roles are specified, filter based on role. If not specified, include tile.
                     if (tile.roles) {
                         if (($scope.isStudent && _.contains(tile.roles, STUDENT)) ||
-                            ($scope.isEmployee && _.contains(tile.roles, EMPLOYEE))) {
+                            ($scope.isEmployee && _.contains(tile.roles, EMPLOYEE))||
+                            ($scope.isAdmin && _.contains(tile.roles, AIPADMIN))) {
 
                             tilesForRole.push(tile);
                         }
@@ -56,14 +58,24 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                         }
                     );
                 }
-                if(generalConfigResolve.isActionItemEnabled) {
+                if(generalConfigResolve.isActionItemEnabledAndAvailable) {
                     $scope.appTiles.push(
                         {
                             title: 'banner.generalssb.landingpage.actionsitem.title',
                             desc: 'banner.generalssb.landingpage.actionsitem.description',
                             url: $scope.applicationContextRoot +'/ssb/aip/list',
+                            icon: '../images/action_items_icon.svg'
+                        }
+                    );
+                }
+                if(generalConfigResolve.isActionItemEnabled){
+                    $scope.appTiles.push(
+                        {
+                            title: 'banner.generalssb.landingpage.actionsitemadmin.title',
+                            desc: 'banner.generalssb.landingpage.actionsitemadmin.description',
+                            url: $scope.applicationContextRoot +'/ssb/aip/#/landing',
                             icon: '../images/action_items_icon.svg',
-                            roles: [STUDENT, EMPLOYEE]
+                            roles: [AIPADMIN]
                         }
                     );
                 }
@@ -71,6 +83,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                 generalSsbService.getRoles().$promise.then(function (response) {
                     $scope.isStudent = response.isStudent;
                     $scope.isEmployee = response.isEmployee;
+                    $scope.isAdmin = response.isAdmin;
                     $scope.appTilesForRole = getAppTilesForRole($scope.appTiles);
                     $scope.isSingleTile = $scope.appTilesForRole.length === 1;
                 });

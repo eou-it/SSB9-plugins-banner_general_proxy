@@ -32,6 +32,7 @@ class GeneralController {
         def model = [:]
         model.isStudent = hasUserRole( "STUDENT" )
         model.isEmployee = hasUserRole( "EMPLOYEE" )
+        model.isAdmin = hasUserRole( "ACTIONITEMADMIN" )
 
         render model as JSON
     }
