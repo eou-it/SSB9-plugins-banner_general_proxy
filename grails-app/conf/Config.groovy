@@ -152,6 +152,7 @@ formControllerMap = [
         'securityqa'                : ['SELFSERVICE'],
         'general'                   : ['SELFSERVICE'],
         'theme'                     : ['SELFSERVICE'],
+        'aipgatekeeping'            : ['SELFSERVICE'],
         'themeeditor'               : ['SELFSERVICE'],
         'directdeposit'             : ['SELFSERVICE-STUDENT', 'SELFSERVICE-EMPLOYEE'],
         'personalinformation'       : ['SELFSERVICE'],
@@ -184,7 +185,6 @@ formControllerMap = [
         'visualpagemodelcomposer'   : ['GPBADMN'],
         'cssrender'                 : ['SELFSERVICE', 'GUAGMNU'],
         'custompage'                : ['SELFSERVICE', 'GPBADMN'],
-        'userpreference'            : ['SELFSERVICE']
 
 ]
 
@@ -194,6 +194,11 @@ grails.plugin.springsecurity.useRequestMapDomainClass = false
 
 grails.plugin.springsecurity.securityConfigType = SecurityConfigType.InterceptUrlMap
 
+grails.plugin.springsecurity.filterChain.chainMap = [
+        '/api/**' : 'basicAuthenticationFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor',
+        '/qapi/**': 'basicAuthenticationFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,basicExceptionTranslationFilter,filterInvocationInterceptor',
+        '/**'     : 'securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor'
+]
 
 // ******************************************************************************
 //
@@ -207,6 +212,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/directDepositApp/**'               : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/personalInformationApp/**'         : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/resetPassword/**'                  : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/aipGateKeeping/**'                  : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/login/**'                          : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/index**'                           : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/logout/**'                         : ['IS_AUTHENTICATED_ANONYMOUSLY'],
@@ -292,8 +298,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/ssb/personalInformation/**'        : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/PersonalInformationDetails/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/PersonalInformationPicture/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationQA/**'      : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/userPreference/**'             : ['IS_AUTHENTICATED_ANONYMOUSLY']
+        '/ssb/PersonalInformationQA/**'      : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M']
 ]
 
 // CodeNarc rulesets
