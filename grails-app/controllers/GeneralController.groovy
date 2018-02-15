@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2015-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2015-2018 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 
 
@@ -32,6 +32,7 @@ class GeneralController {
         def model = [:]
         model.isStudent = hasUserRole( "STUDENT" )
         model.isEmployee = hasUserRole( "EMPLOYEE" )
+        model.isAipAdmin = hasUserRole( "ACTIONITEMADMIN" )
 
         render model as JSON
     }
