@@ -1,5 +1,5 @@
 /********************************************************************************
-  Copyright 2017 Ellucian Company L.P. and its affiliates.
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'generalSsbService', 'piConfigResolve', 'generalConfigResolve',
     function ($scope, generalSsbService, piConfigResolve, generalConfigResolve) {
@@ -21,7 +21,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                     if (tile.roles) {
                         if (($scope.isStudent && _.contains(tile.roles, STUDENT)) ||
                             ($scope.isEmployee && _.contains(tile.roles, EMPLOYEE))||
-                            ($scope.isAdmin && _.contains(tile.roles, AIPADMIN))) {
+                            ($scope.isAipAdmin && _.contains(tile.roles, AIPADMIN))) {
 
                             tilesForRole.push(tile);
                         }
@@ -71,8 +71,8 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                 if(generalConfigResolve.isActionItemEnabled){
                     $scope.appTiles.push(
                         {
-                            title: 'banner.generalssb.landingpage.actionsitemadmin.title',
-                            desc: 'banner.generalssb.landingpage.actionsitemadmin.description',
+                            title: 'banner.generalssb.landingpage.actionitemadmin.title',
+                            desc: 'banner.generalssb.landingpage.actionitemadmin.description',
                             url: $scope.applicationContextRoot +'/ssb/aip/#/landing',
                             icon: '../images/action_items_icon.svg',
                             roles: [AIPADMIN]
@@ -83,7 +83,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                 generalSsbService.getRoles().$promise.then(function (response) {
                     $scope.isStudent = response.isStudent;
                     $scope.isEmployee = response.isEmployee;
-                    $scope.isAdmin = response.isAdmin;
+                    $scope.isAipAdmin = response.isAipAdmin;
                     $scope.appTilesForRole = getAppTilesForRole($scope.appTiles);
                     $scope.isSingleTile = $scope.appTilesForRole.length === 1;
                 });

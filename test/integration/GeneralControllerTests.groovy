@@ -1,5 +1,5 @@
 /********************************************************************************
-  Copyright 2017 Ellucian Company L.P. and its affiliates.
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
@@ -57,6 +57,7 @@ class GeneralControllerTests extends BaseIntegrationTestCase {
         assertNotNull data
         assertFalse(data.isStudent)
         assertFalse(data.isEmployee)
+        assertFalse(data.isAipAdmin)
     }
 
     @Test
@@ -70,6 +71,8 @@ class GeneralControllerTests extends BaseIntegrationTestCase {
         assertNotNull data
         assertTrue(data.isDirectDepositEnabled)
         assertTrue(data.isPersonalInformationEnabled)
+        assertFalse(data.isActionItemEnabledAndAvailable)
+        assertTrue(data.isActionItemEnabled)
     }
 
     @Test
