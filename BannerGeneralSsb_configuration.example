@@ -382,7 +382,7 @@ pageBuilder {
  ***************************************************************************** **/
 BCMLOCATION='<HOST_NAME>:<PORT>/CommunicationManagement' // Example localhost:8080/CommunicationManagement
 BANNER_AIP_BLOCK_PROCESS_PERSONA=[]// List of Supported Persona  Example : ['EVERYONE', 'STUDENT', 'REGISTRAR', 'FACULTYINSTRUCTOR', 'FACULTYADVISOR', 'FACULTYBOTH']
-BANNER_AIP_EXCLUDE_LIST='about|aipGateKeeping|cssManager|cssRender|error|excelExportBase|dateConverter|keepAlive|login|logout|resetPassword|securityQa|selfServiceMenu|survery|test|theme|themeEditor|userAgreement|userPreference'
+BANNER_AIP_EXCLUDE_LIST='about|cssManager|cssRender|error|excelExportBase|dateConverter|keepAlive|login|logout|resetPassword|securityQa|selfServiceMenu|survey|test|theme|themeEditor|userAgreement|userPreference'
 GENERALLOCATION='<HOST_NAME>:<PORT>/BannerGeneralSsb' // Example localhost:8080/BannerGeneralSsb
 
 ssconfig.app.seeddata.keys = [['BCMLOCATION'], ['BANNER_AIP_BLOCK_PROCESS_PERSONA']]

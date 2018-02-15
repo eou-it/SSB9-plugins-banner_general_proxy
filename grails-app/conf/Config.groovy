@@ -212,7 +212,6 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/directDepositApp/**'               : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/personalInformationApp/**'         : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/resetPassword/**'                  : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/aipGateKeeping/**'                  : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/login/**'                          : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/index**'                           : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/logout/**'                         : ['IS_AUTHENTICATED_ANONYMOUSLY'],
