@@ -72,7 +72,7 @@ class GeneralControllerTests extends BaseIntegrationTestCase {
         assertTrue(data.isDirectDepositEnabled)
         assertTrue(data.isPersonalInformationEnabled)
         assertFalse(data.isActionItemEnabledAndAvailable)
-        assertTrue(data.isActionItemEnabled)
+        assertNotNull data.isActionItemEnabled
     }
 
     @Test
