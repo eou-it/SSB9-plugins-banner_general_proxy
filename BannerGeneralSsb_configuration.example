@@ -400,12 +400,12 @@ aip {
     weblogicDeployment = false
 
     actionItemPostMonitor {
-        enabled = true
+        enabled = false
         monitorIntervalInSeconds = 10
     }
 
     actionItemPostWorkProcessingEngine {
-        enabled = true
+        enabled = false
         maxThreads = 1
         maxQueueSize = 5000
         continuousPolling = true
@@ -414,7 +414,7 @@ aip {
     }
 
     actionItemJobProcessingEngine {
-        enabled = true
+        enabled = false
         maxThreads = 2
         maxQueueSize = 5000
         continuousPolling = true
@@ -423,7 +423,7 @@ aip {
     }
 
     scheduler {
-        enabled = true
+        enabled = false
         idleWaitTime = 30000
     }
 }
