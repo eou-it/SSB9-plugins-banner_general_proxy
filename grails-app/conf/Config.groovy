@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2013-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2013-2018 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 import net.hedtech.banner.configuration.ApplicationConfigurationUtils as ConfigFinder
@@ -278,8 +278,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         //For now use a page builder dummy page for cas aut
         '/customPage/page/pbadm.ssoauth/**'  : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M', pageBuilder.adminRoles],
         //Theming specific
-        '/theme/**'                          : ['IS_AUTHENTICATED_ANONYMOUSLY'],
-        '/themeEditor/**'                    : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
+        '/ssb/theme/**'                       : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/ssb/themeEditor/**'                : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
         '/uploadProperties/**'               : ['ROLE_SELFSERVICE-WTAILORADMIN_BAN_DEFAULT_M'],
 
         '/api/**'                            : ['ROLE_DETERMINED_DYNAMICALLY'],
