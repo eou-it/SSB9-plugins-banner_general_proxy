@@ -56,7 +56,8 @@ grails.project.dependency.resolution = {
         runtime "javax.servlet:jstl:1.1.2"
 
         runtime 'org.springframework:spring-test:3.1.0.RELEASE'
-
+        compile "cglib:cglib:3.0"
+        compile "org.pegdown:pegdown:1.2.0"
         compile ('org.apache.poi:poi-ooxml:3.7') {
             excludes 'stax-api'
         }
