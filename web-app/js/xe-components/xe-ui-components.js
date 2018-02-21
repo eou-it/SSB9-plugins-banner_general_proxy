@@ -2,7 +2,7 @@
  * component-library
  * 
 
- * Version: 0.0.1 - 2018-02-07
+ * Version: 0.0.1 - 2018-02-21
  * License: ISC
  */
 angular.module("xe-ui-components", ['badge','button','checkbox','dropdown','label','radiobutton','simpleTextbox','statusLabel','switch','textarea','textbox','ui.select','xeUISelect','external-resouces','utils','columnFilter','pagination','search','dataTableModule','aboutModal','pieChartModule','popupModal','tabnav','xe-ui-components-tpls']);
@@ -15,7 +15,7 @@ angular.module("templates/badge.html", []).run(["$templateCache", function ($tem
 
 angular.module("templates/button.html", []).run(["$templateCache", function ($templateCache) {
   $templateCache.put("templates/button.html",
-    "<button class=\"{{xeType +' '+ xeBtnClass}}\" ng-disabled=\"xeDisabled\" ng-click=\"xeBtnClick()\" ng-bind=\"xeLabel\"></button>");
+    "<button class=\"{{xeType +' '+ xeBtnClass}}\" ng-disabled=\"xeDisabled\" aria-label=\"{{xeAriaLabel}}\" ng-click=\"xeBtnClick()\" ng-bind=\"xeLabel\"></button>");
 }]);
 
 angular.module("templates/checkbox.html", []).run(["$templateCache", function ($templateCache) {
@@ -40,7 +40,7 @@ angular.module("templates/radio-button.html", []).run(["$templateCache", functio
 
 angular.module("templates/simple-textbox.html", []).run(["$templateCache", function ($templateCache) {
   $templateCache.put("templates/simple-textbox.html",
-    "<input id=\"{{::inputField}}\" xe-field=\"search\" name=\"{{::inputField}}\" placeholder=\"{{placeHolder}}\" class=\"simple-input-field font-semibold {{xeClass}}\" ng-model=\"value\" ng-class=\"{readOnly: inputDisabled}\" ng-disabled=\"{{disabled}}\" ng-keyup=\"onChange({data: value, id: inputField, event: $event})\" ng-keydown=\"onKeydown({data: value, id: inputField, event: $event})\" ng-keypress=\"onKeypress({data: value, id: inputField, event: $event})\" ng-paste=\"onKeypress({data: $event.originalEvent.clipboardData.getData('text/plain'), id: inputField, event: $event})\" ng-focus=\"onFocus({event: $event})\" ng-blur=\"onBlur(({event: $event}))\" autocomplete=\"off\">");
+    "<input id=\"{{::inputField}}\" xe-field=\"search\" name=\"{{::inputField}}\" placeholder=\"{{placeHolder}}\" class=\"simple-input-field auto-width font-semibold {{xeClass}}\" ng-model=\"value\" ng-class=\"{readOnly: inputDisabled}\" ng-disabled=\"{{disabled}}\" ng-keyup=\"onChange({data: value, id: inputField, event: $event})\" ng-keydown=\"onKeydown({data: value, id: inputField, event: $event})\" ng-keypress=\"onKeypress({data: value, id: inputField, event: $event})\" ng-paste=\"onKeypress({data: $event.originalEvent.clipboardData.getData('text/plain'), id: inputField, event: $event})\" ng-focus=\"onFocus({event: $event})\" ng-blur=\"onBlur(({event: $event}))\" autocomplete=\"off\">");
 }]);
 
 angular.module("templates/statusLabel.html", []).run(["$templateCache", function ($templateCache) {
@@ -88,7 +88,7 @@ angular.module("templates/column-filter.html", []).run(["$templateCache", functi
 
 angular.module("templates/pagination.html", []).run(["$templateCache", function ($templateCache) {
   $templateCache.put("templates/pagination.html",
-    "<div class=\"tfoot pagination-container visible-lg\" role=\"navigation\" ng-cloak><div id=\"resultsFound\" class=\"results-container\" ng-bind=\"('pagination.record.found' | xei18n) + ': ' + resultsFound\"></div><div class=\"pagination-controls\"><xe-button xe-type=\"secondary\" xe-btn-class=\"first\" aria-label=\"{{::'pagination.first.label' | xei18n}}\" xe-btn-click=\"first()\" xe-disabled=\"firstPrev\" ng-cloak></xe-button><xe-button xe-type=\"secondary\" xe-btn-class=\"previous\" aria-label=\"{{::'pagination.previous.label' | xei18n}}\" xe-btn-click=\"prev()\" xe-disabled=\"firstPrev\" ng-cloak></xe-button><xe-label xe-value=\"{{::'pagination.page.label' | xei18n}}\" role=\"presentation\" aria-hidden=\"true\"></xe-label><span title=\"{{::'pagination.page.shortcut.label' | xei18n}}\" role=\"presentation\"><input id=\"pageInput\" type=\"number\" ng-model=\"onPage\" aria-valuenow=\"{{onPage}}\" aria-valuemax=\"{{numberOfPages}}\" aria-valuemin=\"{{!numberOfPages ? 0 : 1}}\" max=\"{{numberOfPages}}\" min=\"{{!numberOfPages ? 0 : 1}}\" ng-model-options=\"{ debounce: {'default': 200, 'blur': 0} }\" ng-change=\"paggeNumberChange()\" ng-blur=\"focusOut($event)\" aria-label=\"{{::'pagination.page.aria.label' | xei18n}}. {{::'pagination.page.label' | xei18n}} {{onPage}} {{::'pagination.page.of.label' | xei18n}} {{numberOfPages}}\" ng-cloak></span><xe-label xe-value=\"{{::'pagination.page.of.label' | xei18n}} {{numberOfPages}}\" role=\"presentation\"></xe-label><xe-button xe-type=\"secondary\" xe-btn-class=\"next\" aria-label=\"{{::'pagination.next.label' | xei18n}}\" xe-btn-click=\"next()\" xe-disabled=\"nextLast\" ng-cloak></xe-button><xe-button xe-type=\"secondary\" xe-btn-class=\"last\" aria-label=\"{{::'pagination.last.label' | xei18n}}\" xe-btn-click=\"last()\" xe-disabled=\"nextLast\" ng-cloak></xe-button><xe-label id=\"perPage\" xe-value=\"{{::'pagination.per.page.label' | xei18n}}\" role=\"presentation\" aria-hidden=\"true\"></xe-label><select class=\"per-page-select\" aria-labelledby=\"perPage\" ng-model=\"offset\" ng-options=\"pageOffset for pageOffset in ::pageOffsets\" ng-change=\"offsetChanged(true)\" ng-disabled=\"resultsFound === 0\"></select></div></div>");
+    "<div class=\"tfoot pagination-container visible-lg\" role=\"navigation\" ng-cloak><div id=\"resultsFound\" class=\"results-container\" ng-bind=\"('pagination.record.found' | xei18n) + ': ' + resultsFound\"></div><div class=\"pagination-controls\"><xe-button xe-type=\"secondary\" xe-btn-class=\"first\" xe-aria-label=\"{{::'pagination.first.label' | xei18n}}\" xe-btn-click=\"first()\" xe-disabled=\"firstPrev\" ng-cloak></xe-button><xe-button xe-type=\"secondary\" xe-btn-class=\"previous\" xe-aria-label=\"{{::'pagination.previous.label' | xei18n}}\" xe-btn-click=\"prev()\" xe-disabled=\"firstPrev\" ng-cloak></xe-button><xe-label xe-value=\"{{::'pagination.page.label' | xei18n}}\" role=\"presentation\" aria-hidden=\"true\"></xe-label><span title=\"{{::'pagination.page.shortcut.label' | xei18n}}\" role=\"presentation\"><input id=\"pageInput\" type=\"number\" ng-model=\"onPage\" aria-valuenow=\"{{onPage}}\" aria-valuemax=\"{{numberOfPages}}\" aria-valuemin=\"{{!numberOfPages ? 0 : 1}}\" max=\"{{numberOfPages}}\" min=\"{{!numberOfPages ? 0 : 1}}\" ng-model-options=\"{ debounce: {'default': 200, 'blur': 0} }\" ng-change=\"paggeNumberChange()\" ng-blur=\"focusOut($event)\" aria-label=\"{{::'pagination.page.aria.label' | xei18n}}. {{::'pagination.page.label' | xei18n}} {{onPage}} {{::'pagination.page.of.label' | xei18n}} {{numberOfPages}}\" ng-cloak></span><xe-label xe-value=\"{{::'pagination.page.of.label' | xei18n}} {{numberOfPages}}\" role=\"presentation\"></xe-label><xe-button xe-type=\"secondary\" xe-btn-class=\"next\" xe-aria-label=\"{{::'pagination.next.label' | xei18n}}\" xe-btn-click=\"next()\" xe-disabled=\"nextLast\" ng-cloak></xe-button><xe-button xe-type=\"secondary\" xe-btn-class=\"last\" xe-aria-label=\"{{::'pagination.last.label' | xei18n}}\" xe-btn-click=\"last()\" xe-disabled=\"nextLast\" ng-cloak></xe-button><xe-label id=\"perPage\" xe-value=\"{{::'pagination.per.page.label' | xei18n}}\" role=\"presentation\" aria-hidden=\"true\"></xe-label><select class=\"per-page-select\" aria-labelledby=\"perPage\" ng-model=\"offset\" ng-options=\"pageOffset for pageOffset in ::pageOffsets\" ng-change=\"offsetChanged(true)\" ng-disabled=\"resultsFound === 0\"></select></div></div>");
 }]);
 
 angular.module("templates/search.html", []).run(["$templateCache", function ($templateCache) {
@@ -98,7 +98,7 @@ angular.module("templates/search.html", []).run(["$templateCache", function ($te
 
 angular.module("templates/dataTable.html", []).run(["$templateCache", function ($templateCache) {
   $templateCache.put("templates/dataTable.html",
-    "<div id=\"{{tableId}}\" class=\"table-container\" ng-class=\"{'fixed-height': !!height, 'noToolbar': noCaptionAndToolbar, 'no-data': !resultsFound, 'empty': emptyTableMsg}\" browser-detect role=\"grid\" aria-labelledby=\"gridCaption\" ng-cloak><div class=\"caption\" ng-if=\"::!noCaptionBar\" xe-section=\"{{xeSection + 'CaptionBar'}}\"><table class=\"data-table\" role=\"presentaion\"><caption ng-class=\"{'search-opened': hideContainer}\"><span id=\"gridCaption\" class=\"caption-container font-semibold\" ng-if=\"::!nocaption\" ng-bind=\"::caption\" xe-field=\"caption\"></span><div class=\"toolbar\" ng-if=\"toolbar\"><xe-toolbar></xe-toolbar><xe-column-filter></xe-column-filter><span role=\"search\" title=\"{{'search.title' | xei18n}}\" ng-if=\"::!nosearch\"><xe-search value=\"searchConfig.searchString\" place-holder=\"{{'search.label' | xei18n}}\" on-change=\"fetchSpecial(query)\" on-focus=\"onSearchFocus({event: event})\" on-blur=\"onSearchBlur({event: event})\" search-config=\"searchConfig\" xe-focus loading-data=\"loadingData\"></xe-search></span></div></caption></table></div><div class=\"hr-scrollable-content\"><div class=\"thead\"><table class=\"data-table\" ng-style=\"headerPadding\" role=\"presentaion\"><thead role=\"rowgroup\"><tr role=\"row\"><th class=\"font-semibold width-animate {{::heading.name}}\" ng-repeat=\"heading in header\" ng-class=\"{'sortable': heading.options.sortable, 'ascending': sortArray[heading.name].ascending, 'decending': sortArray[heading.name].decending}\" ng-if=\"heading.options.visible === true\" ng-style=\"{'width': heading.dynamicWidth + 'px'}\" data-name=\"{{::heading.name}}\" ng-click=\"onSort({heading: heading}); sortOnHeading(heading, $index);\" role=\"columnheader\" aria-sort=\"{{sortArray[heading.name].ascending ? ('dataTable.sort.ascending.label' | xei18n) : (sortArray[heading.name].decending ? ('dataTable.sort.descending.label' | xei18n) : 'none')}}\" aria-describedby=\"{{'headingAria' + $index}}\" drag-drop=\"handleDrop\" tabindex=\"0\" xe-field=\"{{::heading.name}}\" xe-heading-injector xe-focus xe-click-grid><div class=\"data\" title=\"{{heading.label}}\"><span ng-show=\"::heading.options.titleVisible !== false\" aria-hidden=\"false\" ng-bind=\"::heading.title\"></span><label id=\"${{'headingAria' + $index}}\" class=\"sr-only\" ng-bind=\"heading.ariaLabel + (heading.options.sortable ? ('dataTable.sortable.label' | xei18n) : '')\"></label></div></th></tr></thead></table></div><div class=\"tbody\" ng-style=\"::{'height': height}\" continuous-scroll=\"nextPage()\" scroll-parent=\"{{::continuousScrollParent}}\" aria-labelledby=\"msg\" tabindex=\"{{(!resultsFound || emptyTableMsg) ? 0 : ''}}\" resize><div id=\"msg\" ng-bind=\"emptyTableMsg? emptyTableMsg : ((!resultsFound && !loadingData) ? noDataMsg : '')\"></div><table class=\"data-table\" ng-class=\"::mobileLayout ? 'mobileLayout' : 'noMobileLayout'\" role=\"presentaion\"><thead role=\"presentaion\" aria-hidden=\"true\"><tr><th class=\"font-semibold {{::heading.name}}\" ng-repeat=\"heading in header\" ng-class=\"{'sortable': heading.options.sortable, 'ascending': sortArray[heading.name].ascending, 'decending': sortArray[heading.name].decending}\" ng-if=\"heading.options.visible === true\" ng-style=\"{'width': heading.dynamicWidth + 'px'}\" data-name=\"{{::heading.name}}\" xe-field=\"{{::heading.name}}\" xe-heading-injector tabindex=\"0\"><div class=\"data\"><span ng-show=\"::heading.options.titleVisible !== false\" ng-bind=\"::heading.title\"></span></div></th></tr></thead><tbody role=\"rowgroup\"><tr ng-repeat=\"row in content\" ng-click=\"onRowClick({data:row,index:$index})\" ng-dblclick=\"onRowDoubleClick({data:row,index:$index})\" xe-row-injector tabindex=\"-1\" role=\"row\"><td class=\"width-animate\" ng-repeat=\"heading in header\" ng-class=\"{'align-right': heading.options.actionOrStatus, 'sortable': heading.options.sortable}\" ng-if=\"heading.options.visible === true\" data-name=\"{{::heading.name}}\" data-title=\"{{::(heading.title && heading.options.titleVisible !== false) ? heading.title + ':' : ''}}\" attain-mobile-layout=\"{{mobileLayout[heading.name]}}\" xe-field=\"{{::heading.name}}\" xe-cell-injector xe-focus xe-click-grid role=\"gridcell\" ng-cloak><div ng-if=\"!isExtendedField(row, heading.name)\"><span ng-bind=\"getObjectValue(row, heading.name)\" tabindex=\"0\"></span></div><div ng-if=\"isExtendedField(row, heading.name)\"><div ng-if=\"isEditable\"><div ng-if=\"dataType === 'DATE'\"><input date-picker=\"\" value=\"{{::extensionValue}}\" class=\"datePicker\" aria-labelledby=\"\"></div><div ng-if=\"dataType === 'VARCHAR2'\"><xe-simple-text-box value=\"::extensionValue\"></xe-simple-text-box></div><div ng-if=\"dataType === 'NUMBER'\"><decimal-input ng-model=\"::extensionValue\" decimals=\"0\"></decimal-input></div></div><div ng-if=\"!isEditable\"><span ng-bind=\"::extensionValue\"></span></div></div></td></tr></tbody></table></div></div><div class=\"tfoot\" ng-transclude></div><xe-pagination model=\"content\" results-found=\"resultsFound\" ng-show=\"showPagination\" xe-focus search-string=\"searchConfig.searchString\"></xe-pagination><div ng-show=\"loadingData\" class=\"load-indicator\"><div class=\"spinner\"><div class=\"bounce1\"></div><div class=\"bounce2\"></div><div class=\"bounce3\"></div></div></div></div>");
+    "<div id=\"{{tableId}}\" class=\"table-container\" ng-class=\"{'fixed-height': !!height, 'noToolbar': noCaptionAndToolbar, 'no-data': !resultsFound, 'empty': emptyTableMsg}\" browser-detect role=\"grid\" aria-labelledby=\"gridCaption\" ng-cloak><div class=\"caption\" ng-if=\"::!noCaptionBar\" xe-section=\"{{xeSection + 'CaptionBar'}}\"><table class=\"data-table\" role=\"presentaion\"><caption ng-class=\"{'search-opened': hideContainer}\"><span id=\"gridCaption\" class=\"caption-container font-semibold\" ng-if=\"::!nocaption\" ng-bind=\"::caption\" xe-field=\"caption\"></span><div class=\"toolbar\" ng-if=\"toolbar\"><xe-toolbar></xe-toolbar><xe-column-filter></xe-column-filter><span role=\"search\" title=\"{{'search.title' | xei18n}}\" ng-if=\"::!nosearch\"><xe-search value=\"searchConfig.searchString\" place-holder=\"{{'search.label' | xei18n}}\" on-change=\"fetchSpecial(query)\" on-focus=\"onSearchFocus({event: event})\" on-blur=\"onSearchBlur({event: event})\" search-config=\"searchConfig\" xe-focus loading-data=\"loadingData\"></xe-search></span></div></caption></table></div><div class=\"hr-scrollable-content\"><div class=\"thead\"><table class=\"data-table\" ng-style=\"headerPadding\" role=\"presentaion\"><thead role=\"rowgroup\"><tr role=\"row\"><th class=\"font-semibold width-animate {{::heading.name}}\" ng-repeat=\"heading in header\" ng-class=\"{'sortable': heading.options.sortable, 'ascending': sortArray[heading.name].ascending, 'decending': sortArray[heading.name].decending}\" ng-if=\"heading.options.visible === true\" ng-style=\"{'width': heading.dynamicWidth + 'px'}\" data-name=\"{{::heading.name}}\" ng-click=\"onSort({heading: heading}); sortOnHeading(heading, $index);\" role=\"columnheader\" aria-sort=\"{{sortArray[heading.name].ascending ? ('dataTable.sort.ascending.label' | xei18n) : (sortArray[heading.name].decending ? ('dataTable.sort.descending.label' | xei18n) : 'none')}}\" aria-describedby=\"{{'headingAria' + $index}}\" drag-drop=\"handleDrop\" tabindex=\"0\" xe-field=\"{{::heading.name}}\" xe-heading-injector xe-focus xe-click-grid><div class=\"data\" title=\"{{heading.label}}\"><span ng-show=\"::heading.options.titleVisible !== false\" aria-hidden=\"false\" ng-bind=\"::heading.title\"></span><label id=\"${{'headingAria' + $index}}\" class=\"sr-only\" ng-bind=\"heading.ariaLabel + (heading.options.sortable ? ('dataTable.sortable.label' | xei18n) : '')\"></label></div></th></tr></thead></table></div><div class=\"tbody\" ng-style=\"::{'height': height}\" continuous-scroll=\"nextPage()\" scroll-parent=\"{{::continuousScrollParent}}\" aria-labelledby=\"msg\" tabindex=\"{{(!resultsFound || emptyTableMsg) ? 0 : ''}}\" resize><div id=\"msg\" ng-bind=\"emptyTableMsg? emptyTableMsg : ((!resultsFound && !loadingData) ? noDataMsg : '')\"></div><table class=\"data-table\" ng-class=\"::mobileLayout ? 'mobileLayout' : 'noMobileLayout'\" role=\"presentaion\"><thead role=\"presentaion\" aria-hidden=\"true\"><tr><th class=\"font-semibold {{::heading.name}}\" ng-repeat=\"heading in header\" ng-class=\"{'sortable': heading.options.sortable, 'ascending': sortArray[heading.name].ascending, 'decending': sortArray[heading.name].decending}\" ng-if=\"heading.options.visible === true\" ng-style=\"{'width': heading.dynamicWidth + 'px'}\" data-name=\"{{::heading.name}}\" xe-field=\"{{::heading.name}}\" xe-heading-injector tabindex=\"0\"><div class=\"data\"><span ng-show=\"::heading.options.titleVisible !== false\" ng-bind=\"::heading.title\"></span></div></th></tr></thead><tbody role=\"rowgroup\"><tr ng-repeat=\"row in content\" ng-click=\"onRowClick({data:row,index:$index})\" ng-dblclick=\"onRowDoubleClick({data:row,index:$index})\" xe-row-injector tabindex=\"-1\" role=\"row\"><td class=\"width-animate\" ng-repeat=\"heading in header\" ng-class=\"{'align-right': heading.options.actionOrStatus, 'sortable': heading.options.sortable}\" ng-if=\"heading.options.visible === true\" data-name=\"{{::heading.name}}\" data-title=\"{{::(heading.title && heading.options.titleVisible !== false) ? heading.title + ':' : ''}}\" attain-mobile-layout=\"{{mobileLayout[heading.name]}}\" xe-field=\"{{::heading.name}}\" xe-cell-injector xe-focus xe-click-grid role=\"gridcell\" ng-cloak><div ng-if=\"!isExtendedField(row, heading.name)\"><span ng-bind=\"getObjectValue(row, heading.name)\" tabindex=\"0\"></span></div><div ng-if=\"isExtendedField(row, heading.name)\"><div ng-if=\"isEditable\"><div ng-if=\"dataType === 'DATE'\"><input date-picker=\"\" value=\"{{::extensionValue}}\" class=\"datePicker\" aria-labelledby=\"\"></div><div ng-if=\"dataType === 'VARCHAR2'\"><xe-simple-text-box value=\"::extensionValue\"></xe-simple-text-box></div><div ng-if=\"dataType === 'NUMBER'\"><decimal-input ng-model=\"::extensionValue\" decimals=\"0\"></decimal-input></div></div><div ng-if=\"!isEditable\"><span ng-bind=\"::extensionValue\"></span></div></div></td></tr></tbody></table></div></div><div class=\"tfoot\" ng-transclude></div><xe-pagination model=\"content\" results-found=\"resultsFound\" ng-show=\"showPagination\" xe-grid-pagination-control search-string=\"searchConfig.searchString\"></xe-pagination><div ng-show=\"loadingData\" class=\"load-indicator\"><div class=\"spinner\"><div class=\"bounce1\"></div><div class=\"bounce2\"></div><div class=\"bounce3\"></div></div></div></div>");
 }]);
 
 angular.module("templates/dialog.html", []).run(["$templateCache", function ($templateCache) {
@@ -150,7 +150,8 @@ angular.module("templates/tabPanel.html", []).run(["$templateCache", function ($
                 xeDisabled : '=',
                 xeLabel : '@',
                 xeBtnClick : '&',
-                xeBtnClass : "@"
+                xeBtnClass : "@",
+                xeAriaLabel : "@"
             },
             templateUrl: 'templates/button.html'
         };
@@ -3455,20 +3456,7 @@ angular.module("external-resouces", ['pascalprecht.translate', 'ngSanitize']);
             }
 
             function applyAccessibilityForTable(table) {
-                // Setting tabindex of "Show/Hide Column" dropdown items
-                table.find('.column-setting-menu').find('.xe-checkbox')
-                        .each(function(index, element) {
-                            setTabindex(element, -1);
-                        });
-
-                // Setting tabindex of all actionable elements inside table header and footer 
-                // except pageInput of pagination controls, so that it can be traversed with normal tab order
-                table.find('thead, .tfoot').find('a, :input').not('#pageInput')
-                        .each(function(index, element) {
-                            setTabindex(element, -1);
-                        });
-
-                /* Tabindex of table rows and all actionable elements present inside table body are set through 
+                /* Tabindex of table rows and all actionable elements present inside table body are set through
                     tab-index directive in dataTable.html as they can be generated dynamically. */
 
                 // Shortcut key bindings
@@ -3480,8 +3468,6 @@ angular.module("external-resouces", ['pascalprecht.translate', 'ngSanitize']);
                 }
 
                 table.find('input.search:first').attr('shortcut-key', searchShortcutKey).attr('global-key', true);
-                /*table.find('.thead th:not(":hidden"):first').attr('shortcut-key', 'HOME');
-                table.find('.tfoot input#pageInput').attr('shortcut-key', 'END');*/
             }
 
             function applyKeyboardNavForTable(table, scrollableParent) {
@@ -4538,6 +4524,8 @@ angular.module('pagination', [])
 
     'use strict';
     var editableMode = false;
+    var paginationPreviousGridCell;
+    var keys = {'left': 37, 'right': 39, 'enter': 13, 'escape': 27, 'tab': 9, 'downArrow': 40, 'upArrow': 38, 'PAGE_UP':33 , 'PAGE_DOWN':34 , 'HOME':36, 'END':35};
     angular.module('dataTableModule', ['utils'])
         .constant('mobileMaxWidth', 768)
         .directive('xeTableGrid', ['$timeout', 'accessibility', '$window', 'mobileMaxWidth', function ($timeout, accessibility, $window, mobileMaxWidth) {
@@ -5591,49 +5579,20 @@ angular.module('pagination', [])
          UP-ARROW
          DOWN-ARROW
 
-         previousElement is the variable to store the previous element where the focus was and when user clicks shift+tab then it should come back to previousElement.
+         paginationPreviousGridCell is the variable to store the previous element where the focus was and when user clicks shift+tab then it should come back to paginationPreviousGridCell.
          */
 
         .directive('xeFocus', function () {
             var COLUMNHEADER = 'columnheader';
             var FOCUSRING = 'focus-ring';
             var ACTIVEROW = 'active-row';
-            var previousElement;
-            var actionableMode;
-            var keys = {'left': 37, 'right': 39, 'enter': 13, 'escape': 27, 'tab': 9, 'downArrow': 40, 'upArrow': 38, 'PAGE_UP':33 , 'PAGE_DOWN':34 , 'HOME':36, 'END':35};
             return {
                 restrict: 'A',
                 link: function ($scope, elem, attrs) {
                     elem.bind('keydown', function (e) {
                         var code = e.keyCode || e.which;
                         if (!editableMode) {
-                            if (e.target.id !== 'undefined' && e.target.id === 'pageInput') {
-                                switch (code) {
-                                    case keys.tab:
-                                        if (e.shiftKey) {
-                                            if ($(previousElement).is(':visible')) {
-                                                $(previousElement).focus();
-                                                $(previousElement).addClass(FOCUSRING);
-                                            } else {
-                                                var gridFirstRow = $(elem).closest('.table-container').find('.tbody tbody tr:first');
-                                                var gridFirstRowFirstCell = $(elem).closest('.table-container').find('.tbody tbody tr:first td:first');
-                                                $(gridFirstRow).addClass(ACTIVEROW);
-                                                $(gridFirstRowFirstCell).focus();
-                                                $(gridFirstRowFirstCell).addClass(FOCUSRING);
-                                            }
-                                        }
-                                        e.preventDefault();
-                                        return false;
-                                        break;
-                                    case keys.downArrow:
-                                        return true;
-                                        break;
-                                    case keys.upArrow:
-                                        return true;
-                                        break;
-                                }
-                                return true;
-                            } else if (e.target.id !== 'undefined' && e.target.id === 'dataTableSearch') {
+                          if (e.target.id !== 'undefined' && e.target.id === 'dataTableSearch') {
                                 switch (code) {
                                     case keys.tab:
                                         if (e.shiftKey) {
@@ -5718,17 +5677,16 @@ angular.module('pagination', [])
                                             if ($(e.target).is('th') || $(e.target).is('td') ) {
                                                 clearFocus(e);
                                                 $('tr.active-row').removeClass(ACTIVEROW);
-                                               /* var previousTabable = $(elem).parent().parent().parent().parent().parent().prev();*/
                                                 angular.element("#dataTableSearch").select().focus();
-                                                /*var test = $(previousTabable).find(':input');*/
-                                                //$(previousElement).focus();
-                                                /*$(test[test.length - 1]).focus();*/
                                             }
                                         }
                                         else {
                                             clearFocus(e);
-                                            angular.element('#pageInput').select().focus();
-                                            previousElement = e.currentTarget;
+                                            $('tr.active-row').removeClass(ACTIVEROW);
+                                            var paginationControlDiv =$(elem).closest('.table-container').children().find('div.pagination-controls');
+                                            var moveFocusToFirstElement = $(paginationControlDiv).find('input, button , select').not(':disabled');
+                                            $(moveFocusToFirstElement[0]).focus();
+                                            paginationPreviousGridCell = e.currentTarget;
                                         }
                                         e.preventDefault();
                                         return false;
@@ -5985,6 +5943,53 @@ angular.module('pagination', [])
 
             }
         })
+        .directive('xeGridPaginationControl',function(){
+            return {
+                restrict: 'A',
+                link: function ($scope, elem, attrs) {
+                    //Binding Click event for removing focus-ring class.
+                    elem.bind('keydown', function (e) {
+                        clearFocus(e);
+                        var code = e.keyCode || e.which;
+                        var paginationControlDiv =$(elem).closest('.table-container').children().find('div.pagination-controls');
+                        var moveFocusToFirstElement = $(paginationControlDiv).find('input, button , select').not(':disabled');
+                        var inputElementIndex = $.inArray(e.target, moveFocusToFirstElement);
+                        if (inputElementIndex === 0) {
+                            if (e.shiftKey) {
+                                switch (code) {
+                                    case keys.tab:
+                                        if ($(paginationPreviousGridCell).is(':visible') && $(elem).parent('.table-container').find(paginationPreviousGridCell)) {
+                                            $(paginationPreviousGridCell).focus();
+                                            $(paginationPreviousGridCell).parent().addClass('active-row');
+                                            $(paginationPreviousGridCell).addClass('focus-ring');
+                                        } else {
+                                            var associatedTable = $(elem).parent('.table-container');
+                                            var gridFirstRow = $(associatedTable).find('tbody tr:first');
+                                            var gridFirstRowFirstCell = $(associatedTable).find('tbody tr:first td:first');
+                                            $(gridFirstRow).addClass('active-row');
+                                            $(gridFirstRowFirstCell).focus();
+                                            $(gridFirstRowFirstCell).addClass('focus-ring');
+                                        }
+                                        e.preventDefault();
+                                        return false;
+
+                                        break;
+                                    case keys.downArrow:
+                                        return true;
+                                        break;
+                                    case keys.upArrow:
+                                        return true;
+                                        break;
+                                }
+                            }
+                            else {
+                                return true;
+                            }
+                        }
+                    });
+                }
+            }
+        })
 
 
 }());
@@ -5998,6 +6003,7 @@ clearFocus = function (e) {
     }
     return true;
 };
+
 
 (function () {
     'use strict';

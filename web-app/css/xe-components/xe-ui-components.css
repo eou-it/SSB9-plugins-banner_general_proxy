@@ -892,6 +892,8 @@ xe-simple-text-box {
     box-shadow: inset 0px -2px 4px #E2EAEF;
     color: #869FB1;
     opacity: 100%; }
+  xe-simple-text-box .auto-width {
+    width: 100%; }
   @media only screen and (max-width: 768px) {
     xe-simple-text-box .input-field {
       width: 80%; } }
