@@ -7270,6 +7270,7 @@ clearFocus = function (e) {
                         selectedTab.active = true;
                         self.currentActive = selectedTab;
                         self.loadDynamicContent(selectedTab.loadDataOnClick, selectedTab);
+                        console.dir(selectedTab)
                         if (selectedTab.state) {
                             $state.go(selectedTab.state);
                         }
@@ -7299,7 +7300,7 @@ clearFocus = function (e) {
                         script.src = activeTab.jsLazyLoad;
                         document.head.appendChild(script);
                     };
-                    $transclude(scope, function (clone, scope) {
+                    $transclude(function (clone, scope) {
                         var elementTo;
                         if (clone.text().trim().length) {
                             scope.hasTranscludedContent = true;
@@ -7307,10 +7308,19 @@ clearFocus = function (e) {
                             elementTo.append(clone);
                         }
                     });
+                    // NOTE: This "isDefaultActivationDisabled" flag was added locally by the Banner General XE SSB
+                    // team to support the Personal Information 9.1 application.  The default behavior of this
+                    // xeTabPanel directive is to automatically select the first tab if no tab is explicitly set to
+                    // active. The isDefaultActivationDisabled flag allows this behavior to be turned off. This is
+                    // useful when an <xe-tab-nav> directive contains a nested ng-repeat, in which case the first tab
+                    // is *always* selected, even if not appropriate.
+                    // The flag is employed as a "boolean attribute" on the xeTabPanel directive's HTML element, e.g.
+                    // <xe-tab-panel ... disable-default-tab-activation>
+                    var isDefaultActivationDisabled = 'disableDefaultTabActivation' in attr;
                     if (attr.hasOwnProperty('active')) {
                         scope.active = true;
                         xeTabNavCtrl.currentActive = scope;
-                    } else if (ele.is(':last-child') && !xeTabNavCtrl.currentActive) {
+                    } else if (ele.is(':last-child') && !xeTabNavCtrl.currentActive && !isDefaultActivationDisabled) {
                         xeTabNavCtrl.tabs[0].active = true;
                         xeTabNavCtrl.currentActive = xeTabNavCtrl.tabs[0];
                         xeTabNavCtrl.currentActive.element.attr('active', '');
