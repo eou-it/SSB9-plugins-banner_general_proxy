@@ -39,7 +39,7 @@ modules = {
     }
 
     'generalSsbAppLTR' {
-        dependsOn "bannerWebLTR, generalSsbApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsRTL"
+        dependsOn "bannerWebLTR, generalSsbApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsLTR"
         // CSS
         resource url: [file: 'css/generalSsbMain.css'], attrs: [media: 'screen, projection']
         resource url: [file: 'css/generalSsbResponsive.css'], attrs: [media: 'screen, projection']
