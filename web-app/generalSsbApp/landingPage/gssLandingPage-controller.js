@@ -63,7 +63,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                         {
                             title: 'banner.generalssb.landingpage.actionsitem.title',
                             desc: 'banner.generalssb.landingpage.actionsitem.description',
-                            url: $scope.applicationContextRoot +'/ssb/aip/list',
+                            url: $scope.applicationContextRoot +'/ssb/aip/#/list',
                             icon: '../images/action_items_icon.svg'
                         }
                     );
