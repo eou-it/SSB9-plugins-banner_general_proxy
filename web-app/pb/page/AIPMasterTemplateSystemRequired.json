@@ -55,7 +55,7 @@
                      {
                         "name": "ActionItemNameHeader",
                         "type": "literal",
-                        "value": "<h4>$ActionItemContentDetail.ACTION_ITEM_NAME</h4>"
+                        "value": "<h4>$ActionItemContentDetail.ACTION_ITEM_TITLE</h4>"
                      },
                      {
                         "asHtml": true,

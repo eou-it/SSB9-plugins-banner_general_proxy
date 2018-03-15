@@ -12,7 +12,7 @@
    "codePut": "update GCRAACT \r\nset GCRAACT_GCVASTS_ID = :STATUS_ID,\r\nGCRAACT_USER_RESPONSE_DATE = sysdate,\r\nGCRAACT_ACTIVITY_DATE = sysdate\r\nwhere gcraact_pidm = :parm_user_pidm\r\nand gcraact_gcbactm_id = :id",
    "fileTimestamp": "2017-10-09T19:33:43Z",
    "codeDelete": null,
-   "codeGet": "SELECT ACTION_ITEM_ID \"id\", ACTION_ITEM_NAME, ACTION_ITEM_CONTENT, \r\n(select count(status_id) from gvq_gcraisr where status_rule_action_item_id = :actionitemid and status_active_ind = 'Y') status_count\r\nFROM GVQ_GCBACTM WHERE ACTION_ITEM_PAGE_NAME=:pageid\r\nAND ACTION_ITEM_ID=:actionitemid",
+   "codeGet": "SELECT ACTION_ITEM_ID \"id\", ACTION_ITEM_TITLE, ACTION_ITEM_CONTENT, \r\n(select count(status_id) from gvq_gcraisr where status_rule_action_item_id = :actionitemid and status_active_ind = 'Y') status_count\r\nFROM GVQ_GCBACTM WHERE ACTION_ITEM_PAGE_NAME=:pageid\r\nAND ACTION_ITEM_ID=:actionitemid",
    "typeOfCode": "S",
    "serviceName": "ActionItemContent"
 }
