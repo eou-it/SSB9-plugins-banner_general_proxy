@@ -7270,7 +7270,6 @@ clearFocus = function (e) {
                         selectedTab.active = true;
                         self.currentActive = selectedTab;
                         self.loadDynamicContent(selectedTab.loadDataOnClick, selectedTab);
-                        console.dir(selectedTab)
                         if (selectedTab.state) {
                             $state.go(selectedTab.state);
                         }
@@ -7300,10 +7299,14 @@ clearFocus = function (e) {
                         script.src = activeTab.jsLazyLoad;
                         document.head.appendChild(script);
                     };
+                    // Use closure to set tab scope property so transcluded content can use its default scope
+                    var setHasTranscludedContentTrue = function(){
+                        scope.hasTranscludedContent = true;
+                    };
                     $transclude(function (clone, scope) {
                         var elementTo;
                         if (clone.text().trim().length) {
-                            scope.hasTranscludedContent = true;
+                            setHasTranscludedContentTrue();
                             elementTo = angular.element(ele[0].querySelector('[content]'));
                             elementTo.append(clone);
                         }
