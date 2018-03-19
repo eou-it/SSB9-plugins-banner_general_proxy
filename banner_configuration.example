@@ -45,7 +45,7 @@ onLineHelp.url = "http://HOST:PORT/banner9OH"
  *              Transaction timeout Configuration (in seconds)                  *
  *                                                                              *
  ***************************************************************************** **/
-banner.transactionTimeout = 30
+banner.transactionTimeout = 300
 
 /** ****************************************************************************
  *                                                                              *
