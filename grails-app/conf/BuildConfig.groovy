@@ -44,6 +44,7 @@ grails.project.dependency.resolution = {
         runtime ":rendering:1.0.0"
         compile ':csv:0.3.1'
         compile ':feeds:1.5'
+        compile ":functional-test:2.0.0"
     }
 
     dependencies {
