@@ -230,6 +230,9 @@ banner {
         if (authenticationProvider != 'default') {
             grails.plugin.springsecurity.failureHandler.defaultFailureUrl = '/login/error'
         }
+        if(authenticationProvider == 'saml') {
+            grails.plugin.springsecurity.auth.loginFormUrl = '/saml/login'
+        }
     }
 }
 
@@ -380,12 +383,12 @@ pageBuilder {
  *                 Configuration for AIP application                     *
  *                                                                              *
  ***************************************************************************** **/
-BCMLOCATION='<HOST_NAME>:<PORT>/CommunicationManagement' // The URL of BCM application. Please note, Banner Communication Manangement (BCM) is dependent application for General SS 9.2.
+BCMLOCATION='http://<HOST_NAME>:<PORT>/CommunicationManagement' // The URL of BCM application. Please note, Banner Communication Manangement (BCM) is dependent application for General SS 9.2.
                                                          //Example localhost:8080/CommunicationManagement
 BANNER_AIP_BLOCK_PROCESS_PERSONA= ['EVERYONE', 'STUDENT', 'REGISTRAR', 'FACULTYINSTRUCTOR', 'FACULTYADVISOR', 'FACULTYBOTH'] // Add/update if any change in persona
 BANNER_AIP_EXCLUDE_LIST='aipActionItemPosting|aipAdmin|aip|aipPageBuilder|BCM|about|cssManager|cssRender|error|excelExportBase|dateConverter|keepAlive|login|logout|resetPassword|securityQa|selfServiceMenu|survey|test|theme|themeEditor|userAgreement|userPreference'// No change in this.
 // in case of new controller which needs to be ignored, can be added here.
-GENERALLOCATION='<HOST_NAME>:<PORT>/BannerGeneralSsb' // Example localhost:8080/BannerGeneralSsb
+GENERALLOCATION='http://<HOST_NAME>:<PORT>/BannerGeneralSsb' // Example localhost:8080/BannerGeneralSsb
 ssconfig.app.seeddata.keys = [['BCMLOCATION'], ['BANNER_AIP_BLOCK_PROCESS_PERSONA']]
 
 /*******************************************************************************
