@@ -1,6 +1,6 @@
 /*
  * component-library
- * 
+ *
 
  * Version: 0.0.1 - 2018-02-21
  * License: ISC
@@ -3013,285 +3013,10 @@ angular.module("external-resouces", ['pascalprecht.translate', 'ngSanitize']);
  */
 (function () {
     'use strict';
-    var translations = {
-        en: {
-            "pieChart.title": "Pie Chart",
-            "pieChart.subtitle": "Demo Pie Slices",
-            "pieChart.svg.title": "Pie Chart Title",
-            "pieChart.svg.desc": "Pie Chart Description",
-            "pieChart.pie.ariaLabel": "Pie Chart",
-            "pieChart.pie.group.main.ariaLabel": "Enter to Main Group",
-            "pieChart.pie.group.other.ariaLabel": "Enter to Other Group",
-            "pieChart.table.label": "label",
-            "pieChart.table.value": "value",
-            "pieChart.table.percentage": "percentage",
-            "pieChart.table.ariaLabel": "A tabular view of the data in the chart.",
-            "pieChart.main.label.other": "Other",
-            "search.label": "Search",
-            "dataTable.columnFilter.label": "Show/Hide Column",
-            "dataTable.columnFilter.selectAll": "Select All",
-            "dataTable.sortable.label": "Sortable",
-            "dataTable.sort.descending.label": "descending",
-            "dataTable.sort.ascending.label": "ascending",
-            "dataTable.no.record.found": "No records found",
-            "pagination.record.found": "Results found",
-            "pagination.first.label": "First page",
-            "pagination.previous.label": "Previous page",
-            "pagination.last.label": "Last page",
-            "pagination.next.label": "Next page",
-            "pagination.per.page.label": "Per Page",
-            "pagination.page.label": "Page",
-            "pagination.page.shortcut.label": "Go To Page (End)",
-            "pagination.page.aria.label": "Go To Page. Short cut is End",
-            "pagination.page.of.label": "of",
-            "search.title": "Search (Alt+Y)",
-            "search.aria.label": "Search text field. Short cut is Alt+Y.",
-            "angular-ui.select.items.group1.label": "From A - M",
-            "angular-ui.select.items.group2.label": "From N - Z",
-            "angular-ui.select.items.without.section.heading": "Items not grouped under section heading",
-            "angular-ui.select.items.with.section.heading": "Items grouped under section",
-            "angular-ui.select.items.with.long.text": "Items grouped here has long text",
-            "angular-ui.select.items.remote.data.placeholder": "Enter a term to search",
-            "angular-ui.select.remote.data":  "Minimum input search, Infinite scroll, Placeholder",
-            "angular-ui-select": "Single Select",
-            "angular-ui-select-search-disabled": "Single Select with search disabled",
-            "angular-ui-select-multiple": "Multiple Select",
-            "uiselect.minimum.input.text": "Please enter {{arg1}} or more characters",
-            "uiselect.no.results.found.text": "No Result Found!",
-            "uiselect.search.results": "Searching ... {{arg1}} results are available, use up and down arrow keys to navigate.",
-            "uiselect.option.selected": "{{arg1}}",
-            "about.component.tab.general" : "General",
-            "about.component.plugin.information" : "Plugin information",
-            "about.component.plugin.other.information" : "Other Plugin information",
-            "popup.component.information" : "Other Plugin information",
-            "popup.preference.locale.heading":"Language Setting ",
-            "userpreference.popup.language.close":"Close",
-            "textbox.validation.required": "This field is required",
-            "textbox.validation.maxlength": "Maximum Character length should be",
-            "xe.text.chars.left": "Remaining Characters",
-            "xe.text.max.chars": "Characters Max",
-            "xe.text.limit.over": "Character Limit of {{arg1}} has been reached",
-            "xe.text.chars.remaining.aria": "Remaining Characters : {{arg1}}",
-            "angular-textarea-label": "Comments Label",
-            "angular-textarea-placeholder-text": "Enter your comments here",
-            "angular-textarea-placeholder-text-readonly": "Read only comments",
-            "description-textarea-label": "Description",
-            "description-textarea-placeholder": "Enter your description here",
-            "textarea-readonly-comments": "This content is secured.",
-            "textInput": "Text Input",
-            "text": "Text",
-            "rtlText": "Switch to LTR",
-            "ltrText": "Switch to RTL",
-            "uiselect.search.disabled.results": "Use up and down arrow keys to navigate."
-        },
-        ar: {
-            "search.label": "\u0627\u0644\u0628\u062D\u062B",
-            "dataTable.columnFilter.label": "\u0625\u0638\u0647\u0627\u0631/\u0625\u062E\u0641\u0627\u0621 \u0627\u0644\u0639\u0645\u0648\u062F",
-            "dataTable.columnFilter.selectAll": "\u0627\u062E\u062A\u064A\u0627\u0631 \u0627\u0644\u0643\u0644",
-            "dataTable.sortable.label": "\u0642\u0627\u0628\u0644 \u0644\u0644\u062A\u0631\u062A\u064A\u0628",
-            "dataTable.sort.descending.label": "\u062A\u0646\u0627\u0632\u0644\u064A\u0627",
-            "dataTable.sort.ascending.label": "\u062A\u0635\u0627\u0639\u062F\u064A\u0627",
-            "dataTable.no.record.found": "\u0644\u0645 \u064A\u062A\u0645 \u0627\u0644\u0639\u062B\u0648\u0631 \u0639\u0644\u0649 \u0633\u062C\u0644\u0627\u062A",
-            "pagination.record.found": "\u0627\u0644\u0646\u062A\u0627\u0626\u062C \u0627\u0644\u062A\u064A \u062A\u0645 \u0627\u0644\u0639\u062B\u0648\u0631 \u0639\u0644\u064A\u0647\u0627",
-            "pagination.first.label": "\u0627\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u0623\u0648\u0644\u0649",
-            "pagination.previous.label": "\u0627\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u0633\u0627\u0628\u0642\u0629",
-            "pagination.last.label": "\u0627\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u0623\u062E\u064A\u0631\u0629",
-            "pagination.next.label": "\u0627\u0644\u0635\u0641\u062D\u0629 \u0627\u0644\u062A\u0627\u0644\u064A\u0629",
-            "pagination.per.page.label": "\u0641\u064A \u0643\u0644 \u0635\u0641\u062D\u0629",
-            "pagination.page.label": "\u0627\u0644\u0635\u0641\u062D\u0629",
-            "pagination.page.shortcut.label": "\u0627\u0644\u0630\u0647\u0627\u0628 \u0644\u0644\u0635\u0641\u062D\u0629 (End)",
-            "pagination.page.aria.label": "\u0627\u0644\u0630\u0647\u0627\u0628 \u0625\u0644\u0649 \u0627\u0644\u0635\u0641\u062D\u0629. \u0627\u0644\u0627\u062E\u062A\u0635\u0627\u0631 \u0647\u0648 End",
-            "pagination.page.of.label": "\u0645\u0646",
-            "search.title": "\u0627\u0644\u0628\u062D\u062B (Alt+Y)",
-            "search.aria.label": "\u0627\u0644\u0628\u062D\u062B \u0641\u064A \u062D\u0642\u0644 \u0627\u0644\u0646\u0635. \u0645\u0641\u062A\u0627\u062D \u0627\u0644\u0627\u062E\u062A\u0635\u0627\u0631 Alt+Y."
-        },
-        en_AU: {
-            "search.label": "Search",
-            "dataTable.columnFilter.label": "Show/Hide Column",
-            "dataTable.columnFilter.selectAll": "Select All",
-            "dataTable.sortable.label": "Sortable",
-            "dataTable.sort.descending.label": "descending",
-            "dataTable.sort.ascending.label": "ascending",
-            "dataTable.no.record.found": "No records found",
-            "pagination.record.found": "Results found",
-            "pagination.first.label": "First page",
-            "pagination.previous.label": "Previous page",
-            "pagination.last.label": "Last page",
-            "pagination.next.label": "Next page",
-            "pagination.per.page.label": "Per Page",
-            "pagination.page.label": "Page",
-            "pagination.page.shortcut.label": "Go To Page (End)",
-            "pagination.page.aria.label": "Go To Page. Short cut is End",
-            "pagination.page.of.label": "of",
-            "search.title": "Search (Alt+Y)",
-            "search.aria.label": "Search text field. Short cut is Alt+Y."
-        },
-        en_GB: {
-            "search.label": "Search",
-            "dataTable.columnFilter.label": "Show/Hide Column",
-            "dataTable.columnFilter.selectAll": "Select All",
-            "dataTable.sortable.label": "Sortable",
-            "dataTable.sort.descending.label": "descending",
-            "dataTable.sort.ascending.label": "ascending",
-            "dataTable.no.record.found": "No records found",
-            "pagination.record.found": "Results found",
-            "pagination.first.label": "First page",
-            "pagination.previous.label": "Previous page",
-            "pagination.last.label": "Last page",
-            "pagination.next.label": "Next page",
-            "pagination.per.page.label": "Per Page",
-            "pagination.page.label": "Page",
-            "pagination.page.shortcut.label": "Go To Page (End)",
-            "pagination.page.aria.label": "Go To Page. Short cut is End",
-            "pagination.page.of.label": "of",
-            "search.title": "Search (Alt+Y)",
-            "search.aria.label": "Search text field. Short cut is Alt+Y."
-        },
-        en_IE: {
-            "search.label": "Search",
-            "dataTable.columnFilter.label": "Show/Hide Column",
-            "dataTable.columnFilter.selectAll": "Select All",
-            "dataTable.sortable.label": "Sortable",
-            "dataTable.sort.descending.label": "descending",
-            "dataTable.sort.ascending.label": "ascending",
-            "dataTable.no.record.found": "No records found",
-            "pagination.record.found": "Results found",
-            "pagination.first.label": "First page",
-            "pagination.previous.label": "Previous page",
-            "pagination.last.label": "Last page",
-            "pagination.next.label": "Next page",
-            "pagination.per.page.label": "Per Page",
-            "pagination.page.label": "Page",
-            "pagination.page.shortcut.label": "Go To Page (End)",
-            "pagination.page.aria.label": "Go To Page. Short cut is End",
-            "pagination.page.of.label": "of",
-            "search.title": "Search (Alt+Y)",
-            "search.aria.label": "Search text field. Short cut is Alt+Y."
-        },
-        en_IN: {
-            "search.label": "Search",
-            "dataTable.columnFilter.label": "Show/Hide Column",
-            "dataTable.columnFilter.selectAll": "Select All",
-            "dataTable.sortable.label": "Sortable",
-            "dataTable.sort.descending.label": "descending",
-            "dataTable.sort.ascending.label": "ascending",
-            "dataTable.no.record.found": "No records found",
-            "pagination.record.found": "Results found",
-            "pagination.first.label": "First page",
-            "pagination.previous.label": "Previous page",
-            "pagination.last.label": "Last page",
-            "pagination.next.label": "Next page",
-            "pagination.per.page.label": "Per Page",
-            "pagination.page.label": "Page",
-            "pagination.page.shortcut.label": "Go To Page (End)",
-            "pagination.page.aria.label": "Go To Page. Short cut is End",
-            "pagination.page.of.label": "of",
-            "search.title": "Search (Alt+Y)",
-            "search.aria.label": "Search text field. Short cut is Alt+Y."
-        },
-        es: {
-            "search.label": "Buscar",
-            "dataTable.columnFilter.label": "Mostrar/Ocultar columna",
-            "dataTable.columnFilter.selectAll": "Seleccionar todo",
-            "dataTable.sortable.label": "Que pueda ordenarse",
-            "dataTable.sort.descending.label": "descendente",
-            "dataTable.sort.ascending.label": "ascendente",
-            "dataTable.no.record.found": "No se encontraron registros.",
-            "pagination.record.found": "Resultados encontrados",
-            "pagination.first.label": "Primera p\u00E1gina",
-            "pagination.previous.label": "P\u00E1gina anterior",
-            "pagination.last.label": "\u00DAltima p\u00E1gina",
-            "pagination.next.label": "P\u00E1gina siguiente",
-            "pagination.per.page.label": "Por p\u00E1gina",
-            "pagination.page.label": "P\u00E1gina",
-            "pagination.page.shortcut.label": "Ir a la p\u00E1gina (Fin)",
-            "pagination.page.aria.label": "Ir a p\u00E1gina. Atajo es Fin",
-            "pagination.page.of.label": "de",
-            "search.title": "Buscar (Alt+Y)",
-            "search.aria.label": "Campo de b\u00FAsqueda de texto. El atajo es Alt+Y."
-        },
-        fr: {
-            "search.label": "Rechercher",
-            "dataTable.columnFilter.label": "Afficher/cacher colonne",
-            "dataTable.columnFilter.selectAll": "Tout s\u00E9lectionner",
-            "dataTable.sortable.label": "Peut \u00EAtre tri\u00E9",
-            "dataTable.sort.descending.label": "descendant",
-            "dataTable.sort.ascending.label": "ascendant",
-            "dataTable.no.record.found": "Aucun enregistrement trouv\u00E9",
-            "pagination.record.found": "R\u00E9sultats trouv\u00E9s",
-            "pagination.first.label": "Premi\u00E8re page",
-            "pagination.previous.label": "Page pr\u00E9c\u00E9dente",
-            "pagination.last.label": "Derni\u00E8re page",
-            "pagination.next.label": "Page suivante",
-            "pagination.per.page.label": "Par page",
-            "pagination.page.label": "Page",
-            "pagination.page.shortcut.label": "Aller \u00E0 page (Fin)",
-            "pagination.page.aria.label": "Aller \u00E0 la page. Le raccourci est Fin.",
-            "pagination.page.of.label": "de",
-            "search.title": "Rechercher (Alt+Y)",
-            "search.aria.label": "Recherche de champ de texte. Raccourci Alt+Y."
-        },
-        fr_CA: {
-            "search.label": "Rechercher",
-            "dataTable.columnFilter.label": "Afficher/cacher colonne",
-            "dataTable.columnFilter.selectAll": "Tout s\u00E9lectionner",
-            "dataTable.sortable.label": "Peut \u00EAtre tri\u00E9",
-            "dataTable.sort.descending.label": "descendant",
-            "dataTable.sort.ascending.label": "ascendant",
-            "dataTable.no.record.found": "Aucun enregistrement trouv\u00E9",
-            "pagination.record.found": "R\u00E9sultats trouv\u00E9s",
-            "pagination.first.label": "Premi\u00E8re page",
-            "pagination.previous.label": "Page pr\u00E9c\u00E9dente",
-            "pagination.last.label": "Derni\u00E8re page",
-            "pagination.next.label": "Page suivante",
-            "pagination.per.page.label": "Par page",
-            "pagination.page.label": "Page",
-            "pagination.page.shortcut.label": "Aller \u00E0 page (Fin)",
-            "pagination.page.aria.label": "Aller \u00E0 la page. Le raccourci est Fin.",
-            "pagination.page.of.label": "de",
-            "search.title": "Rechercher (Alt+Y)",
-            "search.aria.label": "Recherche de champ de texte. Raccourci Alt+Y."
-        },
-        pt: {
-            "search.label": "Pesquisar",
-            "dataTable.columnFilter.label": "Exibir/ocultar coluna",
-            "dataTable.columnFilter.selectAll": "Selecionar todos",
-            "dataTable.sortable.label": "Classific\u00E1vel",
-            "dataTable.sort.descending.label": "decrescente",
-            "dataTable.sort.ascending.label": "crescente",
-            "dataTable.no.record.found": "N\u00E3o foram encontrados registros",
-            "pagination.record.found": "Resultados encontrados",
-            "pagination.first.label": "Primeira p\u00E1gina",
-            "pagination.previous.label": "P\u00E1gina anterior",
-            "pagination.last.label": "\u00DAltima p\u00E1gina",
-            "pagination.next.label": "pagination.next.label=Pr\u00F3xima p\u00E1gina",
-            "pagination.per.page.label": "Por p\u00E1gina",
-            "pagination.page.label": "P\u00E1gina",
-            "pagination.page.shortcut.label": "V\u00E1 para p\u00E1gina (End)",
-            "pagination.page.aria.label": "V\u00E1 para P\u00E1gina. A tecla de atalho \u00E9 End",
-            "pagination.page.of.label": "de",
-            "search.title": "Pesquisar (Alt+Y)",
-            "search.aria.label": "Campo para texto de busca. A tecla de atalho \u00E9 Alt+Y."
-        }
-    };
+    var translations = {};
 
     angular.module("xe-ui-components")
-        .config(['$translateProvider', function ($translateProvider) {
-            $translateProvider
-                .translations('en', translations.en)
-                .translations('ar', translations.ar)
-                .translations('en_AU', translations.en_AU)
-                .translations('en_GB', translations.en_GB)
-                .translations('en_IE', translations.en_IE)
-                .translations('en_IN', translations.en_IN)
-                .translations('es', translations.es)
-                .translations('fr', translations.fr)
-                .translations('fr_CA', translations.fr_CA)
-                .translations('pt', translations.pt)
-                .determinePreferredLanguage() // Determines user local by checking different local variable from the browser.
-                .fallbackLanguage('en')
-                .useSanitizeValueStrategy('escape');
-        }]);
+        .config(['$translateProvider', function ($translateProvider) {}]);
 }());
 (function () {
     'use strict';
@@ -3301,7 +3026,7 @@ angular.module("external-resouces", ['pascalprecht.translate', 'ngSanitize']);
                 require: 'ngModel',
                 link: function (scope, element, attrs, modelCtrl) {
                     modelCtrl.$parsers.push(function (inputValue) {
-                        // It is necessary for when using ng-required on your input. 
+                        // It is necessary for when using ng-required on your input.
                         // In such cases, when a letter is typed first, this parser will be called
                         // again, and the 2nd time, the value will be undefined
                         if (inputValue === undefined) {
@@ -3471,7 +3196,7 @@ angular.module("external-resouces", ['pascalprecht.translate', 'ngSanitize']);
             }
 
             function applyKeyboardNavForTable(table, scrollableParent) {
-                var tempTargetIndex; // Variable to remember previous column position, 
+                var tempTargetIndex; // Variable to remember previous column position,
                                      // used while traversing across columns inside rows
 
                 $document.off('keydown', globalKeydownHandler).on('keydown', {"table": table, "parent": scrollableParent}, globalKeydownHandler);
@@ -3560,10 +3285,10 @@ angular.module("external-resouces", ['pascalprecht.translate', 'ngSanitize']);
                 element.select().focus()
                     .on('focusout', function(event) {
                         var element = angular.element(event.target);
-                        
+
                         element.closest('th').removeClass('focus-ring');
                         element.closest('td').removeClass('active focus-ring');
-                        element.off('focusout');         
+                        element.off('focusout');
                     });
                 element.closest('tr th').addClass('focus-ring');
                 element.closest('tr td').addClass('active focus-ring');
@@ -3619,7 +3344,7 @@ angular.module("external-resouces", ['pascalprecht.translate', 'ngSanitize']);
 
             function getActionableSiblings (element, parentTag, rootTag) {
                 var siblings;
-                
+
                 if (parentTag && element.is('th')) {
                     siblings = element.siblings('.sortable').add(element);
                     siblings = siblings.add(element.siblings(':not(.sortable)').has("a:not(:hidden), :input:enabled:not([readonly]), [tabindex=0]").not(':hidden, .disabled'));
@@ -3630,7 +3355,7 @@ angular.module("external-resouces", ['pascalprecht.translate', 'ngSanitize']);
                 } else {
                     siblings = element.siblings("a, :input:enabled:not([readonly]), [tabindex=0]").not(':hidden, .disabled').add(element);
                 }
-                
+
                 return siblings;
             }
 
@@ -3819,15 +3544,15 @@ angular.module("external-resouces", ['pascalprecht.translate', 'ngSanitize']);
 angular.module('pagination', [])
 .directive('xePagination', ["$http", "$q", function($http, $q) {
     var fetch = function(query) {
-        var deferred = $q.defer();          
-        
+        var deferred = $q.defer();
+
         url = query.endPoint + "?"
             + "searchString=" + (query.searchString ? query.searchString : "")
             + "&sortColumnName=" + (query.sortColumnName ? query.sortColumnName : "")
             + "&ascending=" + query.ascending
             + "&offset=" + (query.offset ? query.offset : "")
             + "&max=" + (query.max ? query.max : "");
-        
+
         $http.get(url)
             .success(function(data) {
                 deferred.resolve(data);
@@ -3851,7 +3576,7 @@ angular.module('pagination', [])
         replace: true,
         require: "?^xeTableGrid",
         scope: {
-            model: "=",         
+            model: "=",
             endPoint: "=?",
             paginationConfig: "=?",
             resultsFound: "=",
@@ -3861,8 +3586,8 @@ angular.module('pagination', [])
         },
         templateUrl: "templates/pagination.html",
         controller: ['$scope', '$attrs', "$timeout", function($scope, $attrs, $timeout) {
-            var oldPageValue = 1;   
-            
+            var oldPageValue = 1;
+
             $scope.firstPrev = false;
             $scope.nextLast = false;
             $scope.onPage = 1;
@@ -3883,14 +3608,14 @@ angular.module('pagination', [])
                 $scope.pageOffsets.push($scope.offset);
                 $scope.pageOffsets.sort(function(a, b){ return a-b; });
             }
-            
-            $scope.offsetChanged = function(doFetch) {                              
+
+            $scope.offsetChanged = function(doFetch) {
                 calculateNumberOfPages();
                 disableButtons($scope.onPage, $scope.numberOfPages);
                 if (doFetch) {
                     $scope.fetchData($scope.onPage, $scope.offset);
                 }
-            };      
+            };
 
             $scope.first = function() {
                 if ($scope.firstPrev) {
@@ -3898,7 +3623,7 @@ angular.module('pagination', [])
                 }
 
                 setPageValue(1);
-                
+
                 $scope.fetchData($scope.onPage, $scope.offset);
                 disableButtons($scope.onPage, $scope.numberOfPages);
                 focusPageInput();
@@ -3912,7 +3637,7 @@ angular.module('pagination', [])
                 var onPage = parseInt($scope.onPage);
                 onPage--;
                 setPageValue(onPage);
-                
+
                 $scope.fetchData($scope.onPage, $scope.offset, append);
                 disableButtons($scope.onPage, $scope.numberOfPages);
                 if ($scope.firstPrev) {
@@ -3920,15 +3645,15 @@ angular.module('pagination', [])
                 }
             };
 
-            $scope.next = function(append) {    
+            $scope.next = function(append) {
                 if ($scope.nextLast) {
                     return;
-                }   
+                }
 
                 var onPage = parseInt($scope.onPage);
                 onPage++;
                 setPageValue(onPage);
-                
+
                 $scope.fetchData($scope.onPage, $scope.offset, append);
                 disableButtons($scope.onPage, $scope.numberOfPages);
                 if ($scope.nextLast) {
@@ -3942,7 +3667,7 @@ angular.module('pagination', [])
                 }
 
                 setPageValue($scope.numberOfPages);
-                
+
                 $scope.fetchData($scope.onPage, $scope.offset);
                 disableButtons($scope.onPage, $scope.numberOfPages);
                 focusPageInput();
@@ -3968,7 +3693,7 @@ angular.module('pagination', [])
                 angular.element(event.target).val(oldPageValue);
             };
 
-            $scope.$watch("resultsFound", function(newValue, oldValue) {              
+            $scope.$watch("resultsFound", function(newValue, oldValue) {
                 $timeout(function() {
                     if (newValue === 0) {
                         setPageValue(0);
@@ -3978,7 +3703,7 @@ angular.module('pagination', [])
 
                     calculateNumberOfPages();
                     disableButtons($scope.onPage, $scope.numberOfPages);
-                });             
+                });
             });
 
             // Private functions
@@ -3996,14 +3721,14 @@ angular.module('pagination', [])
 
             var calculateNumberOfPages = function() {
                 $scope.numberOfPages = Math.ceil($scope.resultsFound / $scope.offset);
-                $scope.numberOfPages = $scope.numberOfPages < 1 ? 0 : $scope.numberOfPages;             
+                $scope.numberOfPages = $scope.numberOfPages < 1 ? 0 : $scope.numberOfPages;
 
                 if ($scope.onPage > $scope.numberOfPages) {
-                    setPageValue($scope.numberOfPages);              
+                    setPageValue($scope.numberOfPages);
                 }
             };
 
-            var disableButtons = function(pageNumber, numberOfPages) {              
+            var disableButtons = function(pageNumber, numberOfPages) {
                 pageNumber = parseInt(pageNumber);
                 numberOfPages = parseInt(numberOfPages);
                 var reminder = numberOfPages / pageNumber;
@@ -4019,27 +3744,27 @@ angular.module('pagination', [])
                     $scope.nextLast = false;
                 } else if(pageNumber <= 0 || (pageNumber > numberOfPages)) { // Out of range
                     $scope.firstPrev = true;
-                    $scope.nextLast = true;                 
+                    $scope.nextLast = true;
                 } else { // Between first and last page
                     $scope.nextLast = false;
                     $scope.firstPrev = false;
-                }               
+                }
             };
 
             /*
                 boolean append variable is used to check if we need append to the result set or not.
-                This is because on tablet we will not show the pagination but it components can still use pagination 
+                This is because on tablet we will not show the pagination but it components can still use pagination
                 code to make the continuous scroll happen.
             */
             $scope.fetchData = function(onPage, offset, append) {
-                if (!angular.isNumber(onPage)) {            
+                if (!angular.isNumber(onPage)) {
                     onPage = parseInt(onPage);
                 }
 
                 setPageValue(onPage);
 
                 var range = reassignRange(onPage, offset),
-                    query = {                       
+                    query = {
                         searchString: $scope.searchString,
                         sortColumnName: $scope.sortColumnName,
                         ascending: $scope.ascending,
@@ -4047,7 +3772,7 @@ angular.module('pagination', [])
                         max: range.max,
                         endPoint: $scope.endPoint,
                         onPage: onPage,
-                        pageSize:offset             
+                        pageSize:offset
                     };
 
                 // Show Load indicator
@@ -4057,11 +3782,11 @@ angular.module('pagination', [])
                     // Call clients fetch method
                     $scope.fetch({query: query}).then(
                         /* Success */
-                        function(data) {    
-                            $scope.postFetch({response: data, oldResult: $scope.model});                        
+                        function(data) {
+                            $scope.postFetch({response: data, oldResult: $scope.model});
                             $scope.model = append ? $scope.model.concat(data.result) : data.result;
                             $scope.resultsFound = data.length;
-                            
+
                             $scope.loading(false);
                             $scope.addExtensionColumns($scope.header, data);
                         },
@@ -4071,7 +3796,7 @@ angular.module('pagination', [])
                             $scope.postFetch({response: data, oldResult: $scope.model});
                             $scope.loading(false);
                         }
-                    );                  
+                    );
                 } else {
                     fetch(query).then(
                         /* Success */
@@ -4090,10 +3815,10 @@ angular.module('pagination', [])
                             $scope.loading(false);
                         }
                     );
-                }               
+                }
             };
-            
-            $scope.offsetChanged(false);            
+
+            $scope.offsetChanged(false);
         }],
         link: function(scope, elem, attributes, parentController) {
             // Assigning values from parentCOntroller to be used later in paginations controller.
@@ -4132,7 +3857,7 @@ angular.module('pagination', [])
 
             parentController.sort = function(sortColumnName, order) {
                 scope.sortColumnName = sortColumnName;
-                scope.ascending = order;        
+                scope.ascending = order;
                 scope.fetchData(scope.onPage, scope.offset);
             };
         }
