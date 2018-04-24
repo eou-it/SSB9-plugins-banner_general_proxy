@@ -174,6 +174,11 @@ class UrlMappings {
             action = "timeout"
         }
 
+        "/resetPinAction" {
+            controller = "general"
+            action = "resetPinAction"
+        }
+
         // ------------------- RESTful API end points - BEGIN --------------------
         "/api/configuration/$pluralizedResourceName/$id"(controller:'restfulApi') {
             action = [GET: "show"]

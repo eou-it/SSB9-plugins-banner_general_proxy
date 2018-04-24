@@ -19,6 +19,23 @@ class GeneralController {
 
     def generalSsbConfigService
 
+    def grades(){
+        render view: "grades"
+    }
+
+    def proxy(){
+        render view: "actionpassword"
+    }
+
+    def submitActionPassword() {
+        render view: "resetpin"
+    }
+
+    def resetPinAction() {
+        //redirect(url: "http://localhost:8080/BannerGeneralSsb/login/auth")
+        redirect(controller:"login", action: "auth")
+    }
+
 
     def landingPage() {
         try {
