@@ -298,7 +298,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/ssb/accountListing/**'             : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
         '/ssb/DirectDepositConfiguration/**' : ['ROLE_SELFSERVICE-EMPLOYEE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M'],
         '/ssb/personalInformation/**'        : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
-        '/ssb/PersonalInformationDetails/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
+        '/ssb/PersonalInformationDetails/**' : ['ROLE_SELFSERVICE-FACULTY_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-STUDENT_BAN_DEFAULT_M', 'ROLE_SELFSERVICE_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-ALUMNI_BAN_DEFAULT_M', 'ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M', 'IS_AUTHENTICATED_FULLY','ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/PersonalInformationPicture/**' : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/PersonalInformationQA/**'      : ['ROLE_SELFSERVICE-ALLROLES_BAN_DEFAULT_M'],
         '/ssb/userPreference/**'             : ['IS_AUTHENTICATED_ANONYMOUSLY']

@@ -38,7 +38,7 @@ class GeneralSsbConfigService extends BasePersonConfigService {
 
         [isDirectDepositEnabled      : getParamFromSession( ENABLE_DIRECT_DEPOSIT, 'Y' ) == 'Y',
          isPersonalInformationEnabled: getParamFromSession( ENABLE_PERSONAL_INFORMATION, 'Y' ) == 'Y',
-         isActionItemEnabledAndAvailable         : getParamFromSession( ENABLE_ACTION_ITEM, 'Y' ) == 'Y' && actionItemProcessingConfigService.isActionItemPresentForUser(),
+         //isActionItemEnabledAndAvailable         : getParamFromSession( ENABLE_ACTION_ITEM, 'Y' ) == 'Y' && actionItemProcessingConfigService.isActionItemPresentForUser(),
          isActionItemEnabled :  getParamFromSession( ENABLE_ACTION_ITEM, 'Y' ) == 'Y']
     }
 }

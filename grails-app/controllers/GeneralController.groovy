@@ -32,8 +32,9 @@ class GeneralController {
     }
 
     def resetPinAction() {
-        //redirect(url: "http://localhost:8080/BannerGeneralSsb/login/auth")
-        redirect(controller:"login", action: "auth")
+        redirect(url: "http://localhost:8080/BannerGeneralSsb/login/auth")
+        //redirect(controller:"login", action: "auth")
+        render view: "auth"
     }
 
 

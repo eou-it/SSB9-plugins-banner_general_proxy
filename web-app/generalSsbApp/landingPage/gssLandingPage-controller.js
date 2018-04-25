@@ -36,15 +36,40 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
             init = function() {
                 $scope.piConfig = piConfigResolve;
 
-                if(generalConfigResolve.isPersonalInformationEnabled) {
+                CommonContext.guestUser = true;
+
+                if (CommonContext.guestUser){
+
+
                     $scope.appTiles.push(
                         {
-                            title: 'banner.generalssb.landingpage.personalinfo.title',
-                            desc: 'banner.generalssb.landingpage.personalinfo.description',
+                            title: 'banner.generalssb.landingpage.grades.title',
+                            desc: 'banner.generalssb.landingpage.grades.description',
+                            url: $scope.applicationContextRoot +'/ssb/general/grades',
+                            icon: '../images/personal_info.svg'
+                        }
+                    );
+
+                    $scope.appTiles.push(
+                        {
+                            title: 'banner.generalssb.landingpage.holds.title',
+                            desc: 'banner.generalssb.landingpage.holds.description',
                             url: $scope.applicationContextRoot +'/ssb/personalInformation',
                             icon: '../images/personal_info.svg'
                         }
                     );
+                }else{
+
+                    if(generalConfigResolve.isPersonalInformationEnabled) {
+                        $scope.appTiles.push(
+                            {
+                                title: 'banner.generalssb.landingpage.personalinfo.title',
+                                desc: 'banner.generalssb.landingpage.personalinfo.description',
+                                url: $scope.applicationContextRoot +'/ssb/personalInformation',
+                                icon: '../images/personal_info.svg'
+                            }
+                        );
+                    }
                 }
 
                 if(generalConfigResolve.isDirectDepositEnabled) {
@@ -58,52 +83,14 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                         }
                     );
                 }
-                if(generalConfigResolve.isActionItemEnabledAndAvailable) {
-                    $scope.appTiles.push(
-                        {
-                            title: 'banner.generalssb.landingpage.actionsitem.title',
-                            desc: 'banner.generalssb.landingpage.actionsitem.description',
-                            url: $scope.applicationContextRoot +'/ssb/aip/#/list',
-                            icon: '../images/action_items_icon.svg'
-                        }
-                    );
-                }
-                if(generalConfigResolve.isActionItemEnabled){
-                    $scope.appTiles.push(
-                        {
-                            title: 'banner.generalssb.landingpage.actionitemadmin.title',
-                            desc: 'banner.generalssb.landingpage.actionitemadmin.description',
-                            url: $scope.applicationContextRoot +'/ssb/aip/#/landing',
-                            icon: '../images/action_items_icon.svg',
-                            roles: [AIPADMIN]
-                        }
-                    );
-                }
 
                 generalSsbService.getRoles().$promise.then(function (response) {
                     $scope.isStudent = response.isStudent;
                     $scope.isEmployee = response.isEmployee;
-                    $scope.isAipAdmin = response.isAipAdmin;
                     $scope.appTilesForRole = getAppTilesForRole($scope.appTiles);
                     $scope.isSingleTile = $scope.appTilesForRole.length === 1;
                 });
 
-                // Get user name for display
-                generalSsbService.getFromPersonalInfo('PersonalDetails').$promise.then(function (response) {
-                    var firstName = response && response.preferenceFirstName;
-
-                    if (firstName) {
-                        $scope.firstName = firstName;
-                    } else {
-                        generalSsbService.getFromPersonalInfo('UserName').$promise.then(function (response) {
-                            firstName = response && response.firstName;
-
-                            if (firstName) {
-                                $scope.firstName = firstName;
-                            }
-                        });
-                    }
-                });
 
                 generalSsbService.getFromPersonalInfo('BannerId').$promise.then(function (response) {
                     $scope.bannerId = response.bannerId;
