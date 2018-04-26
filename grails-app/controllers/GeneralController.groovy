@@ -32,8 +32,9 @@ class GeneralController {
     }
 
     def resetPinAction() {
-        redirect(url: "http://localhost:8080/BannerGeneralSsb/login/auth")
+        //redirect(url: "http://localhost:8080/BannerGeneralSsb/login/auth")
         //redirect(controller:"login", action: "auth")
+        redirect(url: "http://" + request.getServerName() + ":" + request.getServerPort() + "/BannerGeneralSsb/login/auth")
         render view: "auth"
     }
 
