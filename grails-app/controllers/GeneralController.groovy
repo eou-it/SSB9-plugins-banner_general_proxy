@@ -19,6 +19,10 @@ class GeneralController {
 
     def generalSsbConfigService
 
+    def proxypersonalinformation(){
+        render view: "proxypersonalinformation"
+    }
+
     def grades(){
         render view: "grades"
     }

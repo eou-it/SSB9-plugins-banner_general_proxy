@@ -40,6 +40,15 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
 
                 if (CommonContext.guestUser){
 
+                    $scope.appTiles.push(
+                        {
+                            title: 'banner.generalssb.landingpage.personal.title',
+                            desc: 'banner.generalssb.landingpage.personal.description',
+                            url: $scope.applicationContextRoot +'/ssb/general/proxypersonalinformation',
+                            icon: '../images/personal_info.svg'
+                        }
+                    );
+
 
                     $scope.appTiles.push(
                         {
