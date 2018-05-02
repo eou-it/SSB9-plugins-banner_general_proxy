@@ -1,20 +1,15 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: mhitrik
-  Date: 4/23/2018
-  Time: 2:14 PM
---%>
-
-<%@ page contentType="text/html;charset=UTF-8" %>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+    <link rel="stylesheet" href="${resource(plugin: 'bannerGeneralPersonalInformationUi', dir: 'css', file: 'main.css')}"/>
+    <link rel="stylesheet" href="${resource(plugin: 'bannerCore', dir: 'css', file: 'login.css')}"/>
 </head>
 
 <body>
 THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
 
-<button ng-click="goApp(tileData.url)" class="gen-app-tile">
+<button ng-click="goApp(tileData.url)" class="signin-button">
 
     <div>
         <div class="tile-title">
@@ -28,7 +23,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
     <INPUT TYPE="hidden" NAME="p_proxyIDM" VALUE="-99999700">
     <TABLE CLASS="dataentrytable" SUMMARY="This table displays the proxy profile fields.">
         <TR>
-            <TD COLSPAN="2" CLASS="input-field-label">
+            <TD COLSPAN="2" CLASS="text-input-field">
                 <SPAN class="requiredmsgtext"><SPAN class="fieldrequiredtext"><IMG
                         SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom" ALT="Required" CLASS="headerImg"
                         TITLE="Required" NAME="web_required" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=9 WIDTH=10>
@@ -36,71 +31,71 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_name_prefix><SPAN class="fieldlabeltext">Salutation&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
+            <TD CLASS="text-input-field">
+                <LABEL for=p_name_prefix><SPAN>Salutation</SPAN></LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_name_prefix" SIZE="22" MAXLENGTH="20" id="p_name_prefix">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_name_prefix" SIZE="22" MAXLENGTH="20" id="p_name_prefix" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_first_name><SPAN class="input-field-label">First Name&nbsp;&nbsp;&nbsp;</SPAN><SPAN
+            <TD CLASS="text-input-field">
+                <LABEL for=p_first_name><SPAN >First Name</SPAN><SPAN
+                        ><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
+                                                       ALT="Required" CLASS="headerImg" TITLE="Required"
+                                                       NAME="web_required" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=9 WIDTH=10>
+                </SPAN></LABEL>
+            </TD>
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_first_name" SIZE="62" MAXLENGTH="60" VALUE="Mike" id="p_first_name" CLASS="text-input-field">
+            </TD>
+        </TR>
+        <TR>
+            <TD CLASS="text-input-field">
+                <LABEL for=p_mi><SPAN >Middle Name</SPAN></LABEL>
+            </TD>
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_mi" SIZE="62" MAXLENGTH="60" id="p_mi" CLASS="text-input-field">
+            </TD>
+        </TR>
+        <TR>
+            <TD CLASS="text-input-field">
+                <LABEL for=p_surname_prefix><SPAN>Surname Prefix</SPAN></LABEL>
+            </TD>
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_surname_prefix" SIZE="62" MAXLENGTH="60" id="p_surname_prefix" CLASS="text-input-field">
+            </TD>
+        </TR>
+        <TR>
+            <TD CLASS="text-input-field">
+                <LABEL for=p_last_name><SPAN>Last Name</SPAN><SPAN
                         class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
                                                        ALT="Required" CLASS="headerImg" TITLE="Required"
                                                        NAME="web_required" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=9 WIDTH=10>
                 </SPAN></LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_first_name" SIZE="62" MAXLENGTH="60" VALUE="Mike" id="p_first_name">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_last_name" SIZE="62" MAXLENGTH="60" VALUE="Hitrik" id="p_last_name" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_mi><SPAN class="input-field-label">Middle Name&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
+            <TD CLASS="text-input-field">
+                <LABEL for=p_name_suffix><SPAN>Name Suffix</SPAN></LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_mi" SIZE="62" MAXLENGTH="60" id="p_mi">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_surname_prefix><SPAN class="input-field-label">Surname Prefix&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
-            </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_surname_prefix" SIZE="62" MAXLENGTH="60" id="p_surname_prefix">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_name_suffix" SIZE="22" MAXLENGTH="20" id="p_name_suffix" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_last_name><SPAN class="input-field-label">Last Name&nbsp;&nbsp;&nbsp;</SPAN><SPAN
-                        class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
-                                                       ALT="Required" CLASS="headerImg" TITLE="Required"
-                                                       NAME="web_required" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=9 WIDTH=10>
-                </SPAN></LABEL>
+            <TD CLASS="text-input-field">
+                <LABEL for=p_pref_first_name><SPAN>Nickname</SPAN></LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_last_name" SIZE="62" MAXLENGTH="60" VALUE="Hitrik" id="p_last_name">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_pref_first_name" SIZE="62" MAXLENGTH="60" id="p_pref_first_name" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_name_suffix><SPAN class="input-field-label">Name Suffix&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
-            </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_name_suffix" SIZE="22" MAXLENGTH="20" id="p_name_suffix">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_pref_first_name><SPAN class="input-field-label">Nickname&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
-            </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_pref_first_name" SIZE="62" MAXLENGTH="60" id="p_pref_first_name">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_email_address><SPAN
                         class="fieldlabeltext">Home E Mail Address &nbsp;&nbsp;&nbsp;</SPAN><SPAN
                         class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
@@ -108,40 +103,40 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
                                                        NAME="web_required" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=9 WIDTH=10>
                 </SPAN></LABEL>
             </TD>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <INPUT TYPE="text" NAME="p_email_address" SIZE="75" MAXLENGTH="128" VALUE="michael.hitrik@ellucian.com"
-                       id="p_email_address">
+                       id="p_email_address" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_phone_area><SPAN class="fieldlabeltext">Permanent Phone Area Code&nbsp;&nbsp;&nbsp;</SPAN>
                 </LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_phone_area" SIZE="7" MAXLENGTH="6" id="p_phone_area">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_phone_area" SIZE="7" MAXLENGTH="6" id="p_phone_area" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_phone_number><SPAN class="fieldlabeltext">Permanent Phone Number&nbsp;&nbsp;&nbsp;</SPAN>
                 </LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_phone_number" SIZE="14" MAXLENGTH="12" id="p_phone_number">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_phone_number" SIZE="14" MAXLENGTH="12" id="p_phone_number" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_phone_ext><SPAN class="fieldlabeltext">Permanent Phone Extension &nbsp;&nbsp;&nbsp;</SPAN>
                 </LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_phone_ext" SIZE="11" MAXLENGTH="10" id="p_phone_ext">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_phone_ext" SIZE="11" MAXLENGTH="10" id="p_phone_ext" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_street_line1><SPAN
                         class="fieldlabeltext">Mailing Address Line 1 &nbsp;&nbsp;&nbsp;</SPAN><SPAN
                         class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
@@ -149,50 +144,50 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
                                                        NAME="web_required" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=9 WIDTH=10>
                 </SPAN></LABEL>
             </TD>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <INPUT TYPE="text" NAME="p_street_line1" SIZE="77" MAXLENGTH="75" VALUE="4 Country View Rd"
-                       id="p_street_line1">
+                       id="p_street_line1" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_street_line2><SPAN class="fieldlabeltext">Mailing Address Line 2 &nbsp;&nbsp;&nbsp;</SPAN>
                 </LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_street_line2" SIZE="77" MAXLENGTH="75" id="p_street_line2">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_street_line2" SIZE="77" MAXLENGTH="75" id="p_street_line2" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_street_line3><SPAN class="fieldlabeltext">Mailing Address Line 3 &nbsp;&nbsp;&nbsp;</SPAN>
                 </LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_street_line3" SIZE="77" MAXLENGTH="75" id="p_street_line3">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_street_line3" SIZE="77" MAXLENGTH="75" id="p_street_line3" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_city><SPAN class="fieldlabeltext">City&nbsp;&nbsp;&nbsp;</SPAN><SPAN
                         class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
                                                        ALT="Required" CLASS="headerImg" TITLE="Required"
                                                        NAME="web_required" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=9 WIDTH=10>
                 </SPAN></LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_city" SIZE="52" MAXLENGTH="50" VALUE="Malvern" id="p_city">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_city" SIZE="52" MAXLENGTH="50" VALUE="Malvern" id="p_city" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_stat_code><SPAN class="fieldlabeltext">State&nbsp;&nbsp;&nbsp;</SPAN><SPAN
                         class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
                                                        ALT="Required" CLASS="headerImg" TITLE="Required"
                                                        NAME="web_required" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=9 WIDTH=10>
                 </SPAN></LABEL>
             </TD>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <SELECT NAME="p_stat_code" SIZE="1" ID="p_stat_code">
                     <OPTION VALUE="">Not Applicable</OPTION>
                     <OPTION VALUE="123">1Test</OPTION>
@@ -286,22 +281,22 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_zip><SPAN class="fieldlabeltext">Zipcode&nbsp;&nbsp;&nbsp;</SPAN><SPAN
                         class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
                                                        ALT="Required" CLASS="headerImg" TITLE="Required"
                                                        NAME="web_required" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=9 WIDTH=10>
                 </SPAN></LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_zip" SIZE="33" MAXLENGTH="30" VALUE="19355" id="p_zip">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_zip" SIZE="33" MAXLENGTH="30" VALUE="19355" id="p_zip" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_natn_code><SPAN class="fieldlabeltext">Nation&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
             </TD>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <SELECT NAME="p_natn_code" SIZE="1" ID="p_natn_code">
                     <OPTION VALUE="">Not Applicable</OPTION>
                     <OPTION VALUE="WWWWW">5 Character Test</OPTION>
@@ -503,10 +498,10 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_sex><SPAN class="fieldlabeltext">Gender&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
             </TD>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <SELECT NAME="p_sex" id="p_sex">
                     <OPTION SELECTED value="">Select Gender
                     <OPTION value="F">Female
@@ -515,24 +510,24 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_birth_date><SPAN class="fieldlabeltext">Birthdate (DD/MM/YYYY)&nbsp;&nbsp;&nbsp;</SPAN>
                 </LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_birth_date" id="p_birth_date">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_birth_date" id="p_birth_date" CLASS="text-input-field">
             </TD>
         </TR>
         <TR>
-            <TD CLASS="input-field-label">
+            <TD CLASS="text-input-field">
                 <LABEL for=p_ssn><SPAN class="fieldlabeltext">SSN/SIN/TIN&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
             </TD>
-            <TD CLASS="input-field-label">
-                <INPUT TYPE="text" NAME="p_ssn" SIZE="10" MAXLENGTH="9" id="p_ssn" autocomplete="off">
+            <TD CLASS="text-input-field">
+                <INPUT TYPE="text" NAME="p_ssn" SIZE="10" MAXLENGTH="9" id="p_ssn" autocomplete="off" CLASS="text-input-field">
             </TD>
         </TR>
     </TABLE>
-    <INPUT TYPE="submit" NAME="p_save" VALUE="Save" id="p_save">
+    <INPUT TYPE="submit" NAME="p_save" VALUE="Save" id="p_save" class="signin-button">
 </FORM>
 
 </body>
