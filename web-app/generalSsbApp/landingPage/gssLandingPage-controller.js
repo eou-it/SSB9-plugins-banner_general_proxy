@@ -36,8 +36,6 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
             init = function() {
                 $scope.piConfig = piConfigResolve;
 
-                CommonContext.guestUser = true;
-
                 if (CommonContext.guestUser){
 
                     $scope.appTiles.push(
