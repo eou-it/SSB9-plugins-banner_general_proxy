@@ -19,7 +19,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
     </div>
 </button>
 
-<FORM ACTION="/GVUDB/bwgkpxya.P_PA_StoreProfile" METHOD="POST" id="proxyprofile" autocomplete="off">
+<FORM ACTION="updateProxyProfile" METHOD="POST" id="proxyprofile" autocomplete="off">
     <INPUT TYPE="hidden" NAME="p_proxyIDM" VALUE="-99999700">
     <TABLE CLASS="dataentrytable" SUMMARY="This table displays the proxy profile fields.">
         <TR>
@@ -31,7 +31,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_name_prefix><SPAN>Salutation</SPAN></LABEL>
             </TD>
             <TD CLASS="text-input-field">
@@ -39,7 +39,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_first_name><SPAN >First Name</SPAN><SPAN
                         ><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
                                                        ALT="Required" CLASS="headerImg" TITLE="Required"
@@ -51,7 +51,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_mi><SPAN >Middle Name</SPAN></LABEL>
             </TD>
             <TD CLASS="text-input-field">
@@ -59,7 +59,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_surname_prefix><SPAN>Surname Prefix</SPAN></LABEL>
             </TD>
             <TD CLASS="text-input-field">
@@ -67,7 +67,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_last_name><SPAN>Last Name</SPAN><SPAN
                         class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
                                                        ALT="Required" CLASS="headerImg" TITLE="Required"
@@ -79,7 +79,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_name_suffix><SPAN>Name Suffix</SPAN></LABEL>
             </TD>
             <TD CLASS="text-input-field">
@@ -87,7 +87,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_pref_first_name><SPAN>Nickname</SPAN></LABEL>
             </TD>
             <TD CLASS="text-input-field">
@@ -95,7 +95,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_email_address><SPAN
                         class="fieldlabeltext">Home E Mail Address &nbsp;&nbsp;&nbsp;</SPAN><SPAN
                         class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
@@ -109,7 +109,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_phone_area><SPAN class="fieldlabeltext">Permanent Phone Area Code&nbsp;&nbsp;&nbsp;</SPAN>
                 </LABEL>
             </TD>
@@ -118,7 +118,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_phone_number><SPAN class="fieldlabeltext">Permanent Phone Number&nbsp;&nbsp;&nbsp;</SPAN>
                 </LABEL>
             </TD>
@@ -127,7 +127,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_phone_ext><SPAN class="fieldlabeltext">Permanent Phone Extension &nbsp;&nbsp;&nbsp;</SPAN>
                 </LABEL>
             </TD>
@@ -136,7 +136,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_street_line1><SPAN
                         class="fieldlabeltext">Mailing Address Line 1 &nbsp;&nbsp;&nbsp;</SPAN><SPAN
                         class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
@@ -150,7 +150,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_street_line2><SPAN class="fieldlabeltext">Mailing Address Line 2 &nbsp;&nbsp;&nbsp;</SPAN>
                 </LABEL>
             </TD>
@@ -159,7 +159,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_street_line3><SPAN class="fieldlabeltext">Mailing Address Line 3 &nbsp;&nbsp;&nbsp;</SPAN>
                 </LABEL>
             </TD>
@@ -168,7 +168,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_city><SPAN class="fieldlabeltext">City&nbsp;&nbsp;&nbsp;</SPAN><SPAN
                         class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
                                                        ALT="Required" CLASS="headerImg" TITLE="Required"
@@ -180,7 +180,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_stat_code><SPAN class="fieldlabeltext">State&nbsp;&nbsp;&nbsp;</SPAN><SPAN
                         class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
                                                        ALT="Required" CLASS="headerImg" TITLE="Required"
@@ -281,7 +281,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_zip><SPAN class="fieldlabeltext">Zipcode&nbsp;&nbsp;&nbsp;</SPAN><SPAN
                         class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
                                                        ALT="Required" CLASS="headerImg" TITLE="Required"
@@ -293,7 +293,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_natn_code><SPAN class="fieldlabeltext">Nation&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
             </TD>
             <TD CLASS="text-input-field">
@@ -498,7 +498,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_sex><SPAN class="fieldlabeltext">Gender&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
             </TD>
             <TD CLASS="text-input-field">
@@ -510,7 +510,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
             </TD>
         </TR>
         <TR>
-            <TD CLASS="text-input-field">
+            <TD CLASS="input-field-label">
                 <LABEL for=p_birth_date><SPAN class="fieldlabeltext">Birthdate (DD/MM/YYYY)&nbsp;&nbsp;&nbsp;</SPAN>
                 </LABEL>
             </TD>
@@ -520,7 +520,7 @@ THIS IS A PLACEHOLDER TO VIEW Proxy Personal Information
         </TR>
         <TR>
             <TD CLASS="text-input-field">
-                <LABEL for=p_ssn><SPAN class="fieldlabeltext">SSN/SIN/TIN&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
+                <LABEL for=p_ssn><SPAN class="fieldlabeltext">SSN/SIN/TIN</SPAN></LABEL>
             </TD>
             <TD CLASS="text-input-field">
                 <INPUT TYPE="text" NAME="p_ssn" SIZE="10" MAXLENGTH="9" id="p_ssn" autocomplete="off" CLASS="text-input-field">

@@ -9,6 +9,10 @@ import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 import org.springframework.security.core.context.SecurityContextHolder
 
+import grails.util.Holders
+import groovy.sql.GroovyRowResult
+import groovy.sql.Sql
+
 /**
  * Controller for General
  */
@@ -18,6 +22,47 @@ class GeneralController {
     static defaultAction = "landingPage"
 
     def generalSsbConfigService
+
+    def dataSource               // injected by Spring
+    def sessionFactory           // injected by Spring
+
+    def updateProxyProfile(){
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        //get proxy gidm
+        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+        def p_first_name = params.p_first_name
+        def p_last_name = "Hitrik"
+
+
+        //Execute bwgkpxya.P_PA_StoreProfile
+        sql.executeUpdate("""
+       DECLARE
+        lv_GPBPRXY_rec        gp_gpbprxy.gpbprxy_rec;
+        lv_GPBPRXY_ref        gp_gpbprxy.gpbprxy_ref;
+       BEGIN
+            -- Get the proxy record
+          lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One (${p_proxyIDM});
+          FETCH lv_GPBPRXY_ref INTO lv_GPBPRXY_rec;
+          CLOSE lv_GPBPRXY_ref;
+          
+          gp_gpbprxy.P_Update (
+            p_proxy_idm    => ${p_proxyIDM},
+            p_first_name   => ${p_first_name},
+            p_last_name    => ${p_last_name},
+            p_user_id      => goksels.f_get_ssb_id_context,
+            p_rowid        => lv_GPBPRXY_rec.R_INTERNAL_RECORD_ID
+            );
+            
+            gb_common.P_Commit;
+       
+        END ;
+        
+            """)
+
+        println params
+        render view: "proxypersonalinformation"
+    }
 
     def proxypersonalinformation(){
         render view: "proxypersonalinformation"
