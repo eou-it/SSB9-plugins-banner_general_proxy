@@ -38,6 +38,8 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
 
                 if (CommonContext.guestUser){
 
+                    $scope.guestUser = true;
+
                     $scope.appTiles.push(
                         {
                             title: 'banner.generalssb.landingpage.personal.title',
@@ -66,6 +68,8 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                         }
                     );
                 }else{
+
+                    $scope.guestUser = false;
 
                     if(generalConfigResolve.isPersonalInformationEnabled) {
                         $scope.appTiles.push(
