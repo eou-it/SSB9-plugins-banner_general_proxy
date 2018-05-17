@@ -14,7 +14,7 @@
 
         <div class="logInProxy appNameProxy">
             Action Password:
-            <input type="text" name="firstname">
+            <input type="text" name="token">
             <input type="submit" value="Submit" class="signin-button">
             <br>
 
