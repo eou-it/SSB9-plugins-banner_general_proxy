@@ -3,26 +3,34 @@
 <head>
     <link rel="shortcut icon" href="${resource(plugin: 'bannerCore', dir: 'images', file: 'favicon.ico')}"/>
     <link rel="stylesheet" href="${resource(plugin: 'bannerCore', dir: 'css', file: 'login.css')}"/>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'generalSsbMain.css')}"/>
 </head>
+
 <body class="pageBg">
 
 <div class="splashBg">
-<form action="submitActionPassword" method="post">
-    <div class="appName">Banner<span>&reg;</span></div>
+    <form action="submitActionPassword" method="post">
+        <div class="appName">Banner<span>&reg;</span></div>
 
-    <div class="logIn appName">
-    Action Password:
-    <input type="text" name="firstname">
-    <input type="submit" value="Sign" class="signin-button">
+        <div class="logIn appName">
+            Action Password:
+            <input type="text" name="firstname">
+            <input type="submit" value="Sign" class="signin-button">
+            <br>
+
+            <div class="actionpassword">
+                The email you received contained an Action Link(which you have used to get here)
+                and an Action Password used to verify that you are an intended  recipient.
+            </div>
+        </div>
+    </form>
+
+
+    <div class="copyright">
+        <p>&copy; <g:message code="net.hedtech.banner.login.copyright1"/></p>
+
+        <p><g:message code="net.hedtech.banner.login.copyright2"/></p>
     </div>
-</form>
-
-
-<div class="copyright">
-    <p>&copy; <g:message code="net.hedtech.banner.login.copyright1"/></p>
-
-    <p><g:message code="net.hedtech.banner.login.copyright2"/></p>
-</div>
 </div>
 </body>
 </html>
