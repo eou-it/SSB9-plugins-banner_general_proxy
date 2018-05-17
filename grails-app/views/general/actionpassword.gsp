@@ -10,17 +10,19 @@
 
 <div class="splashBg">
     <form action="submitActionPassword" method="post">
-        <div class="appName">Banner<span>&reg;</span></div>
+        <div class="appNameProxy">Banner<span>&reg;</span></div>
 
-        <div class="logIn appName">
+        <div class="logInProxy appNameProxy">
             Action Password:
             <input type="text" name="firstname">
-            <input type="submit" value="Sign" class="signin-button">
+            <input type="submit" value="Submit" class="signin-button">
             <br>
 
             <div class="actionpassword">
                 The email you received contained an Action Link(which you have used to get here)
                 and an Action Password used to verify that you are an intended  recipient.
+                You will also use this value as an 'Old Pin' on the following page
+                when establishing your new Pin.
             </div>
         </div>
     </form>
