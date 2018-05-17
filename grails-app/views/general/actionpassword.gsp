@@ -13,16 +13,13 @@
         <div class="appNameProxy">Banner<span>&reg;</span></div>
 
         <div class="logInProxy appNameProxy">
-            Action Password:
+            <g:message code="banner.generalssb.submitactionpassword.label"/>
             <input type="text" name="token">
             <input type="submit" value="Submit" class="signin-button">
             <br>
 
             <div class="actionpassword">
-                The email you received contained an Action Link(which you have used to get here)
-                and an Action Password used to verify that you are an intended  recipient.
-                You will also use this value as an 'Old Pin' on the following page
-                when establishing your new Pin.
+                <g:message code="banner.generalssb.submitactionpassword"/>
             </div>
         </div>
     </form>
