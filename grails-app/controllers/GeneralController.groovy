@@ -22,6 +22,7 @@ class GeneralController {
     static defaultAction = "landingPage"
 
     def generalSsbConfigService
+    def generalSsbProxyService
 
     def dataSource               // injected by Spring
     def sessionFactory           // injected by Spring
@@ -73,7 +74,18 @@ class GeneralController {
     }
 
     def proxy(){
-        render view: "actionpassword"
+
+        def result = generalSsbProxyService.setProxy(params.p_token)
+
+        if (result.verify) {
+
+            render view: "actionpassword", params: params
+
+        } else if (result.login || result.error){
+
+            flash.message = result.message
+            forward controller: "login", action: "auth", params: params
+        }
     }
 
     def submitActionPassword() {
