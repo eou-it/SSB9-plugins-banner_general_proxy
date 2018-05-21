@@ -30,6 +30,7 @@ def locationAdder = ConfigFinder.&addLocation.curry( grails.config.locations )
 grails.config.locations.each {
     println "configuration: " + it
 }
+
 proxySqlLoad {
     if (System.getProperty("PROXY_SQL_LOAD")) {
         file = System.getProperty("PROXY_SQL_LOAD")

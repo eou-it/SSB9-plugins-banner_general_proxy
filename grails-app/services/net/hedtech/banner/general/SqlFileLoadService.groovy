@@ -23,7 +23,7 @@ class SqlFileLoadService {
             String sqlFileText = file.getText('UTF-8')
             def sqlTextMap = new ConfigSlurper().parse(sqlFileText)
 
-            log.info('proxy sql text map: ' + sqlTextMap)
+            log.debug('proxy sql text map: ' + sqlTextMap)
             return sqlTextMap
         }
         catch (IOException e) {

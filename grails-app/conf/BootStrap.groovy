@@ -156,29 +156,6 @@ class BootStrap {
     }
 
 
-    private String getTextFromFile() {
-        String fileLocation = grailsApplication.config?.proxySqlLoad?.file
-        String sqlText
-        try {
-            File file = new File(fileLocation)
-            if (file.canRead()) {
-                sqlText = file.getText('UTF-8');
-                def confObj = new ConfigSlurper().parse(sqlText)
-                log.error confObj.toString()
-            }
-            else {
-                log.warn('SQL file for proxy can\'t be read')
-            }
-        }
-        catch(IOException e) {
-            log.error('Problem loading SQL file for proxy')
-            log.error(e)
-        }
-
-        sqlText
-    }
-
-
     private def registerJSONMarshallers() {
         Closure marshaller = {it ->
             dateConverterService.parseGregorianToDefaultCalendar( LocalizeUtil.formatDate( it ) )
