@@ -24,8 +24,9 @@ import org.codehaus.groovy.grails.web.converters.configuration.DefaultConverterC
  * */
 class BootStrap {
 
-    def log = Logger.getLogger( this.getClass() )
+    private static final log = Logger.getLogger( BootStrap.class)
     def dateConverterService
+    def sqlFileLoadService
 
     def localizer = {mapToLocalize ->
         new ValidationTagLib().message( mapToLocalize )
@@ -76,6 +77,8 @@ class BootStrap {
             setTestOnReturn( false )
             setValidationQuery( "select 1 from dual" )
         }*/
+
+        grailsApplication.config.proxySql = sqlFileLoadService.getSqlTextMap()
 
         if (Environment.current != Environment.TEST) {
             // println("Reading format from ${servletContext.getRealPath("/xml/application.navigation.conf.xml" )}")
@@ -150,6 +153,29 @@ class BootStrap {
         actionItemPostMonitor.shutdown()
         actionItemPostWorkProcessingEngine.stopRunning()
         actionItemPostJobProcessingEngine.stopRunning()
+    }
+
+
+    private String getTextFromFile() {
+        String fileLocation = grailsApplication.config?.proxySqlLoad?.file
+        String sqlText
+        try {
+            File file = new File(fileLocation)
+            if (file.canRead()) {
+                sqlText = file.getText('UTF-8');
+                def confObj = new ConfigSlurper().parse(sqlText)
+                log.error confObj.toString()
+            }
+            else {
+                log.warn('SQL file for proxy can\'t be read')
+            }
+        }
+        catch(IOException e) {
+            log.error('Problem loading SQL file for proxy')
+            log.error(e)
+        }
+
+        sqlText
     }
 
 
