@@ -79,6 +79,7 @@ class GeneralController {
 
         if (result.verify) {
 
+            session."token" = params.p_token
             render view: "actionpassword", params: params
 
         } else if (result.login || result.error){
@@ -89,7 +90,14 @@ class GeneralController {
     }
 
     def submitActionPassword() {
-        render view: "resetpin"
+
+        def result = generalSsbProxyService.setProxyVerify(session."token", params.p_verify)
+
+        if (result.doPin) {
+            render view: "resetpin"
+        } else {
+            forward controller: "login", action: "auth", params: params
+        }
     }
 
     def resetPinAction() {

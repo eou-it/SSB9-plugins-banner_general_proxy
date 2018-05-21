@@ -177,3 +177,21 @@ a.breadcrumbButton.leaf-breadcrumb {
     color: #FFF;
     text-align: left;
 }
+
+.required-field::before {
+    content: "*";
+    color: red;
+}
+
+.required:after { content:" *"; }
+
+.asterisc {
+    display: block;
+    color: red;
+    margin: -19px 185px;
+}
+.red-star {
+    color: red;
+    float: right;
+}
+

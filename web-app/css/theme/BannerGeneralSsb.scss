@@ -5289,6 +5289,17 @@ body  {
 .actionpassword  {
     color: #FFFFFF;
 }
+
+.required-field::before  {
+    color: #FF0000;
+}
+
+.asterisc  {
+    color: #FF0000;
+}
+.red-star  {
+    color: #FF0000;
+}
 /* xe-ui-components.min.css */
 xe-button .primary:focus:not([disabled]),xe-button .secondary:focus:not([disabled]) {
     outline-color: #4D90FE;

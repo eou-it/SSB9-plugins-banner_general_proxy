@@ -14,7 +14,7 @@
 
         <div class="logInProxy appNameProxy">
             <g:message code="banner.generalssb.submitactionpassword.label"/>
-            <input type="text" name="token">
+            <input type="text" name="p_verify">
             <input type="submit" value="Submit" class="signin-button">
             <br>
 
