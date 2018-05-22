@@ -12,23 +12,26 @@
     <div class="appNameProxy">Banner<span>&reg;</span></div>
 
     <div class="logInProxy appNameProxy">
+        <g:if test='${flash.message}'>
+            <span class="icon-error"></span>${flash.message}
+        </g:if>
         <table>
      <tr>
             <td><label>Email Address: </label> <span class="red-star"> *</span></td>
-            <td><input type="text" name="email" required></td>
+            <td><input type="text" name="p_email" required></td>
      </tr>
             <tr>
                 <td><label>Old Pin: </label> <span class="red-star"> *</span></td>
-                <td><input type="text" name="oldPin" required></td>
+                <td><input type="text" name="p_pin_orig" required></td>
             </tr>
     <tr>
         <td><label>New Pin: </label> <span class="red-star"> *</span></td>
-        <td><input type="text" name="newPin" required></td>
+        <td><input type="text" name="p_pin1" required></td>
     </tr>
 
             <tr>
                 <td><label>Validate Pin: </label> <span class="red-star"> *</span></td>
-                <td><input type="text" name="validatePin" required></td>
+                <td><input type="text" name="p_pin2" required></td>
                 <td>    <input type="submit" value="Save" class="signin-button"></td>
 
             </tr>

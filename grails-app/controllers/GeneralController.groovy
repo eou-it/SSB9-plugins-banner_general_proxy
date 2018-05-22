@@ -101,10 +101,17 @@ class GeneralController {
     }
 
     def resetPinAction() {
-        //redirect(url: "http://localhost:8080/BannerGeneralSsb/login/auth")
-        //redirect(controller:"login", action: "auth")
-        redirect(url: "http://" + request.getServerName() + ":" + request.getServerPort() + "/BannerGeneralSsb/login/auth")
-        render view: "auth"
+        println "GUIDM: " + session."gidm"
+        println params.p_pin1 + " " + params.p_pin2 + " " + params.p_email + " " + params.p_pin_orig
+
+        def result = generalSsbProxyService.savePin(session."gidm", params.p_pin1, params.p_pin2, params.p_email, params.p_pin_orig)
+
+        if(!result.errorStatus) {
+            forward controller: "login", action: "auth", params: params
+        }else{
+            flash.message = result.error
+            render view: "resetpin"
+        }
     }
 
 
