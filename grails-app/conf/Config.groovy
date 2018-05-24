@@ -31,15 +31,6 @@ grails.config.locations.each {
     println "configuration: " + it
 }
 
-proxySqlLoad {
-    if (System.getProperty("PROXY_SQL_LOAD")) {
-        file = System.getProperty("PROXY_SQL_LOAD")
-    }
-    else if (System.getenv()["PROXY_SQL_LOAD"]) {
-        file = System.getenv()["PROXY_SQL_LOAD"]
-    }
-}
-
 // ******************************************************************************
 //
 //                       +++ BUILD NUMBER SEQUENCE UUID +++
