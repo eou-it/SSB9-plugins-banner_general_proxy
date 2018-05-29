@@ -43,7 +43,7 @@
         </div>
 
     </div>
-
+    <input type="hidden" name="gidm" value="${gidm}" />
 </form>
 </p>
 

@@ -79,8 +79,7 @@ class GeneralController {
 
         if (result.verify) {
 
-            session."token" = params.p_token
-            render view: "actionpassword", params: params
+            render view: "actionpassword", params: params, model: [token: params.p_token, gidm : result.gidm]
 
         } else if (result.login || result.error){
 
@@ -91,20 +90,19 @@ class GeneralController {
 
     def submitActionPassword() {
 
-        def result = generalSsbProxyService.setProxyVerify(session."token", params.p_verify)
+        def result = generalSsbProxyService.setProxyVerify(params.token, params.p_verify, params.gidm)
 
         if (result.doPin) {
-            render view: "resetpin"
+            render view: "resetpin", model: [gidm : result.gidm]
         } else {
             forward controller: "login", action: "auth", params: params
         }
     }
 
     def resetPinAction() {
-        println "GUIDM: " + session."gidm"
-        println params.p_pin1 + " " + params.p_pin2 + " " + params.p_email + " " + params.p_pin_orig
+        println "GUIDM: " + params."gidm" + " " + params.p_pin1 + " " + params.p_pin2 + " " + params.p_email + " " + params.p_pin_orig
 
-        def result = generalSsbProxyService.savePin(session."gidm", params.p_pin1, params.p_pin2, params.p_email, params.p_pin_orig)
+        def result = generalSsbProxyService.savePin(params."gidm", params.p_pin1, params.p_pin2, params.p_email, params.p_pin_orig)
 
         if(!result.errorStatus) {
             forward controller: "login", action: "auth", params: params
