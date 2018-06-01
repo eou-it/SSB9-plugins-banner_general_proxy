@@ -151,25 +151,19 @@
         </TR>
         <TR>
             <TD CLASS="input-field-label">
-                <LABEL for=p_stat_code><SPAN class="fieldlabeltext">State&nbsp;&nbsp;&nbsp;</SPAN><SPAN
-                        class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
-                                                       ALT="Required" CLASS="headerImg" TITLE="Required"
-                                                       NAME="web_required" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=9 WIDTH=10>
-                </SPAN></LABEL>
+                <LABEL for=p_stat_code><SPAN class="fieldlabeltext">State&nbsp;&nbsp;&nbsp;</SPAN>
+                </LABEL>
             </TD>
             <TD CLASS="text-input-field-proxy">
-                <g:select name="p_stat_code" optionKey="code" from="${State.list()}" optionValue="${{it.description}}" value="${proxyProfile.p_stat_code}"
+                <g:select name="p_stat_code" optionKey="code" from="${State.list().sort{ it.description }}" optionValue="${{it.description}}" value="${proxyProfile.p_stat_code}"
                           noSelection="['null':'Enter State']"></g:select>
 
             </TD>
         </TR>
         <TR>
             <TD CLASS="input-field-label">
-                <LABEL for=p_zip><SPAN class="fieldlabeltext">Zipcode&nbsp;&nbsp;&nbsp;</SPAN><SPAN
-                        class="fieldrequiredtext"><IMG SRC="/wtlgifs/web_required_cascade.png" ALIGN="bottom"
-                                                       ALT="Required" CLASS="headerImg" TITLE="Required"
-                                                       NAME="web_required" HSPACE=0 VSPACE=0 BORDER=0 HEIGHT=9 WIDTH=10>
-                </SPAN></LABEL>
+                <LABEL for=p_zip><SPAN class="fieldlabeltext">Zipcode&nbsp;&nbsp;&nbsp;</SPAN>
+                </LABEL>
             </TD>
             <TD CLASS="text-input-field-proxy">
                 <INPUT TYPE="text" NAME="p_zip" value="${proxyProfile.p_zip}" SIZE="33" MAXLENGTH="30" VALUE="19355" id="p_zip">
@@ -180,7 +174,7 @@
                 <LABEL for=p_natn_code><SPAN class="fieldlabeltext">Nation&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
             </TD>
             <TD CLASS="text-input-field-proxy">
-                <g:select name="p_natn_code" optionKey="code" from="${Nation.list()}" optionValue="${{it.nation}}" value="${proxyProfile.p_natn_code}"
+                <g:select name="p_natn_code" optionKey="code" from="${Nation.list().sort{ it.nation }}" optionValue="${{it.nation}}" value="${proxyProfile.p_natn_code}"
                           noSelection="['null':'Enter Nation']"></g:select>
 
             </TD>
@@ -190,7 +184,7 @@
                 <LABEL for=p_sex><SPAN class="fieldlabeltext">Gender&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
             </TD>
             <TD CLASS="text-input-field-proxy">
-                <g:select name="p_sex" from="${Gender.values()}" optionKey="bannerValue"  value="${proxyProfile.p_sex}"/>
+                <g:select name="p_sex" from="${Gender.values().sort{it.bannerValue}}" optionKey="bannerValue"  value="${proxyProfile.p_sex}"/>
             </TD>
         </TR>
         <TR>
