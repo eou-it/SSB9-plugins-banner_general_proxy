@@ -29,44 +29,19 @@ class GeneralController {
 
     def updateProxyProfile(){
 
-        def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        //get proxy gidm
-        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
-        def p_first_name = params.p_first_name
-        def p_last_name = "Hitrik"
+        generalSsbProxyService.updateProxyProfile(params)
+
+        def proxyProfile =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
 
 
-        //Execute bwgkpxya.P_PA_StoreProfile
-        sql.executeUpdate("""
-       DECLARE
-        lv_GPBPRXY_rec        gp_gpbprxy.gpbprxy_rec;
-        lv_GPBPRXY_ref        gp_gpbprxy.gpbprxy_ref;
-       BEGIN
-            -- Get the proxy record
-          lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One (${p_proxyIDM});
-          FETCH lv_GPBPRXY_ref INTO lv_GPBPRXY_rec;
-          CLOSE lv_GPBPRXY_ref;
-          
-          gp_gpbprxy.P_Update (
-            p_proxy_idm    => ${p_proxyIDM},
-            p_first_name   => ${p_first_name},
-            p_last_name    => ${p_last_name},
-            p_user_id      => goksels.f_get_ssb_id_context,
-            p_rowid        => lv_GPBPRXY_rec.R_INTERNAL_RECORD_ID
-            );
-            
-            gb_common.P_Commit;
-       
-        END ;
-        
-            """)
-
-        println params
-        render view: "proxypersonalinformation"
+        render view: "proxypersonalinformation",  model :  [proxyProfile : proxyProfile ]
     }
 
     def proxypersonalinformation(){
-        render view: "proxypersonalinformation"
+        def proxyProfile
+        proxyProfile =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
+
+        render view: "proxypersonalinformation", model :  [proxyProfile : proxyProfile ]
     }
 
     def grades(){

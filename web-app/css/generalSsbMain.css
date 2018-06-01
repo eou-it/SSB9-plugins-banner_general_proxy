@@ -195,3 +195,17 @@ a.breadcrumbButton.leaf-breadcrumb {
     float: right;
 }
 
+table.dataentrytable {
+    border-spacing: 0px;
+    width:80%;
+}
+
+.text-input-field-proxt {
+    border-radius: 4px;
+    background-color: #fff;
+    border:1px solid #869FB1;
+    box-shadow: 4px 4px #EDF3F6 inset;
+    width: 60%;
+    color: #869FB1;
+}
+

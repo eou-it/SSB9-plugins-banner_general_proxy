@@ -3,19 +3,83 @@ updateProfile {
      DECLARE
       lv_GPBPRXY_rec        gp_gpbprxy.gpbprxy_rec;
       lv_GPBPRXY_ref        gp_gpbprxy.gpbprxy_ref;
+
+      lv_opt_out_adv_date   DATE := SYSDATE;
+
+      lv_info               twgrinfo.twgrinfo_label%TYPE := 'SAVED';
+
+         FUNCTION f_validate_date (p_date VARCHAR2)
+           RETURN VARCHAR2
+         IS
+           f_date    DATE;
+         BEGIN
+           IF p_date IS NOT NULL THEN
+             BEGIN
+               IF twbkwbis.f_isdate (p_date, twbklibs.date_input_fmt) THEN
+                 f_date := twbkwbis.f_fmtdate (p_date);
+                 IF trunc(( sysdate - f_date)/365) > 150 THEN -- if the birthdate makes them over 150, error
+                   RETURN NULL;
+                 ELSE
+                   RETURN p_date;
+                 END IF;
+               ELSE
+                 RETURN NULL;
+               END IF;
+             EXCEPTION
+               WHEN OTHERS THEN
+                 RETURN NULL;
+             END;
+           END IF;
+           RETURN NULL;
+         END f_validate_date;
+
      BEGIN
           -- Get the proxy record
-        lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One (:p_proxyIDM);
+        lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One (?);
         FETCH lv_GPBPRXY_ref INTO lv_GPBPRXY_rec;
         CLOSE lv_GPBPRXY_ref;
 
         gp_gpbprxy.P_Update (
-          p_proxy_idm    => :p_proxyIDM,
-          p_first_name   => :p_first_name,
-          p_last_name    => :p_last_name,
+          p_proxy_idm    => ?,
+          p_first_name   => ?,
+          p_last_name    => ?,
           p_user_id      => goksels.f_get_ssb_id_context,
           p_rowid        => lv_GPBPRXY_rec.R_INTERNAL_RECORD_ID
           );
+
+            -- Update everything else except e-mail
+                      -- but verify birthdate and null out if invalid
+                          BEGIN
+                             gp_gpbprxy.P_Update (
+                                p_proxy_idm          => ?,
+                                p_mi                 => goksels.f_clean_text(?),
+                                p_surname_prefix     => goksels.f_clean_text(?),
+                                p_name_prefix        => goksels.f_clean_text(?),
+                                p_name_suffix        => goksels.f_clean_text(?),
+                                p_pref_first_name    => goksels.f_clean_text(?),
+                                p_phone_area         => goksels.f_clean_text(?),
+                                p_phone_number       => goksels.f_clean_text(?),
+                                p_phone_ext          => goksels.f_clean_text(?),
+                                p_ctry_code_phone    => goksels.f_clean_text(?),
+                                p_house_number       => goksels.f_clean_text(?),
+                                p_street_line1       => goksels.f_clean_text(?),
+                                p_street_line2       => goksels.f_clean_text(?),
+                                p_street_line3       => goksels.f_clean_text(?),
+                                p_street_line4       => goksels.f_clean_text(?),
+                                p_city               => goksels.f_clean_text(?),
+                                p_stat_code          => goksels.f_clean_text(?),
+                                p_zip                => goksels.f_clean_text(?),
+                                p_cnty_code          => goksels.f_clean_text(?),
+                                p_natn_code          => goksels.f_clean_text(?),
+                                p_sex                => goksels.f_clean_text(?),
+                                p_birth_date         => TO_DATE (f_validate_date(?), twbklibs.date_input_fmt),
+                                p_ssn                => goksels.f_clean_text(?),
+                                p_opt_out_adv_date   => lv_opt_out_adv_date,
+                                p_user_id            => goksels.f_get_ssb_id_context,
+                                p_rowid              => lv_GPBPRXY_rec.R_INTERNAL_RECORD_ID);
+                          EXCEPTION
+                             WHEN OTHERS THEN lv_info := 'DATA_ERROR';
+                          END;
 
           gb_common.P_Commit;
 
@@ -334,5 +398,19 @@ savePin {
           ?  := error_status;
 
       END;
+    """
+}
+
+getProxyPersonalInformation {
+    sqlText = """
+       DECLARE
+        lv_GPBPRXY_rec gp_gpbprxy.gpbprxy_rec;
+        lv_GPBPRXY_ref gp_gpbprxy.gpbprxy_ref;
+
+        BEGIN
+
+         ? := gp_gpbprxy.F_Query_One (to_number(?));
+
+         END;
     """
 }
