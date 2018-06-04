@@ -11,7 +11,9 @@
 </head>
 
 <body>
-
+<br>
+<b>Proxy Profile </b><br>
+Please keep your Banner Web proxy information up-to-date.
 <FORM ACTION="updateProxyProfile" METHOD="POST" id="proxyprofile" autocomplete="off">
     <TABLE CLASS="dataentrytable" SUMMARY="This table displays the proxy profile fields.">
         <TR>
@@ -193,7 +195,7 @@
                 </LABEL>
             </TD>
             <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_birth_date" value="${proxyProfile.p_birth_date}" id="p_birth_date">
+                <INPUT TYPE="date" NAME="p_birth_date" value="${proxyProfile.p_birth_date}" id="p_birth_date">
             </TD>
         </TR>
         <TR>

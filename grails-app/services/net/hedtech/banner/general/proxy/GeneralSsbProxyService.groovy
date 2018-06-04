@@ -11,6 +11,9 @@ import groovy.json.JsonBuilder
 import oracle.jdbc.driver.OracleTypes
 import groovy.sql.OutParameter
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 class GeneralSsbProxyService {
     private final Logger log = Logger.getLogger(getClass())
     def sessionFactory                     // injected by Spring
@@ -138,7 +141,8 @@ class GeneralSsbProxyService {
 
         def sqlText = sqlFileLoadService.getSqlTextMap().getProxyPersonalInformation?.sqlText
 
-        println sqlText
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
         def proxyProfile = [:]
 
@@ -163,7 +167,7 @@ class GeneralSsbProxyService {
                 proxyProfile.p_zip = data.GPBPRXY_ZIP
                 proxyProfile.p_natn_code = data.GPBPRXY_NATN_CODE
                 proxyProfile.p_sex = data.GPBPRXY_SEX
-                proxyProfile.p_birth_date = data.GPBPRXY_BIRTH_DATE
+                proxyProfile.p_birth_date = df.format(data.GPBPRXY_BIRTH_DATE)
                 proxyProfile.p_ssn = data.GPBPRXY_SSN
             }
 
@@ -186,13 +190,15 @@ class GeneralSsbProxyService {
 
         def sqlText = sqlFileLoadService.getSqlTextMap().updateProfile?.sqlText
 
+        def bDate = Date.parse('yyyy-MM-dd', params.p_birth_date).format('MM/dd/yyyy')
+
         sql.call(sqlText, [p_proxyIDM, p_proxyIDM, params.p_first_name, params.p_last_name,
                            p_proxyIDM , params.p_mi, params.p_surname_prefix, params.p_name_prefix,
                            params.p_name_suffix, params.p_pref_first_name, params.p_phone_area,
                            params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
                            params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
                            params.p_city, params.p_stat_code, params.p_zip, params.p_cnty_code, params.p_natn_code,
-                           params.p_sex, params.p_birth_date, params.p_ssn
+                           params.p_sex, bDate, params.p_ssn
                           ])
 
     }
