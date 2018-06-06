@@ -39,12 +39,13 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                 if (CommonContext.guestUser){
 
                     $scope.guestUser = true;
+                    $scope.guestUserName = CommonContext.user;
 
                     $scope.appTiles.push(
                         {
                             title: 'banner.generalssb.landingpage.personal.title',
                             desc: 'banner.generalssb.landingpage.personal.description',
-                            url: $scope.applicationContextRoot +'/ssb/general/proxypersonalinformation',
+                            url: $scope.applicationContextRoot +'/ssb/proxy/proxypersonalinformation',
                             icon: '../images/personal_info.svg'
                         }
                     );
@@ -54,7 +55,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                         {
                             title: 'banner.generalssb.landingpage.grades.title',
                             desc: 'banner.generalssb.landingpage.grades.description',
-                            url: $scope.applicationContextRoot +'/ssb/general/grades',
+                            url: $scope.applicationContextRoot +'/ssb/proxy/grades',
                             icon: '../images/personal_info.svg'
                         }
                     );
@@ -63,7 +64,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                         {
                             title: 'banner.generalssb.landingpage.holds.title',
                             desc: 'banner.generalssb.landingpage.holds.description',
-                            url: $scope.applicationContextRoot +'/ssb/personalInformation',
+                            url: $scope.applicationContextRoot +'/ssb/proxy/holds',
                             icon: '../images/personal_info.svg'
                         }
                     );

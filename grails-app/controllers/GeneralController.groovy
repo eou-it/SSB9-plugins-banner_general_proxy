@@ -24,29 +24,6 @@ class GeneralController {
     def generalSsbConfigService
     def generalSsbProxyService
 
-    def dataSource               // injected by Spring
-    def sessionFactory           // injected by Spring
-
-    def updateProxyProfile(){
-
-        generalSsbProxyService.updateProxyProfile(params)
-
-        def proxyProfile =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
-
-
-        render view: "proxypersonalinformation",  model :  [proxyProfile : proxyProfile ]
-    }
-
-    def proxypersonalinformation(){
-        def proxyProfile
-        proxyProfile =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
-
-        render view: "proxypersonalinformation", model :  [proxyProfile : proxyProfile ]
-    }
-
-    def grades(){
-        render view: "grades"
-    }
 
     def proxy(){
 
@@ -80,7 +57,7 @@ class GeneralController {
         def result = generalSsbProxyService.savePin(params."gidm", params.p_pin1, params.p_pin2, params.p_email, params.p_pin_orig)
 
         if(!result.errorStatus) {
-            forward controller: "login", action: "auth", params: params
+            redirect (uri: "/login/auth")
         }else{
             flash.message = result.error
             render view: "resetpin"

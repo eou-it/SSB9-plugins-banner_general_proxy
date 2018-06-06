@@ -9,8 +9,7 @@
         <div class="greeting">
 
             <div data-ng-show = "guestUser === true">
-                <div class="break-long-words">Hello, Michael Hitrik</div>
-                <div class="landingDesc break-long-words">You view this page as a Proxy User</div>
+                <div class="landingDesc break-long-words">You view this page as a Proxy User: {{guestUserName}}</div>
             </div>
 
             <div  data-ng-show = "guestUser == false">

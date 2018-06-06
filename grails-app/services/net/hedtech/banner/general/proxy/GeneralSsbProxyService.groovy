@@ -167,7 +167,7 @@ class GeneralSsbProxyService {
                 proxyProfile.p_zip = data.GPBPRXY_ZIP
                 proxyProfile.p_natn_code = data.GPBPRXY_NATN_CODE
                 proxyProfile.p_sex = data.GPBPRXY_SEX
-                proxyProfile.p_birth_date = df.format(data.GPBPRXY_BIRTH_DATE)
+                proxyProfile.p_birth_date = (data.GPBPRXY_BIRTH_DATE==null) ? "" : df.format(data.GPBPRXY_BIRTH_DATE)
                 proxyProfile.p_ssn = data.GPBPRXY_SSN
             }
 
