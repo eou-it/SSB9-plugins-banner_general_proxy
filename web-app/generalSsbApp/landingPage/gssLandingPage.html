@@ -27,7 +27,9 @@
         <landing-page-app-tile tile-data="tile"/>
     </div>
 
-    <div ng-repeat="proxy in proxyTiles">
+    <div data-ng-show = "guestUser === true">
+     <div ng-repeat="proxy in proxyTiles">
         <landing-page-proxy-tile proxy-data="proxy"/>
+      </div>
     </div>
 </div>
