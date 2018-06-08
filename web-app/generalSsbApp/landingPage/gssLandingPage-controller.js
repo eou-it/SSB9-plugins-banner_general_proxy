@@ -51,7 +51,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                     );
 
 
-                    $scope.appTiles.push(
+                    $scope.proxyTiles.push(
                         {
                             title: 'banner.generalssb.landingpage.grades.title',
                             desc: 'banner.generalssb.landingpage.grades.description',
@@ -60,7 +60,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                         }
                     );
 
-                    $scope.appTiles.push(
+                    $scope.proxyTiles.push(
                         {
                             title: 'banner.generalssb.landingpage.holds.title',
                             desc: 'banner.generalssb.landingpage.holds.description',
@@ -68,6 +68,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
                             icon: '../images/personal_info.svg'
                         }
                     );
+
                 }else{
 
                     $scope.guestUser = false;
@@ -115,6 +116,7 @@ generalSsbAppControllers.controller('gssLandingPageController',['$scope', 'gener
         // --------------------
         $scope.piConfig = {};
         $scope.appTiles = [];
+        $scope.proxyTiles = [];
         $scope.isStudent;
         $scope.isEmployee;
         $scope.appTilesForRole;

@@ -31,7 +31,7 @@ class GeneralController {
 
         if (result.verify) {
 
-            render view: "actionpassword", params: params, model: [token: params.p_token, gidm : result.gidm]
+            render view: "/proxy/actionpassword", params: params, model: [token: params.p_token, gidm : result.gidm]
 
         } else if (result.login || result.error){
 
@@ -45,7 +45,7 @@ class GeneralController {
         def result = generalSsbProxyService.setProxyVerify(params.token, params.p_verify, params.gidm)
 
         if (result.doPin) {
-            render view: "resetpin", model: [gidm : result.gidm]
+            render view: "/proxy/resetpin", model: [gidm : result.gidm]
         } else {
             forward controller: "login", action: "auth", params: params
         }
@@ -60,7 +60,7 @@ class GeneralController {
             redirect (uri: "/login/auth")
         }else{
             flash.message = result.error
-            render view: "resetpin"
+            render view: "/proxy/resetpin"
         }
     }
 
