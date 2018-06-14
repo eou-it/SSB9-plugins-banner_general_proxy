@@ -202,4 +202,19 @@ class GeneralSsbProxyService {
                           ])
 
     }
+
+
+
+    def updateProxyHistoryOnLogin() {
+        //get proxy gidm
+        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        def sqlText = sqlFileLoadService.getSqlTextMap().storeLoginInHistory?.sqlText
+
+        sql.call(sqlText,
+                [p_proxyIDM, p_proxyIDM, p_proxyIDM
+        ])
+
+    }
 }
