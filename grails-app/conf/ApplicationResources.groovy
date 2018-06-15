@@ -52,6 +52,42 @@ modules = {
         resource url: [file: 'css/generalSsbResponsive-rtl.css'], attrs: [media: 'screen, projection']
     }
 
+    'proxyApp' {
+        dependsOn "angularGeneral"
+
+        defaultBundle environment == "development" ? false : "proxyApp"
+
+        //Main configuration file
+        resource url: [file: 'proxyApp/app.js']
+
+        // Services
+        resource url: [file: 'proxyApp/common/services/breadcrumb-service.js']
+        resource url: [file: 'proxyApp/common/services/proxyApp-service.js']
+
+        // Controllers
+        resource url: [file: 'proxyApp/proxyAccessHome/gssLandingPage-controller.js']
+
+        // Filters
+        resource url: [file: 'proxyApp/common/filters/i18n-filter.js']
+
+        // Directives
+        resource url: [file: 'proxyApp/proxyAccessHome/gssLandingPage-directive.js']
+
+    }
+    'proxyAppLTR' {
+        dependsOn "bannerWebLTR, proxyApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsLTR"
+        // CSS
+        resource url: [file: 'css/generalSsbMain.css'], attrs: [media: 'screen, projection']
+        resource url: [file: 'css/generalSsbResponsive.css'], attrs: [media: 'screen, projection']
+    }
+
+    'proxyAppRTL' {
+        dependsOn "bannerWebRTL, proxyApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsRTL"
+        // CSS
+        resource url: [file: 'css/generalSsbMain-rtl.css'], attrs: [media: 'screen, projection']
+        resource url: [file: 'css/generalSsbResponsive-rtl.css'], attrs: [media: 'screen, projection']
+    }
+
     'commonComponents' {
         resource url: [file: 'js/d3/d3.min.js']
         resource url: [file: 'js/xe-components/xe-ui-components.js']

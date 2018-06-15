@@ -19,12 +19,23 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <g:set var="appName" value= ""/>
+        <g:set var="guestUser" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('guestUser')}"/>
 
-        <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-            <r:require modules="generalSsbAppRTL"/>
+        <g:if test="${guestUser}">
+            <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
+                <r:require modules="proxyAppRTL"/>
+            </g:if>
+            <g:else>
+                <r:require modules="proxyAppLTR"/>
+            </g:else>
         </g:if>
         <g:else>
-            <r:require modules="generalSsbAppLTR"/>
+            <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
+                <r:require modules="generalSsbAppRTL"/>
+            </g:if>
+            <g:else>
+                <r:require modules="generalSsbAppLTR"/>
+            </g:else>
         </g:else>
 
     </g:applyLayout>
@@ -66,10 +77,16 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
 
 <body>
 
-
+<g:if test="${guestUser}">
+<div id="content" ng-app="proxyApp" class="container-fluid" aria-relevant="additions" role="main">
+    <div ui-view class="gen-home-main-view"></div>
+</div>
+</g:if>
+<g:else>
 <div id="content" ng-app="generalSsbApp" class="container-fluid" aria-relevant="additions" role="main">
     <div ui-view class="gen-home-main-view"></div>
 </div>
+</g:else>
 <div class="body-overlay"></div>
 </body>
 </html>
