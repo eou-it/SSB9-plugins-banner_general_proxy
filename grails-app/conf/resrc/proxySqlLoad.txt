@@ -81,6 +81,9 @@ updateProfile {
                              WHEN OTHERS THEN lv_info := 'DATA_ERROR';
                           END;
 
+          -- Update match-n-load tables for insert/update into General Person
+          bwgkprxy.P_MatchLoad (?);
+
           gb_common.P_Commit;
 
       END ;
