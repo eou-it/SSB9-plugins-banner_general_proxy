@@ -73,6 +73,16 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider) {
             data: {
                 breadcrumbs: []
             }
+        })
+        .state('proxyPersonalInfo', {
+            url: "/proxypersonalinformation",
+            templateUrl: '../proxyApp/proxyPersonalInfo/proxyPersonalInformation.html',
+            controller: 'proxyPersonalInformationController',
+            resolve: {
+            },
+            data: {
+                breadcrumbs: []
+            }
         });
 });
 

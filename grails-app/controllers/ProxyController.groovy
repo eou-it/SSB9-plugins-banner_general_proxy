@@ -1,6 +1,8 @@
 /*******************************************************************************
  Copyright 2015-2018 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
+
+import grails.converters.JSON
 import org.springframework.security.core.context.SecurityContextHolder
 
 /**
@@ -29,6 +31,13 @@ class ProxyController {
         proxyProfile =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
 
         render view: "/proxy/proxypersonalinformation", model :  [proxyProfile: proxyProfile ]
+    }
+
+    def getProxypersonalinformation(){
+        def proxyProfile
+        proxyProfile =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
+
+        render proxyProfile as JSON
     }
 
     def grades(){

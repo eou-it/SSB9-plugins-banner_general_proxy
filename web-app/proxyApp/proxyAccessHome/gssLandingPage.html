@@ -19,8 +19,11 @@
 <div class="gen-home-heading-spacer"></div>
 <div ng-class="['gen-home-content', isSingleTile ? 'single-tile' : null]">
     <div data-ng-show = "guestUser === true">
-     <div ng-repeat="proxy in proxyTiles">
-        <landing-page-proxy-tile proxy-data="proxy"/>
-      </div>
+        <div ng-repeat="tile in appTiles">
+            <landing-page-app-tile proxy-data="tile"/>
+        </div>
+        <div ng-repeat="proxy in proxyTiles">
+            <landing-page-proxy-tile proxy-data="proxy"/>
+        </div>
     </div>
 </div>

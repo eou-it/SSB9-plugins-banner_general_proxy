@@ -21,11 +21,12 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
                     $scope.guestUser = true;
                     $scope.guestUserName = CommonContext.user;
 
-                    $scope.proxyTiles.push(
+
+                    $scope.appTiles.push(
                         {
                             title: 'banner.generalssb.landingpage.personal.title',
                             desc: 'banner.generalssb.landingpage.personal.description',
-                            url: $scope.applicationContextRoot +'/ssb/proxy/proxypersonalinformation',
+                            url: 'proxyPersonalInfo',//$scope.applicationContextRoot +'/ssb/proxy/proxypersonalinformation',
                             icon: '../images/personal_info.svg'
                         }
                     );
@@ -58,6 +59,7 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
         // --------------------
         $scope.piConfig = {};
         $scope.proxyTiles = [];
+        $scope.appTiles = [];
         $scope.isSingleTile;
         $scope.firstName = '';
         $scope.bannerId;
