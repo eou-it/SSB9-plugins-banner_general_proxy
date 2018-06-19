@@ -398,7 +398,7 @@ class GeneralSsbProxyService {
         def updateRulesErrors = checkProxyProfileDataOnUpdate(params)
 
         if (updateRulesErrors){
-            throw new ApplicationException(GeneralSsbProxyService, x)
+            throw new ApplicationException(GeneralSsbProxyService, updateRulesErrors)
         }
         //get proxy gidm
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
