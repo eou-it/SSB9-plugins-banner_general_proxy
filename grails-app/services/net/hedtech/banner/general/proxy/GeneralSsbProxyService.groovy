@@ -14,12 +14,15 @@ import groovy.sql.OutParameter
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
+import net.hedtech.banner.exceptions.ApplicationException
+
 class GeneralSsbProxyService {
     private final Logger log = Logger.getLogger(getClass())
     def sessionFactory                     // injected by Spring
     def dataSource                         // injected by Spring
     def grailsApplication                  // injected by Spring
     def sqlFileLoadService
+
 
     /**
      * This methods defines the p_token authentication as passed to the proxy
@@ -173,15 +176,230 @@ class GeneralSsbProxyService {
 
         }
 
-        println "proxyProfile: " + proxyProfile
+        def proxyUiRules = [:]
+        sqlText = sqlFileLoadService.getSqlTextMap().getProxyProfileUiRules?.sqlText
 
-        return proxyProfile
+        sql.call(sqlText, [gidm, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR,
+                           Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR,
+                           Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR,
+                           Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR,
+                           Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR,
+                           Sql.VARCHAR, Sql.VARCHAR ])
+                { show_p_name_prefix, show_p_mi, show_p_surname_prefix,
+                  show_p_name_suffix, show_p_pref_first_name, show_p_phone_area,
+                  show_p_phone_number, show_p_phone_ext, show_p_ctry_code_phone,
+                  show_p_house_number, show_p_street_line1,show_p_street_line2,show_p_street_line3,show_p_street_line4,
+                  show_p_city, show_p_stat_code, show_p_zip, show_p_cnty_code, show_p_natn_code,
+                  show_p_sex, show_p_birth_date, show_p_ssn ->
+
+                    if (show_p_name_prefix.equals("V")){
+                        proxyUiRules."p_name_prefix" = [visible: true, required : false]
+                    }else if(show_p_name_prefix.equals("N")){
+                        proxyUiRules."p_name_prefix" = [visible: false, required : false]
+                    }else if(show_p_name_prefix.equals("Y")){
+                        proxyUiRules."p_name_prefix" = [visible: true, required : true]
+                    }
+
+                    if (show_p_mi.equals("V")){
+                        proxyUiRules."p_mi" = [visible: true, required : false]
+                    }else if(show_p_mi.equals("N")){
+                        proxyUiRules."p_mi" = [visible: false, required : false]
+                    }else if(show_p_mi.equals("Y")){
+                        proxyUiRules."p_mi" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_surname_prefix.equals("V")){
+                        proxyUiRules."p_surname_prefix" = [visible: true, required : false]
+                    }else if(show_p_surname_prefix.equals("N")){
+                        proxyUiRules."p_surname_prefix" = [visible: false, required : false]
+                    }else if(show_p_surname_prefix.equals("Y")){
+                        proxyUiRules."p_surname_prefix" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_name_suffix.equals("V")){
+                        proxyUiRules."p_name_suffix" = [visible: true, required : false]
+                    }else if(show_p_name_suffix.equals("N")){
+                        proxyUiRules."p_name_suffix" = [visible: false, required : false]
+                    }else if(show_p_name_suffix("Y")){
+                        proxyUiRules."p_name_suffix" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_pref_first_name.equals("V")){
+                        proxyUiRules."p_pref_first_name" = [visible: true, required : false]
+                    }else if(show_p_pref_first_name.equals("N")){
+                        proxyUiRules."p_pref_first_name" = [visible: false, required : false]
+                    }else if(show_p_pref_first_name("Y")){
+                        proxyUiRules."p_pref_first_name" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_phone_area.equals("V")){
+                        proxyUiRules."p_phone_area" = [visible: true, required : false]
+                    }else if(show_p_phone_area.equals("N")){
+                        proxyUiRules."p_phone_area" = [visible: false, required : false]
+                    }else if(show_p_phone_area("Y")){
+                        proxyUiRules."show_p_phone_area" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_phone_number.equals("V")){
+                        proxyUiRules."p_phone_number" = [visible: true, required : false]
+                    }else if(show_p_phone_number.equals("N")){
+                        proxyUiRules."p_phone_number" = [visible: false, required : false]
+                    }else if(show_p_phone_number("Y")){
+                        proxyUiRules."p_phone_number" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_phone_ext.equals("V")){
+                        proxyUiRules."p_phone_ext" = [visible: true, required : false]
+                    }else if(show_p_phone_ext.equals("N")){
+                        proxyUiRules."p_phone_ext" = [visible: false, required : false]
+                    }else if(show_p_phone_ext("Y")){
+                        proxyUiRules."p_phone_ext" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_ctry_code_phone.equals("V")){
+                        proxyUiRules."p_ctry_code_phone" = [visible: true, required : false]
+                    }else if(show_p_ctry_code_phone.equals("N")){
+                        proxyUiRules."p_ctry_code_phone" = [visible: false, required : false]
+                    }else if(show_p_ctry_code_phone("Y")){
+                        proxyUiRules."p_ctry_code_phone" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_house_number.equals("V")){
+                        proxyUiRules."p_house_number" = [visible: true, required : false]
+                    }else if(show_p_house_number.equals("N")){
+                        proxyUiRules."p_house_number" = [visible: false, required : false]
+                    }else if(show_p_house_number("Y")){
+                        proxyUiRules."show_p_house_number" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_street_line1.equals("V")){
+                        proxyUiRules."p_street_line1" = [visible: true, required : false]
+                    }else if(show_p_street_line1.equals("N")){
+                        proxyUiRules."p_street_line1" = [visible: false, required : false]
+                    }else if(show_p_street_line1.equals("Y")){
+                        proxyUiRules."p_street_line1" = [visible: true, required : true]
+                    }
+
+                    if (show_p_street_line2.equals("V")){
+                        proxyUiRules."p_street_line2" = [visible: true, required : false]
+                    }else if(show_p_street_line2.equals("N")){
+                        proxyUiRules."p_street_line2" = [visible: false, required : false]
+                    }else if(show_p_street_line2.equals("Y")){
+                        proxyUiRules."p_street_line2" = [visible: true, required : true]
+                    }
+
+                    if (show_p_street_line3.equals("V")){
+                        proxyUiRules."p_street_line3" = [visible: true, required : false]
+                    }else if(show_p_street_line3.equals("N")){
+                        proxyUiRules."p_street_line3" = [visible: false, required : false]
+                    }else if(show_p_street_line3.equals("Y")){
+                        proxyUiRules."p_street_line3" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_street_line4.equals("V")){
+                        proxyUiRules."p_street_line4" = [visible: true, required : false]
+                    }else if(show_p_street_line1.equals("N")){
+                        proxyUiRules."p_street_line4" = [visible: false, required : false]
+                    }else if(show_p_street_line4.equals("Y")){
+                        proxyUiRules."p_street_line4" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_city.equals("V")){
+                        proxyUiRules."p_city" = [visible: true, required : false]
+                    }else if(show_p_city.equals("N")){
+                        proxyUiRules."p_city" = [visible: false, required : false]
+                    }else if(show_p_city.equals("Y")){
+                        proxyUiRules."p_city" = [visible: true, required : true]
+                    }
+
+
+
+                    if (show_p_stat_code.equals("V")){
+                        proxyUiRules."p_stat_code" = [visible: true, required : false]
+                    }else if(show_p_stat_code.equals("N")){
+                        proxyUiRules."p_stat_code" = [visible: false, required : false]
+                    }else if(show_p_stat_code.equals("Y")){
+                        proxyUiRules."p_stat_code" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_zip.equals("V")){
+                        proxyUiRules."p_zip" = [visible: true, required : false]
+                    }else if(show_p_zip.equals("N")){
+                        proxyUiRules."p_zip" = [visible: false, required : false]
+                    }else if(show_p_zip.equals("Y")){
+                        proxyUiRules."p_zip" = [visible: true, required : true]
+                    }
+
+                    if (show_p_cnty_code.equals("V")){
+                        proxyUiRules."p_cnty_code" = [visible: true, required : false]
+                    }else if(show_p_cnty_code.equals("N")){
+                        proxyUiRules."p_cnty_code" = [visible: false, required : false]
+                    }else if(show_p_cnty_code.equals("Y")){
+                        proxyUiRules."p_cnty_code" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_natn_code.equals("V")){
+                        proxyUiRules."p_natn_code" = [visible: true, required : false]
+                    }else if(show_p_natn_code.equals("N")){
+                        proxyUiRules."p_natn_code" = [visible: false, required : false]
+                    }else if(show_p_natn_code.equals("Y")){
+                        proxyUiRules."p_natn_code" = [visible: true, required : true]
+                    }
+
+                    if (show_p_sex.equals("V")){
+                        proxyUiRules."p_sex" = [visible: true, required : false]
+                    }else if(show_p_sex.equals("N")){
+                        proxyUiRules."p_sex" = [visible: false, required : false]
+                    }else if(show_p_sex.equals("Y")){
+                        proxyUiRules."p_sex" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_ssn.equals("V")){
+                        proxyUiRules."p_ssn" = [visible: true, required : false]
+                    }else if(show_p_ssn.equals("N")){
+                        proxyUiRules."p_ssn" = [visible: false, required : false]
+                    }else if(show_p_ssn.equals("Y")){
+                        proxyUiRules."p_ssn" = [visible: true, required : true]
+                    }
+
+
+                    if (show_p_birth_date.equals("V")){
+                        proxyUiRules."p_birth_date" = [visible: true, required : false]
+                    }else if(show_p_birth_date.equals("N")){
+                        proxyUiRules."p_birth_date" = [visible: false, required : false]
+                    }else if(show_p_birth_date("Y")){
+                        proxyUiRules."p_birth_date" = [visible: true, required : true]
+                    }
+
+                }
+
+        return [proxyProfile : proxyProfile, proxyUiRules : proxyUiRules]
     }
 
 
     def updateProxyProfile(def params) {
 
-        println "Update Proxy Profile: " + params
+        //println "Update Proxy Profile: " + params
+
+        def updateRulesErrors = checkProxyProfileDataOnUpdate(params)
+
+        if (updateRulesErrors){
+            throw new ApplicationException(GeneralSsbProxyService, updateRulesErrors)
+        }
         //get proxy gidm
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
 
@@ -190,7 +408,7 @@ class GeneralSsbProxyService {
 
         def sqlText = sqlFileLoadService.getSqlTextMap().updateProfile?.sqlText
 
-        def bDate = Date.parse('yyyy-MM-dd', params.p_birth_date).format('MM/dd/yyyy')
+        def bDate = params.p_birth_date ? Date.parse('yyyy-MM-dd', params.p_birth_date).format('MM/dd/yyyy') : ""
 
         sql.call(sqlText, [p_proxyIDM, p_proxyIDM, params.p_first_name, params.p_last_name,
                            p_proxyIDM , params.p_mi, params.p_surname_prefix, params.p_name_prefix,
@@ -198,7 +416,7 @@ class GeneralSsbProxyService {
                            params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
                            params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
                            params.p_city, params.p_stat_code, params.p_zip, params.p_cnty_code, params.p_natn_code,
-                           params.p_sex, bDate, params.p_ssn
+                           params.p_sex, bDate, params.p_ssn, p_proxyIDM
                           ])
 
     }
@@ -217,4 +435,30 @@ class GeneralSsbProxyService {
         ])
 
     }
+
+
+    def checkProxyProfileDataOnUpdate(def params) {
+
+        def errorMsgOut = ""
+
+        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+        def sqlText = sqlFileLoadService.getSqlTextMap().checkProxyProfileRequiredData?.sqlText
+
+        def bDate = params.p_birth_date ? Date.parse('yyyy-MM-dd', params.p_birth_date).format('MM/dd/yyyy') : ""
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [p_proxyIDM, params.p_first_name, params.p_mi, params.p_last_name,
+                           params.p_surname_prefix, params.p_name_prefix,
+                           params.p_name_suffix, params.p_pref_first_name, params.p_email_address, params.p_phone_area,
+                           params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
+                           params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
+                           params.p_city, params.p_stat_code, params.p_zip, params.p_cnty_code, params.p_natn_code,
+                           params.p_sex, bDate, params.p_ssn, Sql.VARCHAR
+        ]){ errorMsg ->
+            errorMsgOut = errorMsg
+        }
+
+        return errorMsgOut
+    }
+
 }
