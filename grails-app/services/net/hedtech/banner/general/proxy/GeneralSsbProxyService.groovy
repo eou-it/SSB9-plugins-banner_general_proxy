@@ -222,7 +222,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_name_suffix" = [visible: true, required : false]
                     }else if(show_p_name_suffix.equals("N")){
                         proxyUiRules."p_name_suffix" = [visible: false, required : false]
-                    }else if(show_p_name_suffix("Y")){
+                    }else if(show_p_name_suffix.equals("Y")){
                         proxyUiRules."p_name_suffix" = [visible: true, required : true]
                     }
 
@@ -231,7 +231,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_pref_first_name" = [visible: true, required : false]
                     }else if(show_p_pref_first_name.equals("N")){
                         proxyUiRules."p_pref_first_name" = [visible: false, required : false]
-                    }else if(show_p_pref_first_name("Y")){
+                    }else if(show_p_pref_first_name.equals("Y")){
                         proxyUiRules."p_pref_first_name" = [visible: true, required : true]
                     }
 
@@ -240,7 +240,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_phone_area" = [visible: true, required : false]
                     }else if(show_p_phone_area.equals("N")){
                         proxyUiRules."p_phone_area" = [visible: false, required : false]
-                    }else if(show_p_phone_area("Y")){
+                    }else if(show_p_phone_area.equals("Y")){
                         proxyUiRules."show_p_phone_area" = [visible: true, required : true]
                     }
 
@@ -249,7 +249,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_phone_number" = [visible: true, required : false]
                     }else if(show_p_phone_number.equals("N")){
                         proxyUiRules."p_phone_number" = [visible: false, required : false]
-                    }else if(show_p_phone_number("Y")){
+                    }else if(show_p_phone_number.equals("Y")){
                         proxyUiRules."p_phone_number" = [visible: true, required : true]
                     }
 
@@ -258,7 +258,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_phone_ext" = [visible: true, required : false]
                     }else if(show_p_phone_ext.equals("N")){
                         proxyUiRules."p_phone_ext" = [visible: false, required : false]
-                    }else if(show_p_phone_ext("Y")){
+                    }else if(show_p_phone_ext.equals("Y")){
                         proxyUiRules."p_phone_ext" = [visible: true, required : true]
                     }
 
@@ -267,7 +267,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_ctry_code_phone" = [visible: true, required : false]
                     }else if(show_p_ctry_code_phone.equals("N")){
                         proxyUiRules."p_ctry_code_phone" = [visible: false, required : false]
-                    }else if(show_p_ctry_code_phone("Y")){
+                    }else if(show_p_ctry_code_phone.equals("Y")){
                         proxyUiRules."p_ctry_code_phone" = [visible: true, required : true]
                     }
 
@@ -276,7 +276,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_house_number" = [visible: true, required : false]
                     }else if(show_p_house_number.equals("N")){
                         proxyUiRules."p_house_number" = [visible: false, required : false]
-                    }else if(show_p_house_number("Y")){
+                    }else if(show_p_house_number.equals("Y")){
                         proxyUiRules."show_p_house_number" = [visible: true, required : true]
                     }
 
@@ -381,7 +381,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_birth_date" = [visible: true, required : false]
                     }else if(show_p_birth_date.equals("N")){
                         proxyUiRules."p_birth_date" = [visible: false, required : false]
-                    }else if(show_p_birth_date("Y")){
+                    }else if(show_p_birth_date.equals("Y")){
                         proxyUiRules."p_birth_date" = [visible: true, required : true]
                     }
 
