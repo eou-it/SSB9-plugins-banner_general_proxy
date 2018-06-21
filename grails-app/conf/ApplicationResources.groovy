@@ -73,6 +73,7 @@ modules = {
 
         // Directives
         resource url: [file: 'proxyApp/proxyAccessHome/gssLandingPage-directive.js']
+        resource url: [file: 'proxyApp/proxyPersonalInfo/proxyPersonalInfo-directive.js']
 
     }
     'proxyAppLTR' {

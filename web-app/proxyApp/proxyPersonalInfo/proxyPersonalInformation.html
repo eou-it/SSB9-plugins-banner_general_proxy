@@ -4,201 +4,28 @@
 <br>
 <b>Proxy Profile </b><br>
 Please keep your Banner Web proxy information up-to-date.
-<FORM ACTION="proxy/updateProxyProfile" METHOD="POST" id="proxyprofile" autocomplete="off">
-    <TABLE CLASS="dataentrytable" SUMMARY="This table displays the proxy profile fields.">
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_name_prefix><SPAN>Salutation</SPAN></LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_name_prefix" ng-model="proxyProfile.p_name_prefix" SIZE="22" MAXLENGTH="20" id="p_name_prefix">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_first_name><SPAN >First Name</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_first_name" ng-model="proxyProfile.p_first_name"  SIZE="62" MAXLENGTH="60" VALUE="Mike" id="p_first_name">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_mi><SPAN >Middle Name</SPAN></LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_mi" ng-model="proxyProfile.p_mi" SIZE="62" MAXLENGTH="60" id="p_mi">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_surname_prefix><SPAN>Surname Prefix</SPAN></LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_surname_prefix" ng-model="proxyProfile.p_surname_prefix" SIZE="62" MAXLENGTH="60" id="p_surname_prefix">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_last_name><SPAN>Last Name</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_last_name" ng-model="proxyProfile.p_last_name" SIZE="62" MAXLENGTH="60" VALUE="Hitrik" id="p_last_name">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_name_suffix><SPAN>Name Suffix</SPAN></LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_name_suffix" ng-model="proxyProfile.p_name_suffix" SIZE="22" MAXLENGTH="20" id="p_name_suffix">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_pref_first_name><SPAN>Nickname</SPAN></LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_pref_first_name" ng-model="proxyProfile.p_pref_first_name" SIZE="62" MAXLENGTH="60" id="p_pref_first_name">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_email_address><SPAN
-                        class="fieldlabeltext">Home E Mail Address &nbsp;&nbsp;&nbsp;</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_email_address" ng-model="proxyProfile.p_email_address" SIZE="75" MAXLENGTH="128" VALUE="michael.hitrik@ellucian.com"
-                       id="p_email_address">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_phone_area><SPAN class="fieldlabeltext">Permanent Phone Area Code&nbsp;&nbsp;&nbsp;</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_phone_area" ng-model="proxyProfile.p_phone_area" SIZE="7" MAXLENGTH="6" id="p_phone_area">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_phone_number><SPAN class="fieldlabeltext">Permanent Phone Number&nbsp;&nbsp;&nbsp;</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_phone_number"  ng-model="proxyProfile.p_phone_number" SIZE="14" MAXLENGTH="12" id="p_phone_number">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_phone_ext><SPAN class="fieldlabeltext">Permanent Phone Extension &nbsp;&nbsp;&nbsp;</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_phone_ext" ng-model="proxyProfile.p_phone_ext" SIZE="11" MAXLENGTH="10" id="p_phone_ext">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_street_line1><SPAN
-                        class="fieldlabeltext">Mailing Address Line 1 &nbsp;&nbsp;&nbsp;</SPAN>
-
-                    </SPAN></LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_street_line1" ng-model="proxyProfile.p_street_line1" SIZE="77" MAXLENGTH="75" VALUE="4 Country View Rd"
-                       id="p_street_line1">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_street_line2><SPAN class="fieldlabeltext">Mailing Address Line 2 &nbsp;&nbsp;&nbsp;</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_street_line2" ng-model="proxyProfile.p_street_line2" SIZE="77" MAXLENGTH="75" id="p_street_line2">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_street_line3><SPAN class="fieldlabeltext">Mailing Address Line 3 &nbsp;&nbsp;&nbsp;</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_street_line3" ng-model="proxyProfile.p_street_line3" SIZE="77" MAXLENGTH="75" id="p_street_line3">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_city><SPAN class="fieldlabeltext">City&nbsp;&nbsp;&nbsp;</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_city" ng-model="proxyProfile.p_city" SIZE="52" MAXLENGTH="50" VALUE="Malvern" id="p_city">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_stat_code><SPAN class="fieldlabeltext">State&nbsp;&nbsp;&nbsp;</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <g:select name="p_stat_code" optionKey="code" from="${State.list().sort{ it.description }}" optionValue="${{it.description}}" value="${proxyProfile.p_stat_code}"
-                          noSelection="['null':'Enter State']"></g:select>
-
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_zip><SPAN class="fieldlabeltext">Zipcode&nbsp;&nbsp;&nbsp;</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_zip" ng-model="proxyProfile.p_zip" SIZE="33" MAXLENGTH="30" VALUE="19355" id="p_zip">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_natn_code><SPAN class="fieldlabeltext">Nation&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <g:select name="p_natn_code" optionKey="code" from="${Nation.list().sort{ it.nation }}" optionValue="${{it.nation}}" value="${proxyProfile.p_natn_code}"
-                          noSelection="['null':'Enter Nation']"></g:select>
-
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_sex><SPAN class="fieldlabeltext">Gender&nbsp;&nbsp;&nbsp;</SPAN></LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <g:select name="p_sex" from="${Gender.values().sort{it.bannerValue}}" optionKey="bannerValue"  ng-model="proxyProfile.p_sex"/>
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_birth_date><SPAN class="fieldlabeltext">Birthdate (DD/MM/YYYY)&nbsp;&nbsp;&nbsp;</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_birth_date" ng-model="proxyProfile.p_birth_date" id="p_birth_date">
-            </TD>
-        </TR>
-        <TR>
-            <TD CLASS="input-field-label">
-                <LABEL for=p_ssn><SPAN class="fieldlabeltext">SSN/SIN/TIN</SPAN>
-                </LABEL>
-            </TD>
-            <TD CLASS="text-input-field-proxy">
-                <INPUT TYPE="text" NAME="p_ssn" ng-model="proxyProfile.p_ssn" SIZE="10" MAXLENGTH="9" id="p_ssn" autocomplete="off">
-            </TD>
-        </TR>
+<!--FORM ACTION="proxy/updateProxyProfile" METHOD="POST" id="proxyprofile" autocomplete="off">
+    <!--TABLE CLASS="dataentrytable" SUMMARY="This table displays the proxy profile fields."-->
+    <div class="row">
+    <div ng-repeat="profileElement in profileElements">
+        <div ng-if="profileElement.visible" class="col-xs-12">
+            <label ng-class="(!!cityErrMsg && !cityFocused ? 'input-field-label field-error' : 'input-field-label')"
+                   class="input-field-label" for="{{profileElement.elemId}}">{{profileElement.label}}</label><br>
+            <input ng-model="profileElement.model" ng-blur="cityFocused=false;" ng-focus="cityFocused=true"
+                   ng-class="[(!!cityErrMsg && !cityFocused ? 'input-field-error' : null)]" class="text-input-field semi-bold form-spacing"
+                   type="text" placeholder="{{profileElement.placeholder}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="{{profileElement.elemId}}">
+                <span ng-if="!!cityErrMsg && !cityFocused" class="icon input-fail">
+                    <span class="icon-error ellucian-font"></span>
+                </span>
+            <p class="input-field-label mobile-errors" ng-class="[(!!cityErrMsg ? 'field-error error-font-size' : 'no-display')]"
+               role="alert" aria-live="assertive">{{cityErrMsg|i18n}}</p>
+        </div>
+    </div>
+    <INPUT ng-click="save()" TYPE="button" VALUE="Save" id="p_save" class="signin-button">
+        <!--
+        NAME="p_save"
         <tr>
             <td><INPUT TYPE="submit" NAME="p_save" VALUE="Save" id="p_save" class="signin-button"></td>
         </tr>
     </TABLE>
-</FORM>
+</FORM-->
