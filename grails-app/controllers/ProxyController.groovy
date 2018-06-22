@@ -21,6 +21,7 @@ class ProxyController {
         def proxyProfiles =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
 
         try {
+            flash.message = null
             generalSsbProxyService.updateProxyProfile(params)
             proxyProfiles =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
 
