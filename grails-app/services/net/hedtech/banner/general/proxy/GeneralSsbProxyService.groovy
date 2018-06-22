@@ -165,6 +165,7 @@ class GeneralSsbProxyService {
                 proxyProfile.p_street_line1 = data.GPBPRXY_STREET_LINE1
                 proxyProfile.p_street_line2 = data.GPBPRXY_STREET_LINE2
                 proxyProfile.p_street_line3 = data.GPBPRXY_STREET_LINE3
+                proxyProfile.p_street_line4 = data.GPBPRXY_STREET_LINE4
                 proxyProfile.p_city = data.GPBPRXY_CITY
                 proxyProfile.p_stat_code = data.GPBPRXY_STAT_CODE
                 proxyProfile.p_zip = data.GPBPRXY_ZIP
