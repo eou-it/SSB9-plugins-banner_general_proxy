@@ -172,6 +172,7 @@ class GeneralSsbProxyService {
                 proxyProfile.p_stat_code = data.GPBPRXY_STAT_CODE
                 proxyProfile.p_zip = data.GPBPRXY_ZIP
                 proxyProfile.p_natn_code = data.GPBPRXY_NATN_CODE
+                proxyProfile.p_cnty_code = data.GPBPRXY_CNTY_CODE
                 proxyProfile.p_sex = data.GPBPRXY_SEX
                 proxyProfile.p_birth_date = (data.GPBPRXY_BIRTH_DATE==null) ? "" : df.format(data.GPBPRXY_BIRTH_DATE)
                 proxyProfile.p_ssn = data.GPBPRXY_SSN
@@ -231,7 +232,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_name_suffix".putAll([visible: true, required : false])
                     }else if(show_p_name_suffix.equals("N")){
                         proxyUiRules."p_name_suffix".putAll([visible: false, required : false])
-                    }else if(show_p_name_suffix("Y")){
+                    }else if(show_p_name_suffix.equals("Y")){
                         proxyUiRules."p_name_suffix".putAll([visible: true, required : true])
                     }
 
@@ -240,7 +241,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_pref_first_name".putAll([visible: true, required : false])
                     }else if(show_p_pref_first_name.equals("N")){
                         proxyUiRules."p_pref_first_name".putAll([visible: false, required : false])
-                    }else if(show_p_pref_first_name("Y")){
+                    }else if(show_p_pref_first_name.equals("Y")){
                         proxyUiRules."p_pref_first_name".putAll([visible: true, required : true])
                     }
 
@@ -251,8 +252,8 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_phone_area".putAll([visible: true, required : false])
                     }else if(show_p_phone_area.equals("N")){
                         proxyUiRules."p_phone_area".putAll([visible: false, required : false])
-                    }else if(show_p_phone_area("Y")){
-                        proxyUiRules."show_p_phone_area".putAll([visible: true, required : true])
+                    }else if(show_p_phone_area.equals("Y")){
+                        proxyUiRules."p_phone_area".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_phone_number" = [fieldLength: 12]
@@ -260,7 +261,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_phone_number".putAll([visible: true, required : false])
                     }else if(show_p_phone_number.equals("N")){
                         proxyUiRules."p_phone_number".putAll([visible: false, required : false])
-                    }else if(show_p_phone_number("Y")){
+                    }else if(show_p_phone_number.equals("Y")){
                         proxyUiRules."p_phone_number".putAll([visible: true, required : true])
                     }
 
@@ -269,7 +270,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_phone_ext".putAll([visible: true, required : false])
                     }else if(show_p_phone_ext.equals("N")){
                         proxyUiRules."p_phone_ext".putAll([visible: false, required : false])
-                    }else if(show_p_phone_ext("Y")){
+                    }else if(show_p_phone_ext.equals("Y")){
                         proxyUiRules."p_phone_ext".putAll([visible: true, required : true])
                     }
 
@@ -278,7 +279,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_ctry_code_phone".putAll([visible: true, required : false])
                     }else if(show_p_ctry_code_phone.equals("N")){
                         proxyUiRules."p_ctry_code_phone".putAll([visible: false, required : false])
-                    }else if(show_p_ctry_code_phone("Y")){
+                    }else if(show_p_ctry_code_phone.equals("Y")){
                         proxyUiRules."p_ctry_code_phone".putAll([visible: true, required : true])
                     }
 
@@ -287,8 +288,8 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_house_number".putAll([visible: true, required : false])
                     }else if(show_p_house_number.equals("N")){
                         proxyUiRules."p_house_number".putAll([visible: false, required : false])
-                    }else if(show_p_house_number("Y")){
-                        proxyUiRules."show_p_house_number".putAll([visible: true, required : true])
+                    }else if(show_p_house_number.equals("Y")){
+                        proxyUiRules."p_house_number".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_street_line1" = [fieldLength: 75]
@@ -395,7 +396,7 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_birth_date".putAll([visible: true, required : false])
                     }else if(show_p_birth_date.equals("N")){
                         proxyUiRules."p_birth_date".putAll([visible: false, required : false])
-                    }else if(show_p_birth_date("Y")){
+                    }else if(show_p_birth_date.equals("Y")){
                         proxyUiRules."p_birth_date".putAll([visible: true, required : true])
                     }
 

@@ -29,4 +29,9 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
         return fetchProxyPersonalInfo.query();
     };
 
+    this.updateProxyPersonalInfo = function (entity) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'updateProxypersonalinformation'}, {save: {method: 'POST'}}).save(entity);
+    };
+
 }]);

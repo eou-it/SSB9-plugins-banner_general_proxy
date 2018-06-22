@@ -3,6 +3,7 @@
  ****************************************************************************** */
 
 import grails.converters.JSON
+import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
 
 /**
@@ -39,11 +40,26 @@ class ProxyController {
         render view: "/proxy/proxypersonalinformation", model :  [proxyProfile: proxyProfiles.proxyProfile, proxyUiRules : proxyProfiles.proxyUiRules  ]
     }
 
-    def getProxypersonalinformation(){
+    def getProxypersonalinformation() {
         def proxyProfile
         proxyProfile =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
 
         render proxyProfile as JSON
+    }
+
+    def updateProxypersonalinformation() {
+        def updatedProfile = fixJSONObjectForCast(request?.JSON ?: params)
+        try {
+            generalSsbProxyService.updateProxyProfile(updatedProfile)
+
+            Map response = [failure: false]
+            render response as JSON
+        }
+        catch(Exception e){
+            def response = [message: e.message, failure: true]
+            render response as JSON
+        }
+
     }
 
     def grades(){
@@ -90,6 +106,20 @@ class ProxyController {
         }else{
             flash.message = result.error
             render view: "resetpin"
+        }
+    }
+
+    private def fixJSONObjectForCast(JSONObject json) {
+        json.each {entry ->
+            // Make JSONObject.NULL a real Java null
+            if (entry.value == JSONObject.NULL) {
+                entry.value = null
+
+//            If we ever want to fix dates, this is one possible solution
+//            } else if (entry.key == "lastModified") {
+//                // Make this date string a real Date object
+//                entry.value = DateUtility.parseDateString(entry.value, "yyyy-MM-dd'T'HH:mm:ss'Z'")
+            }
         }
     }
 

@@ -72,22 +72,28 @@ modules = {
         resource url: [file: 'proxyApp/common/filters/i18n-filter.js']
 
         // Directives
+        resource url: [file: 'proxyApp/common/services/selectBox-directive.js']
         resource url: [file: 'proxyApp/proxyAccessHome/gssLandingPage-directive.js']
         resource url: [file: 'proxyApp/proxyPersonalInfo/proxyPersonalInfo-directive.js']
 
     }
+
     'proxyAppLTR' {
         dependsOn "bannerWebLTR, proxyApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsLTR"
         // CSS
-        resource url: [file: 'css/generalSsbMain.css'], attrs: [media: 'screen, projection']
+        resource url: [file: 'css/proxy.css'], attrs: [media: 'screen, projection']
         resource url: [file: 'css/generalSsbResponsive.css'], attrs: [media: 'screen, projection']
+        resource url: [plugin: 'banner-general-personal-information-ui', file: 'css/main.css'], attrs: [media: 'screen, projection']
+        resource url: [plugin: 'banner-general-personal-information-ui', file: 'css/select2-box.css'], attrs: [media: 'screen, projection']
     }
 
     'proxyAppRTL' {
         dependsOn "bannerWebRTL, proxyApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsRTL"
         // CSS
-        resource url: [file: 'css/generalSsbMain-rtl.css'], attrs: [media: 'screen, projection']
+        resource url: [file: 'css/proxy-rtl.css'], attrs: [media: 'screen, projection']
         resource url: [file: 'css/generalSsbResponsive-rtl.css'], attrs: [media: 'screen, projection']
+        resource url: [plugin: 'banner-general-personal-information-ui', file: 'css/main-rtl.css'], attrs: [media: 'screen, projection']
+        resource url: [plugin: 'banner-general-personal-information-ui', file: 'css/select2-box-rtl.css'], attrs: [media: 'screen, projection']
     }
 
     'commonComponents' {

@@ -12,6 +12,7 @@ var proxyApp = angular.module('proxyApp', [
     'proxyAppDirectives',
     'ui.bootstrap',
     'I18n',
+    'datePickerApp',
     'xe-ui-components'])
     .run(
         ['$rootScope', '$state', '$stateParams', '$filter', 'breadcrumbService',
