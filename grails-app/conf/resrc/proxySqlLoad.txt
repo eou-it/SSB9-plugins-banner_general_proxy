@@ -828,3 +828,62 @@ checkProxyProfileRequiredData {
    END;
     """
 }
+
+getStudentListForProxy {
+    sqlText = """
+DECLARE
+  lv_attr_nt     G_ATTRIBUTE_NT;
+  lv_minify_ext  varchar2(04);
+
+  CURSOR C_PersonList RETURN GPRXREF%ROWTYPE
+      IS
+           SELECT GPRXREF.*
+             FROM GPRXREF
+            WHERE GPRXREF_PROXY_IDM = ?
+                  AND TRUNC (SYSDATE) BETWEEN TRUNC (GPRXREF_START_DATE)
+                                          AND TRUNC (GPRXREF_STOP_DATE)
+         ORDER BY F_Format_Name (GPRXREF_PERSON_PIDM, 'LFMI');
+
+ students varchar2(3000);
+
+BEGIN
+
+      -- Loop through potential Banner Web users
+      -- Only show users if they have the Proxy Management role
+
+  students := '{ "students":[';
+
+      FOR person IN C_PersonList
+      LOOP
+         -- Execute the GORRSQL rule for proxy management
+         -- Only create tab for first occurance of role
+         lv_attr_nt :=
+            gp_gorrsql.F_Execute_Rule ('SSB_ROLES',
+                                       'SSB_ROLE_PROXYMGMT',
+                                       person.GPRXREF_PERSON_PIDM);
+
+         IF lv_attr_nt IS NOT NULL AND lv_attr_nt.COUNT > 0
+         THEN
+            FOR i IN lv_attr_nt.FIRST .. lv_attr_nt.LAST
+            LOOP
+               IF lv_attr_nt (i)."value" = 'TRUE'
+               THEN
+
+                      students := students || '{' ||
+                      '"name" ' || ':' || '"' || f_format_name (person.GPRXREF_PERSON_PIDM, 'FML') || '"' ||
+                      ',"pidm" ' || ':'  || person.GPRXREF_PERSON_PIDM || '},';
+                  END IF;
+            END LOOP;
+
+         END IF;
+      END LOOP;
+
+     students := TRIM(TRAILING ',' FROM students );
+
+     students := students || ']}';
+
+     ? := students;
+
+END;
+    """
+}

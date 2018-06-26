@@ -1,5 +1,6 @@
 package net.hedtech.banner.general.proxy
 
+import groovy.json.JsonSlurper
 import groovy.sql.OutParameter
 import groovy.sql.Sql
 import net.sf.json.JSON
@@ -474,6 +475,22 @@ class GeneralSsbProxyService {
         }
 
         return errorMsgOut
+    }
+
+
+    def getStudentListForProxy(def gidm) {
+
+        def studentList = ""
+
+        def sqlText = sqlFileLoadService.getSqlTextMap().getStudentListForProxy?.sqlText
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [gidm, Sql.VARCHAR
+        ]){ studentListJson ->
+            studentList = studentListJson
+        }
+
+        return new JsonSlurper().parseText(studentList)
     }
 
 }
