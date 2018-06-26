@@ -1,0 +1,208 @@
+/********************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+********************************************************************************/
+/* General Styles */
+body {
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
+    font-size: 14px;
+}
+
+.break-long-words {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+}
+
+svg.hide-svg {
+    height: 0;
+}
+
+.gen-home-main-view {
+    background: #EFF4F8;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+.gen-home-heading,
+.gen-home-content {
+    position: absolute;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    right: 0;
+    left: 0;
+}
+
+.gen-home-heading {
+    top: 25px;
+}
+
+.gen-home-heading-spacer {
+    display: none;
+}
+
+.gen-home-content {
+    top: 220px;
+    height: 500px;
+}
+
+.gen-home-heading .title {
+    font-size: 28px;
+    color: #888D91;
+    padding-bottom: 25px;
+}
+
+.gen-home-heading .greeting-wrapper {
+    clear: both;
+    padding-top: 15px;
+}
+
+.gen-home-heading .avatar {
+    width: 66px;
+    height: 80px;
+    margin-right: 25px;
+    float: left;
+}
+
+.gen-home-heading .avatar svg {
+    width: 66px;
+    height: 80px;
+}
+
+.gen-home-heading .avatar-spacer {
+    display: none;
+}
+
+.gen-home-heading .greeting {
+    font-size: 16px;
+    color: #888D91;
+    margin-top: 10px;
+}
+
+.gen-home-heading .greeting .landingDesc {
+    height: 55px;
+    overflow-y: auto;
+}
+
+.gen-home-title-divider {
+    width: 30px;
+    height: 2px;
+}
+
+.gen-home-title-divider span {
+    border-bottom: 2px solid #989DA2;
+    width: 100%;
+    float: left;
+    margin-top: 1.0em;
+    margin-bottom: 0.675em;
+}
+
+.gen-app-tile {
+    float: left;
+    margin-right: 15px;
+    padding: 15px 15px 0;
+    text-align: center;
+    border: none;
+    border-bottom: 4px solid #ddd;
+    overflow: hidden;
+    background: white;
+    cursor: pointer;
+}
+
+.tile-icon {
+    float: left;
+    width: 25%;
+}
+
+.gen-app-tile img {
+    margin: -10px 0 0 -10px;
+}
+
+.tile-content {
+    float: left;
+    width: 75%;
+}
+
+.tile-title {
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.tile-desc {
+    text-align: left;
+    font-size: 14px;
+}
+
+/* Accessibility */
+.audible-message {
+    position: absolute;
+    top:0;
+    left: -500px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    color: transparent;
+}
+.audible-message-hidden {
+    display: none;
+    visibility: hidden;
+}
+.audible-message-visible {
+    display: block;
+    visibility: visible;
+}
+
+/* Breadcrumbs */
+a.breadcrumbButton.leaf-breadcrumb {
+    text-decoration: none;
+    cursor: default;
+}
+
+.actionpassword {
+    clear: both;
+    font-size: 0.50em;
+    color: #FFF;
+    text-align: left;
+}
+
+.required-field::before {
+    content: "*";
+    color: red;
+}
+
+.required:after { content:" *"; }
+
+.red-star {
+    color: red;
+    float: right;
+}
+
+table.dataentrytable {
+    border-spacing: 0px;
+    width:80%;
+}
+
+.text-input-field-proxt {
+    border-radius: 4px;
+    background-color: #fff;
+    border:1px solid #869FB1;
+    box-shadow: 4px 4px #EDF3F6 inset;
+    width: 60%;
+    color: #869FB1;
+}
+
+.proxy-profile-form {
+    padding: 0px 15px;
+}
+
+.proxy-profile-form input.hasMultiCalendarPicker.pi-date-input + span.calendar-img {
+    left: 12em;
+}

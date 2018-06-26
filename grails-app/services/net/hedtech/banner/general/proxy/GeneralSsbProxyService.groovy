@@ -159,9 +159,11 @@ class GeneralSsbProxyService {
                 proxyProfile.p_name_suffix = data.GPBPRXY_NAME_SUFFIX
                 proxyProfile.p_pref_first_name = data.GPBPRXY_PREF_FIRST_NAME
                 proxyProfile.p_email_address = data.GPBPRXY_EMAIL_ADDRESS
+                proxyProfile.p_ctry_code_phone = data.GPBPRXY_CTRY_CODE_PHONE
                 proxyProfile.p_phone_area = data.GPBPRXY_PHONE_AREA
                 proxyProfile.p_phone_number = data.GPBPRXY_PHONE_NUMBER
                 proxyProfile.p_phone_ext = data.GPBPRXY_PHONE_EXT
+                proxyProfile.p_house_number = data.GPBPRXY_HOUSE_NUMBER
                 proxyProfile.p_street_line1 = data.GPBPRXY_STREET_LINE1
                 proxyProfile.p_street_line2 = data.GPBPRXY_STREET_LINE2
                 proxyProfile.p_street_line3 = data.GPBPRXY_STREET_LINE3
@@ -170,6 +172,7 @@ class GeneralSsbProxyService {
                 proxyProfile.p_stat_code = data.GPBPRXY_STAT_CODE
                 proxyProfile.p_zip = data.GPBPRXY_ZIP
                 proxyProfile.p_natn_code = data.GPBPRXY_NATN_CODE
+                proxyProfile.p_cnty_code = data.GPBPRXY_CNTY_CODE
                 proxyProfile.p_sex = data.GPBPRXY_SEX
                 proxyProfile.p_birth_date = (data.GPBPRXY_BIRTH_DATE==null) ? "" : df.format(data.GPBPRXY_BIRTH_DATE)
                 proxyProfile.p_ssn = data.GPBPRXY_SSN
@@ -193,197 +196,208 @@ class GeneralSsbProxyService {
                   show_p_city, show_p_stat_code, show_p_zip, show_p_cnty_code, show_p_natn_code,
                   show_p_sex, show_p_birth_date, show_p_ssn ->
 
+                    proxyUiRules."p_name_prefix" = [fieldLength: 20]
                     if (show_p_name_prefix.equals("V")){
-                        proxyUiRules."p_name_prefix" = [visible: true, required : false]
+                        proxyUiRules."p_name_prefix".putAll([visible: true, required : false])
                     }else if(show_p_name_prefix.equals("N")){
-                        proxyUiRules."p_name_prefix" = [visible: false, required : false]
+                        proxyUiRules."p_name_prefix".putAll([visible: false, required : false])
                     }else if(show_p_name_prefix.equals("Y")){
-                        proxyUiRules."p_name_prefix" = [visible: true, required : true]
+                        proxyUiRules."p_name_prefix".putAll([visible: true, required : true])
                     }
 
+                    proxyUiRules."p_first_name" = [fieldLength: 60]
+
+                    proxyUiRules."p_mi" = [fieldLength: 60]
                     if (show_p_mi.equals("V")){
-                        proxyUiRules."p_mi" = [visible: true, required : false]
+                        proxyUiRules."p_mi".putAll([visible: true, required : false])
                     }else if(show_p_mi.equals("N")){
-                        proxyUiRules."p_mi" = [visible: false, required : false]
+                        proxyUiRules."p_mi".putAll([visible: false, required : false])
                     }else if(show_p_mi.equals("Y")){
-                        proxyUiRules."p_mi" = [visible: true, required : true]
+                        proxyUiRules."p_mi".putAll([visible: true, required : true])
                     }
 
+                    proxyUiRules."p_last_name" = [fieldLength: 60]
 
+                    proxyUiRules."p_surname_prefix" = [fieldLength: 60]
                     if (show_p_surname_prefix.equals("V")){
-                        proxyUiRules."p_surname_prefix" = [visible: true, required : false]
+                        proxyUiRules."p_surname_prefix".putAll([visible: true, required : false])
                     }else if(show_p_surname_prefix.equals("N")){
-                        proxyUiRules."p_surname_prefix" = [visible: false, required : false]
+                        proxyUiRules."p_surname_prefix".putAll([visible: false, required : false])
                     }else if(show_p_surname_prefix.equals("Y")){
-                        proxyUiRules."p_surname_prefix" = [visible: true, required : true]
+                        proxyUiRules."p_surname_prefix".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_name_suffix" = [fieldLength: 20]
                     if (show_p_name_suffix.equals("V")){
-                        proxyUiRules."p_name_suffix" = [visible: true, required : false]
+                        proxyUiRules."p_name_suffix".putAll([visible: true, required : false])
                     }else if(show_p_name_suffix.equals("N")){
-                        proxyUiRules."p_name_suffix" = [visible: false, required : false]
+                        proxyUiRules."p_name_suffix".putAll([visible: false, required : false])
                     }else if(show_p_name_suffix.equals("Y")){
-                        proxyUiRules."p_name_suffix" = [visible: true, required : true]
+                        proxyUiRules."p_name_suffix".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_pref_first_name" = [fieldLength: 60]
                     if (show_p_pref_first_name.equals("V")){
-                        proxyUiRules."p_pref_first_name" = [visible: true, required : false]
+                        proxyUiRules."p_pref_first_name".putAll([visible: true, required : false])
                     }else if(show_p_pref_first_name.equals("N")){
-                        proxyUiRules."p_pref_first_name" = [visible: false, required : false]
+                        proxyUiRules."p_pref_first_name".putAll([visible: false, required : false])
                     }else if(show_p_pref_first_name.equals("Y")){
-                        proxyUiRules."p_pref_first_name" = [visible: true, required : true]
+                        proxyUiRules."p_pref_first_name".putAll([visible: true, required : true])
                     }
 
+                    proxyUiRules."p_email_address" = [fieldLength: 75]
 
+                    proxyUiRules."p_phone_area" = [fieldLength: 6]
                     if (show_p_phone_area.equals("V")){
-                        proxyUiRules."p_phone_area" = [visible: true, required : false]
+                        proxyUiRules."p_phone_area".putAll([visible: true, required : false])
                     }else if(show_p_phone_area.equals("N")){
-                        proxyUiRules."p_phone_area" = [visible: false, required : false]
+                        proxyUiRules."p_phone_area".putAll([visible: false, required : false])
                     }else if(show_p_phone_area.equals("Y")){
-                        proxyUiRules."show_p_phone_area" = [visible: true, required : true]
+                        proxyUiRules."p_phone_area".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_phone_number" = [fieldLength: 12]
                     if (show_p_phone_number.equals("V")){
-                        proxyUiRules."p_phone_number" = [visible: true, required : false]
+                        proxyUiRules."p_phone_number".putAll([visible: true, required : false])
                     }else if(show_p_phone_number.equals("N")){
-                        proxyUiRules."p_phone_number" = [visible: false, required : false]
+                        proxyUiRules."p_phone_number".putAll([visible: false, required : false])
                     }else if(show_p_phone_number.equals("Y")){
-                        proxyUiRules."p_phone_number" = [visible: true, required : true]
+                        proxyUiRules."p_phone_number".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_phone_ext" = [fieldLength: 10]
                     if (show_p_phone_ext.equals("V")){
-                        proxyUiRules."p_phone_ext" = [visible: true, required : false]
+                        proxyUiRules."p_phone_ext".putAll([visible: true, required : false])
                     }else if(show_p_phone_ext.equals("N")){
-                        proxyUiRules."p_phone_ext" = [visible: false, required : false]
+                        proxyUiRules."p_phone_ext".putAll([visible: false, required : false])
                     }else if(show_p_phone_ext.equals("Y")){
-                        proxyUiRules."p_phone_ext" = [visible: true, required : true]
+                        proxyUiRules."p_phone_ext".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_ctry_code_phone" = [fieldLength: 4]
                     if (show_p_ctry_code_phone.equals("V")){
-                        proxyUiRules."p_ctry_code_phone" = [visible: true, required : false]
+                        proxyUiRules."p_ctry_code_phone".putAll([visible: true, required : false])
                     }else if(show_p_ctry_code_phone.equals("N")){
-                        proxyUiRules."p_ctry_code_phone" = [visible: false, required : false]
+                        proxyUiRules."p_ctry_code_phone".putAll([visible: false, required : false])
                     }else if(show_p_ctry_code_phone.equals("Y")){
-                        proxyUiRules."p_ctry_code_phone" = [visible: true, required : true]
+                        proxyUiRules."p_ctry_code_phone".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_house_number" = [fieldLength: 10]
                     if (show_p_house_number.equals("V")){
-                        proxyUiRules."p_house_number" = [visible: true, required : false]
+                        proxyUiRules."p_house_number".putAll([visible: true, required : false])
                     }else if(show_p_house_number.equals("N")){
-                        proxyUiRules."p_house_number" = [visible: false, required : false]
+                        proxyUiRules."p_house_number".putAll([visible: false, required : false])
                     }else if(show_p_house_number.equals("Y")){
-                        proxyUiRules."show_p_house_number" = [visible: true, required : true]
+                        proxyUiRules."p_house_number".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_street_line1" = [fieldLength: 75]
                     if (show_p_street_line1.equals("V")){
-                        proxyUiRules."p_street_line1" = [visible: true, required : false]
+                        proxyUiRules."p_street_line1".putAll([visible: true, required : false])
                     }else if(show_p_street_line1.equals("N")){
-                        proxyUiRules."p_street_line1" = [visible: false, required : false]
+                        proxyUiRules."p_street_line1".putAll([visible: false, required : false])
                     }else if(show_p_street_line1.equals("Y")){
-                        proxyUiRules."p_street_line1" = [visible: true, required : true]
+                        proxyUiRules."p_street_line1".putAll([visible: true, required : true])
                     }
 
+                    proxyUiRules."p_street_line2" = [fieldLength: 75]
                     if (show_p_street_line2.equals("V")){
-                        proxyUiRules."p_street_line2" = [visible: true, required : false]
+                        proxyUiRules."p_street_line2".putAll([visible: true, required : false])
                     }else if(show_p_street_line2.equals("N")){
-                        proxyUiRules."p_street_line2" = [visible: false, required : false]
+                        proxyUiRules."p_street_line2".putAll([visible: false, required : false])
                     }else if(show_p_street_line2.equals("Y")){
-                        proxyUiRules."p_street_line2" = [visible: true, required : true]
+                        proxyUiRules."p_street_line2".putAll([visible: true, required : true])
                     }
 
+                    proxyUiRules."p_street_line3" = [fieldLength: 75]
                     if (show_p_street_line3.equals("V")){
-                        proxyUiRules."p_street_line3" = [visible: true, required : false]
+                        proxyUiRules."p_street_line3".putAll([visible: true, required : false])
                     }else if(show_p_street_line3.equals("N")){
-                        proxyUiRules."p_street_line3" = [visible: false, required : false]
+                        proxyUiRules."p_street_line3".putAll([visible: false, required : false])
                     }else if(show_p_street_line3.equals("Y")){
-                        proxyUiRules."p_street_line3" = [visible: true, required : true]
+                        proxyUiRules."p_street_line3".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_street_line4" = [fieldLength: 75]
                     if (show_p_street_line4.equals("V")){
-                        proxyUiRules."p_street_line4" = [visible: true, required : false]
+                        proxyUiRules."p_street_line4".putAll([visible: true, required : false])
                     }else if(show_p_street_line1.equals("N")){
-                        proxyUiRules."p_street_line4" = [visible: false, required : false]
+                        proxyUiRules."p_street_line4".putAll([visible: false, required : false])
                     }else if(show_p_street_line4.equals("Y")){
-                        proxyUiRules."p_street_line4" = [visible: true, required : true]
+                        proxyUiRules."p_street_line4".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_city" = [fieldLength: 50]
                     if (show_p_city.equals("V")){
-                        proxyUiRules."p_city" = [visible: true, required : false]
+                        proxyUiRules."p_city".putAll([visible: true, required : false])
                     }else if(show_p_city.equals("N")){
-                        proxyUiRules."p_city" = [visible: false, required : false]
+                        proxyUiRules."p_city".putAll([visible: false, required : false])
                     }else if(show_p_city.equals("Y")){
-                        proxyUiRules."p_city" = [visible: true, required : true]
+                        proxyUiRules."p_city".putAll([visible: true, required : true])
                     }
 
-
-
+                    proxyUiRules."p_stat_code" = [fieldLength: 3]
                     if (show_p_stat_code.equals("V")){
-                        proxyUiRules."p_stat_code" = [visible: true, required : false]
+                        proxyUiRules."p_stat_code".putAll([visible: true, required : false])
                     }else if(show_p_stat_code.equals("N")){
-                        proxyUiRules."p_stat_code" = [visible: false, required : false]
+                        proxyUiRules."p_stat_code".putAll([visible: false, required : false])
                     }else if(show_p_stat_code.equals("Y")){
-                        proxyUiRules."p_stat_code" = [visible: true, required : true]
+                        proxyUiRules."p_stat_code".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_zip" = [fieldLength: 30]
                     if (show_p_zip.equals("V")){
-                        proxyUiRules."p_zip" = [visible: true, required : false]
+                        proxyUiRules."p_zip".putAll([visible: true, required : false])
                     }else if(show_p_zip.equals("N")){
-                        proxyUiRules."p_zip" = [visible: false, required : false]
+                        proxyUiRules."p_zip".putAll([visible: false, required : false])
                     }else if(show_p_zip.equals("Y")){
-                        proxyUiRules."p_zip" = [visible: true, required : true]
+                        proxyUiRules."p_zip".putAll([visible: true, required : true])
                     }
 
+                    proxyUiRules."p_cnty_code" = [fieldLength: 5]
                     if (show_p_cnty_code.equals("V")){
-                        proxyUiRules."p_cnty_code" = [visible: true, required : false]
+                        proxyUiRules."p_cnty_code".putAll([visible: true, required : false])
                     }else if(show_p_cnty_code.equals("N")){
-                        proxyUiRules."p_cnty_code" = [visible: false, required : false]
+                        proxyUiRules."p_cnty_code".putAll([visible: false, required : false])
                     }else if(show_p_cnty_code.equals("Y")){
-                        proxyUiRules."p_cnty_code" = [visible: true, required : true]
+                        proxyUiRules."p_cnty_code".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_natn_code" = [fieldLength: 5]
                     if (show_p_natn_code.equals("V")){
-                        proxyUiRules."p_natn_code" = [visible: true, required : false]
+                        proxyUiRules."p_natn_code".putAll([visible: true, required : false])
                     }else if(show_p_natn_code.equals("N")){
-                        proxyUiRules."p_natn_code" = [visible: false, required : false]
+                        proxyUiRules."p_natn_code".putAll([visible: false, required : false])
                     }else if(show_p_natn_code.equals("Y")){
-                        proxyUiRules."p_natn_code" = [visible: true, required : true]
+                        proxyUiRules."p_natn_code".putAll([visible: true, required : true])
                     }
 
+                    proxyUiRules."p_sex" = [fieldLength: 1]
                     if (show_p_sex.equals("V")){
-                        proxyUiRules."p_sex" = [visible: true, required : false]
+                        proxyUiRules."p_sex".putAll([visible: true, required : false])
                     }else if(show_p_sex.equals("N")){
-                        proxyUiRules."p_sex" = [visible: false, required : false]
+                        proxyUiRules."p_sex".putAll([visible: false, required : false])
                     }else if(show_p_sex.equals("Y")){
-                        proxyUiRules."p_sex" = [visible: true, required : true]
+                        proxyUiRules."p_sex".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_ssn" = [fieldLength: 9]
                     if (show_p_ssn.equals("V")){
-                        proxyUiRules."p_ssn" = [visible: true, required : false]
+                        proxyUiRules."p_ssn".putAll([visible: true, required : false])
                     }else if(show_p_ssn.equals("N")){
-                        proxyUiRules."p_ssn" = [visible: false, required : false]
+                        proxyUiRules."p_ssn".putAll([visible: false, required : false])
                     }else if(show_p_ssn.equals("Y")){
-                        proxyUiRules."p_ssn" = [visible: true, required : true]
+                        proxyUiRules."p_ssn".putAll([visible: true, required : true])
                     }
 
-
+                    proxyUiRules."p_birth_date" = [fieldLength: 20]
                     if (show_p_birth_date.equals("V")){
-                        proxyUiRules."p_birth_date" = [visible: true, required : false]
+                        proxyUiRules."p_birth_date".putAll([visible: true, required : false])
                     }else if(show_p_birth_date.equals("N")){
-                        proxyUiRules."p_birth_date" = [visible: false, required : false]
+                        proxyUiRules."p_birth_date".putAll([visible: false, required : false])
                     }else if(show_p_birth_date.equals("Y")){
-                        proxyUiRules."p_birth_date" = [visible: true, required : true]
+                        proxyUiRules."p_birth_date".putAll([visible: true, required : true])
                     }
 
                 }

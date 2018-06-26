@@ -231,6 +231,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/ssb/menu**'                        : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/about/**'                      : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/generalSsbApp/**'                  : ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/proxyApp/**'                       : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/keepAlive/data**'              : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/dateConverter/**'                  : ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/ssb/dateConverter/**'              : ['IS_AUTHENTICATED_ANONYMOUSLY'],

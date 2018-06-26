@@ -8,6 +8,6 @@ angular.module('I18n', []).
                     value = value.replace(regexp, data[i] !== undefined ? data[i] : '' );
                 }
             }
-            return value;
+            return value
         };
     });

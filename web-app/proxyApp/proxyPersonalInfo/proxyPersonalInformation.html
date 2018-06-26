@@ -1,0 +1,54 @@
+<!--*******************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="proxy-profile-form">
+<br>
+<b>Proxy Profile </b><br>
+Please keep your Banner Web proxy information up-to-date.
+    <span  ng-if="flashMessage">
+        <span class="icon-error"></span>{{flashMessage}}
+    </span>
+    <div>
+        <div ng-repeat="profileElement in profileElements" class="">
+            <div ng-if="profileElement.visible && !profileElement.isWidget">
+                <label ng-class="(!!cityErrMsg && !cityFocused ? 'input-field-label field-error' : 'input-field-label')"
+                       class="input-field-label" for="{{profileElement.elemId}}">{{profileElement.label}}</label><br>
+                <input ng-model="profileElement.model" ng-blur="cityFocused=false;" ng-focus="cityFocused=true"
+                       ng-class="[(!!cityErrMsg && !cityFocused ? 'input-field-error' : null)]" class="text-input-field semi-bold form-spacing"
+                       type="text" placeholder="{{profileElement.placeholder}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="{{profileElement.elemId}}">
+                    <span ng-if="!!cityErrMsg && !cityFocused" class="icon input-fail">
+                        <span class="icon-error ellucian-font"></span>
+                    </span>
+                <p class="input-field-label mobile-errors" ng-class="[(!!cityErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                   role="alert" aria-live="assertive">{{cityErrMsg|i18n}}</p>
+            </div>
+
+            <div ng-if="profileElement.visible && profileElement.isDropdown">
+                <label class="input-field-label">{{profileElement.label}}</label><br>
+                <input select-box for-select='{"placeholder": "{{profileElement.placeholder}}", "action": "PersonalInformationDetails/get{{profileElement.fetch}}List", "model": "profileElement.model", "showNA": true}' type="hidden" />
+                <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                   role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
+            </div>
+
+            <div ng-if="profileElement.visible && profileElement.elemId === 'p_birth_date'" class="vet-date-input">
+                <label ng-class="(seprDateErrMsg && !seprDateFocused ? 'field-error' : '')" for="seprDate">
+                    {{profileElement.label}}
+                </label>
+                <input date-picker ng-model="profileElement.model" pi-input-watcher on-select="setSeprDate" ng-blur="seprDateFocused=false; removeVeteranErrors()"
+                       ng-focus="seprDateFocused=true" ng-class="[(seprDateErrMsg && !seprDateFocused ? 'input-error' : null)]"
+                       class="pi-date-input input-colors" placeholder="{{'personInfo.placeholder.datePicker'|i18n}}" id="seprDate"
+                       aria-label="{{'personinfo.veteran.classification.date.discharge.label'|i18n}}"/>
+                <p class="mobile-errors" ng-class="[(!!seprDateErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                   role="alert" aria-live="assertive">{{seprDateErrMsg|i18n}}</p>
+            </div>
+
+            <div ng-if="profileElement.visible && profileElement.elemId === 'p_sex'">
+                <label class="input-field-label">{{profileElement.label}}</label><br>
+                <input legal-sex-select profile-item="profileElement" type="hidden" />
+                <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                   role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
+            </div>
+        </div>
+        <INPUT ng-click="save()" TYPE="button" VALUE="Save" id="p_save" class="signin-button">
+    </div>
+</div>

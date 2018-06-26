@@ -1,0 +1,23 @@
+<!--*******************************************************************************
+  Copyright 2017 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="gen-app-tile">
+
+    <div class="tile-icon">
+        <img ng-src="{{proxyData.icon}}"/>
+    </div>
+    <div class="tile-content">
+        <div class="tile-title">
+            {{proxyData.title|i18n}}
+        </div>
+        <div class="tile-desc">
+            {{proxyData.desc|i18n}}
+        </div>
+
+        <select ng-click="goProxyApp('/ssb/proxy/grades/')">
+            <option value="/ssb/proxy/grades">View Grades</option>
+            <option value="/ssb/viewHolds">View Holds</option>
+        </select>
+
+    </div>
+</div>
