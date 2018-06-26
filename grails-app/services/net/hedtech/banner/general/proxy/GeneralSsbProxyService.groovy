@@ -181,7 +181,7 @@ class GeneralSsbProxyService {
         }
 
         def proxyUiRules = [:]
-        sqlText = sqlFileLoadService.getSqlTextMap().getProxyProfileUiRules?.sqlText //22
+        sqlText = sqlFileLoadService.getSqlTextMap().getProxyProfileUiRules?.sqlText
 
         sql.call(sqlText, [gidm, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR,
                            Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR,

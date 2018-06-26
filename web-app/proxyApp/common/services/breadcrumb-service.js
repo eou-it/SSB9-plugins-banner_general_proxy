@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2016-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2016-2018 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 proxyApp.service( 'breadcrumbService', ['$filter',function ($filter) {

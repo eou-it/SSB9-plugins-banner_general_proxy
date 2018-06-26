@@ -1,5 +1,5 @@
 /********************************************************************************
-  Copyright 2017 Ellucian Company L.P. and its affiliates.
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 /* General Styles */
 body {
@@ -180,11 +180,6 @@ a.breadcrumbButton.leaf-breadcrumb {
 
 .required:after { content:" *"; }
 
-.asterisc {
-    display: block;
-    color: red;
-    margin: -19px 185px;
-}
 .red-star {
     color: red;
     float: right;

@@ -1,3 +1,6 @@
+/*******************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+*******************************************************************************/
 proxyAppDirectives.directive('selectBox',['$filter', function($filter) {
 
     // Get description from an address field item, e.g. an item for a state or nation
@@ -38,7 +41,6 @@ proxyAppDirectives.directive('selectBox',['$filter', function($filter) {
                         return  {
                             searchString: term,
                             offset: page-1,
-                            //max: $filter('i18n')('default.select2.maxLimit')
                             max: maxItems
                         };
                     },
