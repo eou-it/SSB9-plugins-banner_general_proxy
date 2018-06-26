@@ -139,6 +139,7 @@ setProxy {
 
                do_pin                varchar2(1);
                msg                   varchar2(100);
+               lv_loginOut           varchar2(1);
 
  FUNCTION F_ActionVerify (p_proxyIDM    gpbprxy.gpbprxy_proxy_idm%TYPE,
                           p_CTYP        gtvctyp.gtvctyp_code%TYPE,
@@ -182,8 +183,16 @@ setProxy {
 
              IF lv_GPBELTR_ref%NOTFOUND THEN
 
-                 ?  := 'Y';
+                 lv_loginOut  := 'Y';
                  msg := 'token-error';
+
+             -- Check for expiration date
+             -- Check for action already executed
+             ELSIF NVL (TRUNC(lv_GPBELTR_rec.R_CTYP_EXP_DATE), TRUNC(SYSDATE)) < TRUNC(SYSDATE)
+                  OR lv_GPBELTR_rec.R_CTYP_EXE_DATE IS NOT NULL
+             THEN
+                 lv_loginOut  := 'Y';
+                 msg := 'token-expire';
 
              ELSIF (lv_GPBELTR_ref%FOUND AND F_ActionVerify (lv_GPBELTR_rec.R_PROXY_IDM,
                              lv_GPBELTR_rec.R_CTYP_CODE,
@@ -199,6 +208,7 @@ setProxy {
 
            ?  := do_pin;
            ?  := msg;
+           ?  := lv_loginOut;
 
         EXCEPTION
           WHEN OTHERS THEN ? := 'Y';

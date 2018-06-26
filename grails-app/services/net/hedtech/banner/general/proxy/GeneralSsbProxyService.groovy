@@ -2,6 +2,7 @@ package net.hedtech.banner.general.proxy
 
 import groovy.sql.OutParameter
 import groovy.sql.Sql
+import net.hedtech.banner.i18n.MessageHelper
 import net.sf.json.JSON
 import org.apache.log4j.Logger
 import org.codehaus.groovy.grails.web.context.ServletContextHolder as SC
@@ -41,8 +42,8 @@ class GeneralSsbProxyService {
         def error
 
         def sqlText = sqlFileLoadService.getSqlTextMap().setProxy?.sqlText
-        sql.call(sqlText, [token, Sql.VARCHAR, Sql.NUMERIC, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR])
-                { loginOut, gidmOut, actionVerifyOut, pinOut, msgOut, errorOut ->
+        sql.call(sqlText, [token, Sql.NUMERIC, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR])
+                { gidmOut, actionVerifyOut, pinOut, msgOut, errorOut, loginOut ->
                     login = loginOut
                     gidm = gidmOut
                     actionVerify = actionVerifyOut
@@ -61,7 +62,12 @@ class GeneralSsbProxyService {
 
         RequestContextHolder.currentRequestAttributes().getSession()["gidm"] = gidm
 
-        return [verify: actionVerify.equals("Y"), login: login.equals("Y"), doPin: doPin.equals("Y"), message: msg, error: error.equals("Y"), gidm: gidm]
+        String messageText = msg
+        if(msg.equals('token-expire')) {
+            messageText = MessageHelper.message('proxy.error.tokenExpired')
+        }
+
+        return [verify: actionVerify.equals("Y"), login: login.equals("Y"), doPin: doPin.equals("Y"), message: messageText, error: error.equals("Y"), gidm: gidm]
     }
 
 
