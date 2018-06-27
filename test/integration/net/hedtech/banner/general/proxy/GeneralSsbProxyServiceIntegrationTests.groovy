@@ -50,6 +50,21 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
         assertEquals PersonUtility.getPerson("HOS00001").pidm, result.students[1].pidm
     }
 
+    @Test
+    void testSetProxyExpiredActionLink() {
+        // expired letter SSS_REGD_USER2	SS_PINRESET2    AAAgFJAAFAAAspFAAB
+        // set encodedRowId to that letter's row id encoded as base64
+        String encodedRowId = 'QUFBZ0ZKQUFGQUFBc3BGQUFC'
+        def result = generalSsbProxyService.setProxy(encodedRowId)
+
+        assertNull result.gidm
+        assertTrue result.login
+        assertEquals 'token-expire', result.message
+        assertFalse result.verify
+        assertFalse result.doPin
+        assertFalse result.error
+    }
+
     def createProxy_0() {
 
         def pidm = PersonUtility.getPerson("GDP000005").pidm
@@ -169,7 +184,7 @@ end;
         FROM gpbprxy
         WHERE gpbprxy_proxy_idm = -1;
          
-        DELETE FROM TWGRROLE WHERE TWGRROLE_PIDM = 37859;
+        DELETE FROM TWGRROLE WHERE TWGRROLE_PIDM = ${pidm};
 
         commit;
         end;
@@ -194,7 +209,7 @@ end;
         FROM gpbprxy
         WHERE gpbprxy_proxy_idm = -1;
          
-        DELETE FROM TWGRROLE WHERE TWGRROLE_PIDM = 30253;
+        DELETE FROM TWGRROLE WHERE TWGRROLE_PIDM = ${pidm};
 
         commit;
 

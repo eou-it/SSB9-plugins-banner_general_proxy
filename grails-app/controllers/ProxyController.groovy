@@ -3,6 +3,7 @@
  ****************************************************************************** */
 
 import grails.converters.JSON
+import net.hedtech.banner.i18n.MessageHelper
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
 
@@ -79,9 +80,14 @@ class ProxyController {
 
             render view: "actionpassword", params: params, model: [token: params.p_token, gidm : result.gidm]
 
-        } else if (result.login || result.error){
+        }
+        else if (result.login || result.error) {
+            String messageText = result.message
+            if(result.message.equals('token-expire')) {
+                messageText = MessageHelper.message('proxy.error.tokenExpired')
+            }
 
-            flash.message = result.message
+            flash.message = messageText
             forward controller: "login", action: "auth", params: params
         }
     }
