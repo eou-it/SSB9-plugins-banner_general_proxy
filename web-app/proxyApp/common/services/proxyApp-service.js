@@ -9,7 +9,11 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
         fetchConfig = $resource('../ssb/:controller/:action',
             {controller: 'General', action: 'getGeneralConfig'}, {query: {method:'GET', isArray:false}}),
         fetchProxyPersonalInfo = $resource('../ssb/:controller/:action',
-            {controller: 'Proxy', action: 'getProxypersonalinformation'}, {query: {method:'GET', isArray:false}});
+            {controller: 'Proxy', action: 'getProxypersonalinformation'}, {query: {method:'GET', isArray:false}}),
+        fetchStudentListForProxy = $resource('../ssb/:controller/:action',
+            {controller: 'General', action: 'getStudentListForProxy'}, {query: {method:'GET', isArray:false}});
+
+    ;
 
 
     this.getRoles = function () {
@@ -32,6 +36,10 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
     this.updateProxyPersonalInfo = function (entity) {
         return $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'updateProxypersonalinformation'}, {save: {method: 'POST'}}).save(entity);
+    };
+
+    this.getStudentListForProxy = function () {
+        return fetchStudentListForProxy.query();
     };
 
 }]);

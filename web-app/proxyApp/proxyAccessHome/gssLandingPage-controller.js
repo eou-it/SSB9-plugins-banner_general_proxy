@@ -2,7 +2,7 @@
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppService', 'piConfigResolve',
-    function ($scope, generalSsbService, piConfigResolve) {
+    function ($scope, proxyAppService, piConfigResolve) {
 
         // LOCAL VARIABLES
         // ---------------
@@ -22,6 +22,26 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
                     $scope.guestUserName = CommonContext.user;
 
 
+                    proxyAppService.getStudentListForProxy().$promise.then(function (response) {
+                        $scope.students = response.students;
+
+                        _.each($scope.students, function(student) {
+                            //console.log("Name: " + student.name)
+                            //console.log("PIDM: " + student.pidm)
+
+                            $scope.proxyTiles.push(
+                                {
+                                    title: "I am proxy for:",
+                                    desc: student.name,
+                                    url: $scope.applicationContextRoot +'/ssb/proxy/proxypersonalinformation',
+                                    icon: '../images/personal_info.svg'
+                                }
+                            );
+                        });
+                    });
+
+
+
                     $scope.appTiles.push(
                         {
                             title: 'banner.generalssb.landingpage.personal.title',
@@ -32,23 +52,6 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
                     );
 
 
-                    $scope.proxyTiles.push(
-                        {
-                            title: 'banner.generalssb.landingpage.grades.title',
-                            desc: 'banner.generalssb.landingpage.grades.description',
-                            url: $scope.applicationContextRoot +'/ssb/proxy/grades',
-                            icon: '../images/personal_info.svg'
-                        }
-                    );
-
-                    $scope.proxyTiles.push(
-                        {
-                            title: 'banner.generalssb.landingpage.holds.title',
-                            desc: 'banner.generalssb.landingpage.holds.description',
-                            url: $scope.applicationContextRoot +'/ssb/proxy/holds',
-                            icon: '../images/personal_info.svg'
-                        }
-                    );
 
                 }
 

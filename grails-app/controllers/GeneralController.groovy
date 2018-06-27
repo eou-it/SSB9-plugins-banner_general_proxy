@@ -65,6 +65,12 @@ class GeneralController {
     }
 
 
+    def getStudentListForProxy(){
+        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+        render generalSsbProxyService.getStudentListForProxy(p_proxyIDM) as JSON
+    }
+
+
     def landingPage() {
         try {
 
