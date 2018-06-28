@@ -42,8 +42,8 @@ class GeneralSsbProxyService {
         def error
 
         def sqlText = sqlFileLoadService.getSqlTextMap().setProxy?.sqlText
-        sql.call(sqlText, [token, Sql.VARCHAR, Sql.NUMERIC, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR])
-                { loginOut, gidmOut, actionVerifyOut, pinOut, msgOut, errorOut ->
+        sql.call(sqlText, [token, Sql.NUMERIC, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR])
+                { gidmOut, actionVerifyOut, pinOut, msgOut, loginOut, errorOut  ->
                     login = loginOut
                     gidm = gidmOut
                     actionVerify = actionVerifyOut
