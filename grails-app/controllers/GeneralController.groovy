@@ -52,7 +52,6 @@ class GeneralController {
     }
 
     def resetPinAction() {
-        println "GUIDM: " + params."gidm" + " " + params.p_pin1 + " " + params.p_pin2 + " " + params.p_email + " " + params.p_pin_orig
 
         def result = generalSsbProxyService.savePin(params."gidm", params.p_pin1, params.p_pin2, params.p_email, params.p_pin_orig)
 
@@ -62,12 +61,6 @@ class GeneralController {
             flash.message = result.error
             render view: "/proxy/resetpin"
         }
-    }
-
-
-    def getStudentListForProxy(){
-        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
-        render generalSsbProxyService.getStudentListForProxy(p_proxyIDM) as JSON
     }
 
 

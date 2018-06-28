@@ -29,14 +29,19 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
                             //console.log("Name: " + student.name)
                             //console.log("PIDM: " + student.pidm)
 
+                            proxyAppService.getPages({pidm: student.pidm}).$promise.then(function (response) {
+                                $scope.pages = response.pages;
+
                             $scope.proxyTiles.push(
                                 {
-                                    title: "I am proxy for:",
+                                    title: "I am proxy for: " ,
                                     desc: student.name,
                                     url: $scope.applicationContextRoot +'/ssb/proxy/proxypersonalinformation',
-                                    icon: '../images/personal_info.svg'
+                                    icon: '../images/personal_info.svg',
+                                    pages : $scope.pages
                                 }
-                            );
+                                  );
+                            });
                         });
                     });
 
@@ -66,6 +71,7 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
         $scope.isSingleTile;
         $scope.firstName = '';
         $scope.bannerId;
+        $scope.pages =[];
 
 
         // INITIALIZE

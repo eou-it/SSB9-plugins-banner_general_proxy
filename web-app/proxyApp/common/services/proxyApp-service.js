@@ -11,7 +11,7 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
         fetchProxyPersonalInfo = $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'getProxypersonalinformation'}, {query: {method:'GET', isArray:false}}),
         fetchStudentListForProxy = $resource('../ssb/:controller/:action',
-            {controller: 'General', action: 'getStudentListForProxy'}, {query: {method:'GET', isArray:false}});
+            {controller: 'Proxy', action: 'getStudentListForProxy'}, {query: {method:'GET', isArray:false}});
 
     ;
 
@@ -40,6 +40,12 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
 
     this.getStudentListForProxy = function () {
         return fetchStudentListForProxy.query();
+    };
+
+
+    this.getPages = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'getProxyPages'}).get(params);
     };
 
 }]);

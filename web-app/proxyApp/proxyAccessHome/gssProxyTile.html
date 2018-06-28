@@ -14,10 +14,19 @@
             {{proxyData.desc}}
         </div>
 
+        <div>
+            <ul class="list-unstyled">
+            <li id="proxyPages" ng-repeat="page in proxyData.pages" data-ng-click="goProxyApp(page.url)">
+                <span>{{page.desc}}</span>
+            </li>
+            </ul>
+        </div>
+     <!--
         <select ng-click="goProxyApp('/ssb/proxy/grades/')">
             <option value="/ssb/proxy/grades">View Grades</option>
             <option value="/ssb/viewHolds">View Holds</option>
         </select>
+      -->
 
     </div>
 </div>

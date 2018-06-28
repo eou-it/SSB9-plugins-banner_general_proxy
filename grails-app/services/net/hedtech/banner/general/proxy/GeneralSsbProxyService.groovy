@@ -493,4 +493,20 @@ class GeneralSsbProxyService {
         return new JsonSlurper().parseText(studentList)
     }
 
+
+    def getProxyPages(def gidm, def pidm) {
+
+        def  proxyPages = ""
+
+        def sqlText = sqlFileLoadService.getSqlTextMap().getProxyPages?.sqlText
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [gidm,pidm,gidm,pidm, Sql.VARCHAR
+        ]){ proxyPagesJson ->
+            proxyPages = proxyPagesJson
+        }
+
+        return new JsonSlurper().parseText(proxyPages)
+    }
+
 }
