@@ -64,6 +64,18 @@ class ProxyController {
 
     }
 
+
+    def getStudentListForProxy(){
+        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+        render generalSsbProxyService.getStudentListForProxy(p_proxyIDM) as JSON
+    }
+
+
+    def getProxyPages(){
+        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+        render generalSsbProxyService.getProxyPages(p_proxyIDM, params.pidm) as JSON
+    }
+
     def grades(){
         render view: "/proxy/grades"
     }

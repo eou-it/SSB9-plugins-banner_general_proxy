@@ -206,3 +206,14 @@ table.dataentrytable {
 .proxy-profile-form input.hasMultiCalendarPicker.pi-date-input + span.calendar-img {
     left: 12em;
 }
+
+ul{
+    margin:0;
+    padding:0 20px;
+}
+ul li    {
+    padding:0;
+    width:150px;
+    background: #B2B2B2;
+    margin:10px 0;
+}
