@@ -65,6 +65,36 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
         assertFalse result.error
     }
 
+    @Test
+    void testViewHolds() {
+        def pidm = PersonUtility.getPerson("STUAFR320").pidm
+        def result = generalSsbProxyService.viewHolds(pidm)
+
+        println result
+
+        assertNotNull result.message
+        assertTrue result.rows.size() > 0
+
+        assertTrue result.rows[4].hold_for.contains('evaluation')
+        assertEquals '$111.22', result.rows[4].r_amount_owed.trim()
+        assertEquals 'Jun 11, 2014', result.rows[4].r_from_date
+        assertEquals 'This one has them all', result.rows[4].r_reason
+        assertEquals 'Dec 31, 2025', result.rows[4].r_to_date
+        assertEquals 'Compliance Hold', result.rows[4].stvhold_desc
+        assertEquals 'Hold Originator', result.rows[4].stvorig_desc
+    }
+
+    @Test
+    void testViewHoldsNoHolds() {
+        def pidm = PersonUtility.getPerson("GDP000005").pidm
+        def result = generalSsbProxyService.viewHolds(pidm)
+
+        println result
+
+        assertEquals 'noHoldsExist', result.message
+        assertTrue result.rows.size() == 0
+    }
+
     def createProxy_0() {
 
         def pidm = PersonUtility.getPerson("GDP000005").pidm

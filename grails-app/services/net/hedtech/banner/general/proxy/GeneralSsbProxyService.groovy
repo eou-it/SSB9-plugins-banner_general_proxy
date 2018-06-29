@@ -493,4 +493,13 @@ class GeneralSsbProxyService {
         return new JsonSlurper().parseText(studentList)
     }
 
+    def viewHolds(def pidm) {
+        String holds = "{}"
+        def sqlText = sqlFileLoadService.getSqlTextMap().viewHolds?.sqlText
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [pidm, Sql.VARCHAR]) { holdsListJson -> holds = holdsListJson }
+
+        return new JsonSlurper().parseText(holds)
+    }
+
 }
