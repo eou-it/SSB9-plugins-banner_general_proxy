@@ -17,7 +17,7 @@ proxyAppDirectives.directive('landingPageAppTile', [ '$state', function ($state)
     };
 }]);
 
-proxyAppDirectives.directive('landingPageProxyTile', [function () {
+proxyAppDirectives.directive('landingPageProxyTile', ['$state', function ($state) {
     return{
         restrict: 'E',
         templateUrl: '../proxyApp/proxyAccessHome/gssProxyTile.html',
@@ -26,7 +26,7 @@ proxyAppDirectives.directive('landingPageProxyTile', [function () {
         },
         link: function(scope){
             scope.goProxyApp = function(url) {
-                window.location.href = $('meta[name=applicationContextRoot]').attr("content") + url;
+                $state.go(url, {pidm: scope.proxyData.pidm});
             };
         }
 

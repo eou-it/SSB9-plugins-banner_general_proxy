@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 class ProxyController {
 
     def generalSsbProxyService
+    def personRelatedHoldService
 
     def dataSource               // injected by Spring
     def sessionFactory           // injected by Spring
@@ -129,9 +130,7 @@ class ProxyController {
     }
 
     def getHolds() {
-        // do PIDM <-> GIDM check
-        // generalSsbProxyService.checkAccess(session.getAttribute(gidm), params.pidm, 'VIEW_HOLDS');
-        def result = generalSsbProxyService.viewHolds(params.pidm);
+        def result = personRelatedHoldService.getWebDisplayableHolds(params.pidm);
 
         render result as JSON
     }

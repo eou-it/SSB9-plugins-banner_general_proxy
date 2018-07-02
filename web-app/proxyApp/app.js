@@ -84,6 +84,20 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider) {
             data: {
                 breadcrumbs: []
             }
+        })
+        .state('/ssb/proxy/holds', {
+            url: "/viewHolds",
+            templateUrl: '../proxyApp/student/holds.html',
+            controller: 'proxyViewHoldsController',
+            resolve: {
+            },
+            data: {
+                breadcrumbs: []
+            },
+            params: {
+                pidm: null
+            }
+
         });
 });
 
