@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 class ProxyController {
 
     def generalSsbProxyService
+    def personRelatedHoldService
 
     def dataSource               // injected by Spring
     def sessionFactory           // injected by Spring
@@ -126,6 +127,12 @@ class ProxyController {
             flash.message = result.error
             render view: "resetpin"
         }
+    }
+
+    def getHolds() {
+        def result = personRelatedHoldService.getWebDisplayableHolds(params.pidm);
+
+        render result as JSON
     }
 
     private def fixJSONObjectForCast(JSONObject json) {

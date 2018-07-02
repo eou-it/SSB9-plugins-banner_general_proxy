@@ -42,10 +42,15 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
         return fetchStudentListForProxy.query();
     };
 
-
     this.getPages = function (params) {
         return $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'getProxyPages'}).get(params);
     };
+
+    this.getHolds = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'getHolds'}).get(params);
+    };
+
 
 }]);
