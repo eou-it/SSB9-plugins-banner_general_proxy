@@ -24,7 +24,7 @@ class SqlFileLoadService {
         String fileLocation
         if (!grailsApplication.config?.proxySqlLoad?.file) {
             log.debug('no config, using resource: /resrc/proxySqlLoad.txt')
-            fileLocation = getClass().getResource('/resrc/proxySqlLoad.txt').getFile()
+            fileLocation = this.class.classLoader.getResource('resrc/proxySqlLoad.txt')?.getFile()
         }
         else {
             fileLocation = grailsApplication.config?.proxySqlLoad?.file

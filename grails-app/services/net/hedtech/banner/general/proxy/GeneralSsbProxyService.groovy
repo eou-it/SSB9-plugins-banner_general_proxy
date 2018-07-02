@@ -438,18 +438,28 @@ class GeneralSsbProxyService {
     }
 
 
-
+    /* Updates Audit data on ProxyHistoryOnLogin */
     def updateProxyHistoryOnLogin() {
+        log.debug('starting updateProxyHistoryOnLogin')
         //get proxy gidm
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+        log.debug('p_proxyIDM: ' + p_proxyIDM)
+        try {
+            def sql = new Sql(sessionFactory.getCurrentSession().connection())
+            def sqlText = sqlFileLoadService.getSqlTextMap()?.storeLoginInHistory?.sqlText
 
-        def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        def sqlText = sqlFileLoadService.getSqlTextMap().storeLoginInHistory?.sqlText
+            log.debug('sqlText: ' + sqlText)
 
-        sql.call(sqlText,
-                [p_proxyIDM, p_proxyIDM, p_proxyIDM
-        ])
+            sql.call(sqlText,
+                    [p_proxyIDM, p_proxyIDM, p_proxyIDM
+                    ])
 
+            log.debug('finished updateProxyHistoryOnLogin')
+
+        }catch(Exception e) {
+            log.error('Problem setting updateProxyHistoryOnLogin')
+            log.error(e)
+        }
     }
 
 
