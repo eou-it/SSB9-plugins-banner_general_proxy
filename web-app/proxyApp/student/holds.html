@@ -7,24 +7,24 @@
     <p>{{'proxy.holds.message.'+ holds.message|i18n}}</p>
     <table>
         <thead>
-            <tr>
-                <th>Hold Type</th>
-                <th>From Date</th>
-                <th>To Date</th>
-                <th>Amount</th>
-                <th>Reason</th>
-                <th>Orginator</th>
-                <th>Process Affected</th>
-            </tr>
+        <tr>
+            <th>Hold Type</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th>Amount</th>
+            <th>Reason</th>
+            <th>Orginator</th>
+            <th>Process Affected</th>
+        </tr>
         </thead>
         <tr ng-repeat="hold in holds.rows">
-            <td>{{stringifyHoldsFor(hold)}}</td>
+            <td>{{hold.stvhold_desc}}</td>
             <td>{{hold.r_from_date}}</td>
             <td>{{hold.r_to_date}}</td>
             <td>{{hold.r_amount_owed}}</td>
             <td>{{hold.r_reason}}</td>
             <td>{{hold.stvorig_desc}}</td>
-            <td>{{hold.stvhold_desc}}</td>
+            <td>{{stringifyHoldsFor(hold)}}</td>
         </tr>
     </table>
 </div>
