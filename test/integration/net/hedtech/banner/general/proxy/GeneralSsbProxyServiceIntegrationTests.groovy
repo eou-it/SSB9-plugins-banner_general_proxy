@@ -14,6 +14,8 @@ import net.hedtech.banner.general.person.PersonUtility
 class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
 
     def generalSsbProxyService
+    def dataSource
+    def conn
 
     @Before
     public void setUp() {
@@ -28,6 +30,7 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
     public void tearDown() {
         deleteProxy_0()
         deleteProxy_1()
+        deleteProxyPageWithRole()
         super.tearDown()
     }
 
@@ -73,6 +76,21 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
         assertFalse result.doPin
         assertFalse result.error
     }
+
+
+    @Test
+    void testGetProxyPages() {
+        addProxyPageWithRole()
+        updateProxyRETP()
+        def result = generalSsbProxyService.getProxyPages(-1, PersonUtility.getPerson("GDP000005").pidm )
+
+        def page = result.pages.find { it -> it.url.equals("/ssb/proxy/mypage") }
+
+        assertNotNull page
+        deleteProxyPageWithRole()
+    }
+
+
 
     def createProxy_0() {
 
@@ -286,6 +304,79 @@ end;
         commit;
 
         end;
+            """)
+    }
+
+
+    // adds a new proxy page
+    private def addProxyPageWithRole() {
+        conn = dataSource.getConnection()
+
+        Sql sqlObj = new Sql( conn )
+        try {
+            sqlObj.executeInsert("INSERT INTO twgbwmnu (TWGBWMNU_NAME,TWGBWMNU_DESC,TWGBWMNU_PAGE_TITLE,TWGBWMNU_HEADER,TWGBWMNU_BACK_MENU_IND,TWGBWMNU_MODULE,TWGBWMNU_ENABLED_IND," +
+                    "TWGBWMNU_INSECURE_ALLOWED_IND,TWGBWMNU_ACTIVITY_DATE,TWGBWMNU_CACHE_OVERRIDE,TWGBWMNU_SOURCE_IND,TWGBWMNU_ADM_ACCESS_IND) VALUES " +
+                    "('/ssb/proxy/mypage','My Proxy Page','My Proxy Page','My Proxy Page','N','WTL','Y','N'," +
+                    "TO_TIMESTAMP('13-AUG-02','DD-MON-RR HH.MI.SSXFF AM'),'S','L','N')")
+
+            sqlObj.executeInsert("insert into TWGRMENU (TWGRMENU_NAME,TWGRMENU_SEQUENCE,TWGRMENU_URL_TEXT,TWGRMENU_URL,TWGRMENU_DB_LINK_IND,TWGRMENU_SUBMENU_IND,TWGRMENU_ACTIVITY_DATE,TWGRMENU_SOURCE_IND,TWGRMENU_ENABLED)\n" +
+                    "values ('PROXY_ACCESS_PARENT',99,'My Proxy Page','/ssb/proxy/mypage','Y','N',sysdate,'L','Y')")
+
+            sqlObj.executeInsert("insert into twgrwmrl (twgrwmrl_name, twgrwmrl_role,twgrwmrl_activity_date,twgrwmrl_source_ind)" +
+                    "values ('/ssb/proxy/mypage','PROXY_ACCESS_SUPPORT',TO_TIMESTAMP('13-AUG-02','DD-MON-RR HH.MI.SSXFF AM'),'L')")
+
+            sqlObj.commit();
+        } finally {
+            sqlObj?.close()
+        }
+
+    }
+
+
+    private def deleteProxyPageWithRole() {
+        conn = dataSource.getConnection()
+        Sql  sqlObj = new Sql( conn )
+        try {
+            sqlObj.execute("delete from  twgrmenu where TWGRMENU_SEQUENCE=99 and TWGRMENU_NAME = 'PROXY_ACCESS_PARENT'");
+            sqlObj.execute("delete from twgbwmnu where TWGBWMNU_NAME='/ssb/proxy/mypage' and TWGBWMNU_SOURCE_IND='L'");
+            sqlObj.execute("delete from twgrwmrl where twgrwmrl_name='/ssb/proxy/mypage' and twgrwmrl_SOURCE_IND='L'");
+            sqlObj.commit();
+        } finally {
+            sqlObj?.close()
+        }
+    }
+
+
+
+    def updateProxyRETP() {
+
+        def pidm = PersonUtility.getPerson("GDP000005").pidm
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+
+        sql.call("""
+declare
+
+   lv_proxyIDM    gpbprxy.gpbprxy_proxy_idm%TYPE := 0;
+   lv_pinhash     gpbprxy.gpbprxy_pin%TYPE;
+   lv_salt        gpbprxy.gpbprxy_salt%TYPE;
+   lv_hold_rowid  gb_common.internal_record_id_type;
+   lv_GPBPRXY_rec gp_gpbprxy.gpbprxy_rec;
+   lv_GPBPRXY_ref gp_gpbprxy.gpbprxy_ref;
+   lv_proxy_url   VARCHAR2(300);
+
+begin
+
+gp_gprxref.P_Update (
+      p_proxy_idm   => -1,
+      p_person_pidm => ${pidm},
+      p_retp_code   => 'PARENT',
+      p_start_date  => TRUNC(SYSDATE - 1),
+      p_stop_date   => TRUNC(SYSDATE + 10),
+      p_user_id     => goksels.f_get_ssb_id_context
+      );
+   gb_common.P_Commit;
+
+end;
             """)
     }
 }
