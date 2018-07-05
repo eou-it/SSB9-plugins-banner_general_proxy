@@ -500,7 +500,14 @@ class GeneralSsbProxyService {
             studentList = studentListJson
         }
 
-        return new JsonSlurper().parseText(studentList)
+        def studentsListMap = new JsonSlurper().parseText(studentList)
+
+        studentsListMap.students.each { it ->
+            def pages = getProxyPages(gidm, it.pidm)?.pages
+            it.pages = pages
+        }
+
+        return studentsListMap
     }
 
 

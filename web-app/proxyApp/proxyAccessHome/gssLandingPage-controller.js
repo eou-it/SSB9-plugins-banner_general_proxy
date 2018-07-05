@@ -26,11 +26,6 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
                         $scope.students = response.students;
 
                         _.each($scope.students, function(student) {
-                            //console.log("Name: " + student.name)
-                            //console.log("PIDM: " + student.pidm)
-
-                            proxyAppService.getPages({pidm: student.pidm}).$promise.then(function (response) {
-                                $scope.pages = response.pages;
 
                             $scope.proxyTiles.push(
                                 {
@@ -38,11 +33,11 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
                                     desc: student.name,
                                     url: $scope.applicationContextRoot +'/ssb/proxy/proxypersonalinformation',
                                     icon: '../images/personal_info.svg',
-                                    pages : $scope.pages,
+                                    pages : student.pages,
                                     pidm: student.pidm
                                 }
-                                  );
-                            });
+                            );
+
                         });
                     });
 
