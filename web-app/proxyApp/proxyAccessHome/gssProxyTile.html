@@ -15,18 +15,20 @@
         </div>
 
         <div>
-            <ul class="list-unstyled">
-            <li id="proxyPages" ng-repeat="page in proxyData.pages" data-ng-click="goProxyApp(page.url)">
-                <span>{{page.desc}}</span>
-            </li>
-            </ul>
+            <accordion>
+                <accordion-group ng-init="status = {isOpen: false}" is-open="status.isOpen">
+                    <accordion-heading>
+                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
+                        View Pages.
+                    </accordion-heading>
+                    <ul class="list-unstyled">
+                        <li id="proxyPages" ng-repeat="page in proxyData.pages" data-ng-click="goProxyApp(page.url)">
+                            <span>{{page.desc}}</span>
+                        </li>
+                    </ul>
+                </accordion-group>
+            </accordion>
         </div>
-     <!--
-        <select ng-click="goProxyApp('/ssb/proxy/grades/')">
-            <option value="/ssb/proxy/grades">View Grades</option>
-            <option value="/ssb/viewHolds">View Holds</option>
-        </select>
-      -->
 
     </div>
 </div>
