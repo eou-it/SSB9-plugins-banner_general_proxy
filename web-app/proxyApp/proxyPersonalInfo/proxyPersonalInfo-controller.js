@@ -1,8 +1,8 @@
 /********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyPersonalInformationController',['$scope', 'proxyAppService',
-    function ($scope, proxyAppService) {
+proxyAppControllers.controller('proxyPersonalInformationController',['$scope', 'proxyAppService','$filter',
+    function ($scope, proxyAppService, $filter) {
 
         $scope.proxyProfile = {};
         $scope.proxyUiRules = {};
@@ -16,7 +16,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope', '
                 var required = $scope.proxyUiRules[it] ? $scope.proxyUiRules[it].required : false;
 
                 $scope.profileElements[it] = {
-                    label: required ? ('label.'+it+'*') : ('label.'+it),
+                    label: required ? ($filter('i18n')('proxy.personalinformation.label.'+it)+'*') : $filter('i18n')('proxy.personalinformation.label.'+it),
                     model: $scope.proxyProfile[it],
                     fieldLength: $scope.proxyUiRules[it].fieldLength,
                     elemId: it,
@@ -26,6 +26,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope', '
                 };
 
             });
+
 
             $scope.profileElements['p_birth_date'].isWidget = true;
 
