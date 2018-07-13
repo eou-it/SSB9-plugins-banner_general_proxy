@@ -174,10 +174,10 @@ class GeneralSsbProxyService {
                 proxyProfile.p_street_line3 = data.GPBPRXY_STREET_LINE3
                 proxyProfile.p_street_line4 = data.GPBPRXY_STREET_LINE4
                 proxyProfile.p_city = data.GPBPRXY_CITY
-                proxyProfile.p_stat_code = State.findByCode(data.GPBPRXY_STAT_CODE)
+                proxyProfile.p_stat_code = State.findByCode(data.GPBPRXY_STAT_CODE)?: new State()
                 proxyProfile.p_zip = data.GPBPRXY_ZIP
-                proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE)
-                proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE)
+                proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE)?: new Nation()
+                proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE)?: new County()
                 proxyProfile.p_sex = data.GPBPRXY_SEX
                 proxyProfile.p_birth_date = (data.GPBPRXY_BIRTH_DATE==null) ? "" : df.format(data.GPBPRXY_BIRTH_DATE)
                 proxyProfile.p_ssn = data.GPBPRXY_SSN
@@ -435,7 +435,7 @@ class GeneralSsbProxyService {
                            params.p_name_suffix, params.p_pref_first_name, params.p_phone_area,
                            params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
                            params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
-                           params.p_city, params.p_stat_code.code, params.p_zip, params.p_cnty_code.code, params.p_natn_code.code,
+                           params.p_city, params.p_stat_code?.code ?: "", params.p_zip, params.p_cnty_code?.code ?: "", params.p_natn_code?.code ?: "",
                            params.p_sex, bDate, params.p_ssn, p_proxyIDM
                           ])
 
@@ -482,7 +482,7 @@ class GeneralSsbProxyService {
                            params.p_name_suffix, params.p_pref_first_name, params.p_email_address, params.p_phone_area,
                            params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
                            params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
-                           params.p_city, params.p_stat_code.code, params.p_zip, params.p_cnty_code.code, params.p_natn_code.code,
+                           params.p_city, params.p_stat_code?.code?:"", params.p_zip, params.p_cnty_code?.code?:"", params.p_natn_code?.code?:"",
                            params.p_sex, bDate, params.p_ssn, Sql.VARCHAR
         ]){ errorMsg ->
             errorMsgOut = errorMsg

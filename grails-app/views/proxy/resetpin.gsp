@@ -13,7 +13,7 @@
 
     <div class="logInProxy appNameProxy">
         <g:if test='${flash.message}'>
-            <span class="icon-error"></span>${flash.message}
+            <span class="icon-error"></span ><span class="actionpassword">${flash.message}</span>
         </g:if>
         <table>
      <tr>
@@ -22,16 +22,16 @@
      </tr>
             <tr>
                 <td><label>Old Pin: </label> <span class="red-star"> *</span></td>
-                <td><input type="text" name="p_pin_orig" required></td>
+                <td><input type="password" name="p_pin_orig" required></td>
             </tr>
     <tr>
         <td><label>New Pin: </label> <span class="red-star"> *</span></td>
-        <td><input type="text" name="p_pin1" required></td>
+        <td><input type="password" name="p_pin1" required></td>
     </tr>
 
             <tr>
                 <td><label>Validate Pin: </label> <span class="red-star"> *</span></td>
-                <td><input type="text" name="p_pin2" required></td>
+                <td><input type="passwordt" name="p_pin2" required></td>
                 <td>    <input type="submit" value="Save" class="signin-button"></td>
 
             </tr>
