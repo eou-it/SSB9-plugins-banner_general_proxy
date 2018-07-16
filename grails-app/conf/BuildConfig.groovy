@@ -1,6 +1,6 @@
-/*******************************************************************************
- Copyright 2015-2017 Ellucian Company L.P. and its affiliates.
- *******************************************************************************/
+/*********************************************************************************
+ Copyright 2016-2017 Ellucian Company L.P. and its affiliates.
+ *********************************************************************************/
 
 grails.project.dependency.resolver = "maven"
 grails.project.class.dir        = "target/classes"
@@ -12,15 +12,22 @@ grails.project.test.reports.dir = "target/test-reports"
 // result in the all-too-familiar exception:
 // "Cannot cast object 'oracle.jdbc.driver.T4CConnection@6469adc7'... to class 'oracle.jdbc.OracleConnection'
 grails.war.resources = { stagingDir ->
-    delete( file: "${stagingDir}/WEB-INF/lib/ojdbc6.jar" )
 }
 
-grails.plugin.location.'banner-packaging'                   = "plugins/banner_packaging.git"
-grails.plugin.location.'banner-aip-ui'                      = "plugins/banner_aip_ui.git"
-grails.plugin.location.'banner-aip-gate-keeper'                      = "plugins/banner_aip_gate_keeper.git"
-grails.plugin.location.'banner-general-direct-deposit-ui' = "plugins/banner_general_direct_deposit_ui.git"
-grails.plugin.location.'banner-general-personal-information-ui' = "plugins/banner_general_personal_information_ui.git"
-grails.plugin.location.'banner-general-proxy' = "plugins/banner_general_proxy.git"
+grails.plugin.location.'i18n_core'                        = "../i18n_core.git"
+grails.plugin.location.'banner-ui-ss'                     = "../banner_ui_ss.git"
+grails.plugin.location.'banner-core'                      = "../banner_core.git"
+grails.plugin.location.'banner-codenarc'                  = "../banner_codenarc.git"
+grails.plugin.location.'banner-general-person'            = "../banner_general_person.git"
+grails.plugin.location.'banner-general-common'            = "../banner_general_common.git"
+grails.plugin.location.'banner-general-utility'           = "../banner_general_utility.git"
+grails.plugin.location.'banner-seeddata-catalog'          = "../banner_seeddata_catalog.git"
+grails.plugin.location.'banner-general-validation-common' = "../banner_general_validation_common.git"
+grails.plugin.location.'sghe-aurora'                      = "../sghe_aurora.git"
+grails.plugin.location.'banner-packaging'                 = "../banner_packaging.git"
+grails.plugin.location.'banner-general-common-ui-ss'      = "../banner_general_common_ui_ss.git"
+grails.plugin.location.'domain-extension'                 = "../domain_extension.git"
+grails.plugin.location.'web-app-extensibility'            = "../web-app-extensibility.git"
 
 grails.project.dependency.resolution = {
 
@@ -39,13 +46,10 @@ grails.project.dependency.resolution = {
     plugins {
         compile ':zipped-resources:1.0'
         compile ':cached-resources:1.0'
-        compile ':yui-minify-resources:0.1.5'
+        compile ':yui-minify-resources:0.1.4'
         compile ':cache-headers:1.1.7'
         test ':code-coverage:2.0.3-3'
         runtime ":rendering:1.0.0"
-        compile ':csv:0.3.1'
-        compile ':feeds:1.5'
-        compile ":functional-test:2.0.0"
     }
 
     dependencies {
@@ -58,8 +62,7 @@ grails.project.dependency.resolution = {
         runtime "javax.servlet:jstl:1.1.2"
 
         runtime 'org.springframework:spring-test:3.1.0.RELEASE'
-        compile "cglib:cglib:3.0"
-        compile "org.pegdown:pegdown:1.2.0"
+
         compile ('org.apache.poi:poi-ooxml:3.7') {
             excludes 'stax-api'
         }
@@ -87,12 +90,10 @@ grails.war.resources = { stagingDir, args ->
 
 grails.war.copyToWebApp = { args ->
     fileset(dir:"web-app") {
-        include(name: "generalSsbApp/**")
+        include(name: "proxyApp/**")
         include(name: "js/**")
         include(name: "css/**")
         include(name: "images/**")
-        include(name: "fonts/**")
-        include(name: "pb/**")
         include(name: "WEB-INF/**")
     }
 }
@@ -130,9 +131,3 @@ reportMessages {
     dynamicKeys = [
     ]
 }
-
-// CodeNarc rulesets
-codenarc.ruleSetFiles = "rulesets/banner.groovy"
-codenarc.reportName = "target/CodeNarcReport.html"
-codenarc.propertiesFile = "grails-app/conf/codenarc.properties"
-codenarc.extraIncludeDirs = ["grails-app/composers"]

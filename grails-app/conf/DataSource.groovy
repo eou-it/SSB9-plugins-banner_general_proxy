@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2013-2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2013 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 // Support Hibernate annotations
@@ -20,7 +20,6 @@ dataSource {
 hibernate {
     cache.use_second_level_cache = true
     cache.use_query_cache = true
-    flush.mode = 'manual' // OSIV session flush mode outside of transactional context
     cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
     hbm2ddl.auto = null
     show_sql = false
@@ -31,12 +30,10 @@ hibernate {
             "classpath:hibernate-banner-general-person.cfg.xml",
             "classpath:hibernate-banner-general-validation-common.cfg.xml",
             "classpath:hibernate-banner-general-common.cfg.xml",
-            "classpath:hibernate-banner-aip-gate-keeper.cfg.xml",
-            "classpath:hibernate-banner-aip.cfg.xml",
-            "classpath:hibernate-banner-general-utility.cfg.xml",
-            "classpath:hibernate-banner-sspb.cfg.xml"
+            "classpath:hibernate-banner-general-utility.cfg.xml"
     ]
 }
+
 
 // environment specific settings
 environments {
