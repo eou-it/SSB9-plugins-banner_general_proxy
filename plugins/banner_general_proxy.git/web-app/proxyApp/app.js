@@ -52,7 +52,10 @@ var proxyApp = angular.module('proxyApp', [
         ]
     );
 
-proxyApp.config(function ($stateProvider, $urlRouterProvider) {
+proxyApp.constant('webAppResourcePathString', '../plugins/banner-general-proxy-0.1');
+
+
+proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePathString) {
     // For any unmatched url, send to landing page
     var url = url ? url : 'home';
 
@@ -64,12 +67,12 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state('home', {
             url: "/home",
-            templateUrl: '../proxyApp/proxyAccessHome/gssLandingPage.html',
+            templateUrl: webAppResourcePathString + '/proxyApp/proxyAccessHome/gssLandingPage.html',
             controller: 'gssLandingPageController',
             resolve: {
-                piConfigResolve: function (proxyAppService) {
-                    return proxyAppService.getFromPersonalInfo('PiConfig').$promise;
-                }
+                //piConfigResolve: function (proxyAppService) {
+                //    return proxyAppService.getFromPersonalInfo('PiConfig').$promise;
+                //}
             },
             data: {
                 breadcrumbs: []
@@ -77,7 +80,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider) {
         })
         .state('proxyPersonalInfo', {
             url: "/proxypersonalinformation",
-            templateUrl: '../proxyApp/proxyPersonalInfo/proxyPersonalInformation.html',
+            templateUrl: webAppResourcePathString + '/proxyApp/proxyPersonalInfo/proxyPersonalInformation.html',
             controller: 'proxyPersonalInformationController',
             resolve: {
             },
@@ -87,7 +90,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider) {
         })
         .state('/ssb/proxy/holds', {
             url: "/viewHolds",
-            templateUrl: '../proxyApp/student/holds.html',
+            templateUrl: webAppResourcePathString + '/proxyApp/student/holds.html',
             controller: 'proxyViewHoldsController',
             resolve: {
             },

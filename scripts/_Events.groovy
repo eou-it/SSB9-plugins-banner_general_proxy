@@ -87,6 +87,14 @@ eventCreateWarStart = { warName, stagingDir ->
         }
     }
 
+    preparePlugin("banner-general-proxy") { name, version, pluginDirectory ->
+        println "Copying i18n files from banner-general-proxy plugin"
+
+        Ant.copy(todir: "${stagingDir}/WEB-INF/plugins/$name-$version/grails-app/i18n") {
+            fileset(dir: "${pluginDirectory}/grails-app/i18n")
+        }
+    }
+
     preparePlugin("banner-ui-ss") { name, version, pluginDirectory ->
         println "Copying CSS, image, and JavaScript files from banner-ui-ss plugin"
 

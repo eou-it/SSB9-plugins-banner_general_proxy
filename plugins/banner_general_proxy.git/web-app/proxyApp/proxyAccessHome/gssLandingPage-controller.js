@@ -1,8 +1,8 @@
 /********************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppService', 'piConfigResolve',
-    function ($scope, proxyAppService, piConfigResolve) {
+proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppService',
+    function ($scope, proxyAppService) {
 
         // LOCAL VARIABLES
         // ---------------
@@ -14,7 +14,6 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
         // LOCAL FUNCTIONS
         // ---------------
             init = function() {
-                $scope.piConfig = piConfigResolve;
 
                 if (CommonContext.guestUser){
 

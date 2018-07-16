@@ -4,10 +4,10 @@
 Copyright 2017 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 --%>
-<!--[if IE 9 ]>    <html xmlns:ng="http://angularjs.org" ng-app="generalSsbApp" id="ng-app" class="ie9"> <![endif]-->
+<!--[if IE 9 ]>    <html xmlns:ng="http://angularjs.org" ng-app="proxyApp" id="ng-app" class="ie9"> <![endif]-->
 <html xmlns:ng="http://angularjs.org" id="ng-app">
 <head>
-    <g:applyLayout name="bannerWebPage">
+    <g:applyLayout name="bannerSelfServicePage">
         <title><g:message code="banner.general.common.title"/></title>
 
         <meta name="menuEndPoint" content="${request.contextPath}/ssb/menu"/>
@@ -15,17 +15,19 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <g:set var="applicationContextRoot" value= "${application.contextPath}"/>
         <meta name="applicationContextRoot" content="${applicationContextRoot}">
-        <g:set var="mep" value="${params?.mepCode}"/>
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <g:set var="appName" value= ""/>
+        <g:set var="guestUser" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('guestUser')}"/>
 
-        <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-            <r:require modules="generalSsbAppRTL"/>
+        <g:if test="${guestUser}">
+            <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
+                <r:require modules="proxyAppRTL"/>
+            </g:if>
+            <g:else>
+                <r:require modules="proxyAppLTR"/>
+            </g:else>
         </g:if>
-        <g:else>
-            <r:require modules="generalSsbAppLTR"/>
-        </g:else>
+
     </g:applyLayout>
 
     <script type="text/javascript">
@@ -43,11 +45,11 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
             // URLs to exclude from updating genMainCallingPage.  No breadcrumbs for "/BannerGeneralSsb/" URLs
             // (i.e. the applicationName variable below) or App Nav should be created for the landing page.
             var referrerUrl = document.referrer,
-                excludedRegex = [
-                    /\${applicationContextRoot}\//,
-                    /\/seamless/
-                ],
-                isExcluded;
+                    excludedRegex = [
+                        /\${applicationContextRoot}\//,
+                        /\/seamless/
+                    ],
+                    isExcluded;
 
             if (referrerUrl) {
                 isExcluded = _.find(excludedRegex, function (regex) {
@@ -56,7 +58,7 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
 
                 if (!isExcluded) {
                     // Track this page
-                    sessionStorage.setItem('genMainCallingPage', referrerUrl);
+                    sessionStorage.setItem('proxyCallingPage', referrerUrl);
                 }
             }
         })();
@@ -66,15 +68,10 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
 <body>
 
 <g:if test="${guestUser}">
-<div id="content" ng-app="proxyApp" class="container-fluid" aria-relevant="additions" role="main">
-    <div ui-view class="gen-home-main-view"></div>
-</div>
+    <div id="content" ng-app="proxyApp" class="container-fluid" aria-relevant="additions" role="main">
+        <div ui-view class="gen-home-main-view"></div>
+    </div>
 </g:if>
-<g:else>
-<div id="content" ng-app="generalSsbApp" class="container-fluid" aria-relevant="additions" role="main">
-    <div ui-view class="gen-home-main-view"></div>
-</div>
-</g:else>
 <div class="body-overlay"></div>
 </body>
 </html>

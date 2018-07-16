@@ -3,6 +3,7 @@
  ****************************************************************************** */
 
 import grails.converters.JSON
+import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.i18n.MessageHelper
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
@@ -11,12 +12,29 @@ import org.springframework.security.core.context.SecurityContextHolder
  * Controller for General
  */
 class ProxyController {
+    static defaultAction = 'landingPage'
 
     def generalSsbProxyService
     def personRelatedHoldService
 
     def dataSource               // injected by Spring
     def sessionFactory           // injected by Spring
+
+
+    def landingPage() {
+        try {
+
+            def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+
+            if(p_proxyIDM){
+                generalSsbProxyService.updateProxyHistoryOnLogin()
+            }
+            render view: "proxy"
+        }
+        catch (ApplicationException e) {
+            render returnFailureMessage( e ) as JSON
+        }
+    }
 
 
     def updateProxyProfile(){

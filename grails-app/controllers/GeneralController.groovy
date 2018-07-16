@@ -70,9 +70,11 @@ class GeneralController {
             def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
 
             if(p_proxyIDM){
-                generalSsbProxyService.updateProxyHistoryOnLogin()
+                forward controller: 'proxy', action: 'landingPage'
             }
-            render view: "general"
+            else {
+                render view: "general"
+            }
         } catch (ApplicationException e) {
             render returnFailureMessage( e ) as JSON
         }

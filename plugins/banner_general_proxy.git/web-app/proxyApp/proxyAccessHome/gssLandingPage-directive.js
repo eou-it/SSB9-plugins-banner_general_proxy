@@ -1,10 +1,10 @@
 /*******************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-proxyAppDirectives.directive('landingPageAppTile', [ '$state', function ($state) {
+proxyAppDirectives.directive('landingPageAppTile', [ '$state', 'webAppResourcePathString', function ($state, webAppResourcePathString) {
     return{
         restrict: 'E',
-        templateUrl: '../proxyApp/proxyAccessHome/gssAppTile.html',
+        templateUrl: webAppResourcePathString + '/proxyApp/proxyAccessHome/gssAppTile.html',
         scope: {
             proxyData: '='
         },
@@ -17,10 +17,10 @@ proxyAppDirectives.directive('landingPageAppTile', [ '$state', function ($state)
     };
 }]);
 
-proxyAppDirectives.directive('landingPageProxyTile', ['$state', function ($state) {
+proxyAppDirectives.directive('landingPageProxyTile', ['$state', 'webAppResourcePathString', function ($state, webAppResourcePathString) {
     return{
         restrict: 'E',
-        templateUrl: '../proxyApp/proxyAccessHome/gssProxyTile.html',
+        templateUrl: webAppResourcePathString + '/proxyApp/proxyAccessHome/gssProxyTile.html',
         scope: {
             proxyData: '='
         },

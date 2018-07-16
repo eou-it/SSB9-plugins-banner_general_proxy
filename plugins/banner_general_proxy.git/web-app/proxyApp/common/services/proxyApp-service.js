@@ -23,7 +23,7 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
     };
 
     this.getFromPersonalInfo = function (entityName, params) {
-        return $resource('../ssb/:controller/:action',
+        return $resource('../:controller/:action',
             {controller: 'PersonalInformationDetails', action: 'get'+entityName}).get(params);
     };
 
