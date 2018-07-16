@@ -14,7 +14,7 @@
 
         <div class="logInProxy appNameProxy">
             <g:message code="banner.generalssb.submitactionpassword.label"/>
-            <input type="text" name="p_verify">
+            <input type='password' name="p_verify">
             <input type="hidden" name="token" value="${token}" />
             <input type="hidden" name="gidm" value="${gidm}" />
             <input type="submit" value="Submit" class="signin-button">
@@ -22,6 +22,10 @@
 
             <div class="actionpassword">
                 <g:message code="banner.generalssb.submitactionpassword"/>
+                <g:if test='${flash.message}'>
+                    <span class="icon-error"></span>
+                    ${flash.message}
+                </g:if>
             </div>
         </div>
     </form>
