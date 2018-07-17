@@ -9,17 +9,13 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
 
 /**
- * Controller for General
+ * Controller for Proxy
  */
 class ProxyController {
     static defaultAction = 'landingPage'
 
     def generalSsbProxyService
     def personRelatedHoldService
-
-    def dataSource               // injected by Spring
-    def sessionFactory           // injected by Spring
-
 
     def landingPage() {
         try {
@@ -54,12 +50,6 @@ class ProxyController {
 
     }
 
-    def proxypersonalinformation(){
-        def proxyProfiles
-        proxyProfiles =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
-
-        render view: "/proxy/proxypersonalinformation", model :  [proxyProfile: proxyProfiles.proxyProfile, proxyUiRules : proxyProfiles.proxyUiRules  ]
-    }
 
     def getProxypersonalinformation() {
         def proxyProfile
@@ -67,6 +57,7 @@ class ProxyController {
 
         render proxyProfile as JSON
     }
+
 
     def updateProxypersonalinformation() {
         def updatedProfile = fixJSONObjectForCast(request?.JSON ?: params)
@@ -89,13 +80,6 @@ class ProxyController {
         render generalSsbProxyService.getStudentListForProxy(p_proxyIDM) as JSON
     }
 
-    def grades(){
-        render view: "/proxy/grades"
-    }
-
-    def holds(){
-        render view: "/proxy/holds"
-    }
 
     def proxy(){
 
@@ -117,6 +101,7 @@ class ProxyController {
         }
     }
 
+
     def submitActionPassword() {
 
         def result = generalSsbProxyService.setProxyVerify(params.token, params.p_verify, params.gidm)
@@ -128,8 +113,8 @@ class ProxyController {
         }
     }
 
+
     def resetPinAction() {
-        println "GUIDM: " + params."gidm" + " " + params.p_pin1 + " " + params.p_pin2 + " " + params.p_email + " " + params.p_pin_orig
 
         def result = generalSsbProxyService.savePin(params."gidm", params.p_pin1, params.p_pin2, params.p_email, params.p_pin_orig)
 
@@ -141,11 +126,13 @@ class ProxyController {
         }
     }
 
+
     def getHolds() {
         def result = personRelatedHoldService.getWebDisplayableHolds(params.pidm);
 
         render result as JSON
     }
+
 
     private def fixJSONObjectForCast(JSONObject json) {
         json.each {entry ->
@@ -160,5 +147,4 @@ class ProxyController {
             }
         }
     }
-
 }
