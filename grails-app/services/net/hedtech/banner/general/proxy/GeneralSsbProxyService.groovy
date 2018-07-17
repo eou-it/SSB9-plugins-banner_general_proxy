@@ -131,7 +131,7 @@ class GeneralSsbProxyService {
         println "msg: " + msg
         println "error: " + error
 
-        return [errorStatus: errorStatus.equals("Y"), message: msg, error: error]
+        return [errorStatus: errorStatus.equals("Y"), message: msg, error: error, gidm: p_proxyIDM]
 
     }
 
