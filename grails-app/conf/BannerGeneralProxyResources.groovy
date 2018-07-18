@@ -16,11 +16,6 @@ modules = {
         resource url:[plugin: 'banner-general-personal-information-ui', file: 'js/angular/angular-route.min.js']
     }
 
-    'angularGeneral' {
-        resource url: [plugin: 'banner-ui-ss', file: 'js/angular/angular-route.min.js']
-
-    }
-
     'bootstrapLTR' {
         dependsOn "jquery"
         defaultBundle environment == "development" ? false : "bootstrap"
@@ -50,7 +45,7 @@ modules = {
     }
 
     'proxyApp' {
-        dependsOn "angularGeneral"
+        dependsOn "angular"
 
         defaultBundle environment == "development" ? false : "proxyApp"
 

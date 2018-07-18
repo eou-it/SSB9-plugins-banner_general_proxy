@@ -1,6 +1,7 @@
 /*******************************************************************************
- Copyright 2015-2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2018 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
+package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
