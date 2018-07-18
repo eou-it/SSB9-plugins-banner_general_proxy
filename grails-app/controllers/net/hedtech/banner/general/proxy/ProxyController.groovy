@@ -82,7 +82,7 @@ class ProxyController {
     }
 
 
-    def proxy(){
+    def proxyAction(){
 
         def result = generalSsbProxyService.setProxy(params.p_token)
 
