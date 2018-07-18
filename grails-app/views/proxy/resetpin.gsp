@@ -31,7 +31,7 @@
 
             <tr>
                 <td><label>Validate Pin: </label> <span class="red-star"> *</span></td>
-                <td><input type="passwordt" name="p_pin2" required></td>
+                <td><input type="password" name="p_pin2" required></td>
                 <td>    <input type="submit" value="Save" class="signin-button"></td>
 
             </tr>

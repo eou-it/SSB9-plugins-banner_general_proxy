@@ -8,6 +8,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope', '
         $scope.proxyUiRules = {};
         $scope.profileElements = {};
 
+
         proxyAppService.getProxyPersonalInfo().$promise.then(function(response) {
             $scope.proxyProfile = response.proxyProfile;
             $scope.proxyUiRules = response.proxyUiRules;
@@ -16,7 +17,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope', '
                 var required = $scope.proxyUiRules[it] ? $scope.proxyUiRules[it].required : false;
 
                 $scope.profileElements[it] = {
-                    label: required ? ($filter('i18n')('proxy.personalinformation.label.'+it)+'*') : $filter('i18n')('proxy.personalinformation.label.'+it),
+                    label: required ? ($filter('i18n')('proxy.personalinformation.label.'+it)+ '<font color="red">*</font>' ) : $filter('i18n')('proxy.personalinformation.label.'+it),
                     model: $scope.proxyProfile[it],
                     fieldLength: $scope.proxyUiRules[it].fieldLength,
                     elemId: it,
@@ -43,6 +44,8 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope', '
             $scope.profileElements['p_natn_code'].isDropdown = true;
 
             $scope.profileElements['p_sex'].isWidget = true;
+
+            $scope.profileElements['p_opt_out_adv_date'].isWidget = true;
 
         });
 

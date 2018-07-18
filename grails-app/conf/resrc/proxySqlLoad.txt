@@ -33,6 +33,18 @@ updateProfile {
            RETURN NULL;
          END f_validate_date;
 
+         FUNCTION GET_DATE(p_ind VARCHAR2) RETURN DATE
+         IS
+         BEGIN
+           CASE
+             WHEN p_ind = 'N'
+           THEN
+             RETURN NULL;
+           ELSE
+             RETURN SYSDATE;
+           END CASE;
+         END GET_DATE;
+
      BEGIN
           -- Get the proxy record
         lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One (?);
@@ -74,7 +86,7 @@ updateProfile {
                                 p_sex                => goksels.f_clean_text(?),
                                 p_birth_date         => TO_DATE (f_validate_date(?), twbklibs.date_input_fmt),
                                 p_ssn                => goksels.f_clean_text(?),
-                                p_opt_out_adv_date   => lv_opt_out_adv_date,
+                                p_opt_out_adv_date   => GET_DATE(?),
                                 p_user_id            => goksels.f_get_ssb_id_context,
                                 p_rowid              => lv_GPBPRXY_rec.R_INTERNAL_RECORD_ID);
                           EXCEPTION
@@ -496,6 +508,7 @@ DECLARE
       show_p_sex                VARCHAR2(1);
       show_p_birth_date         VARCHAR2(1);
       show_p_ssn                VARCHAR2(1);
+      show_p_opt_out_adv_date VARCHAR2(1);
 
      FUNCTION F_Required (p_OTYP gtvotyp.gtvotyp_code%TYPE)
          RETURN VARCHAR2
@@ -573,6 +586,8 @@ BEGIN
 
          show_p_ssn := F_Required ('PROFILE_SSN');
 
+         show_p_opt_out_adv_date := F_Required ('PROFILE_OPT_OUT_ADV_IND');
+
          ? := show_p_name_prefix;
          ? := show_p_mi;
          ? := show_p_surname_prefix;
@@ -595,6 +610,7 @@ BEGIN
          ? := show_p_sex;
          ? := show_p_birth_date;
          ? := show_p_ssn;
+         ? := show_p_opt_out_adv_date;
 END;
 
     """

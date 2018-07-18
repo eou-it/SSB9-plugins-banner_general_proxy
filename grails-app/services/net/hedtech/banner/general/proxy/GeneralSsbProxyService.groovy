@@ -150,7 +150,7 @@ class GeneralSsbProxyService {
         def sqlText = sqlFileLoadService.getSqlTextMap().getProxyPersonalInformation?.sqlText
 
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
         def proxyProfile = [:]
 
@@ -181,6 +181,7 @@ class GeneralSsbProxyService {
                 proxyProfile.p_sex = data.GPBPRXY_SEX
                 proxyProfile.p_birth_date = (data.GPBPRXY_BIRTH_DATE==null) ? "" : df.format(data.GPBPRXY_BIRTH_DATE)
                 proxyProfile.p_ssn = data.GPBPRXY_SSN
+                proxyProfile.p_opt_out_adv_date = (data.GPBPRXY_OPT_OUT_ADV_DATE==null) ? false: true
             }
 
         }
@@ -193,13 +194,13 @@ class GeneralSsbProxyService {
                            Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR,
                            Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR,
                            Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR,
-                           Sql.VARCHAR, Sql.VARCHAR ])
+                           Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR ])
                 { show_p_name_prefix, show_p_mi, show_p_surname_prefix,
                   show_p_name_suffix, show_p_pref_first_name, show_p_phone_area,
                   show_p_phone_number, show_p_phone_ext, show_p_ctry_code_phone,
                   show_p_house_number, show_p_street_line1,show_p_street_line2,show_p_street_line3,show_p_street_line4,
                   show_p_city, show_p_stat_code, show_p_zip, show_p_cnty_code, show_p_natn_code,
-                  show_p_sex, show_p_birth_date, show_p_ssn ->
+                  show_p_sex, show_p_birth_date, show_p_ssn, show_p_opt_out_adv_date ->
 
 
                     proxyUiRules."p_name_prefix" = [fieldLength: 20]
@@ -406,6 +407,16 @@ class GeneralSsbProxyService {
                         proxyUiRules."p_birth_date".putAll([visible: true, required : true])
                     }
 
+
+                    proxyUiRules."p_opt_out_adv_date" = [fieldLength: 1]
+                    if (show_p_opt_out_adv_date.equals("V")){
+                        proxyUiRules."p_opt_out_adv_date".putAll([visible: true, required : false])
+                    }else if(show_p_opt_out_adv_date.equals("N")){
+                        proxyUiRules."p_opt_out_adv_date".putAll([visible: false, required : false])
+                    }else if(show_p_opt_out_adv_date.equals("Y")){
+                        proxyUiRules."p_opt_out_adv_date".putAll([visible: true, required : true])
+                    }
+
                 }
 
         return [proxyProfile : proxyProfile, proxyUiRules : proxyUiRules]
@@ -429,14 +440,13 @@ class GeneralSsbProxyService {
 
         def bDate = dateFormat(params.p_birth_date)
 
-
         sql.call(sqlText, [p_proxyIDM, p_proxyIDM, params.p_first_name, params.p_last_name,
                            p_proxyIDM , params.p_mi, params.p_surname_prefix, params.p_name_prefix,
                            params.p_name_suffix, params.p_pref_first_name, params.p_phone_area,
                            params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
                            params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
                            params.p_city, params.p_stat_code?.code ?: "", params.p_zip, params.p_cnty_code?.code ?: "", params.p_natn_code?.code ?: "",
-                           params.p_sex, bDate, params.p_ssn, p_proxyIDM
+                           params.p_sex, bDate, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", p_proxyIDM
                           ])
 
     }
