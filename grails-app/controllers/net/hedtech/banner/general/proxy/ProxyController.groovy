@@ -104,13 +104,15 @@ class ProxyController {
 
 
     def submitActionPassword() {
+        flash.message = ""
 
         def result = generalSsbProxyService.setProxyVerify(params.token, params.p_verify, params.gidm)
 
         if (result.doPin) {
-            render view: "resetpin", model: [gidm : result.gidm]
+            render view: "/proxy/resetpin", model: [gidm : result.gidm]
         } else {
-            forward controller: "login", action: "auth", params: params
+            flash.message = message( code:"proxy.actionpassword.invalid" )
+            render view: "/proxy/actionpassword", params: params, model: [token: params.p_token, gidm : result.gidm]
         }
     }
 
@@ -120,10 +122,10 @@ class ProxyController {
         def result = generalSsbProxyService.savePin(params."gidm", params.p_pin1, params.p_pin2, params.p_email, params.p_pin_orig)
 
         if(!result.errorStatus) {
-            forward controller: "login", action: "auth", params: params
+            redirect (uri: "/login/auth")
         }else{
-            flash.message = result.error
-            render view: "resetpin"
+            flash.message = message( code: "proxy.pinmanagement.invalid." + result.error )
+            render view: "/proxy/resetpin"
         }
     }
 
