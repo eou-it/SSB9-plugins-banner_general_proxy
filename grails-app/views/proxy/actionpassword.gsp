@@ -13,7 +13,7 @@
         <div class="appNameProxy">Banner<span>&reg;</span></div>
 
         <div class="logInProxy appNameProxy">
-            <g:message code="banner.generalssb.submitactionpassword.label"/>
+            <g:message code="proxy.pinmanagement.submitactionpassword.label"/>
             <input type='password' name="p_verify">
             <input type="hidden" name="token" value="${token}" />
             <input type="hidden" name="gidm" value="${gidm}" />
@@ -21,7 +21,7 @@
             <br>
 
             <div class="actionpassword">
-                <g:message code="banner.generalssb.submitactionpassword"/>
+                <g:message code="proxy.pinmanagement.submitactionpassword"/>
                 <g:if test='${flash.message}'>
                     <span class="icon-error"></span>
                     ${flash.message}
