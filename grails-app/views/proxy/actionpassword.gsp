@@ -11,6 +11,12 @@
 <div class="splashBg">
     <form action="submitActionPassword" method="post">
         <div class="appNameProxy">Banner<span>&reg;</span></div>
+        <div class="loginMsg">
+            <g:if test='${flash.message}'>
+                <span class="icon-error"></span>${flash.message}
+            </g:if>
+        </div>
+
 
         <div class="logInProxy appNameProxy">
             <g:message code="proxy.pinmanagement.submitactionpassword.label"/>
@@ -22,10 +28,6 @@
 
             <div class="actionpassword">
                 <g:message code="proxy.pinmanagement.submitactionpassword"/>
-                <g:if test='${flash.message}'>
-                    <span class="icon-error"></span>
-                    ${flash.message}
-                </g:if>
             </div>
         </div>
     </form>
