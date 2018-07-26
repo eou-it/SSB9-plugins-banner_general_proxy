@@ -28,6 +28,15 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', 'webAppResourceP
             scope.goProxyApp = function(url) {
                 $state.go(url, {pidm: scope.proxyData.pidm});
             };
+
+            scope.setPidm = function() {
+                jQuery.ajax({
+                    url: "proxy/setPidm",
+                    data: {"pidm": scope.proxyData.pidm},
+                    async: false
+                });
+
+            };
         }
 
     };

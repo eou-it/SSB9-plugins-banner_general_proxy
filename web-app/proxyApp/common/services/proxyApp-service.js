@@ -45,5 +45,10 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
             {controller: 'Proxy', action: 'getHolds'}).get(params);
     };
 
+    this.getGrades = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'getGrades'}).get(params);
+    };
+
 
 }]);

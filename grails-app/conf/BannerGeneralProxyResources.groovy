@@ -60,6 +60,7 @@ modules = {
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/gssLandingPage-controller.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyPersonalInfo/proxyPersonalInfo-controller.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyViewHolds-controller.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyViewGrades-controller.js']
 
         // Filters
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/filters/i18n-filter.js']

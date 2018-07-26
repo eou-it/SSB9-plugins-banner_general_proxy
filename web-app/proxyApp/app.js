@@ -101,7 +101,21 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
                 pidm: null
             }
 
-        });
+        })
+        .state('/ssb/proxy/grades', {
+            url: "/viewGrades",
+            templateUrl: webAppResourcePathString + '/proxyApp/student/grades.html',
+            controller: 'proxyViewGradesController',
+            resolve: {
+            },
+            data: {
+                breadcrumbs: []
+            },
+            params: {
+                pidm: null
+            }
+
+        })
 });
 
 proxyApp.config(['$locationProvider',
