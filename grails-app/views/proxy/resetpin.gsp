@@ -17,20 +17,20 @@
         </g:if>
         <table>
      <tr>
-            <td><label>Email Address: </label> <span class="red-star"> *</span></td>
+            <td><label><g:message code="proxy.pinmanagement.email.address.label"/> </label> <span class="red-star"> *</span></td>
             <td><input type="text" name="p_email" required></td>
      </tr>
             <tr>
-                <td><label>Old Pin: </label> <span class="red-star"> *</span></td>
+                <td><label><g:message code="proxy.pinmanagement.old.pin"/> </label> <span class="red-star"> *</span></td>
                 <td><input type="password" name="p_pin_orig" required></td>
             </tr>
     <tr>
-        <td><label>New Pin: </label> <span class="red-star"> *</span></td>
+        <td><label><g:message code="proxy.pinmanagement.new.pin"/> </label> <span class="red-star"> *</span></td>
         <td><input type="password" name="p_pin1" required></td>
     </tr>
 
             <tr>
-                <td><label>Validate Pin: </label> <span class="red-star"> *</span></td>
+                <td><label><g:message code="proxy.pinmanagement.validate.pin"/> </label> <span class="red-star"> *</span></td>
                 <td><input type="password" name="p_pin2" required></td>
                 <td>    <input type="submit" value="Save" class="signin-button"></td>
 
@@ -39,7 +39,7 @@
     </table>
        <br>
         <div class="actionpassword">
-            <g:message code="banner.generalssb.pin"/>
+            <g:message code="proxy.pinmanagement.change.pin"/>
         </div>
 
     </div>
