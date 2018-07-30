@@ -49,6 +49,9 @@ modules = {
 
         defaultBundle environment == "development" ? false : "proxyApp"
 
+        resource url: [plugin: 'banner-general-proxy', file: 'js/lib/moment.min.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'js/fullcalendar/fullcalendar.js']
+
         //Main configuration file
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/app.js']
 
@@ -60,6 +63,7 @@ modules = {
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/gssLandingPage-controller.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyPersonalInfo/proxyPersonalInfo-controller.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyViewHolds-controller.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyViewCourseSched-controller.js']
 
         // Filters
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/filters/i18n-filter.js']
@@ -68,11 +72,14 @@ modules = {
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/selectBox-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/gssLandingPage-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyPersonalInfo/proxyPersonalInfo-directive.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyStudent-directive.js']
     }
 
     'proxyAppLTR' {
         dependsOn "bannerWebLTR, proxyApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsLTR"
         // CSS
+        resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar.css'], attrs: [media: 'screen, projection']
+
         resource url: [plugin: 'banner-general-proxy', file: 'css/proxy.css'], attrs: [media: 'screen, projection']
         resource url: [file: 'css/generalSsbResponsive.css'], attrs: [media: 'screen, projection']
         resource url: [plugin: 'banner-general-personal-information-ui', file: 'css/main.css'], attrs: [media: 'screen, projection']
@@ -82,6 +89,8 @@ modules = {
     'proxyAppRTL' {
         dependsOn "bannerWebRTL, proxyApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsRTL"
         // CSS
+        resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar.css'], attrs: [media: 'screen, projection']
+
         resource url: [plugin: 'banner-general-proxy', file: 'css/proxy-rtl.css'], attrs: [media: 'screen, projection']
         resource url: [file: 'css/generalSsbResponsive-rtl.css'], attrs: [media: 'screen, projection']
         resource url: [plugin: 'banner-general-personal-information-ui', file: 'css/main-rtl.css'], attrs: [media: 'screen, projection']

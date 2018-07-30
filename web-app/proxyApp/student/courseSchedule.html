@@ -1,0 +1,8 @@
+<div>
+    <h2>Course Schedule</h2>
+    <div full-calendar pidm="{{pidm}}" id="calendar" class="ui-widget-content" role="region"></div>
+    <div>
+        <h3>Courses without assigned meeting times:</h3>
+        <p ng-repeat="course in unassignedSchedule">{{course.crse_subj_code}} {{course.crse_crse_numb}}-{{course.crse_seq_numb}} - {{course.crse_crn}} {{course.crse_ptrm_code == null ? course.crse_stvschd_desc : 'TBA'}}</p>
+    </div>
+</div>

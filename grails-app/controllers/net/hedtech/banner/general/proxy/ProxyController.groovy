@@ -136,6 +136,12 @@ class ProxyController {
         render result as JSON
     }
 
+    def getCourseSchedule() {
+        def result = generalSsbProxyService.getCourseSchedule(params.pidm);
+
+        render result as JSON
+    }
+
 
     private def fixJSONObjectForCast(JSONObject json) {
         json.each {entry ->

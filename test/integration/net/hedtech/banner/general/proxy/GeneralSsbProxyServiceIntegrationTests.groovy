@@ -91,6 +91,52 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
     }
 
 
+    @Test
+    void testGetCourseScheduleWeek() {
+        def result = generalSsbProxyService.getCourseSchedule(37461, '09/15/2018')
+        println result
+
+        assertNotNull result.unassignedSchedule
+        assertEquals 'BIOL', result.unassignedSchedule[0].crse_subj_code
+    }
+
+
+    @Test
+    void testGetRegistrationEventsForSchedule() {
+        def schedule = [[meeting_term_code : '20140',
+         meeting_crn : '405',
+         meeting_begin_time: '0800',
+         meeting_end_time: '0850',
+         meeting_subj_code: 'MATH',
+         meeting_crse_numb: '405',
+         meeting_mon_day: 'M',
+         meeting_tue_day: null,
+         meeting_wed_day: null,
+         meeting_thu_day: null,
+         meeting_fri_day: null,
+         meeting_sat_day: null,
+         meeting_sun_day: null],
+        [meeting_term_code : '20140',
+         meeting_crn : '405',
+         meeting_begin_time: '0800',
+         meeting_end_time: '0850',
+         meeting_subj_code: 'MATH',
+         meeting_crse_numb: '405',
+         meeting_mon_day: null,
+         meeting_tue_day: null,
+         meeting_wed_day: 'W',
+         meeting_thu_day: null,
+         meeting_fri_day: null,
+         meeting_sat_day: null,
+         meeting_sun_day: null]]
+
+        def result = generalSsbProxyService.getRegistrationEventsForSchedule(schedule, '09/15/2018')
+        println result
+
+        assertNotNull result.unassignedSchedule
+        assertEquals 'BIOL', result.unassignedSchedule[0].crse_subj_code
+    }
+
 
     def createProxy_0() {
 
@@ -129,8 +175,8 @@ begin
       p_opt_out_adv_date => NULL,
       p_rowid_out        => lv_hold_rowid
       );
-      
-      
+
+
         gp_gprxref.P_Create (
          p_proxy_idm   => -1,
          p_person_pidm => ${pidm},
@@ -144,7 +190,7 @@ begin
          p_passphrase  => NULL,
          p_rowid_out   => lv_hold_rowid
          );
-         
+
 insert into TWGRROLE (TWGRROLE_PIDM,TWGRROLE_ROLE,TWGRROLE_ACTIVITY_DATE) values(${pidm},'WTAILORPROXYMGMT',sysdate);
 insert into TWGRROLE (TWGRROLE_PIDM,TWGRROLE_ROLE,TWGRROLE_ACTIVITY_DATE) values(${pidm},'WTAILORPROXYACCESS',sysdate);
 
@@ -171,7 +217,7 @@ declare
 
 begin
 
-      
+
         gp_gprxref.P_Create (
          p_proxy_idm   => -1,
          p_person_pidm => ${pidm},
@@ -185,7 +231,7 @@ begin
          p_passphrase  => NULL,
          p_rowid_out   => lv_hold_rowid
          );
-         
+
 insert into TWGRROLE (TWGRROLE_PIDM,TWGRROLE_ROLE,TWGRROLE_ACTIVITY_DATE) values(${pidm},'WTAILORPROXYMGMT',sysdate);
 insert into TWGRROLE (TWGRROLE_PIDM,TWGRROLE_ROLE,TWGRROLE_ACTIVITY_DATE) values(${pidm},'WTAILORPROXYACCESS',sysdate);
 
@@ -234,8 +280,8 @@ begin
       p_opt_out_adv_date => NULL,
       p_rowid_out        => lv_hold_rowid
       );
-      
-      
+
+
         gp_gprxref.P_Create (
          p_proxy_idm   => -1,
          p_person_pidm => ${pidm},
@@ -249,7 +295,7 @@ begin
          p_passphrase  => NULL,
          p_rowid_out   => lv_hold_rowid
          );
-         
+
 insert into TWGRROLE (TWGRROLE_PIDM,TWGRROLE_ROLE,TWGRROLE_ACTIVITY_DATE) values(${pidm},'WTAILORPROXYMGMT',sysdate);
 insert into TWGRROLE (TWGRROLE_PIDM,TWGRROLE_ROLE,TWGRROLE_ACTIVITY_DATE) values(${pidm},'WTAILORPROXYACCESS',sysdate);
 
@@ -273,7 +319,7 @@ end;
         DELETE
         FROM gpbprxy
         WHERE gpbprxy_proxy_idm = -1;
-         
+
         DELETE FROM TWGRROLE WHERE TWGRROLE_PIDM = ${pidm};
 
         commit;
@@ -298,7 +344,7 @@ end;
         DELETE
         FROM gpbprxy
         WHERE gpbprxy_proxy_idm = -1;
-         
+
         DELETE FROM TWGRROLE WHERE TWGRROLE_PIDM = ${pidm};
 
         commit;
@@ -349,7 +395,6 @@ end;
 
 
     def updateProxyRETP() {
-
         def pidm = PersonUtility.getPerson("GDP000005").pidm
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
 
