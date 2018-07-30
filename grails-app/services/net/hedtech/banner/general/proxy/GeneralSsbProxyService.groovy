@@ -1,14 +1,11 @@
 package net.hedtech.banner.general.proxy
 
 import groovy.json.JsonSlurper
-import groovy.sql.OutParameter
 import groovy.sql.Sql
-import net.sf.json.JSON
 import org.apache.log4j.Logger
-import org.codehaus.groovy.grails.web.context.ServletContextHolder as SC
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.context.request.RequestContextHolder
-import groovy.json.JsonBuilder
 import oracle.jdbc.driver.OracleTypes
 import groovy.sql.OutParameter
 
@@ -18,6 +15,7 @@ import java.text.SimpleDateFormat
 import net.hedtech.banner.general.system.State
 import net.hedtech.banner.general.system.Nation
 import net.hedtech.banner.general.system.County
+import net.hedtech.banner.i18n.LocalizeUtil
 
 import net.hedtech.banner.exceptions.ApplicationException
 
@@ -540,6 +538,106 @@ class GeneralSsbProxyService {
         return new JsonSlurper().parseText(proxyPages)
     }
 
+
+    def getCourseSchedule(def pidm, def date = null) {
+        def scheduleJson = ""
+        def tbaScheduleJson = ""
+        def errorMsg = ""
+        def sqlText = sqlFileLoadService.getSqlTextMap().getWeeklyCourseSchedule?.sqlText
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [date, pidm, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR
+        ]){ lv_sched_json, lv_tba_sched_json, lv_errorMsg ->
+            scheduleJson = lv_sched_json
+            tbaScheduleJson = lv_tba_sched_json
+            errorMsg = lv_errorMsg
+        }
+
+        def resultMap = [
+                schedule: getRegistrationEventsForSchedule(scheduleJson ? new JsonSlurper().parseText(scheduleJson).rows : [], date),
+                unassignedSchedule: tbaScheduleJson ? new JsonSlurper().parseText(tbaScheduleJson).rows : [],
+                errorMsg: errorMsg
+        ]
+
+        return resultMap
+    }
+
+    public static
+    def createRegistrationEvent(id, term, crn, title, date, beginTime, endTime, className, subject = null, courseNumber = null) {
+        Calendar startCal = Calendar.instance
+        Calendar endCal = Calendar.instance
+        startCal = date
+        endCal = date
+        startCal.set(Calendar.HOUR_OF_DAY, beginTime.substring(0, 2).toInteger())
+        startCal.set(Calendar.MINUTE, beginTime.substring(2, 4).toInteger())
+        def registrationMap = [:]
+        registrationMap.id = id
+        registrationMap.title = title
+        registrationMap.start = startCal.time.format(LocalizeUtil.message("default.date.time.ISO8601.format", null, LocaleContextHolder.getLocale()))
+        endCal.set(Calendar.HOUR_OF_DAY, endTime.substring(0, 2).toInteger())
+        endCal.set(Calendar.MINUTE, endTime.substring(2, 4).toInteger())
+        registrationMap.end = endCal.time.format(LocalizeUtil.message("default.date.time.ISO8601.format", null, LocaleContextHolder.getLocale()))
+        registrationMap.editable = false
+        registrationMap.allDay = false
+        registrationMap.className = className
+        registrationMap.term = term
+        registrationMap.crn = crn
+        registrationMap.subject = subject ?: ""
+        registrationMap.courseNumber = courseNumber ?: ""
+        return registrationMap
+    }
+
+    private def getRegistrationEventsForSchedule(def weeklySchedule, def date) {
+        def registrationArray = []
+
+        Calendar cal = Calendar.instance
+        //TODO: need to set Calendar date based on date arg
+//        int year = Integer.parseInt(date.substring(6))
+//        int month= Integer.parseInt(date.substring(0,2))
+//        int day = Integer.parseInt(date.substring(3,5))
+//        cal.clear()
+//        println(cal.get(Calendar.DAY_OF_YEAR))
+//        cal.set(year, month-1, day);
+//        println(cal.get(Calendar.DAY_OF_YEAR))
+//        println("$year, $month, $day")
+//        int weekOfMonth = cal.get(Calendar.WEEK_OF_MONTH)
+//        println(cal.get(Calendar.DAY_OF_YEAR))
+//        cal.set(Calendar.WEEK_OF_MONTH, weekOfMonth)
+//        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+//        println(cal.get(Calendar.DAY_OF_YEAR))
+        def id = new Date().getTime()
+        weeklySchedule.each {
+
+            if (it.meeting_mon_day) {
+                cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+            }
+            if (it.meeting_tue_day) {
+                cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY)
+            }
+            if (it.meeting_wed_day) {
+                cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY)
+            }
+            if (it.meeting_thu_day) {
+                cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY)
+            }
+            if (it.meeting_fri_day) {
+                cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY)
+            }
+            if (it.meeting_sat_day) {
+                cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
+            }
+            if (it.meeting_sun_day) {
+                cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+            }
+
+            if(it.meeting_begin_time && it.meeting_end_time) {
+                registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                        'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+            }
+        }
+
+        return registrationArray
+    }
 
     /*
      * Private method to convert Date for birthday parameter. TODO

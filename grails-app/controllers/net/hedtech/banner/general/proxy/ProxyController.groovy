@@ -147,6 +147,12 @@ class ProxyController {
         render result as JSON
     }
 
+    def getCourseSchedule() {
+        def result = generalSsbProxyService.getCourseSchedule(params.pidm);
+
+        render result as JSON
+    }
+
 
     /**
      * Gets the list of terms model for student - grades view model
