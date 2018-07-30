@@ -13,30 +13,42 @@
            role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
     </div>
 
-    <div class="maybe-clear select2-container sm-fix col-xs-12 col-md-4 col-lg-4">
-        <label class="input-field-label">{{'personInfo.label.state'|i18n}}</label><br>
-        <input select-box for-select='{"placeholder": "{{"personInfo.placeholder.selectState"|i18n}}", "action": "PersonalInformationDetails/getStateList", "model": "address.state", "showNA": true}' type="hidden" />
-        <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"
-           role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
-    </div>
+    <div id="grades" class="ng-hide">
 
     <table>
 
         <tr>
-            <th>Term Code</th>
-            <th>Term Desc</th>
+            <th>CRN</th>
+            <th>Subject</th>
+            <th>Course</th>
+            <th>Section</th>
             <th>Course Title</th>
+            <th>Campus</th>
             <th>Final Grade</th>
             <th>MidTerm Grade</th>
+            <th>Attempted Hours</th>
+            <th>Earned Hours</th>
+            <th>GPA Hours</th>
+            <th>Quality Points</th>
+            <th>Level</th>
         </tr>
 
         <tr ng-repeat="grade in grades">
-            <td>{{grade.termCode}}</td>
-            <td>{{grade.termDescription}}</td>
+            <td>{{grade.courseReferenceNumber}}</td>
+            <td>{{grade.subjectCode}}</td>
+            <td>{{grade.courseNumber}}</td>
+            <td>{{grade.section}}</td>
             <td>{{grade.courseTitle}}</td>
+            <td>{{grade.campusCode}}</td>
             <td>{{grade.finalGrade}}</td>
             <td>{{grade.midtermGrade}}</td>
+            <td>{{grade.hoursAttempted}}</td>
+            <td>{{grade.hoursEarned}}</td>
+            <td>{{grade.gpaHours}}</td>
+            <td>{{grade.qualityPoints}}</td>
+            <td>{{grade.levelCode}}</td>
         </tr>
     </table>
+    </div>
 
 </div>

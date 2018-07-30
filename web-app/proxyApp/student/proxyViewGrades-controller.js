@@ -6,52 +6,30 @@ proxyAppControllers.controller('proxyViewGradesController',['$scope', '$statePar
 
         $scope.grades = {};
 
-        /*
-        proxyAppService.getGrades({pidm: $stateParams.pidm}).$promise.then(function(response) {
-            $scope.grades = response.data;
-
-            console.log($scope.grades);
-        });
-        */
-
-
         init = function() {
 
-            $('#term', this.$el).on('change', function (event) {
-                console.log("Term: " + event.target.value);
-                //studentGrades.selectedValueModel.set({
-                //   termCode: event.target.value
+            $scope.pidm = $stateParams.pidm
 
-                proxyAppService.getGrades({termCode: event.target.value}).$promise.then(function(response) {
+            $('#term', this.$el).on('change', function (event) {
+                $scope.pidm = $stateParams.pidm
+
+                proxyAppService.getGrades({termCode: event.target.value, pidm: $scope.pidm}).$promise.then(function(response) {
                     $scope.grades = response.data;
 
-                    console.log($scope.grades);
+                    //console.log($scope.grades);
+
+                    if ($scope.grades.length > 0){
+                        _show();
+                }else {
+                        _hide();
+                    }
                 });
             });
 
         }
 
 
-
         $scope.grades = {};
-
-        /*
-        $scope.address = {
-            county: {},
-            state: {},
-            nation: {},
-            addressType:{},
-            city: null,
-            fromDate: null,
-            toDate: null,
-            houseNumber: null,
-            streetLine1: null,
-            streetLine2: null,
-            streetLine3: null,
-            streetLine4: null,
-            zip: null
-        };
-        */
 
 
         $scope.term = {
@@ -63,5 +41,19 @@ proxyAppControllers.controller('proxyViewGradesController',['$scope', '$statePar
        init();
 
 
+        var _hide = function() {
+
+            $('#grades').addClass('ng-hide');
+
+        };
+
+        var _show = function() {
+
+            $( '#grades' ).removeClass('ng-hide');
+
+        };
+
+
+        $scope.pidm = "";
     }
 ]);

@@ -6,8 +6,13 @@ package net.hedtech.banner.general.proxy
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.i18n.MessageHelper
+import net.hedtech.banner.student.history.HistoryTermForStudentGrades
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
+
+import net.hedtech.banner.general.PersonalInformationControllerUtility
+import net.hedtech.banner.general.system.Term
+import net.hedtech.banner.security.XssSanitizer
 
 /**
  * Controller for Proxy
@@ -17,6 +22,8 @@ class ProxyController {
 
     def generalSsbProxyService
     def personRelatedHoldService
+    def termProxyService
+    def gradesProxyService
 
     def landingPage() {
         try {
@@ -130,8 +137,12 @@ class ProxyController {
     }
 
 
+    /**
+     * Gets the Holds model for the student
+     *
+     */
     def getHolds() {
-        def result = personRelatedHoldService.getWebDisplayableHolds(params.pidm);
+        def result = personRelatedHoldService.getWebDisplayableHolds(XssSanitizer.sanitize(params.pidm));
 
         render result as JSON
     }
@@ -140,6 +151,45 @@ class ProxyController {
         def result = generalSsbProxyService.getCourseSchedule(params.pidm);
 
         render result as JSON
+    }
+
+
+    /**
+     * Gets the list of terms model for student - grades view model
+     *
+     */
+    def getTerms(params) {
+        def pidm = session["currentStudentPidm"]?.toInteger()
+        def map = PersonalInformationControllerUtility.getFetchListParams(params)
+
+        try {
+            render termProxyService.fetchTermList(pidm, map.searchString) as JSON
+        } catch (ApplicationException e) {
+            render PersonalInformationControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+
+    /**
+     * Sets the current student pidm
+     *
+     */
+    def setPidm(params){
+        def pidm =XssSanitizer.sanitize(params.pidm)
+        session["currentStudentPidm"] = pidm
+        render "PIDM context set"
+    }
+
+    /**
+     * Gets the grades model for the student
+     *
+     */
+    def getGrades(){
+        try {
+            render gradesProxyService.viewGrades(params)
+        } catch (ApplicationException e) {
+            render PersonalInformationControllerUtility.returnFailureMessage(e) as JSON
+        }
     }
 
 
