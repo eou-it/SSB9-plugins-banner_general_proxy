@@ -163,7 +163,7 @@ class ProxyController {
         def map = PersonalInformationControllerUtility.getFetchListParams(params)
 
         try {
-            render termProxyService.fetchTermList(pidm, map.searchString) as JSON
+            render termProxyService.fetchTermList(pidm, map.searchString, map.max,  map.offset) as JSON
         } catch (ApplicationException e) {
             render PersonalInformationControllerUtility.returnFailureMessage(e) as JSON
         }
