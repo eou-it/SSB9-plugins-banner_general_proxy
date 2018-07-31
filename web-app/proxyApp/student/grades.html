@@ -18,35 +18,35 @@
     <table>
 
         <tr>
+            <th>Level</th>
             <th>CRN</th>
             <th>Subject</th>
             <th>Course</th>
             <th>Section</th>
             <th>Course Title</th>
             <th>Campus</th>
-            <th>Final Grade</th>
             <th>MidTerm Grade</th>
+            <th>Final Grade</th>
             <th>Attempted Hours</th>
             <th>Earned Hours</th>
             <th>GPA Hours</th>
             <th>Quality Points</th>
-            <th>Level</th>
         </tr>
 
         <tr ng-repeat="grade in grades">
+            <td>{{grade.levelDescription}}</td>
             <td>{{grade.courseReferenceNumber}}</td>
             <td>{{grade.subjectCode}}</td>
             <td>{{grade.courseNumber}}</td>
             <td>{{grade.section}}</td>
             <td>{{grade.courseTitle}}</td>
-            <td>{{grade.campusCode}}</td>
-            <td>{{grade.finalGrade}}</td>
+            <td>{{grade.campusDescription}}</td>
             <td>{{grade.midtermGrade}}</td>
+            <td>{{grade.finalGrade}}</td>
             <td>{{grade.hoursAttempted}}</td>
             <td>{{grade.hoursEarned}}</td>
             <td>{{grade.gpaHours}}</td>
             <td>{{grade.qualityPoints}}</td>
-            <td>{{grade.levelCode}}</td>
         </tr>
     </table>
     </div>

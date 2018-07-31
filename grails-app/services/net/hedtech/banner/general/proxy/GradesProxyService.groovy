@@ -1,5 +1,6 @@
 package net.hedtech.banner.general.proxy
 
+import groovy.sql.Sql
 import net.hedtech.banner.student.history.HistoryTermForStudentGrades
 
 import grails.converters.JSON
@@ -34,6 +35,7 @@ class GradesProxyService {
     private final int OPTION_ALL_COURSES_INT = -2
     private final String INSTITUTIONAL_GPA_RULE_MAP = 'institutionalGPARuleMap'
     def session
+    def sessionFactory
 
     def viewGrades(def params) {
 
@@ -45,7 +47,7 @@ class GradesProxyService {
         params.studyPathCode = OPTION_ALL_COURSES
 
         params.pageMaxSize = 10
-        params.pageOffset = 1
+        params.pageOffset = 0
 
         def filterData = prepareFilterData(params, studentPidm)
         def pagingAndSortParams = preparePagingAndSortParams(params)
@@ -53,6 +55,7 @@ class GradesProxyService {
         def courseDetails = new ArrayList(courses.size())
         courses.each { it ->
             CourseDetailDecorator courseDetail = new CourseDetailDecorator(it)
+            courseDetail.campusDescription = getCampusDescription(courseDetail.campusCode)
             courseDetails.add(courseDetail)
         }
         def courseDetailsMap = getFormattedGpaInformationMap(courseDetails)
@@ -174,5 +177,20 @@ class GradesProxyService {
         }
         return filterText
     }
+
+
+    private def getCampusDescription(def campCode) {
+        def sql
+        def stvcampRow = null
+        try {
+            sql = new Sql(sessionFactory.getCurrentSession().connection())
+            stvcampRow = sql.firstRow("select * from STVCAMP where STVCAMP_CODE = ?", [campCode])
+
+        } finally {
+            sql?.close() // note that the test will close the connection, since it's our current session's connection
+        }
+        return stvcampRow.STVCAMP_DESC
+    }
+
 
 }

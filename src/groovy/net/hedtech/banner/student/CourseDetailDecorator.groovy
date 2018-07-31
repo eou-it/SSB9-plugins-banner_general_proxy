@@ -27,6 +27,7 @@ class CourseDetailDecorator {
     String gradeCodeIncmpFinal
     Date incmpExtnDate
     String campusCode
+    String campusDescription
     BigDecimal hoursEarned
     BigDecimal hoursAttempted
     BigDecimal gpaHours
@@ -87,10 +88,11 @@ class CourseDetailDecorator {
                  gradeCodeIncmpFinal=$gradeCodeIncmpFinal,
                  incmpExtnDate=$incmpExtnDate
                  campusCode=$campusCode,
-                 hoursEarned=$hoursEarned
-                 hoursAttempted=$hoursAttempted
-                 gpaHours=$gpaHours
-                 qualityPoints=$qualityPoints
+                 campusDescription=$campusDescription,
+                 hoursEarned=$hoursEarned,
+                 hoursAttempted=$hoursAttempted,
+                 gpaHours=$gpaHours,
+                 qualityPoints=$qualityPoints,
                  levelCode=$levelCode,
                  levelDescription=$levelDescription,
                  hasComponent=$hasComponent,
