@@ -608,31 +608,42 @@ class GeneralSsbProxyService {
         def id = new Date().getTime()
         weeklySchedule.each {
 
-            if (it.meeting_mon_day) {
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-            }
-            if (it.meeting_tue_day) {
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY)
-            }
-            if (it.meeting_wed_day) {
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY)
-            }
-            if (it.meeting_thu_day) {
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY)
-            }
-            if (it.meeting_fri_day) {
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY)
-            }
-            if (it.meeting_sat_day) {
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
-            }
-            if (it.meeting_sun_day) {
-                cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-            }
-
             if(it.meeting_begin_time && it.meeting_end_time) {
-                registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                        'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                if (it.meeting_mon_day) {
+                    cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                }
+                if (it.meeting_tue_day) {
+                    cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY)
+                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                }
+                if (it.meeting_wed_day) {
+                    cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY)
+                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                }
+                if (it.meeting_thu_day) {
+                    cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY)
+                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                }
+                if (it.meeting_fri_day) {
+                    cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY)
+                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                }
+                if (it.meeting_sat_day) {
+                    cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
+                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                }
+                if (it.meeting_sun_day) {
+                    cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                }
             }
         }
 
