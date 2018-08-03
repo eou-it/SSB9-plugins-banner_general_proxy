@@ -28,6 +28,7 @@ grails.plugin.location.'banner-packaging'                 = "../banner_packaging
 grails.plugin.location.'banner-general-common-ui-ss'      = "../banner_general_common_ui_ss.git"
 grails.plugin.location.'domain-extension'                 = "../domain_extension.git"
 grails.plugin.location.'web-app-extensibility'            = "../web-app-extensibility.git"
+grails.plugin.location.'banner-general-personal-information-ui' = "../banner_general_personal_information_ui.git"
 
 grails.project.dependency.resolution = {
 
