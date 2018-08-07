@@ -637,6 +637,23 @@ class GeneralSsbProxyService {
         return registrationArray
     }
 
+    def getCourseScheduleDetail(def pidm, def term) {
+        def scheduleJson = ""
+        def errorMsg = ""
+        //def sqlText = sqlFileLoadService.getSqlTextMap().getCourseScheduleDetail?.sqlText
+        def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE_DETAIL
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [ term, pidm, Sql.VARCHAR
+        ]){ lv_sched_json ->
+            scheduleJson = lv_sched_json
+        }
+
+        def resultMap = new JsonSlurper().parseText(scheduleJson)
+
+        return resultMap
+    }
+
     /*
      * Private method to convert Date for birthday parameter. TODO
      */

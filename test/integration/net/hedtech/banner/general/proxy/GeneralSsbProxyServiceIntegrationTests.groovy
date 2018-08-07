@@ -138,6 +138,16 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
     }
 
 
+    @Test
+    void testGetCourseSchedulDetail() {
+        def result = generalSsbProxyService.getCourseScheduleDetail(37461)
+        println result
+
+        assertNotNull result.unassignedSchedule
+        assertEquals 'BIOL', result.unassignedSchedule[0].crse_subj_code
+    }
+
+
     def createProxy_0() {
 
         def pidm = PersonUtility.getPerson("GDP000005").pidm
