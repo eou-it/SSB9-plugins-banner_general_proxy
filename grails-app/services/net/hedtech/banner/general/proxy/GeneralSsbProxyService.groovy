@@ -640,7 +640,8 @@ class GeneralSsbProxyService {
     def getCourseScheduleDetail(def pidm, def term) {
         def scheduleJson = ""
         def errorMsg = ""
-        def sqlText = sqlFileLoadService.getSqlTextMap().getCourseScheduleDetail?.sqlText
+        //def sqlText = sqlFileLoadService.getSqlTextMap().getCourseScheduleDetail?.sqlText
+        def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE_DETAIL
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText, [ term, pidm, Sql.VARCHAR
