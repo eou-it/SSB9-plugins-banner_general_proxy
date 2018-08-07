@@ -2,6 +2,11 @@ package net.hedtech.banner.general.proxy
 
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
+import net.hedtech.banner.proxy.api.ProxyLandingPageApi
+import net.hedtech.banner.proxy.api.ProxyPersonalInformationApi
+import net.hedtech.banner.proxy.api.PinManagementApi
+import net.hedtech.banner.proxy.api.CourseScheduleApi
+
 import org.apache.log4j.Logger
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.core.context.SecurityContextHolder
@@ -43,7 +48,7 @@ class GeneralSsbProxyService {
         def msg
         def error
 
-        def sqlText = sqlFileLoadService.getSqlTextMap().setProxy?.sqlText
+        def sqlText = PinManagementApi.SET_PROXY
         sql.call(sqlText, [token, Sql.NUMERIC, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR])
                 { gidmOut, actionVerifyOut, pinOut, msgOut, loginOut, errorOut  ->
                     login = loginOut
@@ -53,14 +58,6 @@ class GeneralSsbProxyService {
                     msg = msgOut
                     error = errorOut
                 }
-
-
-        println "GIDM: " + gidm
-        println "ActionVerify: " + actionVerify
-        println "LoginOUT: " + login
-        println "Do Pin: " + doPin
-        println "Message: " + msg
-        println "Error: " + error
 
         RequestContextHolder.currentRequestAttributes().getSession()["gidm"] = gidm
 
@@ -79,7 +76,7 @@ class GeneralSsbProxyService {
         def error
         def errorStatus
 
-        def sqlText = sqlFileLoadService.getSqlTextMap().setProxyVerify?.sqlText
+        def sqlText = PinManagementApi.SET_PROXY_VERIFY
         sql.call(sqlText, [token, Sql.VARCHAR, verify, Sql.NUMERIC, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR])
                 { loginOut, gidmOut, actionVerifyOut, pinOut, msgOut, errorOut ->
                     login = loginOut
@@ -89,13 +86,6 @@ class GeneralSsbProxyService {
                     msg = msgOut
                     error = errorOut
                 }
-
-        println "GIDM: " + gidm
-        println "ActionVerify: " + actionVerify
-        println "LoginOUT: " + login
-        println "Do Pin: " + doPin
-        println "Message: " + msg
-        println "Error: " + error
 
         return [verify: actionVerify.equals("Y"), login: login.equals("Y"), doPin: doPin.equals("Y"), message: msg, error: error.equals("Y"), gidm: gidm]
     }
@@ -108,7 +98,7 @@ class GeneralSsbProxyService {
         def error
         def errorStatus
 
-        def sqlText = sqlFileLoadService.getSqlTextMap().savePin?.sqlText
+        def sqlText = PinManagementApi.SAVE_PIN
         sql.call(sqlText, [p_email, p_pin_orig, p_proxyIDM,
                            p_pin1, p_pin2,
                            p_pin1,
@@ -125,9 +115,6 @@ class GeneralSsbProxyService {
                     errorStatus = errorStatusOut
                 }
 
-        println "errorStatus: " + errorStatus
-        println "msg: " + msg
-        println "error: " + error
 
         return [errorStatus: errorStatus.equals("Y"), message: msg, error: error, gidm: p_proxyIDM]
 
@@ -145,7 +132,7 @@ class GeneralSsbProxyService {
             }
         };
 
-        def sqlText = sqlFileLoadService.getSqlTextMap().getProxyPersonalInformation?.sqlText
+        def sqlText = ProxyPersonalInformationApi.PROXY_PERSONAL_INFORMATION
 
 
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
@@ -185,7 +172,7 @@ class GeneralSsbProxyService {
         }
 
         def proxyUiRules = [:]
-        sqlText = sqlFileLoadService.getSqlTextMap().getProxyProfileUiRules?.sqlText
+        sqlText = ProxyPersonalInformationApi.PROXY_PROFILE_UI_RULES
 
         sql.call(sqlText, [gidm, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR,
                            Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR,
@@ -434,7 +421,7 @@ class GeneralSsbProxyService {
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
 
-        def sqlText = sqlFileLoadService.getSqlTextMap().updateProfile?.sqlText
+        def sqlText = ProxyPersonalInformationApi.UPDATE_PROFILE
 
         def bDate = dateFormat(params.p_birth_date)
 
@@ -458,7 +445,7 @@ class GeneralSsbProxyService {
         log.debug('p_proxyIDM: ' + p_proxyIDM)
         try {
             def sql = new Sql(sessionFactory.getCurrentSession().connection())
-            def sqlText = sqlFileLoadService.getSqlTextMap()?.storeLoginInHistory?.sqlText
+            def sqlText = ProxyPersonalInformationApi.STORE_LOGIN_IN_HISTORY
 
             log.debug('sqlText: ' + sqlText)
 
@@ -480,7 +467,7 @@ class GeneralSsbProxyService {
         def errorMsgOut = ""
 
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
-        def sqlText = sqlFileLoadService.getSqlTextMap().checkProxyProfileRequiredData?.sqlText
+        def sqlText = ProxyPersonalInformationApi.CHECK_PROXY_PROFILE_REQUIRED_DATA
 
         def bDate = dateFormat(params.p_birth_date)
 
@@ -504,7 +491,7 @@ class GeneralSsbProxyService {
 
         def studentList = ""
 
-        def sqlText = sqlFileLoadService.getSqlTextMap().getStudentListForProxy?.sqlText
+        def sqlText = ProxyLandingPageApi.STUDENT_LIST_FOR_PROXY
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText, [gidm, Sql.VARCHAR
@@ -527,7 +514,7 @@ class GeneralSsbProxyService {
 
         def  proxyPages = ""
 
-        def sqlText = sqlFileLoadService.getSqlTextMap().getProxyPages?.sqlText
+        def sqlText = ProxyLandingPageApi.PROXY_PAGES
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText, [gidm,pidm,gidm,pidm, Sql.VARCHAR
@@ -543,7 +530,7 @@ class GeneralSsbProxyService {
         def scheduleJson = ""
         def tbaScheduleJson = ""
         def errorMsg = ""
-        def sqlText = sqlFileLoadService.getSqlTextMap().getWeeklyCourseSchedule?.sqlText
+        def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText, [date, pidm, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR
