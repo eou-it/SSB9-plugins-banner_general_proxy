@@ -650,13 +650,13 @@ class GeneralSsbProxyService {
         return registrationArray
     }
 
-    def getCourseScheduleDetail(def pidm) {
+    def getCourseScheduleDetail(def pidm, def term) {
         def scheduleJson = ""
         def errorMsg = ""
         def sqlText = sqlFileLoadService.getSqlTextMap().getCourseScheduleDetail?.sqlText
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        sql.call(sqlText, [ '201764', pidm, Sql.VARCHAR
+        sql.call(sqlText, [ term, pidm, Sql.VARCHAR
         ]){ lv_sched_json ->
             scheduleJson = lv_sched_json
         }

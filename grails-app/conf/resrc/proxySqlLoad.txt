@@ -1635,11 +1635,12 @@ DECLARE
 --  end BWCKGEN globals
 
    crn          VARCHAR2(6) DEFAULT NULL;
-   term_in      stvterm.stvterm_code%TYPE := ?;--'201110';--'201764';
-   lv_pidm  spriden.spriden_pidm%TYPE     := ?;--49349;
+   term_in      stvterm.stvterm_code%TYPE := ?;
+   lv_pidm  spriden.spriden_pidm%TYPE     := ?;
    lv_tot_credit_hr VARCHAR2(12) default null;
    lv_course_title_caption VARCHAR2(120) default null;
    lv_dowebctlogin VARCHAR2(1);
+   lv_sched_count NUMBER;
 
    lv_course_json VARCHAR2(32000);
    lv_errorMsg VARCHAR2(60) default null;
@@ -1853,7 +1854,6 @@ BEGIN
    FOR regcrse IN regcrsec (genpidm, term, crn, tmp_hist_ind)
    LOOP
       row_count := regcrsec%rowcount;
-      term := regcrse.scbcrse_eff_term;
 
 
       sylncrsec_rec := NULL;
@@ -1881,7 +1881,7 @@ BEGIN
 --         );
 --         HTP.br;
 --         HTP.br;
-         lv_tot_credit_hr := TO_CHAR (tot_credit_hr, '99990D990');
+         lv_tot_credit_hr :=  LTRIM (TO_CHAR (tot_credit_hr, '99990D990'));
          lv_course_json := lv_course_json || '{"tot_credits":"' || lv_tot_credit_hr || '",';
       ELSE
          lv_course_json := lv_course_json || ', {';
@@ -2295,13 +2295,19 @@ BEGIN
          lv_course_json := lv_course_json || '"meet_end": "' || TO_CHAR (ssrmeet.ssrmeet_end_date, 'MM/DD/YYYY') || '",';
 
          /* schedule type */
-         lv_course_json := lv_course_json || '"sched_type": ["';
+         lv_course_json := lv_course_json || '"sched_type": [';
+         lv_sched_count := 0;
          FOR stvschd IN stkschd.stvschdc (ssrmeet.ssrmeet_schd_code)
          LOOP
+            lv_sched_count := lv_sched_count + 1;
 --            twbkfrmt.p_tabledata (stvschd.stvschd_desc);
-            lv_course_json := lv_course_json || stvschd.stvschd_desc || ',';
+            IF lv_sched_count > 1
+            THEN
+               lv_course_json := lv_course_json || ',';
+            END IF;
+            lv_course_json := lv_course_json || '"' || stvschd.stvschd_desc || '"';
          END LOOP;
-         lv_course_json := lv_course_json || '"]';
+         lv_course_json := lv_course_json || ']';
 
 
          /* instructors */

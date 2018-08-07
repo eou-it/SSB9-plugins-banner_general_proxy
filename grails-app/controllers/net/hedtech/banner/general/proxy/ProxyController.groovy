@@ -154,7 +154,7 @@ class ProxyController {
     }
 
     def getCourseScheduleDetail() {
-        def result = generalSsbProxyService.getCourseScheduleDetail(params.pidm);
+        def result = generalSsbProxyService.getCourseScheduleDetail(params.pidm, params.termCode);
 
         render result as JSON
     }

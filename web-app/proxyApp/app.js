@@ -128,6 +128,19 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             params: {
                 pidm: null
             }
+        })
+        .state('/ssb/proxy/courseScheduleDetail',{
+            url: "/courseScheduleDetail",
+            templateUrl: webAppResourcePathString + '/proxyApp/student/courseScheduleDetail.html',
+            controller: 'proxyCourseSchedDetails',
+            resolve: {
+            },
+            data: {
+                breadcrumbs: []
+            },
+            params: {
+                pidm: null
+            }
         });
 });
 
