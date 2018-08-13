@@ -2273,15 +2273,19 @@ BEGIN
 --               )
 --            );
 --       ELSE
+            lv_sched_count := 0;
             FOR stvbldg IN stkbldg.stvbldgc (ssrmeet.ssrmeet_bldg_code)
             LOOP
+               lv_sched_count := lv_sched_count + 1;
 --               twbkfrmt.p_tabledata (
 --                  stvbldg.stvbldg_desc || ' ' || ssrmeet.ssrmeet_room_code
 --               );
-               lv_course_json := lv_course_json || '"' || stvbldg.stvbldg_desc || ' ' || ssrmeet.ssrmeet_room_code || '",';
+               IF lv_sched_count > 1
+               THEN
+                  lv_course_json := lv_course_json || ',';
+               END IF;
+               lv_course_json := lv_course_json || '"' || stvbldg.stvbldg_desc || ' ' || ssrmeet.ssrmeet_room_code || '"';
             END LOOP;
-            -- pop off the last comma
-            lv_course_json := substr(lv_course_json, length(lv_course_json), 1);
          END IF;
          lv_course_json := lv_course_json || '],';
 

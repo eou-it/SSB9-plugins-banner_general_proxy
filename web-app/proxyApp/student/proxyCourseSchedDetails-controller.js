@@ -35,13 +35,22 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope', '$stateParam
                                     return memo + ', ' + sched_type
                                 });
 
-                                meeting.whereText = meeting.where.length > 0 ? meeting.where : 'TBA';
+                                if(meeting.where.length > 0) {
+                                    meeting.whereText = _.reduce(meeting.where, function (memo, location, index) {
+                                        return memo + ', ' + location
+                                    });
+                                }
+                                else {
+                                    meeting.whereText = 'TBA';
+                                }
+
                             });
                         });
                     });
                 }
                 else {
                     $scope.termHolder.term.code = 'dummy';
+                    $scope.schedule = [];
                     $scope.errorMsg = 'notRegistered';
                     $scope.$apply();
                 }
