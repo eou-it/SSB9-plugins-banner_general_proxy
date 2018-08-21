@@ -1180,6 +1180,8 @@ declare
       lv_tba_sched_json        VARCHAR2 (32000) DEFAULT NULL;
       lv_errorMsg              VARCHAR2 (30) DEFAULT NULL;
       lv_temp_fmt              VARCHAR2 (30);
+      lv_has_prev_wk           VARCHAR2(6) := 'false';
+      lv_has_next_wk           VARCHAR2(6) := 'false';
    BEGIN
 
    -- Validate CHAR/VARCHAR2 post variables
@@ -1340,8 +1342,8 @@ declare
          lv_sched_json := lv_sched_json || '"meeting_fri_day": "' || meeting_tab (row_count).fri_day || '",';
          lv_sched_json := lv_sched_json || '"meeting_sat_day": "' || meeting_tab (row_count).sat_day || '",';
          lv_sched_json := lv_sched_json || '"meeting_sun_day": "' || meeting_tab (row_count).sun_day || '",';
-         lv_sched_json := lv_sched_json || '"meeting_ssrmeet_start_date": "' || meeting_tab (row_count).ssrmeet_start_date || '",';
-         lv_sched_json := lv_sched_json || '"meeting_ssrmeet_end_date": "' || meeting_tab (row_count).ssrmeet_end_date || '",';
+         lv_sched_json := lv_sched_json || '"meeting_ssrmeet_start_date": "' || to_char(meeting_tab (row_count).ssrmeet_start_date,'MM/DD/YYYY') || '",';
+         lv_sched_json := lv_sched_json || '"meeting_ssrmeet_end_date": "' || to_char(meeting_tab (row_count).ssrmeet_end_date,'MM/DD/YYYY') || '",';
          lv_sched_json := lv_sched_json || '"meeting_sfrareg_start_date": "' || meeting_tab (row_count).sfrareg_start_date || '",';
          lv_sched_json := lv_sched_json || '"meeting_sfrareg_completion_date": "' || meeting_tab (row_count).sfrareg_completion_date || '",';
          lv_sched_json := lv_sched_json || '"meeting_begin_time": "' || meeting_tab (row_count).begin_time || '",';
@@ -1357,8 +1359,6 @@ declare
          <<end_loop>>
          NULL;
       END LOOP read_classes_loop;
-
-      lv_sched_json := lv_sched_json || ']}';
 
 --
 -- Display any error messages, and the go to date input field.
@@ -1387,6 +1387,20 @@ declare
 --         row_count,
 --         no_schd
 --      );
+      IF todays_template_index > 1
+      THEN
+         lv_has_prev_wk := 'true';
+      END IF;
+      --lv_has_prev_wk := todays_template_index > 1;
+      IF todays_template_index < max_template_index
+      THEN
+         lv_has_next_wk := 'true';
+      END IF;
+      --lv_has_next_wk := todays_template_index < max_template_index;
+      lv_sched_json := lv_sched_json || '],"hasNextWeek":' || lv_has_next_wk || ',';
+      lv_sched_json := lv_sched_json || '"hasPrevWeek":' || lv_has_prev_wk;
+      lv_sched_json := lv_sched_json || '}';
+
 --
 -- Print classes without assigned times.
 -- ==================================================
