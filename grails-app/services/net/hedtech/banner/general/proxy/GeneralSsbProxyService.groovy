@@ -530,6 +530,7 @@ class GeneralSsbProxyService {
         def scheduleJson = ""
         def tbaScheduleJson = ""
         def errorMsg = ""
+        //def sqlText = sqlFileLoadService.getSqlTextMap().getWeeklyCourseSchedule?.sqlText
         def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
@@ -540,9 +541,13 @@ class GeneralSsbProxyService {
             errorMsg = lv_errorMsg
         }
 
+        def scheduleJsonMap = new JsonSlurper().parseText(scheduleJson)
+
         def resultMap = [
-                schedule: getRegistrationEventsForSchedule(scheduleJson ? new JsonSlurper().parseText(scheduleJson).rows : [], date),
-                unassignedSchedule: tbaScheduleJson ? new JsonSlurper().parseText(tbaScheduleJson).rows : [],
+                schedule: getRegistrationEventsForSchedule(scheduleJsonMap.rows, date),
+                hasNextWeek: scheduleJsonMap.hasNextWeek,
+                hasPrevWeek: scheduleJsonMap.hasPrevWeek,
+                unassignedSchedule: new JsonSlurper().parseText(tbaScheduleJson).rows,
                 errorMsg: errorMsg
         ]
 
@@ -576,60 +581,79 @@ class GeneralSsbProxyService {
 
     private def getRegistrationEventsForSchedule(def weeklySchedule, def date) {
         def registrationArray = []
+        SimpleDateFormat usDateFmt = new SimpleDateFormat("MM/dd/yyyy")
 
         Calendar cal = Calendar.instance
-        //TODO: need to set Calendar date based on date arg
-//        int year = Integer.parseInt(date.substring(6))
-//        int month= Integer.parseInt(date.substring(0,2))
-//        int day = Integer.parseInt(date.substring(3,5))
-//        cal.clear()
-//        println(cal.get(Calendar.DAY_OF_YEAR))
-//        cal.set(year, month-1, day);
-//        println(cal.get(Calendar.DAY_OF_YEAR))
-//        println("$year, $month, $day")
-//        int weekOfMonth = cal.get(Calendar.WEEK_OF_MONTH)
-//        println(cal.get(Calendar.DAY_OF_YEAR))
-//        cal.set(Calendar.WEEK_OF_MONTH, weekOfMonth)
-//        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-//        println(cal.get(Calendar.DAY_OF_YEAR))
+        if(date) {
+            cal.setTime(usDateFmt.parse(date))
+        }
         def id = new Date().getTime()
         weeklySchedule.each {
 
+            //SSRMEET dates should never be null but use a default date far in the past or future just in case
+            Calendar startCal = Calendar.instance
+            startCal.setTime(usDateFmt.parse(it.meeting_ssrmeet_start_date ?: '12/31/5000'))
+
+            Calendar endCal = Calendar.instance
+            endCal.setTime(usDateFmt.parse(it.meeting_ssrmeet_end_date ?: '01/02/1970'))
+
+            boolean isDateWithinMeetingDates = false
             if(it.meeting_begin_time && it.meeting_end_time) {
                 if (it.meeting_mon_day) {
                     cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
+                    if(isDateWithinMeetingDates) {
+                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    }
                 }
                 if (it.meeting_tue_day) {
                     cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY)
-                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
+                    if(isDateWithinMeetingDates) {
+                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    }
                 }
                 if (it.meeting_wed_day) {
                     cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY)
-                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
+                    if(isDateWithinMeetingDates) {
+                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    }
                 }
                 if (it.meeting_thu_day) {
                     cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY)
-                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
+                    if(isDateWithinMeetingDates) {
+                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    }
                 }
                 if (it.meeting_fri_day) {
                     cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY)
-                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
+                    if(isDateWithinMeetingDates) {
+                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    }
                 }
                 if (it.meeting_sat_day) {
                     cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
-                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
+                    if(isDateWithinMeetingDates) {
+                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    }
                 }
                 if (it.meeting_sun_day) {
                     cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-                    registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                            'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
+                    if(isDateWithinMeetingDates) {
+                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
+                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
+                    }
                 }
             }
         }

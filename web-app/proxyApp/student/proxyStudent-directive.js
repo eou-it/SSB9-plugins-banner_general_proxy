@@ -11,7 +11,6 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
     }, 100);
 
     return {
-        scope: true,
         link: function(scope, elem, attrs) {
             //function setupCalendarView() {
             //    var amPm = $.i18n.prop("default.gregorian.amPm").toLowerCase().split(',');
@@ -53,9 +52,12 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                     isRTL: $.i18n.prop('default.language.direction') == 'rtl',
                     events: function (start, end, timezone, callback) {
                         //var events = JSON.parse(sessionStorage.getItem("classScheduleEvents"));
+                        start.add(1, 'days'); //move start to a Monday to coincide with SQL date processing
                         var events;
-                        proxyAppService.getCourseSchedule({pidm: attrs.pidm}).$promise.then(function(response) {
+                        proxyAppService.getCourseSchedule({pidm: attrs.pidm, date: start.format('MM/DD/YYYY')}).$promise.then(function(response) {
                             events = response.schedule;
+                            scope.hasNextWeek = response.hasNextWeek;
+                            scope.hasPrevWeek = response.hasPrevWeek;
                             callback(events);
                         });
                     },
@@ -87,7 +89,6 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                             //$('.fc-event-title', element).html("<br>" + setupCourseDetailsLink(options));
                             $('.fc-event-title', element).html("<a>"+ options.courseTitle +"</a>");
                         }*/
-
                     },
                     eventAfterRender: function (event, element, view) {
                         // this is a drastic oversimplification of the logic needed to reverse the width calculation
@@ -122,6 +123,20 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                             $(".fc-agenda-axis.fc-widget-header.fc-first").removeClass("fc-first").addClass("fc-fake-first");
                             $(".fc-agenda-gutter.fc-widget-header.fc-fake-last").removeClass("fc-fake-last").addClass("fc-first-rtl");
                             $(".fc-agenda-axis.fc-widget-header.fc-fake-first").removeClass("fc-fake-first").addClass("fc-last-rtl");
+                        }
+
+                        if(scope.hasPrevWeek) {
+                            $('.fc-prev-button').removeClass('fc-state-disabled');
+                        }
+                        else {
+                            $('.fc-prev-button').addClass('fc-state-disabled');
+                        }
+
+                        if(scope.hasNextWeek) {
+                            $('.fc-next-button').removeClass('fc-state-disabled');
+                        }
+                        else {
+                            $('.fc-next-button').addClass('fc-state-disabled');
                         }
                     }
                 });
