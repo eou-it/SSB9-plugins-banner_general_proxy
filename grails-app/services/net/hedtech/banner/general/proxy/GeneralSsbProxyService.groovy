@@ -530,8 +530,8 @@ class GeneralSsbProxyService {
         def scheduleJson = ""
         def tbaScheduleJson = ""
         def errorMsg = ""
-        def sqlText = sqlFileLoadService.getSqlTextMap().getWeeklyCourseSchedule?.sqlText
-        //def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE
+        //def sqlText = sqlFileLoadService.getSqlTextMap().getWeeklyCourseSchedule?.sqlText
+        def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText, [date, pidm, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR
@@ -565,8 +565,8 @@ class GeneralSsbProxyService {
     def createRegistrationEvent(id, term, crn, title, date, beginTime, endTime, className, subject = null, courseNumber = null) {
         Calendar startCal = Calendar.instance
         Calendar endCal = Calendar.instance
-        startCal = date
-        endCal = date
+        startCal.setTime(date.getTime())
+        endCal.setTime(date.getTime())
         startCal.set(Calendar.HOUR_OF_DAY, beginTime.substring(0, 2).toInteger())
         startCal.set(Calendar.MINUTE, beginTime.substring(2, 4).toInteger())
         def registrationMap = [:]

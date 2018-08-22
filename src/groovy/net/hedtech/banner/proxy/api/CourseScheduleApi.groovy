@@ -257,7 +257,9 @@ declare
 -- ==================================================
       row_count := 0;
 
-      lv_sched_json := '{"rows": [';
+      lv_sched_json := '{"schedStartDate":"' || to_char(template_start_date, 'MM/DD/YYYY') || '", ';
+      lv_sched_json := lv_sched_json || '"schedEndDate":"' || to_char(template_end_date, 'MM/DD/YYYY') || '", ';
+      lv_sched_json := lv_sched_json || '"rows": [';
 
 
       <<read_classes_loop>>
