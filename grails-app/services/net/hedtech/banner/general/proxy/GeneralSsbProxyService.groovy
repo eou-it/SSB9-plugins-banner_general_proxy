@@ -530,8 +530,8 @@ class GeneralSsbProxyService {
         def scheduleJson = ""
         def tbaScheduleJson = ""
         def errorMsg = ""
-        //def sqlText = sqlFileLoadService.getSqlTextMap().getWeeklyCourseSchedule?.sqlText
-        def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE
+        def sqlText = sqlFileLoadService.getSqlTextMap().getWeeklyCourseSchedule?.sqlText
+        //def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText, [date, pidm, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR
@@ -543,8 +543,15 @@ class GeneralSsbProxyService {
 
         def scheduleJsonMap = new JsonSlurper().parseText(scheduleJson)
 
+        if(!errorMsg) {
+            if(!scheduleJsonMap.hasNextWeek || !scheduleJsonMap.hasPrevWeek) {
+                date = scheduleJsonMap.schedStartDate;
+            }
+        }
+
         def resultMap = [
                 schedule: getRegistrationEventsForSchedule(scheduleJsonMap.rows, date),
+                dateUsed: date,
                 hasNextWeek: scheduleJsonMap.hasNextWeek,
                 hasPrevWeek: scheduleJsonMap.hasPrevWeek,
                 unassignedSchedule: new JsonSlurper().parseText(tbaScheduleJson).rows,
