@@ -251,6 +251,7 @@ END F_ActionVerify;
       ELSIF LENGTH (NVL (?, 'x')) < bwgkprxy.F_GetOption ('PIN_LENGTH_MINIMUM') OR
             LENGTH (NVL (?, 'x')) < bwgkprxy.F_GetOption ('PIN_LENGTH_MINIMUM') THEN
               lv_error := 'ERR_TOOSHORT';
+              lv_msg := 'Minimum PIN length: ' || NVL (bwgkprxy.F_GetOption ('PIN_LENGTH_MINIMUM'), '6');
       ELSIF TRIM(NVL (?, 'x')) <>  NVL (?, 'x') THEN
               lv_error := 'ERR_GUAPPRF';
               lv_msg   := g\$_NLS.Get('BWGKPXYA1-0051','SQL', 'PIN values may not start with or end with a space');
@@ -278,7 +279,7 @@ END F_ActionVerify;
        END IF;
 
           ?  := lv_error;
-          ?  := lv_msg;
+          ?  := replace(lv_msg,'::',' ');
           ?  := error_status;
 
       END;

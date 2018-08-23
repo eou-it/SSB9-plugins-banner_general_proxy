@@ -131,7 +131,7 @@ class ProxyController {
         if(!result.errorStatus) {
             redirect (uri: "/login/auth")
         }else{
-            flash.message = message( code: "proxy.pinmanagement.invalid." + result.error )
+            flash.message = result.message
             render view: "/proxy/resetpin",  model: [gidm : result.gidm]
         }
     }

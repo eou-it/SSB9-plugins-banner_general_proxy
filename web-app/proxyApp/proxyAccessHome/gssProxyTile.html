@@ -21,11 +21,11 @@
                         <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
                         <span data-ng-click="setPidm()">{{'proxy.landingpage.label.viewpages'|i18n}}</span>
                     </accordion-heading>
-                    <ul class="list-unstyled">
-                        <li id="proxyPages" ng-repeat="page in proxyData.pages" data-ng-click="goProxyApp(page.url)">
-                            <span>{{page.desc}}</span>
-                        </li>
-                    </ul>
+                    <div class="list-group">
+                        <div class="list-group-item" id="proxyPages" ng-repeat="page in proxyData.pages" data-ng-click="goProxyApp(page.url)">
+                            {{page.desc}}
+                        </div>
+                    </div>
                 </accordion-group>
             </accordion>
         </div>
