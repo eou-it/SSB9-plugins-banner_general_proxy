@@ -59,6 +59,11 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                             scope.hasNextWeek = response.hasNextWeek;
                             scope.hasPrevWeek = response.hasPrevWeek;
                             callback(events);
+
+                            var dateUsed = moment(response.dateUsed, 'MM/DD/YYYY');
+                            if(dateUsed != start) {
+                                $('#calendar').fullCalendar( 'gotoDate', dateUsed);
+                            }
                         });
                     },
                     eventRender: function (event, element, view) {

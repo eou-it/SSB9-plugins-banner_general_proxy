@@ -543,8 +543,15 @@ class GeneralSsbProxyService {
 
         def scheduleJsonMap = new JsonSlurper().parseText(scheduleJson)
 
+        if(!errorMsg) {
+            if(!scheduleJsonMap.hasNextWeek || !scheduleJsonMap.hasPrevWeek) {
+                date = scheduleJsonMap.schedStartDate;
+            }
+        }
+
         def resultMap = [
                 schedule: getRegistrationEventsForSchedule(scheduleJsonMap.rows, date),
+                dateUsed: date,
                 hasNextWeek: scheduleJsonMap.hasNextWeek,
                 hasPrevWeek: scheduleJsonMap.hasPrevWeek,
                 unassignedSchedule: new JsonSlurper().parseText(tbaScheduleJson).rows,
@@ -558,8 +565,8 @@ class GeneralSsbProxyService {
     def createRegistrationEvent(id, term, crn, title, date, beginTime, endTime, className, subject = null, courseNumber = null) {
         Calendar startCal = Calendar.instance
         Calendar endCal = Calendar.instance
-        startCal = date
-        endCal = date
+        startCal.setTime(date.getTime())
+        endCal.setTime(date.getTime())
         startCal.set(Calendar.HOUR_OF_DAY, beginTime.substring(0, 2).toInteger())
         startCal.set(Calendar.MINUTE, beginTime.substring(2, 4).toInteger())
         def registrationMap = [:]
