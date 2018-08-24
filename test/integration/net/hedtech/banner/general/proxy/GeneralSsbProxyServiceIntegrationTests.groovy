@@ -98,6 +98,18 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
 
         assertNotNull result.unassignedSchedule
         assertEquals 'BIOL', result.unassignedSchedule[0].crse_subj_code
+        assertNotNull result.scheduleConflicts
+    }
+
+
+    @Test
+    void testGetCourseScheduleWeekForConflicts() {
+        def result = generalSsbProxyService.getCourseSchedule(49349, '12/26/2011')
+        println result
+
+        assertNotNull result.scheduleConflicts
+        assertTrue result.scheduleConflicts.size() > 0
+        assertEquals '0201', result.scheduleConflicts[0].subject
     }
 
 
