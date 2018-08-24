@@ -1,8 +1,10 @@
 /********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyViewHoldsController',['$scope', '$stateParams', 'proxyAppService', '$filter',
-    function ($scope, $stateParams, proxyAppService, $filter) {
+proxyAppControllers.controller('proxyViewHoldsController',['$scope', '$rootScope', '$stateParams', 'proxyAppService', '$filter',
+    function ($scope,$rootScope, $stateParams, proxyAppService, $filter) {
+
+        $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.holds.label') + " " + $rootScope.studentName);
 
         $scope.holds = {};
 

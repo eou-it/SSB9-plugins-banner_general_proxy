@@ -1,8 +1,8 @@
 /********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyCourseSchedDetails',['$scope', '$stateParams', 'proxyAppService', '$filter',
-    function ($scope, $stateParams, proxyAppService, $filter) {
+proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope','$stateParams', 'proxyAppService', '$filter',
+    function ($scope, $rootScope, $stateParams, proxyAppService, $filter) {
 
         $scope.schedule = {};
         $scope.termHolder = {
@@ -10,6 +10,8 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope', '$stateParam
         };
 
         init = function() {
+
+            $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.scheduleDetails.label') + " " + $rootScope.studentName);
 
             $scope.pidm = $stateParams.pidm;
 

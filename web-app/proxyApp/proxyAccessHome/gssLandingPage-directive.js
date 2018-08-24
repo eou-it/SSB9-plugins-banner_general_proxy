@@ -17,7 +17,7 @@ proxyAppDirectives.directive('landingPageAppTile', [ '$state', 'webAppResourcePa
     };
 }]);
 
-proxyAppDirectives.directive('landingPageProxyTile', ['$state', 'webAppResourcePathString', function ($state, webAppResourcePathString) {
+proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','webAppResourcePathString', function ($state,$rootScope, webAppResourcePathString) {
     return{
         restrict: 'E',
         templateUrl: webAppResourcePathString + '/proxyApp/proxyAccessHome/gssProxyTile.html',
@@ -26,6 +26,7 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', 'webAppResourceP
         },
         link: function(scope){
             scope.goProxyApp = function(url) {
+                $rootScope.studentName = scope.proxyData.desc;
                 $state.go(url, {pidm: scope.proxyData.pidm});
             };
 
