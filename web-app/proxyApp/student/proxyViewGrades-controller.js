@@ -1,12 +1,15 @@
 /********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyViewGradesController',['$scope', '$stateParams', 'proxyAppService', '$filter',
-    function ($scope, $stateParams, proxyAppService, $filter) {
+proxyAppControllers.controller('proxyViewGradesController',['$scope', '$rootScope','$stateParams', 'proxyAppService', '$filter',
+    function ($scope, $rootScope, $stateParams, proxyAppService, $filter) {
 
         $scope.grades = {};
 
         init = function() {
+
+            $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.grades.label') + " " + $rootScope.studentName);
+
 
             $scope.pidm = $stateParams.pidm
 
