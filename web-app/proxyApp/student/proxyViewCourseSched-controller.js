@@ -5,6 +5,7 @@ proxyAppControllers.controller('proxyViewCourseSchedController',['$scope', '$roo
     function ($scope, $rootScope, $stateParams, proxyAppService, $filter) {
 
         $scope.schedule = {};
+        $scope.scheduleConflicts = {};
         $scope.unassignedSchedule = {};
         $scope.hasPrevWeek = false;
         $scope.hasNextWeek = false;
@@ -14,6 +15,7 @@ proxyAppControllers.controller('proxyViewCourseSchedController',['$scope', '$roo
 
         proxyAppService.getCourseSchedule({pidm: $stateParams.pidm}).$promise.then(function(response) {
             $scope.schedule = response.schedule;
+            $scope.scheduleConflicts = response.scheduleConflicts;
             $scope.unassignedSchedule = response.unassignedSchedule;
             $scope.hasPrevWeek = response.hasPrevWeek;
             $scope.hasNextWeek = response.hasNextWeek;
