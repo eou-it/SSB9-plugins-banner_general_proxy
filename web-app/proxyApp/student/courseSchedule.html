@@ -5,4 +5,8 @@
         <h3>Courses without assigned meeting times:</h3>
         <p ng-repeat="course in unassignedSchedule">{{course.crse_subj_code}} {{course.crse_crse_numb}}-{{course.crse_seq_numb}} - {{course.crse_crn}} {{course.crse_ptrm_code == null ? course.crse_stvschd_desc : 'TBA'}}</p>
     </div>
+    <div>
+        <h3>Courses with time conflict:</h3>
+        <p ng-repeat="course in scheduleConflicts"><b>Subject Code:</b> {{course.subject}} <b>Course #:</b> {{course.courseNumber}} <b>CRN:</b> {{course.crn}} <b>Start:</b> {{course.start}} <b>End:</b> {{course.end}}</p>
+    </div>
 </div>

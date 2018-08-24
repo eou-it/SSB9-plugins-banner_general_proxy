@@ -526,7 +526,7 @@ class GeneralSsbProxyService {
     }
 
 
-    def getCourseSchedule(def pidm, def date = null) {
+    def getCourseSchedule(def pidm, def startDate = null) {
         def scheduleJson = ""
         def tbaScheduleJson = ""
         def errorMsg = ""
@@ -534,24 +534,27 @@ class GeneralSsbProxyService {
         def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        sql.call(sqlText, [date, pidm, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR
+        sql.call(sqlText, [startDate, pidm, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR
         ]){ lv_sched_json, lv_tba_sched_json, lv_errorMsg ->
             scheduleJson = lv_sched_json
             tbaScheduleJson = lv_tba_sched_json
             errorMsg = lv_errorMsg
         }
 
-        def scheduleJsonMap = new JsonSlurper().parseText(scheduleJson)
+        def scheduleJsonMap = scheduleJson ? new JsonSlurper().parseText(scheduleJson) : [:]
 
-        if(!errorMsg) {
+        if(scheduleJsonMap && !errorMsg) {
             if(!scheduleJsonMap.hasNextWeek || !scheduleJsonMap.hasPrevWeek) {
-                date = scheduleJsonMap.schedStartDate;
+                startDate = scheduleJsonMap.schedStartDate;
             }
         }
 
+        def regEvents = getRegistrationEventsForSchedule(scheduleJsonMap.rows, startDate)
+
         def resultMap = [
-                schedule: getRegistrationEventsForSchedule(scheduleJsonMap.rows, date),
-                dateUsed: date,
+                schedule: regEvents.registrationEvents,
+                scheduleConflicts: regEvents.conflictingEvents,
+                dateUsed: startDate,
                 hasNextWeek: scheduleJsonMap.hasNextWeek,
                 hasPrevWeek: scheduleJsonMap.hasPrevWeek,
                 unassignedSchedule: new JsonSlurper().parseText(tbaScheduleJson).rows,
@@ -559,113 +562,6 @@ class GeneralSsbProxyService {
         ]
 
         return resultMap
-    }
-
-    public static
-    def createRegistrationEvent(id, term, crn, title, date, beginTime, endTime, className, subject = null, courseNumber = null) {
-        Calendar startCal = Calendar.instance
-        Calendar endCal = Calendar.instance
-        startCal.setTime(date.getTime())
-        endCal.setTime(date.getTime())
-        startCal.set(Calendar.HOUR_OF_DAY, beginTime.substring(0, 2).toInteger())
-        startCal.set(Calendar.MINUTE, beginTime.substring(2, 4).toInteger())
-        def registrationMap = [:]
-        registrationMap.id = id
-        registrationMap.title = title
-        registrationMap.start = startCal.time.format(LocalizeUtil.message("default.date.time.ISO8601.format", null, LocaleContextHolder.getLocale()))
-        endCal.set(Calendar.HOUR_OF_DAY, endTime.substring(0, 2).toInteger())
-        endCal.set(Calendar.MINUTE, endTime.substring(2, 4).toInteger())
-        registrationMap.end = endCal.time.format(LocalizeUtil.message("default.date.time.ISO8601.format", null, LocaleContextHolder.getLocale()))
-        registrationMap.editable = false
-        registrationMap.allDay = false
-        registrationMap.className = className
-        registrationMap.term = term
-        registrationMap.crn = crn
-        registrationMap.subject = subject ?: ""
-        registrationMap.courseNumber = courseNumber ?: ""
-        return registrationMap
-    }
-
-    private def getRegistrationEventsForSchedule(def weeklySchedule, def date) {
-        def registrationArray = []
-        SimpleDateFormat usDateFmt = new SimpleDateFormat("MM/dd/yyyy")
-
-        Calendar cal = Calendar.instance
-        if(date) {
-            cal.setTime(usDateFmt.parse(date))
-        }
-        def id = new Date().getTime()
-        weeklySchedule.each {
-
-            //SSRMEET dates should never be null but use a default date far in the past or future just in case
-            Calendar startCal = Calendar.instance
-            startCal.setTime(usDateFmt.parse(it.meeting_ssrmeet_start_date ?: '12/31/5000'))
-
-            Calendar endCal = Calendar.instance
-            endCal.setTime(usDateFmt.parse(it.meeting_ssrmeet_end_date ?: '01/02/1970'))
-
-            boolean isDateWithinMeetingDates = false
-            if(it.meeting_begin_time && it.meeting_end_time) {
-                if (it.meeting_mon_day) {
-                    cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
-                    if(isDateWithinMeetingDates) {
-                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
-                    }
-                }
-                if (it.meeting_tue_day) {
-                    cal.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY)
-                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
-                    if(isDateWithinMeetingDates) {
-                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
-                    }
-                }
-                if (it.meeting_wed_day) {
-                    cal.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY)
-                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
-                    if(isDateWithinMeetingDates) {
-                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
-                    }
-                }
-                if (it.meeting_thu_day) {
-                    cal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY)
-                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
-                    if(isDateWithinMeetingDates) {
-                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
-                    }
-                }
-                if (it.meeting_fri_day) {
-                    cal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY)
-                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
-                    if(isDateWithinMeetingDates) {
-                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
-                    }
-                }
-                if (it.meeting_sat_day) {
-                    cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
-                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
-                    if(isDateWithinMeetingDates) {
-                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
-                    }
-                }
-                if (it.meeting_sun_day) {
-                    cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-                    isDateWithinMeetingDates = (cal.after(startCal) || cal.equals(startCal)) && (cal.before(endCal) || cal.equals(endCal))
-                    if(isDateWithinMeetingDates) {
-                        registrationArray.add(createRegistrationEvent(id, it.meeting_term_code, it.meeting_crn,
-                                'section.courseTitle', cal, it.meeting_begin_time, it.meeting_end_time, 'event', it.meeting_subj_code, it.meeting_crse_numb))
-                    }
-                }
-            }
-        }
-
-        return registrationArray
     }
 
     def getCourseScheduleDetail(def pidm, def term) {
@@ -683,6 +579,124 @@ class GeneralSsbProxyService {
         def resultMap = new JsonSlurper().parseText(scheduleJson)
 
         return resultMap
+    }
+
+    public static
+    def createRegistrationEvent(id, term, crn, title, date, beginTime, endTime, className, subject = null, courseNumber = null) {
+        Calendar startCal = Calendar.instance
+        Calendar endCal = Calendar.instance
+        startCal.setTime(date.getTime())
+        endCal.setTime(date.getTime())
+        startCal.set(Calendar.HOUR_OF_DAY, beginTime.substring(0, 2).toInteger())
+        startCal.set(Calendar.MINUTE, beginTime.substring(2, 4).toInteger())
+        def registrationMap = [:]
+        registrationMap.id = id
+        registrationMap.title = title
+        registrationMap.startCal = startCal
+        registrationMap.start = startCal.time.format(LocalizeUtil.message("default.date.time.ISO8601.format", null, LocaleContextHolder.getLocale()))
+        endCal.set(Calendar.HOUR_OF_DAY, endTime.substring(0, 2).toInteger())
+        endCal.set(Calendar.MINUTE, endTime.substring(2, 4).toInteger())
+        registrationMap.endCal = endCal
+        registrationMap.end = endCal.time.format(LocalizeUtil.message("default.date.time.ISO8601.format", null, LocaleContextHolder.getLocale()))
+        registrationMap.editable = false
+        registrationMap.allDay = false
+        registrationMap.className = className
+        registrationMap.term = term
+        registrationMap.crn = crn
+        registrationMap.subject = subject ?: ""
+        registrationMap.courseNumber = courseNumber ?: ""
+        return registrationMap
+    }
+
+    private registrationEventTimesConflict(event, existingEvents) {
+        def hasConflict = false
+
+        existingEvents.reverse().find {
+            if ( !(event.startCal.before(it.startCal) || event.startCal.after(it.endCal)) ) {
+                hasConflict = true
+                return true
+            }
+        }
+
+        hasConflict
+    }
+
+    private addRegistrationEvent(event, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, dayOfWeek, eventsAlreadyOnSchedule, registrationArray, conflictingEvents) {
+        startDateCal.set(Calendar.DAY_OF_WEEK, dayOfWeek)
+        boolean isDateWithinMeetingDates = !startDateCal.before(ssrmeetStartCal) && !startDateCal.after(ssrmeetEndCal)
+
+        if(isDateWithinMeetingDates) {
+            def regEvent = createRegistrationEvent(id, event.meeting_term_code, event.meeting_crn, 'section.courseTitle',
+                    startDateCal, event.meeting_begin_time, event.meeting_end_time, 'event', event.meeting_subj_code,
+                    event.meeting_crse_numb)
+
+            if (registrationEventTimesConflict(regEvent, eventsAlreadyOnSchedule[dayOfWeek])) {
+                conflictingEvents.add(regEvent)
+            } else {
+                registrationArray.add(regEvent)
+                eventsAlreadyOnSchedule[dayOfWeek].add(regEvent)
+            }
+        }
+    }
+
+    private getRegistrationEventsForSchedule(def weeklySchedule, def startDate) {
+        def registrationArray = []
+        def conflictingEvents = []
+        def eventsAlreadyOnSchedule = [
+                (Calendar.MONDAY):    [],
+                (Calendar.TUESDAY):   [],
+                (Calendar.WEDNESDAY): [],
+                (Calendar.THURSDAY):  [],
+                (Calendar.FRIDAY):    [],
+                (Calendar.SATURDAY):  [],
+                (Calendar.SUNDAY):    []
+        ]
+
+        SimpleDateFormat usDateFmt = new SimpleDateFormat("MM/dd/yyyy")
+
+        Calendar startDateCal = Calendar.instance
+        if(startDate) {
+            startDateCal.setTime(usDateFmt.parse(startDate))
+        }
+        def id = new Date().getTime()
+        weeklySchedule.each {
+
+            //SSRMEET dates should never be null but use a default date far in the past or future just in case
+            Calendar ssrmeetStartCal = Calendar.instance
+            ssrmeetStartCal.setTime(usDateFmt.parse(it.meeting_ssrmeet_start_date ?: '12/31/5000'))
+
+            Calendar ssrmeetEndCal = Calendar.instance
+            ssrmeetEndCal.setTime(usDateFmt.parse(it.meeting_ssrmeet_end_date ?: '01/02/1970'))
+
+            if(it.meeting_begin_time && it.meeting_end_time) {
+                if (it.meeting_mon_day) {
+                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.MONDAY,    eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
+                }
+                if (it.meeting_tue_day) {
+                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.TUESDAY,   eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
+                }
+                if (it.meeting_wed_day) {
+                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.WEDNESDAY, eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
+                }
+                if (it.meeting_thu_day) {
+                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.THURSDAY,  eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
+                }
+                if (it.meeting_fri_day) {
+                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.FRIDAY,    eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
+                }
+                if (it.meeting_sat_day) {
+                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.SATURDAY,  eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
+                }
+                if (it.meeting_sun_day) {
+                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.SUNDAY,    eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
+                }
+            }
+        }
+
+        return [
+                registrationEvents: registrationArray,
+                conflictingEvents: conflictingEvents
+        ]
     }
 
     /*
