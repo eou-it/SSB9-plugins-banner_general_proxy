@@ -198,6 +198,12 @@ class ProxyController {
         }
     }
 
+    def getAwardPackage() {
+        def result = generalSsbProxyService.getAwardPackage(params.pidm, params.aidYear);
+
+        render result as JSON
+    }
+
 
     private def fixJSONObjectForCast(JSONObject json) {
         json.each {entry ->
