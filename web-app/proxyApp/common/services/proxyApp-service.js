@@ -65,5 +65,10 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
             {controller: 'Proxy', action: 'getAwardPackage'}).get(params);
     };
 
+    this.getAwardHistory = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'getAwardHistory'}).get(params);
+    };
+
 
 }]);

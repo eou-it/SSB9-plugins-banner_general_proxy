@@ -26,6 +26,10 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
         },
         link: function(scope){
             scope.goProxyApp = function(url) {
+
+                sessionStorage.setItem("pidm", scope.proxyData.pidm);
+                sessionStorage.setItem("name", scope.proxyData.desc);
+                
                 $rootScope.studentName = scope.proxyData.desc;
                 $state.go(url, {pidm: scope.proxyData.pidm});
             };

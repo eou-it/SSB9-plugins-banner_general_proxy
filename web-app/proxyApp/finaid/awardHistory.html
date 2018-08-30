@@ -1,0 +1,64 @@
+<!--*******************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div>
+
+    <h1 ng-repeat="message in messages"><span ng-bind-html="stringifyAwardMesageFor(message)"></span></h1>
+    <br><br>
+
+    <div ng-repeat="award in awards" id="awards">
+
+    <p>{{'proxy.awards.aidYear.label'|i18n}} {{award.aidYear}}</p>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Fund</th>
+            <th>Offered</th>
+            <th>Accepted</th>
+            <th>Declined</th>
+            <th>Cancelled</th>
+            <th>Total</th>
+            <th>Paid To Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in award.data.rows">
+            <td ng-bind-html="stringifyAwardMesageFor(row.fund_title)"></td>
+            <td class="right">{{row.offer_amt}}</td>
+            <td class="right">{{row.accept_amt}}</td>
+            <td class="right">{{row.decline_amt}}</td>
+            <td class="right">{{row.cancel_amt}}</td>
+            <td class="right">{{row.total_amt}}</td>
+            <td class="right">{{row.paid_amt}}</td>
+        </tr>
+        </tbody>
+    </table>
+<br><br><br><br>
+
+        <div data-ng-show="award.resources.length &gt; 0">
+
+        <p>{{'proxy.awards.resources.label'|i18n}}</p>
+        <table>
+            <thead>
+            <tr>
+                <th>Additional Resource</th>
+                <th>Term</th>
+                <th>Expected Amount</th>
+                <th>Actual Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="resource in award.resources">
+                <td ng-bind-html="stringifyAwardMesageFor(resource.resource_desc)"></td>
+                <td class="right" ng-bind-html="resource.term_code"></td>
+                <td class="right">{{resource.est_amt}}</td>
+                <td class="right">{{resource.actual_amt}}</td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+
+    </div>
+
+</div>

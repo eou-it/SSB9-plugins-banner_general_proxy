@@ -24,6 +24,7 @@ class ProxyController {
     def personRelatedHoldService
     def termProxyService
     def gradesProxyService
+    def awardHistoryProxyService
 
     def landingPage() {
         try {
@@ -203,6 +204,17 @@ class ProxyController {
 
         render result as JSON
     }
+
+
+    /**
+     * Gets Financial Aid Award History model for the student
+     *
+     */
+    def getAwardHistory() {
+        def result = awardHistoryProxyService.getAwardHistory(XssSanitizer.sanitize(params.pidm));
+        render result as JSON
+    }
+
 
 
     private def fixJSONObjectForCast(JSONObject json) {

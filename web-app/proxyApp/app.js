@@ -154,6 +154,20 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             params: {
                 pidm: null
             }
+        })
+        .state('/ssb/proxy/awardhist', {
+            url: "/awardHistory",
+            templateUrl: webAppResourcePathString + '/proxyApp/finaid/awardHistory.html',
+            controller: 'proxyAwardHistoryController',
+            resolve: {
+            },
+            data: {
+                breadcrumbs: []
+            },
+            params: {
+                pidm: null
+            }
+
         });
 });
 
