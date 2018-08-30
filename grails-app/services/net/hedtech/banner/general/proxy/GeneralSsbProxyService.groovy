@@ -2,6 +2,7 @@ package net.hedtech.banner.general.proxy
 
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
+import net.hedtech.banner.proxy.api.FinAidAwardPackageApi
 import net.hedtech.banner.proxy.api.ProxyLandingPageApi
 import net.hedtech.banner.proxy.api.ProxyPersonalInformationApi
 import net.hedtech.banner.proxy.api.PinManagementApi
@@ -579,6 +580,87 @@ class GeneralSsbProxyService {
         def resultMap = new JsonSlurper().parseText(scheduleJson)
 
         return resultMap
+    }
+
+    def getAwardPackage(def pidm, def aidYear) {
+        //def sqlText = sqlFileLoadService.getSqlTextMap().getRorwebrRec?.sqlText
+        def sqlText = FinAidAwardPackageApi.GET_RORWEBRREC
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        def result = [:]
+        def rorwebrRec = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
+
+        if (!rorwebrRec.info_access?.equals('Y')) {
+            return [:]
+        }
+        else {
+            if(rorwebrRec.need_calc_ind.equals('Y')) {
+                //sqlText = sqlFileLoadService.getSqlTextMap().getNeedCalculation?.sqlText
+                sqlText = FinAidAwardPackageApi.GET_NEED_CALCULATION
+                result.needsCalc = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
+            }
+
+            if(rorwebrRec.housing_status_ind.equals('Y')) {
+                //sqlText = sqlFileLoadService.getSqlTextMap().getHousingStatus?.sqlText
+                sqlText = FinAidAwardPackageApi.GET_HOUSING_STATUS
+                result.housingStatuses = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
+            }
+
+            if(rorwebrRec.enrollment_status.equals('F') || rorwebrRec.enrollment_status.equals('T')) {
+                if(rorwebrRec.aid_year >= 2015) {
+                    //sqlText = sqlFileLoadService.getSqlTextMap().getNewEnrollment?.sqlText
+                    sqlText = FinAidAwardPackageApi.GET_NEW_ENROLLMENT
+                }
+                else {
+                    //sqlText = sqlFileLoadService.getSqlTextMap().getEnrollment?.sqlText
+                    sqlText = FinAidAwardPackageApi.GET_ENROLLMENT
+                }
+
+                String enrollmentJson = ''
+                sql.call(sqlText, [ pidm, aidYear, rorwebrRec.enrollment_status, Sql.VARCHAR
+                ]){ lv_enroll_json ->
+                    enrollmentJson = lv_enroll_json
+                }
+                def enrollment = new JsonSlurper().parseText(enrollmentJson)
+                result.enrollment = enrollment
+            }
+
+            if(rorwebrRec.coa_ind.equals('Y')) {
+                //sqlText = sqlFileLoadService.getSqlTextMap().getCostOfAttendance?.sqlText
+                sqlText = FinAidAwardPackageApi.GET_COST_OF_ATTENDANCE
+                result.costOfAttendance = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
+            }
+
+            if(rorwebrRec.cum_loan_ind.equals('Y')) {
+                sqlText = sqlFileLoadService.getSqlTextMap().getCumLoanInfo?.sqlText
+                sqlText = FinAidAwardPackageApi.GET_CUM_LOAN_INFO
+                result.loanInfo = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
+            }
+
+            //sqlText = sqlFileLoadService.getSqlTextMap().getAwardInfo?.sqlText
+            sqlText = FinAidAwardPackageApi.GET_AWARD_INFO
+            String awardInfoJson = ''
+            String periodInfoJson = ''
+            sql.call(sqlText, [ pidm, aidYear, Sql.VARCHAR, Sql.VARCHAR
+            ]){ lv_award_json, lv_period_json ->
+                awardInfoJson = lv_award_json
+                periodInfoJson = lv_period_json
+            }
+            def awardInfo = new JsonSlurper().parseText(awardInfoJson)
+            result.awardInfo = awardInfo
+            def periodInfo = new JsonSlurper().parseText(periodInfoJson)
+            result.periodInfo = periodInfo
+
+            return result
+        }
+    }
+
+    private getFinAidAwardMap(Sql sql, String sqlText, def pidm, def aidYear) {
+        String json = ''
+        sql.call(sqlText, [ pidm, aidYear, Sql.VARCHAR
+        ]){ lv_json ->
+            json = lv_json
+        }
+        return new JsonSlurper().parseText(json)
     }
 
     public static
