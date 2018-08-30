@@ -3309,8 +3309,8 @@ declare
    pidm   NUMBER := ?;
    aidy   robinst.robinst_aidy_code%TYPE := ?;
 
-   lv_award_json VARCHAR2(32000);
-   lv_period_json VARCHAR2(32000);
+   lv_award_json VARCHAR2(32000) := '{}';
+   lv_period_json VARCHAR2(32000):= '{}';
 
 
    g_unscheduled VARCHAR2(50) := g\$_nls.get('BWRKRHS1-0000', 'SQL', 'Unscheduled');
@@ -3966,7 +3966,7 @@ PROCEDURE P_GetAwardData( p_award_data   OUT fund_data_tab_type,
       --                                                'SQL',
       --                                                'Financial Aid Award for the %01%',
       --                                                bwrkolib.f_validaidy(aidy) ));
-      lv_aidyr_json := lv_aidyr_json || '{"aidYrTitle":"' || bwrkolib.f_validaidy(aidy) || '",';
+      lv_aidyr_json := lv_aidyr_json || '{';
       -- Header
       --twbkfrmt.p_tablerowopen;
       --twbkfrmt.p_tabledataheader(g$_nls.get('BWRKRHS1-0091', 'SQL', 'Fund'));
@@ -4180,6 +4180,7 @@ BEGIN
    lv_rorwebr_json := lv_rorwebr_json || '"term_zero_awrd_ind":"' || rorwebr_rec.rorwebr_term_zero_awrd_ind || '",';
    lv_rorwebr_json := lv_rorwebr_json || '"fund_zero_amt_ind":"' || rorwebr_rec.rorwebr_fund_zero_amt_ind || '",';
    lv_rorwebr_json := lv_rorwebr_json || '"info_access":"' || f_getinfoaccess(pidm, aidy) || '",';
+   lv_rorwebr_json := lv_rorwebr_json || '"aidYearDesc":"' || bwrkolib.f_validaidy(aidy) || '",';
    lv_rorwebr_json := lv_rorwebr_json || '"aid_year":' ||rb_common.f_sel_robinst_aidy_end_year(aidy);
    lv_rorwebr_json := lv_rorwebr_json || '}';
 

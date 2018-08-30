@@ -1,5 +1,5 @@
 <div>
-    <h2>Award Package for {{awardPackage.awardInfo.aidYearAwards.aidYrTitle}}</h2>
+    <h2>Award Package for {{awardPackage.aidYearDesc}}</h2>
     <input ng-model="aidYear" type="text" placeholder="Aid Year Code">
     <input ng-click="submit()" type="button" value="Submit">
     <div>
@@ -40,7 +40,7 @@
     </div>
     <div>
         <table>
-            <caption><h3>Aid Award for {{awardPackage.awardInfo.aidYearAwards.aidYrTitle}}</h3></caption>
+            <caption><h3>Aid Award for {{awardPackage.aidYearDesc}}</h3></caption>
             <tbody>
                 <tr>
                     <th>Fund</th>

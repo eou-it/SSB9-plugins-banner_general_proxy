@@ -593,6 +593,8 @@ class GeneralSsbProxyService {
             return [:]
         }
         else {
+            result.aidYearDesc = rorwebrRec.aidYearDesc
+
             if(rorwebrRec.need_calc_ind.equals('Y')) {
                 //sqlText = sqlFileLoadService.getSqlTextMap().getNeedCalculation?.sqlText
                 sqlText = FinAidAwardPackageApi.GET_NEED_CALCULATION
