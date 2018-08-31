@@ -3,6 +3,7 @@ package net.hedtech.banner.general.proxy
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
 import net.hedtech.banner.proxy.api.FinAidAwardPackageApi
+import net.hedtech.banner.proxy.api.FinancialAidStatusApi
 import net.hedtech.banner.proxy.api.ProxyLandingPageApi
 import net.hedtech.banner.proxy.api.ProxyPersonalInformationApi
 import net.hedtech.banner.proxy.api.PinManagementApi
@@ -663,6 +664,21 @@ class GeneralSsbProxyService {
             json = lv_json
         }
         return new JsonSlurper().parseText(json)
+    }
+
+    def getFinancialAidStatus(def pidm, def aidYear = null) {
+        def finaidJson = ""
+        def sqlText = FinancialAidStatusApi.FINANCIAL_AID_SUMMARY
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [pidm, aidYear, Sql.VARCHAR
+        ]){ lv_finaid_json ->
+            finaidJson = lv_finaid_json
+        }
+
+        def resultMap = finaidJson ? new JsonSlurper().parseText(finaidJson) : [:]
+
+        resultMap
     }
 
     public static

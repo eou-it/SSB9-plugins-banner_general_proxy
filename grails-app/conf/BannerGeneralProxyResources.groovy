@@ -64,6 +64,7 @@ modules = {
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyPersonalInfo/proxyPersonalInfo-controller.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyViewHolds-controller.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyViewGrades-controller.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyViewFinaidStatus-controller.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyViewCourseSched-controller.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyCourseSchedDetails-controller.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/finaid/proxyViewAwardPackage-controller.js']

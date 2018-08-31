@@ -178,6 +178,27 @@ class ProxyController {
 
 
     /**
+     * Gets the list of aid years model for student
+     *
+     */
+    def getAidYears(params) {
+        // TODO: this is a stub
+        def aidYears = [
+                [
+                        code: '1314',
+                        description: '2013-2014'
+                ]
+        ]
+
+        try {
+            render aidYears as JSON
+        } catch (ApplicationException e) {
+            render PersonalInformationControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+
+    /**
      * Sets the current student pidm
      *
      */
@@ -197,6 +218,16 @@ class ProxyController {
         } catch (ApplicationException e) {
             render PersonalInformationControllerUtility.returnFailureMessage(e) as JSON
         }
+    }
+
+    /**
+     * Gets the financial aid status model for the student
+     *
+     */
+    def getFinancialAidStatus(){
+        def result = generalSsbProxyService.getFinancialAidStatus(params.pidm, params.aidYear)
+
+        render result as JSON
     }
 
     def getAwardPackage() {
