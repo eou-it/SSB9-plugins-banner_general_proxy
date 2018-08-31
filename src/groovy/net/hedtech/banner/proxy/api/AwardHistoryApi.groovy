@@ -353,7 +353,7 @@ DECLARE
                  lv_award_json := lv_award_json || '{' ||
                       '"fund_title" ' || ':' || '"' || award_dtl_rec.rfrbase_fund_title || '"' ||
                       ',"offer_amt" ' || ':'  || '"' || TRIM(to_char(award_dtl_rec.rprawrd_offer_amt, 'L999G999G999D99')) || '"' ||
-                      ',"accept_amt" ' || ':'  || '"' || TRIM(to_char(award_dtl_rec.rprawrd_offer_amt, 'L999G999G999D99')) || '"' ||
+                      ',"accept_amt" ' || ':'  || '"' || TRIM(to_char(award_dtl_rec.rprawrd_accept_amt, 'L999G999G999D99')) || '"' ||
                       ',"decline_amt" ' || ':'  || '"' || TRIM(to_char(award_dtl_rec.rprawrd_decline_amt, 'L999G999G999D99')) || '"' ||
                       ',"cancel_amt" ' || ':'  || '"' || TRIM(to_char(award_dtl_rec.rprawrd_cancel_amt, 'L999G999G999D99')) || '"' ;
                       
