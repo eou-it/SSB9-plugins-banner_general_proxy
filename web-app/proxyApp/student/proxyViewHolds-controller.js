@@ -4,9 +4,8 @@
 proxyAppControllers.controller('proxyViewHoldsController',['$scope', '$rootScope', '$stateParams', 'proxyAppService', '$filter',
     function ($scope,$rootScope, $stateParams, proxyAppService, $filter) {
 
-        // $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.holds.label') + " " + $rootScope.studentName);
-
         $scope.holds = {};
+        $scope.studentName = proxyAppService.getStudentName();
 
         proxyAppService.getHolds({pidm: $stateParams.pidm}).$promise.then(function(response) {
             $scope.holds = response;

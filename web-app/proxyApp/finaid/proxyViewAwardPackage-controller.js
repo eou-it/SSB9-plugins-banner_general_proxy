@@ -7,6 +7,7 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
         $scope.pidm = $stateParams.pidm;
         $scope.aidYear = '';
         $scope.awardPackage = {test: 'bonkers'};
+        $scope.studentName = proxyAppService.getStudentName();
 
         $scope.submit = function() {
             proxyAppService.getAwardPackage({aidYear: $scope.aidYear, pidm: $scope.pidm}).$promise.then(function (response) {

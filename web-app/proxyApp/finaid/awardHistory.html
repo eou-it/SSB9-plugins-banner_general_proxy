@@ -8,7 +8,7 @@
 
     <div ng-repeat="award in awards" id="awards">
 
-    <p>{{'proxy.awards.aidYear.label'|i18n}} {{award.aidYear}}</p>
+    <p>{{'proxy.awards.aidYear.label'|i18n:[award.aidYear,studentName]}}</p>
 
     <table>
         <thead>

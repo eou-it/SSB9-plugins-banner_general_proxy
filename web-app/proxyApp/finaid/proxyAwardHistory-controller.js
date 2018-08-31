@@ -7,10 +7,7 @@ proxyAppControllers.controller('proxyAwardHistoryController',['$scope', '$rootSc
         $scope.awards = {};
         $scope.messages = {};
         $scope.aidYear = "";
-
-
-        // $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.awardHistory.label') + " " + ((typeof $rootScope.studentName != "undefined") ? $rootScope.studentName :sessionStorage.getItem("name"))) ;
-
+        $scope.studentName = proxyAppService.getStudentName();
 
         proxyAppService.getAwardHistory({pidm: $stateParams.pidm ? $stateParams.pidm : sessionStorage.getItem("pidm")}).$promise.then(function(response) {
 

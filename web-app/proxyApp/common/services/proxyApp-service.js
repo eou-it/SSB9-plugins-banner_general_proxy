@@ -75,5 +75,9 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
             {controller: 'Proxy', action: 'getAwardHistory'}).get(params);
     };
 
+    this.getStudentName = function() {
+        return (typeof $rootScope.studentName != "undefined") ? $rootScope.studentName : sessionStorage.getItem("name");
+    };
+
 
 }]);

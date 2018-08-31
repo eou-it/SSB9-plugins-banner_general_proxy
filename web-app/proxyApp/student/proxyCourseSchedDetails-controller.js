@@ -11,9 +11,8 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope',
 
         init = function() {
 
-            // $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.scheduleDetails.label') + " " + $rootScope.studentName);
-
             $scope.pidm = $stateParams.pidm;
+            $scope.studentName = proxyAppService.getStudentName();
 
             $('#term', this.$el).on('change', function (event) {
                 if(event.target.value != 'not/app') { // don't run query on "Not Applicable" selection
