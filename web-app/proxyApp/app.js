@@ -85,7 +85,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             resolve: {
             },
             data: {
-                breadcrumbs: []
+                breadcrumbs: [{label: 'proxy.profile.heading'}]
             }
         })
         .state('/ssb/proxy/holds', {
@@ -95,7 +95,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             resolve: {
             },
             data: {
-                breadcrumbs: []
+                breadcrumbs: [{label: 'proxy.holds.heading'}]
             },
             params: {
                 pidm: null
@@ -109,7 +109,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             resolve: {
             },
             data: {
-                breadcrumbs: []
+                breadcrumbs: [{label: 'proxy.grades.heading'}]
             },
             params: {
                 pidm: null
@@ -123,7 +123,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             resolve: {
             },
             data: {
-                breadcrumbs: []
+                breadcrumbs: [{label: 'proxy.finaid.status.heading'}]
             },
             params: {
                 pidm: null
@@ -136,7 +136,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             resolve: {
             },
             data: {
-                breadcrumbs: []
+                breadcrumbs: [{label: 'proxy.schedule.heading'}]
             },
             params: {
                 pidm: null
@@ -149,7 +149,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             resolve: {
             },
             data: {
-                breadcrumbs: []
+                breadcrumbs: [{label: 'proxy.scheduleDetails.heading'}]
             },
             params: {
                 pidm: null
@@ -162,7 +162,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             resolve: {
             },
             data: {
-                breadcrumbs: []
+                breadcrumbs: [{label: 'proxy.awardPackage.heading'}]
             },
             params: {
                 pidm: null
@@ -175,7 +175,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             resolve: {
             },
             data: {
-                breadcrumbs: []
+                breadcrumbs: [{label: 'proxy.awardHistory.heading'}]
             },
             params: {
                 pidm: null

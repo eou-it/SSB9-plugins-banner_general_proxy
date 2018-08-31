@@ -9,7 +9,7 @@ proxyAppControllers.controller('proxyAwardHistoryController',['$scope', '$rootSc
         $scope.aidYear = "";
 
 
-        $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.awardHsitory.label') + " " + ((typeof $rootScope.studentName != "undefined") ? $rootScope.studentName :sessionStorage.getItem("name"))) ;
+        // $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.awardHistory.label') + " " + ((typeof $rootScope.studentName != "undefined") ? $rootScope.studentName :sessionStorage.getItem("name"))) ;
 
 
         proxyAppService.getAwardHistory({pidm: $stateParams.pidm ? $stateParams.pidm : sessionStorage.getItem("pidm")}).$promise.then(function(response) {
