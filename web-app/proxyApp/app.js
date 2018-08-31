@@ -116,6 +116,19 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             }
 
         })
+        .state('/ssb/proxy/finaidappsumm', {
+            url: "/financialaidstatus",
+            templateUrl: webAppResourcePathString + '/proxyApp/student/financialaidstatus.html',
+            controller: 'proxyViewFinaidStatusController',
+            resolve: {
+            },
+            data: {
+                breadcrumbs: []
+            },
+            params: {
+                pidm: null
+            }
+        })
         .state('/ssb/proxy/crsesched', {
             url: "/courseSchedule",
             templateUrl: webAppResourcePathString + '/proxyApp/student/courseSchedule.html',
