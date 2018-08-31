@@ -41,6 +41,12 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
                     async: false
                 });
 
+                _.each(scope.$parent.proxyTiles, function(value) {
+
+                    if (value.pidm != scope.proxyData.pidm)
+                        value.open = false;
+                });
+
             };
         }
 

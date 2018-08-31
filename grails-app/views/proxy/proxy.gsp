@@ -68,7 +68,7 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
 <body>
 
 <g:if test="${guestUser}">
-    <div id="content" ng-app="proxyApp" class="container-fluid" aria-relevant="additions" role="main">
+    <div id="content" ng-app="proxyApp" class="container-fluid proxy" aria-relevant="additions" role="main">
         <div ui-view class="gen-home-main-view"></div>
     </div>
 </g:if>
