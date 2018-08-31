@@ -11,7 +11,7 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
 
         init = function() {
 
-            $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.finaid.status.label') + " " + $rootScope.studentName);
+            $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.finaid.status.for.label') + " " + $rootScope.studentName);
 
             $scope.pidm = $stateParams.pidm;
 
