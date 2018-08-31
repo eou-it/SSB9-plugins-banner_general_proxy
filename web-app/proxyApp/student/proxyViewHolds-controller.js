@@ -4,7 +4,7 @@
 proxyAppControllers.controller('proxyViewHoldsController',['$scope', '$rootScope', '$stateParams', 'proxyAppService', '$filter',
     function ($scope,$rootScope, $stateParams, proxyAppService, $filter) {
 
-        $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.holds.label') + " " + $rootScope.studentName);
+        // $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.holds.label') + " " + $rootScope.studentName);
 
         $scope.holds = {};
 

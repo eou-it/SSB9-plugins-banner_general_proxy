@@ -11,7 +11,7 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope',
 
         init = function() {
 
-            $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.scheduleDetails.label') + " " + $rootScope.studentName);
+            // $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.scheduleDetails.label') + " " + $rootScope.studentName);
 
             $scope.pidm = $stateParams.pidm;
 

@@ -8,7 +8,7 @@ proxyAppControllers.controller('proxyViewGradesController',['$scope', '$rootScop
 
         init = function() {
 
-            $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.grades.label') + " " + $rootScope.studentName);
+            // $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.grades.label') + " " + $rootScope.studentName);
 
 
             $scope.pidm = $stateParams.pidm
