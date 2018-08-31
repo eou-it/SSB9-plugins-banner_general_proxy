@@ -10,8 +10,7 @@ proxyAppControllers.controller('proxyViewCourseSchedController',['$scope', '$roo
         $scope.hasPrevWeek = false;
         $scope.hasNextWeek = false;
         $scope.pidm = $stateParams.pidm;
-
-        // $("[class*='breadcrumbButton']").append(" " + $filter('i18n')('proxy.schedule.label') + " " + $rootScope.studentName);
+        $scope.studentName = proxyAppService.getStudentName();
 
         proxyAppService.getCourseSchedule({pidm: $stateParams.pidm}).$promise.then(function(response) {
             $scope.schedule = response.schedule;
