@@ -141,31 +141,6 @@ h2 {
     font-size: 14px;
 }
 
-/* Accessibility */
-.audible-message {
-    position: absolute;
-    top:0;
-    left: -500px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    color: transparent;
-}
-.audible-message-hidden {
-    display: none;
-    visibility: hidden;
-}
-.audible-message-visible {
-    display: block;
-    visibility: visible;
-}
-
-/* Breadcrumbs */
-a.breadcrumbButton.leaf-breadcrumb {
-    text-decoration: none;
-    cursor: default;
-}
-
 .actionpassword {
     clear: both;
     font-size: 0.50em;
@@ -251,6 +226,59 @@ ul li    {
     background-color: #4CAF50;
     color: white;
 }
+
+#content.proxy {
+    font-family: OpenSans-regular;
+    font-size: 14px;
+    background: #eff4f8;
+}
+
+h1.proxy-page-heading {
+    font-family: OpenSans-semibold;
+    font-size: 18px;
+    background: #EEEEEE;
+    padding: 20px;
+    margin: auto;
+    border-bottom: 1px solid #dddddd;
+}
+
+.proxy-page-body {
+    padding: 32px 32px 0;
+}
+
+.info-text {
+    font-family: OpenSans-semibold;
+    font-size: 16px;
+}
+
+/* Accessibility */
+.audible-message {
+    position: absolute;
+    top:0;
+    left: -500px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    color: transparent;
+}
+.audible-message-hidden {
+    display: none;
+    visibility: hidden;
+}
+.audible-message-visible {
+    display: block;
+    visibility: visible;
+}
+
+/* Breadcrumbs */
+a.breadcrumbButton.leaf-breadcrumb {
+    text-decoration: none;
+    cursor: default;
+}
+
+/***********************/
+/* Media Query Section */
+/***********************/
 
 @media screen and (min-width:1024px) {
    .proxy .gen-home-heading,
