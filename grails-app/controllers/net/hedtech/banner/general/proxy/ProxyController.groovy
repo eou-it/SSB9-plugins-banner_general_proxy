@@ -182,14 +182,8 @@ class ProxyController {
      *
      */
     def getAidYears(params) {
-        // TODO: this is a stub
-        def aidYears = [
-                [
-                        code: '1314',
-                        description: '2013-2014'
-                ]
-        ]
-
+        def map = PersonalInformationControllerUtility.getFetchListParams(params)
+        def aidYears = generalSsbProxyService.fetchAidYearList(map.max, map.offset, map.searchString)
         try {
             render aidYears as JSON
         } catch (ApplicationException e) {
