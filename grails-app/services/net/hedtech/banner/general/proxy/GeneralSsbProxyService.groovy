@@ -681,6 +681,29 @@ class GeneralSsbProxyService {
         resultMap
     }
 
+    def fetchAidYearList(int max = 10, int offset = 0, String searchString = '') {
+        def resultList = []
+        def aidYearSql = """select robinst_aidy_code, robinst_aidy_desc
+                            from
+                            (select a.*, rownum rnum
+                              from
+                              (select robinst_aidy_code, robinst_aidy_desc
+                                 from robinst
+                                 where robinst_info_access_ind = 'Y'
+                                 and upper(robinst_aidy_desc) like ?
+                                 order by robinst_aidy_start_date desc) a
+                              where rownum <= ?)
+                            where rnum > ?"""
+        String preppedSearchString = '%' + searchString.toUpperCase() + '%'
+
+        resultList = sessionFactory.getCurrentSession().createSQLQuery(aidYearSql)
+                .setString(0, preppedSearchString)
+                .setInteger(1, max+offset)
+                .setInteger(2, offset).list().collect { it = [code: it[0], description: it[1]] }
+
+        resultList
+    }
+
     public static
     def createRegistrationEvent(id, term, crn, title, date, beginTime, endTime, className, subject = null, courseNumber = null) {
         Calendar startCal = Calendar.instance

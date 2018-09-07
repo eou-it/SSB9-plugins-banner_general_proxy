@@ -3,103 +3,111 @@
 *******************************************************************************-->
 <div>
     <h2>{{'proxy.awardPackage.label'|i18n:[awardPackage.aidYearDesc,studentName]}}</h2>
-    <input ng-model="aidYear" type="text" placeholder="Aid Year Code">
-    <input ng-click="submit()" type="button" value="Submit">
-    <div>
-        <h3>Need Calculation</h3>
-        <p>Cost of Attendance: {{awardPackage.needsCalc.attendanceCost}}</p>
-        <p>Estimated Family Contribution: {{awardPackage.needsCalc.familyContrib}}</p>
-        <p>Initial Need: {{awardPackage.needsCalc.initialNeed}}</p>
-        <p>Outside Resource: {{awardPackage.needsCalc.outsideResrc}}</p>
-        <p>Need: {{awardPackage.needsCalc.need}}</p>
-    </div>
-    <div>
-        <h3>Cost of Attendance</h3>
-        <p ng-repeat="budget in awardPackage.costOfAttendance.budgets">{{budget.desc}}: {{budget.amount}}</p>
-        <p>Total: {{awardPackage.costOfAttendance.total}}</p>
-    </div>
-    <div>
-        <h3>Housing Status</h3>
-        <p ng-repeat="status in awardPackage.housingStatuses.rows">{{status}}</p>
-    </div>
-    <div>
-        <h3>Expected Enrollment Status</h3>
-        <div ng-if="awardPackage.enrollment.fStatus">
-            <p ng-if="awardPackage.enrollment.fStatus.status">{{awardPackage.enrollment.fStatus.status}}</p>
-            <p ng-if="awardPackage.enrollment.fStatus.dfltOption">{{getStatusTextNonPell(awardPackage.enrollment.fStatus.dfltOption)}}</p>
-        </div>
-        <div ng-if="awardPackage.enrollment.tStatus">
-            <p ng-repeat="status in awardPackage.enrollment.tStatus.statuses">{{status}}</p>
+    <div class="row">
+        <div class="maybe-clear select2-container sm-fix col-xs-12 col-md-4 col-lg-4">
+            <label class="input-field-label">{{'proxy.selectAidYear.label'|i18n}}</label><br>
+            <input name="aidyear" id="aidyear" select-box for-select='{"placeholder": "{{"proxy.selectAidYear.label"|i18n}}", "action": "Proxy/getAidYears", "model": "aidYearHolder.aidYear", "showNA": true}' type="hidden" />
+            <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"
+               role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
         </div>
     </div>
-    <div>
-        <h3>Cumulative Loan Information as of {{now()}}</h3>
-        <p>Subsidized: {{loanInfo.subsidized}}</p>
-        <p>Unsubsidized: {{loanInfo.unsubsidized}}</p>
-        <p>Graduate PLUS: {{loanInfo.gradPlus}}</p>
-        <p>Parent PLUS: {{loanInfo.parentPlus}}</p>
-        <p>Perkins: {{loanInfo.perkins}}</p>
-        <p>Direct Unsubsidized (TEACH): {{loanInfo.directUnsub}}</p>
-    </div>
-    <div>
-        <table>
-            <caption><h3>Aid Award for {{awardPackage.aidYearDesc}}</h3></caption>
-            <tbody>
-                <tr>
-                    <th>Fund</th>
-                    <th>Status</th>
-                    <th>Offered</th>
-                    <th>Accepted</th>
-                    <th>Declined</th>
-                    <th>Cancelled</th>
-                    <th>Total</th>
-                </tr>
-                <tr ng-repeat="award in awardPackage.awardInfo.aidYearAwards.aidAwards">
-                    <td>{{award.fundTitle}}</td>
-                    <td>{{award.status}}</td>
-                    <td>{{award.offerAmt}}</td>
-                    <td>{{award.acceptAmt}}</td>
-                    <td>{{award.declineAmt}}</td>
-                    <td>{{award.cancelAmt}}</td>
-                    <td>{{award.amount}}</td>
-                </tr>
-                <tr>
-                    <td>Total</td>
-                    <td></td>
-                    <td>{{awardPackage.awardInfo.aidYearAwards.totalOfferAmt}}</td>
-                    <td>{{awardPackage.awardInfo.aidYearAwards.totalAcceptAmt}}</td>
-                    <td>{{awardPackage.awardInfo.aidYearAwards.totalDeclineAmt}}</td>
-                    <td>{{awardPackage.awardInfo.aidYearAwards.totalCancelAmt}}</td>
-                    <td>{{awardPackage.awardInfo.aidYearAwards.totalAmt}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div>
-        <table>
-            <caption><h3>Aid Award by Term {{awardPackage.awardInfo.aidYearAwards.aidYrTitle}}</h3></caption>
-            <tbody>
-                <tr ng-repeat-start="period in awardPackage.periodInfo.periods">
-                    <th></th>
-                    <th></th>
-                    <th>{{period.termDesc}}</th>
-                </tr>
-                <tr>
-                    <th>Fund</th>
-                    <th>Status</th>
-                    <th>Amount</th>
-                </tr>
-                <tr ng-repeat="periodAward in period.periodAwards">
-                    <td>{{periodAward.fundTitle}}</td>
-                    <td>{{periodAward.status}}</td>
-                    <td>{{periodAward.amount}}</td>
-                </tr>
-                <tr ng-repeat-end>
-                    <td>Totals</td>
-                    <td></td>
-                    <td>{{period.total}}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div ng-show="aidYearHolder.aidYear.code">
+        <div>
+            <h3>Need Calculation</h3>
+            <p>Cost of Attendance: {{awardPackage.needsCalc.attendanceCost}}</p>
+            <p>Estimated Family Contribution: {{awardPackage.needsCalc.familyContrib}}</p>
+            <p>Initial Need: {{awardPackage.needsCalc.initialNeed}}</p>
+            <p>Outside Resource: {{awardPackage.needsCalc.outsideResrc}}</p>
+            <p>Need: {{awardPackage.needsCalc.need}}</p>
+        </div>
+        <div>
+            <h3>Cost of Attendance</h3>
+            <p ng-repeat="budget in awardPackage.costOfAttendance.budgets">{{budget.desc}}: {{budget.amount}}</p>
+            <p>Total: {{awardPackage.costOfAttendance.total}}</p>
+        </div>
+        <div>
+            <h3>Housing Status</h3>
+            <p ng-repeat="status in awardPackage.housingStatuses.rows">{{status}}</p>
+        </div>
+        <div>
+            <h3>Expected Enrollment Status</h3>
+            <div ng-if="awardPackage.enrollment.fStatus">
+                <p ng-if="awardPackage.enrollment.fStatus.status">{{awardPackage.enrollment.fStatus.status}}</p>
+                <p ng-if="awardPackage.enrollment.fStatus.dfltOption">{{getStatusTextNonPell(awardPackage.enrollment.fStatus.dfltOption)}}</p>
+            </div>
+            <div ng-if="awardPackage.enrollment.tStatus">
+                <p ng-repeat="status in awardPackage.enrollment.tStatus.statuses">{{status}}</p>
+            </div>
+        </div>
+        <div>
+            <h3>Cumulative Loan Information as of {{now()}}</h3>
+            <p>Subsidized: {{loanInfo.subsidized}}</p>
+            <p>Unsubsidized: {{loanInfo.unsubsidized}}</p>
+            <p>Graduate PLUS: {{loanInfo.gradPlus}}</p>
+            <p>Parent PLUS: {{loanInfo.parentPlus}}</p>
+            <p>Perkins: {{loanInfo.perkins}}</p>
+            <p>Direct Unsubsidized (TEACH): {{loanInfo.directUnsub}}</p>
+        </div>
+        <div>
+            <table>
+                <caption><h3>Aid Award for {{awardPackage.aidYearDesc}}</h3></caption>
+                <tbody>
+                    <tr>
+                        <th>Fund</th>
+                        <th>Status</th>
+                        <th>Offered</th>
+                        <th>Accepted</th>
+                        <th>Declined</th>
+                        <th>Cancelled</th>
+                        <th>Total</th>
+                    </tr>
+                    <tr ng-repeat="award in awardPackage.awardInfo.aidYearAwards.aidAwards">
+                        <td>{{award.fundTitle}}</td>
+                        <td>{{award.status}}</td>
+                        <td>{{award.offerAmt}}</td>
+                        <td>{{award.acceptAmt}}</td>
+                        <td>{{award.declineAmt}}</td>
+                        <td>{{award.cancelAmt}}</td>
+                        <td>{{award.amount}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td></td>
+                        <td>{{awardPackage.awardInfo.aidYearAwards.totalOfferAmt}}</td>
+                        <td>{{awardPackage.awardInfo.aidYearAwards.totalAcceptAmt}}</td>
+                        <td>{{awardPackage.awardInfo.aidYearAwards.totalDeclineAmt}}</td>
+                        <td>{{awardPackage.awardInfo.aidYearAwards.totalCancelAmt}}</td>
+                        <td>{{awardPackage.awardInfo.aidYearAwards.totalAmt}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <table>
+                <caption><h3>Aid Award by Term {{awardPackage.awardInfo.aidYearAwards.aidYrTitle}}</h3></caption>
+                <tbody>
+                    <tr ng-repeat-start="period in awardPackage.periodInfo.periods">
+                        <th></th>
+                        <th></th>
+                        <th>{{period.termDesc}}</th>
+                    </tr>
+                    <tr>
+                        <th>Fund</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                    </tr>
+                    <tr ng-repeat="periodAward in period.periodAwards">
+                        <td>{{periodAward.fundTitle}}</td>
+                        <td>{{periodAward.status}}</td>
+                        <td>{{periodAward.amount}}</td>
+                    </tr>
+                    <tr ng-repeat-end>
+                        <td>Totals</td>
+                        <td></td>
+                        <td>{{period.total}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
