@@ -2,6 +2,7 @@ package net.hedtech.banner.general.proxy
 
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
+import net.hedtech.banner.proxy.api.AccountSummaryApi
 import net.hedtech.banner.proxy.api.FinAidAwardPackageApi
 import net.hedtech.banner.proxy.api.FinancialAidStatusApi
 import net.hedtech.banner.proxy.api.ProxyLandingPageApi
@@ -22,6 +23,7 @@ import java.text.SimpleDateFormat
 import net.hedtech.banner.general.system.State
 import net.hedtech.banner.general.system.Nation
 import net.hedtech.banner.general.system.County
+import net.hedtech.banner.general.system.SdaCrosswalkConversion
 import net.hedtech.banner.i18n.LocalizeUtil
 
 import net.hedtech.banner.exceptions.ApplicationException
@@ -702,6 +704,24 @@ class GeneralSsbProxyService {
                 .setInteger(2, offset).list().collect { it = [code: it[0], description: it[1]] }
 
         resultList
+    }
+
+    def getAccountSummary(def pidm) {
+        def accSummJson
+        def sqlText = AccountSummaryApi.ACCOUNT_SUMMARY
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [pidm, Sql.CLOB
+        ]){ lv_accSumm_json ->
+            accSummJson = lv_accSumm_json.asciiStream.text
+        }
+
+        def resultMap = new JsonSlurper().parseText(accSummJson)
+
+        def gtvsdaxValue = SdaCrosswalkConversion.fetchAllByInternalAndInternalGroup('WEBDETCODE', 'WEBACCTSUM')[0]?.external
+        resultMap.showDetailCode = gtvsdaxValue == 'Y'
+
+        resultMap
     }
 
     public static
