@@ -141,31 +141,6 @@ h2 {
     font-size: 14px;
 }
 
-/* Accessibility */
-.audible-message {
-    position: absolute;
-    top:0;
-    left: -500px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    color: transparent;
-}
-.audible-message-hidden {
-    display: none;
-    visibility: hidden;
-}
-.audible-message-visible {
-    display: block;
-    visibility: visible;
-}
-
-/* Breadcrumbs */
-a.breadcrumbButton.leaf-breadcrumb {
-    text-decoration: none;
-    cursor: default;
-}
-
 .actionpassword {
     clear: both;
     font-size: 0.50em;
@@ -250,6 +225,122 @@ ul li    {
     text-align: left;
     background-color: #4CAF50;
     color: white;
+}
+
+#content.proxy {
+    font-family: OpenSans-regular;
+    font-size: 14px;
+    background: #eff4f8;
+}
+
+h1.proxy-page-heading {
+    font-family: OpenSans-semibold;
+    font-size: 18px;
+    color: #151618;
+    background: #f7f7f7;
+    padding: 20px;
+    margin: auto;
+    border-bottom: 1px solid #dddddd;
+}
+
+.proxy-page-body {
+    padding: 0;
+}
+
+.info-text {
+    font-family: OpenSans-semibold;
+    font-size: 16px;
+}
+
+.mobile-visible {
+    visibility: visible;
+}
+
+.desktop-visible {
+    visibility: hidden;
+}
+
+.holds-msg {
+    font-family: OpenSans-semibold;
+}
+
+.holds-msg-container {
+    font-family: OpenSans-semibold;
+    background: #ffffff;
+    padding: 15px;
+}
+
+.hold-item {
+    background: #ffffff;
+    margin-top: 10px;
+    padding: 15px;
+}
+
+.hold-item-label {
+    font-family: OpenSans-semibold;
+}
+
+.subsection-divider {
+    width: 80%;
+    height: 1px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.subsection-divider span {
+    border-bottom: 1px solid #BEC5CB;
+    width: 100%;
+    float: left;
+    margin-top: 1.0em;
+    margin-bottom: 0.675em;
+}
+
+.subsection-divider-spacer {
+    height: 25px;
+}
+
+
+/* Accessibility */
+.audible-message {
+    position: absolute;
+    top:0;
+    left: -500px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    color: transparent;
+}
+.audible-message-hidden {
+    display: none;
+    visibility: hidden;
+}
+.audible-message-visible {
+    display: block;
+    visibility: visible;
+}
+
+/* Breadcrumbs */
+a.breadcrumbButton.leaf-breadcrumb {
+    text-decoration: none;
+    cursor: default;
+}
+
+/***********************/
+/* Media Query Section */
+/***********************/
+
+@media screen and (min-width:768px) {
+    .mobile-visible {
+        visibility: hidden;
+    }
+
+    .desktop-visible {
+        visibility: visible;
+    }
+
+    .proxy-page-body {
+        padding: 32px 32px 0;
+    }
 }
 
 @media screen and (min-width:1024px) {

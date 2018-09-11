@@ -1,0 +1,32 @@
+<!--*******************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div>
+    <h1 class="proxy-page-heading">{{'proxy.holds.label.viewStudentHolds'|i18n:[studentName]}}</h1>
+    <div class="proxy-page-body">
+        <p class="holds-msg">{{'proxy.holds.message.holdsMayNotDisplay'|i18n}}</p>
+        <p class="holds-msg">{{'proxy.holds.message.'+ holds.message|i18n}}</p>
+        <table>
+            <thead>
+            <tr>
+                <th>{{'proxy.holds.label.holdType'|i18n}}</th>
+                <th>{{'proxy.holds.label.fromDate'|i18n}}</th>
+                <th>{{'proxy.holds.label.toDate'|i18n}}</th>
+                <th>{{'proxy.holds.label.amount'|i18n}}</th>
+                <th>{{'proxy.holds.label.reason'|i18n}}</th>
+                <th>{{'proxy.holds.label.originator'|i18n}}</th>
+                <th>{{'proxy.holds.label.processAffected'|i18n}}</th>
+            </tr>
+            </thead>
+            <tr ng-repeat="hold in holds.rows">
+                <td>{{hold.stvhold_desc}}</td>
+                <td>{{hold.r_from_date}}</td>
+                <td>{{hold.r_to_date}}</td>
+                <td>{{hold.r_amount_owed}}</td>
+                <td>{{hold.r_reason}}</td>
+                <td>{{hold.stvorig_desc}}</td>
+                <td>{{stringifyHoldsFor(hold)}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
