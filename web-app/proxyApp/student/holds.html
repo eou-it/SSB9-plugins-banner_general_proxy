@@ -2,31 +2,10 @@
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div>
-    <h1 class="proxy-page-heading">{{'proxy.holds.student.label'|i18n}} {{studentName}}</h1>
-    <div class="proxy-page-body">
-        <p class="info-text">Please note that some holds are sensitive and may not display on this page.</p>
-        <p>{{'proxy.holds.message.'+ holds.message|i18n}}</p>
-        <table>
-            <thead>
-            <tr>
-                <th>Hold Type</th>
-                <th>From Date</th>
-                <th>To Date</th>
-                <th>Amount</th>
-                <th>Reason</th>
-                <th>Orginator</th>
-                <th>Process Affected</th>
-            </tr>
-            </thead>
-            <tr ng-repeat="hold in holds.rows">
-                <td>{{hold.stvhold_desc}}</td>
-                <td>{{hold.r_from_date}}</td>
-                <td>{{hold.r_to_date}}</td>
-                <td>{{hold.r_amount_owed}}</td>
-                <td>{{hold.r_reason}}</td>
-                <td>{{hold.stvorig_desc}}</td>
-                <td>{{stringifyHoldsFor(hold)}}</td>
-            </tr>
-        </table>
+    <div class="mobile-visible">
+        <ng-include src="'proxyApp/student/holdsMobile.html'|webAppResourcePath"></ng-include>
+    </div>
+    <div class="desktop-visible">
+        <ng-include src="'proxyApp/student/holdsDesktop.html'|webAppResourcePath"></ng-include>
     </div>
 </div>

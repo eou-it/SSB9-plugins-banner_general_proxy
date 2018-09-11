@@ -72,6 +72,7 @@ modules = {
 
         // Filters
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/filters/i18n-filter.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/filters/webAppResourcePath-filter.js']
 
         // Directives
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/selectBox-directive.js']
