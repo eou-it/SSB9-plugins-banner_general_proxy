@@ -79,5 +79,20 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
         return (typeof $rootScope.studentName != "undefined") ? $rootScope.studentName : sessionStorage.getItem("name");
     };
 
+    this.setAidYear = function(aidYearObj) {
+        sessionStorage.setItem("aidYearCode", aidYearObj.code);
+        sessionStorage.setItem("aidYearDesc", aidYearObj.description);
+    };
 
+    this.getAidYear = function() {
+        if (sessionStorage.getItem("aidYearCode")) {
+            return {
+                code: sessionStorage.getItem("aidYearCode"),
+                description: sessionStorage.getItem("aidYearDesc")
+            }
+        }
+        else {
+            return null;
+        }
+    };
 }]);
