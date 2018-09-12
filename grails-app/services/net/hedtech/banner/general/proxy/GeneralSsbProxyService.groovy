@@ -34,6 +34,7 @@ class GeneralSsbProxyService {
     def dataSource                         // injected by Spring
     def grailsApplication                  // injected by Spring
     def sqlFileLoadService
+    def preferredNameService
 
 
     /**
@@ -508,6 +509,7 @@ class GeneralSsbProxyService {
         studentsListMap.students.each { it ->
             def pages = getProxyPages(gidm, it.pidm)?.pages
             it.pages = pages
+            it.name = preferredNameService.getPreferredName(it.pidm,sql)
         }
 
         return studentsListMap
