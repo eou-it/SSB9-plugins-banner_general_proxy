@@ -240,7 +240,11 @@ class ProxyController {
         render result as JSON
     }
 
+    def getAccountSummary() {
+        def result = generalSsbProxyService.getAccountSummary(params.pidm);
 
+        render result as JSON
+    }
 
     private def fixJSONObjectForCast(JSONObject json) {
         json.each {entry ->

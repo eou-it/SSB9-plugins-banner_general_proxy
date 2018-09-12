@@ -180,7 +180,19 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             params: {
                 pidm: null
             }
-
+        })
+        .state('/ssb/proxy/acctsumm', {
+            url: "/accountSummary",
+            templateUrl: webAppResourcePathString + '/proxyApp/student/accountSummary.html',
+            controller: 'proxyAccountSummaryController',
+            resolve: {
+            },
+            data: {
+                breadcrumbs: [{label: 'proxy.acctSummary.heading'}]
+            },
+            params: {
+                pidm: null
+            }
         });
 });
 
