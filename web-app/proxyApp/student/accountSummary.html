@@ -1,0 +1,62 @@
+<!--*******************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div>
+    <h1 class="proxy-page-heading">{{'proxy.acctSummary.title'|i18n:[studentName]}}</h1>
+    <div class="proxy-page-body">
+        <p class="holds-msg">{{'proxy.acctSummary.message.notIncluded'|i18n}}</p>
+        <div ng-if="!accountSummary.accountBal">
+            <p class="holds-msg">{{'proxy.acctSummary.message.noSummary'|i18n}}</p>
+        </div>
+        <div ng-if="accountSummary.accountBal">
+            <h2>{{'proxy.acctSummary.label.summaryAcctBalance'|i18n}} {{accountSummary.accountBal}}</h2>
+            <table ng-repeat="term in accountSummary.terms">
+                <caption>{{term.termDesc}}</caption>
+                <thead>
+                    <tr>
+                        <th ng-show="accountSummary.showDetailCode">{{'proxy.acctSummary.label.detailCode'|i18n}}</th>
+                        <th>{{'proxy.acctSummary.label.description'|i18n}}</th>
+                        <th>{{'proxy.acctSummary.label.charge'|i18n}}</th>
+                        <th>{{'proxy.acctSummary.label.payment'|i18n}}</th>
+                        <th>{{'proxy.acctSummary.label.balance'|i18n}}</th>
+                    </tr>
+                </thead>
+                <tr ng-repeat="ledgerItem in term.ledger">
+                    <td ng-show="accountSummary.showDetailCode">{{ledgerItem.detailCode}}</td>
+                    <td>{{ledgerItem.description}}</td>
+                    <td>{{ledgerItem.charge}}</td>
+                    <td>{{ledgerItem.payment}}</td>
+                    <td>{{ledgerItem.balance}}</td>
+                </tr>
+                <tr>
+                    <td>{{'proxy.acctSummary.label.termCharges'|i18n}}</td>
+                    <td ng-show="accountSummary.showDetailCode"></td>
+                    <td>{{term.termCharge}}</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>{{'proxy.acctSummary.label.termCredits'|i18n}}</td>
+                    <td ng-show="accountSummary.showDetailCode"></td>
+                    <td>-</td>
+                    <td>{{term.termPay}}</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>{{'proxy.acctSummary.label.termBalances'|i18n}}</td>
+                    <td ng-show="accountSummary.showDetailCode"></td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>{{term.termBalance}}</td>
+                </tr>
+                <tr ng-if="$last">
+                    <td>{{'proxy.acctSummary.label.accountBalance'|i18n}}</td>
+                    <td ng-show="accountSummary.showDetailCode">-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>{{accountSummary.acctTotal}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

@@ -75,6 +75,11 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
             {controller: 'Proxy', action: 'getAwardHistory'}).get(params);
     };
 
+    this.getAccountSummary = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'getAccountSummary'}).get(params);
+    };
+
     this.getStudentName = function() {
         return (typeof $rootScope.studentName != "undefined") ? $rootScope.studentName : sessionStorage.getItem("name");
     };
@@ -89,7 +94,7 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
             return {
                 code: sessionStorage.getItem("aidYearCode"),
                 description: sessionStorage.getItem("aidYearDesc")
-            }
+            };
         }
         else {
             return null;
