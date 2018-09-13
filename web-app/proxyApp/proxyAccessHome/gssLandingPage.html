@@ -1,22 +1,11 @@
 <!--*******************************************************************************
   Copyright 2017 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
-<div class="gen-home-heading">
-    <div class="title">{{'banner.generalssb.landingpage.title'|i18n}}</div>
-    <div class="greeting-wrapper">
-        <ng-include ng-if="piConfig.isProfilePicDisplayable" src="'../generalSsbApp/landingPage/gssLandingPagePicture.html'"></ng-include>
-        <div class="greeting">
 
-            <div data-ng-show = "guestUser === true">
-                <div class="landingDesc break-long-words">You view this page as a Proxy User: {{guestUserName}}</div>
-            </div>
-
-        </div>
-    </div>
-</div>
-<div ng-if="piConfig.isProfilePicDisplayable" class="avatar-spacer mobile"></div>
-<div class="gen-home-heading-spacer"></div>
 <div ng-class="['gen-home-content', isSingleTile ? 'single-tile' : null]">
+
+    <h1 class="proxy-landing-page-heading">{{'proxy.landingPage.label.proxyUser'|i18n:[guestUserName]}} <br><br> {{'proxy.landingPage.label.proxyUser1'|i18n}}</h1>
+
     <div data-ng-show = "guestUser === true">
         <div ng-repeat="tile in appTiles">
             <landing-page-app-tile proxy-data="tile"/>

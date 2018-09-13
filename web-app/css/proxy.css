@@ -243,6 +243,15 @@ h1.proxy-page-heading {
     border-bottom: 1px solid #dddddd;
 }
 
+h1.proxy-landing-page-heading {
+    font-family: OpenSans-semibold;
+    font-size: 18px;
+    color: #151618;
+    padding: 10px;
+    margin: auto;
+    border-bottom: 1px solid #dddddd;
+}
+
 .proxy-page-body {
     padding: 0;
 }
@@ -353,6 +362,7 @@ a.breadcrumbButton.leaf-breadcrumb {
    .proxy .gen-home-heading,
    .proxy .gen-home-content {
         width: 425px;
+        top:0px;
     }
 
     .gen-home-content.single-tile {
