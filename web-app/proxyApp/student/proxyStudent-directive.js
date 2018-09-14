@@ -167,3 +167,16 @@ proxyAppDirectives.directive('textWithLinks', [function () {
         }
     };
 }]);
+
+proxyAppDirectives.directive('setupTermSelector', ['proxyAppService', function(proxyAppService) {
+    return {
+        restrict: 'A',
+        link: function(scope, elem) {
+            elem.on('change', function (event) {
+                proxyAppService.getGrades({termCode: event.target.value}).$promise.then(function(response) {
+                    scope.student.grades = response.data;
+                });
+            });
+        }
+    };
+}]);

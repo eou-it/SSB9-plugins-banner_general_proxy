@@ -1,53 +1,12 @@
 <!--*******************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
-<h2>{{'proxy.grades.label'|i18n}} {{studentName}}</h2>
 <div>
-    <p>Please note that some Grades are sensitive and may not display on this page.</p>
-
-    <div class="maybe-clear select2-container sm-fix col-xs-12 col-md-4 col-lg-4">
-        <label class="input-field-label">{{'proxy.label.term'|i18n}}</label><br>
-        <input name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "term.code", "showNA": true}' type="hidden" />
-        <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"
-           role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
+    <div id="term" name="term"></div>
+    <div class="mobile-visible">
+        <ng-include src="'proxyApp/student/gradesMobile.html'|webAppResourcePath"></ng-include>
     </div>
-
-    <div id="grades" class="ng-hide">
-
-    <table>
-
-        <tr>
-            <th>Level</th>
-            <th>CRN</th>
-            <th>Subject</th>
-            <th>Course</th>
-            <th>Section</th>
-            <th>Course Title</th>
-            <th>Campus</th>
-            <th>MidTerm Grade</th>
-            <th>Final Grade</th>
-            <th>Attempted Hours</th>
-            <th>Earned Hours</th>
-            <th>GPA Hours</th>
-            <th>Quality Points</th>
-        </tr>
-
-        <tr ng-repeat="grade in grades">
-            <td>{{grade.levelDescription}}</td>
-            <td>{{grade.courseReferenceNumber}}</td>
-            <td>{{grade.subjectCode}}</td>
-            <td>{{grade.courseNumber}}</td>
-            <td>{{grade.section}}</td>
-            <td>{{grade.courseTitle}}</td>
-            <td>{{grade.campusDescription}}</td>
-            <td>{{grade.midtermGrade}}</td>
-            <td>{{grade.finalGrade}}</td>
-            <td>{{grade.hoursAttempted}}</td>
-            <td>{{grade.hoursEarned}}</td>
-            <td>{{grade.gpaHours}}</td>
-            <td>{{grade.qualityPoints}}</td>
-        </tr>
-    </table>
+    <div class="desktop-visible">
+        <ng-include src="'proxyApp/student/gradesDesktop.html'|webAppResourcePath"></ng-include>
     </div>
-
 </div>
