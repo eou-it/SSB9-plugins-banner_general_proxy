@@ -269,8 +269,12 @@ h1.proxy-landing-page-heading {
     visibility: hidden;
 }
 
-.holds-msg {
+.notification-msg {
     font-family: OpenSans-semibold;
+}
+
+p.notification-msg {
+    margin-bottom: 20px;
 }
 
 .holds-msg-container {
@@ -306,6 +310,23 @@ h1.proxy-landing-page-heading {
 
 .subsection-divider-spacer {
     height: 25px;
+}
+
+.gpa-summary-header {
+    background: #ffffff;
+    font-family: OpenSans-semibold;
+    font-size: 18px;
+    padding: 20px;
+}
+
+.grades-list {
+    margin-top: 20px;
+}
+
+.grades-header th,
+table tr.grades-header th:last-child,
+table tr.grades-header:hover th:last-child {
+    background: #f7f7f7;
 }
 
 

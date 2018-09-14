@@ -4,7 +4,7 @@
 <div>
     <h2>{{'proxy.finaid.status.label'|i18n}} {{studentName}}</h2>
     <div class="row">
-        <div class="maybe-clear select2-container sm-fix col-xs-12 col-md-4 col-lg-4">
+        <div class="select2-container sm-fix col-xs-12 col-md-4 col-lg-4">
             <label class="input-field-label">{{'proxy.selectAidYear.label'|i18n}}</label><br>
             <input name="aidyear" id="aidyear" select-box for-select='{"placeholder": "{{"proxy.selectAidYear.label"|i18n}}", "action": "Proxy/getAidYears", "model": "aidYearHolder.aidYear", "showNA": true}' type="hidden" />
             <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"

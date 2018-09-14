@@ -1,34 +1,32 @@
 <!--*******************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
-<div>
-    <h1 class="proxy-page-heading">{{'proxy.holds.label.viewStudentHolds'|i18n:[studentName]}}</h1>
-    <div class="proxy-page-body">
-        <div class="holds-msg-container">
-            <div>{{'proxy.holds.message.holdsMayNotDisplay'|i18n}}</div>
-            <div ng-if="holds.message">{{'proxy.holds.message.'+ holds.message|i18n}}</div>
-        </div>
-        <div class="hold-item row" ng-repeat="hold in holds.rows">
-            <div class="hold-item-label col-xs-12">{{'proxy.holds.label.holdType.colon'|i18n}}</div>
-            <div class="col-xs-12">{{hold.stvhold_desc}}</div>
-            <div class="subsection-divider"><span></span></div>
-            <div class="clearfix subsection-divider-spacer"></div>
-            <div class="hold-item-label col-xs-6">{{'proxy.holds.label.fromDate.colon'|i18n}}</div>
-            <div class="hold-item-label col-xs-6">{{'proxy.holds.label.toDate.colon'|i18n}}</div>
-            <div class="col-xs-6">{{hold.r_from_date}}</div>
-            <div class="col-xs-6">{{hold.r_to_date}}</div>
-            <div class="subsection-divider"><span></span></div>
-            <div class="clearfix subsection-divider-spacer"></div>
-            <div class="hold-item-label col-xs-6">{{'proxy.holds.label.amount.colon'|i18n}}</div>
-            <div class="hold-item-label col-xs-6">{{'proxy.holds.label.reason.colon'|i18n}}</div>
-            <div class="col-xs-6">{{hold.r_amount_owed}}</div>
-            <div class="col-xs-6">{{hold.r_reason}}</div>
-            <div class="subsection-divider"><span></span></div>
-            <div class="clearfix subsection-divider-spacer"></div>
-            <div class="hold-item-label col-xs-6">{{'proxy.holds.label.originator.colon'|i18n}}</div>
-            <div class="hold-item-label col-xs-6">{{'proxy.holds.label.processAffected.colon'|i18n}}</div>
-            <div class="col-xs-6">{{hold.stvorig_desc}}</div>
-            <div class="col-xs-6">{{stringifyHoldsFor(hold)}}</div>
-        </div>
+<h1 class="proxy-page-heading">{{'proxy.holds.label.viewStudentHolds'|i18n:[studentName]}}</h1>
+<div class="proxy-page-body">
+    <div class="holds-msg-container">
+        <div>{{'proxy.holds.message.holdsMayNotDisplay'|i18n}}</div>
+        <div ng-if="holds.message">{{'proxy.holds.message.'+ holds.message|i18n}}</div>
+    </div>
+    <div class="hold-item row" ng-repeat="hold in holds.rows">
+        <div class="hold-item-label col-xs-12">{{'proxy.holds.label.holdType.colon'|i18n}}</div>
+        <div class="col-xs-12">{{hold.stvhold_desc}}</div>
+        <div class="subsection-divider"><span></span></div>
+        <div class="clearfix subsection-divider-spacer"></div>
+        <div class="hold-item-label col-xs-6">{{'proxy.holds.label.fromDate.colon'|i18n}}</div>
+        <div class="hold-item-label col-xs-6">{{'proxy.holds.label.toDate.colon'|i18n}}</div>
+        <div class="col-xs-6">{{hold.r_from_date}}</div>
+        <div class="col-xs-6">{{hold.r_to_date}}</div>
+        <div class="subsection-divider"><span></span></div>
+        <div class="clearfix subsection-divider-spacer"></div>
+        <div class="hold-item-label col-xs-6">{{'proxy.holds.label.amount.colon'|i18n}}</div>
+        <div class="hold-item-label col-xs-6">{{'proxy.holds.label.reason.colon'|i18n}}</div>
+        <div class="col-xs-6">{{hold.r_amount_owed}}</div>
+        <div class="col-xs-6">{{hold.r_reason}}</div>
+        <div class="subsection-divider"><span></span></div>
+        <div class="clearfix subsection-divider-spacer"></div>
+        <div class="hold-item-label col-xs-6">{{'proxy.holds.label.originator.colon'|i18n}}</div>
+        <div class="hold-item-label col-xs-6">{{'proxy.holds.label.processAffected.colon'|i18n}}</div>
+        <div class="col-xs-6">{{hold.stvorig_desc}}</div>
+        <div class="col-xs-6">{{stringifyHoldsFor(hold)}}</div>
     </div>
 </div>

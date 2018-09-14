@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2017 Ellucian Company L.P. and its affiliates.
+ Copyright 2018 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 var proxyAppControllers = angular.module('proxyAppControllers', []);
 var proxyAppDirectives = angular.module('proxyAppDirectives', []);
@@ -110,9 +110,6 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             },
             data: {
                 breadcrumbs: [{label: 'proxy.grades.heading'}]
-            },
-            params: {
-                pidm: null
             }
 
         })
