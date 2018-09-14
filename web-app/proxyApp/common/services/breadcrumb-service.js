@@ -35,7 +35,8 @@ proxyApp.service( 'breadcrumbService', ['$filter',function ($filter) {
             updatedHeaderAttributes,
             registerBackButtonClickListenerOverride = function(location) {
                 $('#breadcrumbBackButton').on('click',function(){
-                    window.location = location;
+                    //window.location = location;
+                    window.location.assign(sessionStorage.getItem('proxyLandingPage'));
                 })
             };
 

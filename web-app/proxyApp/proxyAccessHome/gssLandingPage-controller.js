@@ -17,6 +17,8 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
 
                 if (CommonContext.guestUser){
 
+                    sessionStorage.setItem('proxyLandingPage', window.parent.location);
+
                     //disable the menu for proxy
                     $('#menuContainer').removeClass('show').addClass('hide');
                     $('#menu').removeClass('show').addClass('hide');
