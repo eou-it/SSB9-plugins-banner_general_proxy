@@ -4,14 +4,11 @@
 
 <div ng-class="['gen-home-content', isSingleTile ? 'single-tile' : null]">
 
-    <h1 class="proxy-landing-page-heading">{{'proxy.landingPage.label.proxyUser'|i18n:[guestUserName]}} <br><br> {{'proxy.landingPage.label.proxyUser1'|i18n}}</h1>
-
-    <div data-ng-show = "guestUser === true">
+    <h1 class="proxy-landing-page-heading break-long-words">{{'proxy.landingPage.label.proxyUser'|i18n:[proxyUser]}} <br><br> {{'proxy.landingPage.label.proxyUser1'|i18n}}</h1>
         <div ng-repeat="tile in appTiles">
             <landing-page-app-tile proxy-data="tile"/>
         </div>
         <div ng-repeat="proxy in proxyTiles">
             <landing-page-proxy-tile proxy-data="proxy"/>
         </div>
-    </div>
 </div>

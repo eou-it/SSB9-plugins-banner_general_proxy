@@ -506,6 +506,8 @@ class GeneralSsbProxyService {
 
         def studentsListMap = new JsonSlurper().parseText(studentList)
 
+        studentsListMap <<   getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
+
         studentsListMap.students.each { it ->
             def pages = getProxyPages(gidm, it.pidm)?.pages
             it.pages = pages

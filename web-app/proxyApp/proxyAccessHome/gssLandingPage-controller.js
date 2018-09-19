@@ -15,7 +15,7 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
         // ---------------
             init = function() {
 
-                if (CommonContext.guestUser){
+                //if (CommonContext.guestUser){
 
                     sessionStorage.setItem('proxyLandingPage', window.parent.location);
 
@@ -24,12 +24,10 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
                     $('#menu').removeClass('show').addClass('hide');
                     $('#bannerMenu').removeClass('show').addClass('hide');
 
-                    $scope.guestUser = true;
-                    $scope.guestUserName = CommonContext.user;
-
 
                     proxyAppService.getStudentListForProxy().$promise.then(function (response) {
                         $scope.students = response.students;
+                        $scope.proxyUser = toCamelCase(response.proxyProfile.p_first_name) + " " + toCamelCase(response.proxyProfile.p_last_name);
 
                         _.each($scope.students, function(student) {
 
@@ -61,9 +59,14 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppSe
 
 
 
-                }
+               // }
 
             };
+
+        function toCamelCase(str){
+            return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+        }
+
 
 
         // CONTROLLER VARIABLES
