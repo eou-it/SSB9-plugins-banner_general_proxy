@@ -15,6 +15,9 @@ DECLARE
             WHERE GPRXREF_PROXY_IDM = ?
                   AND TRUNC (SYSDATE) BETWEEN TRUNC (GPRXREF_START_DATE)
                                           AND TRUNC (GPRXREF_STOP_DATE)
+                  AND EXISTS (SELECT 'Y' FROM GOBTPAC 
+                  WHERE GOBTPAC_PIDM = GPRXREF_PERSON_PIDM
+                  AND GOBTPAC_PIN_DISABLED_IND = 'N')
          ORDER BY F_Format_Name (GPRXREF_PERSON_PIDM, 'LFMI');
 
  students varchar2(3000);
