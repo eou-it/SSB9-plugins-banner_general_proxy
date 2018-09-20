@@ -12,9 +12,9 @@
         <div>
             <accordion>
                 <accordion-group is-open="proxyData.open">
-                    <accordion-heading>
+                    <accordion-heading data-ng-click="setPidm()">
                         <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isOpen, 'glyphicon-chevron-right': !status.isOpen}"></i>
-                        <span data-ng-click="setPidm()" class="break-long-words">{{proxyData.desc}}</span>
+                        <span class="break-long-words">{{proxyData.desc}}</span>
                     </accordion-heading>
                     <div class="list-group">
                         <div class="list-group-item" id="proxyPages" ng-repeat="page in proxyData.pages" data-ng-click="goProxyApp(page.url)">
