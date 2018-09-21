@@ -376,7 +376,7 @@ declare
          lv_sched_json := lv_sched_json || '"meeting_room_code": "' || meeting_tab (row_count).room_code || '",';
          lv_sched_json := lv_sched_json || '"meeting_mtyp_code": "' || meeting_tab (row_count).mtyp_code || '",';
          lv_sched_json := lv_sched_json || '"meeting_gtvmtyp_code": "' || meeting_tab (row_count).gtvmtyp_desc || '",';
-
+         lv_sched_json := lv_sched_json || '"courseTitle": "' || bwcklibs.f_course_title (meeting_tab (row_count).term_code, meeting_tab (row_count).crn) || '",';
 
          lv_sched_json := lv_sched_json || '}';
 

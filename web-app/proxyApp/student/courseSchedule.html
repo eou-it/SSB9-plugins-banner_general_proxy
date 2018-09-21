@@ -1,5 +1,7 @@
 <div>
     <h2>{{'proxy.schedule.label'|i18n}} {{studentName}}</h2>
+    <label>Date</label>
+    <input ng-model="tgtDate" type="text" placeholder="MM/DD/YYYY"><input ng-click="goToDate()" type="button" value="Go to date">
     <div full-calendar pidm="{{pidm}}" id="calendar" class="ui-widget-content" role="region"></div>
     <div>
         <h3>Courses without assigned meeting times:</h3>
