@@ -1,13 +1,13 @@
 /********************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-proxyAppControllers.controller('gssLandingPageController',['$scope', '$location', 'proxyAppService',
-    function ($scope, $location, proxyAppService) {
+proxyAppControllers.controller('gssLandingPageController',['$scope', '$rootScope', '$location', 'proxyAppService',
+    function ($scope, $rootScope, $location, proxyAppService) {
 
         $scope.initLandingPage = function(profileReq)
         {
             //This function is sort of private constructor for controller
-            $scope.profileRequired = profileReq;
+            $rootScope.profileRequired = profileReq;
 
         };
 
@@ -15,7 +15,11 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', '$location'
         // ---------------
             init = function() {
 
-                if ($scope.profileRequired){
+                if ($rootScope.profileRequired){
+
+                    if ($('#breadcrumb-panel').is(":visible")) {
+                        $("#breadcrumb-panel").hide();
+                    }
 
                     $location.path("/proxypersonalinformation");
 

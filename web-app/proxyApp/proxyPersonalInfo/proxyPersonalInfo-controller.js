@@ -1,8 +1,8 @@
 /********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyPersonalInformationController',['$scope', 'proxyAppService','$filter',
-    function ($scope, proxyAppService, $filter) {
+proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$rootScope','proxyAppService','$filter',
+    function ($scope, $rootScope, proxyAppService, $filter) {
 
         $scope.proxyProfile = {};
         $scope.proxyUiRules = {};
@@ -62,9 +62,15 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope', '
             proxyAppService.updateProxyPersonalInfo(profile).$promise.then(function(response) {
                 if(response.failure) {
                     $scope.flashMessage = response.message;
+
+                    if ($('#breadcrumb-panel').is(":visible"))
+                        $("#breadcrumb-panel").hide();
                 }
                 else {
                     $scope.flashMessage = 'Saved successfully';
+                    $rootScope.profileRequired = false;
+                    if (!$('#breadcrumb-panel').is(":visible"))
+                        $("#breadcrumb-panel").show();
                 }
 
             });
