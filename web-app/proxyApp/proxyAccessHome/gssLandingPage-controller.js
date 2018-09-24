@@ -1,19 +1,26 @@
 /********************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-proxyAppControllers.controller('gssLandingPageController',['$scope', 'proxyAppService',
-    function ($scope, proxyAppService) {
+proxyAppControllers.controller('gssLandingPageController',['$scope', '$location', 'proxyAppService',
+    function ($scope, $location, proxyAppService) {
 
-        // LOCAL VARIABLES
-        // ---------------
-        var STUDENT = 0,
-            EMPLOYEE = 1,
-            AIPADMIN =2,
+        $scope.initLandingPage = function(profileReq)
+        {
+            //This function is sort of private constructor for controller
+            $scope.profileRequired = profileReq;
 
+        };
 
         // LOCAL FUNCTIONS
         // ---------------
             init = function() {
+
+                if ($scope.profileRequired){
+
+                    $location.path("/proxypersonalinformation");
+
+                    return;
+                }
 
                 //if (CommonContext.guestUser){
 

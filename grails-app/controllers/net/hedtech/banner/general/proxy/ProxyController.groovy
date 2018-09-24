@@ -34,7 +34,17 @@ class ProxyController {
             if(p_proxyIDM){
                 generalSsbProxyService.updateProxyHistoryOnLogin()
             }
-            render view: "proxy"
+
+            def profileRequired = false
+
+            // check if proxy profile data is not complete
+            // forces to pass profileRequired = true
+            if (generalSsbProxyService.isRequiredDataForProxyProfileComplete(p_proxyIDM)?.trim()) {
+                profileRequired = true
+            }
+
+            render view: "proxy", model : [proxyProfile: profileRequired]
+
         }
         catch (ApplicationException e) {
             render returnFailureMessage( e ) as JSON

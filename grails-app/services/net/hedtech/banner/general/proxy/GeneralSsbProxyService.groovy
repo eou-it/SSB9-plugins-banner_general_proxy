@@ -492,6 +492,79 @@ class GeneralSsbProxyService {
     }
 
 
+    public def isRequiredDataForProxyProfileComplete(def p_proxyIDM) {
+
+        def errorMsgOut = ""
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+
+        // special OutParameter for cursor type
+        OutParameter CURSOR_PARAMETER = new OutParameter() {
+            public int getType() {
+                return OracleTypes.CURSOR;
+            }
+        };
+
+        def sqlText = ProxyPersonalInformationApi.PROXY_PERSONAL_INFORMATION
+
+
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+
+        def proxyProfile = [:]
+
+        sql.call(sqlText, [CURSOR_PARAMETER, p_proxyIDM]) { profile ->
+            profile.eachRow() { data ->
+                proxyProfile.p_name_prefix = data.GPBPRXY_NAME_PREFIX
+                proxyProfile.p_first_name = data.GPBPRXY_FIRST_NAME
+                proxyProfile.p_mi = data.GPBPRXY_MI
+                proxyProfile.p_surname_prefix = data.GPBPRXY_SURNAME_PREFIX
+                proxyProfile.p_last_name = data.GPBPRXY_LAST_NAME
+                proxyProfile.p_name_suffix = data.GPBPRXY_NAME_SUFFIX
+                proxyProfile.p_pref_first_name = data.GPBPRXY_PREF_FIRST_NAME
+                proxyProfile.p_email_address = data.GPBPRXY_EMAIL_ADDRESS
+                proxyProfile.p_ctry_code_phone = data.GPBPRXY_CTRY_CODE_PHONE
+                proxyProfile.p_phone_area = data.GPBPRXY_PHONE_AREA
+                proxyProfile.p_phone_number = data.GPBPRXY_PHONE_NUMBER
+                proxyProfile.p_phone_ext = data.GPBPRXY_PHONE_EXT
+                proxyProfile.p_house_number = data.GPBPRXY_HOUSE_NUMBER
+                proxyProfile.p_street_line1 = data.GPBPRXY_STREET_LINE1
+                proxyProfile.p_street_line2 = data.GPBPRXY_STREET_LINE2
+                proxyProfile.p_street_line3 = data.GPBPRXY_STREET_LINE3
+                proxyProfile.p_street_line4 = data.GPBPRXY_STREET_LINE4
+                proxyProfile.p_city = data.GPBPRXY_CITY
+                proxyProfile.p_stat_code = State.findByCode(data.GPBPRXY_STAT_CODE) ?: new State()
+                proxyProfile.p_zip = data.GPBPRXY_ZIP
+                proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE) ?: new Nation()
+                proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE) ?: new County()
+                proxyProfile.p_sex = data.GPBPRXY_SEX
+                proxyProfile.p_birth_date = (data.GPBPRXY_BIRTH_DATE == null) ? "" : df.format(data.GPBPRXY_BIRTH_DATE)
+                proxyProfile.p_ssn = data.GPBPRXY_SSN
+                proxyProfile.p_opt_out_adv_date = (data.GPBPRXY_OPT_OUT_ADV_DATE == null) ? false : true
+            }}
+
+
+        def sqlText1 = ProxyPersonalInformationApi.CHECK_PROXY_PROFILE_REQUIRED_DATA
+
+        def bDate = dateFormat(proxyProfile.p_birth_date)
+
+        sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText1, [p_proxyIDM, proxyProfile.p_first_name, proxyProfile.p_mi, proxyProfile.p_last_name,
+                            proxyProfile.p_surname_prefix, proxyProfile.p_name_prefix,
+                            proxyProfile.p_name_suffix, proxyProfile.p_pref_first_name, proxyProfile.p_email_address, proxyProfile.p_phone_area,
+                            proxyProfile.p_phone_number, proxyProfile.p_phone_ext, proxyProfile.p_ctry_code_phone,
+                            proxyProfile.p_house_number, proxyProfile.p_street_line1, proxyProfile.p_street_line2, proxyProfile.p_street_line3, proxyProfile.p_street_line4,
+                            proxyProfile.p_city, proxyProfile.p_stat_code?.code?:"", proxyProfile.p_zip, proxyProfile.p_cnty_code?.code?:"", proxyProfile.p_natn_code?.code?:"",
+                            proxyProfile.p_sex, bDate, proxyProfile.p_ssn, Sql.VARCHAR
+        ]) { errorMsg ->
+            errorMsgOut = errorMsg
+        }
+
+        return errorMsgOut
+
+    }
+
+
+
     def getStudentListForProxy(def gidm) {
 
         def studentList = ""
