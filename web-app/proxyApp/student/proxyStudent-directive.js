@@ -83,7 +83,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                         var html = '';
                         options.term = event.term;
                         options.courseReferenceNumber = event.crn;
-                        options.courseTitle = event.title;//event.subject + " " + event.courseNumber;
+                        options.courseTitle = event.title;
                         if(event.isConflicted) {
                             html = '<span class="icon-info-CO"></span>';
                         }
