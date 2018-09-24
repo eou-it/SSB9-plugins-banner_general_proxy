@@ -2,6 +2,16 @@
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAppService) {
+    function topOf(elements) {
+        function topOfOne(element) {
+            var pos = $(element).position();
+            return pos ? pos.top : null;
+        }
+
+
+        return topOfOne(_.min($(elements), topOfOne));
+    }
+
     var scrollToFirstEvent = _.debounce(function() {
         var top = topOf('.fc-event:visible');
         if (top != null) {
@@ -20,13 +30,19 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
 
                 $('#calendar').fullCalendar({
                     header: {
-                        left: '',
-                        center: '',
-                        right: ''
+                        left: 'prev',
+                        center: 'title',
+                        right: 'next goToDate'
                     },
                     defaultView: 'agendaWeek',
                     allDaySlot: false,
                     editable: false,
+                    eventColor: '#eff7ff',
+                    eventBorderColor: '#026BC8',
+                    aspectRatio: 2,
+                    slotEventOverlap: true,
+                    slotDuration: '00:15:00',
+                    slotLabelInterval: '01:00',
                     //columnFormat: {
                     //    agendaWeek: 'dddd',
                     //    basicWeek: 'ddd'
@@ -37,11 +53,6 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                     //},
                     timeFormat: 'h:mm', // 5:00 - 6:30,
                     titleFormat: '[Week of] MMMM DD, YYYY',
-                    header: {
-                        left: 'prev',
-                        center: 'title',
-                        right: 'next'
-                    },
 
                     firstDay: parseInt($.i18n.prop("default.firstDayOfTheWeek")),
                     dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],//$.i18n.prop("default.gregorian.dayNames").split(','), TODO: add to props
@@ -58,6 +69,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                             events = response.schedule;
                             scope.hasNextWeek = response.hasNextWeek;
                             scope.hasPrevWeek = response.hasPrevWeek;
+                            scope.unassignedSchedule = response.unassignedSchedule;
                             callback(events);
 
                             var dateUsed = moment(response.dateUsed, 'MM/DD/YYYY');
@@ -68,12 +80,16 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                     },
                     eventRender: function (event, element, view) {
                         var options = {};
+                        var html = '';
                         options.term = event.term;
                         options.courseReferenceNumber = event.crn;
-                        options.courseTitle = event.subject + " " + event.courseNumber;
+                        options.courseTitle = event.title;
+                        if(event.isConflicted) {
+                            html = '<span class="icon-info-CO"></span>';
+                        }
                         $('.fc-title', element).text("");
                         //$('.fc-event-title', element).html(setupCourseDetailsLink(options));
-                        $('.fc-title', element).html("<a>"+ options.courseTitle +"</a>");
+                        $('.fc-title', element).html(html+"<a> "+ options.courseTitle +"</a>");
 
                         /*if (view.name == "agendaWeek") {
                             var options = {};

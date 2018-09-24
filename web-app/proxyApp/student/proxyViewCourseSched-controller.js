@@ -12,13 +12,12 @@ proxyAppControllers.controller('proxyViewCourseSchedController',['$scope', '$roo
         $scope.pidm = $stateParams.pidm;
         $scope.studentName = proxyAppService.getStudentName();
 
-        proxyAppService.getCourseSchedule({pidm: $stateParams.pidm}).$promise.then(function(response) {
-            $scope.schedule = response.schedule;
-            $scope.scheduleConflicts = response.scheduleConflicts;
-            $scope.unassignedSchedule = response.unassignedSchedule;
-            $scope.hasPrevWeek = response.hasPrevWeek;
-            $scope.hasNextWeek = response.hasNextWeek;
-        });
+        $scope.goToDate = function() {
+            if($scope.tgtDate) {
+                $('#calendar').fullCalendar( 'gotoDate', $scope.tgtDate);
+                $scope.tgtDate = undefined;
+            }
+        };
 
     }
 ]);

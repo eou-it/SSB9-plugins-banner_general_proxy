@@ -773,16 +773,16 @@ class GeneralSsbProxyService {
         boolean isDateWithinMeetingDates = !startDateCal.before(ssrmeetStartCal) && !startDateCal.after(ssrmeetEndCal)
 
         if(isDateWithinMeetingDates) {
-            def regEvent = createRegistrationEvent(id, event.meeting_term_code, event.meeting_crn, 'section.courseTitle',
+            def regEvent = createRegistrationEvent(id, event.meeting_term_code, event.meeting_crn, event.courseTitle,
                     startDateCal, event.meeting_begin_time, event.meeting_end_time, 'event', event.meeting_subj_code,
                     event.meeting_crse_numb)
 
             if (registrationEventTimesConflict(regEvent, eventsAlreadyOnSchedule[dayOfWeek])) {
-                conflictingEvents.add(regEvent)
-            } else {
-                registrationArray.add(regEvent)
-                eventsAlreadyOnSchedule[dayOfWeek].add(regEvent)
+                regEvent.isConflicted = true
             }
+
+            registrationArray.add(regEvent)
+            eventsAlreadyOnSchedule[dayOfWeek].add(regEvent)
         }
     }
 
