@@ -129,7 +129,7 @@ class ProxyController {
         if (result.doPin) {
             render view: "/proxy/resetpin", model: [gidm : result.gidm]
         } else {
-            flash.message = message( code:"proxy.actionpassword.invalid" )
+            flash.message = message( code:"proxy.passwordManagement.invalidPassord" )
             render view: "/proxy/actionpassword", params: params, model: [token: params.token, gidm : result.gidm]
         }
     }

@@ -19,7 +19,7 @@
 
 
         <div class="logInProxy appNameProxy">
-            <g:message code="proxy.pinmanagement.submitactionpassword.label"/>
+            <g:message code="proxy.passwordManagement.initialPassword.label"/>
             <input type='password' name="p_verify">
             <input type="hidden" name="token" value="${token}" />
             <input type="hidden" name="gidm" value="${gidm}" />
@@ -27,7 +27,7 @@
             <br>
 
             <div class="actionpassword">
-                <g:message code="proxy.pinmanagement.submitactionpassword"/>
+                <g:message code="proxy.passwordManagement.submitInitialPassword"/>
             </div>
         </div>
     </form>
