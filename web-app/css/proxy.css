@@ -329,6 +329,9 @@ table tr.grades-header:hover th:last-child {
     background: #f7f7f7;
 }
 
+.proxy .fc-event:hover {
+    color: #0c4e8c;
+}
 
 /* Accessibility */
 .audible-message {
