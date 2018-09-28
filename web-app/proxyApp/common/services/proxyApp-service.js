@@ -4,22 +4,23 @@
 
 proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootScope, $resource) {
 
-    var fetchRoles = $resource('../ssb/:controller/:action',
-            {controller: 'General', action: 'getRoles'}, {query: {method:'GET', isArray:false}}),
-        fetchConfig = $resource('../ssb/:controller/:action',
-            {controller: 'General', action: 'getGeneralConfig'}, {query: {method:'GET', isArray:false}}),
+    var fetchConfig = $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'getConfig'}),
         fetchProxyPersonalInfo = $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'getProxypersonalinformation'}, {query: {method:'GET', isArray:false}}),
         fetchStudentListForProxy = $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'getStudentListForProxy'}, {query: {method:'GET', isArray:false}});
 
 
-    this.getRoles = function () {
-        return fetchRoles.query();
-    };
+    this.config = null;
 
-    this.getGeneralConfig = function () {
-        return fetchConfig.query();
+    this.getConfiguration = function () {
+        // Retrieve configuration just once; don't make a round trip each time it's requested.
+        if (!this.config) {
+            this.config = fetchConfig.get();
+        }
+
+        return this.config;
     };
 
     this.getFromPersonalInfo = function (entityName, params) {

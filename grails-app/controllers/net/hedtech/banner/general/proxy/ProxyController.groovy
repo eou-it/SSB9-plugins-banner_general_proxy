@@ -10,7 +10,6 @@ import net.hedtech.banner.student.history.HistoryTermForStudentGrades
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
 
-import net.hedtech.banner.general.PersonalInformationControllerUtility
 import net.hedtech.banner.general.system.Term
 import net.hedtech.banner.security.XssSanitizer
 
@@ -25,6 +24,7 @@ class ProxyController {
     def termProxyService
     def gradesProxyService
     def awardHistoryProxyService
+    def proxyConfigurationService
 
     def landingPage() {
         try {
@@ -47,7 +47,7 @@ class ProxyController {
 
         }
         catch (ApplicationException e) {
-            render returnFailureMessage( e ) as JSON
+            render ProxyControllerUtility.returnFailureMessage( e ) as JSON
         }
     }
 
@@ -177,12 +177,12 @@ class ProxyController {
      */
     def getTerms(params) {
         def pidm = session["currentStudentPidm"]?.toInteger()
-        def map = PersonalInformationControllerUtility.getFetchListParams(params)
+        def map = ProxyControllerUtility.getFetchListParams(params)
 
         try {
             render termProxyService.fetchTermList(pidm, map.searchString, map.max,  map.offset) as JSON
         } catch (ApplicationException e) {
-            render PersonalInformationControllerUtility.returnFailureMessage(e) as JSON
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
     }
 
@@ -192,12 +192,12 @@ class ProxyController {
      *
      */
     def getAidYears(params) {
-        def map = PersonalInformationControllerUtility.getFetchListParams(params)
+        def map = ProxyControllerUtility.getFetchListParams(params)
         def aidYears = generalSsbProxyService.fetchAidYearList(map.max, map.offset, map.searchString)
         try {
             render aidYears as JSON
         } catch (ApplicationException e) {
-            render PersonalInformationControllerUtility.returnFailureMessage(e) as JSON
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
     }
 
@@ -220,7 +220,7 @@ class ProxyController {
         try {
             render gradesProxyService.viewGrades(params)
         } catch (ApplicationException e) {
-            render PersonalInformationControllerUtility.returnFailureMessage(e) as JSON
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
     }
 
@@ -254,6 +254,21 @@ class ProxyController {
         def result = generalSsbProxyService.getAccountSummary(params.pidm);
 
         render result as JSON
+    }
+
+    def getConfig() {
+        try {
+            def map = [:]
+            proxyConfigurationService.getProxyParams().each {
+                // Web Tailor parameter values cannot be null so will come in here as "<UPDATE ME>" for a "non-value".
+                // We change it to null for use in the front end.
+                map[it.key] = (it.value == '<UPDATE ME>') ? null : it.value
+            }
+
+            render map as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
     }
 
     private def fixJSONObjectForCast(JSONObject json) {
