@@ -40,7 +40,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                     eventColor: '#eff7ff',
                     eventBorderColor: '#026BC8',
                     aspectRatio: 2,
-                    slotEventOverlap: true,
+                    slotEventOverlap: false,
                     slotDuration: '00:15:00',
                     slotLabelInterval: '01:00',
                     //columnFormat: {

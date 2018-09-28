@@ -434,6 +434,9 @@ END;
       lv_opt_out_adv_date   DATE := SYSDATE;
 
       lv_info               twgrinfo.twgrinfo_label%TYPE := 'SAVED';
+      
+      lv_hold_rowid         gb_common.internal_record_id_type;
+      lv_message            VARCHAR2 (30000);
 
          FUNCTION f_validate_date (p_date VARCHAR2)
            RETURN VARCHAR2
@@ -519,6 +522,34 @@ END;
                           EXCEPTION
                              WHEN OTHERS THEN lv_info := 'DATA_ERROR';
                           END;
+                          
+           lv_message :=
+           lv_message
+           || G\$_NLS.Get ('BWGKPXYA1-0099',
+                 'SQL',
+                 'Proxy profile changes submitted by proxy user %01% %02% %03%',
+                 lv_GPBPRXY_rec.R_FIRST_NAME, lv_GPBPRXY_rec.R_LAST_NAME,
+                 '<P>');
+                          
+         gp_gpbeltr.P_Create (
+         p_syst_code        => 'PROXY',
+         p_ctyp_code        => 'PROFILE_CHANGE_CLR',
+         p_ctyp_url         => bwgkprxy.F_getProxyURL('PROFILE_CHANGE'),
+         p_ctyp_exp_date    => NULL,
+         p_ctyp_exe_date    => NULL,
+         p_transmit_date    => NULL,
+         p_proxy_idm        => ?,
+         p_proxy_old_data   => NULL,
+         p_proxy_new_data   => NULL,
+         p_person_pidm      => bwgkprxy.F_Get_PIDM_For_IDM(?),
+         p_user_id          => goksels.f_get_ssb_id_context,
+         p_create_date      => SYSDATE,
+         p_create_user      => goksels.f_get_ssb_id_context,
+         p_rowid_out        => lv_hold_rowid);
+
+         gb_common.P_Commit;
+
+         bwgkprxy.P_SendEmail (lv_hold_rowid, lv_message);
 
           -- Update match-n-load tables for insert/update into General Person
           bwgkprxy.P_MatchLoad (?);
