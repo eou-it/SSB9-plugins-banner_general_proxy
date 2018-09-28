@@ -6,6 +6,13 @@ proxyAppControllers.controller('proxyAccountSummaryController',['$scope', '$root
 
         $scope.accountSummary = {};
         $scope.studentName = proxyAppService.getStudentName();
+        $scope.payvendUrl = null;
+        $scope.payvendVendor = null;
+
+        proxyAppService.getConfiguration().$promise.then(function(response) {
+            $scope.payvendUrl = response.PAYVEND_URL;
+            $scope.payvendVendor = response.PAYVEND_VENDOR;
+        });
 
         proxyAppService.getAccountSummary({pidm: $stateParams.pidm}).$promise.then(function(response) {
             $scope.accountSummary = response;

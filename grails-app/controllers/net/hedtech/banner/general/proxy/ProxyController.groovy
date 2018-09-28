@@ -24,6 +24,7 @@ class ProxyController {
     def termProxyService
     def gradesProxyService
     def awardHistoryProxyService
+    def proxyConfigurationService
 
     def landingPage() {
         try {
@@ -253,6 +254,21 @@ class ProxyController {
         def result = generalSsbProxyService.getAccountSummary(params.pidm);
 
         render result as JSON
+    }
+
+    def getConfig() {
+        try {
+            def map = [:]
+            proxyConfigurationService.getProxyParams().each {
+                // Web Tailor parameter values cannot be null so will come in here as "<UPDATE ME>" for a "non-value".
+                // We change it to null for use in the front end.
+                map[it.key] = (it.value == '<UPDATE ME>') ? null : it.value
+            }
+
+            render map as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
     }
 
     private def fixJSONObjectForCast(JSONObject json) {
