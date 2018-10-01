@@ -6,12 +6,10 @@ package net.hedtech.banner.general.proxy
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.i18n.MessageHelper
-import net.hedtech.banner.student.history.HistoryTermForStudentGrades
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
 
 import net.hedtech.banner.general.PersonalInformationControllerUtility
-import net.hedtech.banner.general.system.Term
 import net.hedtech.banner.security.XssSanitizer
 
 /**
@@ -24,7 +22,7 @@ class ProxyController {
     def personRelatedHoldService
     def termProxyService
     def gradesProxyService
-    def awardHistoryProxyService
+    def proxyFinAidService
 
     def landingPage() {
         try {
@@ -193,7 +191,7 @@ class ProxyController {
      */
     def getAidYears(params) {
         def map = PersonalInformationControllerUtility.getFetchListParams(params)
-        def aidYears = generalSsbProxyService.fetchAidYearList(map.max, map.offset, map.searchString)
+        def aidYears = proxyFinAidService.fetchAidYearList(map.max, map.offset, map.searchString)
         try {
             render aidYears as JSON
         } catch (ApplicationException e) {
@@ -235,7 +233,7 @@ class ProxyController {
     }
 
     def getAwardPackage() {
-        def result = generalSsbProxyService.getAwardPackage(params.pidm, params.aidYear);
+        def result = proxyFinAidService.getAwardPackage(params.pidm, params.aidYear);
 
         render result as JSON
     }
@@ -246,7 +244,7 @@ class ProxyController {
      *
      */
     def getAwardHistory() {
-        def result = awardHistoryProxyService.getAwardHistory(XssSanitizer.sanitize(params.pidm));
+        def result = proxyFinAidService.getAwardHistory(XssSanitizer.sanitize(params.pidm));
         render result as JSON
     }
 
