@@ -64,7 +64,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     $scope.flashMessage = response.message;
 
                     notificationCenterService.clearNotifications();
-                    notificationCenterService.addNotification(response.message, "error");
+                    notificationCenterService.addNotification(response.message, "error",true);
 
                     if ($('#breadcrumb-panel').is(":visible"))
                         $("#breadcrumb-panel").hide();
@@ -74,7 +74,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     $rootScope.profileRequired = false;
 
                     notificationCenterService.clearNotifications();
-                    notificationCenterService.addNotification('proxy.personalinformation.label.saveSuccces',"success");
+                    notificationCenterService.addNotification('proxy.personalinformation.label.saveSuccces',"success",true);
 
                     if (!$('#breadcrumb-panel').is(":visible"))
                         $("#breadcrumb-panel").show();
