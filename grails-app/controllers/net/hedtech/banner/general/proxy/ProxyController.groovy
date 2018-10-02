@@ -8,8 +8,6 @@ import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.i18n.MessageHelper
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
-
-import net.hedtech.banner.general.system.Term
 import net.hedtech.banner.security.XssSanitizer
 
 /**
@@ -24,6 +22,7 @@ class ProxyController {
     def gradesProxyService
     def proxyFinAidService
     def proxyConfigurationService
+    def directDepositAccountCompositeService
 
     def landingPage() {
         try {
@@ -153,6 +152,9 @@ class ProxyController {
      */
     def getHolds() {
         def result = personRelatedHoldService.getWebDisplayableHolds(XssSanitizer.sanitize(params.pidm));
+        result.rows?.each {
+            it.r_amount_owed = directDepositAccountCompositeService.formatCurrency(it.r_amount_owed)
+        }
 
         render result as JSON
     }
@@ -246,13 +248,59 @@ class ProxyController {
      */
     def getAwardHistory() {
         def result = proxyFinAidService.getAwardHistory(XssSanitizer.sanitize(params.pidm));
+        def awards = result.awards?.get(0)
+        /*awards?.data?.rows?.each {
+            if(it.fund_title.equals('AWARD_TOTAL')) {
+                it.accept_amt = directDepositAccountCompositeService.formatCurrency(it.accept_amt)
+                it.cancel_amt = directDepositAccountCompositeService.formatCurrency(it.cancel_amt)
+                it.decline_amt = directDepositAccountCompositeService.formatCurrency(it.decline_amt)
+                it.offer_amt = directDepositAccountCompositeService.formatCurrency(it.offer_amt)
+            }
+            else {
+                it.accept_amt = formatCurrencyDashZeroes(it.accept_amt)
+                it.cancel_amt = formatCurrencyDashZeroes(it.cancel_amt)
+                it.decline_amt = formatCurrencyDashZeroes(it.decline_amt)
+                it.offer_amt = formatCurrencyDashZeroes(it.offer_amt)
+            }
+            it.paid_amt = directDepositAccountCompositeService.formatCurrency(it.paid_amt)
+            it.total_amt = directDepositAccountCompositeService.formatCurrency(it.total_amt)
+        }
+
+        awards?.resources?.each {
+            it.actual_amt = directDepositAccountCompositeService.formatCurrency(it.actual_amt)
+            it.est_amt = directDepositAccountCompositeService.formatCurrency(it.est_amt)
+        }*/
+
         render result as JSON
     }
 
     def getAccountSummary() {
         def result = generalSsbProxyService.getAccountSummary(params.pidm);
+        result.accountBalTxt = directDepositAccountCompositeService.formatCurrency(result.accountBal)
+        result.acctTotalTxt = directDepositAccountCompositeService.formatCurrency(result.acctTotal)
+
+        result.terms?.each {
+            it.termBalance = directDepositAccountCompositeService.formatCurrency(it.termBalance)
+            it.termCharge = directDepositAccountCompositeService.formatCurrency(it.termCharge)
+            it.termPay = directDepositAccountCompositeService.formatCurrency(it.termPay)
+
+            it.ledger.each {
+                it.balance = formatCurrencyDashZeroes(it.balance)
+                it.charge = formatCurrencyDashZeroes(it.charge)
+                it.payment = formatCurrencyDashZeroes(it.payment)
+            }
+        }
 
         render result as JSON
+    }
+
+    private def formatCurrencyDashZeroes(def value) {
+        def result = '-'
+        if(value != 0) {
+            result = directDepositAccountCompositeService.formatCurrency(value)
+        }
+
+        return result
     }
 
     def getConfig() {
