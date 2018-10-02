@@ -433,10 +433,14 @@ END;
 
       lv_opt_out_adv_date   DATE := SYSDATE;
 
-      lv_info               twgrinfo.twgrinfo_label%TYPE := 'SAVED';
+      lv_info               twgrinfo.twgrinfo_label%TYPE;
       
       lv_hold_rowid         gb_common.internal_record_id_type;
       lv_message            VARCHAR2 (30000);
+      
+      lv_email1             gpbprxy.gpbprxy_email_address%TYPE;
+      lv_email2             gpbprxy.gpbprxy_email_address%TYPE;
+
 
          FUNCTION f_validate_date (p_date VARCHAR2)
            RETURN VARCHAR2
@@ -555,7 +559,28 @@ END;
           bwgkprxy.P_MatchLoad (?);
 
           gb_common.P_Commit;
+          
+      -- Email address change requested by proxy
+      
+      lv_email1 := TRIM(LOWER (lv_GPBPRXY_rec.R_EMAIL_ADDRESS));
+      lv_email2 := TRIM(LOWER (?));
+      IF goksels.f_clean_text(lv_email2) IS NOT NULL AND lv_email1 <> lv_email2
+      THEN
+         -- Fetch a proxy record based on new email address
+         -- If you find existing record then don't make the change
+         lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One_By_Email (lv_email2);
 
+         FETCH lv_GPBPRXY_ref INTO lv_GPBPRXY_rec;
+
+         IF lv_GPBPRXY_ref%FOUND
+         THEN
+            lv_info := 'EMAIL_DUPLICATE';
+            CLOSE lv_GPBPRXY_ref;
+         END IF;
+      END IF;
+         
+         ? := lv_info;
+         
       END ;
 
           """

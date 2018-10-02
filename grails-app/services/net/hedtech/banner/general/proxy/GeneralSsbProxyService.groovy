@@ -11,6 +11,7 @@ import net.hedtech.banner.proxy.api.PinManagementApi
 import net.hedtech.banner.proxy.api.CourseScheduleApi
 
 import org.apache.log4j.Logger
+import net.hedtech.banner.i18n.MessageHelper
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.context.request.RequestContextHolder
@@ -415,6 +416,8 @@ class GeneralSsbProxyService {
 
     def updateProxyProfile(def params) {
 
+        def  errorMsgOut = ""
+
         def updateRulesErrors = checkProxyProfileDataOnUpdate(params)
 
         if (updateRulesErrors){
@@ -436,8 +439,16 @@ class GeneralSsbProxyService {
                            params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
                            params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
                            params.p_city, params.p_stat_code?.code ?: "", params.p_zip, params.p_cnty_code?.code ?: "", params.p_natn_code?.code ?: "",
-                           params.p_sex, bDate, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", p_proxyIDM, p_proxyIDM, p_proxyIDM
-                          ])
+                           params.p_sex, bDate, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", p_proxyIDM, p_proxyIDM, p_proxyIDM, params.p_email_address, Sql.VARCHAR
+        ]){ errorMsg ->
+            errorMsgOut = errorMsg
+        }
+
+        if (errorMsgOut){
+            throw new ApplicationException("", MessageHelper.message("proxy.personalinformation.invalid." + errorMsgOut))
+        }
+
+
 
     }
 
