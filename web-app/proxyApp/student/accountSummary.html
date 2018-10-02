@@ -10,6 +10,9 @@
         </div>
         <div ng-if="accountSummary.accountBal">
             <h2>{{'proxy.acctSummary.label.summaryAcctBalance'|i18n}} {{accountSummary.accountBal}}</h2>
+            <div ng-if="payvendUrl && payvendVendor">
+                <a ng-href="{{payvendUrl}}" target="_blank">{{payvendVendor}}</a>
+            </div>
             <table ng-repeat="term in accountSummary.terms">
                 <caption>{{term.termDesc}}</caption>
                 <thead>

@@ -59,6 +59,7 @@ modules = {
         // Services
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/breadcrumb-service.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/proxyApp-service.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/notificationcenter-service.js']
 
         // Controllers
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/gssLandingPage-controller.js']
