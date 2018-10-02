@@ -1,5 +1,6 @@
 package net.hedtech.banner.general.proxy
 
+import net.hedtech.banner.general.person.PersonUtility
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 import org.junit.After
 import org.junit.Before
@@ -26,7 +27,6 @@ class ProxyFinAidServiceIntegrationTests extends BaseIntegrationTestCase {
     @Test
     void testFetchAidYearList() {
         def result = proxyFinAidService.fetchAidYearList()
-        println result
 
         assertTrue 2 <= result.size()
         assertTrue result.code.contains('1819')
@@ -41,10 +41,10 @@ class ProxyFinAidServiceIntegrationTests extends BaseIntegrationTestCase {
 
     @Test
     void testGetAwardPackage() {
-        def result = proxyFinAidService.getAwardPackage(37461, '1819')
-        println result
+        def pidm = PersonUtility.getPerson("GDP000005").pidm
+        def result = proxyFinAidService.getAwardPackage(pidm, '1819')
 
-        assertNotNull result.unassignedSchedule
-        assertEquals 'BIOL', result.unassignedSchedule[0].crse_subj_code
+        assertNotNull result
+        assertEquals 0, result.size()
     }
 }

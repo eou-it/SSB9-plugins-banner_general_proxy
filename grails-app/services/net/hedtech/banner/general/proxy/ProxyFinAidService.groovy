@@ -48,7 +48,6 @@ class ProxyFinAidService {
     }
 
     def getAwardPackage(def pidm, def aidYear) {
-        //def sqlText = sqlFileLoadService.getSqlTextMap().getRorwebrRec?.sqlText
         def sqlText = FinAidAwardPackageApi.GET_RORWEBRREC
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         def result = [:]
@@ -61,24 +60,20 @@ class ProxyFinAidService {
             result.aidYearDesc = rorwebrRec.aidYearDesc
 
             if(rorwebrRec.need_calc_ind.equals('Y')) {
-                //sqlText = sqlFileLoadService.getSqlTextMap().getNeedCalculation?.sqlText
                 sqlText = FinAidAwardPackageApi.GET_NEED_CALCULATION
                 result.needsCalc = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
             }
 
             if(rorwebrRec.housing_status_ind.equals('Y')) {
-                //sqlText = sqlFileLoadService.getSqlTextMap().getHousingStatus?.sqlText
                 sqlText = FinAidAwardPackageApi.GET_HOUSING_STATUS
                 result.housingStatuses = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
             }
 
             if(rorwebrRec.enrollment_status.equals('F') || rorwebrRec.enrollment_status.equals('T')) {
                 if(rorwebrRec.aid_year >= 2015) {
-                    //sqlText = sqlFileLoadService.getSqlTextMap().getNewEnrollment?.sqlText
                     sqlText = FinAidAwardPackageApi.GET_NEW_ENROLLMENT
                 }
                 else {
-                    //sqlText = sqlFileLoadService.getSqlTextMap().getEnrollment?.sqlText
                     sqlText = FinAidAwardPackageApi.GET_ENROLLMENT
                 }
 
@@ -92,18 +87,15 @@ class ProxyFinAidService {
             }
 
             if(rorwebrRec.coa_ind.equals('Y')) {
-                //sqlText = sqlFileLoadService.getSqlTextMap().getCostOfAttendance?.sqlText
                 sqlText = FinAidAwardPackageApi.GET_COST_OF_ATTENDANCE
                 result.costOfAttendance = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
             }
 
             if(rorwebrRec.cum_loan_ind.equals('Y')) {
-                sqlText = sqlFileLoadService.getSqlTextMap().getCumLoanInfo?.sqlText
                 sqlText = FinAidAwardPackageApi.GET_CUM_LOAN_INFO
                 result.loanInfo = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
             }
 
-            //sqlText = sqlFileLoadService.getSqlTextMap().getAwardInfo?.sqlText
             sqlText = FinAidAwardPackageApi.GET_AWARD_INFO
             String awardInfoJson = ''
             String periodInfoJson = ''
