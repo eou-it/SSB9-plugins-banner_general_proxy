@@ -142,15 +142,11 @@ DECLARE
     RETURN lv_info_access;
   END f_getinfoaccess;
 --  
-  FUNCTION F_CheckMaxAmount(amt NUMBER) RETURN VARCHAR2 IS
+  FUNCTION F_CheckMaxAmount(amt NUMBER) RETURN NUMBER IS
   BEGIN
-    RETURN to_char(LEAST(NVL(amt, 0), m_resource_max), 'L999G999G999D99');
+    RETURN LEAST(NVL(amt, 0), m_resource_max);
   END F_CheckMaxAmount;
 --
-  FUNCTION F_CheckTotalMaxAmount(amt NUMBER) RETURN VARCHAR2 IS
-  BEGIN
-    RETURN to_char(LEAST(NVL(amt, 0), m_total_resource_max), 'L999G999G999G999D99');
-  END F_CheckTotalMaxAmount;
   
   FUNCTION f_gettermdesc(term stvterm.stvterm_code%TYPE) RETURN VARCHAR2 IS
   BEGIN
@@ -232,8 +228,8 @@ DECLARE
         lv_resource_json := lv_resource_json || '{' ||
                       '"resource_desc" ' || ':' || '"' || resources_r.resource_desc || '"' ||
                       ',"term_code" ' || ':'  || '"' || f_gettermdesc(resources_r.term_code) || '"' ||
-                      ',"est_amt" ' || ':'  || '"' || F_CheckMaxAmount(resources_r.est_amt) || '"' ||
-                      ',"actual_amt" ' || ':'  || '"' || F_CheckMaxAmount(resources_r.actual_amt) || '"' || '},'; 
+                      ',"est_amt" ' || ':'  || F_CheckMaxAmount(resources_r.est_amt) ||
+                      ',"actual_amt" ' || ':'  || F_CheckMaxAmount(resources_r.actual_amt) || '},'; 
 --
         total_est_amt    := total_est_amt + NVL(resources_r.est_amt, 0);
         total_actual_amt := total_actual_amt + NVL(resources_r.actual_amt, 0);
@@ -255,15 +251,15 @@ DECLARE
 --        
         lv_resources_total_json := lv_resources_total_json || '"resource_desc" ' || ':'  || '"RESOURCE_TOTAL"';
         lv_resources_total_json := lv_resources_total_json || ',"term_code" ' || ':'  || '""';
-        lv_resources_total_json := lv_resources_total_json || ',"est_amt" ' || ':'  || '"' ||  TRIM(to_char(total_est_amt, 'L999G999G999D99')) || '"';
-        lv_resources_total_json := lv_resources_total_json || ',"actual_amt" ' || ':'  || '"' || TRIM(to_char(total_actual_amt, 'L999G999G999D99')) || '"' || '}';
+        lv_resources_total_json := lv_resources_total_json || ',"est_amt" ' || ':'  || total_est_amt;
+        lv_resources_total_json := lv_resources_total_json || ',"actual_amt" ' || ':'  || total_actual_amt || '}';
 --      
         IF total_est_amt <> 0 THEN
           lv_resources_calc_total_json := ', {';
           lv_resources_total_json := lv_resources_total_json || lv_resources_calc_total_json || '"resource_desc" ' || ':'  || '"CALCULATED_RESOURCE"';
-          lv_resources_total_json := lv_resources_total_json || ',"term_code" ' || ':'  || '"'||'Total '|| TRIM(to_char(total_cal_amt, 'L999G999G999D99')) || '"';
+          lv_resources_total_json := lv_resources_total_json || ',"term_code" ' || ':'  || '""';
           lv_resources_total_json := lv_resources_total_json || ',"est_amt" ' || ':'  || '""';
-          lv_resources_total_json := lv_resources_total_json || ',"actual_amt" ' || ':'  || '""' || '}';
+          lv_resources_total_json := lv_resources_total_json || ',"actual_amt" ' || ':'  || total_cal_amt || '}';
         END IF;
 --       
         lv_resources_total_json := lv_resource_json || lv_resources_total_json || ']';
@@ -352,10 +348,10 @@ DECLARE
         
                  lv_award_json := lv_award_json || '{' ||
                       '"fund_title" ' || ':' || '"' || award_dtl_rec.rfrbase_fund_title || '"' ||
-                      ',"offer_amt" ' || ':'  || '"' || TRIM(to_char(award_dtl_rec.rprawrd_offer_amt, 'L999G999G999D99')) || '"' ||
-                      ',"accept_amt" ' || ':'  || '"' || TRIM(to_char(award_dtl_rec.rprawrd_accept_amt, 'L999G999G999D99')) || '"' ||
-                      ',"decline_amt" ' || ':'  || '"' || TRIM(to_char(award_dtl_rec.rprawrd_decline_amt, 'L999G999G999D99')) || '"' ||
-                      ',"cancel_amt" ' || ':'  || '"' || TRIM(to_char(award_dtl_rec.rprawrd_cancel_amt, 'L999G999G999D99')) || '"' ;
+                      ',"offer_amt" ' || ':' || NVL(award_dtl_rec.rprawrd_offer_amt,0) ||
+                      ',"accept_amt" ' || ':'  || NVL(award_dtl_rec.rprawrd_accept_amt,0) ||
+                      ',"decline_amt" ' || ':'  || NVL(award_dtl_rec.rprawrd_decline_amt,0) ||
+                      ',"cancel_amt" ' || ':'  || NVL(award_dtl_rec.rprawrd_cancel_amt,0);
                       
                       total_offer_amt := total_offer_amt + NVL(award_dtl_rec.rprawrd_offer_amt,0); 
                       total_accept_amt := total_accept_amt + NVL(award_dtl_rec.rprawrd_accept_amt,0); 
@@ -363,20 +359,20 @@ DECLARE
                       total_cancel_amt := total_cancel_amt + NVL(award_dtl_rec.rprawrd_cancel_amt,0); 
                                    
                     IF award_dtl_rec.rprawrd_offer_amt IS NOT NULL THEN   
-                      lv_award_json := lv_award_json || ',"total_amt" ' || ':'  || '"' || TRIM(to_char(award_dtl_rec.rprawrd_offer_amt, 'L999G999G999D99')) || '"';
+                      lv_award_json := lv_award_json || ',"total_amt" ' || ':'  || award_dtl_rec.rprawrd_offer_amt;
                         
                         total_total_amt := total_total_amt + award_dtl_rec.rprawrd_offer_amt;
                     ELSE
-                       lv_award_json := lv_award_json || ',"total_amt" ' || ':'  || '"' || TRIM(to_char(0, 'L0D99')) || '"';
+                       lv_award_json := lv_award_json || ',"total_amt" ' || ':'  || 0;
                     END IF;
                     
                     
                     IF award_dtl_rec.rprawrd_paid_amt IS NOT NULL THEN   
-                      lv_award_json := lv_award_json || ',"paid_amt" ' || ':'  || '"' || TRIM(to_char(award_dtl_rec.rprawrd_paid_amt, 'L999G999G999D99')) || '"';
+                      lv_award_json := lv_award_json || ',"paid_amt" ' || ':'  || award_dtl_rec.rprawrd_paid_amt;
                         
                         total_paid_amt := total_paid_amt + award_dtl_rec.rprawrd_paid_amt;
                     ELSE
-                       lv_award_json := lv_award_json || ',"paid_amt" ' || ':'  || '"' || TRIM(to_char(0, 'L0D99')) || '"';
+                       lv_award_json := lv_award_json || ',"paid_amt" ' || ':'  || 0;
                     END IF;
                                       
                     lv_award_json := lv_award_json || '},';
@@ -393,41 +389,17 @@ DECLARE
         
         lv_award_total_json := lv_award_total_json || ',"fund_title" ' || ':'  || '"AWARD_TOTAL"';
         
-        IF total_offer_amt != 0 THEN 
-          lv_award_total_json := lv_award_total_json || ',"offer_amt" ' || ':'  || '"' || TRIM(to_char(total_offer_amt, 'L999G999G999D99')) || '"';
-        ELSE 
-          lv_award_total_json := lv_award_total_json || ',"offer_amt" ' || ':'  || '"' || TRIM(to_char(0, 'L0D99')) || '"';
-        END IF;
+        lv_award_total_json := lv_award_total_json || ',"offer_amt" ' || ':'  || total_offer_amt;
 
-        IF total_accept_amt != 0 THEN
-            lv_award_total_json := lv_award_total_json || ',"accept_amt" ' || ':'  || '"' || TRIM(to_char(total_accept_amt, 'L999G999G999D99')) || '"';
-        ELSE
-            lv_award_total_json := lv_award_total_json || ',"accept_amt" ' || ':'  || '"' || TRIM(to_char(0, 'L0D99')) || '"';
-        END IF;
+        lv_award_total_json := lv_award_total_json || ',"accept_amt" ' || ':'  || total_accept_amt;
 
-        IF total_decline_amt != 0 THEN
-           lv_award_total_json := lv_award_total_json || ',"decline_amt" ' || ':'  || '"' || TRIM(to_char(total_decline_amt, 'L999G999G999D99')) || '"';
-        ELSE 
-          lv_award_total_json := lv_award_total_json || ',"decline_amt" ' || ':'  || '"' || TRIM(to_char(0, 'L0D99')) || '"';
-        END IF;
+        lv_award_total_json := lv_award_total_json || ',"decline_amt" ' || ':'  || total_decline_amt;
 
-        IF total_cancel_amt != 0 THEN
-          lv_award_total_json := lv_award_total_json || ',"cancel_amt" ' || ':'  || '"' || TRIM(to_char(total_cancel_amt, 'L999G999G999D99')) || '"';
-        ELSE
-          lv_award_total_json := lv_award_total_json || ',"cancel_amt" ' || ':'  || '"' || TRIM(to_char(0, 'L0D99')) || '"';
-        END IF; 
+        lv_award_total_json := lv_award_total_json || ',"cancel_amt" ' || ':' || total_cancel_amt;
 
-        IF total_total_amt != 0 THEN 
-          lv_award_total_json := lv_award_total_json || ',"total_amt" ' || ':'  || '"' || TRIM(to_char(total_total_amt, 'L999G999G999D99')) || '"';
-        ELSE
-          lv_award_total_json := lv_award_total_json || ',"total_amt" ' || ':'  || '"' || TRIM(to_char(0, 'L0D99')) || '"';
-        END IF;
+        lv_award_total_json := lv_award_total_json || ',"total_amt" ' || ':'  || total_total_amt;
 
-        IF total_paid_amt != 0 THEN
-        lv_award_total_json := lv_award_total_json || ',"paid_amt" ' || ':'  || '"' || TRIM(to_char(total_paid_amt, 'L999G999G999D99')) || '"';
-        ELSE
-          lv_award_total_json := lv_award_total_json || ',"paid_amt" ' || ':'  || '"' || TRIM(to_char(0, 'L0D99')) || '"';
-        END IF;
+        lv_award_total_json := lv_award_total_json || ',"paid_amt" ' || ':'  || total_paid_amt;
         
         lv_award_total_json :=  lv_award_total_json || '}';
         

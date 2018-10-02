@@ -248,28 +248,28 @@ class ProxyController {
      */
     def getAwardHistory() {
         def result = proxyFinAidService.getAwardHistory(XssSanitizer.sanitize(params.pidm));
-        def awards = result.awards?.get(0)
-        /*awards?.data?.rows?.each {
-            if(it.fund_title.equals('AWARD_TOTAL')) {
-                it.accept_amt = directDepositAccountCompositeService.formatCurrency(it.accept_amt)
-                it.cancel_amt = directDepositAccountCompositeService.formatCurrency(it.cancel_amt)
-                it.decline_amt = directDepositAccountCompositeService.formatCurrency(it.decline_amt)
-                it.offer_amt = directDepositAccountCompositeService.formatCurrency(it.offer_amt)
+        result.awards?.each {
+            it.data?.rows?.each {
+                if (it.fund_title.equals('AWARD_TOTAL')) {
+                    it.accept_amt = directDepositAccountCompositeService.formatCurrency(it.accept_amt)
+                    it.cancel_amt = directDepositAccountCompositeService.formatCurrency(it.cancel_amt)
+                    it.decline_amt = directDepositAccountCompositeService.formatCurrency(it.decline_amt)
+                    it.offer_amt = directDepositAccountCompositeService.formatCurrency(it.offer_amt)
+                } else {
+                    it.accept_amt = formatCurrencyDashZeroes(it.accept_amt)
+                    it.cancel_amt = formatCurrencyDashZeroes(it.cancel_amt)
+                    it.decline_amt = formatCurrencyDashZeroes(it.decline_amt)
+                    it.offer_amt = formatCurrencyDashZeroes(it.offer_amt)
+                }
+                it.paid_amt = directDepositAccountCompositeService.formatCurrency(it.paid_amt)
+                it.total_amt = directDepositAccountCompositeService.formatCurrency(it.total_amt)
             }
-            else {
-                it.accept_amt = formatCurrencyDashZeroes(it.accept_amt)
-                it.cancel_amt = formatCurrencyDashZeroes(it.cancel_amt)
-                it.decline_amt = formatCurrencyDashZeroes(it.decline_amt)
-                it.offer_amt = formatCurrencyDashZeroes(it.offer_amt)
-            }
-            it.paid_amt = directDepositAccountCompositeService.formatCurrency(it.paid_amt)
-            it.total_amt = directDepositAccountCompositeService.formatCurrency(it.total_amt)
-        }
 
-        awards?.resources?.each {
-            it.actual_amt = directDepositAccountCompositeService.formatCurrency(it.actual_amt)
-            it.est_amt = directDepositAccountCompositeService.formatCurrency(it.est_amt)
-        }*/
+            it?.resources?.each {
+                it.actual_amt = directDepositAccountCompositeService.formatCurrency(it.actual_amt)
+                it.est_amt = directDepositAccountCompositeService.formatCurrency(it.est_amt)
+            }
+        }
 
         render result as JSON
     }
