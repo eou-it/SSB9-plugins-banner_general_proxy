@@ -23,7 +23,7 @@
         <div>
             <h3>Cost of Attendance</h3>
             <p ng-repeat="budget in awardPackage.costOfAttendance.budgets">{{budget.desc}}: {{budget.amount}}</p>
-            <p>Total: {{awardPackage.costOfAttendance.total}}</p>
+            <p>Total: {{awardPackage.costOfAttendance.totalTxt}}</p>
         </div>
         <div>
             <h3>Housing Status</h3>
@@ -73,11 +73,11 @@
                     <tr>
                         <td>Total</td>
                         <td></td>
-                        <td>{{awardPackage.awardInfo.aidYearAwards.totalOfferAmt}}</td>
-                        <td>{{awardPackage.awardInfo.aidYearAwards.totalAcceptAmt}}</td>
-                        <td>{{awardPackage.awardInfo.aidYearAwards.totalDeclineAmt}}</td>
-                        <td>{{awardPackage.awardInfo.aidYearAwards.totalCancelAmt}}</td>
-                        <td>{{awardPackage.awardInfo.aidYearAwards.totalAmt}}</td>
+                        <td>{{awardPackage.awardInfo.aidYearAwards.totalOfferAmtTxt}}</td>
+                        <td>{{awardPackage.awardInfo.aidYearAwards.totalAcceptAmtTxt}}</td>
+                        <td>{{awardPackage.awardInfo.aidYearAwards.totalDeclineAmtTxt}}</td>
+                        <td>{{awardPackage.awardInfo.aidYearAwards.totalCancelAmtTxt}}</td>
+                        <td>{{awardPackage.awardInfo.aidYearAwards.totalAmtTxt}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -104,7 +104,7 @@
                     <tr ng-repeat-end>
                         <td>Totals</td>
                         <td></td>
-                        <td>{{period.total}}</td>
+                        <td>{{period.totalTxt}}</td>
                     </tr>
                 </tbody>
             </table>

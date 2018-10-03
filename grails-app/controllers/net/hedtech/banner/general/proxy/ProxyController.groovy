@@ -229,14 +229,61 @@ class ProxyController {
      * Gets the financial aid status model for the student
      *
      */
-    def getFinancialAidStatus(){
+    def getFinancialAidStatus() {
         def result = generalSsbProxyService.getFinancialAidStatus(params.pidm, params.aidYear)
+        result.awardPackage?.each {
+            if(it.amount != null) {
+                it.text = it.text + directDepositAccountCompositeService.formatCurrency(it.amount) + '.'
+            }
+        }
+        result.costOfAttendance?.each {
+            if(it.amount != null) {
+                it.text = it.text + directDepositAccountCompositeService.formatCurrency(it.amount) + '.'
+            }
+        }
 
         render result as JSON
     }
 
     def getAwardPackage() {
         def result = proxyFinAidService.getAwardPackage(params.pidm, params.aidYear);
+        result.needsCalc?.attendanceCost = directDepositAccountCompositeService.formatCurrency(result.needsCalc?.attendanceCost)
+        result.needsCalc?.familyContrib = directDepositAccountCompositeService.formatCurrency(result.needsCalc?.familyContrib)
+        result.needsCalc?.initialNeed = directDepositAccountCompositeService.formatCurrency(result.needsCalc?.initialNeed)
+        result.needsCalc?.need = directDepositAccountCompositeService.formatCurrency(result.needsCalc?.need)
+        result.needsCalc?.outsideResrc = directDepositAccountCompositeService.formatCurrency(result.needsCalc?.outsideResrc)
+
+        result.costOfAttendance?.budgets?.each {
+            it.amount = directDepositAccountCompositeService.formatCurrency(it.amount)
+        }
+        result.costOfAttendance?.totalTxt = directDepositAccountCompositeService.formatCurrency(result.costOfAttendance?.total)
+
+        result.loanInfo?.subsidized = directDepositAccountCompositeService.formatCurrency(result.loanInfo?.subsidized)
+        result.loanInfo?.unsubsidized = directDepositAccountCompositeService.formatCurrency(result.loanInfo?.unsubsidized)
+        result.loanInfo?.gradPlus = directDepositAccountCompositeService.formatCurrency(result.loanInfo?.gradPlus)
+        result.loanInfo?.parentPlus = directDepositAccountCompositeService.formatCurrency(result.loanInfo?.parentPlus)
+        result.loanInfo?.perkins = directDepositAccountCompositeService.formatCurrency(result.loanInfo?.perkins)
+        result.loanInfo?.directUnsub = directDepositAccountCompositeService.formatCurrency(result.loanInfo?.directUnsub)
+
+        result.awardInfo?.aidYearAwards?.aidAwards?.each {
+            it.acceptAmt = formatCurrencyDashZeroes(it.acceptAmt)
+            it.amount = formatCurrencyDashZeroes(it.amount)
+            it.cancelAmt = formatCurrencyDashZeroes(it.cancelAmt)
+            it.declineAmt = formatCurrencyDashZeroes(it.declineAmt)
+            it.offerAmt = formatCurrencyDashZeroes(it.offerAmt)
+        }
+        result.awardInfo?.aidYearAwards?.totalAcceptAmtTxt = directDepositAccountCompositeService.formatCurrency(result.awardInfo?.aidYearAwards?.totalAcceptAmt)
+        result.awardInfo?.aidYearAwards?.totalAmtTxt = directDepositAccountCompositeService.formatCurrency(result.awardInfo?.aidYearAwards?.totalAmt)
+        result.awardInfo?.aidYearAwards?.totalCancelAmtTxt = directDepositAccountCompositeService.formatCurrency(result.awardInfo?.aidYearAwards?.totalCancelAmt)
+        result.awardInfo?.aidYearAwards?.totalDeclineAmtTxt = directDepositAccountCompositeService.formatCurrency(result.awardInfo?.aidYearAwards?.totalDeclineAmt)
+        result.awardInfo?.aidYearAwards?.totalOfferAmtTxt = directDepositAccountCompositeService.formatCurrency(result.awardInfo?.aidYearAwards?.totalOfferAmt)
+
+        result.periodInfo?.periods?.each {
+            it.periodAwards.each {
+                it.amount = formatCurrencyDashZeroes(it.amount)
+            }
+            it.totalTxt = directDepositAccountCompositeService.formatCurrency(it.total)
+        }
 
         render result as JSON
     }
