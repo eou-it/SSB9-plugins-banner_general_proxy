@@ -153,7 +153,11 @@ class ProxyController {
     def getHolds() {
         def result = personRelatedHoldService.getWebDisplayableHolds(XssSanitizer.sanitize(params.pidm));
         result.rows?.each {
-            it.r_amount_owed = directDepositAccountCompositeService.formatCurrency(it.r_amount_owed)
+            def amountTxt = '-'
+            if(it.r_amount_owed && it.r_amount_owed != 0) {
+                amountTxt = directDepositAccountCompositeService.formatCurrency(it.r_amount_owed)
+            }
+            it.r_amount_owed = amountTxt
         }
 
         render result as JSON
