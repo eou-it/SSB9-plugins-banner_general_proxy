@@ -22,7 +22,7 @@ class ProxyController {
     def gradesProxyService
     def proxyFinAidService
     def proxyConfigurationService
-    def directDepositAccountCompositeService
+    def currencyFormatHelperService
 
     def landingPage() {
         try {
@@ -155,7 +155,7 @@ class ProxyController {
         result.rows?.each {
             def amountTxt = '-'
             if(it.r_amount_owed && it.r_amount_owed != 0) {
-                amountTxt = directDepositAccountCompositeService.formatCurrency(it.r_amount_owed)
+                amountTxt = currencyFormatHelperService.formatCurrency(it.r_amount_owed)
             }
             it.r_amount_owed = amountTxt
         }
@@ -237,12 +237,12 @@ class ProxyController {
         def result = generalSsbProxyService.getFinancialAidStatus(params.pidm, params.aidYear)
         result.awardPackage?.each {
             if(it.amount != null) {
-                it.text = it.text + directDepositAccountCompositeService.formatCurrency(it.amount) + '.'
+                it.text = it.text + currencyFormatHelperService.formatCurrency(it.amount) + '.'
             }
         }
         result.costOfAttendance?.each {
             if(it.amount != null) {
-                it.text = it.text + directDepositAccountCompositeService.formatCurrency(it.amount) + '.'
+                it.text = it.text + currencyFormatHelperService.formatCurrency(it.amount) + '.'
             }
         }
 
@@ -251,23 +251,23 @@ class ProxyController {
 
     def getAwardPackage() {
         def result = proxyFinAidService.getAwardPackage(params.pidm, params.aidYear);
-        result.needsCalc?.attendanceCost = directDepositAccountCompositeService.formatCurrency(result.needsCalc?.attendanceCost)
-        result.needsCalc?.familyContrib = directDepositAccountCompositeService.formatCurrency(result.needsCalc?.familyContrib)
-        result.needsCalc?.initialNeed = directDepositAccountCompositeService.formatCurrency(result.needsCalc?.initialNeed)
-        result.needsCalc?.need = directDepositAccountCompositeService.formatCurrency(result.needsCalc?.need)
-        result.needsCalc?.outsideResrc = directDepositAccountCompositeService.formatCurrency(result.needsCalc?.outsideResrc)
+        result.needsCalc?.attendanceCost = currencyFormatHelperService.formatCurrency(result.needsCalc?.attendanceCost)
+        result.needsCalc?.familyContrib = currencyFormatHelperService.formatCurrency(result.needsCalc?.familyContrib)
+        result.needsCalc?.initialNeed = currencyFormatHelperService.formatCurrency(result.needsCalc?.initialNeed)
+        result.needsCalc?.need = currencyFormatHelperService.formatCurrency(result.needsCalc?.need)
+        result.needsCalc?.outsideResrc = currencyFormatHelperService.formatCurrency(result.needsCalc?.outsideResrc)
 
         result.costOfAttendance?.budgets?.each {
-            it.amount = directDepositAccountCompositeService.formatCurrency(it.amount)
+            it.amount = currencyFormatHelperService.formatCurrency(it.amount)
         }
-        result.costOfAttendance?.totalTxt = directDepositAccountCompositeService.formatCurrency(result.costOfAttendance?.total)
+        result.costOfAttendance?.totalTxt = currencyFormatHelperService.formatCurrency(result.costOfAttendance?.total)
 
-        result.loanInfo?.subsidized = directDepositAccountCompositeService.formatCurrency(result.loanInfo?.subsidized)
-        result.loanInfo?.unsubsidized = directDepositAccountCompositeService.formatCurrency(result.loanInfo?.unsubsidized)
-        result.loanInfo?.gradPlus = directDepositAccountCompositeService.formatCurrency(result.loanInfo?.gradPlus)
-        result.loanInfo?.parentPlus = directDepositAccountCompositeService.formatCurrency(result.loanInfo?.parentPlus)
-        result.loanInfo?.perkins = directDepositAccountCompositeService.formatCurrency(result.loanInfo?.perkins)
-        result.loanInfo?.directUnsub = directDepositAccountCompositeService.formatCurrency(result.loanInfo?.directUnsub)
+        result.loanInfo?.subsidized = currencyFormatHelperService.formatCurrency(result.loanInfo?.subsidized)
+        result.loanInfo?.unsubsidized = currencyFormatHelperService.formatCurrency(result.loanInfo?.unsubsidized)
+        result.loanInfo?.gradPlus = currencyFormatHelperService.formatCurrency(result.loanInfo?.gradPlus)
+        result.loanInfo?.parentPlus = currencyFormatHelperService.formatCurrency(result.loanInfo?.parentPlus)
+        result.loanInfo?.perkins = currencyFormatHelperService.formatCurrency(result.loanInfo?.perkins)
+        result.loanInfo?.directUnsub = currencyFormatHelperService.formatCurrency(result.loanInfo?.directUnsub)
 
         result.awardInfo?.aidYearAwards?.aidAwards?.each {
             it.acceptAmt = formatCurrencyDashZeroes(it.acceptAmt)
@@ -276,17 +276,17 @@ class ProxyController {
             it.declineAmt = formatCurrencyDashZeroes(it.declineAmt)
             it.offerAmt = formatCurrencyDashZeroes(it.offerAmt)
         }
-        result.awardInfo?.aidYearAwards?.totalAcceptAmtTxt = directDepositAccountCompositeService.formatCurrency(result.awardInfo?.aidYearAwards?.totalAcceptAmt)
-        result.awardInfo?.aidYearAwards?.totalAmtTxt = directDepositAccountCompositeService.formatCurrency(result.awardInfo?.aidYearAwards?.totalAmt)
-        result.awardInfo?.aidYearAwards?.totalCancelAmtTxt = directDepositAccountCompositeService.formatCurrency(result.awardInfo?.aidYearAwards?.totalCancelAmt)
-        result.awardInfo?.aidYearAwards?.totalDeclineAmtTxt = directDepositAccountCompositeService.formatCurrency(result.awardInfo?.aidYearAwards?.totalDeclineAmt)
-        result.awardInfo?.aidYearAwards?.totalOfferAmtTxt = directDepositAccountCompositeService.formatCurrency(result.awardInfo?.aidYearAwards?.totalOfferAmt)
+        result.awardInfo?.aidYearAwards?.totalAcceptAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalAcceptAmt)
+        result.awardInfo?.aidYearAwards?.totalAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalAmt)
+        result.awardInfo?.aidYearAwards?.totalCancelAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalCancelAmt)
+        result.awardInfo?.aidYearAwards?.totalDeclineAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalDeclineAmt)
+        result.awardInfo?.aidYearAwards?.totalOfferAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalOfferAmt)
 
         result.periodInfo?.periods?.each {
             it.periodAwards.each {
                 it.amount = formatCurrencyDashZeroes(it.amount)
             }
-            it.totalTxt = directDepositAccountCompositeService.formatCurrency(it.total)
+            it.totalTxt = currencyFormatHelperService.formatCurrency(it.total)
         }
 
         render result as JSON
@@ -302,23 +302,23 @@ class ProxyController {
         result.awards?.each {
             it.data?.rows?.each {
                 if (it.fund_title.equals('AWARD_TOTAL')) {
-                    it.accept_amt = directDepositAccountCompositeService.formatCurrency(it.accept_amt)
-                    it.cancel_amt = directDepositAccountCompositeService.formatCurrency(it.cancel_amt)
-                    it.decline_amt = directDepositAccountCompositeService.formatCurrency(it.decline_amt)
-                    it.offer_amt = directDepositAccountCompositeService.formatCurrency(it.offer_amt)
+                    it.accept_amt = currencyFormatHelperService.formatCurrency(it.accept_amt)
+                    it.cancel_amt = currencyFormatHelperService.formatCurrency(it.cancel_amt)
+                    it.decline_amt = currencyFormatHelperService.formatCurrency(it.decline_amt)
+                    it.offer_amt = currencyFormatHelperService.formatCurrency(it.offer_amt)
                 } else {
                     it.accept_amt = formatCurrencyDashZeroes(it.accept_amt)
                     it.cancel_amt = formatCurrencyDashZeroes(it.cancel_amt)
                     it.decline_amt = formatCurrencyDashZeroes(it.decline_amt)
                     it.offer_amt = formatCurrencyDashZeroes(it.offer_amt)
                 }
-                it.paid_amt = directDepositAccountCompositeService.formatCurrency(it.paid_amt)
-                it.total_amt = directDepositAccountCompositeService.formatCurrency(it.total_amt)
+                it.paid_amt = currencyFormatHelperService.formatCurrency(it.paid_amt)
+                it.total_amt = currencyFormatHelperService.formatCurrency(it.total_amt)
             }
 
             it?.resources?.each {
-                it.actual_amt = directDepositAccountCompositeService.formatCurrency(it.actual_amt)
-                it.est_amt = directDepositAccountCompositeService.formatCurrency(it.est_amt)
+                it.actual_amt = currencyFormatHelperService.formatCurrency(it.actual_amt)
+                it.est_amt = currencyFormatHelperService.formatCurrency(it.est_amt)
             }
         }
 
@@ -327,13 +327,13 @@ class ProxyController {
 
     def getAccountSummary() {
         def result = generalSsbProxyService.getAccountSummary(params.pidm);
-        result.accountBalTxt = directDepositAccountCompositeService.formatCurrency(result.accountBal)
-        result.acctTotalTxt = directDepositAccountCompositeService.formatCurrency(result.acctTotal)
+        result.accountBalTxt = currencyFormatHelperService.formatCurrency(result.accountBal)
+        result.acctTotalTxt = currencyFormatHelperService.formatCurrency(result.acctTotal)
 
         result.terms?.each {
-            it.termBalance = directDepositAccountCompositeService.formatCurrency(it.termBalance)
-            it.termCharge = directDepositAccountCompositeService.formatCurrency(it.termCharge)
-            it.termPay = directDepositAccountCompositeService.formatCurrency(it.termPay)
+            it.termBalance = currencyFormatHelperService.formatCurrency(it.termBalance)
+            it.termCharge = currencyFormatHelperService.formatCurrency(it.termCharge)
+            it.termPay = currencyFormatHelperService.formatCurrency(it.termPay)
 
             it.ledger.each {
                 it.balance = formatCurrencyDashZeroes(it.balance)
@@ -348,7 +348,7 @@ class ProxyController {
     private def formatCurrencyDashZeroes(def value) {
         def result = '-'
         if(value != 0) {
-            result = directDepositAccountCompositeService.formatCurrency(value)
+            result = currencyFormatHelperService.formatCurrency(value)
         }
 
         return result
