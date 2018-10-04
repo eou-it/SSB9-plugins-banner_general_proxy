@@ -287,9 +287,8 @@ declare
 --     twbkfrmt.P_TableRowClose;
 --     twbkfrmt.P_TableClose;
      cost_of_attendance := '"costOfAttendance":['
-                       || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0008', 'SQL', 'Your estimated cost of attendance is')
-                       ||   to_char(total_budget_amt,'L999G999G999G999G999G999G999G999G999G999G999D99') || '."}'
-                       || ']';
+                       || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0008', 'SQL', 'Your estimated cost of attendance is ') || '"'
+                       ||  ', "amount": ' || total_budget_amt || '}]';
   --
   <<Chk_Awd>>
      OPEN bwrkrhst.GetAwdDtlC(pidm,aidy);
@@ -364,7 +363,7 @@ declare
                         || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0010', 'SQL', 'You have been ') || '"},'
                         || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0011', 'SQL', 'awarded') || '", "url":"' || 'dummy' || '"},'
                         || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0012', 'SQL', ' financial aid which totals ')
-                        ||   to_char(total_offer_amt, 'L999G999G999G999G999G999G999G999G999G999G999D99') || '."}'
+                        ||  '", "amount":' || total_offer_amt || '}'
                         || ']';
   END IF;
   --

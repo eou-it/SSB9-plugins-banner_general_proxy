@@ -8,8 +8,6 @@ import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.i18n.MessageHelper
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
-
-import net.hedtech.banner.general.system.Term
 import net.hedtech.banner.security.XssSanitizer
 
 /**
@@ -24,6 +22,7 @@ class ProxyController {
     def gradesProxyService
     def proxyFinAidService
     def proxyConfigurationService
+    def currencyFormatHelperService
 
     def landingPage() {
         try {
@@ -153,6 +152,13 @@ class ProxyController {
      */
     def getHolds() {
         def result = personRelatedHoldService.getWebDisplayableHolds(XssSanitizer.sanitize(params.pidm));
+        result.rows?.each {
+            def amountTxt = '-'
+            if(it.r_amount_owed && it.r_amount_owed != 0) {
+                amountTxt = currencyFormatHelperService.formatCurrency(it.r_amount_owed)
+            }
+            it.r_amount_owed = amountTxt
+        }
 
         render result as JSON
     }
@@ -227,14 +233,61 @@ class ProxyController {
      * Gets the financial aid status model for the student
      *
      */
-    def getFinancialAidStatus(){
+    def getFinancialAidStatus() {
         def result = generalSsbProxyService.getFinancialAidStatus(params.pidm, params.aidYear)
+        result.awardPackage?.each {
+            if(it.amount != null) {
+                it.text = it.text + currencyFormatHelperService.formatCurrency(it.amount) + '.'
+            }
+        }
+        result.costOfAttendance?.each {
+            if(it.amount != null) {
+                it.text = it.text + currencyFormatHelperService.formatCurrency(it.amount) + '.'
+            }
+        }
 
         render result as JSON
     }
 
     def getAwardPackage() {
         def result = proxyFinAidService.getAwardPackage(params.pidm, params.aidYear);
+        result.needsCalc?.attendanceCost = currencyFormatHelperService.formatCurrency(result.needsCalc?.attendanceCost)
+        result.needsCalc?.familyContrib = currencyFormatHelperService.formatCurrency(result.needsCalc?.familyContrib)
+        result.needsCalc?.initialNeed = currencyFormatHelperService.formatCurrency(result.needsCalc?.initialNeed)
+        result.needsCalc?.need = currencyFormatHelperService.formatCurrency(result.needsCalc?.need)
+        result.needsCalc?.outsideResrc = currencyFormatHelperService.formatCurrency(result.needsCalc?.outsideResrc)
+
+        result.costOfAttendance?.budgets?.each {
+            it.amount = currencyFormatHelperService.formatCurrency(it.amount)
+        }
+        result.costOfAttendance?.totalTxt = currencyFormatHelperService.formatCurrency(result.costOfAttendance?.total)
+
+        result.loanInfo?.subsidized = currencyFormatHelperService.formatCurrency(result.loanInfo?.subsidized)
+        result.loanInfo?.unsubsidized = currencyFormatHelperService.formatCurrency(result.loanInfo?.unsubsidized)
+        result.loanInfo?.gradPlus = currencyFormatHelperService.formatCurrency(result.loanInfo?.gradPlus)
+        result.loanInfo?.parentPlus = currencyFormatHelperService.formatCurrency(result.loanInfo?.parentPlus)
+        result.loanInfo?.perkins = currencyFormatHelperService.formatCurrency(result.loanInfo?.perkins)
+        result.loanInfo?.directUnsub = currencyFormatHelperService.formatCurrency(result.loanInfo?.directUnsub)
+
+        result.awardInfo?.aidYearAwards?.aidAwards?.each {
+            it.acceptAmt = formatCurrencyDashZeroes(it.acceptAmt)
+            it.amount = formatCurrencyDashZeroes(it.amount)
+            it.cancelAmt = formatCurrencyDashZeroes(it.cancelAmt)
+            it.declineAmt = formatCurrencyDashZeroes(it.declineAmt)
+            it.offerAmt = formatCurrencyDashZeroes(it.offerAmt)
+        }
+        result.awardInfo?.aidYearAwards?.totalAcceptAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalAcceptAmt)
+        result.awardInfo?.aidYearAwards?.totalAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalAmt)
+        result.awardInfo?.aidYearAwards?.totalCancelAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalCancelAmt)
+        result.awardInfo?.aidYearAwards?.totalDeclineAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalDeclineAmt)
+        result.awardInfo?.aidYearAwards?.totalOfferAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalOfferAmt)
+
+        result.periodInfo?.periods?.each {
+            it.periodAwards.each {
+                it.amount = formatCurrencyDashZeroes(it.amount)
+            }
+            it.totalTxt = currencyFormatHelperService.formatCurrency(it.total)
+        }
 
         render result as JSON
     }
@@ -246,13 +299,59 @@ class ProxyController {
      */
     def getAwardHistory() {
         def result = proxyFinAidService.getAwardHistory(XssSanitizer.sanitize(params.pidm));
+        result.awards?.each {
+            it.data?.rows?.each {
+                if (it.fund_title.equals('AWARD_TOTAL')) {
+                    it.accept_amt = currencyFormatHelperService.formatCurrency(it.accept_amt)
+                    it.cancel_amt = currencyFormatHelperService.formatCurrency(it.cancel_amt)
+                    it.decline_amt = currencyFormatHelperService.formatCurrency(it.decline_amt)
+                    it.offer_amt = currencyFormatHelperService.formatCurrency(it.offer_amt)
+                } else {
+                    it.accept_amt = formatCurrencyDashZeroes(it.accept_amt)
+                    it.cancel_amt = formatCurrencyDashZeroes(it.cancel_amt)
+                    it.decline_amt = formatCurrencyDashZeroes(it.decline_amt)
+                    it.offer_amt = formatCurrencyDashZeroes(it.offer_amt)
+                }
+                it.paid_amt = currencyFormatHelperService.formatCurrency(it.paid_amt)
+                it.total_amt = currencyFormatHelperService.formatCurrency(it.total_amt)
+            }
+
+            it?.resources?.each {
+                it.actual_amt = currencyFormatHelperService.formatCurrency(it.actual_amt)
+                it.est_amt = currencyFormatHelperService.formatCurrency(it.est_amt)
+            }
+        }
+
         render result as JSON
     }
 
     def getAccountSummary() {
         def result = generalSsbProxyService.getAccountSummary(params.pidm);
+        result.accountBalTxt = currencyFormatHelperService.formatCurrency(result.accountBal)
+        result.acctTotalTxt = currencyFormatHelperService.formatCurrency(result.acctTotal)
+
+        result.terms?.each {
+            it.termBalance = currencyFormatHelperService.formatCurrency(it.termBalance)
+            it.termCharge = currencyFormatHelperService.formatCurrency(it.termCharge)
+            it.termPay = currencyFormatHelperService.formatCurrency(it.termPay)
+
+            it.ledger.each {
+                it.balance = formatCurrencyDashZeroes(it.balance)
+                it.charge = formatCurrencyDashZeroes(it.charge)
+                it.payment = formatCurrencyDashZeroes(it.payment)
+            }
+        }
 
         render result as JSON
+    }
+
+    private def formatCurrencyDashZeroes(def value) {
+        def result = '-'
+        if(value != 0) {
+            result = currencyFormatHelperService.formatCurrency(value)
+        }
+
+        return result
     }
 
     def getConfig() {
