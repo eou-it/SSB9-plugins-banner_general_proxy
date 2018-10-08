@@ -175,7 +175,7 @@ table.dataentrytable {
 }
 
 .proxy-profile-form {
-    padding: 0px 15px;
+    padding: 0px 100px;
 }
 
 .proxy-profile-form input.hasMultiCalendarPicker.pi-date-input + span.calendar-img {
@@ -325,6 +325,46 @@ table tr.grades-header:hover th:last-child {
 .proxy .fc-event:hover {
     color: #0c4e8c;
 }
+
+.proxy-pi-top-message-container {
+    margin: 30px 0;
+}
+
+.proxy-pi-left-message {
+    float: left;
+}
+
+.proxy-pi-right-message {
+    float: right;
+}
+
+.pi-section {
+    background: #FFFFFF;
+    margin: 10px 0px;
+    padding: 49px;
+    padding-top: 29px;
+    border: 1px solid #beccd7;
+    border-top: none;
+}
+
+#opt-out-adv-date-txt {
+    padding-top: 30px;
+}
+
+.proxy-bottom-buttons {
+    margin: 50px auto 100px;
+    width: 540px;
+}
+
+.proxy-bottom-buttons input {
+    width: 260px;
+    height: 44px;
+}
+
+.proxy-bottom-buttons input.left {
+    margin-right: 10px;
+}
+
 
 /* Accessibility */
 .audible-message {

@@ -76,6 +76,9 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
             },
             data: {
                 breadcrumbs: []
+            },
+            params: {
+                onLoadNotifications: []
             }
         })
         .state('proxyPersonalInfo', {
