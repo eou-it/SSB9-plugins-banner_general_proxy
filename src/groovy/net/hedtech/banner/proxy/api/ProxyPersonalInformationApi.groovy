@@ -433,10 +433,16 @@ END;
 
       lv_opt_out_adv_date   DATE := SYSDATE;
 
-      lv_info               twgrinfo.twgrinfo_label%TYPE := 'SAVED';
+      lv_info               twgrinfo.twgrinfo_label%TYPE;
       
       lv_hold_rowid         gb_common.internal_record_id_type;
       lv_message            VARCHAR2 (30000);
+      
+      lv_email1             gpbprxy.gpbprxy_email_address%TYPE;
+      lv_email2             gpbprxy.gpbprxy_email_address%TYPE;
+      
+      hold_proxy_idm        gpbprxy.gpbprxy_proxy_idm%TYPE;
+
 
          FUNCTION f_validate_date (p_date VARCHAR2)
            RETURN VARCHAR2
@@ -476,13 +482,16 @@ END;
          END GET_DATE;
 
      BEGIN
+     
+     hold_proxy_idm := ?;
+     
           -- Get the proxy record
-        lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One (?);
+        lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One (hold_proxy_idm);
         FETCH lv_GPBPRXY_ref INTO lv_GPBPRXY_rec;
         CLOSE lv_GPBPRXY_ref;
 
         gp_gpbprxy.P_Update (
-          p_proxy_idm    => ?,
+          p_proxy_idm    => hold_proxy_idm,
           p_first_name   => ?,
           p_last_name    => ?,
           p_user_id      => goksels.f_get_ssb_id_context,
@@ -493,7 +502,7 @@ END;
                       -- but verify birthdate and null out if invalid
                           BEGIN
                              gp_gpbprxy.P_Update (
-                                p_proxy_idm          => ?,
+                                p_proxy_idm          => hold_proxy_idm,
                                 p_mi                 => goksels.f_clean_text(?),
                                 p_surname_prefix     => goksels.f_clean_text(?),
                                 p_name_prefix        => goksels.f_clean_text(?),
@@ -538,10 +547,10 @@ END;
          p_ctyp_exp_date    => NULL,
          p_ctyp_exe_date    => NULL,
          p_transmit_date    => NULL,
-         p_proxy_idm        => ?,
+         p_proxy_idm        => hold_proxy_idm,
          p_proxy_old_data   => NULL,
          p_proxy_new_data   => NULL,
-         p_person_pidm      => bwgkprxy.F_Get_PIDM_For_IDM(?),
+         p_person_pidm      => bwgkprxy.F_Get_PIDM_For_IDM(hold_proxy_idm),
          p_user_id          => goksels.f_get_ssb_id_context,
          p_create_date      => SYSDATE,
          p_create_user      => goksels.f_get_ssb_id_context,
@@ -552,10 +561,94 @@ END;
          bwgkprxy.P_SendEmail (lv_hold_rowid, lv_message);
 
           -- Update match-n-load tables for insert/update into General Person
-          bwgkprxy.P_MatchLoad (?);
+          bwgkprxy.P_MatchLoad (hold_proxy_idm);
 
           gb_common.P_Commit;
+          
+      -- Email address change requested by proxy
+      
+      lv_email1 := TRIM(LOWER (lv_GPBPRXY_rec.R_EMAIL_ADDRESS));
+      lv_email2 := TRIM(LOWER (?));
+      IF goksels.f_clean_text(lv_email2) IS NOT NULL AND lv_email1 <> lv_email2
+      THEN
+         -- Fetch a proxy record based on new email address
+         -- If you find existing record then don't make the change
+         lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One_By_Email (lv_email2);
 
+         FETCH lv_GPBPRXY_ref INTO lv_GPBPRXY_rec;
+
+         IF lv_GPBPRXY_ref%FOUND
+         THEN
+            lv_info := 'EMAIL_DUPLICATE';
+            CLOSE lv_GPBPRXY_ref;
+        ELSE
+            lv_info := 'NEW_EMAIL';
+            -- Send first message using existing e-mail address with CANCEL_EMAIL action
+            gp_gpbeltr.P_Create (
+               p_syst_code        => 'PROXY',
+               p_ctyp_code        => 'CANCEL_EMAIL',
+               p_ctyp_url         => NULL,
+               p_ctyp_exp_date    => SYSDATE
+                                    + bwgkprxy.F_GetOption (
+                                         'ACTION_VALID_DAYS'),
+               p_ctyp_exe_date    => NULL,
+               p_transmit_date    => NULL,
+               p_proxy_idm        => hold_proxy_idm,
+               p_proxy_old_data   => lv_email1,
+               p_proxy_new_data   => lv_email2,
+               p_person_pidm      => bwgkprxy.F_Get_PIDM_For_IDM(hold_proxy_idm),
+               p_user_id          => goksels.f_get_ssb_id_context,
+               p_create_date      => SYSDATE,
+               p_create_user      => goksels.f_get_ssb_id_context,
+               p_rowid_out        => lv_hold_rowid);
+
+            gp_gpbeltr.P_Update (
+               p_ctyp_url   => bwgkprxy.F_getProxyURL('CANCEL_EMAIL'),
+               p_user_id    => goksels.f_get_ssb_id_context,
+               p_rowid      => lv_hold_rowid);
+
+            gb_common.P_Commit;
+            bwgkprxy.P_SendEmail (lv_hold_rowid);
+
+            -- Send second message using updated e-mail address with NEW_EMAIL action
+            -- Expire the PIN with 'e-mail change pending' indicator
+            gp_gpbprxy.P_Update (p_proxy_idm          => hold_proxy_idm,
+                                 p_email_address      => lv_email2,
+                                 p_pin_disabled_ind   => 'E',
+                                 p_inv_login_cnt      => 0,
+                                 p_email_ver_date     => NULL,
+                                 p_user_id            => goksels.f_get_ssb_id_context);
+
+            gp_gpbeltr.P_Create (
+               p_syst_code        => 'PROXY',
+               p_ctyp_code        => 'NEW_EMAIL',
+               p_ctyp_url         => NULL,
+               p_ctyp_exp_date    => SYSDATE
+                                    + bwgkprxy.F_GetOption (
+                                         'ACTION_VALID_DAYS'),
+               p_ctyp_exe_date    => NULL,
+               p_transmit_date    => NULL,
+               p_proxy_idm        => hold_proxy_idm,
+               p_proxy_old_data   => lv_email1,
+               p_proxy_new_data   => lv_email2,
+               p_person_pidm      => bwgkprxy.F_Get_PIDM_For_IDM(hold_proxy_idm),
+               p_user_id          => goksels.f_get_ssb_id_context,
+               p_create_date      => SYSDATE,
+               p_create_user      => goksels.f_get_ssb_id_context,
+               p_rowid_out        => lv_hold_rowid);
+
+            gp_gpbeltr.P_Update (
+               p_ctyp_url   => bwgkprxy.F_getProxyURL('NEW_EMAIL'),
+               p_user_id    => goksels.f_get_ssb_id_context,
+               p_rowid      => lv_hold_rowid);
+
+            gb_common.P_Commit;
+            bwgkprxy.P_SendEmail (lv_hold_rowid);
+            
+             CLOSE lv_GPBPRXY_ref;
+         END IF;
+      END IF;    
+         ? := lv_info;
       END ;
 
           """

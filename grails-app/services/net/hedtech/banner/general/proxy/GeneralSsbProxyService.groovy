@@ -11,6 +11,7 @@ import net.hedtech.banner.proxy.api.PinManagementApi
 import net.hedtech.banner.proxy.api.CourseScheduleApi
 
 import org.apache.log4j.Logger
+import net.hedtech.banner.i18n.MessageHelper
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.context.request.RequestContextHolder
@@ -415,6 +416,11 @@ class GeneralSsbProxyService {
 
     def updateProxyProfile(def params) {
 
+        log.debug('updateProxyProfile')
+        log.debug('Parameters: ' + params)
+
+        def  errorMsgOut = ""
+
         def updateRulesErrors = checkProxyProfileDataOnUpdate(params)
 
         if (updateRulesErrors){
@@ -430,14 +436,30 @@ class GeneralSsbProxyService {
 
         def bDate = dateFormat(params.p_birth_date)
 
-        sql.call(sqlText, [p_proxyIDM, p_proxyIDM, params.p_first_name, params.p_last_name,
-                           p_proxyIDM , params.p_mi, params.p_surname_prefix, params.p_name_prefix,
+        try {
+        sql.call(sqlText, [p_proxyIDM,params.p_first_name, params.p_last_name,
+                           params.p_mi, params.p_surname_prefix, params.p_name_prefix,
                            params.p_name_suffix, params.p_pref_first_name, params.p_phone_area,
                            params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
                            params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
                            params.p_city, params.p_stat_code?.code ?: "", params.p_zip, params.p_cnty_code?.code ?: "", params.p_natn_code?.code ?: "",
-                           params.p_sex, bDate, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", p_proxyIDM, p_proxyIDM, p_proxyIDM
-                          ])
+                           params.p_sex, bDate, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", params.p_email_address, Sql.VARCHAR
+        ]){ errorMsg ->
+            errorMsgOut = errorMsg
+        }
+            log.debug('finished updateProxyProfile')
+        } catch (Exception e) {
+            log.error('updateProxyProfile')
+            log.error(e)
+        } finally {
+            sql?.close()
+        }
+
+        if (errorMsgOut){
+            throw new ApplicationException("", MessageHelper.message("proxy.personalinformation.onSave." + errorMsgOut))
+        }
+
+
 
     }
 
@@ -662,89 +684,6 @@ class GeneralSsbProxyService {
         return resultMap
     }
 
-    def getAwardPackage(def pidm, def aidYear) {
-        //def sqlText = sqlFileLoadService.getSqlTextMap().getRorwebrRec?.sqlText
-        def sqlText = FinAidAwardPackageApi.GET_RORWEBRREC
-        def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        def result = [:]
-        def rorwebrRec = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
-
-        if (!rorwebrRec.info_access?.equals('Y')) {
-            return [:]
-        }
-        else {
-            result.aidYearDesc = rorwebrRec.aidYearDesc
-
-            if(rorwebrRec.need_calc_ind.equals('Y')) {
-                //sqlText = sqlFileLoadService.getSqlTextMap().getNeedCalculation?.sqlText
-                sqlText = FinAidAwardPackageApi.GET_NEED_CALCULATION
-                result.needsCalc = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
-            }
-
-            if(rorwebrRec.housing_status_ind.equals('Y')) {
-                //sqlText = sqlFileLoadService.getSqlTextMap().getHousingStatus?.sqlText
-                sqlText = FinAidAwardPackageApi.GET_HOUSING_STATUS
-                result.housingStatuses = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
-            }
-
-            if(rorwebrRec.enrollment_status.equals('F') || rorwebrRec.enrollment_status.equals('T')) {
-                if(rorwebrRec.aid_year >= 2015) {
-                    //sqlText = sqlFileLoadService.getSqlTextMap().getNewEnrollment?.sqlText
-                    sqlText = FinAidAwardPackageApi.GET_NEW_ENROLLMENT
-                }
-                else {
-                    //sqlText = sqlFileLoadService.getSqlTextMap().getEnrollment?.sqlText
-                    sqlText = FinAidAwardPackageApi.GET_ENROLLMENT
-                }
-
-                String enrollmentJson = ''
-                sql.call(sqlText, [ pidm, aidYear, rorwebrRec.enrollment_status, Sql.VARCHAR
-                ]){ lv_enroll_json ->
-                    enrollmentJson = lv_enroll_json
-                }
-                def enrollment = new JsonSlurper().parseText(enrollmentJson)
-                result.enrollment = enrollment
-            }
-
-            if(rorwebrRec.coa_ind.equals('Y')) {
-                //sqlText = sqlFileLoadService.getSqlTextMap().getCostOfAttendance?.sqlText
-                sqlText = FinAidAwardPackageApi.GET_COST_OF_ATTENDANCE
-                result.costOfAttendance = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
-            }
-
-            if(rorwebrRec.cum_loan_ind.equals('Y')) {
-                sqlText = sqlFileLoadService.getSqlTextMap().getCumLoanInfo?.sqlText
-                sqlText = FinAidAwardPackageApi.GET_CUM_LOAN_INFO
-                result.loanInfo = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
-            }
-
-            //sqlText = sqlFileLoadService.getSqlTextMap().getAwardInfo?.sqlText
-            sqlText = FinAidAwardPackageApi.GET_AWARD_INFO
-            String awardInfoJson = ''
-            String periodInfoJson = ''
-            sql.call(sqlText, [ pidm, aidYear, Sql.VARCHAR, Sql.VARCHAR
-            ]){ lv_award_json, lv_period_json ->
-                awardInfoJson = lv_award_json
-                periodInfoJson = lv_period_json
-            }
-            def awardInfo = new JsonSlurper().parseText(awardInfoJson)
-            result.awardInfo = awardInfo
-            def periodInfo = new JsonSlurper().parseText(periodInfoJson)
-            result.periodInfo = periodInfo
-
-            return result
-        }
-    }
-
-    private getFinAidAwardMap(Sql sql, String sqlText, def pidm, def aidYear) {
-        String json = ''
-        sql.call(sqlText, [ pidm, aidYear, Sql.VARCHAR
-        ]){ lv_json ->
-            json = lv_json
-        }
-        return new JsonSlurper().parseText(json)
-    }
-
     def getFinancialAidStatus(def pidm, def aidYear = null) {
         def finaidJson = ""
         def sqlText = FinancialAidStatusApi.FINANCIAL_AID_SUMMARY
@@ -758,29 +697,6 @@ class GeneralSsbProxyService {
         def resultMap = finaidJson ? new JsonSlurper().parseText(finaidJson) : [:]
 
         resultMap
-    }
-
-    def fetchAidYearList(int max = 10, int offset = 0, String searchString = '') {
-        def resultList = []
-        def aidYearSql = """select robinst_aidy_code, robinst_aidy_desc
-                            from
-                            (select a.*, rownum rnum
-                              from
-                              (select robinst_aidy_code, robinst_aidy_desc
-                                 from robinst
-                                 where robinst_info_access_ind = 'Y'
-                                 and upper(robinst_aidy_desc) like ?
-                                 order by robinst_aidy_start_date desc) a
-                              where rownum <= ?)
-                            where rnum > ?"""
-        String preppedSearchString = '%' + searchString.toUpperCase() + '%'
-
-        resultList = sessionFactory.getCurrentSession().createSQLQuery(aidYearSql)
-                .setString(0, preppedSearchString)
-                .setInteger(1, max+offset)
-                .setInteger(2, offset).list().collect { it = [code: it[0], description: it[1]] }
-
-        resultList
     }
 
     def getAccountSummary(def pidm) {

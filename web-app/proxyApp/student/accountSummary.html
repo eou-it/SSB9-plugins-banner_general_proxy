@@ -9,7 +9,7 @@
             <p class="holds-msg">{{'proxy.acctSummary.message.noSummary'|i18n}}</p>
         </div>
         <div ng-if="accountSummary.accountBal">
-            <h2>{{'proxy.acctSummary.label.summaryAcctBalance'|i18n}} {{accountSummary.accountBal}}</h2>
+            <h2>{{'proxy.acctSummary.label.summaryAcctBalance'|i18n}} {{accountSummary.accountBalTxt}}</h2>
             <div ng-if="payvendUrl && payvendVendor">
                 <a ng-href="{{payvendUrl}}" target="_blank">{{payvendVendor}}</a>
             </div>
@@ -57,7 +57,7 @@
                     <td ng-show="accountSummary.showDetailCode">-</td>
                     <td>-</td>
                     <td>-</td>
-                    <td>{{accountSummary.acctTotal}}</td>
+                    <td>{{accountSummary.acctTotalTxt}}</td>
                 </tr>
             </table>
         </div>
