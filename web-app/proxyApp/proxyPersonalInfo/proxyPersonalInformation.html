@@ -1,15 +1,27 @@
 <!--*******************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
+<h1 class="proxy-page-heading">{{'proxy.profile.heading'|i18n}}</h1>
 <div class="proxy-profile-form">
-<br>
-<b>Proxy Profile </b><br>
-Please keep your Banner Web proxy information up-to-date.
+    <div class="proxy-pi-top-message-container clearfix">
+        <div class="proxy-pi-left-message info-text">
+            {{'proxy.personalinformation.topMessage'|i18n}}
+        </div>
+        <div class="proxy-pi-right-message">
+            <a ng-href="/BannerGeneralSsb/login/resetPassword?j_username={{guestUserName}}">{{'proxy.personalinformation.clickToChangePassword'|i18n}}</a>
+        </div>
+    </div>
     <span  ng-if="flashMessage">
         <span class="icon-error ellucian-font"></span>{{flashMessage}}
     </span>
-    <div>
-        <div ng-repeat="profileElement in profileElements" class="">
+    <div class="row pi-section" ng-repeat="piSection in personalInfoSections">
+        <div class="clearfix">
+            <h2 class="proxy-pi-left-message">{{piSection.heading}}</h2>
+            <div class="proxy-pi-right-message required-field">
+                {{'proxy.label.indicatesRequiredField'|i18n}}
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4 col-lg-4" ng-repeat="profileElement in piSection.elements" ng-if="profileElement.visible">
             <div ng-if="profileElement.visible && !profileElement.isWidget">
                 <label ng-class="(!!cityErrMsg && !cityFocused ? 'input-field-label field-error' : 'input-field-label')"
                        class="input-field-label" for="{{profileElement.elemId}}" ng-bind-html= "profileElement.label"> </label><br>
@@ -48,13 +60,17 @@ Please keep your Banner Web proxy information up-to-date.
                    role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
             </div>
 
-            <div ng-if="profileElement.visible && profileElement.elemId === 'p_opt_out_adv_date'">
-                <input ng-model="profileElement.model" class="main-nav-check" id="opt_out_adv_date" type="checkbox" aria-describedby="opt-out-adv-date-txt"/>
-                <p class="lbl" id="opt-out-adv-date-txt"><label for="opt_out_adv_date">{{'proxy.personalinformation.label.p_opt_out_adv_date'|i18n}}</label></p>
-            </div>
-
 
         </div>
-        <INPUT ng-click="save()" TYPE="button" VALUE="Save" id="p_save" class="signin-button">
+    </div>
+
+    <div ng-if="optOutAdvDate && optOutAdvDate.visible">
+        <input ng-model="optOutAdvDate.model" class="main-nav-check" id="opt_out_adv_date" type="checkbox" aria-describedby="opt-out-adv-date-txt"/>
+        <p class="lbl" id="opt-out-adv-date-txt"><label for="opt_out_adv_date">{{'proxy.personalinformation.label.p_opt_out_adv_date'|i18n}}</label></p>
+    </div>
+
+    <div class="proxy-bottom-buttons">
+        <input ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" id="p_cancel" class="secondary left">
+        <input ng-click="save()"   type="button" value="{{'proxy.label.submit'|i18n}}" id="p_update" class="primary">
     </div>
 </div>
