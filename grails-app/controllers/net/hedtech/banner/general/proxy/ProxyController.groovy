@@ -107,13 +107,20 @@ class ProxyController {
             render view: "actionpassword", params: params, model: [token: params.p_token, gidm : result.gidm]
 
         }
+        else if(result.doPin) {
+            render view: "/proxy/resetpin", model: [gidm : result.gidm]
+        }
         else if (result.login || result.error) {
             String messageText = result.message
             if(result.message.equals('token-expire')) {
-                messageText = MessageHelper.message('proxy.error.tokenExpired')
+                messageText = MessageHelper.message('proxy.error.token-expire')
+                flash.message = messageText
+            }
+            else if(result.message.length() > 0) {
+                messageText = MessageHelper.message('proxy.message.' + result.message)
+                flash.reloginMessage = messageText
             }
 
-            flash.message = messageText
             forward controller: "login", action: "auth", params: params
         }
     }

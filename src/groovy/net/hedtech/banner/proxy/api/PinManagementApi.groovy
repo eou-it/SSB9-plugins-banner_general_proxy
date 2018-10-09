@@ -3,93 +3,160 @@ package net.hedtech.banner.proxy.api
 class PinManagementApi {
 
     public final static String SET_PROXY = """
+DECLARE
+   p_verify      gpbprxy.gpbprxy_salt%TYPE DEFAULT '!@#bogus!@#';
+   lv_rowid              gb_common.internal_record_id_type;
+   lv_GPBELTR_ref        gp_gpbeltr.gpbeltr_ref;
+   lv_GPBELTR_rec        gp_gpbeltr.gpbeltr_rec;
+   lv_GPBPRXY_rec        gp_gpbprxy.gpbprxy_rec;
+   lv_GPBPRXY_ref        gp_gpbprxy.gpbprxy_ref;
 
-        DECLARE
-               p_verify      gpbprxy.gpbprxy_salt%TYPE DEFAULT '!@#bogus!@#';
-               lv_rowid              gb_common.internal_record_id_type;
-               lv_GPBELTR_ref        gp_gpbeltr.gpbeltr_ref;
-               lv_GPBELTR_rec        gp_gpbeltr.gpbeltr_rec;
-               lv_GPBPRXY_rec        gp_gpbprxy.gpbprxy_rec;
-               lv_GPBPRXY_ref        gp_gpbprxy.gpbprxy_ref;
-
-               do_pin                varchar2(1);
-               msg                   varchar2(100);
-               lv_loginOut           varchar2(1);
-
- FUNCTION F_ActionVerify (p_proxyIDM    gpbprxy.gpbprxy_proxy_idm%TYPE,
+   do_pin                varchar2(1) := 'N';
+   msg                   varchar2(100);
+   lv_loginOut           varchar2(1)  := 'N';
+   lv_actionVerifyOut    varchar2(1)  := 'N';
+   lv_gidm               number;
+   
+   FUNCTION F_ActionVerify (p_proxyIDM    gpbprxy.gpbprxy_proxy_idm%TYPE,
                           p_CTYP        gtvctyp.gtvctyp_code%TYPE,
                           p_verify      gpbprxy.gpbprxy_salt%TYPE)
-    RETURN BOOLEAN
- IS
-    lv_ind   gtvotyp.gtvotyp_option_default%TYPE;
+   RETURN BOOLEAN
+   IS
+      lv_ind   gtvotyp.gtvotyp_option_default%TYPE;
 
-    CURSOR C_VerifySalt
-    IS
-       SELECT 'Y'
-         FROM GPBPRXY
-        WHERE GPBPRXY_SALT = p_verify AND GPBPRXY_PROXY_IDM = p_proxyIDM;
- BEGIN
-    IF NVL (bwgkprxy.F_GetOption ('VERIFY_' || p_CTYP || '_ACTION'), 'N') = 'N'
-    THEN
-       RETURN FALSE;
-    END IF;
+      CURSOR C_VerifySalt
+      IS
+      SELECT 'Y'
+      FROM GPBPRXY
+      WHERE GPBPRXY_SALT = p_verify AND GPBPRXY_PROXY_IDM = p_proxyIDM;
+   BEGIN
+      IF NVL (bwgkprxy.F_GetOption ('VERIFY_' || p_CTYP || '_ACTION'), 'N') = 'N'
+      THEN
+         RETURN FALSE;
+      END IF;
 
-    OPEN C_VerifySalt;
+      OPEN C_VerifySalt;
 
-    FETCH C_VerifySalt INTO lv_ind;
+      FETCH C_VerifySalt INTO lv_ind;
 
-    IF C_VerifySalt%FOUND
-    THEN
-       CLOSE C_VerifySalt;
-       RETURN FALSE;
-    END IF;
+      IF C_VerifySalt%FOUND
+      THEN
+         CLOSE C_VerifySalt;
+         RETURN FALSE;
+      END IF;
 
-    CLOSE C_VerifySalt;
+      CLOSE C_VerifySalt;
 
-    RETURN TRUE;
- END F_ActionVerify;
+      RETURN TRUE;
+   END F_ActionVerify;
 
-        BEGIN
-               lv_rowid := twbkbssf.f_decode_base64(?);
+BEGIN
+   lv_rowid := twbkbssf.f_decode_base64(?);
 
-               lv_GPBELTR_ref := gp_gpbeltr.F_Query_By_Rowid(lv_rowid);
+   lv_GPBELTR_ref := gp_gpbeltr.F_Query_By_Rowid(lv_rowid);
 
-                FETCH lv_GPBELTR_ref INTO lv_GPBELTR_rec;
+   FETCH lv_GPBELTR_ref INTO lv_GPBELTR_rec;
 
-             IF lv_GPBELTR_ref%NOTFOUND THEN
+   IF lv_GPBELTR_ref%NOTFOUND THEN
 
-                 lv_loginOut  := 'Y';
-                 msg := 'token-error';
+      lv_loginOut  := 'Y';
+      msg := 'token-error';
 
-             -- Check for expiration date
-             -- Check for action already executed
-             ELSIF NVL (TRUNC(lv_GPBELTR_rec.R_CTYP_EXP_DATE), TRUNC(SYSDATE)) < TRUNC(SYSDATE)
-                  OR lv_GPBELTR_rec.R_CTYP_EXE_DATE IS NOT NULL
-             THEN
-                 lv_loginOut  := 'Y';
-                 msg := 'token-expire';
+      -- Check for expiration date
+      -- Check for action already executed
+   ELSIF NVL (TRUNC(lv_GPBELTR_rec.R_CTYP_EXP_DATE), TRUNC(SYSDATE)) < TRUNC(SYSDATE)
+   OR lv_GPBELTR_rec.R_CTYP_EXE_DATE IS NOT NULL
+   THEN
+     lv_loginOut  := 'Y';
+     msg := 'tokenExpire';
 
-             ELSIF (lv_GPBELTR_ref%FOUND AND F_ActionVerify (lv_GPBELTR_rec.R_PROXY_IDM,
-                             lv_GPBELTR_rec.R_CTYP_CODE,
-                             TRIM(p_verify))) THEN
+   ELSIF (lv_GPBELTR_ref%FOUND)
+   THEN
+      lv_gidm := lv_GPBELTR_rec.R_PROXY_IDM;
 
-              ? := lv_GPBELTR_rec.R_PROXY_IDM;
+      IF(F_ActionVerify (lv_GPBELTR_rec.R_PROXY_IDM, lv_GPBELTR_rec.R_CTYP_CODE, TRIM(p_verify)))
+      then
+         lv_actionVerifyOut := 'Y';
+      else
+         do_pin := 'Y';
+         
+         -- Update action as executed
+         gp_gpbeltr.P_Update (p_ctyp_exe_date => SYSDATE, p_user_id => USER, p_rowid => lv_rowid);
 
-              ?  := 'Y';
+         -- Update e-mail address as verified
+         gp_gpbprxy.P_Update (p_proxy_idm        => lv_GPBELTR_rec.R_PROXY_IDM,
+                              p_email_ver_date   => SYSDATE,
+                              p_user_id          => USER);
+          
+         CASE lv_GPBELTR_rec.R_CTYP_CODE
+            WHEN 'NEW_EMAIL'
+            THEN
+               do_pin := 'N';
+               lv_loginOut := 'Y';
+               msg := 'emailChanged';
+               --P_PA_SaveEmail (lv_GPBELTR_rec.R_PROXY_IDM,
+               --                lv_GPBELTR_rec.R_PROXY_OLD_DATA,
+               --                lv_GPBELTR_rec.R_PROXY_NEW_DATA);
+               -- Set email address to updated value
+               gp_gpbprxy.P_Update (p_proxy_idm          => lv_GPBELTR_rec.R_PROXY_IDM,
+                                    p_pin_disabled_ind   => 'N',
+                                    p_email_address      => lv_GPBELTR_rec.R_PROXY_NEW_DATA,
+                                    p_user_id            => USER);
+               bwgkprxy.P_MatchLoad (lv_GPBELTR_rec.R_PROXY_IDM);
+               gb_common.P_Commit;
+            WHEN 'CANCEL_EMAIL'
+            THEN
+               do_pin := 'N';
+               lv_loginOut := 'Y';
+               msg := 'emailCanceled';
+               --P_PA_CancelEmail (lv_GPBELTR_rec.R_PROXY_IDM,
+               --                  lv_GPBELTR_rec.R_PROXY_OLD_DATA,
+               --                  lv_GPBELTR_rec.R_PROXY_NEW_DATA);
+               -- Verify that previous e-mail address doesn't exist
+               lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One_By_Email (lv_GPBELTR_rec.R_PROXY_OLD_DATA);
 
-           ELSE
-              do_pin := 'Y';
-           END IF;
+               FETCH lv_GPBPRXY_ref INTO lv_GPBPRXY_rec;
 
-           ?  := do_pin;
-           ?  := msg;
-           ?  := lv_loginOut;
+               IF lv_GPBPRXY_ref%FOUND
+               THEN
+                  --lv_info := 'EMAIL_DUPLICATE';
+                  msg := 'emailDuplicate';
+               ELSE
+                  -- Reset email address back to previous value and enable account
+                  gp_gpbprxy.P_Update (p_proxy_idm          => lv_GPBELTR_rec.R_PROXY_IDM,
+                                       p_pin_disabled_ind   => 'N',
+                                       p_email_address      => lv_GPBELTR_rec.R_PROXY_OLD_DATA,
+                                       p_user_id            => USER);
 
-        EXCEPTION
-          WHEN OTHERS THEN ? := 'Y';
+                  -- Invalidate any outstanding actions related to changing e-mail address
+                  -- The cancel e-mail action can override a new e-mail action
+                  UPDATE GPBELTR
+                     SET GPBELTR_CTYP_EXE_DATE = SYSDATE,
+                         GPBELTR_ACTIVITY_DATE = SYSDATE
+                   WHERE     GPBELTR_CTYP_CODE = 'NEW_EMAIL'
+                         AND GPBELTR_CTYP_EXE_DATE IS NULL
+                         AND GPBELTR_PROXY_IDM = lv_GPBELTR_rec.R_PROXY_IDM;
 
-         END ;
+                  gb_common.P_Commit;
+               END IF;
 
+               CLOSE lv_GPBPRXY_ref;
+         END CASE;
+      end if;
+   END IF;
+
+  ?  := lv_gidm;
+  ?  := lv_actionVerifyOut;
+  ?  := do_pin;
+  ?  := msg;
+  ?  := lv_loginOut;
+
+EXCEPTION
+WHEN OTHERS 
+THEN 
+   ? := 'Y';
+
+END ;
     """
 
     public final static String SET_PROXY_VERIFY = """
