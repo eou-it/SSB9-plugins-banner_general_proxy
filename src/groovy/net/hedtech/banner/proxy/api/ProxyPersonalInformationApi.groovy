@@ -543,7 +543,7 @@ END;
          gp_gpbeltr.P_Create (
          p_syst_code        => 'PROXY',
          p_ctyp_code        => 'PROFILE_CHANGE_CLR',
-         p_ctyp_url         => bwgkprxy.F_getProxyURL('PROFILE_CHANGE'),
+         p_ctyp_url         => bwgkprxy.F_getProxyURL('PROFILE_CHANGE') || twbkbssf.F_Encode (lv_hold_rowid),
          p_ctyp_exp_date    => NULL,
          p_ctyp_exe_date    => NULL,
          p_transmit_date    => NULL,
@@ -603,7 +603,7 @@ END;
                p_rowid_out        => lv_hold_rowid);
 
             gp_gpbeltr.P_Update (
-               p_ctyp_url   => bwgkprxy.F_getProxyURL('CANCEL_EMAIL'),
+               p_ctyp_url   => bwgkprxy.F_getProxyURL('CANCEL_EMAIL') || twbkbssf.F_Encode (lv_hold_rowid),
                p_user_id    => goksels.f_get_ssb_id_context,
                p_rowid      => lv_hold_rowid);
 
@@ -638,7 +638,7 @@ END;
                p_rowid_out        => lv_hold_rowid);
 
             gp_gpbeltr.P_Update (
-               p_ctyp_url   => bwgkprxy.F_getProxyURL('NEW_EMAIL'),
+               p_ctyp_url   => bwgkprxy.F_getProxyURL('NEW_EMAIL') || twbkbssf.F_Encode (lv_hold_rowid),
                p_user_id    => goksels.f_get_ssb_id_context,
                p_rowid      => lv_hold_rowid);
 
