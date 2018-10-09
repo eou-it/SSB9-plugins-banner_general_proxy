@@ -416,6 +416,9 @@ class GeneralSsbProxyService {
 
     def updateProxyProfile(def params) {
 
+        log.debug('updateProxyProfile')
+        log.debug('Parameters: ' + params)
+
         def  errorMsgOut = ""
 
         def updateRulesErrors = checkProxyProfileDataOnUpdate(params)
@@ -433,19 +436,27 @@ class GeneralSsbProxyService {
 
         def bDate = dateFormat(params.p_birth_date)
 
-        sql.call(sqlText, [p_proxyIDM, p_proxyIDM, params.p_first_name, params.p_last_name,
-                           p_proxyIDM , params.p_mi, params.p_surname_prefix, params.p_name_prefix,
+        try {
+        sql.call(sqlText, [p_proxyIDM,params.p_first_name, params.p_last_name,
+                           params.p_mi, params.p_surname_prefix, params.p_name_prefix,
                            params.p_name_suffix, params.p_pref_first_name, params.p_phone_area,
                            params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
                            params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
                            params.p_city, params.p_stat_code?.code ?: "", params.p_zip, params.p_cnty_code?.code ?: "", params.p_natn_code?.code ?: "",
-                           params.p_sex, bDate, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", p_proxyIDM, p_proxyIDM, p_proxyIDM, params.p_email_address, Sql.VARCHAR
+                           params.p_sex, bDate, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", params.p_email_address, Sql.VARCHAR
         ]){ errorMsg ->
             errorMsgOut = errorMsg
         }
+            log.debug('finished updateProxyProfile')
+        } catch (Exception e) {
+            log.error('updateProxyProfile')
+            log.error(e)
+        } finally {
+            sql?.close()
+        }
 
         if (errorMsgOut){
-            throw new ApplicationException("", MessageHelper.message("proxy.personalinformation.invalid." + errorMsgOut))
+            throw new ApplicationException("", MessageHelper.message("proxy.personalinformation.onSave." + errorMsgOut))
         }
 
 
