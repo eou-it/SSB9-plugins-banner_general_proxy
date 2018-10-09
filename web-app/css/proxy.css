@@ -370,13 +370,14 @@ table tr.grades-header:hover th:last-child {
 
 .proxy-pi-right-message {
     float: right;
+    margin-top: 20px;
 }
 
 .pi-section {
     background: #FFFFFF;
     margin: 10px 0px;
     padding: 49px;
-    padding-top: 29px;
+    padding-top: 23px;
     border: 1px solid #beccd7;
     border-top: none;
 }

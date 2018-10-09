@@ -55,11 +55,11 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     // Group elements for presentation on page
                     elem = $scope.profileElements[it];
 
-                    if (detailsIds.includes(it)) {
+                    if ($.inArray(it, detailsIds) > -1) {
                         $scope.detailsElements.push(elem);
-                    } else if (contactIds.includes(it)) {
+                    } else if ($.inArray(it, contactIds) > -1) {
                         $scope.contactElements.push(elem);
-                    } else if (addressIds.includes(it)) {
+                    } else if ($.inArray(it, addressIds) > -1) {
                         $scope.addressElements.push(elem);
                     } else if (it === 'p_opt_out_adv_date') {
                         $scope.optOutAdvDate = elem;
