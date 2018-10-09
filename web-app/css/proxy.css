@@ -22,7 +22,7 @@ svg.hide-svg {
 }
 
 .gen-home-main-view {
-    background: #EFF4F8;
+    background: #F8F8F8;
 }
 
 h2 {
@@ -233,7 +233,10 @@ h1.proxy-page-heading {
     background: #f7f7f7;
     padding: 20px;
     margin: auto;
-    border-bottom: 1px solid #dddddd;
+}
+
+h1.proxy-page-heading.pi {
+    float: left;
 }
 
 h1.proxy-landing-page-heading {
@@ -247,11 +250,6 @@ h1.proxy-landing-page-heading {
 
 .proxy-page-body {
     padding: 0;
-}
-
-.info-text {
-    font-family: OpenSans-semibold;
-    font-size: 16px;
 }
 
 .mobile-visible {
@@ -326,8 +324,44 @@ table tr.grades-header:hover th:last-child {
     color: #0c4e8c;
 }
 
-.proxy-pi-top-message-container {
-    margin: 30px 0;
+.proxy-top-message-container {
+    padding: 22px 32px;
+    margin: 10px 0 10px;
+    background: #eff7ff;
+    border-top: 2px solid #51abff;
+
+}
+
+.proxy-notification-icon {
+    font-size: 24px;
+    padding-right: 15px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.proxy-notification-icon [class^="icon-"] {
+    font-weight: bold;
+}
+
+.proxy-notification-icon.blue {
+    color: #428bca;
+}
+
+.proxy-notification-text {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.proxy-top-message {
+    font-family: OpenSans-semibold;
+    font-size: 16px;
+    color: #428bca;
+}
+
+.proxy-pi-top-link {
+    float: right;
+    font-family: OpenSans-semibold;
+    padding: 20px 100px 0 0;
 }
 
 .proxy-pi-left-message {
@@ -352,7 +386,8 @@ table tr.grades-header:hover th:last-child {
 }
 
 .proxy-bottom-buttons {
-    margin: 50px auto 100px;
+    margin: 0 auto;
+    padding: 50px 0 100px;
     width: 540px;
 }
 
