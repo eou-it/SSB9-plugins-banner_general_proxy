@@ -103,8 +103,6 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 profile[it] = $scope.profileElements[it].model
             });
 
-            console.dir(profile);  // TODO: need this?
-
             proxyAppService.updateProxyPersonalInfo(profile).$promise.then(function(response) {
                 var notifications = [],
                     doStateGoSuccess = function() {
