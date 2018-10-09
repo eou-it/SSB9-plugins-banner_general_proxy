@@ -52,6 +52,7 @@ DECLARE
 
 BEGIN
    lv_rowid := twbkbssf.f_decode_base64(?);
+   p_verify := ?;
 
    lv_GPBELTR_ref := gp_gpbeltr.F_Query_By_Rowid(lv_rowid);
 
@@ -68,7 +69,7 @@ BEGIN
    OR lv_GPBELTR_rec.R_CTYP_EXE_DATE IS NOT NULL
    THEN
      lv_loginOut  := 'Y';
-     msg := 'tokenExpire';
+     msg := 'tokenExpired';
 
    ELSIF (lv_GPBELTR_ref%FOUND)
    THEN
@@ -87,7 +88,7 @@ BEGIN
          gp_gpbprxy.P_Update (p_proxy_idm        => lv_GPBELTR_rec.R_PROXY_IDM,
                               p_email_ver_date   => SYSDATE,
                               p_user_id          => USER);
-          
+         
          CASE lv_GPBELTR_rec.R_CTYP_CODE
             WHEN 'NEW_EMAIL'
             THEN
@@ -141,9 +142,11 @@ BEGIN
                END IF;
 
                CLOSE lv_GPBPRXY_ref;
+            ELSE
+               null;
          END CASE;
       end if;
-   END IF;
+  END IF;
 
   ?  := lv_gidm;
   ?  := lv_actionVerifyOut;
@@ -157,84 +160,6 @@ THEN
    ? := 'Y';
 
 END ;
-    """
-
-    public final static String SET_PROXY_VERIFY = """
-        DECLARE
-              p_verify      gpbprxy.gpbprxy_salt%TYPE DEFAULT '!@#bogus!@#';
-              lv_rowid              gb_common.internal_record_id_type;
-              lv_GPBELTR_ref        gp_gpbeltr.gpbeltr_ref;
-              lv_GPBELTR_rec        gp_gpbeltr.gpbeltr_rec;
-              lv_GPBPRXY_rec        gp_gpbprxy.gpbprxy_rec;
-              lv_GPBPRXY_ref        gp_gpbprxy.gpbprxy_ref;
-
-              do_pin                varchar2(1);
-              msg                   varchar2(100);
-
-FUNCTION F_ActionVerify (p_proxyIDM    gpbprxy.gpbprxy_proxy_idm%TYPE,
-                         p_CTYP        gtvctyp.gtvctyp_code%TYPE,
-                         p_verify      gpbprxy.gpbprxy_salt%TYPE)
-   RETURN BOOLEAN
-IS
-   lv_ind   gtvotyp.gtvotyp_option_default%TYPE;
-
-   CURSOR C_VerifySalt
-   IS
-      SELECT 'Y'
-        FROM GPBPRXY
-       WHERE GPBPRXY_SALT = p_verify AND GPBPRXY_PROXY_IDM = p_proxyIDM;
-BEGIN
-   IF NVL (bwgkprxy.F_GetOption ('VERIFY_' || p_CTYP || '_ACTION'), 'N') = 'N'
-   THEN
-      RETURN FALSE;
-   END IF;
-
-   OPEN C_VerifySalt;
-
-   FETCH C_VerifySalt INTO lv_ind;
-
-   IF C_VerifySalt%FOUND
-   THEN
-      CLOSE C_VerifySalt;
-      RETURN FALSE;
-   END IF;
-
-   CLOSE C_VerifySalt;
-
-   RETURN TRUE;
-END F_ActionVerify;
-
-       BEGIN
-              lv_rowid := twbkbssf.f_decode_base64(?);
-
-              lv_GPBELTR_ref := gp_gpbeltr.F_Query_By_Rowid(lv_rowid);
-
-               FETCH lv_GPBELTR_ref INTO lv_GPBELTR_rec;
-
-            IF lv_GPBELTR_ref%NOTFOUND THEN
-
-                ?  := 'Y';
-                msg := 'token-error';
-
-            ELSIF (lv_GPBELTR_ref%FOUND AND F_ActionVerify (lv_GPBELTR_rec.R_PROXY_IDM,
-                            lv_GPBELTR_rec.R_CTYP_CODE,
-                            TRIM(?))) THEN
-
-             ? := lv_GPBELTR_rec.R_PROXY_IDM;
-
-             ?  := 'Y';
-
-          ELSE
-             do_pin := 'Y';
-          END IF;
-
-          ?  := do_pin;
-          ?  := msg;
-
-       EXCEPTION
-         WHEN OTHERS THEN ? := 'Y';
-
-        END ;
     """
 
     public final static String SAVE_PIN = """

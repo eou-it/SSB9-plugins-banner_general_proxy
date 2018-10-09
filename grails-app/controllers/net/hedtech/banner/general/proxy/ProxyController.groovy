@@ -111,14 +111,11 @@ class ProxyController {
             render view: "/proxy/resetpin", model: [gidm : result.gidm]
         }
         else if (result.login || result.error) {
-            String messageText = result.message
-            if(result.message.equals('token-expire')) {
-                messageText = MessageHelper.message('proxy.error.token-expire')
-                flash.message = messageText
+            if(result.message?.equals('tokenExpired')) {
+                flash.message = MessageHelper.message('proxy.error.tokenExpired')
             }
-            else if(result.message.length() > 0) {
-                messageText = MessageHelper.message('proxy.message.' + result.message)
-                flash.reloginMessage = messageText
+            else if(result.message?.length() > 0) {
+                flash.reloginMessage = MessageHelper.message('proxy.message.' + result.message)
             }
 
             forward controller: "login", action: "auth", params: params
@@ -132,8 +129,19 @@ class ProxyController {
         def result = generalSsbProxyService.setProxyVerify(params.token, params.p_verify, params.gidm)
 
         if (result.doPin) {
-            render view: "/proxy/resetpin", model: [gidm : result.gidm]
-        } else {
+            render view: "/proxy/resetpin", model: [gidm: result.gidm]
+        }
+        else if (result.login) {
+            if(result.message?.equals('tokenExpired')) {
+                flash.message = MessageHelper.message('proxy.error.tokenExpired')
+            }
+            else if(result.message?.length() > 0) {
+                flash.reloginMessage = MessageHelper.message('proxy.message.' + result.message)
+            }
+
+            forward controller: "login", action: "auth", params: params
+        }
+        else {
             flash.message = message( code:"proxy.passwordManagement.invalidPassord" )
             render view: "/proxy/actionpassword", params: params, model: [token: params.token, gidm : result.gidm]
         }

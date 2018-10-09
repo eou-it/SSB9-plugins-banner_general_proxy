@@ -55,7 +55,7 @@ class GeneralSsbProxyService {
         def error
 
         def sqlText = PinManagementApi.SET_PROXY
-        sql.call(sqlText, [token, Sql.NUMERIC, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR])
+        sql.call(sqlText, [token, null, Sql.NUMERIC, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR])
                 { gidmOut, actionVerifyOut, pinOut, msgOut, loginOut, errorOut  ->
                     login = loginOut
                     gidm = gidmOut
@@ -82,9 +82,9 @@ class GeneralSsbProxyService {
         def error
         def errorStatus
 
-        def sqlText = PinManagementApi.SET_PROXY_VERIFY
-        sql.call(sqlText, [token, Sql.VARCHAR, verify, Sql.NUMERIC, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR])
-                { loginOut, gidmOut, actionVerifyOut, pinOut, msgOut, errorOut ->
+        def sqlText = PinManagementApi.SET_PROXY
+        sql.call(sqlText, [token, verify, Sql.NUMERIC, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR])
+                { gidmOut, actionVerifyOut, pinOut, msgOut, loginOut, errorOut  ->
                     login = loginOut
                     //gidm = gidmOut
                     actionVerify = actionVerifyOut
