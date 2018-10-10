@@ -165,15 +165,6 @@ table.dataentrytable {
     width:80%;
 }
 
-.text-input-field-proxt {
-    border-radius: 4px;
-    background-color: #fff;
-    border:1px solid #869FB1;
-    box-shadow: 4px 4px #EDF3F6 inset;
-    width: 60%;
-    color: #869FB1;
-}
-
 .proxy-profile-form {
     padding: 0px 100px;
 }
@@ -400,6 +391,88 @@ table tr.grades-header:hover th:last-child {
     margin-right: 10px;
 }
 
+/* Action Password Page - BEGIN */
+.actionPW.pageBg {
+    overflow: auto;
+}
+
+.actionPW.splashBg {
+    height: 90%;
+    width: unset;
+    /*position: relative;
+    background-color: #ffffff;
+    border: 2px solid #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 0 10px 0px #CECECE;*/
+    top: unset;
+    margin: 2em;
+    padding: 1em;
+    left: unset;
+}
+
+.actionPW.splashBg .ellucianName {
+    position: unset;
+    left: unset;
+    top: unset;
+    height: 2.5em;
+    width: 12em;
+    /*background-image: url(../images/ellucian_logo.svg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;*/
+}
+
+.actionPW.splashBg .appName {
+    /*color: #026BC8;
+    font-size: 24px;
+    font-weight: bold;
+    padding-top: 4px;
+    text-align: right;*/
+    font-size: 2em;
+    padding-bottom: 1em;
+    position: unset;
+    top: unset;
+    right: unset;
+}
+
+.actionPW.splashBg .loginMsg {
+    top: unset;
+    right: unset;
+    position: relative;
+    font-weight: bold;
+    text-align: left;
+    padding: 1em 0;
+    font-size: 1.5em;
+}
+
+.actionPw-form
+{
+}
+
+.eds-text-field.action-input {
+    width: 100%;
+    margin: 1em 0;
+    font-size: 1.2em !important;
+}
+
+.primary.submit-btn {
+    width: 100%;
+    margin: 0.5em 0;
+    padding: 1em 1.5em;
+    font-size: 1.2em;
+}
+
+.actionPW.splashBg .copyright {
+    top: unset;
+    bottom: unset;
+    left: unset;
+    right: unset;
+    margin: 1em 0;
+    padding: 1em 0;
+    position: relative;
+}
+/* Action Password Page - END   */
+
 
 /* Accessibility */
 .audible-message {
@@ -448,6 +521,40 @@ a.breadcrumbButton.leaf-breadcrumb {
     .proxy-page-body {
         padding: 32px 32px 0;
     }
+
+    /* Action Password Page - BEGIN */
+    .actionPW.splashBg {
+
+    }
+
+    .actionPW.splashBg .ellucianName {
+
+    }
+
+    .actionPW.splashBg .appName {
+
+    }
+
+    .actionPW.splashBg .loginMsg {
+
+    }
+
+    .actionPw-form
+    {
+    }
+
+    .eds-text-field.action-input {
+
+    }
+
+    .primary.submit-btn {
+
+    }
+
+    .actionPW.splashBg .copyright {
+
+    }
+    /* Action Password Page - END   */
 }
 
 @media screen and (min-width:1024px) {
