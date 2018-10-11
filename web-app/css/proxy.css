@@ -165,15 +165,6 @@ table.dataentrytable {
     width:80%;
 }
 
-.text-input-field-proxt {
-    border-radius: 4px;
-    background-color: #fff;
-    border:1px solid #869FB1;
-    box-shadow: 4px 4px #EDF3F6 inset;
-    width: 60%;
-    color: #869FB1;
-}
-
 .proxy-profile-form {
     padding: 0px 100px;
 }
@@ -401,6 +392,70 @@ table tr.grades-header:hover th:last-child {
     margin-right: 10px;
 }
 
+/* Action Password Page - BEGIN */
+.actionPW.pageBg {
+    overflow: auto;
+}
+
+.actionPW.splashBg {
+    height: unset;
+    width: unset;
+    top: unset;
+    margin: 2em;
+    padding: 1em;
+    left: unset;
+}
+
+.actionPW.splashBg .ellucianName {
+    position: unset;
+    left: unset;
+    top: unset;
+    height: 2.5em;
+    width: 12em;
+}
+
+.actionPW.splashBg .appName {
+    font-size: 2em;
+    padding-bottom: 1em;
+    position: unset;
+    top: unset;
+    right: unset;
+}
+
+.actionPW.splashBg .loginMsg {
+    top: unset;
+    right: unset;
+    position: relative;
+    font-weight: bold;
+    text-align: left;
+    padding: 1em 0;
+    font-size: 1.5em;
+}
+
+.eds-text-field.action-input {
+    width: 100%;
+    margin: 1em 0;
+    font-size: 1.2em !important;
+}
+
+.primary.submit-btn {
+    width: 100%;
+    margin: 0.5em 0;
+    padding: 1em 1.5em;
+    font-size: 1.2em;
+}
+
+.actionPW.splashBg .copyright {
+    top: unset;
+    bottom: unset;
+    left: unset;
+    right: unset;
+    margin: 1em 0;
+    padding: 1em 0;
+    position: relative;
+}
+/* Action Password Page - END   */
+
 
 /* Accessibility */
 .audible-message {
@@ -449,11 +504,84 @@ a.breadcrumbButton.leaf-breadcrumb {
     .proxy-page-body {
         padding: 32px 32px 0;
     }
+
+    /* Action Password Page - BEGIN */
+    .actionPW.splashBg {
+        margin: 18% 10%;
+        padding: 3em;
+        height: unset;
+    }
+
+    .actionPW.splashBg .appName {
+        font-size: 1.8em;
+        padding-top: 1em;
+    }
+
+    .flex-wrapper {
+        display: flex;
+        flex-direction: row-reverse;
+        flex-wrap: wrap;
+    }
+
+    .actionPW.splashBg .ellucianName {
+        height: 1.8em;
+        width: 9em;
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-right: 1.5em;
+        order: 3;
+        flex: 0 1 auto;
+    }
+
+    .actionPW.splashBg .loginMsg {
+        padding: 0;
+        font-size: 1.2em;
+        order: 1;
+        flex: 1 0 100%;
+        padding-left: 8.8em;
+        box-sizing: border-box;
+    }
+
+    .actionPW.splashBg form {
+        order: 2;
+        flex: 1 0 70%;
+    }
+
+    .eds-text-field.action-input {
+        width: 60%;
+        margin: 1em 0.5em 1em 0;
+        font-size: 1em !important;
+    }
+
+    .primary.submit-btn {
+        width: 33%;
+        margin: 1em 0 1em 0.5em;
+        font-size: 1em;
+    }
+
+    .actionPW-text {
+        font-size: 12px;
+        order: 4;
+        padding-left: 12.3em;
+    }
+
+    .splashBg .subsection-divider {
+        display: none;
+    }
+
+    .actionPW.splashBg .copyright {
+        margin: 0;
+    }
+
+    .splashBg .copyright > p {
+        margin-bottom: 0;
+    }
+    /* Action Password Page - END   */
 }
 
 @media screen and (min-width:1024px) {
-   .proxy .gen-home-heading,
-   .proxy .gen-home-content {
+    .proxy .gen-home-heading,
+    .proxy .gen-home-content {
         width: 425px;
         top:0px;
     }
@@ -465,4 +593,23 @@ a.breadcrumbButton.leaf-breadcrumb {
     .gen-app-tile {
         width: 410px;
     }
+
+    /* Action Password Page - BEGIN */
+    .actionPW.splashBg {
+        height: 360px;
+        width: 705px;
+        margin: 140px auto 0px;
+    }
+
+    .primary.submit-btn {
+        width: 36%;
+    }
+
+    .actionPW.splashBg .copyright {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 2em;
+        margin-right: 3em;
+    }
+    /* Action Password Page - END   */
 }
