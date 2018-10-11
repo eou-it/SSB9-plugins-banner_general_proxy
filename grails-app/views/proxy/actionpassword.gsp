@@ -21,34 +21,28 @@
         <div class="flex-wrapper">
             <div class="ellucianName"></div>
 
-            <!-- div class="actionPW-content" -->
-                <div class="loginMsg" id="loginMsg">
-                    Enter your Action Password, then click Submit to continue.
-                </div>
-
+            <div class="loginMsg" id="loginMsg">
+                <g:message code="proxy.passwordManagement.initialPassword.prompt"/>
                 <g:if test='${flash.message}'>
-                    <div class="loginMsg">
-                        <span class="icon-error"></span>${flash.message}
-                    </div>
+                        <br><span class="icon-error"></span>${flash.message}
                 </g:if>
+            </div>
 
+            <form action="submitActionPassword" method="post">
 
-                <form action="submitActionPassword" method="post">
+                <div class="actionPw-form">
+                    <input class="eds-text-field action-input" type='password' name="p_verify"
+                           placeholder="<g:message code="proxy.passwordManagement.initialPassword.label"/>">
+                    <input type="hidden" name="token" value="${token}" />
+                    <input type="hidden" name="gidm" value="${gidm}" />
+                    <input type="submit" value="<g:message code="proxy.label.submit"/>" class="primary submit-btn">
+                    <br>
 
-                    <div class="actionPw-form">
-                        <input class="eds-text-field action-input" type='password' name="p_verify"
-                               placeholder="<g:message code="proxy.passwordManagement.initialPassword.label"/>">
-                        <input type="hidden" name="token" value="${token}" />
-                        <input type="hidden" name="gidm" value="${gidm}" />
-                        <input type="submit" value="<g:message code="proxy.label.submit"/>" class="primary submit-btn">
-                        <br>
-
-                    </div>
-                </form>
-                <p class="actionPW-text">
-                    <g:message code="proxy.passwordManagement.submitInitialPassword"/>
-                </p>
-            <!-- /div -->
+                </div>
+            </form>
+            <p class="actionPW-text">
+                <g:message code="proxy.passwordManagement.submitInitialPassword"/>
+            </p>
         </div>
         <div class="subsection-divider"><span></span></div>
         <div class="copyright">

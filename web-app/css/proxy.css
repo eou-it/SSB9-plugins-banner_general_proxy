@@ -547,14 +547,18 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin-bottom: auto;
         margin-right: 1.5em;
         order: 3;
+        flex: 0 1 auto;
     }
 
     .actionPW.splashBg .loginMsg {
         padding: 0;
         font-size: 1.2em;
         order: 1;
-        max-width: 70%;
-        min-width: 70%;
+        /*max-width: 70%;
+        min-width: 70%;*/
+        flex: 1 0 100%;
+        padding-left: 8.8em;
+        box-sizing: border-box;
     }
 
     .actionPW-content {
@@ -563,8 +567,9 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .actionPW.splashBg form {
         order: 2;
-        flex-grow: 1;
-        max-width: 70%;
+        /*flex-grow: 1;
+        max-width: 70%;*/
+        flex: 1 0 70%;
     }
 
     .actionPw-form
@@ -586,7 +591,8 @@ a.breadcrumbButton.leaf-breadcrumb {
     .actionPW-text {
         font-size: 12px;
         order: 4;
-        max-width: 70%;
+        /*max-width: 70%;*/
+        padding-left: 12.3em;
     }
 
     .splashBg .subsection-divider {
@@ -617,4 +623,57 @@ a.breadcrumbButton.leaf-breadcrumb {
     .gen-app-tile {
         width: 410px;
     }
+
+    /* Action Password Page - BEGIN */
+    .actionPW.splashBg {
+        height: 360px;
+        width: 705px;
+        margin: 140px auto 0px;
+    }
+
+    .actionPW.splashBg .appName {
+    }
+
+    .flex-wrapper {
+    }
+
+    .actionPW.splashBg .ellucianName {
+    }
+
+    .actionPW.splashBg .loginMsg {
+    }
+
+    .actionPW-content {
+    }
+
+    .actionPW.splashBg form {
+    }
+
+    .actionPw-form
+    {
+    }
+
+    .eds-text-field.action-input {
+    }
+
+    .primary.submit-btn {
+        width: 36%;
+    }
+
+    .actionPW-text {
+    }
+
+    .splashBg .subsection-divider {
+    }
+
+    .actionPW.splashBg .copyright {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 2em;
+        margin-right: 3em;
+    }
+
+    .splashBg .copyright > p {
+    }
+    /* Action Password Page - END   */
 }
