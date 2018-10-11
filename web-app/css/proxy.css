@@ -399,11 +399,6 @@ table tr.grades-header:hover th:last-child {
 .actionPW.splashBg {
     height: unset;
     width: unset;
-    /*position: relative;
-    background-color: #ffffff;
-    border: 2px solid #ffffff;
-    border-radius: 6px;
-    box-shadow: 0 0 10px 0px #CECECE;*/
     top: unset;
     margin: 2em;
     padding: 1em;
@@ -416,18 +411,9 @@ table tr.grades-header:hover th:last-child {
     top: unset;
     height: 2.5em;
     width: 12em;
-    /*background-image: url(../images/ellucian_logo.svg);
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;*/
 }
 
 .actionPW.splashBg .appName {
-    /*color: #026BC8;
-    font-size: 24px;
-    font-weight: bold;
-    padding-top: 4px;
-    text-align: right;*/
     font-size: 2em;
     padding-bottom: 1em;
     position: unset;
@@ -443,10 +429,6 @@ table tr.grades-header:hover th:last-child {
     text-align: left;
     padding: 1em 0;
     font-size: 1.5em;
-}
-
-.actionPw-form
-{
 }
 
 .eds-text-field.action-input {
@@ -554,26 +536,14 @@ a.breadcrumbButton.leaf-breadcrumb {
         padding: 0;
         font-size: 1.2em;
         order: 1;
-        /*max-width: 70%;
-        min-width: 70%;*/
         flex: 1 0 100%;
         padding-left: 8.8em;
         box-sizing: border-box;
     }
 
-    .actionPW-content {
-        /*grid-column: 2/5;*/
-    }
-
     .actionPW.splashBg form {
         order: 2;
-        /*flex-grow: 1;
-        max-width: 70%;*/
         flex: 1 0 70%;
-    }
-
-    .actionPw-form
-    {
     }
 
     .eds-text-field.action-input {
@@ -591,7 +561,6 @@ a.breadcrumbButton.leaf-breadcrumb {
     .actionPW-text {
         font-size: 12px;
         order: 4;
-        /*max-width: 70%;*/
         padding-left: 12.3em;
     }
 
@@ -610,8 +579,8 @@ a.breadcrumbButton.leaf-breadcrumb {
 }
 
 @media screen and (min-width:1024px) {
-   .proxy .gen-home-heading,
-   .proxy .gen-home-content {
+    .proxy .gen-home-heading,
+    .proxy .gen-home-content {
         width: 425px;
         top:0px;
     }
@@ -631,39 +600,8 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin: 140px auto 0px;
     }
 
-    .actionPW.splashBg .appName {
-    }
-
-    .flex-wrapper {
-    }
-
-    .actionPW.splashBg .ellucianName {
-    }
-
-    .actionPW.splashBg .loginMsg {
-    }
-
-    .actionPW-content {
-    }
-
-    .actionPW.splashBg form {
-    }
-
-    .actionPw-form
-    {
-    }
-
-    .eds-text-field.action-input {
-    }
-
     .primary.submit-btn {
         width: 36%;
-    }
-
-    .actionPW-text {
-    }
-
-    .splashBg .subsection-divider {
     }
 
     .actionPW.splashBg .copyright {
@@ -671,9 +609,6 @@ a.breadcrumbButton.leaf-breadcrumb {
         bottom: 0;
         margin-bottom: 2em;
         margin-right: 3em;
-    }
-
-    .splashBg .copyright > p {
     }
     /* Action Password Page - END   */
 }
