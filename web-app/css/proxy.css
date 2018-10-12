@@ -166,11 +166,11 @@ table.dataentrytable {
 }
 
 .proxy-profile-form {
-    padding: 0px 100px;
+    padding: 0px 16px;
 }
 
 .proxy-profile-form input.hasMultiCalendarPicker.pi-date-input + span.calendar-img {
-    left: 12em;
+    right: 5px;
 }
 
 ul{
@@ -218,16 +218,7 @@ ul{
 }
 
 h1.proxy-page-heading {
-    font-family: OpenSans-semibold;
-    font-size: 18px;
-    color: #151618;
-    background: #f7f7f7;
-    padding: 20px;
-    margin: auto;
-}
-
-h1.proxy-page-heading.pi {
-    float: left;
+    display: none;
 }
 
 h1.proxy-landing-page-heading {
@@ -350,9 +341,9 @@ table tr.grades-header:hover th:last-child {
 }
 
 .proxy-pi-top-link {
-    float: right;
     font-family: OpenSans-semibold;
-    padding: 20px 100px 0 0;
+    padding: 23px 0 19px;
+    text-align: center;
 }
 
 .proxy-pi-left-message {
@@ -366,30 +357,33 @@ table tr.grades-header:hover th:last-child {
 
 .pi-section {
     background: #FFFFFF;
-    margin: 10px 0px;
-    padding: 49px;
-    padding-top: 23px;
+    margin: 20px 0px;
+    padding: 19px;
+    padding-top: 9px;
     border: 1px solid #beccd7;
     border-top: none;
 }
 
-#opt-out-adv-date-txt {
-    padding-top: 30px;
+.pi-section .col-xs-12 {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.proxy-pi-bottom-spacer {
+    padding: 5px;
 }
 
 .proxy-bottom-buttons {
-    margin: 0 auto;
-    padding: 50px 0 100px;
-    width: 540px;
+    padding: 42px 0 100px;
 }
 
 .proxy-bottom-buttons input {
-    width: 260px;
+    width: 100%;
     height: 44px;
 }
 
-.proxy-bottom-buttons input.left {
-    margin-right: 10px;
+.proxy-bottom-buttons .mobile-visible input {
+    margin-bottom: 20px;
 }
 
 /* Action Password Page - BEGIN */
@@ -522,7 +516,7 @@ a.breadcrumbButton.leaf-breadcrumb {
         flex-direction: row-reverse;
         flex-wrap: wrap;
     }
-
+    
     .actionPW.splashBg .ellucianName {
         height: 1.8em;
         width: 9em;
@@ -577,6 +571,53 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin-bottom: 0;
     }
     /* Action Password Page - END   */
+
+    h1.proxy-page-heading {
+        font-family: OpenSans-semibold;
+        font-size: 18px;
+        color: #151618;
+        background: #f7f7f7;
+        padding: 20px;
+        margin: auto;
+        display: block;
+    }
+
+    h1.proxy-page-heading.pi {
+        float: left;
+    }
+
+    .proxy-profile-form {
+        padding: 0px 100px;
+    }
+
+    .proxy-pi-top-link {
+        float: right;
+        padding: 20px 100px 0 0;
+        text-align: left;
+    }
+
+    .pi-section {
+        padding: 49px;
+        padding-top: 23px;
+    }
+
+    .proxy-bottom-buttons {
+        margin: 0 auto;
+        padding-top: 54px;
+        width: 540px;
+    }
+
+    .proxy-pi-bottom-spacer {
+        padding: 8px;
+    }
+
+    .proxy-bottom-buttons input {
+        width: 260px;
+    }
+
+    .proxy-bottom-buttons input.left {
+        margin-right: 10px;
+    }
 }
 
 @media screen and (min-width:1024px) {
@@ -612,4 +653,31 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin-right: 3em;
     }
     /* Action Password Page - END   */
+}
+
+/*Tablet device*/
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .proxy-profile-form {
+        padding: 0px 18px;
+    }
+
+    .proxy-pi-top-link {
+        padding-right: 20px;
+    }
+
+    .pi-section {
+        padding: 23px 16px 49px 24px;
+    }
+
+    .proxy-pi-right-message {
+        padding-right: 10px;
+    }
+
+    .proxy-pi-bottom-spacer {
+        padding: 8px;
+    }
+
+    .proxy-bottom-buttons {
+        padding-top: 54px;
+    }
 }
