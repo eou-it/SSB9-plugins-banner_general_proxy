@@ -47,7 +47,7 @@
                    role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
             </div>
 
-            <div ng-if="profileElement.visible && profileElement.elemId === 'p_birth_date'" class="vet-date-input">
+            <div ng-if="profileElement.visible && profileElement.elemId === 'p_birth_date'">
                 <label ng-class="(seprDateErrMsg && !seprDateFocused ? 'field-error' : '')" for="seprDate" ng-bind-html= "profileElement.label" class="input-field-label">
                 </label>
                 <input date-picker ng-model="profileElement.model" pi-input-watcher on-select="setSeprDate" ng-blur="seprDateFocused=false; removeVeteranErrors()"
@@ -68,14 +68,20 @@
 
         </div>
     </div>
-
+    <div class="proxy-pi-bottom-spacer"></div>
     <div ng-if="optOutAdvDate && optOutAdvDate.visible">
         <input ng-model="optOutAdvDate.model" class="main-nav-check" id="opt_out_adv_date" type="checkbox" aria-describedby="opt-out-adv-date-txt"/>
         <p class="lbl" id="opt-out-adv-date-txt"><label for="opt_out_adv_date">{{'proxy.personalinformation.label.p_opt_out_adv_date'|i18n}}</label></p>
     </div>
 
     <div class="proxy-bottom-buttons">
-        <input ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" id="p_cancel" class="secondary left">
-        <input ng-click="save()"   type="button" value="{{'proxy.label.submit'|i18n}}" id="p_update" class="primary">
+        <div class="mobile-visible">
+            <input ng-click="save()"   type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
+            <input ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
+        </div>
+        <div class="desktop-visible">
+            <input ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
+            <input ng-click="save()"   type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
+        </div>
     </div>
 </div>
