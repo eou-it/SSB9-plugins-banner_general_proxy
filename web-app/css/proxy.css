@@ -342,6 +342,7 @@ table tr.grades-header:hover th:last-child {
 
 .proxy-pi-top-link {
     font-family: OpenSans-semibold;
+    text-decoration: underline;
     padding: 23px 0 19px;
     text-align: center;
 }
