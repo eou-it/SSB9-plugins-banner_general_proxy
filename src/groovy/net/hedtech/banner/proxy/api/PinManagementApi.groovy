@@ -89,62 +89,59 @@ BEGIN
                               p_email_ver_date   => SYSDATE,
                               p_user_id          => USER);
          
-         CASE lv_GPBELTR_rec.R_CTYP_CODE
-            WHEN 'NEW_EMAIL'
+         IF lv_GPBELTR_rec.R_CTYP_CODE = 'NEW_EMAIL_NOA' or lv_GPBELTR_rec.R_CTYP_CODE = 'NEW_EMAIL'
+         THEN
+            do_pin := 'N';
+            lv_loginOut := 'Y';
+            msg := 'emailChanged';
+            --P_PA_SaveEmail (lv_GPBELTR_rec.R_PROXY_IDM,
+            --                lv_GPBELTR_rec.R_PROXY_OLD_DATA,
+            --                lv_GPBELTR_rec.R_PROXY_NEW_DATA);
+            -- Set email address to updated value
+            gp_gpbprxy.P_Update (p_proxy_idm          => lv_GPBELTR_rec.R_PROXY_IDM,
+                                 p_pin_disabled_ind   => 'N',
+                                 p_email_address      => lv_GPBELTR_rec.R_PROXY_NEW_DATA,
+                                 p_user_id            => USER);
+            bwgkprxy.P_MatchLoad (lv_GPBELTR_rec.R_PROXY_IDM);
+            gb_common.P_Commit;
+         ELSIF lv_GPBELTR_rec.R_CTYP_CODE = 'CANCEL_EMAIL_NOA' or lv_GPBELTR_rec.R_CTYP_CODE = 'CANCEL_EMAIL'
+         THEN
+            do_pin := 'N';
+            lv_loginOut := 'Y';
+            msg := 'emailCanceled';
+            --P_PA_CancelEmail (lv_GPBELTR_rec.R_PROXY_IDM,
+            --                  lv_GPBELTR_rec.R_PROXY_OLD_DATA,
+            --                  lv_GPBELTR_rec.R_PROXY_NEW_DATA);
+            -- Verify that previous e-mail address doesn't exist
+            lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One_By_Email (lv_GPBELTR_rec.R_PROXY_OLD_DATA);
+
+            FETCH lv_GPBPRXY_ref INTO lv_GPBPRXY_rec;
+
+            IF lv_GPBPRXY_ref%FOUND
             THEN
-               do_pin := 'N';
-               lv_loginOut := 'Y';
-               msg := 'emailChanged';
-               --P_PA_SaveEmail (lv_GPBELTR_rec.R_PROXY_IDM,
-               --                lv_GPBELTR_rec.R_PROXY_OLD_DATA,
-               --                lv_GPBELTR_rec.R_PROXY_NEW_DATA);
-               -- Set email address to updated value
+               --lv_info := 'EMAIL_DUPLICATE';
+               msg := 'emailDuplicate';
+            ELSE
+               -- Reset email address back to previous value and enable account
                gp_gpbprxy.P_Update (p_proxy_idm          => lv_GPBELTR_rec.R_PROXY_IDM,
                                     p_pin_disabled_ind   => 'N',
-                                    p_email_address      => lv_GPBELTR_rec.R_PROXY_NEW_DATA,
+                                    p_email_address      => lv_GPBELTR_rec.R_PROXY_OLD_DATA,
                                     p_user_id            => USER);
-               bwgkprxy.P_MatchLoad (lv_GPBELTR_rec.R_PROXY_IDM);
+
+               -- Invalidate any outstanding actions related to changing e-mail address
+               -- The cancel e-mail action can override a new e-mail action
+               UPDATE GPBELTR
+                  SET GPBELTR_CTYP_EXE_DATE = SYSDATE,
+                      GPBELTR_ACTIVITY_DATE = SYSDATE
+                WHERE     GPBELTR_CTYP_CODE = 'NEW_EMAIL'
+                      AND GPBELTR_CTYP_EXE_DATE IS NULL
+                      AND GPBELTR_PROXY_IDM = lv_GPBELTR_rec.R_PROXY_IDM;
+
                gb_common.P_Commit;
-            WHEN 'CANCEL_EMAIL'
-            THEN
-               do_pin := 'N';
-               lv_loginOut := 'Y';
-               msg := 'emailCanceled';
-               --P_PA_CancelEmail (lv_GPBELTR_rec.R_PROXY_IDM,
-               --                  lv_GPBELTR_rec.R_PROXY_OLD_DATA,
-               --                  lv_GPBELTR_rec.R_PROXY_NEW_DATA);
-               -- Verify that previous e-mail address doesn't exist
-               lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One_By_Email (lv_GPBELTR_rec.R_PROXY_OLD_DATA);
+            END IF;
 
-               FETCH lv_GPBPRXY_ref INTO lv_GPBPRXY_rec;
-
-               IF lv_GPBPRXY_ref%FOUND
-               THEN
-                  --lv_info := 'EMAIL_DUPLICATE';
-                  msg := 'emailDuplicate';
-               ELSE
-                  -- Reset email address back to previous value and enable account
-                  gp_gpbprxy.P_Update (p_proxy_idm          => lv_GPBELTR_rec.R_PROXY_IDM,
-                                       p_pin_disabled_ind   => 'N',
-                                       p_email_address      => lv_GPBELTR_rec.R_PROXY_OLD_DATA,
-                                       p_user_id            => USER);
-
-                  -- Invalidate any outstanding actions related to changing e-mail address
-                  -- The cancel e-mail action can override a new e-mail action
-                  UPDATE GPBELTR
-                     SET GPBELTR_CTYP_EXE_DATE = SYSDATE,
-                         GPBELTR_ACTIVITY_DATE = SYSDATE
-                   WHERE     GPBELTR_CTYP_CODE = 'NEW_EMAIL'
-                         AND GPBELTR_CTYP_EXE_DATE IS NULL
-                         AND GPBELTR_PROXY_IDM = lv_GPBELTR_rec.R_PROXY_IDM;
-
-                  gb_common.P_Commit;
-               END IF;
-
-               CLOSE lv_GPBPRXY_ref;
-            ELSE
-               null;
-         END CASE;
+            CLOSE lv_GPBPRXY_ref;
+         END IF;
       end if;
   END IF;
 
