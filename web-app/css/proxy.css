@@ -430,13 +430,19 @@ table tr.grades-header:hover th:last-child {
 .eds-text-field.action-input {
     width: 100%;
     margin: 1em 0;
+    font-family: sans-serif !important;
     font-size: 1.2em !important;
+}
+
+.eds-text-field.action-input:focus:not([valid]) {
+    font-family: sans-serif !important;
 }
 
 .primary.submit-btn {
     width: 100%;
     margin: 0.5em 0;
     padding: 1em 1.5em;
+    font-family: sans-serif !important;
     font-size: 1.2em;
 }
 
