@@ -586,7 +586,7 @@ END;
             -- Send first message using existing e-mail address with CANCEL_EMAIL action
             gp_gpbeltr.P_Create (
                p_syst_code        => 'PROXY',
-               p_ctyp_code        => 'CANCEL_EMAIL',
+               p_ctyp_code        => 'CANCEL_EMAIL_NOA',
                p_ctyp_url         => NULL,
                p_ctyp_exp_date    => SYSDATE
                                     + bwgkprxy.F_GetOption (
@@ -609,6 +609,27 @@ END;
 
             gb_common.P_Commit;
             bwgkprxy.P_SendEmail (lv_hold_rowid);
+            
+            
+             gp_gpbeltr.P_Create (
+      p_syst_code      => 'PROXY',
+      p_ctyp_code      => 'NEW_PROXY_ACCESS_CODE',
+      p_ctyp_url       => NULL,
+      p_ctyp_exp_date  => SYSDATE + bwgkprxy.F_GetOption ('ACTION_VALID_DAYS'),
+      p_ctyp_exe_date  => NULL,
+      p_transmit_date  => NULL,
+      p_proxy_idm      => hold_proxy_idm,
+      p_proxy_old_data => NULL,
+      p_proxy_new_data => NULL,
+      p_person_pidm    => NULL,
+      p_user_id        => goksels.f_get_ssb_id_context,
+      p_create_date    => SYSDATE,
+      p_create_user    => goksels.f_get_ssb_id_context,
+      p_rowid_out      => lv_hold_rowid
+      );
+      
+      gb_common.P_Commit;
+      bwgkprxy.P_SendEmail (lv_hold_rowid);
 
             -- Send second message using updated e-mail address with NEW_EMAIL action
             -- Expire the PIN with 'e-mail change pending' indicator
@@ -621,7 +642,7 @@ END;
 
             gp_gpbeltr.P_Create (
                p_syst_code        => 'PROXY',
-               p_ctyp_code        => 'NEW_EMAIL',
+               p_ctyp_code        => 'NEW_EMAIL_NOA',
                p_ctyp_url         => NULL,
                p_ctyp_exp_date    => SYSDATE
                                     + bwgkprxy.F_GetOption (
@@ -644,6 +665,27 @@ END;
 
             gb_common.P_Commit;
             bwgkprxy.P_SendEmail (lv_hold_rowid);
+            
+                       
+             gp_gpbeltr.P_Create (
+      p_syst_code      => 'PROXY',
+      p_ctyp_code      => 'NEW_PROXY_ACCESS_CODE',
+      p_ctyp_url       => NULL,
+      p_ctyp_exp_date  => SYSDATE + bwgkprxy.F_GetOption ('ACTION_VALID_DAYS'),
+      p_ctyp_exe_date  => NULL,
+      p_transmit_date  => NULL,
+      p_proxy_idm      => hold_proxy_idm,
+      p_proxy_old_data => NULL,
+      p_proxy_new_data => NULL,
+      p_person_pidm    => NULL,
+      p_user_id        => goksels.f_get_ssb_id_context,
+      p_create_date    => SYSDATE,
+      p_create_user    => goksels.f_get_ssb_id_context,
+      p_rowid_out      => lv_hold_rowid
+      );
+      
+      gb_common.P_Commit;
+      bwgkprxy.P_SendEmail (lv_hold_rowid);
             
              CLOSE lv_GPBPRXY_ref;
          END IF;
