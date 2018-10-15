@@ -65,8 +65,11 @@ BEGIN
 
       -- Check for expiration date
       -- Check for action already executed
+   ELSIF lv_GPBELTR_rec.R_CTYP_EXE_DATE IS NOT NULL
+   THEN
+     lv_loginOut  := 'Y';
+     
    ELSIF NVL (TRUNC(lv_GPBELTR_rec.R_CTYP_EXP_DATE), TRUNC(SYSDATE)) < TRUNC(SYSDATE)
-   OR lv_GPBELTR_rec.R_CTYP_EXE_DATE IS NOT NULL
    THEN
      lv_loginOut  := 'Y';
      msg := 'tokenExpired';
