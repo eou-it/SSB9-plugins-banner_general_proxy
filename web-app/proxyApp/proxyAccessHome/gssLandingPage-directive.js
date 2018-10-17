@@ -27,6 +27,16 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
         link: function(scope){
             scope.goProxyApp = function(url) {
 
+                //clear storage for Term Selector
+                if (sessionStorage.getItem("termCode")){
+                    sessionStorage.removeItem("termCode");
+                }
+
+                if (sessionStorage.getItem("termDesc")){
+                    sessionStorage.removeItem("termDesc");
+                }
+
+
                 sessionStorage.setItem("pidm", scope.proxyData.pidm);
                 sessionStorage.setItem("name", scope.proxyData.desc);
                 
