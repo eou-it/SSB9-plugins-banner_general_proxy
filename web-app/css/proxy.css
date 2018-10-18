@@ -334,6 +334,7 @@ p.notification-msg {
 
 .proxy-top-input {
     margin-top: 10px;
+    width: 100%;
 }
 
 .proxy-section-heading {
