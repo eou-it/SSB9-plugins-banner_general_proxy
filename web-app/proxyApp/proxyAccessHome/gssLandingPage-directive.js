@@ -27,6 +27,25 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
         link: function(scope){
             scope.goProxyApp = function(url) {
 
+                //clear storage for Term Selector
+                if (sessionStorage.getItem("termCode")){
+                    sessionStorage.removeItem("termCode");
+                }
+
+                if (sessionStorage.getItem("termDesc")){
+                    sessionStorage.removeItem("termDesc");
+                }
+
+                //clear storage for AidYear Selector
+                if (sessionStorage.getItem("aidYearCode")){
+                    sessionStorage.removeItem("aidYearCode");
+                }
+
+                if (sessionStorage.getItem("aidYearDesc")){
+                    sessionStorage.removeItem("aidYearDesc");
+                }
+
+
                 sessionStorage.setItem("pidm", scope.proxyData.pidm);
                 sessionStorage.setItem("name", scope.proxyData.desc);
                 

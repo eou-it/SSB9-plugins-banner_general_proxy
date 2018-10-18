@@ -12,5 +12,16 @@ proxyAppControllers.controller('proxyViewGradesController',['$scope', 'proxyAppS
         $scope.term = {
             code: {}
         };
+
+
+        if(proxyAppService.getTerm()) {
+            $scope.term.code = proxyAppService.getTerm();
+
+            proxyAppService.getGrades({termCode: $scope.term.code.code}).$promise.then(function(response) {
+
+                $scope.student.grades = response.data;
+                
+            });
+        }
     }
 ]);

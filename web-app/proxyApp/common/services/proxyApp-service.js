@@ -101,4 +101,22 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
             return null;
         }
     };
+
+    this.setTerm = function(termrObj) {
+        sessionStorage.setItem("termCode", termrObj.code);
+        sessionStorage.setItem("termDesc", termrObj.description);
+    };
+
+    this.getTerm = function() {
+        if (sessionStorage.getItem("termCode")) {
+            return {
+                code: sessionStorage.getItem("termCode"),
+                description: sessionStorage.getItem("termDesc")
+            };
+        }
+        else {
+            return null;
+        }
+    };
+
 }]);
