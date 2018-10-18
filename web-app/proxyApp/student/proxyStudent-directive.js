@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAppService) {
+proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$compile', function(proxyAppService, $filter, $compile) {
     function topOf(elements) {
         function topOfOne(element) {
             var pos = $(element).position();
@@ -20,6 +20,10 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
         }
     }, 100);
 
+    var weekOfText = $filter('i18n')('proxy.schedule.weekOf'),
+        goToText = $filter('i18n')('proxy.schedule.goTo'),
+        datePlaceholderText = $filter('i18n')('default.date.format.watermark');
+
     return {
         link: function(scope, elem, attrs) {
             //function setupCalendarView() {
@@ -30,9 +34,12 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
 
                 $('#calendar').fullCalendar({
                     header: {
-                        left: 'prev',
+                        left: '',
                         center: 'title',
-                        right: 'next goToDate'
+                        right: ''
+                    },
+                    footer: {
+                        right: 'prev next'
                     },
                     defaultView: 'agendaWeek',
                     allDaySlot: false,
@@ -43,16 +50,18 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                     slotEventOverlap: false,
                     slotDuration: '00:15:00',
                     slotLabelInterval: '01:00',
+                    slotLabelFormat: 'h:mm a',
+                    scrollTime: '08:00:00',
                     //columnFormat: {
                     //    agendaWeek: 'dddd',
                     //    basicWeek: 'ddd'
                     //},
-                    columnHeaderFormat: 'dddd',
+                    columnHeaderFormat: 'DD ddd',
                     //timeFormat: {
                     //    basicWeek: 'h:mm{-h:mm}' // 5:00 - 6:30
                     //},
                     timeFormat: 'h:mm', // 5:00 - 6:30,
-                    titleFormat: '[Week of] MMMM DD, YYYY',
+                    titleFormat: '['+ weekOfText +'] MMMM DD, YYYY',
 
                     firstDay: parseInt($.i18n.prop("default.firstDayOfTheWeek")),
                     dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],//$.i18n.prop("default.gregorian.dayNames").split(','), TODO: add to props
@@ -159,10 +168,17 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                         else {
                             $('.fc-next-button').addClass('fc-state-disabled');
                         }
+
                     }
                 });
 
-                //$("#calendar div").attr("dir", $.i18n.prop('default.language.direction') == 'ltr' ? "ltr" : "rtl");
+                //add date-picker to calendar
+            var datePickerTemplate = '<div class="gotodate-block"> <label>'+ goToText +'</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="'+ datePlaceholderText +'" id="goToDate"/> </div>';
+            var datePickerElem = $compile(datePickerTemplate)(scope);
+            $('.fc-header-toolbar > .fc-right').append(datePickerElem);
+
+
+            //$("#calendar div").attr("dir", $.i18n.prop('default.language.direction') == 'ltr' ? "ltr" : "rtl");
 
             //}
         }

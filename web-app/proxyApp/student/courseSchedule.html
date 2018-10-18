@@ -1,14 +1,18 @@
 <div>
-    <h2>{{'proxy.schedule.label'|i18n}} {{studentName}}</h2>
-    <label>Date</label>
-    <input ng-model="tgtDate" type="text" placeholder="MM/DD/YYYY"><input ng-click="goToDate()" type="button" value="Go to date">
-    <div full-calendar pidm="{{pidm}}" id="calendar" class="ui-widget-content" role="region"></div>
-    <div>
-        <h3>Courses without assigned meeting times:</h3>
-        <p ng-repeat="course in unassignedSchedule">{{course.crse_subj_code}} {{course.crse_crse_numb}}-{{course.crse_seq_numb}} - {{course.crse_crn}} {{course.crse_ptrm_code == null ? course.crse_stvschd_desc : 'TBA'}}</p>
-    </div>
-    <div>
-        <h3>Courses with time conflict:</h3>
-        <p ng-repeat="course in scheduleConflicts"><b>Subject Code:</b> {{course.subject}} <b>Course #:</b> {{course.courseNumber}} <b>CRN:</b> {{course.crn}} <b>Start:</b> {{course.start}} <b>End:</b> {{course.end}}</p>
+    <h2>{{'proxy.schedule.label'|i18n:[studentName]}}</h2>
+    <div class="proxy-page-body">
+        <div class="proxy-top-message-container">
+            <div class="proxy-notification-icon blue">
+                <span class="icon-info-CO"></span>
+            </div>
+            <p class="proxy-top-message proxy-notification-text">
+                {{'proxy.schedule.infoText'|i18n}}
+            </p>
+        </div>
+        <div full-calendar pidm="{{pidm}}" id="calendar" class="ui-widget-content" role="region"></div>
+        <div>
+            <h3>Courses without assigned meeting times:</h3>
+            <p ng-repeat="course in unassignedSchedule">{{course.crse_subj_code}} {{course.crse_crse_numb}}-{{course.crse_seq_numb}} - {{course.crse_crn}} {{course.crse_ptrm_code == null ? course.crse_stvschd_desc : 'TBA'}}</p>
+        </div>
     </div>
 </div>
