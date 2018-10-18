@@ -595,6 +595,9 @@ a.breadcrumbButton.leaf-breadcrumb {
         display: block;
     }
 
+    #awardHistoryTable>tbody>tr:last-child { font-family: OpenSans-semibold; }
+    #awardHistoryResourcesTable>tbody>tr:last-child { font-family: OpenSans-semibold; }
+
     h1.proxy-page-heading.left {
         float: left;
     }
