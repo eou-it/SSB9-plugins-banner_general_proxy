@@ -36,6 +36,15 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
                     sessionStorage.removeItem("termDesc");
                 }
 
+                //clear storage for AidYear Selector
+                if (sessionStorage.getItem("aidYearCode")){
+                    sessionStorage.removeItem("aidYearCode");
+                }
+
+                if (sessionStorage.getItem("aidYearDesc")){
+                    sessionStorage.removeItem("aidYearDesc");
+                }
+
 
                 sessionStorage.setItem("pidm", scope.proxyData.pidm);
                 sessionStorage.setItem("name", scope.proxyData.desc);
