@@ -1,0 +1,79 @@
+<!--*******************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<h1 class="proxy-page-heading awardHistory">{{'proxy.awardHistory.label'|i18n:[studentName]}}</h1>
+<div  class="proxy-page-body">
+
+    <p class="notification-msg" ng-repeat="message in messages"><span ng-bind-html="stringifyAwardMesageFor(message)"></span></p>
+
+    <div ng-repeat="award in awards" id="awardhistory">
+
+    <table>
+        <thead>
+        <tr>
+            <th colspan="7">{{'proxy.awardHistory.heading.label'|i18n:[award.aidYear]}}</th>
+        </tr>
+        <tr>
+            <th>{{'proxy.awardHistory.label.fund'|i18n}}</th>
+            <th class="right">{{'proxy.awardHistory.label.offered'|i18n}}</th>
+            <th class="right">{{'proxy.awardHistory.label.accepted'|i18n}}</th>
+            <th class="right">{{'proxy.awardHistory.label.declined'|i18n}}</th>
+            <th class="right">{{'proxy.awardHistory.label.cancelled'|i18n}}</th>
+            <th class="right">{{'proxy.awardHistory.label.total'|i18n}}</th>
+            <th class="right">{{'proxy.awardHistory.label.paidToDate'|i18n}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="row in award.data.rows">
+            <td ng-bind-html="stringifyAwardMesageFor(row.fund_title)"></td>
+            <td align="right">{{row.offer_amt}}</td>
+            <td align="right">{{row.accept_amt}}</td>
+            <td align="right">{{row.decline_amt}}</td>
+            <td align="right">{{row.cancel_amt}}</td>
+            <td align="right">{{row.total_amt}}</td>
+            <td align="right">{{row.paid_amt}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+        <div data-ng-show="award.resources.length &gt; 0">
+
+        <p></p>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="4">{{'proxy.awards.resources.label'|i18n}}</th>
+            </tr>
+            <tr>
+                <th>{{'proxy.awardHistory.label.additionalResource'|i18n}}</th>
+                <th class="right">{{'proxy.awardHistory.label.term'|i18n}}</th>
+                <th class="right">{{'proxy.awardHistory.label.expectedAmount'|i18n}}</th>
+                <th class="right">{{'proxy.awardHistory.label.actualAmount'|i18n}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="resource in award.resources">
+                <td ng-bind-html="stringifyAwardMesageFor(resource.resource_desc)"></td>
+                <td align="right" ng-bind-html="resource.term_code"></td>
+                <td align="right">{{resource.est_amt}}</td>
+                <td align="right">{{resource.actual_amt}}</td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+
+    </div>
+
+    <br><br>
+
+    <div class="proxy-bottom-message-container">
+        <div class="proxy-notification-icon blue">
+            <span class="icon-info-CO"></span>
+        </div>
+        <div class="proxy-top-message proxy-notification-text">
+            {{'proxy.awardHistory.bottomMessage'|i18n}}
+        </div>
+    </div>
+
+</div>
+

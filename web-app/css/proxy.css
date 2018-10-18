@@ -187,28 +187,8 @@ ul{
     margin-right: 1em;
 }
 
-
-#awards {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-#awards td, #awards th {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-#awards tr:nth-child(even){background-color: #f2f2f2;}
-
-#awards tr:hover {background-color: #ddd;}
-
-#awards th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #4CAF50;
-    color: white;
+#awardhistory th .right{
+    text-align: right;
 }
 
 #content.proxy {
@@ -591,6 +571,10 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     h1.proxy-page-heading.pi {
         float: left;
+    }
+
+    h1.proxy-page-heading.awardHistory {
+        float: right;
     }
 
     .proxy-profile-form {
