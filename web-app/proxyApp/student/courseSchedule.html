@@ -1,6 +1,11 @@
 <div>
-    <h2>{{'proxy.schedule.label'|i18n:[studentName]}}</h2>
     <div class="proxy-page-body">
+        <div class="clearfix">
+            <h1 class="proxy-page-heading left">{{'proxy.schedule.heading'|i18n}}</h1>
+            <div class="proxy-page-student-name">
+                {{'proxy.message.viewingStudentInfo'|i18n:[studentName]}}
+            </div>
+        </div>
         <div class="proxy-top-message-container">
             <div class="proxy-notification-icon blue">
                 <span class="icon-info-CO"></span>
@@ -10,9 +15,11 @@
             </p>
         </div>
         <div full-calendar pidm="{{pidm}}" id="calendar" class="ui-widget-content" role="region"></div>
-        <div>
-            <h3>Courses without assigned meeting times:</h3>
-            <p ng-repeat="course in unassignedSchedule">{{course.crse_subj_code}} {{course.crse_crse_numb}}-{{course.crse_seq_numb}} - {{course.crse_crn}} {{course.crse_ptrm_code == null ? course.crse_stvschd_desc : 'TBA'}}</p>
+        <div ng-if="unassignedSchedule.length > 0">
+            <h2>{{'proxy.schedule.unassignedMeeting'|i18n}}</h2>
+            <div ng-repeat="course in unassignedSchedule">
+                <a>{{course.crse_subj_code}} {{course.crse_crse_numb}}-{{course.crse_seq_numb}}</a> - {{course.crse_crn}} {{course.crse_ptrm_code == null ? course.crse_stvschd_desc : 'TBA'}}
+            </div>
         </div>
     </div>
 </div>

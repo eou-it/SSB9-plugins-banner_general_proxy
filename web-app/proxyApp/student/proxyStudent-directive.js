@@ -45,7 +45,8 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     allDaySlot: false,
                     editable: false,
                     eventColor: '#eff7ff',
-                    eventBorderColor: '#026BC8',
+                    eventTextColor: '#428bca',
+                    eventBorderColor: '#2874bb',
                     aspectRatio: 2,
                     slotEventOverlap: false,
                     slotDuration: '00:15:00',
@@ -155,19 +156,27 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                             $(".fc-agenda-axis.fc-widget-header.fc-fake-first").removeClass("fc-fake-first").addClass("fc-last-rtl");
                         }
 
+                        var prevBtnElem = $('.fc-prev-button'),
+                            nextBtnElem = $('.fc-next-button');
                         if(scope.hasPrevWeek) {
-                            $('.fc-prev-button').removeClass('fc-state-disabled');
+                            prevBtnElem.removeClass('fc-state-disabled');
+                            prevBtnElem.removeAttr('disabled');
                         }
                         else {
-                            $('.fc-prev-button').addClass('fc-state-disabled');
+                            prevBtnElem.addClass('fc-state-disabled');
+                            prevBtnElem.attr('disabled', '');
                         }
+                        prevBtnElem.addClass('secondary');
 
                         if(scope.hasNextWeek) {
-                            $('.fc-next-button').removeClass('fc-state-disabled');
+                            nextBtnElem.removeClass('fc-state-disabled');
+                            nextBtnElem.removeAttr('disabled');
                         }
                         else {
-                            $('.fc-next-button').addClass('fc-state-disabled');
+                            nextBtnElem.addClass('fc-state-disabled');
+                            nextBtnElem.attr('disabled', '');
                         }
+                        nextBtnElem.addClass('secondary');
 
                     }
                 });

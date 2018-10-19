@@ -529,10 +529,6 @@ p.notification-msg {
     border-style: none;
 }
 
-.fc-unthemed td.fc-widget-content:first-child {
-    border-left-style: none;
-}
-
 #calendar .fc-agendaWeek-view > table {
     border-top-style: solid;
     border-top-width: 1px;
@@ -586,6 +582,25 @@ p.notification-msg {
     right: 2.5em;
 }
 
+.proxy .fc-unthemed td.fc-today {
+    background: #F6F6F6;
+    border-bottom: none;
+}
+
+.fc-unthemed td.fc-widget-content:first-child {
+    border-left-style: none;
+}
+
+.fc-unthemed td.fc-widget-content:last-child {
+    border-right-style: none;
+}
+
+.fc-unthemed th, .fc-unthemed td, .fc-unthemed thead, .fc-unthemed tbody,
+.fc-unthemed .fc-divider, .fc-unthemed .fc-row, .fc-unthemed .fc-content,
+.fc-unthemed .fc-popover, .fc-unthemed .fc-list-view, .fc-unthemed .fc-list-heading td {
+    border-color: #dee5e7;
+}
+
 .proxy .fc-row.fc-widget-header {
     border-right-width: 0px !important;
 }
@@ -635,8 +650,60 @@ p.notification-msg {
 
 .fc-toolbar.fc-footer-toolbar {
     margin-top: 0em;
-    padding-top: 1em;
+    padding: 1em 1.5em 1em 0;
     border-top: 1px solid #dee5e7;
+}
+
+.fc-button.secondary {
+    background-color: #FFFFFF;
+    border: 1px solid #026BC8;
+    color: #026BC8;
+    border-radius: 4px;
+    font-family: Open Sans !important;
+
+    background-image: none; 
+}
+
+.fc-button.secondary:hover:not([disabled]) {
+    background-color: #065AA5;
+    color: #FFFFFF;
+}
+
+.fc-button.secondary:focus:not([disabled]) {
+    border: 1px solid #81C8FF;
+    -ms-user-select: none;
+    background-color: #026BC8;
+    color: #FFFFFF;
+    outline: none;
+}
+
+.fc-button.secondary:disabled {
+    background-color: #B2B3B7;
+    color: #FFFFFF;
+    border: none;
+}
+
+.fc-button.secondary:active:not([disabled]) {
+    background-color: #0A4982;
+    border: none;
+}
+
+.proxy .fc-ltr .fc-time-grid .fc-event-container {
+    margin: 0;
+}
+
+.proxy-event {
+    border-left-width: 3px;
+    border-top-style: none;
+    border-bottom-style: none;
+    border-right-style: none;
+    border-radius: 0;
+    padding-left: 0.5em;
+    padding-top: 0.625em;
+}
+
+.proxy-event a {
+    color: #428bca;
 }
 /* Course Schedule - END */
 
