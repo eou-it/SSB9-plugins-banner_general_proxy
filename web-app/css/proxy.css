@@ -355,9 +355,8 @@ p.notification-msg {
 .pi-section {
     background: #FFFFFF;
     margin: 20px 0px;
-    padding: 17px;
-    padding-top: 7px;
-    border: 2px solid #ffffff;
+    padding: 19px;
+    padding-top: 9px;
     box-shadow: 0 0 10px 0px #CECECE;
     border-radius: 6px;
 }
@@ -373,7 +372,6 @@ p.notification-msg {
 
 .proxy-content-section {
     background: #FFFFFF;
-    border: 2px solid #ffffff;
     box-shadow: 0 0 10px 0px #CECECE;
     border-radius: 6px;
     margin-left: 0;
@@ -639,6 +637,10 @@ a.breadcrumbButton.leaf-breadcrumb {
     .proxy-section-heading {
         padding-top: 28px;
         padding-bottom: 28px;
+    }
+
+    .proxy-section-heading.pi {
+        padding-top: 22px;
     }
 
     .proxy-bottom-buttons {
