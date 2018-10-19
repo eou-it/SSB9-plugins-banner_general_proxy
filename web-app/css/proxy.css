@@ -701,6 +701,14 @@ a.breadcrumbButton.leaf-breadcrumb {
 
 /*Tablet device*/
 @media screen and (min-width: 768px) and (max-width: 1023px) {
+    .proxy-page-body {
+        padding: 20px 20px 100px;
+    }
+
+    .proxy-top-message-container {
+        margin-top: 4px;
+    }
+
     .proxy-profile-form {
         padding: 0px 18px;
     }
@@ -711,6 +719,10 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .pi-section {
         padding: 21px 14px 47px 22px;
+    }
+
+    table.proxy-content-section {
+        max-width: unset;
     }
 
     .proxy-pi-right-message {
