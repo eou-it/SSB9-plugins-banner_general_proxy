@@ -91,7 +91,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     eventRender: function (event, element, view) {
                         var options = {},
                             html = event.isConflicted ? '<span class="icon-info-CO"></span>' : '',
-                            courseLinkTemplate = html+'<a ui-sref="/ssb/proxy/courseScheduleDetail({pidm: pidm})"> '+ event.title +'</a>',
+                            courseLinkTemplate = html+'<a ui-sref="/ssb/proxy/courseScheduleDetail({pidm: pidm})"> '+ event.title +'</a><br><span>'+ event.location +'</span>',
                             courseLinkElem = $compile(courseLinkTemplate)(scope);
 
                         options.term = event.term;

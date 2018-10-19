@@ -766,6 +766,13 @@ class GeneralSsbProxyService {
                     startDateCal, event.meeting_begin_time, event.meeting_end_time, 'proxy-event', event.meeting_subj_code,
                     event.meeting_crse_numb)
 
+            if(event.meeting_bldg_code) {
+                regEvent.location = event.meeting_bldg_code + ' ' + event.meeting_room_code
+            }
+            else {
+                regEvent.location = MessageHelper.getMessage('proxy.schedule.Tba')
+            }
+
             if (registrationEventTimesConflict(regEvent, eventsAlreadyOnSchedule[dayOfWeek])) {
                 regEvent.isConflicted = true
             }
