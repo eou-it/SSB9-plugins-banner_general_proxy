@@ -89,17 +89,20 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                         });
                     },
                     eventRender: function (event, element, view) {
-                        var options = {};
-                        var html = '';
+                        var options = {},
+                            html = event.isConflicted ? '<span class="icon-info-CO"></span>' : '',
+                            courseLinkTemplate = html+'<a ui-sref="/ssb/proxy/courseScheduleDetail({pidm: pidm})"> '+ event.title +'</a>',
+                            courseLinkElem = $compile(courseLinkTemplate)(scope);
+
                         options.term = event.term;
                         options.courseReferenceNumber = event.crn;
                         options.courseTitle = event.title;
-                        if(event.isConflicted) {
-                            html = '<span class="icon-info-CO"></span>';
-                        }
+
                         $('.fc-title', element).text("");
                         //$('.fc-event-title', element).html(setupCourseDetailsLink(options));
-                        $('.fc-title', element).html(html+"<a> "+ options.courseTitle +"</a>");
+                        //$('.fc-title', element).html(html+"<a> "+ options.courseTitle +"</a>");
+                        $('.fc-title', element).append(courseLinkElem);
+
 
                         /*if (view.name == "agendaWeek") {
                             var options = {};
@@ -135,7 +138,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                         else
                             width = view.getColWidth();
 
-                        $ele.css('width', width);
+                        //$ele.css('width', width);
                         if ($.i18n.prop('default.language.direction') == 'rtl') {
                             var left = $ele.position().left;
                             $ele.css('left', left - 20);
@@ -182,8 +185,8 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                 });
 
                 //add date-picker to calendar
-            var datePickerTemplate = '<div class="gotodate-block"> <label>'+ goToText +'</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="'+ datePlaceholderText +'" id="goToDate"/> </div>';
-            var datePickerElem = $compile(datePickerTemplate)(scope);
+            var datePickerTemplate = '<div class="gotodate-block"> <label>'+ goToText +'</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="'+ datePlaceholderText +'" id="goToDate"/> </div>',
+                datePickerElem = $compile(datePickerTemplate)(scope);
             $('.fc-header-toolbar > .fc-right').append(datePickerElem);
 
 
