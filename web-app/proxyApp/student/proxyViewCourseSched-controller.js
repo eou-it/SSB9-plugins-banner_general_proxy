@@ -1,8 +1,8 @@
 /********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyViewCourseSchedController',['$scope', '$rootScope', '$stateParams', 'proxyAppService', '$filter',
-    function ($scope, $rootScope, $stateParams, proxyAppService, $filter) {
+proxyAppControllers.controller('proxyViewCourseSchedController',['$scope', '$rootScope', '$stateParams', 'proxyAppService',
+    function ($scope, $rootScope, $stateParams, proxyAppService) {
 
         $scope.schedule = {};
         $scope.scheduleConflicts = {};
