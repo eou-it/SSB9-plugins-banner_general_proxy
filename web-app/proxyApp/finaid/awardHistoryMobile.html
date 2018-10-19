@@ -3,26 +3,123 @@
 *******************************************************************************-->
 <h1 class="proxy-page-heading">{{'proxy.holds.label.viewStudentHolds'|i18n:[studentName]}}</h1>
 <div class="proxy-page-body">
-
+    <h2 class="proxy-section-heading">{{'proxy.awardHistory.heading'|i18n}}</h2>
     <div ng-repeat="award in awards" id="awards">
 
-            <div class="hold-item row" ng-repeat="row in award.data.rows">
+            <div class="proxy-content-section proxy-content-item row" ng-repeat="row in award.data.rows">
 
-                <div class="hold-item-label col-xs-12">Fund</div>
-                <div class="col-xs-12 break-long-words">{{row.fund_title}}</div>
+                <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.fund'|i18n}}</div>
+                <div class="col-xs-6">{{row.fund_title}}</div>
+
                 <div class="subsection-divider"><span></span></div>
                 <div class="clearfix subsection-divider-spacer"></div>
 
-         </div>
+
+                <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.offered'|i18n}}</div>
+                <div align="right" class="col-xs-6 break-long-words">{{row.offer_amt}}</div>
+
+                <div class="subsection-divider"><span></span></div>
+
+
+                <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.accepted'|i18n}}</div>
+                <div align="right" class="col-xs-6 break-long-words">{{row.accept_amt}}</div>
+
+                <div class="subsection-divider"><span></span></div>
+
+
+                <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.declined'|i18n}}</div>
+                <div align="right" class="col-xs-6 break-long-words">{{row.decline_amt}}</div>
+
+                <div class="subsection-divider"><span></span></div>
+
+                <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.declined'|i18n}}</div>
+                <div align="right" class="col-xs-6 break-long-words">{{row.decline_amt}}</div>
+
+                <div class="subsection-divider"><span></span></div>
+
+                <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.cancelled'|i18n}}</div>
+                <div align="right" class="col-xs-6 break-long-words">{{row.cancel_amt}}</div>
+
+                <div class="subsection-divider"><span></span></div>
+
+                <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.total'|i18n}}</div>
+                <div align="right" class="col-xs-6 proxy-content-item-label">{{row.total_amt}}</div>
+
+                <div class="subsection-divider"><span></span></div>
+
+                <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.paidToDate'|i18n}}</div>
+                <div align="right" class="col-xs-6 proxy-content-item-label">{{row.paid_amt}}</div>
+
+            </div>
+
+
+        <div data-ng-show="award.resources.length &gt; 0">
+
+            <h2 class="proxy-section-heading">{{'proxy.awards.resources.label'|i18n}}</h2>
+
+            <div class="proxy-content-section proxy-content-item row" ng-repeat="resource in award.resources">
+
+                <div ng-if="resource.resource_desc != 'RESOURCE_TOTAL' && resource.resource_desc != 'CALCULATED_RESOURCE'">
+
+                <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.additionalResource'|i18n}}</div>
+                <div align="right" class="col-xs-6 break-long-words" ng-bind-html="stringifyAwardMesageFor(resource.resource_desc)"></div>
+
+                <div class="subsection-divider"><span></span></div>
+
+                <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.term'|i18n}}</div>
+                <div align="right" class="col-xs-6 break-long-words" ng-bind-html="resource.term_code"></div>
+
+                <div class="subsection-divider"><span></span></div>
+
+                <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.expectedAmount'|i18n}}</div>
+                <div align="right" class="col-xs-6 break-long-words">{{resource.est_amt}}</div>
+
+                <div class="subsection-divider"><span></span></div>
+
+                <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.actualAmount'|i18n}}</div>
+                <div align="right" class="col-xs-6 break-long-words">{{resource.actual_amt}}</div>
+
+
+                </div>
+
+                <div ng-if="resource.resource_desc == 'RESOURCE_TOTAL'">
+
+                    <div class="proxy-content-item-label col-xs-6" ng-bind-html="stringifyAwardMesageFor(resource.resource_desc)"></div>
+                    <div class="subsection-divider"><span></span></div>
+
+                    <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.expectedAmount'|i18n}}</div>
+                    <div align="right" class="col-xs-6 proxy-content-item-label">{{resource.est_amt}}</div>
+
+                    <div class="subsection-divider"><span></span></div>
+
+                    <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.actualAmount'|i18n}}</div>
+                    <div align="right" class="col-xs-6 break-long-words proxy-content-item-label">{{resource.actual_amt}}</div>
+
+                </div>
+
+                <div ng-if="resource.resource_desc == 'CALCULATED_RESOURCE'">
+
+                    <div class="proxy-content-item-label col-xs-6" ng-bind-html="stringifyAwardMesageFor(resource.resource_desc)"></div>
+                    <div align="right" class="col-xs-6 break-long-words proxy-content-item-label">{{resource.actual_amt}}</div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
     </div>
 
-</div>
+    <div class="proxy-top-message-container">
+        <div class="proxy-notification-icon blue">
+            <span class="icon-info-CO"></span>
+        </div>
+        <div class="proxy-top-message proxy-notification-text">
+            {{'proxy.awardHistory.bottomMessage'|i18n}}
+        </div>
+    </div>
 
-<div class="proxy-bottom-message-container">
-    <div class="proxy-notification-icon blue">
-        <span class="icon-info-CO"></span>
-    </div>
-    <div class="proxy-bottom-message proxy-notification-text">
-        {{'proxy.personalinformation.topMessage'|i18n}}
-    </div>
 </div>
