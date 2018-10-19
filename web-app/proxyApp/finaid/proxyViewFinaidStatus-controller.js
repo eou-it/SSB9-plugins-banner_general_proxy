@@ -27,7 +27,7 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
             });
 
             if($scope.aidYearHolder.aidYear.code) {
-                proxyAppService.getFinancialAidStatus({aidYear: $scope.aidYearHolder.aidYear.code, pidm: $scope.pidm}).$promise.then(function (response) {
+                proxyAppService.getFinancialAidStatus({aidYear: $scope.aidYearHolder.aidYear.code, pidm: sessionStorage.getItem("pidm")}).$promise.then(function (response) {
                     $scope.financialAidStatus = response;
                 });
             }

@@ -1,53 +1,60 @@
 <!--*******************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
-<h1 class="proxy-page-heading">{{'proxy.grades.label.viewStudentGrades'|i18n:[studentName]}}</h1>
 <div class="proxy-page-body">
-    <p>MOBILE PLACEHOLDER -- UI TO BE UPDATED WHEN WIREFRAMES ARE READY</p>
-    <p class="notification-msg">{{'proxy.grades.message.gradesMayNotDisplay'|i18n}}</p>
-
-    <div class="select2-container sm-fix col-xs-12 col-md-4 col-lg-4">
-        <label class="input-field-label">{{'proxy.label.term'|i18n}}</label><br>
+    <div class="proxy-page-student-name">
+        {{'proxy.message.viewingStudentInfo'|i18n:[student.name]}}
+    </div>
+    <div class="proxy-top-message-container">
+        <div class="proxy-notification-icon blue">
+            <span class="icon-info-CO"></span>
+        </div>
+        <div class="proxy-top-message proxy-notification-text">
+            {{'proxy.grades.message.gradesMayNotDisplay'|i18n}}
+        </div>
+    </div>
+    <div class="select2-container proxy-top-input">
         <input setup-term-selector name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "term.code", "showNA": true}' type="hidden" />
         <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"
            role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
     </div>
 
     <div ng-show="student.grades.length">
-        <table>
-
-            <tr>
-                <th>Level</th>
-                <th>CRN</th>
-                <th>Subject</th>
-                <th>Course</th>
-                <th>Section</th>
-                <th>Course Title</th>
-                <th>Campus</th>
-                <th>MidTerm Grade</th>
-                <th>Final Grade</th>
-                <th>Attempted Hours</th>
-                <th>Earned Hours</th>
-                <th>GPA Hours</th>
-                <th>Quality Points</th>
-            </tr>
-
-            <tr ng-repeat="grade in student.grades">
-                <td>{{grade.levelDescription}}</td>
-                <td>{{grade.courseReferenceNumber}}</td>
-                <td>{{grade.subjectCode}}</td>
-                <td>{{grade.courseNumber}}</td>
-                <td>{{grade.section}}</td>
-                <td>{{grade.courseTitle}}</td>
-                <td>{{grade.campusDescription}}</td>
-                <td>{{grade.midtermGrade}}</td>
-                <td>{{grade.finalGrade}}</td>
-                <td>{{grade.hoursAttempted}}</td>
-                <td>{{grade.hoursEarned}}</td>
-                <td>{{grade.gpaHours}}</td>
-                <td>{{grade.qualityPoints}}</td>
-            </tr>
-        </table>
+        <h2 class="proxy-section-heading">{{'proxy.grades.label.courseWork'|i18n}}</h2>
+        <div class="proxy-content-section proxy-content-item row" ng-repeat="grade in student.grades">
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.level.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.crn.colon'|i18n}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.levelDescription}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.courseReferenceNumber}}</div>
+            <div class="subsection-divider"><span></span></div>
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.subject.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.course.colon'|i18n}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.subjectCode}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.courseNumber}}</div>
+            <div class="subsection-divider"><span></span></div>
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.section.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.courseTitle.colon'|i18n}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.section}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.courseTitle}}</div>
+            <div class="subsection-divider"><span></span></div>
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.campus.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.midtermGrade.colon'|i18n}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.campusDescription}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.midtermGrade}}</div>
+            <div class="subsection-divider"><span></span></div>
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.finalGrade.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.attemptedHours.colon'|i18n}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.finalGrade}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.hoursAttempted}}</div>
+            <div class="subsection-divider"><span></span></div>
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.earnedHours.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.gpaHours.colon'|i18n}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.hoursEarned}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.gpaHours}}</div>
+            <div class="subsection-divider"><span></span></div>
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.qualityPoints.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-6"><!-- SPACER -->&nbsp;</div>
+            <div class="col-xs-6 break-long-words">{{grade.qualityPoints}}</div>
+        </div>
     </div>
-
 </div>

@@ -207,6 +207,8 @@ proxyAppDirectives.directive('setupTermSelector', ['proxyAppService', function(p
             elem.on('change', function (event) {
                 proxyAppService.getGrades({termCode: event.target.value}).$promise.then(function(response) {
                     scope.student.grades = response.data;
+
+                    proxyAppService.setTerm(scope.term.code);
                 });
             });
         }

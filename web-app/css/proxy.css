@@ -21,10 +21,6 @@ svg.hide-svg {
     height: 0;
 }
 
-.gen-home-main-view {
-    background: #F8F8F8;
-}
-
 h2 {
     font-size: 24px;
 }
@@ -183,38 +179,31 @@ ul{
     margin-right: 1em;
 }
 
-
-#awards {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-#awards td, #awards th {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-#awards tr:nth-child(even){background-color: #f2f2f2;}
-
-#awards tr:hover {background-color: #ddd;}
-
-#awards th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #4CAF50;
-    color: white;
+#awardhistory th .right{
+    text-align: right;
 }
 
 #content.proxy {
     font-family: OpenSans-regular;
     font-size: 14px;
-    background: #eff4f8;
+    background: #f8f8f8;
 }
 
 h1.proxy-page-heading {
     display: none;
+}
+
+.proxy-pi-top-link {
+    font-family: OpenSans-semibold;
+    text-decoration: underline;
+    padding: 23px 0 19px;
+    text-align: center;
+}
+
+.proxy-page-student-name {
+    font-family: OpenSans-semibold;
+    padding: 23px 15px 19px;
+    text-align: center;
 }
 
 h1.proxy-landing-page-heading {
@@ -227,7 +216,7 @@ h1.proxy-landing-page-heading {
 }
 
 .proxy-page-body {
-    padding: 0;
+    padding: 0 16px 100px;
 }
 
 .mobile-visible {
@@ -252,18 +241,19 @@ p.notification-msg {
     padding: 15px;
 }
 
-.hold-item {
+.proxy-content-item {
     background: #ffffff;
-    margin-top: 10px;
-    padding: 15px;
+    margin-top: 20px;
+    padding: 20px 5px;
 }
 
-.hold-item-label {
+.proxy-content-item-label {
     font-family: OpenSans-semibold;
+    margin-bottom: 14px;
 }
 
 .subsection-divider {
-    width: 80%;
+    width: 100%;
     height: 1px;
     margin-left: auto;
     margin-right: auto;
@@ -288,14 +278,12 @@ p.notification-msg {
     padding: 20px;
 }
 
-.grades-list {
-    margin-top: 20px;
+.select-term {
+    padding-top: 34px;
 }
 
-.grades-header th,
-table tr.grades-header th:last-child,
-table tr.grades-header:hover th:last-child {
-    background: #f7f7f7;
+.grades-list {
+    margin-top: 20px;
 }
 
 .proxy .fc-event:hover {
@@ -304,17 +292,21 @@ table tr.grades-header:hover th:last-child {
 
 .proxy-top-message-container {
     padding: 22px 32px;
-    margin: 10px 0 10px;
+    margin: 10px 0 22px;
     background: #eff7ff;
     border-top: 2px solid #51abff;
+}
 
+.proxy-top-message-container.pi {
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .proxy-notification-icon {
     font-size: 24px;
     padding-right: 15px;
     display: table-cell;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 .proxy-notification-icon [class^="icon-"] {
@@ -336,15 +328,19 @@ table tr.grades-header:hover th:last-child {
     color: #428bca;
 }
 
-.proxy-pi-top-link {
-    font-family: OpenSans-semibold;
-    text-decoration: underline;
-    padding: 23px 0 19px;
-    text-align: center;
+.proxy-top-input {
+    margin-top: 10px;
+    width: 100%;
 }
 
-.proxy-pi-left-message {
+.proxy-section-heading {
+    font-size: 20px;
+    margin-top: 28px;
+}
+
+.proxy-section-heading.pi {
     float: left;
+    margin-top: inherit;
 }
 
 .proxy-pi-right-message {
@@ -355,10 +351,11 @@ table tr.grades-header:hover th:last-child {
 .pi-section {
     background: #FFFFFF;
     margin: 20px 0px;
-    padding: 19px;
-    padding-top: 9px;
-    border: 1px solid #beccd7;
-    border-top: none;
+    padding: 17px;
+    padding-top: 7px;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 10px 0px #CECECE;
+    border-radius: 6px;
 }
 
 .pi-section .col-xs-12 {
@@ -368,6 +365,15 @@ table tr.grades-header:hover th:last-child {
 
 .proxy-pi-bottom-spacer {
     padding: 5px;
+}
+
+.proxy-content-section {
+    background: #FFFFFF;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 10px 0px #CECECE;
+    border-radius: 6px;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .proxy-bottom-buttons {
@@ -679,7 +685,7 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .proxy-page-body {
-        padding: 32px 32px 0;
+        padding: 22px 32px 100px;
     }
 
     /* Action Password Page - BEGIN */
@@ -760,17 +766,31 @@ a.breadcrumbButton.leaf-breadcrumb {
         font-size: 18px;
         color: #151618;
         background: #f7f7f7;
-        padding: 20px;
+        padding: 0 20px 20px 0;
         margin: auto;
         display: block;
     }
 
-    h1.proxy-page-heading.pi {
+    #awardHistoryTable>tbody>tr:last-child { font-family: OpenSans-semibold; }
+    #awardHistoryResourcesTable>tbody>tr:last-child { font-family: OpenSans-semibold; }
+
+    h1.proxy-page-heading.left {
         float: left;
     }
 
-    .proxy-profile-form {
-        padding: 0px 100px;
+    h1.proxy-page-heading.awardHistory {
+        float: right;
+    }
+
+    h1.proxy-page-heading.pi {
+        padding-top: 20px;
+        padding-left: 20px;
+    }
+
+    .proxy-page-student-name {
+        float: right;
+        padding: 0 0 20px 0;
+        text-align: left;
     }
 
     .proxy-pi-top-link {
@@ -779,9 +799,22 @@ a.breadcrumbButton.leaf-breadcrumb {
         text-align: left;
     }
 
+    .proxy-top-message-container {
+        margin-bottom: 10px;
+    }
+
+    .proxy-profile-form {
+        padding: 0px 100px;
+    }
+
     .pi-section {
-        padding: 49px;
-        padding-top: 23px;
+        padding: 47px;
+        padding-top: 21px;
+    }
+
+    .proxy-section-heading {
+        padding-top: 28px;
+        padding-bottom: 28px;
     }
 
     .proxy-bottom-buttons {
@@ -800,6 +833,10 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .proxy-bottom-buttons input.left {
         margin-right: 10px;
+    }
+
+    .select2-container {
+        width: 345px;
     }
 }
 
@@ -849,7 +886,7 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .pi-section {
-        padding: 23px 16px 49px 24px;
+        padding: 21px 14px 47px 22px;
     }
 
     .proxy-pi-right-message {
