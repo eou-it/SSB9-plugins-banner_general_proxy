@@ -351,9 +351,8 @@ p.notification-msg {
 .pi-section {
     background: #FFFFFF;
     margin: 20px 0px;
-    padding: 17px;
-    padding-top: 7px;
-    border: 2px solid #ffffff;
+    padding: 19px;
+    padding-top: 9px;
     box-shadow: 0 0 10px 0px #CECECE;
     border-radius: 6px;
 }
@@ -917,6 +916,10 @@ a.breadcrumbButton.leaf-breadcrumb {
         padding-bottom: 28px;
     }
 
+    .proxy-section-heading.pi {
+        padding-top: 22px;
+    }
+
     .proxy-bottom-buttons {
         margin: 0 auto;
         padding-top: 54px;
@@ -977,6 +980,14 @@ a.breadcrumbButton.leaf-breadcrumb {
 
 /*Tablet device*/
 @media screen and (min-width: 768px) and (max-width: 1023px) {
+    .proxy-page-body {
+        padding: 20px 20px 100px;
+    }
+
+    .proxy-top-message-container {
+        margin-top: 4px;
+    }
+
     .proxy-profile-form {
         padding: 0px 18px;
     }
@@ -987,6 +998,10 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .pi-section {
         padding: 21px 14px 47px 22px;
+    }
+
+    table.proxy-content-section {
+        max-width: unset;
     }
 
     .proxy-pi-right-message {
