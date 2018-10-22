@@ -174,10 +174,6 @@ ul{
     padding:0 20px;
 }
 
-#calendar {
-    padding: 50px;
-}
-
 .right {
     text-align: right;
     margin-right: 1em;
@@ -461,6 +457,288 @@ p.notification-msg {
 }
 /* Action Password Page - END   */
 
+.proxy input.hasMultiCalendarPicker.pi-date-input {
+    font-weight: normal;
+    border-radius: 4px;
+    background-color: #fff;
+    border: 1px solid #B2B3B7;
+    box-shadow: none;
+    width: 100%;
+    height: auto;
+    color: #151618;
+    padding: 1em .75em;
+    line-height: 136%;
+    float: none;
+}
+
+.text-input-field:focus,
+.proxy input.hasMultiCalendarPicker.pi-date-input:focus,
+.radio-txt-input:focus {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #026BC8;
+    box-shadow: none;
+    color: #151618;
+}
+
+.text-input-field::-webkit-input-placeholder,
+.proxy .pi-date-input::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #5B5E65;
+    font-weight: normal;
+}
+.text-input-field:-moz-placeholder,
+.proxy .pi-date-input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #5B5E65;
+    font-weight: normal;
+    opacity:  1;
+}
+.text-input-field::-moz-placeholder,
+.proxy .pi-date-input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #5B5E65;
+    font-weight: normal;
+    opacity:  1;
+}
+.text-input-field:-ms-input-placeholder,
+.proxy .pi-date-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #5B5E65;
+    font-weight: normal;
+}
+
+.proxy .input-colors + span {
+    color: #5B5E65;
+}
+
+.proxy .input-colors + span:hover,
+.input-colors.input-error + span:hover {
+    color: #5B5E65;
+}
+
+.proxy .input-colors:focus + span {
+    color: #5B5E65;
+}
+
+.text-link {
+    color: #026BC8;
+}
+
+.text-link:hover, .text-link:focus {
+    color: #065AA5;
+    text-decoration: none;
+}
+
+.text-link:active {
+    color: #0A4982;
+    text-decoration: none;
+}
+
+/* Course Schedule - BEGIN */
+#calendar {
+    margin-top: 1.5em;
+}
+
+#calendar table {
+    background: transparent;
+    border-color: #c0ced0;;
+    border-style: none;
+}
+
+#calendar .fc-agendaWeek-view > table {
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-left-width: 0px;
+}
+
+#calendar table tr:hover {
+    background: transparent !important;
+}
+
+.fc-toolbar.fc-header-toolbar {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.fc-toolbar.fc-header-toolbar .fc-right {
+    flex: 0 0 auto;
+}
+
+.fc-toolbar.fc-header-toolbar .fc-center {
+    align-self: center;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+#calendar h2 {
+    font-size: 16px;
+    font-weight: bold;
+    padding-top: 0.7em;
+    flex: 0.7 0 1.5em;
+}
+
+.gotodate-block {
+    display: flex;
+    align-items: center;
+    padding-right: 1.5em;
+    padding-top: 1em;
+}
+
+.fc-header-toolbar label {
+    flex: 1 0 auto;
+    margin-right: 0.875em;
+}
+
+.fc-header-toolbar input.hasMultiCalendarPicker.pi-date-input {
+    margin-right: 0;
+}
+
+.fc-header-toolbar input.hasMultiCalendarPicker.pi-date-input + span.calendar-img {
+    right: 2.5em;
+}
+
+.proxy .fc-unthemed td.fc-today {
+    background: #F6F6F6;
+    border-bottom: none;
+}
+
+.fc-unthemed td.fc-widget-content:first-child {
+    border-left-style: none;
+}
+
+.fc-unthemed td.fc-widget-content:last-child {
+    border-right-style: none;
+}
+
+.fc-unthemed th, .fc-unthemed td, .fc-unthemed thead, .fc-unthemed tbody,
+.fc-unthemed .fc-divider, .fc-unthemed .fc-row, .fc-unthemed .fc-content,
+.fc-unthemed .fc-popover, .fc-unthemed .fc-list-view, .fc-unthemed .fc-list-heading td {
+    border-color: #c0ced0;;
+}
+
+.proxy .fc-row.fc-widget-header {
+    border-right-width: 0px !important;
+}
+
+.proxy .fc-ltr .fc-axis {
+    padding-left: 0px;
+}
+
+#calendar table > tbody > tr > td:first-child {
+    padding-left: 0px;
+    border-top-style: none;
+}
+
+#calendar table > tbody.fc-body > tr > td.fc-widget-content:first-child {
+    padding-left: 1em;
+}
+
+.proxy .fc-time-grid .fc-slats .fc-minor td {
+    border-top-style: none;
+}
+
+.proxy .fc th, .proxy .fc td {
+    border-top-style: none;
+}
+
+.proxy .fc th, .proxy .fc .fc-head td {
+    border-style: none;
+}
+
+.proxy .fc-time-grid .fc-slats td {
+    border-top-style: solid;
+}
+
+.proxy .fc-unthemed th {
+    border-style: none;
+    border-bottom-style: solid;
+    padding-top: 2em;
+    padding-bottom: 2em;
+    font: 11px opensans-semibold;
+    text-transform: uppercase;
+}
+
+.proxy .fc-unthemed th:first-child {
+    border-bottom-style: solid;
+}
+
+.fc-axis.fc-time.fc-widget-content {
+    text-transform: uppercase;
+    font: 11px opensans-semibold;
+    border-style: none;
+}
+
+.fc-toolbar.fc-footer-toolbar {
+    margin-top: 0em;
+    padding: 1em 1.5em 1em 0;
+    border-top: 1px solid #c0ced0;
+}
+
+.fc-button.secondary {
+    background-color: #FFFFFF;
+    border: 1px solid #026BC8;
+    color: #026BC8;
+    border-radius: 4px;
+    font-family: Open Sans !important;
+
+    background-image: none; 
+}
+
+.fc-button.secondary:hover:not([disabled]) {
+    background-color: #065AA5;
+    color: #FFFFFF;
+}
+
+.fc-button.secondary:focus:not([disabled]) {
+    border: 1px solid #81C8FF;
+    -ms-user-select: none;
+    background-color: #026BC8;
+    color: #FFFFFF;
+    outline: none;
+}
+
+.fc-button.secondary:disabled {
+    background-color: #B2B3B7;
+    color: #FFFFFF;
+    border: none;
+}
+
+.fc-button.secondary:active:not([disabled]) {
+    background-color: #0A4982;
+    border: none;
+}
+
+.proxy .fc-ltr .fc-time-grid .fc-event-container {
+    margin: 0;
+}
+
+.proxy-event {
+    border-left-width: 3px;
+    border-top-style: none;
+    border-bottom-style: none;
+    border-right-style: none;
+    border-radius: 0;
+    padding: 0.625em 0.5em 0;
+}
+
+.proxy-event a {
+    color: #428bca;
+}
+
+.unassigned {
+    margin-top: 1.5em;
+}
+
+.unassigned > h2 {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 1.5em;
+    margin: 0;
+}
+
+.unassigned-meeting {
+    border-top: 1px solid #c0ced0;
+    padding: 1.5em;
+}
+/* Course Schedule - END */
 
 /* Accessibility */
 .audible-message {

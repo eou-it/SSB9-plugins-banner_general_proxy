@@ -100,7 +100,7 @@ modules = {
     'proxyAppRTL' {
         dependsOn "bannerWebRTL, proxyApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsRTL"
         // CSS
-        resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar.css'], attrs: [media: 'screen, projection']
+        resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar-rtl.css'], attrs: [media: 'screen, projection']
 
         resource url: [plugin: 'banner-general-proxy', file: 'css/proxy-rtl.css'], attrs: [media: 'screen, projection']
         resource url: [file: 'css/generalSsbResponsive-rtl.css'], attrs: [media: 'screen, projection']

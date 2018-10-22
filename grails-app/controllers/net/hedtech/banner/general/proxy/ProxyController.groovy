@@ -50,24 +50,6 @@ class ProxyController {
     }
 
 
-    def updateProxyProfile(){
-        def proxyProfiles =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
-
-        try {
-            flash.message = null
-            generalSsbProxyService.updateProxyProfile(params)
-            proxyProfiles =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
-
-            render view: "/proxy/proxypersonalinformation",  model :  [proxyProfile: proxyProfiles.proxyProfile, proxyUiRules : proxyProfiles.proxyUiRules ]
-        }catch(Exception e){
-            flash.message = e.message
-            proxyProfiles.proxyProfile = params
-            render view: "/proxy/proxypersonalinformation",  model :  [proxyProfile: proxyProfiles.proxyProfile, proxyUiRules : proxyProfiles.proxyUiRules ]
-        }
-
-    }
-
-
     def getProxypersonalinformation() {
         def proxyProfile
         proxyProfile =  generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)

@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAppService) {
+proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$compile', function(proxyAppService, $filter, $compile) {
     function topOf(elements) {
         function topOfOne(element) {
             var pos = $(element).position();
@@ -20,6 +20,10 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
         }
     }, 100);
 
+    var weekOfText = $filter('i18n')('proxy.schedule.weekOf'),
+        goToText = $filter('i18n')('proxy.schedule.goTo'),
+        datePlaceholderText = $filter('i18n')('default.date.format.watermark');
+
     return {
         link: function(scope, elem, attrs) {
             //function setupCalendarView() {
@@ -30,29 +34,28 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
 
                 $('#calendar').fullCalendar({
                     header: {
-                        left: 'prev',
+                        left: '',
                         center: 'title',
-                        right: 'next goToDate'
+                        right: ''
+                    },
+                    footer: {
+                        right: 'prev next'
                     },
                     defaultView: 'agendaWeek',
                     allDaySlot: false,
                     editable: false,
                     eventColor: '#eff7ff',
-                    eventBorderColor: '#026BC8',
+                    eventTextColor: '#428bca',
+                    eventBorderColor: '#2874bb',
                     aspectRatio: 2,
                     slotEventOverlap: false,
                     slotDuration: '00:15:00',
                     slotLabelInterval: '01:00',
-                    //columnFormat: {
-                    //    agendaWeek: 'dddd',
-                    //    basicWeek: 'ddd'
-                    //},
-                    columnHeaderFormat: 'dddd',
-                    //timeFormat: {
-                    //    basicWeek: 'h:mm{-h:mm}' // 5:00 - 6:30
-                    //},
+                    slotLabelFormat: 'h:mm a',
+                    scrollTime: '08:00:00',
+                    columnHeaderFormat: 'DD ddd',
                     timeFormat: 'h:mm', // 5:00 - 6:30,
-                    titleFormat: '[Week of] MMMM DD, YYYY',
+                    titleFormat: '['+ weekOfText +'] MMMM DD, YYYY',
 
                     firstDay: parseInt($.i18n.prop("default.firstDayOfTheWeek")),
                     dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],//$.i18n.prop("default.gregorian.dayNames").split(','), TODO: add to props
@@ -79,37 +82,17 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                         });
                     },
                     eventRender: function (event, element, view) {
-                        var options = {};
-                        var html = '';
+                        var options = {},
+                            html = event.isConflicted ? '<span class="icon-info-CO"></span>' : '',
+                            courseLinkTemplate = html+'<a ui-sref="/ssb/proxy/courseScheduleDetail({pidm: pidm})"> '+ event.title +'</a><br><span>'+ event.location +'</span>',
+                            courseLinkElem = $compile(courseLinkTemplate)(scope);
+
                         options.term = event.term;
                         options.courseReferenceNumber = event.crn;
                         options.courseTitle = event.title;
-                        if(event.isConflicted) {
-                            html = '<span class="icon-info-CO"></span>';
-                        }
-                        $('.fc-title', element).text("");
-                        //$('.fc-event-title', element).html(setupCourseDetailsLink(options));
-                        $('.fc-title', element).html(html+"<a> "+ options.courseTitle +"</a>");
 
-                        /*if (view.name == "agendaWeek") {
-                            var options = {};
-                            options.term = event.term;
-                            options.courseReferenceNumber = event.crn;
-                            options.courseTitle = event.subject + " " + event.courseNumber;
-                            $('.fc-event-title', element).text("");
-                            //$('.fc-event-title', element).html(setupCourseDetailsLink(options));
-                            $('.fc-event-title', element).html("<a>"+ options.courseTitle +"</a>");
-                        }
-                        else {
-                            var options = {};
-                            options.term = event.term;
-                            options.courseReferenceNumber = event.crn;
-                            options.courseTitle = event.subject + " " + event.courseNumber;
-                            $(".fc-event-time").show();
-                            $('.fc-event-title', element).text("");
-                            //$('.fc-event-title', element).html("<br>" + setupCourseDetailsLink(options));
-                            $('.fc-event-title', element).html("<a>"+ options.courseTitle +"</a>");
-                        }*/
+                        $('.fc-title', element).text("");
+                        $('.fc-title', element).append(courseLinkElem);
                     },
                     eventAfterRender: function (event, element, view) {
                         // this is a drastic oversimplification of the logic needed to reverse the width calculation
@@ -125,7 +108,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                         else
                             width = view.getColWidth();
 
-                        $ele.css('width', width);
+                        //$ele.css('width', width);
                         if ($.i18n.prop('default.language.direction') == 'rtl') {
                             var left = $ele.position().left;
                             $ele.css('left', left - 20);
@@ -146,23 +129,38 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', function(proxyAp
                             $(".fc-agenda-axis.fc-widget-header.fc-fake-first").removeClass("fc-fake-first").addClass("fc-last-rtl");
                         }
 
+                        var prevBtnElem = $('.fc-prev-button'),
+                            nextBtnElem = $('.fc-next-button');
                         if(scope.hasPrevWeek) {
-                            $('.fc-prev-button').removeClass('fc-state-disabled');
+                            prevBtnElem.removeClass('fc-state-disabled');
+                            prevBtnElem.removeAttr('disabled');
                         }
                         else {
-                            $('.fc-prev-button').addClass('fc-state-disabled');
+                            prevBtnElem.addClass('fc-state-disabled');
+                            prevBtnElem.attr('disabled', '');
                         }
+                        prevBtnElem.addClass('secondary');
 
                         if(scope.hasNextWeek) {
-                            $('.fc-next-button').removeClass('fc-state-disabled');
+                            nextBtnElem.removeClass('fc-state-disabled');
+                            nextBtnElem.removeAttr('disabled');
                         }
                         else {
-                            $('.fc-next-button').addClass('fc-state-disabled');
+                            nextBtnElem.addClass('fc-state-disabled');
+                            nextBtnElem.attr('disabled', '');
                         }
+                        nextBtnElem.addClass('secondary');
+
                     }
                 });
 
-                //$("#calendar div").attr("dir", $.i18n.prop('default.language.direction') == 'ltr' ? "ltr" : "rtl");
+                //add date-picker to calendar
+            var datePickerTemplate = '<div class="gotodate-block"> <label>'+ goToText +'</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="'+ datePlaceholderText +'" id="goToDate"/> </div>',
+                datePickerElem = $compile(datePickerTemplate)(scope);
+            $('.fc-header-toolbar > .fc-right').append(datePickerElem);
+
+
+            //$("#calendar div").attr("dir", $.i18n.prop('default.language.direction') == 'ltr' ? "ltr" : "rtl");
 
             //}
         }

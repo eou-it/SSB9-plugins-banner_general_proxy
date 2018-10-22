@@ -1,8 +1,8 @@
 /********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyViewCourseSchedController',['$scope', '$rootScope', '$stateParams', 'proxyAppService', '$filter',
-    function ($scope, $rootScope, $stateParams, proxyAppService, $filter) {
+proxyAppControllers.controller('proxyViewCourseSchedController',['$scope', '$rootScope', '$stateParams', 'proxyAppService',
+    function ($scope, $rootScope, $stateParams, proxyAppService) {
 
         $scope.schedule = {};
         $scope.scheduleConflicts = {};
@@ -11,11 +11,12 @@ proxyAppControllers.controller('proxyViewCourseSchedController',['$scope', '$roo
         $scope.hasNextWeek = false;
         $scope.pidm = $stateParams.pidm;
         $scope.studentName = proxyAppService.getStudentName();
+        $scope.tgtDate = null;
 
-        $scope.goToDate = function() {
-            if($scope.tgtDate) {
-                $('#calendar').fullCalendar( 'gotoDate', $scope.tgtDate);
-                $scope.tgtDate = undefined;
+        $scope.goToDate = function(date) {
+            if(date) {
+                $('#calendar').fullCalendar( 'gotoDate', date);
+                $scope.tgtDate = date;
             }
         };
 
