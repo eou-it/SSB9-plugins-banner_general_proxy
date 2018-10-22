@@ -53,14 +53,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     slotLabelInterval: '01:00',
                     slotLabelFormat: 'h:mm a',
                     scrollTime: '08:00:00',
-                    //columnFormat: {
-                    //    agendaWeek: 'dddd',
-                    //    basicWeek: 'ddd'
-                    //},
                     columnHeaderFormat: 'DD ddd',
-                    //timeFormat: {
-                    //    basicWeek: 'h:mm{-h:mm}' // 5:00 - 6:30
-                    //},
                     timeFormat: 'h:mm', // 5:00 - 6:30,
                     titleFormat: '['+ weekOfText +'] MMMM DD, YYYY',
 
@@ -99,30 +92,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                         options.courseTitle = event.title;
 
                         $('.fc-title', element).text("");
-                        //$('.fc-event-title', element).html(setupCourseDetailsLink(options));
-                        //$('.fc-title', element).html(html+"<a> "+ options.courseTitle +"</a>");
                         $('.fc-title', element).append(courseLinkElem);
-
-
-                        /*if (view.name == "agendaWeek") {
-                            var options = {};
-                            options.term = event.term;
-                            options.courseReferenceNumber = event.crn;
-                            options.courseTitle = event.subject + " " + event.courseNumber;
-                            $('.fc-event-title', element).text("");
-                            //$('.fc-event-title', element).html(setupCourseDetailsLink(options));
-                            $('.fc-event-title', element).html("<a>"+ options.courseTitle +"</a>");
-                        }
-                        else {
-                            var options = {};
-                            options.term = event.term;
-                            options.courseReferenceNumber = event.crn;
-                            options.courseTitle = event.subject + " " + event.courseNumber;
-                            $(".fc-event-time").show();
-                            $('.fc-event-title', element).text("");
-                            //$('.fc-event-title', element).html("<br>" + setupCourseDetailsLink(options));
-                            $('.fc-event-title', element).html("<a>"+ options.courseTitle +"</a>");
-                        }*/
                     },
                     eventAfterRender: function (event, element, view) {
                         // this is a drastic oversimplification of the logic needed to reverse the width calculation
