@@ -14,14 +14,14 @@
         <link rel="stylesheet" href="${resource(plugin: 'bannerUiSs', dir: 'css', file: 'eds-rtl.css')}"/>
     </g:if>
 </head>
-<body class="pageBg actionPW">
-<div class="splashBg actionPW">
-    <form controller="general" action="resetPinAction" method="post">
+<body class="pageBg proxy-pin-mgmt">
+<div class="splashBg proxy-pin-mgmt reset-pin">
+    <form controller="general" action="resetPinAction" method="post" class="reset-pin-form">
 
         <div class="appName">Banner<span>&reg;</span></div>
         <div class="ellucianName"></div>
 
-        <div class=""> <!-- logInProxy -->
+        <div class="reset-input-section">
             <div class="loginMsg">
                 <g:message code="proxy.passwordManagement.resetMsg"/>
             </div>
@@ -41,7 +41,7 @@
                    placeholder="<g:message code="proxy.passwordManagement.newPassword.label"/>" required>
             <input class="eds-text-field reset-input" type="password" name="p_pin2"
                    placeholder="<g:message code="proxy.passwordManagement.verifyNewPassword.label"/>" required>
-
+            <br>
             <input class="primary submit-btn" type="submit" value="<g:message code="proxy.passwordManagement.signIn"/>">
         </div>
         <input type="hidden" name="gidm" value="${gidm}" />

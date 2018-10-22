@@ -16,9 +16,9 @@
 
 </head>
 
-<body class="pageBg actionPW">
+<body class="pageBg proxy-pin-mgmt">
 
-    <div class="splashBg actionPW">
+    <div class="splashBg proxy-pin-mgmt">
         <div class="appName">Banner<span>&reg;</span></div>
 
         <div class="flex-wrapper">
