@@ -14,7 +14,7 @@ proxyAppControllers.controller('proxyAccountSummaryController',['$scope', '$root
             $scope.payvendVendor = response.PAYVEND_VENDOR;
         });
 
-        proxyAppService.getAccountSummary({pidm: $stateParams.pidm}).$promise.then(function(response) {
+        proxyAppService.getAccountSummary({pidm: sessionStorage.getItem("pidm")}).$promise.then(function(response) {
             $scope.accountSummary = response;
             _.each(
                 _.filter($scope.accountSummary.terms, function(term) {
