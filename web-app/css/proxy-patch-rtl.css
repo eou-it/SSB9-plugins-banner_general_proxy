@@ -1,0 +1,14 @@
+/********************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+********************************************************************************/
+#calendar table > tbody.fc-body > tr > td.fc-widget-content:first-child {
+    padding-right: 0;
+}
+
+.proxy .fc-time-grid .fc-slats td {
+    border-top-style: none;
+}
+
+#calendar table > tbody > tr:nth-child(4n-3) > td:first-child {
+    border-top-style: solid;
+}
