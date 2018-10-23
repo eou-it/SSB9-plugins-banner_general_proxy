@@ -3,10 +3,13 @@
 *******************************************************************************-->
 <div>
     <div id="term" name="term"></div>
-    <div class="mobile-visible">
+    <div class="proxy-mobile-visible">
         <ng-include src="'proxyApp/student/gradesMobile.html'|webAppResourcePath"></ng-include>
     </div>
-    <div class="desktop-visible">
+    <div class="proxy-tablet-visible">
+        <ng-include src="'proxyApp/student/gradesTablet.html'|webAppResourcePath"></ng-include>
+    </div>
+    <div class="proxy-desktop-visible">
         <ng-include src="'proxyApp/student/gradesDesktop.html'|webAppResourcePath"></ng-include>
     </div>
 </div>

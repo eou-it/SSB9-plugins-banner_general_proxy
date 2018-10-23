@@ -142,6 +142,10 @@ h2 {
     color: red;
 }
 
+.proxy table th:last-child, .table>thead>tr>th:last-child, .dashboard th:nth-of-type(8), .dashboard th:nth-of-type(9) {
+    white-space: unset;
+}
+
 .proxy-profile-form {
     padding: 0px 16px;
 }
@@ -200,12 +204,17 @@ h1.proxy-landing-page-heading {
     padding: 0 16px 100px;
 }
 
-.mobile-visible {
-    visibility: visible;
-}
-
-.desktop-visible {
+.proxy-tablet-visible,
+.proxy-desktop-visible {
     visibility: hidden;
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
 }
 
 .notification-msg {
@@ -364,7 +373,7 @@ p.notification-msg {
     height: 44px;
 }
 
-.proxy-bottom-buttons .mobile-visible input {
+.proxy-bottom-buttons .proxy-mobile-visible input {
     margin-bottom: 20px;
 }
 
@@ -778,14 +787,6 @@ a.breadcrumbButton.leaf-breadcrumb {
 /***********************/
 
 @media screen and (min-width:768px) {
-    .mobile-visible {
-        visibility: hidden;
-    }
-
-    .desktop-visible {
-        visibility: visible;
-    }
-
     .proxy-page-body {
         padding: 22px 32px 100px;
     }
@@ -977,6 +978,28 @@ a.breadcrumbButton.leaf-breadcrumb {
 }
 
 @media screen and (min-width:1024px) {
+    .proxy-mobile-visible,
+    .proxy-tablet-visible {
+        visibility: hidden;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+    }
+
+    .proxy-desktop-visible {
+        visibility: visible;
+        position: relative;
+        overflow: auto;
+        height: auto;
+        width: auto;
+        margin: 0px;
+    }
+
     .proxy .gen-home-heading,
     .proxy .gen-home-content {
         width: 425px;
@@ -1019,7 +1042,29 @@ a.breadcrumbButton.leaf-breadcrumb {
 }
 
 /*Tablet device*/
-@media screen and (min-width: 768px) and (max-width: 1023px) {
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .proxy-mobile-visible,
+    .proxy-desktop-visible {
+        visibility: hidden;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+    }
+
+    .proxy-tablet-visible {
+        visibility: visible;
+        position: relative;
+        overflow: auto;
+        height: auto;
+        width: auto;
+        margin: 0px;
+    }
+
     .proxy-page-body {
         padding: 20px 20px 100px;
     }
@@ -1040,6 +1085,12 @@ a.breadcrumbButton.leaf-breadcrumb {
         padding: 21px 14px 47px 22px;
     }
 
+    .proxy-section-heading {
+        padding-top: 2px;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+
     table.proxy-content-section {
         max-width: unset;
     }
@@ -1054,5 +1105,14 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .proxy-bottom-buttons {
         padding-top: 54px;
+    }
+
+    .course-title {
+        margin-bottom: 5px;
+    }
+
+    .course-title-label {
+        font-family: OpenSans-semibold;
+        margin-right: 8px;
     }
 }
