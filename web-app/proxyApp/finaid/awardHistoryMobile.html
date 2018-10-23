@@ -9,8 +9,9 @@
 
             <div class="proxy-content-section proxy-content-item row" ng-repeat="row in award.data.rows">
 
+                <div ng-if="row.fund_title != 'AWARD_TOTAL'">
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.fund'|i18n}}</div>
-                <div class="col-xs-6">{{row.fund_title}}</div>
+                <div class="col-xs-6"  ng-bind-html="stringifyAwardMesageFor(row.fund_title)"></div>
 
                 <div class="subsection-divider"><span></span></div>
                 <div class="clearfix subsection-divider-spacer"></div>
@@ -46,6 +47,43 @@
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.paidToDate'|i18n}}</div>
                 <div align="right" class="col-xs-6 proxy-content-item-label">{{row.paid_amt}}</div>
+                </div>
+
+                <div ng-if="row.fund_title == 'AWARD_TOTAL'">
+                    <div class="proxy-content-item-label col-xs-6"  ng-bind-html="stringifyAwardMesageFor(row.fund_title)"></div>
+                    <div class="subsection-divider"><span></span></div>
+
+                    <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.offered'|i18n}}</div>
+                    <div align="right" class="col-xs-6 break-long-words">{{row.offer_amt}}</div>
+
+                    <div class="subsection-divider"><span></span></div>
+
+
+                    <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.accepted'|i18n}}</div>
+                    <div align="right" class="col-xs-6 break-long-words">{{row.accept_amt}}</div>
+
+                    <div class="subsection-divider"><span></span></div>
+
+
+                    <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.declined'|i18n}}</div>
+                    <div align="right" class="col-xs-6 break-long-words">{{row.decline_amt}}</div>
+
+                    <div class="subsection-divider"><span></span></div>
+
+
+                    <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.cancelled'|i18n}}</div>
+                    <div align="right" class="col-xs-6 break-long-words">{{row.cancel_amt}}</div>
+
+                    <div class="subsection-divider"><span></span></div>
+
+                    <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.total'|i18n}}</div>
+                    <div align="right" class="col-xs-6 proxy-content-item-label">{{row.total_amt}}</div>
+
+                    <div class="subsection-divider"><span></span></div>
+
+                    <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.paidToDate'|i18n}}</div>
+                    <div align="right" class="col-xs-6 proxy-content-item-label">{{row.paid_amt}}</div>
+                </div>
 
             </div>
 
