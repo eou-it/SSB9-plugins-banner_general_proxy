@@ -137,28 +137,9 @@ h2 {
     font-size: 14px;
 }
 
-.actionpassword {
-    clear: both;
-    font-size: 0.50em;
-    color: #FFF;
-    text-align: left;
-}
-
 .required-field::before {
     content: "*";
     color: red;
-}
-
-.required:after { content:" *"; }
-
-.red-star {
-    color: red;
-    float: right;
-}
-
-table.dataentrytable {
-    border-spacing: 0px;
-    width:80%;
 }
 
 .proxy-profile-form {
@@ -388,28 +369,28 @@ p.notification-msg {
 }
 
 /* Action Password Page - BEGIN */
-.actionPW.pageBg {
+.proxy-pin-mgmt.pageBg {
     overflow: auto;
 }
 
-.actionPW.splashBg {
+.proxy-pin-mgmt.splashBg {
     height: unset;
     width: unset;
     top: unset;
     margin: 2em;
-    padding: 1em;
+    padding: 2em 1em;
     left: unset;
 }
 
-.actionPW.splashBg .ellucianName {
+.proxy-pin-mgmt.splashBg .ellucianName {
     position: unset;
     left: unset;
     top: unset;
-    height: 2.5em;
-    width: 12em;
+    height: 2em;
+    width: 10em;
 }
 
-.actionPW.splashBg .appName {
+.proxy-pin-mgmt.splashBg .appName {
     font-size: 2em;
     padding-bottom: 1em;
     position: unset;
@@ -417,7 +398,7 @@ p.notification-msg {
     right: unset;
 }
 
-.actionPW.splashBg .loginMsg {
+.proxy-pin-mgmt.splashBg .loginMsg {
     top: unset;
     right: unset;
     position: relative;
@@ -446,16 +427,37 @@ p.notification-msg {
     font-size: 1.2em;
 }
 
-.actionPW.splashBg .copyright {
+.proxy-pin-mgmt.splashBg .copyright {
     top: unset;
     bottom: unset;
     left: unset;
     right: unset;
     margin: 1em 0;
-    padding: 1em 0;
+    padding: 1em 0 0;
     position: relative;
 }
 /* Action Password Page - END   */
+
+.reset-msg {
+    margin: 0 0 1em;
+}
+
+.eds-text-field.reset-input {
+    width: 100%;
+    margin: 0.75em 0;
+    font-family: sans-serif !important;
+    font-size: 1.2em !important;
+}
+
+.eds-text-field.reset-input:focus:not([valid]) {
+    font-family: sans-serif !important;
+}
+
+.resetPin .primary.submit-btn {
+    margin: 0.5em 0 1.5em;
+    padding: 1.25em 1.5em;
+}
+/* Reset PIN page - END */
 
 .proxy input.hasMultiCalendarPicker.pi-date-input {
     font-weight: normal;
@@ -789,13 +791,13 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     /* Action Password Page - BEGIN */
-    .actionPW.splashBg {
+    .proxy-pin-mgmt.splashBg {
         margin: 18% 10%;
         padding: 3em;
         height: unset;
     }
 
-    .actionPW.splashBg .appName {
+    .proxy-pin-mgmt.splashBg .appName {
         font-size: 1.8em;
         padding-top: 1em;
     }
@@ -806,7 +808,7 @@ a.breadcrumbButton.leaf-breadcrumb {
         flex-wrap: wrap;
     }
     
-    .actionPW.splashBg .ellucianName {
+    .proxy-pin-mgmt.splashBg .ellucianName {
         height: 1.8em;
         width: 9em;
         margin-top: auto;
@@ -816,7 +818,7 @@ a.breadcrumbButton.leaf-breadcrumb {
         flex: 0 1 auto;
     }
 
-    .actionPW.splashBg .loginMsg {
+    .proxy-pin-mgmt.splashBg .loginMsg {
         padding: 0;
         font-size: 1.2em;
         order: 1;
@@ -825,7 +827,7 @@ a.breadcrumbButton.leaf-breadcrumb {
         box-sizing: border-box;
     }
 
-    .actionPW.splashBg form {
+    .proxy-pin-mgmt.splashBg form {
         order: 2;
         flex: 1 0 70%;
     }
@@ -852,7 +854,7 @@ a.breadcrumbButton.leaf-breadcrumb {
         display: none;
     }
 
-    .actionPW.splashBg .copyright {
+    .proxy-pin-mgmt.splashBg .copyright {
         margin: 0;
     }
 
@@ -860,6 +862,36 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin-bottom: 0;
     }
     /* Action Password Page - END   */
+
+    /* Reset PIN Page - BEGIN   */
+    .proxy-pin-mgmt.splashBg .reset-pin-form .appName {
+        padding-top: 0;
+        width: 50%;
+        float: right;
+    }
+
+    .proxy-pin-mgmt.splashBg .reset-pin-form .ellucianName {
+        height: 2em;
+    }
+
+    .reset-input-section {
+        padding-top: 2em;
+    }
+
+    .proxy-pin-mgmt.splashBg .reset-input-section  .loginMsg {
+        padding-left: 0;
+        padding-bottom: 1em;
+    }
+
+    .eds-text-field.reset-input {
+        width: 54%;
+    }
+
+    .reset-pin-form .primary.submit-btn {
+        margin: 1em 0 1em;
+        padding: 1.25em 1.5em;
+    }
+    /* Reset PIN Page - END   */
 
     h1.proxy-page-heading {
         font-family: OpenSans-semibold;
@@ -960,7 +992,7 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     /* Action Password Page - BEGIN */
-    .actionPW.splashBg {
+    .proxy-pin-mgmt.splashBg {
         height: 360px;
         width: 705px;
         margin: 140px auto 0px;
@@ -970,13 +1002,20 @@ a.breadcrumbButton.leaf-breadcrumb {
         width: 36%;
     }
 
-    .actionPW.splashBg .copyright {
+    .proxy-pin-mgmt.splashBg .copyright {
         position: absolute;
         bottom: 0;
         margin-bottom: 2em;
         margin-right: 3em;
     }
     /* Action Password Page - END   */
+
+    /* Reset PIN Page - END   */
+    .reset-pin.proxy-pin-mgmt.splashBg {
+        height: unset;
+        margin: 70px auto 0px;
+    }
+    /* Reset PIN Page - END   */
 }
 
 /*Tablet device*/

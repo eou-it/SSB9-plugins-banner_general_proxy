@@ -58,10 +58,10 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     titleFormat: '['+ weekOfText +'] MMMM DD, YYYY',
 
                     firstDay: parseInt($.i18n.prop("default.firstDayOfTheWeek")),
-                    dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],//$.i18n.prop("default.gregorian.dayNames").split(','), TODO: add to props
-                    dayNamesShort: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],//$.i18n.prop("default.gregorian.dayNamesShort").split(','), TODO: add to props
-                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], //$.i18n.prop("default.gregorian.monthNames").split(','), TODO: add to props
-                    monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], //$.i18n.prop("default.gregorian.monthNamesShort").split(','),
+                    dayNames: $.i18n.prop("default.gregorian.dayNames").split(','),
+                    dayNamesShort: $.i18n.prop("default.gregorian.dayNamesShort").split(','),
+                    monthNames: $.i18n.prop("default.gregorian.monthNames").split(','),
+                    monthNamesShort: $.i18n.prop("default.gregorian.monthNamesShort").split(','),
                     axisFormat: $.i18n.prop('events.row.time.format'),
                     isRTL: $.i18n.prop('default.language.direction') == 'rtl',
                     events: function (start, end, timezone, callback) {
