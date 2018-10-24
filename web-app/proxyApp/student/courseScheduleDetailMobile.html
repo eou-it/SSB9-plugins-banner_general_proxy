@@ -1,78 +1,80 @@
-<div>
-    <h2>{{'proxy.scheduleDetails.label'|i18n}} {{studentName}}</h2>
-    <div class="row">
-        <div class="select2-container sm-fix col-xs-12 col-md-4 col-lg-4">
-            <label class="input-field-label">{{'proxy.label.term'|i18n}}</label><br>
-            <input name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "termHolder.term", "showNA": true}' type="hidden" />
-            <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"
-               role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
-        </div>
-    </div>
-    <div ng-show="termHolder.term.code">
-        <br>
-        <p ng-show="schedule.length > 0">Total Credit Hours: {{totalCredits}}</p>
-        <div ng-repeat="course in schedule">
-            <table>
-                <caption>{{course.course_title}}</caption>
-                <tbody>
-                    <tr>
-                        <th>Associted Term</th>
-                        <td>{{course.assoc_term}}</td>
+<div ng-show="termHolder.term.code">
+    <div ng-repeat="course in schedule">
+        <h2>
+            <a href="" data-toggle="collapse" data-target="#schedDetails{{$index}}" class="panel-title">
+                {{course.course_title}}
+                <span class="icon-collapseArrow"></span>
+            </a>
+        </h2>
+        <div class="collapse in" id="schedDetails{{$index}}">
+            <div class="proxy-content-section proxy-content-item">
+                <table>
+                    <tr class="proxy-content-datum">
+                        <th colspan="2" class="proxy-content-item-label">{{'proxy.scheduleDetails.associatedTerm'|i18n}} {{course.assoc_term}}</th>
                     </tr>
-                    <tr>
-                        <th>CRN</th>
+                    <tr class="proxy-content-datum">
+                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.crn'|i18n}}</th>
                         <td>{{course.crn}}</td>
                     </tr>
-                    <tr>
-                        <th>Status</th>
-                        <td>{{course.status_01}} on {{course.status_02}}</td>
+                    <tr class="proxy-content-datum">
+                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.status'|i18n}}</th>
+                        <td>{{'proxy.scheduleDetails.registeredOn'|i18n:[course.status_01, course.status_02]}}</td>
                     </tr>
-                    <tr>
-                        <th>Assigned Instructor</th>
+                    <tr class="proxy-content-datum">
+                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.assignedInstr'|i18n}}</th>
                         <td>{{course.instructorsText}}</td>
                     </tr>
-                    <tr>
-                        <th>Grade Mode</th>
+                    <tr class="proxy-content-datum">
+                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.gradeMode'|i18n}}</th>
                         <td>{{course.grade_mode}}</td>
                     </tr>
-                    <tr>
-                        <th>Credits</th>
+                    <tr class="proxy-content-datum">
+                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.credits'|i18n}}</th>
                         <td>{{course.credits}}</td>
                     </tr>
-                    <tr>
-                        <th>Level</th>
+                    <tr class="proxy-content-datum">
+                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.level'|i18n}}</th>
                         <td>{{course.level}}</td>
                     </tr>
-                    <tr>
-                        <th>Campus</th>
+                    <tr class="proxy-content-datum">
+                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.campus'|i18n}}</th>
                         <td>{{course.campus}}</td>
                     </tr>
-                </tbody>
-            </table>
-            <br>
-            <table ng-show="course.tbl_meetings.length > 0">
-                <caption>Schedule Meeting Times</caption>
-                <tr>
-                    <th>Type</th>
-                    <th>Time</th>
-                    <th>Days</th>
-                    <th>Where</th>
-                    <th>Date Range</th>
-                    <th>Schedule Type</th>
-                    <th>Instructors</th>
-                </tr>
-                <tr ng-repeat="meeting in course.tbl_meetings">
-                    <td>{{meeting.type}}</td>
-                    <td>{{meeting.times}}</td>
-                    <td>{{meeting.days}}</td>
-                    <td>{{meeting.whereText}}</td>
-                    <td>{{meeting.meet_start}} - {{meeting.meet_end}}</td>
-                    <td>{{meeting.schedTypeText}}</td>
-                    <td>{{course.instructorsText}}</td>
-                </tr>
-            </table>
-            <br>
+                </table>
+            </div>
+            <div class="proxy-content-section proxy-content-item" ng-repeat="meeting in course.tbl_meetings">
+                <table>
+                    <th colspan="2">{{'proxy.scheduleDetails.meetingTime'|i18n}}</th>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.type'|i18n}}</th>
+                        <td>{{meeting.type}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.time'|i18n}}</th>
+                        <td>{{meeting.times}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.days'|i18n}}</th>
+                        <td>{{meeting.days}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.where'|i18n}}</th>
+                        <td>{{meeting.whereText}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.dateRange'|i18n}}</th>
+                        <td>{{meeting.meet_start}} - {{meeting.meet_end}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.schedType'|i18n}}</th>
+                        <td>{{meeting.schedTypeText}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.instructors'|i18n}}</th>
+                        <td>{{course.instructorsText}}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        <p>{{'proxy.courseDetail.message.'+ errorMsg|i18n}}</p>
     </div>
 </div>

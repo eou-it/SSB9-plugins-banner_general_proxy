@@ -1,8 +1,26 @@
 <!--*******************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
-<div>
-    <div id="term" name="term"></div>
+<div class="proxy-page-body schedDetail">
+    <div class="proxy-page-student-name">
+        {{'proxy.message.viewingStudentInfo'|i18n:[studentName]}}
+    </div>
+    <div class="select2-container proxy-top-input">
+        <input name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "termHolder.term", "showNA": true}' type="hidden" />
+    </div>
+    <div ng-if="errorMsg" class="proxy-top-message-container">
+        <div class="proxy-notification-icon blue">
+            <span class="icon-info-CO"></span>
+        </div>
+        <p class="proxy-top-message proxy-notification-text">
+            {{'proxy.courseDetail.message.'+ errorMsg|i18n}}
+        </p>
+    </div>
+
+    <div ng-show="termHolder.term.code" class="total-credits">
+            Total Credit Hours: {{totalCredits}}
+    </div>
+
     <div class="proxy-mobile-visible">
         <ng-include src="'proxyApp/student/courseScheduleDetailMobile.html'|webAppResourcePath"></ng-include>
     </div>

@@ -447,6 +447,7 @@ p.notification-msg {
 }
 /* Action Password Page - END   */
 
+/* Reset PIN Page - BEGIN   */
 .reset-msg {
     margin: 0 0 1em;
 }
@@ -750,6 +751,78 @@ p.notification-msg {
     padding: 1.5em;
 }
 /* Course Schedule - END */
+
+/* Course Schedule Details - BEGIN */
+.total-credits {
+    margin: 1.25em 0;
+    text-align: center;
+    font-size: 20px;
+    font-family: OpenSans-semibold;
+    color: #428bca;
+}
+
+.schedDetail h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+    padding: 1em;
+    background: #ffffff;
+    box-shadow: 0 0px 10px 0 #CECECE;
+    border-bottom: solid 1px #c0ced0;
+    margin-top: 1em;
+}
+
+a.panel-title,
+a.panel-title:hover,
+a.panel-title:focus,
+a.panel-title:active {
+    color: #333333;
+    width: 100%;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.icon-collapseArrow {
+    float: right;
+}
+
+.icon-collapseArrow::before {
+    content: "\e642";
+}
+
+.collapsed .icon-collapseArrow::before {
+    content: "\e616";
+}
+
+.schedDetail .proxy-content-item {
+    padding: 0;
+    box-shadow: 0 5px 10px 0 #CECECE;
+}
+
+.schedDetail .proxy-content-section {
+    box-shadow: 0 5px 10px 0 #CECECE;
+}
+
+.schedDetail .proxy-content-section:first-child {
+    margin-top: 0;
+}
+
+.schedDetail table {
+    border: none;
+}
+
+.schedDetail table tr:hover {
+    background: #FFFFFF !important;
+}
+
+.proxy-content-datum {
+    padding: 1.5em;
+}
+
+tr:last-of-type th {
+    border-bottom: none;
+}
+/* Course Schedule Details - END */
 
 /* Accessibility */
 .audible-message {
