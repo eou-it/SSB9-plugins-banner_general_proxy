@@ -4,10 +4,10 @@
 proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$rootScope','$stateParams', 'proxyAppService', '$filter',
     function ($scope, $rootScope, $stateParams, proxyAppService, $filter) {
 
-        var financialAidStatusAsArray = function(finaidStatus) {
+        var sortFinancialAidStatusLines = function(finaidStatus) {
             var retArr = [];
 
-            // Push values into array in a specific order
+            // Push values, if they exist, into array in a specific order for consistent display to user.
             if (finaidStatus.hasOwnProperty('costOfAttendance') && finaidStatus.costOfAttendance) {
                 retArr.push(finaidStatus.costOfAttendance);
             }
@@ -41,7 +41,7 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
                 proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
                 if(event.target.value != 'not/app') { // don't run query on "Not Applicable" selection
                     proxyAppService.getFinancialAidStatus({aidYear: event.target.value, pidm: $scope.pidm}).$promise.then(function (response) {
-                        $scope.financialAidStatus = financialAidStatusAsArray(response);
+                        $scope.financialAidStatus = sortFinancialAidStatusLines(response);
                     });
                 }
             });
@@ -52,7 +52,7 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
 
             if($scope.aidYearHolder.aidYear.code) {
                 proxyAppService.getFinancialAidStatus({aidYear: $scope.aidYearHolder.aidYear.code, pidm: sessionStorage.getItem("pidm")}).$promise.then(function (response) {
-                    $scope.financialAidStatus = financialAidStatusAsArray(response);;
+                    $scope.financialAidStatus = sortFinancialAidStatusLines(response);
                 });
             }
         };
