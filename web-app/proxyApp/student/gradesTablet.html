@@ -30,31 +30,32 @@
         <div class="proxy-content-section proxy-content-item row" ng-repeat="grade in student.grades">
             <div class="col-xs-12 course-title"><span class="course-title-label">{{'proxy.grades.label.courseTitle.colon'|i18n}}</span>{{grade.courseTitle}}</div>
             <div class="subsection-divider"><span></span></div>
-            <div class="proxy-content-item-label col-xs-2">{{'proxy.grades.label.level.colon'|i18n}}</div>
-            <div class="proxy-content-item-label col-xs-2">{{'proxy.grades.label.crn.colon'|i18n}}</div>
-            <div class="proxy-content-item-label col-xs-2">{{'proxy.grades.label.subject.colon'|i18n}}</div>
-            <div class="proxy-content-item-label col-xs-2">{{'proxy.grades.label.course.colon'|i18n}}</div>
-            <div class="proxy-content-item-label col-xs-2">{{'proxy.grades.label.section.colon'|i18n}}</div>
-            <div class="proxy-content-item-label col-xs-2">{{'proxy.grades.label.campus.colon'|i18n}}</div>
-            <div class="col-xs-2 break-long-words">{{grade.levelDescription}}</div>
-            <div class="col-xs-2 break-long-words">{{grade.courseReferenceNumber}}</div>
-            <div class="col-xs-2 break-long-words">{{grade.subjectCode}}</div>
-            <div class="col-xs-2 break-long-words">{{grade.courseNumber}}</div>
-            <div class="col-xs-2 break-long-words">{{grade.section}}</div>
-            <div class="col-xs-2 break-long-words">{{grade.campusDescription}}</div>
+            <div class="proxy-content-item-label col-xs-3">{{'proxy.grades.label.level.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-3">{{'proxy.grades.label.crn.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-3">{{'proxy.grades.label.subject.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-3">{{'proxy.grades.label.course.colon'|i18n}}</div>
+            <div class="col-xs-3 break-long-words">{{grade.levelDescription}}</div>
+            <div class="col-xs-3 break-long-words">{{grade.courseReferenceNumber}}</div>
+            <div class="col-xs-3 break-long-words">{{grade.subjectCode}}</div>
+            <div class="col-xs-3 break-long-words">{{grade.courseNumber}}</div>
             <div class="subsection-divider"><span></span></div>
-            <div class="proxy-content-item-label col-xs-2">{{'proxy.grades.label.midtermGrade.colon'|i18n}}</div>
-            <div class="proxy-content-item-label col-xs-2">{{'proxy.grades.label.finalGrade.colon'|i18n}}</div>
-            <div class="proxy-content-item-label col-xs-2">{{'proxy.grades.label.attemptedHours.colon'|i18n}}</div>
-            <div class="proxy-content-item-label col-xs-2">{{'proxy.grades.label.earnedHours.colon'|i18n}}</div>
-            <div class="proxy-content-item-label col-xs-2">{{'proxy.grades.label.gpaHours.colon'|i18n}}</div>
-            <div class="proxy-content-item-label col-xs-2">{{'proxy.grades.label.qualityPoints.colon'|i18n}}</div>
-            <div class="col-xs-2 break-long-words">{{grade.midtermGrade}}</div>
-            <div class="col-xs-2 break-long-words">{{grade.finalGrade}}</div>
-            <div class="col-xs-2 break-long-words">{{grade.hoursAttempted}}</div>
-            <div class="col-xs-2 break-long-words">{{grade.hoursEarned}}</div>
-            <div class="col-xs-2 break-long-words">{{grade.gpaHours}}</div>
-            <div class="col-xs-2 break-long-words">{{grade.qualityPoints}}</div>
+            <div class="proxy-content-item-label col-xs-3">{{'proxy.grades.label.section.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-3">{{'proxy.grades.label.campus.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-3">{{'proxy.grades.label.midtermGrade.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-3">{{'proxy.grades.label.finalGrade.colon'|i18n}}</div>
+            <div class="col-xs-3 break-long-words">{{grade.section}}</div>
+            <div class="col-xs-3 break-long-words">{{grade.campusDescription}}</div>
+            <div class="col-xs-3 break-long-words">{{grade.midtermGrade}}</div>
+            <div class="col-xs-3 break-long-words">{{grade.finalGrade}}</div>
+            <div class="subsection-divider"><span></span></div>
+            <div class="proxy-content-item-label col-xs-3">{{'proxy.grades.label.attemptedHours.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-3">{{'proxy.grades.label.earnedHours.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-3">{{'proxy.grades.label.gpaHours.colon'|i18n}}</div>
+            <div class="proxy-content-item-label col-xs-3">{{'proxy.grades.label.qualityPoints.colon'|i18n}}</div>
+            <div class="col-xs-3 break-long-words">{{grade.hoursAttempted}}</div>
+            <div class="col-xs-3 break-long-words">{{grade.hoursEarned}}</div>
+            <div class="col-xs-3 break-long-words">{{grade.gpaHours}}</div>
+            <div class="col-xs-3 break-long-words">{{grade.qualityPoints}}</div>
         </div>
     </div>
 </div>

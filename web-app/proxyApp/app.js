@@ -118,7 +118,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
         })
         .state('/ssb/proxy/finaidappsumm', {
             url: "/financialaidstatus",
-            templateUrl: webAppResourcePathString + '/proxyApp/finaid/financialaidstatus.html',
+            templateUrl: webAppResourcePathString + '/proxyApp/finaid/finaidStatus.html',
             controller: 'proxyViewFinaidStatusController',
             resolve: {
             },

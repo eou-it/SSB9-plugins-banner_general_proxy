@@ -1,0 +1,34 @@
+<!--*******************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="proxy-page-body">
+    <div class="proxy-page-heading-container clearfix">
+        <h1 class="proxy-page-heading left">{{'proxy.finaid.status.heading'|i18n}}</h1>
+        <div class="proxy-page-student-name">
+            {{'proxy.message.viewingStudentInfo'|i18n:[studentName]}}
+        </div>
+    </div>
+    <div class="select2-container select-term-top">
+        <input name="aidyear" id="aidyear" select-box for-select='{"placeholder": "{{"proxy.selectAidYear.label"|i18n}}", "action": "Proxy/getAidYears", "model": "aidYearHolder.aidYear", "showNA": true}' type="hidden" />
+        <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
+    </div>
+    <div ng-show="aidYearHolder.aidYear.code">
+        <div class="proxy-mid-message-container">
+            <div class="proxy-notification-icon blue">
+                <span class="icon-info-CO"></span>
+            </div>
+            <div class="proxy-top-message proxy-notification-text">
+                {{'proxy.finaid.status.intro'|i18n}}
+            </div>
+        </div>
+
+        <table class="proxy-content-section">
+            <tr ng-repeat="statusLine in financialAidStatus">
+                <td>
+                    <text-with-links text-data="statusLine"></text-with-links>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

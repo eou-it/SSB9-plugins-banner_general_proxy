@@ -172,6 +172,11 @@ ul{
     font-family: OpenSans-regular;
     font-size: 14px;
     background: #f8f8f8;
+    margin-top: 5px;
+}
+
+.proxy-page-heading-container {
+    border-bottom: 1px solid #dddddd;
 }
 
 h1.proxy-page-heading {
@@ -280,7 +285,8 @@ p.notification-msg {
     color: #0c4e8c;
 }
 
-.proxy-top-message-container {
+.proxy-top-message-container,
+.proxy-mid-message-container {
     padding: 22px 32px;
     margin: 10px 0 22px;
     background: #eff7ff;
@@ -316,6 +322,11 @@ p.notification-msg {
     font-family: OpenSans-semibold;
     font-size: 16px;
     color: #428bca;
+}
+
+.select-term-top {
+    padding: 33px 0 20px;
+    width: 100%;
 }
 
 .proxy-top-input {
@@ -1015,6 +1026,10 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin-bottom: 10px;
     }
 
+    .proxy-mid-message-container {
+        margin: 37px 0 20px;
+    }
+
     .proxy-profile-form {
         padding: 0px 100px;
     }
@@ -1049,6 +1064,11 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .proxy-bottom-buttons input.left {
         margin-right: 10px;
+    }
+
+    .select-term-top {
+        padding-top: 45px;
+        padding-bottom: 0;
     }
 
     .select2-container {
@@ -1126,7 +1146,11 @@ a.breadcrumbButton.leaf-breadcrumb {
 
 }
 
-@media screen and (min-width:1024px) {
+@media screen and (min-width:1025px) {
+    #content.proxy {
+        margin-top: 0;
+    }
+
     .proxy-mobile-visible,
     .proxy-tablet-visible {
         visibility: hidden;
