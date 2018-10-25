@@ -1,0 +1,33 @@
+<table class="course">
+    <tr>
+        <th colspan="2">{{'proxy.scheduleDetails.associatedTerm'|i18n}} {{course.assoc_term}}</th>
+    </tr>
+    <tr>
+        <th>{{'proxy.scheduleDetails.crn'|i18n}}</th>
+        <td>{{course.crn}}</td>
+    </tr>
+    <tr>
+        <th>{{'proxy.scheduleDetails.status'|i18n}}</th>
+        <td>{{'proxy.scheduleDetails.registeredOn'|i18n:[course.status_01, course.status_02]}}</td>
+    </tr>
+    <tr>
+        <th>{{'proxy.scheduleDetails.assignedInstr'|i18n}}</th>
+        <td>{{course.instructorsText}}</td>
+    </tr>
+    <tr>
+        <th>{{'proxy.scheduleDetails.gradeMode'|i18n}}</th>
+        <td>{{course.grade_mode}}</td>
+    </tr>
+    <tr>
+        <th>{{'proxy.scheduleDetails.credits'|i18n}}</th>
+        <td>{{course.credits}}</td>
+    </tr>
+    <tr>
+        <th>{{'proxy.scheduleDetails.level'|i18n}}</th>
+        <td>{{course.level}}</td>
+    </tr>
+    <tr>
+        <th>{{'proxy.scheduleDetails.campus'|i18n}}</th>
+        <td>{{course.campus}}</td>
+    </tr>
+</table>
