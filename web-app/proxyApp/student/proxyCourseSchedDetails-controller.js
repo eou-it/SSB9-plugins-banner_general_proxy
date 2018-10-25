@@ -48,7 +48,7 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope',
                 });
             }
         },
-            init = function() {
+        init = function() {
 
             $scope.pidm = sessionStorage.getItem('pidm');
             $scope.studentName = proxyAppService.getStudentName();
