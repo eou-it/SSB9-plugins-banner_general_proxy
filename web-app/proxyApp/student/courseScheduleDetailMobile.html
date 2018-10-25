@@ -7,73 +7,11 @@
             </a>
         </h2>
         <div class="collapse in" id="schedDetails{{$index}}">
-            <div class="proxy-content-section proxy-content-item">
-                <table>
-                    <tr class="proxy-content-datum">
-                        <th colspan="2" class="proxy-content-item-label">{{'proxy.scheduleDetails.associatedTerm'|i18n}} {{course.assoc_term}}</th>
-                    </tr>
-                    <tr class="proxy-content-datum">
-                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.crn'|i18n}}</th>
-                        <td>{{course.crn}}</td>
-                    </tr>
-                    <tr class="proxy-content-datum">
-                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.status'|i18n}}</th>
-                        <td>{{'proxy.scheduleDetails.registeredOn'|i18n:[course.status_01, course.status_02]}}</td>
-                    </tr>
-                    <tr class="proxy-content-datum">
-                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.assignedInstr'|i18n}}</th>
-                        <td>{{course.instructorsText}}</td>
-                    </tr>
-                    <tr class="proxy-content-datum">
-                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.gradeMode'|i18n}}</th>
-                        <td>{{course.grade_mode}}</td>
-                    </tr>
-                    <tr class="proxy-content-datum">
-                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.credits'|i18n}}</th>
-                        <td>{{course.credits}}</td>
-                    </tr>
-                    <tr class="proxy-content-datum">
-                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.level'|i18n}}</th>
-                        <td>{{course.level}}</td>
-                    </tr>
-                    <tr class="proxy-content-datum">
-                        <th class="proxy-content-item-label">{{'proxy.scheduleDetails.campus'|i18n}}</th>
-                        <td>{{course.campus}}</td>
-                    </tr>
-                </table>
+            <div class="proxy-content-section proxy-content-item course">
+                <ng-include src="'proxyApp/student/courseSchedDetail-course.html'|webAppResourcePath"></ng-include>
             </div>
-            <div class="proxy-content-section proxy-content-item" ng-repeat="meeting in course.tbl_meetings">
-                <table>
-                    <th colspan="2">{{'proxy.scheduleDetails.meetingTime'|i18n}}</th>
-                    <tr>
-                        <th>{{'proxy.scheduleDetails.type'|i18n}}</th>
-                        <td>{{meeting.type}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{'proxy.scheduleDetails.time'|i18n}}</th>
-                        <td>{{meeting.times}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{'proxy.scheduleDetails.days'|i18n}}</th>
-                        <td>{{meeting.days}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{'proxy.scheduleDetails.where'|i18n}}</th>
-                        <td>{{meeting.whereText}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{'proxy.scheduleDetails.dateRange'|i18n}}</th>
-                        <td>{{meeting.meet_start}} - {{meeting.meet_end}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{'proxy.scheduleDetails.schedType'|i18n}}</th>
-                        <td>{{meeting.schedTypeText}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{'proxy.scheduleDetails.instructors'|i18n}}</th>
-                        <td>{{course.instructorsText}}</td>
-                    </tr>
-                </table>
+            <div class="proxy-content-section proxy-content-item meetings" ng-repeat="meeting in course.tbl_meetings">
+                <ng-include src="'proxyApp/student/courseSchedDetail-courseMeetings.html'|webAppResourcePath"></ng-include>
             </div>
         </div>
     </div>

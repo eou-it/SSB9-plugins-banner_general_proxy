@@ -2,29 +2,34 @@
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="proxy-page-body schedDetail">
-    <div class="proxy-page-student-name">
-        {{'proxy.message.viewingStudentInfo'|i18n:[studentName]}}
-    </div>
-    <div class="select2-container proxy-top-input">
-        <input name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "termHolder.term", "showNA": true}' type="hidden" />
-    </div>
-    <div ng-if="errorMsg" class="proxy-top-message-container">
-        <div class="proxy-notification-icon blue">
-            <span class="icon-info-CO"></span>
+    <div class="proxy-header-container">
+        <div class="clearfix">
+            <h1 class="proxy-page-heading left proxy-tablet-visible proxy-desktop-visible">{{'proxy.scheduleDetails.heading'|i18n}}</h1>
+            <div class="proxy-page-student-name">
+                {{'proxy.message.viewingStudentInfo'|i18n:[studentName]}}
+            </div>
         </div>
-        <p class="proxy-top-message proxy-notification-text">
-            {{'proxy.courseDetail.message.'+ errorMsg|i18n}}
-        </p>
-    </div>
+        <div class="select2-container proxy-top-input">
+            <input name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "termHolder.term", "showNA": true}' type="hidden" />
+        </div>
+        <div ng-if="errorMsg" class="proxy-top-message-container">
+            <div class="proxy-notification-icon blue">
+                <span class="icon-info-CO"></span>
+            </div>
+            <p class="proxy-top-message proxy-notification-text">
+                {{'proxy.courseDetail.message.'+ errorMsg|i18n}}
+            </p>
+        </div>
 
-    <div ng-show="termHolder.term.code" class="total-credits">
-            Total Credit Hours: {{totalCredits}}
+        <div ng-show="termHolder.term.code" class="total-credits">
+                {{'proxy.scheduleDetails.totalCredits'|i18n}} {{totalCredits}}
+        </div>
     </div>
 
     <div class="proxy-mobile-visible">
         <ng-include src="'proxyApp/student/courseScheduleDetailMobile.html'|webAppResourcePath"></ng-include>
     </div>
-    <div class="proxy-desktop-visible">
+    <div class="proxy-tablet-visible proxy-desktop-visible schedDetail-tablet">
         <ng-include src="'proxyApp/student/courseScheduleDetailDesktop.html'|webAppResourcePath"></ng-include>
     </div>
 </div>

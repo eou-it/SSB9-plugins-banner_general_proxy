@@ -769,7 +769,8 @@ p.notification-msg {
     background: #ffffff;
     box-shadow: 0 0px 10px 0 #CECECE;
     border-bottom: solid 1px #c0ced0;
-    margin-top: 1em;
+    border-radius: 6px 6px 0 0;
+    margin-top: 2em;
 }
 
 a.panel-title,
@@ -796,10 +797,9 @@ a.panel-title:active {
 
 .schedDetail .proxy-content-item {
     padding: 0;
-    box-shadow: 0 5px 10px 0 #CECECE;
 }
 
-.schedDetail .proxy-content-section {
+.schedDetail .proxy-content-section.course {
     box-shadow: 0 5px 10px 0 #CECECE;
 }
 
@@ -809,18 +809,24 @@ a.panel-title:active {
 
 .schedDetail table {
     border: none;
+    border-radius: 6px;
+}
+
+.schedDetail table.course {
+    border-radius: 0 0 6px 6px;
 }
 
 .schedDetail table tr:hover {
-    background: #FFFFFF !important;
+    background: transparent !important;
 }
 
-.proxy-content-datum {
-    padding: 1.5em;
+.schedDetail table tr:hover * {
+    border-radius: 6px;
 }
 
 tr:last-of-type th {
     border-bottom: none;
+    border-radius: 6px;
 }
 /* Course Schedule Details - END */
 
@@ -1048,6 +1054,76 @@ a.breadcrumbButton.leaf-breadcrumb {
     .select2-container {
         width: 345px;
     }
+
+    /* Course Schedule Details - BEGIN */
+    .schedDetail.proxy-page-body {
+        padding: 20px 0 0;
+    }
+
+    .proxy-tablet-visible.schedDetail-tablet {
+        padding: 20px 20px 100px;
+        clear: both;
+    }
+
+    .proxy-header-container {
+        padding: 0 20px;
+    }
+
+    .schedDetail .select2-container.proxy-top-input {
+        float: left;
+    }
+
+    .schedDetail .proxy-top-message-container {
+        margin-top: 10px;
+        float: right;
+        width: 100%;
+    }
+
+    .total-credits {
+        text-align: left;
+        display: inline-block;
+        float: left;
+        padding-left: 3em;
+        height: 48px;
+        line-height: 47px;
+        margin: 10px 0 1.25em 0;
+    }
+
+    .schedDetail .row {
+        margin: 0;
+    }
+
+    .course-container:first-child h2 {
+        margin-top: 0;
+    }
+
+    .schedDetail h2 {
+        border-radius: 6px;
+        border-bottom-style: none;
+    }
+
+    .schedDetail .proxy-content-section,
+    .schedDetail .proxy-content-section.course {
+        box-shadow: 0 0 10px 0 #CECECE;
+        margin-top: 0.75em;
+    }
+
+    .proxy-content-section.course {
+        margin-right: 1em;
+        max-width: 48%;
+    }
+
+    .schedDetail table.course {
+        border-radius: 6px;
+    }
+
+    .proxy-content-section.meetings {
+        margin-left: 1em;
+        max-width: 48%;
+        float: right;
+    }
+    /* Course Schedule Details - END */
+
 }
 
 @media screen and (min-width:1024px) {
@@ -1112,6 +1188,15 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin: 70px auto 0px;
     }
     /* Reset PIN Page - END   */
+
+    /* Course Schedule Details - BEGIN  */
+    .proxy-header-container {
+        display: inline-block;
+        float: left;
+        width: 100%;
+        padding: 0 20px;
+    }
+    /* Course Schedule Details - END  */
 }
 
 /*Tablet device*/

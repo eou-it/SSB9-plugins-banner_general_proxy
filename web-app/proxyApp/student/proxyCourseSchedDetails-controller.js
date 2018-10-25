@@ -25,7 +25,7 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope',
                                 return instructorObj.instructor;
                             }
                             else {
-                                return memo + ',' + instructorObj.instructor;
+                                return memo + ', ' + instructorObj.instructor;
                             }
                         }, '');
 
