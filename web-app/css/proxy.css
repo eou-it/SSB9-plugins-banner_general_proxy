@@ -554,6 +554,14 @@ p.notification-msg {
     text-decoration: none;
 }
 
+.collapse-font {
+    font-size: 0;
+}
+
+.proxy-base-font {
+    font-size: 14px;
+}
+
 /* Course Schedule - BEGIN */
 #calendar {
     margin-top: 1.5em;

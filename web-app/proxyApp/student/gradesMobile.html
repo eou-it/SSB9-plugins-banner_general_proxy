@@ -24,37 +24,37 @@
         <div class="proxy-content-section proxy-content-item row" ng-repeat="grade in student.grades">
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.level.colon'|i18n}}</div>
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.crn.colon'|i18n}}</div>
-            <div class="col-xs-6 break-long-words">{{grade.levelDescription}}</div>
-            <div class="col-xs-6 break-long-words">{{grade.courseReferenceNumber}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.levelDescription|emptyValToDash}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.courseReferenceNumber|emptyValToDash}}</div>
             <div class="subsection-divider"><span></span></div>
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.subject.colon'|i18n}}</div>
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.course.colon'|i18n}}</div>
-            <div class="col-xs-6 break-long-words">{{grade.subjectCode}}</div>
-            <div class="col-xs-6 break-long-words">{{grade.courseNumber}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.subjectCode|emptyValToDash}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.courseNumber|emptyValToDash}}</div>
             <div class="subsection-divider"><span></span></div>
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.section.colon'|i18n}}</div>
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.courseTitle.colon'|i18n}}</div>
-            <div class="col-xs-6 break-long-words">{{grade.section}}</div>
-            <div class="col-xs-6 break-long-words">{{grade.courseTitle}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.section|emptyValToDash}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.courseTitle|emptyValToDash}}</div>
             <div class="subsection-divider"><span></span></div>
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.campus.colon'|i18n}}</div>
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.midtermGrade.colon'|i18n}}</div>
-            <div class="col-xs-6 break-long-words">{{grade.campusDescription}}</div>
-            <div class="col-xs-6 break-long-words">{{grade.midtermGrade}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.campusDescription|emptyValToDash}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.midtermGrade|emptyValToDash}}</div>
             <div class="subsection-divider"><span></span></div>
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.finalGrade.colon'|i18n}}</div>
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.attemptedHours.colon'|i18n}}</div>
-            <div class="col-xs-6 break-long-words">{{grade.finalGrade}}</div>
-            <div class="col-xs-6 break-long-words">{{grade.hoursAttempted}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.finalGrade|emptyValToDash}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.hoursAttempted|emptyValToDash}}</div>
             <div class="subsection-divider"><span></span></div>
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.earnedHours.colon'|i18n}}</div>
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.gpaHours.colon'|i18n}}</div>
-            <div class="col-xs-6 break-long-words">{{grade.hoursEarned}}</div>
-            <div class="col-xs-6 break-long-words">{{grade.gpaHours}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.hoursEarned|emptyValToDash}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.gpaHours|emptyValToDash}}</div>
             <div class="subsection-divider"><span></span></div>
             <div class="proxy-content-item-label col-xs-6">{{'proxy.grades.label.qualityPoints.colon'|i18n}}</div>
             <div class="proxy-content-item-label col-xs-6"><!-- SPACER -->&nbsp;</div>
-            <div class="col-xs-6 break-long-words">{{grade.qualityPoints}}</div>
+            <div class="col-xs-6 break-long-words">{{grade.qualityPoints|emptyValToDash}}</div>
         </div>
     </div>
 </div>
