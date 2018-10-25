@@ -361,8 +361,8 @@ declare
      
        award_package := '"awardPackage":['
                         || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0010', 'SQL', 'You have been ') || '"},'
-                        || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0011', 'SQL', 'awarded') || '", "url":"' || 'dummy' || '"},'
-                        || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0012', 'SQL', ' financial aid which totals ')
+                        || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0011', 'SQL', 'awarded ') || '", "url":"' || 'dummy' || '"},'
+                        || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0012', 'SQL', 'financial aid which totals ')
                         ||  '", "amount":' || total_offer_amt || '}'
                         || ']';
   END IF;

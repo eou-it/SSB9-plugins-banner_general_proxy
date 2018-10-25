@@ -47,19 +47,19 @@
             </tr>
 
             <tr ng-repeat="grade in student.grades">
-                <td>{{grade.levelDescription}}</td>
-                <td>{{grade.courseReferenceNumber}}</td>
-                <td>{{grade.subjectCode}}</td>
-                <td>{{grade.courseNumber}}</td>
-                <td>{{grade.section}}</td>
-                <td>{{grade.courseTitle}}</td>
-                <td>{{grade.campusDescription}}</td>
-                <td>{{grade.midtermGrade}}</td>
-                <td>{{grade.finalGrade}}</td>
-                <td>{{grade.hoursAttempted}}</td>
-                <td>{{grade.hoursEarned}}</td>
-                <td>{{grade.gpaHours}}</td>
-                <td>{{grade.qualityPoints}}</td>
+                <td>{{grade.levelDescription|emptyValToDash}}</td>
+                <td>{{grade.courseReferenceNumber|emptyValToDash}}</td>
+                <td>{{grade.subjectCode|emptyValToDash}}</td>
+                <td>{{grade.courseNumber|emptyValToDash}}</td>
+                <td>{{grade.section|emptyValToDash}}</td>
+                <td>{{grade.courseTitle|emptyValToDash}}</td>
+                <td>{{grade.campusDescription|emptyValToDash}}</td>
+                <td>{{grade.midtermGrade|emptyValToDash}}</td>
+                <td>{{grade.finalGrade|emptyValToDash}}</td>
+                <td>{{grade.hoursAttempted|emptyValToDash}}</td>
+                <td>{{grade.hoursEarned|emptyValToDash}}</td>
+                <td>{{grade.gpaHours|emptyValToDash}}</td>
+                <td>{{grade.qualityPoints|emptyValToDash}}</td>
             </tr>
         </table>
     </div>
