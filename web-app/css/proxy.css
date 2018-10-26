@@ -601,8 +601,8 @@ p.notification-msg {
 .gotodate-block {
     display: flex;
     align-items: center;
-    padding-right: 1.5em;
     padding-top: 1em;
+    margin-right: -1.5em;
 }
 
 .fc-header-toolbar label {
@@ -616,6 +616,7 @@ p.notification-msg {
 
 .fc-header-toolbar input.hasMultiCalendarPicker.pi-date-input + span.calendar-img {
     right: 2.5em;
+    position: relative;
 }
 
 .proxy .fc-unthemed td.fc-today {
@@ -835,7 +836,7 @@ a.panel-title:active {
     border-radius: 6px;
 }
 
-tr:last-of-type th {
+.schedDetail tr:last-of-type th {
     border-bottom: none;
     border-radius: 6px;
 }
