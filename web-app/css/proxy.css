@@ -1123,25 +1123,25 @@ a.breadcrumbButton.leaf-breadcrumb {
         border-bottom-style: none;
     }
 
-    .schedDetail .proxy-content-section,
+    div.course-container {
+        padding-left: 0;
+        padding-right: 0.75em;
+    }
+
+    div.meeting-container {
+        padding-left: 0.75em;
+        padding-right: 0;
+        float: right;
+    }
+
+    .schedDetail .proxy-content-section.meetings,
     .schedDetail .proxy-content-section.course {
         box-shadow: 0 0 10px 0 #CECECE;
         margin-top: 0.75em;
     }
 
-    .proxy-content-section.course {
-        margin-right: 1em;
-        max-width: 48%;
-    }
-
     .schedDetail table.course {
         border-radius: 6px;
-    }
-
-    .proxy-content-section.meetings {
-        margin-left: 1em;
-        max-width: 48%;
-        float: right;
     }
     /* Course Schedule Details - END */
 

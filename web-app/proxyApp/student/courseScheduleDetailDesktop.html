@@ -1,11 +1,15 @@
 <div ng-show="termHolder.term.code">
     <div ng-repeat="course in schedule" class="row course-container">
         <h2 class="col-md-12">{{course.course_title}}</h2>
-        <div class="col-md-6 proxy-content-section proxy-content-item course">
-            <ng-include src="'proxyApp/student/courseSchedDetail-course.html'|webAppResourcePath"></ng-include>
+        <div class="col-md-6 course-container">
+            <div class="proxy-content-section proxy-content-item course">
+                <ng-include src="'proxyApp/student/courseSchedDetail-course.html'|webAppResourcePath"></ng-include>
+            </div>
         </div>
-        <div class="col-md-6 proxy-content-section proxy-content-item meetings" ng-repeat="meeting in course.tbl_meetings">
-            <ng-include src="'proxyApp/student/courseSchedDetail-courseMeetings.html'|webAppResourcePath"></ng-include>
+        <div class="col-md-6 meeting-container" ng-repeat="meeting in course.tbl_meetings">
+            <div class="proxy-content-section proxy-content-item meetings">
+                <ng-include src="'proxyApp/student/courseSchedDetail-courseMeetings.html'|webAppResourcePath"></ng-include>
+            </div>
         </div>
     </div>
 </div>
