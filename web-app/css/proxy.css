@@ -236,6 +236,11 @@ p.notification-msg {
     padding: 15px;
 }
 
+.hold-process-bubble {
+    display: inline-block;
+    line-height: 2.25em;
+}
+
 .proxy-content-item {
     background: #ffffff;
     margin-top: 20px;
@@ -275,6 +280,10 @@ p.notification-msg {
 
 .select-term {
     padding-top: 34px;
+}
+
+.holds-list {
+    margin-top: 28px;
 }
 
 .grades-list {

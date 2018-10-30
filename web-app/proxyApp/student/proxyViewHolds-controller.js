@@ -9,17 +9,8 @@ proxyAppControllers.controller('proxyViewHoldsController',['$scope', '$rootScope
 
         proxyAppService.getHolds({pidm: sessionStorage.getItem("pidm")}).$promise.then(function(response) {
             $scope.holds = response;
+            $scope.holds.message = 'noHoldsExist';
         });
-
-        $scope.stringifyHoldsFor = function(hold) {
-            var text = '';
-            _.each(hold.hold_for, function(val) {
-                    text = text + $filter('i18n')('proxy.holds.type.'+ val) + ' ';
-                }
-            );
-
-            return text.trim();
-        };
 
     }
 ]);
