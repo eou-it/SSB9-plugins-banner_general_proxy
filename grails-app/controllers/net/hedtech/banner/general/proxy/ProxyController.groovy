@@ -9,6 +9,7 @@ import net.hedtech.banner.i18n.MessageHelper
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
 import net.hedtech.banner.security.XssSanitizer
+import net.hedtech.banner.general.person.PersonUtility
 
 /**
  * Controller for Proxy
@@ -148,7 +149,7 @@ class ProxyController {
      *
      */
     def getHolds() {
-        def result = personRelatedHoldService.getWebDisplayableHolds(XssSanitizer.sanitize(params.pidm));
+        def result = personRelatedHoldService.getWebDisplayableHolds(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm);
         result.rows?.each {
             def amountTxt = '-'
             if(it.r_amount_owed && it.r_amount_owed != 0) {
@@ -161,13 +162,13 @@ class ProxyController {
     }
 
     def getCourseSchedule() {
-        def result = generalSsbProxyService.getCourseSchedule(params.pidm, params.date);
+        def result = generalSsbProxyService.getCourseSchedule(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.date);
 
         render result as JSON
     }
 
     def getCourseScheduleDetail() {
-        def result = generalSsbProxyService.getCourseScheduleDetail(params.pidm, params.termCode);
+        def result = generalSsbProxyService.getCourseScheduleDetail(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.termCode);
 
         render result as JSON
     }
@@ -208,8 +209,8 @@ class ProxyController {
      * Sets the current student pidm
      *
      */
-    def setPidm(params){
-        def pidm =XssSanitizer.sanitize(params.pidm)
+    def setId(params){
+        def pidm =PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm
         session["currentStudentPidm"] = pidm
         render "PIDM context set"
     }
@@ -231,7 +232,7 @@ class ProxyController {
      *
      */
     def getFinancialAidStatus() {
-        def result = generalSsbProxyService.getFinancialAidStatus(params.pidm, params.aidYear)
+        def result = generalSsbProxyService.getFinancialAidStatus(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.aidYear)
         result.awardPackage?.each {
             if(it.amount != null) {
                 it.text = it.text + currencyFormatHelperService.formatCurrency(it.amount) + '.'
@@ -247,7 +248,7 @@ class ProxyController {
     }
 
     def getAwardPackage() {
-        def result = proxyFinAidService.getAwardPackage(params.pidm, params.aidYear);
+        def result = proxyFinAidService.getAwardPackage(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.aidYear);
         result.needsCalc?.attendanceCost = currencyFormatHelperService.formatCurrency(result.needsCalc?.attendanceCost)
         result.needsCalc?.familyContrib = currencyFormatHelperService.formatCurrency(result.needsCalc?.familyContrib)
         result.needsCalc?.initialNeed = currencyFormatHelperService.formatCurrency(result.needsCalc?.initialNeed)
@@ -295,7 +296,7 @@ class ProxyController {
      *
      */
     def getAwardHistory() {
-        def result = proxyFinAidService.getAwardHistory(XssSanitizer.sanitize(params.pidm));
+        def result = proxyFinAidService.getAwardHistory(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm);
         result.awards?.each {
             it.data?.rows?.each {
                 if (it.fund_title.equals('AWARD_TOTAL')) {
@@ -323,7 +324,7 @@ class ProxyController {
     }
 
     def getAccountSummary() {
-        def result = generalSsbProxyService.getAccountSummary(params.pidm);
+        def result = generalSsbProxyService.getAccountSummary(PersonUtility.getPerson(params.id).pidm);
         result.accountBalTxt = currencyFormatHelperService.formatCurrency(result.accountBal)
         result.acctTotalTxt = currencyFormatHelperService.formatCurrency(result.acctTotal)
 

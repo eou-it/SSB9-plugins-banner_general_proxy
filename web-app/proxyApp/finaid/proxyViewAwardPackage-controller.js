@@ -4,7 +4,7 @@
 proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stateParams', 'proxyAppService', '$filter',
     function ($scope, $rootScope, $stateParams, proxyAppService, $filter) {
 
-        $scope.pidm = $stateParams.pidm;
+        $scope.id = $stateParams.id;
         $scope.aidYearHolder = {
             aidYear: {}
         };
@@ -16,7 +16,7 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
 
          var getAwardPackage = function() {
             if($scope.aidYearHolder.aidYear.code) {
-                proxyAppService.getAwardPackage({aidYear: $scope.aidYearHolder.aidYear.code, pidm: sessionStorage.getItem("pidm")}).$promise.then(function (response) {
+                proxyAppService.getAwardPackage({aidYear: $scope.aidYearHolder.aidYear.code, id: sessionStorage.getItem("id")}).$promise.then(function (response) {
                     $scope.awardPackage = response;
                 });
             }

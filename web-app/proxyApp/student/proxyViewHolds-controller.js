@@ -7,7 +7,7 @@ proxyAppControllers.controller('proxyViewHoldsController',['$scope', '$rootScope
         $scope.holds = {};
         $scope.studentName = proxyAppService.getStudentName();
 
-        proxyAppService.getHolds({pidm: sessionStorage.getItem("pidm")}).$promise.then(function(response) {
+        proxyAppService.getHolds({id: sessionStorage.getItem("id")}).$promise.then(function(response) {
             $scope.holds = response;
         });
 

@@ -57,7 +57,7 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', '$rootScope
                             url: $scope.applicationContextRoot +'/ssb/proxy/proxypersonalinformation',
                             icon: '../images/personal_info.svg',
                             pages : student.pages,
-                            pidm: student.pidm,
+                            id: student.id,
                             open : false
                         }
                     );

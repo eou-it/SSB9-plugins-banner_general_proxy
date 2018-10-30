@@ -101,7 +101,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
                 breadcrumbs: [{label: 'proxy.holds.heading'}]
             },
             params: {
-                pidm: null
+                id: null
             }
 
         })
@@ -126,7 +126,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
                 breadcrumbs: [{label: 'proxy.finaid.status.heading'}]
             },
             params: {
-                pidm: null
+                id: null
             }
         })
         .state('/ssb/proxy/crsesched', {
@@ -139,7 +139,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
                 breadcrumbs: [{label: 'proxy.schedule.heading'}]
             },
             params: {
-                pidm: null
+                id: null
             }
         })
         .state('/ssb/proxy/courseScheduleDetail',{
@@ -152,7 +152,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
                 breadcrumbs: [{label: 'proxy.scheduleDetails.heading'}]
             },
             params: {
-                pidm: null
+                id: null
             }
         })
         .state('/ssb/proxy/awardPackage',{
@@ -165,7 +165,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
                 breadcrumbs: [{label: 'proxy.awardPackage.heading'}]
             },
             params: {
-                pidm: null
+                id: null
             }
         })
         .state('/ssb/proxy/awardhist', {
@@ -178,7 +178,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
                 breadcrumbs: [{label: 'proxy.awardHistory.heading'}]
             },
             params: {
-                pidm: null
+                id: null
             }
         })
         .state('/ssb/proxy/acctsumm', {
@@ -191,7 +191,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
                 breadcrumbs: [{label: 'proxy.acctSummary.heading'}]
             },
             params: {
-                pidm: null
+                id: null
             }
         });
 });

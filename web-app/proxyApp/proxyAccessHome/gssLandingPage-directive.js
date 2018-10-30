@@ -46,23 +46,23 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
                 }
 
 
-                sessionStorage.setItem("pidm", scope.proxyData.pidm);
+                sessionStorage.setItem("id", scope.proxyData.id);
                 sessionStorage.setItem("name", scope.proxyData.desc);
                 
                 $rootScope.studentName = scope.proxyData.desc;
-                $state.go(url, {pidm: scope.proxyData.pidm});
+                $state.go(url, {id: scope.proxyData.id});
             };
 
-            scope.setPidm = function() {
+            scope.setId = function() {
                 jQuery.ajax({
-                    url: "proxy/setPidm",
-                    data: {"pidm": scope.proxyData.pidm},
+                    url: "proxy/setId",
+                    data: {"id": scope.proxyData.id},
                     async: false
                 });
 
                 _.each(scope.$parent.proxyTiles, function(value) {
 
-                    if (value.pidm != scope.proxyData.pidm)
+                    if (value.id != scope.proxyData.id)
                         value.open = false;
                 });
 

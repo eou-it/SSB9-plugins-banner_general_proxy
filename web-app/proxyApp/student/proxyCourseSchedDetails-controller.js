@@ -14,7 +14,7 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope',
 
         var getDetailSchedule = function() {
             if($scope.termHolder.term.code) {
-                proxyAppService.getDetailSchedule({termCode: $scope.termHolder.term.code, pidm: $scope.pidm}).$promise.then(function (response) {
+                proxyAppService.getDetailSchedule({termCode: $scope.termHolder.term.code, id: $scope.id}).$promise.then(function (response) {
                     $scope.schedule = response.rows;
                     $scope.errorMsg = response.errorMsg;
 
@@ -50,7 +50,7 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope',
         },
         init = function() {
 
-            $scope.pidm = sessionStorage.getItem('pidm');
+            $scope.id = sessionStorage.getItem('id');
             $scope.studentName = proxyAppService.getStudentName();
 
             $('#term', this.$el).on('change', function (event) {

@@ -68,7 +68,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                         //var events = JSON.parse(sessionStorage.getItem("classScheduleEvents"));
                         start.add(1, 'days'); //move start to a Monday to coincide with SQL date processing
                         var events;
-                        proxyAppService.getCourseSchedule({pidm: attrs.pidm, date: start.format('MM/DD/YYYY')}).$promise.then(function(response) {
+                        proxyAppService.getCourseSchedule({id: sessionStorage.getItem("id"), date: start.format('MM/DD/YYYY')}).$promise.then(function(response) {
                             events = response.schedule;
                             scope.hasNextWeek = response.hasNextWeek;
                             scope.hasPrevWeek = response.hasPrevWeek;
@@ -84,7 +84,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     eventRender: function (event, element, view) {
                         var options = {},
                             html = event.isConflicted ? '<span class="icon-info-CO"></span>' : '',
-                            courseLinkTemplate = html+'<a ui-sref="/ssb/proxy/courseScheduleDetail({pidm: pidm})"> '+ event.title +'</a><br><span>'+ event.location +'</span>',
+                            courseLinkTemplate = html+'<a ui-sref="/ssb/proxy/courseScheduleDetail({id: studentId})"> '+ event.title +'</a><br><span>'+ event.location +'</span>',
                             courseLinkElem = $compile(courseLinkTemplate)(scope);
 
                         options.term = event.term;

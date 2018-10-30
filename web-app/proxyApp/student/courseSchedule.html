@@ -14,11 +14,11 @@
                 {{'proxy.schedule.infoText'|i18n}}
             </p>
         </div>
-        <div full-calendar pidm="{{pidm}}" id="calendar" class="ui-widget-content proxy-content-section" role="region"></div>
+        <div full-calendar studentId="{{id}}" id="calendar" class="ui-widget-content proxy-content-section" role="region"></div>
         <div ng-if="unassignedSchedule.length > 0" class="unassigned proxy-content-section">
             <h2>{{'proxy.schedule.unassignedMeeting'|i18n}}</h2>
             <div ng-repeat="course in unassignedSchedule" class="unassigned-meeting">
-                <a ui-sref="/ssb/proxy/courseScheduleDetail({pidm: pidm})" class="text-link">{{course.crse_subj_code}} {{course.crse_crse_numb}}-{{course.crse_seq_numb}}</a> - {{course.crse_crn}} {{course.crse_ptrm_code == null ? course.crse_stvschd_desc : 'TBA'}}
+                <a ui-sref="/ssb/proxy/courseScheduleDetail({id: id})" class="text-link">{{course.crse_subj_code}} {{course.crse_crse_numb}}-{{course.crse_seq_numb}}</a> - {{course.crse_crn}} {{course.crse_ptrm_code == null ? course.crse_stvschd_desc : 'TBA'}}
             </div>
         </div>
     </div>

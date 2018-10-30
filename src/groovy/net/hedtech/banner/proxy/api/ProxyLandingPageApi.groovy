@@ -8,11 +8,13 @@ DECLARE
   lv_attr_nt     G_ATTRIBUTE_NT;
   lv_minify_ext  varchar2(04);
 
-  CURSOR C_PersonList RETURN GPRXREF%ROWTYPE
+  CURSOR C_PersonList
       IS
-           SELECT GPRXREF.*
-             FROM GPRXREF
-            WHERE GPRXREF_PROXY_IDM = ?
+           SELECT GPRXREF.*, SPRIDEN_ID ID
+             FROM GPRXREF, SPRIDEN
+             WHERE GPRXREF_PERSON_PIDM = SPRIDEN_PIDM
+             AND SPRIDEN_CHANGE_IND IS NULL
+             AND GPRXREF_PROXY_IDM = ?
                   AND TRUNC (SYSDATE) BETWEEN TRUNC (GPRXREF_START_DATE)
                                           AND TRUNC (GPRXREF_STOP_DATE)
                   AND EXISTS (SELECT 'Y' FROM GOBTPAC 
@@ -47,7 +49,7 @@ BEGIN
 
                       students := students || '{' ||
                       '"name" ' || ':' || '"' || f_format_name (person.GPRXREF_PERSON_PIDM, 'FML') || '"' ||
-                      ',"pidm" ' || ':'  || person.GPRXREF_PERSON_PIDM || '},';
+                      ',"id" ' || ':'  || '"' || person.ID || '"' || '},';
                   END IF;
             END LOOP;
 

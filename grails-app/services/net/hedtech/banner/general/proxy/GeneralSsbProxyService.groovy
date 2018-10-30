@@ -29,6 +29,8 @@ import net.hedtech.banner.i18n.LocalizeUtil
 
 import net.hedtech.banner.exceptions.ApplicationException
 
+import net.hedtech.banner.general.person.PersonUtility
+
 class GeneralSsbProxyService {
     private final Logger log = Logger.getLogger(getClass())
     def sessionFactory                     // injected by Spring
@@ -604,9 +606,11 @@ class GeneralSsbProxyService {
         studentsListMap <<   getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
 
         studentsListMap.students.each { it ->
-            def pages = getProxyPages(gidm, it.pidm)?.pages
+            def pidm = PersonUtility.getPerson(it.id).pidm
+
+            def pages = getProxyPages(gidm, pidm)?.pages
             it.pages = pages
-            it.name = preferredNameService.getPreferredName(it.pidm,sql)
+            it.name = preferredNameService.getPreferredName(pidm,sql)
         }
 
         return studentsListMap
