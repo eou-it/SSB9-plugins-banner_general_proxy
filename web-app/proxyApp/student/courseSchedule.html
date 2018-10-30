@@ -14,7 +14,7 @@
                 {{'proxy.schedule.infoText'|i18n}}
             </p>
         </div>
-        <div full-calendar studentId="{{id}}" id="calendar" class="ui-widget-content proxy-content-section" role="region"></div>
+        <div full-calendar id="calendar" class="ui-widget-content proxy-content-section" role="region"></div>
         <div ng-if="unassignedSchedule.length > 0" class="unassigned proxy-content-section">
             <h2>{{'proxy.schedule.unassignedMeeting'|i18n}}</h2>
             <div ng-repeat="course in unassignedSchedule" class="unassigned-meeting">
