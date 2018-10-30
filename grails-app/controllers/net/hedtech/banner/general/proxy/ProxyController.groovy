@@ -267,24 +267,28 @@ class ProxyController {
         result.loanInfo?.perkins = currencyFormatHelperService.formatCurrency(result.loanInfo?.perkins)
         result.loanInfo?.directUnsub = currencyFormatHelperService.formatCurrency(result.loanInfo?.directUnsub)
 
-        result.awardInfo?.aidYearAwards?.aidAwards?.each {
+        result.awardInfo.aidYearAwards?.aidAwards?.each {
             it.acceptAmt = formatCurrencyDashZeroes(it.acceptAmt)
             it.amount = formatCurrencyDashZeroes(it.amount)
             it.cancelAmt = formatCurrencyDashZeroes(it.cancelAmt)
             it.declineAmt = formatCurrencyDashZeroes(it.declineAmt)
             it.offerAmt = formatCurrencyDashZeroes(it.offerAmt)
         }
-        result.awardInfo?.aidYearAwards?.totalAcceptAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalAcceptAmt)
-        result.awardInfo?.aidYearAwards?.totalAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalAmt)
-        result.awardInfo?.aidYearAwards?.totalCancelAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalCancelAmt)
-        result.awardInfo?.aidYearAwards?.totalDeclineAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalDeclineAmt)
-        result.awardInfo?.aidYearAwards?.totalOfferAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo?.aidYearAwards?.totalOfferAmt)
+        result.awardInfo.aidYearAwards?.totalAcceptAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalAcceptAmt)
+        result.awardInfo.aidYearAwards?.totalAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalAmt)
+        result.awardInfo.aidYearAwards?.totalCancelAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalCancelAmt)
+        result.awardInfo.aidYearAwards?.totalDeclineAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalDeclineAmt)
+        result.awardInfo.aidYearAwards?.totalOfferAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalOfferAmt)
 
-        result.periodInfo?.periods?.each {
+        result.periodInfo.periods?.each {
             it.periodAwards.each {
                 it.amount = formatCurrencyDashZeroes(it.amount)
             }
             it.totalTxt = currencyFormatHelperService.formatCurrency(it.total)
+        }
+        result.periodInfo.grandTotal = currencyFormatHelperService.formatCurrency(result.periodInfo.grandTotal)
+        result.periodInfo.fundTotals.keySet().each {
+            result.periodInfo.fundTotals[it] = currencyFormatHelperService.formatCurrency(result.periodInfo.fundTotals[it])
         }
 
         render result as JSON

@@ -106,7 +106,22 @@ class ProxyFinAidService {
             }
             def awardInfo = new JsonSlurper().parseText(awardInfoJson)
             result.awardInfo = awardInfo
+
             def periodInfo = new JsonSlurper().parseText(periodInfoJson)
+            periodInfo.grandTotal = 0
+            def fundTotals = [:]
+            periodInfo.periods.each {
+                periodInfo.grandTotal += it.total
+                it.periodAwards.each {
+                    if(fundTotals[it.fundTitle]) {
+                        fundTotals[it.fundTitle] += it.amount
+                    }
+                    else {
+                        fundTotals[it.fundTitle] = it.amount
+                    }
+                }
+            }
+            periodInfo.fundTotals = fundTotals
             result.periodInfo = periodInfo
 
             return result

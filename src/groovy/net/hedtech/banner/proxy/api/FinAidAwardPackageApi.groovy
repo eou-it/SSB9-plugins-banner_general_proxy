@@ -1666,7 +1666,9 @@ BEGIN
    --  P_Show_PA_D ;  -- Show Period Awards - Double
    --END IF ; -- IF rorwebr_rec.rorwebr_prds_award_ind = 'N' or anything else, don't display anything
 
-   lv_period_json := P_Show_PA_V;
+   IF rorwebr_rec.rorwebr_prds_award_ind IN ('H','V', 'D') THEN
+      lv_period_json := P_Show_PA_V;
+   END IF;
    end if;
    --htp.br;
 
