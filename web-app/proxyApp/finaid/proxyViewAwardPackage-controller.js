@@ -34,27 +34,36 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
         });
 
         $scope.getStatusTextNonPell = function(option) {
-            var text = '';
+            var textKey = '';
             switch (option) {
                 case 1:
-                    text = 'Full-Time';
+                    textKey = 'proxy.awardPackage.nonPell.fullTime';
                     break;
                 case 2:
-                    text = '3/4 Time';
+                    textKey = 'proxy.awardPackage.nonPell.threeFourths';
                     break;
                 case 3:
-                    text = '1/2 Time';
+                    textKey = 'proxy.awardPackage.nonPell.halfTime';
                     break;
                 case 4:
-                    text = 'Less than 1/2 Time';
+                    textKey = 'proxy.awardPackage.nonPell.lessHalf';
                     break;
             }
 
-            return text;
+            return $filter('i18n')(textKey);
         };
 
         $scope.now = function() {
             return moment().format('YYYY-MM-DD');
+        };
+
+        $scope.getFundList = function() {
+            if($scope.awardPackage.periodInfo) {
+                return Object.keys($scope.awardPackage.periodInfo.fundTotals);
+            }
+            else {
+                return [];
+            }
         };
 
         init();

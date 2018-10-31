@@ -790,7 +790,7 @@ p.notification-msg {
     color: #428bca;
 }
 
-.schedDetail h2 {
+.schedDetail h2.course-header {
     font-size: 16px;
     font-weight: bold;
     margin: 0;
@@ -858,6 +858,150 @@ a.panel-title:active {
     border-radius: 6px;
 }
 /* Course Schedule Details - END */
+
+/* Award Package - BEGIN */
+.schedDetail.awardPackage div.proxy-content-section:first-child {
+    margin-top: 3em;
+}
+
+.awardPackage caption {
+    text-align: left;
+    font-size: 1.2em;
+    font-family: OpenSans-semibold;
+    padding: 1em;
+    border-bottom: 1px solid #BEC5CB;
+}
+
+.awardPackage h2 {
+    font-size: 1.2em;
+    font-family: OpenSans-semibold;
+    margin: 0;
+    padding-bottom: 1.25em;
+}
+
+.awardPackage .year-award-container > h2{
+    padding: 1em;
+    border-bottom: 1px solid #BEC5CB;
+    border-radius: 6px 6px 0px 0px;
+    background: #FFFFFF;
+}
+
+.awardPackage table > thead > tr > th:first-child,
+.awardPackage table > tbody > tr > td:first-child,
+.awardPackage table th,
+.awardPackage table tr td,
+.awardPackage .table > thead > tr > th {
+    padding: 1.5em;
+}
+
+td.currency-values {
+    text-align: right;
+}
+
+.currency-totals {
+    font-weight: bold;
+}
+
+.status-container {
+    padding: 1.5em;
+}
+
+.status-desc {
+    border-bottom: solid 2px #c4c4c4;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 1.25em;
+    color: #2086df;
+}
+
+.year-award-container {
+    box-shadow: 0 0px 10px 0 #CECECE;
+    margin-top: 20px;
+    border-radius: 6px;
+}
+
+.year-award-container .proxy-content-section {
+    box-shadow: none;
+}
+
+.year-award-container:first-child > table.proxy-content-item {
+    margin-top: 0;
+}
+
+.awardPackage caption.year-award-fund {
+    font-size: 1em;
+    padding: 1.5em;
+    background: white;
+    border-radius: 6px 6px 0px 0px;
+}
+
+.awardPackage caption.year-award-fund > p {
+    font-family: OpenSans-regular;
+    margin: 0;
+    padding: 0;
+}
+
+td.bold-font {
+    font-family: OpenSans-semibold;
+}
+
+p.term-fund {
+    font-family: OpenSans-regular;
+    margin: 0;
+    padding: 0;
+}
+
+.awardPackage h2.period-award-title {
+    padding: 1em;
+    background: #ffffff;
+    box-shadow: 0 0px 10px 0 #CECECE;
+    border-bottom: solid 1px #c0ced0;
+    border-radius: 6px 6px 0 0;
+    margin-top: 20px;
+}
+
+.awardPackage h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+    padding: 1em;
+    background: #ffffff;
+    box-shadow: 0 0px 10px 0 #CECECE;
+    border-bottom: solid 1px #c0ced0;
+    border-radius: 6px 6px 0 0;
+    margin-top: 20px;
+}
+
+.awardPackage .period:first-of-type h3 {
+    margin-top: 0;
+    box-shadow: 0 5px 10px 0 #CECECE;
+    border-radius: 0;
+}
+
+.period-fund-container {
+    box-shadow: 0 0px 10px 0 #CECECE;
+    margin-bottom: 20px;
+    border-radius: 6px;
+}
+
+.period-fund-container:first-of-type,
+.period-fund-container.proxy-content-section {
+    box-shadow: 0 5px 10px 0 #CECECE;
+}
+
+.period-fund-container .proxy-content-section {
+    box-shadow: none;
+}
+
+.period-fund-container:first-child > table.proxy-content-section > caption.year-award-fund {
+    border-radius: 0;
+}
+
+.schedDetail #fundTotals tr:last-of-type th {
+    border-bottom: solid 1px #c0ced0;
+    border-radius: 0;
+}
+/* Award Package - END */
 
 /* Accessibility */
 .audible-message {
@@ -1135,7 +1279,7 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin-top: 0;
     }
 
-    .schedDetail h2 {
+    .schedDetail h2.course-header {
         border-radius: 6px;
         border-bottom-style: none;
     }
