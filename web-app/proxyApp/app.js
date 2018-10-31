@@ -45,6 +45,12 @@ var proxyApp = angular.module('proxyApp', [
                 var isTablet = window.matchMedia("only screen and (min-width: 768px) and (max-width:1024px)");
                 $rootScope.isTabletView = isTablet.matches;
 
+                $rootScope.isAndroid = (/(android)/i.test(navigator.userAgent));
+
+                if ($rootScope.isAndroid) {
+                    $("html").addClass('device-android');
+                }
+
                 $rootScope.playAudibleMessage = null;
 
                 $rootScope.applicationContextRoot = $('meta[name=applicationContextRoot]').attr("content");

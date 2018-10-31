@@ -4,8 +4,7 @@
 
 proxyApp.service( 'breadcrumbService', ['$filter',function ($filter) {
     var constantBreadCrumb = [],
-        callingUrl,
-        CALLING_URL = 1;
+        appUrl = "";
 
     this.reset = function() {
         constantBreadCrumb = [
@@ -15,14 +14,7 @@ proxyApp.service( 'breadcrumbService', ['$filter',function ($filter) {
             }
         ];
 
-        callingUrl = sessionStorage.getItem('genMainCallingPage');
-
-        if (callingUrl) {
-            constantBreadCrumb.splice(0, 0, {
-                label: 'default.paginate.prev',
-                url: CALLING_URL
-            });
-        }
+        appUrl = document.location.origin + document.location.pathname + "#";
     };
 
     this.setBreadcrumbs = function (bc) {
@@ -31,34 +23,17 @@ proxyApp.service( 'breadcrumbService', ['$filter',function ($filter) {
     };
 
     this.refreshBreadcrumbs = function() {
-        var breadCrumbInputData = {},
-            updatedHeaderAttributes,
-            registerBackButtonClickListenerOverride = function(location) {
-                $('#breadcrumbBackButton').on('click',function(){
-                    //window.location = location;
-                    window.location.assign(sessionStorage.getItem('proxyLandingPage'));
-                })
+        var updatedHeaderAttributes = {
+                "breadcrumb": {}
             };
 
         _.each (constantBreadCrumb, function(item) {
             var label = ($filter('i18n')(item.label));
-            if (item.url) {
-                breadCrumbInputData[label] = (item.url === CALLING_URL) ? callingUrl :
-                    "/" + document.location.pathname.slice(Application.getApplicationPath().length+1) + "#"+item.url;
-            } else {
-                breadCrumbInputData[label] = "";
-            }
+
+            updatedHeaderAttributes.breadcrumb[label] =
+                item.url ? ("/" + document.location.pathname.slice(Application.getApplicationPath().length+1) + "#"+item.url) : "";
         });
 
-        updatedHeaderAttributes = {
-            "breadcrumb":breadCrumbInputData
-        };
-
         BreadCrumbAndPageTitle.draw(updatedHeaderAttributes);
-
-        // As this app's breadcrumb service has the capability to point back to the original calling page, the
-        // default "previous breadcrumb" logic needs to be overridden to point the back button to the calling
-        // page URL.  (Note that the back button is only used for mobile, not desktop.)
-        registerBackButtonClickListenerOverride(callingUrl);
     };
 }]);
