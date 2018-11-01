@@ -9,7 +9,6 @@ proxyAppControllers.controller('proxyViewHoldsController',['$scope', '$rootScope
 
         proxyAppService.getHolds({id: sessionStorage.getItem("id")}).$promise.then(function(response) {
             $scope.holds = response;
-            $scope.holds.message = 'noHoldsExist';
         });
 
     }

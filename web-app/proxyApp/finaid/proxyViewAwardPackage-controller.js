@@ -13,12 +13,16 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
         }
         $scope.awardPackage = {};
         $scope.studentName = proxyAppService.getStudentName();
+        $scope.showMessageForNoAwardInfo = false;
 
          var getAwardPackage = function() {
             if($scope.aidYearHolder.aidYear.code) {
                 proxyAppService.getAwardPackage({aidYear: $scope.aidYearHolder.aidYear.code, id: sessionStorage.getItem("id")}).$promise.then(function (response) {
                     $scope.awardPackage = response;
+                    $scope.showMessageForNoAwardInfo = !$scope.awardPackage.awardInfo;
                 });
+            } else {
+                $scope.showMessageForNoAwardInfo = false;
             }
         };
 
@@ -28,7 +32,13 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
 
         $('#aidyear', this.$el).on('change', function (event) {
             proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
-            if(event.target.value != 'not/app') { // don't run query on "Not Applicable" selection
+
+            if(event.target.value === 'not/app') {
+                // don't run query on "Not Applicable" selection and reset to empty award package
+                $scope.awardPackage = {};
+                $scope.showMessageForNoAwardInfo = false;
+                $scope.$apply();
+            } else {
                 getAwardPackage();
             }
         });

@@ -571,6 +571,11 @@ p.notification-msg {
     font-size: 14px;
 }
 
+#proxyIcon {
+    float: left;
+    margin-right:2%;
+}
+
 /* Course Schedule - BEGIN */
 #calendar {
     margin-top: 1.5em;
@@ -1013,7 +1018,7 @@ p.term-fund {
 }
 /* Award Package - END */
 
-/* Accessibility */
+/* Accessibility - BEGIN */
 .audible-message {
     position: absolute;
     top:0;
@@ -1031,18 +1036,29 @@ p.term-fund {
     display: block;
     visibility: visible;
 }
+/* Accessibility - END */
 
-/* Breadcrumbs */
+/* Breadcrumbs - BEGIN */
 a.breadcrumbButton.leaf-breadcrumb {
     text-decoration: none;
     cursor: default;
 }
 
-
-#proxyIcon {
-    float: left;
-    margin-right:2%;
+#breadcrumbBackButton + #breadcrumbHeader .breadcrumbButton::before {
+    content: "|";
+    color: #41566F;
+    padding-right: 6px;
 }
+
+.device-android #breadcrumbBackButton {
+    display: none;
+}
+
+.device-android #breadcrumbBackButton + #breadcrumbHeader .breadcrumbButton::before {
+    content: none;
+}
+/* Breadcrumbs - END */
+
 
 /***********************/
 /* Media Query Section */
@@ -1354,6 +1370,11 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
     /* Award Package - END  */
 
+    /* Breadcrumbs - BEGIN */
+    #breadcrumbBackButton + #breadcrumbHeader .breadcrumbButton::before {
+        content: none;
+    }
+    /* Breadcrumbs - BEGIN */
 }
 
 @media screen and (min-width:1025px) {

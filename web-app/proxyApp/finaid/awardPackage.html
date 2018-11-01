@@ -12,13 +12,22 @@
         <div class="select2-container proxy-top-input">
             <input name="aidyear" id="aidyear" select-box for-select='{"placeholder": "{{"proxy.selectAidYear.label"|i18n}}", "action": "Proxy/getAidYears", "model": "aidYearHolder.aidYear", "showNA": true}' type="hidden" />
         </div>
-        <div ng-if="errorMsg" class="proxy-top-message-container">
+    <div ng-if="errorMsg" class="proxy-top-message-container">
             <div class="proxy-notification-icon blue">
                 <span class="icon-info-CO"></span>
             </div>
             <p class="proxy-top-message proxy-notification-text">
                 {{'proxy.courseDetail.message.'+ errorMsg|i18n}}
             </p>
+        </div>
+    </div>
+
+    <div ng-show="showMessageForNoAwardInfo" class="proxy-mid-message-container">
+        <div class="proxy-notification-icon blue">
+            <span class="icon-info-CO"></span>
+        </div>
+        <div class="proxy-top-message proxy-notification-text">
+            {{'proxy.awardHistory.message.NO_AWARD_INFO'|i18n}}
         </div>
     </div>
 
