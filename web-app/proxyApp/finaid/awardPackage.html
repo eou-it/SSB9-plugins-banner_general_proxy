@@ -11,7 +11,15 @@
                role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
         </div>
     </div>
-    <div ng-show="aidYearHolder.aidYear.code">
+    <div ng-show="showMessageForNoAwardInfo" class="proxy-mid-message-container">
+        <div class="proxy-notification-icon blue">
+            <span class="icon-info-CO"></span>
+        </div>
+        <div class="proxy-top-message proxy-notification-text">
+            {{'proxy.awardHistory.message.NO_AWARD_INFO'|i18n}}
+        </div>
+    </div>
+    <div ng-show="awardPackage.awardInfo">
         <div>
             <h3>Need Calculation</h3>
             <p>Cost of Attendance: {{awardPackage.needsCalc.attendanceCost}}</p>
