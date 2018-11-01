@@ -395,7 +395,7 @@ BEGIN
          ELSE
 --            twbkfrmt.p_tablerowopen;
 --            twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0043', 'SQL', 'Unknown'));
-            lv_enroll_json := lv_enroll_json || '"status":"unknown"';
+            lv_enroll_json := lv_enroll_json || '"status":"_unknown_"';
 --            twbkfrmt.p_tablerowclose;
          END IF;
       END IF;
@@ -474,7 +474,7 @@ BEGIN
 
 --         twbkfrmt.p_tablerowopen;
 --         twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0052', 'SQL', 'Unknown'));
-         lv_enroll_json := lv_enroll_json || '"status":"unknown"';
+         lv_enroll_json := lv_enroll_json || '"status:unknown"';
 --         twbkfrmt.p_tablerowclose;
       END IF;
 

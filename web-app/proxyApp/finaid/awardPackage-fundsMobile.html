@@ -31,7 +31,7 @@
     </table>
 </div>
 
-<div>
+<div ng-if="awardPackage.periodInfo.periods.length">
     <h2 class="period-award-title">{{'proxy.awardPackage.aidAwardTerm'|i18n:[awardPackage.aidYearDesc]}}</h2>
     <div ng-repeat="period in awardPackage.periodInfo.periods" class="period">
         <h3>

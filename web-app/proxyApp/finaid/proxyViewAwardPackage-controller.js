@@ -63,6 +63,35 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
             return $filter('i18n')(textKey);
         };
 
+        $scope.getStatusTextTerm = function(status) {
+            var textKey = '',
+                statusData = status.split(':');
+
+            switch (statusData[0]) {
+                case 'summer':
+                    textKey = 'proxy.awardPackage.termStatus.summer';
+                    break;
+                case 'fall':
+                    textKey = 'proxy.awardPackage.termStatus.fall';
+                    break;
+                case 'winter':
+                    textKey = 'proxy.awardPackage.termStatus.winter';
+                    break;
+                case 'spring':
+                    textKey = 'proxy.awardPackage.termStatus.spring';
+                    break;
+                case 'nSummer':
+                    textKey = 'proxy.awardPackage.termStatus.summer';
+                    break;
+                default:
+                    textKey = 'proxy.awardPackage.termStatus.unknown';
+                    statusData[1] = null;
+                    break;
+            }
+
+            return $filter('i18n')(textKey, [statusData[1]]);
+        };
+
         $scope.now = function() {
             return moment().format('YYYY-MM-DD');
         };

@@ -1338,6 +1338,10 @@ a.breadcrumbButton.leaf-breadcrumb {
         padding: 0 10px;
     }
 
+    .row.auto-clear .col-md-6:nth-child(2n+1){
+        clear:left;
+    }
+
     .awardPackage div.row.statuses {
         padding: 0;
     }
