@@ -818,6 +818,8 @@ BEGIN
 --                                                      'SQL',
 --                                                      'Cumulative Loan Information as of<br>') ||
 --                                           to_char(proc_date, g\$_date.get_nls_date_format));
+      lv_loan_json := lv_loan_json || '"procDate":"' || to_char(proc_date,'MM/DD/YYYY') || '",';
+
 
       --twbkfrmt.p_tablerowopen;
       --twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0055', 'SQL', 'Loan Type'));
@@ -826,24 +828,24 @@ BEGIN
 
 --      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0057', 'SQL', 'Subsidized'),
 --                          agt_sub_total);
-      lv_loan_json := lv_loan_json || '"subsidized":"' || agt_sub_total || '",';
+      lv_loan_json := lv_loan_json || '"subsidized":' || agt_sub_total || ',';
 --      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0058', 'SQL', 'Unsubsidized'),
 --                          agt_unsub_total);
-      lv_loan_json := lv_loan_json || '"unsubsidized":"' || agt_unsub_total || '",';
+      lv_loan_json := lv_loan_json || '"unsubsidized":' || agt_unsub_total || ',';
 --      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0059', 'SQL', 'Graduate PLUS'),
 --                          agt_gr_plus_total);
-      lv_loan_json := lv_loan_json || '"gradPlus":"' || agt_gr_plus_total || '",';
+      lv_loan_json := lv_loan_json || '"gradPlus":' || agt_gr_plus_total || ',';
 --      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0060', 'SQL', 'Parent PLUS'),
 --                          agt_plus_total);
-      lv_loan_json := lv_loan_json || '"parentPlus":"' || agt_plus_total || '",';
+      lv_loan_json := lv_loan_json || '"parentPlus":' || agt_plus_total || ',';
 --      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0061', 'SQL', 'Perkins'),
 --                          perk_cumulative_amt);
-      lv_loan_json := lv_loan_json || '"perkins":"' || perk_cumulative_amt || '",';
+      lv_loan_json := lv_loan_json || '"perkins":' || perk_cumulative_amt || ',';
 --      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0062',
 --                                     'SQL',
 --                                     'Direct Unsubsidized (TEACH)'),
 --                          teach_loan_total); -- 80300-6
-      lv_loan_json := lv_loan_json || '"directUnsub":"' || teach_loan_total || '"';
+      lv_loan_json := lv_loan_json || '"directUnsub":' || teach_loan_total;
 
 --      twbkfrmt.p_tableclose;
 --      htp.br;

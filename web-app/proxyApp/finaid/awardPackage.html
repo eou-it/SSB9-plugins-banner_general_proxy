@@ -75,29 +75,29 @@
             <div ng-if="awardPackage.loanInfo" class="col-xs-12 col-md-6">
                 <div class="proxy-content-section proxy-content-item">
                     <table>
-                        <caption>{{'proxy.awardPackage.cumLoanInfo'|i18n:[now()]}}</caption>
+                        <caption>{{'proxy.awardPackage.cumLoanInfo'|i18n:[awardPackage.loanInfo.procDate]}}</caption>
                         <tbody>
-                            <tr>
+                            <tr ng-if="awardPackage.loanInfo.subsidized">
                                 <td>{{'proxy.awardPackage.subsidized'|i18n}}</td>
                                 <td class="currency-values">{{awardPackage.loanInfo.subsidized}}</td>
                             </tr>
-                            <tr>
+                            <tr ng-if="awardPackage.loanInfo.unsubsidized">
                                 <td>{{'proxy.awardPackage.unsubsidized'|i18n}}</td>
                                 <td class="currency-values">{{awardPackage.loanInfo.unsubsidized}}</td>
                             </tr>
-                            <tr>
+                            <tr ng-if="awardPackage.loanInfo.gradPlus">
                                 <td>{{'proxy.awardPackage.gradPlus'|i18n}}</td>
                                 <td class="currency-values">{{awardPackage.loanInfo.gradPlus}}</td>
                             </tr>
-                            <tr>
+                            <tr ng-if="awardPackage.loanInfo.parentPlus">
                                 <td>{{'proxy.awardPackage.parentPlus'|i18n}}</td>
                                 <td class="currency-values">{{awardPackage.loanInfo.parentPlus}}</td>
                             </tr>
-                            <tr>
+                            <tr ng-if="awardPackage.loanInfo.perkins">
                                 <td>{{'proxy.awardPackage.perkins'|i18n}}</td>
                                 <td class="currency-values">{{awardPackage.loanInfo.perkins}}</td>
                             </tr>
-                            <tr>
+                            <tr ng-if="awardPackage.loanInfo.directUnsub">
                                 <td>{{'proxy.awardPackage.directUnsub'|i18n}}</td>
                                 <td class="currency-values">{{awardPackage.loanInfo.directUnsub}}</td>
                             </tr>

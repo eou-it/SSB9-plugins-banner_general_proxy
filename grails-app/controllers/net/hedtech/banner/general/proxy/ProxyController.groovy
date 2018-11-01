@@ -260,12 +260,9 @@ class ProxyController {
         }
         result.costOfAttendance?.totalTxt = currencyFormatHelperService.formatCurrency(result.costOfAttendance?.total)
 
-        result.loanInfo?.subsidized = currencyFormatHelperService.formatCurrency(result.loanInfo?.subsidized)
-        result.loanInfo?.unsubsidized = currencyFormatHelperService.formatCurrency(result.loanInfo?.unsubsidized)
-        result.loanInfo?.gradPlus = currencyFormatHelperService.formatCurrency(result.loanInfo?.gradPlus)
-        result.loanInfo?.parentPlus = currencyFormatHelperService.formatCurrency(result.loanInfo?.parentPlus)
-        result.loanInfo?.perkins = currencyFormatHelperService.formatCurrency(result.loanInfo?.perkins)
-        result.loanInfo?.directUnsub = currencyFormatHelperService.formatCurrency(result.loanInfo?.directUnsub)
+        if(result.loanInfo) {
+            result.loanInfo = getLoanText(result.loanInfo)
+        }
 
         result.awardInfo.aidYearAwards?.aidAwards?.each {
             it.acceptAmt = formatCurrencyDashZeroes(it.acceptAmt)
@@ -292,6 +289,23 @@ class ProxyController {
         }
 
         render result as JSON
+    }
+
+    private def getLoanText(def loanInfo) {
+        def result = [:]
+        loanInfo.keySet().each {
+            if(loanInfo[it] != 0) {
+                result[it] = currencyFormatHelperService.formatCurrency(loanInfo[it])
+            }
+        }
+
+        if(result.size() > 1) { // need at leat 1 loan and procDate for loans to be viewable
+            result.procDate = loanInfo.procDate
+            return result
+        }
+        else {
+            return null
+        }
     }
 
 
