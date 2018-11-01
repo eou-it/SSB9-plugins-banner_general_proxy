@@ -23,107 +23,122 @@
     </div>
 
     <div ng-show="aidYearHolder.aidYear.code">
-        <div class="proxy-content-section proxy-content-item">
-            <table>
-                <caption>{{'proxy.awardPackage.needCalc'|i18n}}</caption>
-                <tbody>
-                    <tr>
-                        <td>{{'proxy.awardPackage.costOfAttd'|i18n}}</td>
-                        <td class="currency-values">{{awardPackage.needsCalc.attendanceCost}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{'proxy.awardPackage.familyContrib'|i18n}}</td>
-                        <td class="currency-values">{{awardPackage.needsCalc.familyContrib}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{'proxy.awardPackage.initialNeed'|i18n}}</td>
-                        <td class="currency-values">{{awardPackage.needsCalc.initialNeed}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{'proxy.awardPackage.outsideResrc'|i18n}}</td>
-                        <td class="currency-values">{{awardPackage.needsCalc.outsideResrc}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{'proxy.awardPackage.need'|i18n}}</th>
-                        <td class="currency-values currency-totals">{{awardPackage.needsCalc.need}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="proxy-content-section proxy-content-item">
-            <table>
-                <caption>{{'proxy.awardPackage.costOfAttd'|i18n}}</caption>
-                <tbody>
-                    <tr ng-repeat="budget in awardPackage.costOfAttendance.budgets">
-                        <td>{{budget.desc}}</td>
-                        <td class="currency-values">{{budget.amount}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{'proxy.awardPackage.total'|i18n}}</th>
-                        <td class="currency-values currency-totals">{{awardPackage.costOfAttendance.totalTxt}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="proxy-content-section proxy-content-item">
-            <table>
-                <caption>{{'proxy.awardPackage.cumLoanInfo'|i18n:[now()]}}</caption>
-                <tbody>
-                    <tr>
-                        <td>{{'proxy.awardPackage.subsidized'|i18n}}</td>
-                        <td class="currency-values">{{awardPackage.loanInfo.subsidized}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{'proxy.awardPackage.unsubsidized'|i18n}}</td>
-                        <td class="currency-values">{{awardPackage.loanInfo.unsubsidized}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{'proxy.awardPackage.gradPlus'|i18n}}</td>
-                        <td class="currency-values">{{awardPackage.loanInfo.gradPlus}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{'proxy.awardPackage.parentPlus'|i18n}}</td>
-                        <td class="currency-values">{{awardPackage.loanInfo.parentPlus}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{'proxy.awardPackage.perkins'|i18n}}</td>
-                        <td class="currency-values">{{awardPackage.loanInfo.perkins}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{'proxy.awardPackage.directUnsub'|i18n}}</td>
-                        <td class="currency-values">{{awardPackage.loanInfo.directUnsub}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="proxy-content-section proxy-content-item">
-            <div class="status-container">
-                <h2>{{'proxy.awardPackage.enrollStatus'|i18n}}</h2>
-                <div ng-if="awardPackage.enrollment.fStatus">
-                    <p ng-if="awardPackage.enrollment.fStatus.status" class="status-desc">
-                        {{awardPackage.enrollment.fStatus.status}}
-                    </p>
-                    <p ng-if="awardPackage.enrollment.fStatus.dfltOption" class="status-desc">
-                        {{getStatusTextNonPell(awardPackage.enrollment.fStatus.dfltOption)}}
-                    </p>
-                </div>
-                <div ng-if="awardPackage.enrollment.tStatus">
-                    <p class="status-desc">
-                        <span ng-repeat="status in awardPackage.enrollment.tStatus.statuses">{{status}}</span>
-                    </p>
+        <div class="row award-info">
+            <div class="col-xs-12 col-md-6">
+                <div class="proxy-content-section proxy-content-item">
+                    <table>
+                        <caption>{{'proxy.awardPackage.needCalc'|i18n}}</caption>
+                        <tbody>
+                            <tr>
+                                <td>{{'proxy.awardPackage.costOfAttd'|i18n}}</td>
+                                <td class="currency-values">{{awardPackage.needsCalc.attendanceCost}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'proxy.awardPackage.familyContrib'|i18n}}</td>
+                                <td class="currency-values">{{awardPackage.needsCalc.familyContrib}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'proxy.awardPackage.initialNeed'|i18n}}</td>
+                                <td class="currency-values">{{awardPackage.needsCalc.initialNeed}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'proxy.awardPackage.outsideResrc'|i18n}}</td>
+                                <td class="currency-values">{{awardPackage.needsCalc.outsideResrc}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{'proxy.awardPackage.need'|i18n}}</th>
+                                <td class="currency-values currency-totals">{{awardPackage.needsCalc.need}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
 
-        <div class="proxy-content-section proxy-content-item">
-            <div class="status-container">
-                <h2>{{'proxy.awardPackage.housingStatus'|i18n}}</h2>
-                <p class="status-desc">
-                    <span ng-repeat="status in awardPackage.housingStatuses.rows">{{status}}</span>
-                </p>
+            <div class="col-xs-12 col-md-6">
+                <div class="proxy-content-section proxy-content-item">
+                    <table>
+                        <caption>{{'proxy.awardPackage.costOfAttd'|i18n}}</caption>
+                        <tbody>
+                            <tr ng-repeat="budget in awardPackage.costOfAttendance.budgets">
+                                <td>{{budget.desc}}</td>
+                                <td class="currency-values">{{budget.amount}}</td>
+                            </tr>
+                            <tr>
+                                <th>{{'proxy.awardPackage.total'|i18n}}</th>
+                                <td class="currency-values currency-totals">{{awardPackage.costOfAttendance.totalTxt}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="col-xs-12 col-md-6">
+                <div class="proxy-content-section proxy-content-item">
+                    <table>
+                        <caption>{{'proxy.awardPackage.cumLoanInfo'|i18n:[now()]}}</caption>
+                        <tbody>
+                            <tr>
+                                <td>{{'proxy.awardPackage.subsidized'|i18n}}</td>
+                                <td class="currency-values">{{awardPackage.loanInfo.subsidized}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'proxy.awardPackage.unsubsidized'|i18n}}</td>
+                                <td class="currency-values">{{awardPackage.loanInfo.unsubsidized}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'proxy.awardPackage.gradPlus'|i18n}}</td>
+                                <td class="currency-values">{{awardPackage.loanInfo.gradPlus}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'proxy.awardPackage.parentPlus'|i18n}}</td>
+                                <td class="currency-values">{{awardPackage.loanInfo.parentPlus}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'proxy.awardPackage.perkins'|i18n}}</td>
+                                <td class="currency-values">{{awardPackage.loanInfo.perkins}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{'proxy.awardPackage.directUnsub'|i18n}}</td>
+                                <td class="currency-values">{{awardPackage.loanInfo.directUnsub}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-6 row statuses">
+                <div class="col-xs-12">
+                    <div class="proxy-content-section proxy-content-item">
+                        <div class="status-container">
+                            <h2>{{'proxy.awardPackage.enrollStatus'|i18n}}</h2>
+                            <div ng-if="awardPackage.enrollment.fStatus">
+                                <p ng-if="awardPackage.enrollment.fStatus.status" class="status-desc">
+                                    {{awardPackage.enrollment.fStatus.status}}
+                                </p>
+                                <p ng-if="awardPackage.enrollment.fStatus.dfltOption" class="status-desc">
+                                    {{getStatusTextNonPell(awardPackage.enrollment.fStatus.dfltOption)}}
+                                </p>
+                            </div>
+                            <div ng-if="awardPackage.enrollment.tStatus">
+                                <p class="status-desc">
+                                    <span ng-repeat="status in awardPackage.enrollment.tStatus.statuses">{{status}}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="proxy-content-section proxy-content-item">
+                        <div class="status-container">
+                            <h2>{{'proxy.awardPackage.housingStatus'|i18n}}</h2>
+                            <p class="status-desc">
+                                <span ng-repeat="status in awardPackage.housingStatuses.rows">{{status}}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

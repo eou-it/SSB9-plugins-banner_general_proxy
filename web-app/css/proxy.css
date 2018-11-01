@@ -832,7 +832,7 @@ a.panel-title:active {
     box-shadow: 0 5px 10px 0 #CECECE;
 }
 
-.schedDetail .proxy-content-section:first-child {
+.schedDetail .in > .proxy-content-section:first-child {
     margin-top: 0;
 }
 
@@ -860,7 +860,13 @@ a.panel-title:active {
 /* Course Schedule Details - END */
 
 /* Award Package - BEGIN */
-.schedDetail.awardPackage div.proxy-content-section:first-child {
+.awardPackage div.row,
+.awardPackage [class^="col-"], [class*=" col-"] {
+    padding: 0;
+    margin: 0;
+}
+
+.schedDetail.awardPackage .award-info > div:first-child {
     margin-top: 3em;
 }
 
@@ -991,6 +997,10 @@ p.term-fund {
 
 .period-fund-container .proxy-content-section {
     box-shadow: none;
+}
+
+.period-fund-container:first-of-type > table.proxy-content-section {
+    margin-top: 0;
 }
 
 .period-fund-container:first-child > table.proxy-content-section > caption.year-award-fund {
@@ -1251,7 +1261,7 @@ a.breadcrumbButton.leaf-breadcrumb {
         padding: 0 20px;
     }
 
-    .schedDetail .select2-container.proxy-top-input {
+    .schedDetail1 .select2-container.proxy-top-input {
         float: left;
     }
 
@@ -1305,6 +1315,25 @@ a.breadcrumbButton.leaf-breadcrumb {
         border-radius: 6px;
     }
     /* Course Schedule Details - END */
+
+    /* Award Package - BEGIN  */
+    .awardPackage div.row,
+    .awardPackage [class^="col-"], [class*=" col-"] {
+        padding: 0 10px;
+    }
+
+    .awardPackage div.row.statuses {
+        padding: 0;
+    }
+
+    .awardPackage div.proxy-content-section {
+        margin-top: 2em;
+    }
+
+    .schedDetail.awardPackage .award-info > div:first-child {
+        margin-top: 0;
+    }
+    /* Award Package - END  */
 
 }
 
