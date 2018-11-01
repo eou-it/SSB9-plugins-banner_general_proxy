@@ -1333,6 +1333,25 @@ a.breadcrumbButton.leaf-breadcrumb {
     .schedDetail.awardPackage .award-info > div:first-child {
         margin-top: 0;
     }
+
+    .proxy-tablet-visible.funds {
+        padding-bottom: 100px;
+    }
+
+    .awards-container {
+        padding: 0 20px;
+    }
+
+    .funds thead > tr:last-of-type > th,
+    .funds thead > tr > th {
+        border-bottom: solid 1px #c0ced0;
+    }
+
+    .funds td > p {
+        font-family: OpenSans-regular;
+        margin: 0;
+        padding: 0;
+    }
     /* Award Package - END  */
 
 }

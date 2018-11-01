@@ -1,0 +1,108 @@
+<div ng-repeat="award in awardPackage.awardInfo.aidYearAwards.aidAwards" class="year-award-container">
+    <h2 ng-if="$first">{{'proxy.awardPackage.aidAward'|i18n:[awardPackage.aidYearDesc]}}</h2>
+    <table class="proxy-content-section proxy-content-item">
+        <caption class="year-award-fund">{{'proxy.awardPackage.fund'|i18n}}<p>{{award.fundTitle}}</p></caption>
+        <tbody>
+        <tr>
+            <th>{{'proxy.awardPackage.status'|i18n}}</th>
+            <td class="currency-values">{{award.status}}</td>
+        </tr>
+        <tr>
+            <th>{{'proxy.awardPackage.offered'|i18n}}</th>
+            <td class="currency-values">{{award.offerAmt}}</td>
+        </tr>
+        <tr>
+            <th>{{'proxy.awardPackage.accepted'|i18n}}</th>
+            <td class="currency-values">{{award.acceptAmt}}</td>
+        </tr>
+        <tr>
+            <th>{{'proxy.awardPackage.declined'|i18n}}</th>
+            <td class="currency-values">{{award.declineAmt}}</td>
+        </tr>
+        <tr>
+            <th>{{'proxy.awardPackage.cancelled'|i18n}}</th>
+            <td class="currency-values">{{award.cancelAmt}}</td>
+        </tr>
+        <tr>
+            <th>{{'proxy.awardPackage.total'|i18n}}</th>
+            <td class="currency-values currency-totals">{{award.amount}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h2 class="period-award-title">{{'proxy.awardPackage.aidAwardTerm'|i18n:[awardPackage.aidYearDesc]}}</h2>
+    <div ng-repeat="period in awardPackage.periodInfo.periods" class="period">
+        <h3>
+            <a href="" data-toggle="collapse" data-target="#period{{$index}}" class="panel-title">
+                {{period.termDesc}}
+                <span class="icon-collapseArrow"></span>
+            </a>
+        </h3>
+        <div class="collapse in" id="period{{$index}}">
+            <div ng-repeat="periodAward in period.periodAwards"  class="period-fund-container">
+                <table class="proxy-content-section proxy-content-item">
+                    <caption class="year-award-fund">
+                        {{'proxy.awardPackage.fund'|i18n}}<p>{{periodAward.fundTitle}}</p>
+                    </caption>
+                    <tbody>
+                    <!-- <tr> year-award-container
+                        <th>{{'proxy.awardPackage.status'|i18n}}</th>
+                        <td class="currency-values">{{periodAward.status}}</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.awardPackage.amount'|i18n}}</th>
+                        <td class="currency-values">{{periodAward.amount}}</td>
+                    </tr> {{'proxy.awardPackage.amount'|i18n}} -->
+                    <tr>
+                        <td class="bold-font">
+                            {{'proxy.awardPackage.status'|i18n}}
+                            <p class="term-fund">{{periodAward.status}}</p>
+                        </td>
+                        <td class="currency-values"><p class="term-fund">{{periodAward.amount}}</p></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <table class="proxy-content-section period-fund-container">
+            <tbody>
+            <tr>
+                <th>{{'proxy.awardPackage.total'|i18n}}</th>
+                <td class="currency-values currency-totals">{{period.totalTxt}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h3>
+            <a href="" data-toggle="collapse" data-target="#fundTotals" class="panel-title">
+                {{'proxy.awardPackage.totals'|i18n}}
+                <span class="icon-collapseArrow"></span>
+            </a>
+        </h3>
+        <div class="collapse in period-fund-container" id="fundTotals">
+            <table class="proxy-content-section proxy-content-item">
+                <thead>
+                <th>{{'proxy.awardPackage.fund'|i18n}}</th>
+                <th>{{'proxy.awardPackage.total'|i18n}}</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="fund in getFundList()">
+                    <td>{{fund}}</td>
+                    <td class="currency-values">{{awardPackage.periodInfo.fundTotals[fund]}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <table class="proxy-content-section period-fund-container">
+            <tbody>
+            <tr>
+                <th>{{'proxy.awardPackage.grandTotal'|i18n}}</th>
+                <td class="currency-values currency-totals">{{awardPackage.periodInfo.grandTotal}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

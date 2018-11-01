@@ -66,6 +66,19 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
             }
         };
 
+        $scope.getFund = function(period, fund) {
+            var periodAward = _.find(period.periodAwards, function(award){
+                return award.fundTitle === fund;
+            });
+
+            if(periodAward) {
+                return periodAward;
+            }
+            else {
+                return {};
+            }
+        };
+
         init();
     }
 ]);
