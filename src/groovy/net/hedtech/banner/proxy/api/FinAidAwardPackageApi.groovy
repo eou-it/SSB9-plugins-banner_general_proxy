@@ -395,7 +395,7 @@ BEGIN
          ELSE
 --            twbkfrmt.p_tablerowopen;
 --            twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0043', 'SQL', 'Unknown'));
-            lv_enroll_json := lv_enroll_json || '"status":"unknown"';
+            lv_enroll_json := lv_enroll_json || '"status":"_unknown_"';
 --            twbkfrmt.p_tablerowclose;
          END IF;
       END IF;
@@ -474,7 +474,7 @@ BEGIN
 
 --         twbkfrmt.p_tablerowopen;
 --         twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0052', 'SQL', 'Unknown'));
-         lv_enroll_json := lv_enroll_json || '"status":"unknown"';
+         lv_enroll_json := lv_enroll_json || '"status:unknown"';
 --         twbkfrmt.p_tablerowclose;
       END IF;
 
@@ -515,7 +515,8 @@ declare
 
    lv_PeriodRec        PeriodRecTab;
 
-   lv_unknown          rormval.rormval_desc%TYPE := g\$_nls.get('BWRKRHS1-0028', 'SQL', 'Unknown');
+   --lv_unknown          rormval.rormval_desc%TYPE := g\$_nls.get('BWRKRHS1-0028', 'SQL', 'Unknown');
+   lv_unknown          rormval.rormval_desc%TYPE := '_unknown_';
    i                   PLS_INTEGER;
 
    est_enroll_pell     rpbopts.rpbopts_est_enroll_pell_ind%TYPE := NULL;
@@ -589,7 +590,7 @@ BEGIN
 --         ELSIF default_option = '4' THEN
 --             twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0033', 'SQL', 'Less Than 1/2 Time'));
 --         END IF;
-         lv_nenroll_json := lv_nenroll_json || '"status":"' || default_option || '"';
+         lv_nenroll_json := lv_nenroll_json || '"dfltOption":"' || default_option || '"';
       ELSE
          -- est_enroll_pell = 'Y'
          OPEN  year_c;
@@ -604,7 +605,7 @@ BEGIN
       lv_nenroll_json := lv_nenroll_json || '}}';
    ELSE
       -- status = 'T'
-      lv_nenroll_json := '{"tStatus":{';
+      lv_nenroll_json := '{"tStatus_new":{';
       OPEN  period_c;
       FETCH period_c BULK COLLECT INTO lv_PeriodRec;
       CLOSE period_c;
@@ -616,7 +617,7 @@ BEGIN
 
 --         twbkfrmt.p_tablerowopen;
 --         twbkfrmt.p_tabledata(lv_unknown);
-         lv_nenroll_json := lv_nenroll_json || '"statuses":["' || lv_unknown || '"]';
+         lv_nenroll_json := lv_nenroll_json || '"statuses":[":' || lv_unknown || '"]';
 --         twbkfrmt.p_tablerowclose;
       ELSE
 --         twbkfrmt.p_tablerowopen;
@@ -633,7 +634,7 @@ BEGIN
             end if;
             --twbkfrmt.p_tabledata(lv_PeriodRec(i).period_desc);
             --twbkfrmt.p_tabledata(lv_PeriodRec(i).xes_desc);
-            lv_nenroll_json := lv_nenroll_json || '"' || lv_PeriodRec(i).period_desc || ':' || lv_PeriodRec(i).xes_desc || '"';
+            lv_nenroll_json := lv_nenroll_json || '"' || lv_PeriodRec(i).period_desc || ': ' || lv_PeriodRec(i).xes_desc || '"';
 --            twbkfrmt.p_tablerowclose;
          END LOOP;
          lv_nenroll_json := lv_nenroll_json || ']';
@@ -818,6 +819,8 @@ BEGIN
 --                                                      'SQL',
 --                                                      'Cumulative Loan Information as of<br>') ||
 --                                           to_char(proc_date, g\$_date.get_nls_date_format));
+      lv_loan_json := lv_loan_json || '"procDate":"' || to_char(proc_date,'MM/DD/YYYY') || '",';
+
 
       --twbkfrmt.p_tablerowopen;
       --twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0055', 'SQL', 'Loan Type'));
@@ -826,24 +829,24 @@ BEGIN
 
 --      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0057', 'SQL', 'Subsidized'),
 --                          agt_sub_total);
-      lv_loan_json := lv_loan_json || '"subsidized":"' || agt_sub_total || '",';
+      lv_loan_json := lv_loan_json || '"subsidized":' || agt_sub_total || ',';
 --      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0058', 'SQL', 'Unsubsidized'),
 --                          agt_unsub_total);
-      lv_loan_json := lv_loan_json || '"unsubsidized":"' || agt_unsub_total || '",';
+      lv_loan_json := lv_loan_json || '"unsubsidized":' || agt_unsub_total || ',';
 --      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0059', 'SQL', 'Graduate PLUS'),
 --                          agt_gr_plus_total);
-      lv_loan_json := lv_loan_json || '"gradPlus":"' || agt_gr_plus_total || '",';
+      lv_loan_json := lv_loan_json || '"gradPlus":' || agt_gr_plus_total || ',';
 --      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0060', 'SQL', 'Parent PLUS'),
 --                          agt_plus_total);
-      lv_loan_json := lv_loan_json || '"parentPlus":"' || agt_plus_total || '",';
+      lv_loan_json := lv_loan_json || '"parentPlus":' || agt_plus_total || ',';
 --      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0061', 'SQL', 'Perkins'),
 --                          perk_cumulative_amt);
-      lv_loan_json := lv_loan_json || '"perkins":"' || perk_cumulative_amt || '",';
+      lv_loan_json := lv_loan_json || '"perkins":' || perk_cumulative_amt || ',';
 --      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0062',
 --                                     'SQL',
 --                                     'Direct Unsubsidized (TEACH)'),
 --                          teach_loan_total); -- 80300-6
-      lv_loan_json := lv_loan_json || '"directUnsub":"' || teach_loan_total || '"';
+      lv_loan_json := lv_loan_json || '"directUnsub":' || teach_loan_total;
 
 --      twbkfrmt.p_tableclose;
 --      htp.br;
@@ -1666,7 +1669,9 @@ BEGIN
    --  P_Show_PA_D ;  -- Show Period Awards - Double
    --END IF ; -- IF rorwebr_rec.rorwebr_prds_award_ind = 'N' or anything else, don't display anything
 
-   lv_period_json := P_Show_PA_V;
+   IF rorwebr_rec.rorwebr_prds_award_ind IN ('H','V', 'D') THEN
+      lv_period_json := P_Show_PA_V;
+   END IF;
    end if;
    --htp.br;
 

@@ -1,0 +1,75 @@
+<div ng-if="awardPackage.awardInfo.aidYearAwards" class="awards-container">
+    <div class="proxy-content-section proxy-content-item">
+        <table>
+            <caption>{{'proxy.awardPackage.aidAward'|i18n:[awardPackage.aidYearDesc]}}</caption>
+            <thead>
+                <tr>
+                    <th>{{'proxy.awardPackage.fund'|i18n}}</th>
+                    <th>{{'proxy.awardPackage.status'|i18n}}</th>
+                    <th>{{'proxy.awardPackage.offered'|i18n}}</th>
+                    <th>{{'proxy.awardPackage.accepted'|i18n}}</th>
+                    <th>{{'proxy.awardPackage.declined'|i18n}}</th>
+                    <th>{{'proxy.awardPackage.cancelled'|i18n}}</th>
+                    <th>{{'proxy.awardPackage.total'|i18n}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="award in awardPackage.awardInfo.aidYearAwards.aidAwards">
+                    <td>{{award.fundTitle}}</td>
+                    <td>{{award.status}}</td>
+                    <td class="currency-values">{{award.offerAmt}}</td>
+                    <td class="currency-values">{{award.acceptAmt}}</td>
+                    <td class="currency-values">{{award.declineAmt}}</td>
+                    <td class="currency-values">{{award.cancelAmt}}</td>
+                    <td class="currency-values">{{award.amount}}</td>
+                </tr>
+                <tr>
+                    <td class="bold-font">{{'proxy.awardPackage.total'|i18n}}</td>
+                    <td>-</td>
+                    <td class="currency-values currency-totals">{{awardPackage.awardInfo.aidYearAwards.totalOfferAmtTxt}}</td>
+                    <td class="currency-values currency-totals">{{awardPackage.awardInfo.aidYearAwards.totalAcceptAmtTxt}}</td>
+                    <td class="currency-values currency-totals">{{awardPackage.awardInfo.aidYearAwards.totalDeclineAmtTxt}}</td>
+                    <td class="currency-values currency-totals">{{awardPackage.awardInfo.aidYearAwards.totalCancelAmtTxt}}</td>
+                    <td class="currency-values currency-totals">{{awardPackage.awardInfo.aidYearAwards.totalAmtTxt}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div ng-if="awardPackage.periodInfo.periods.length" class="awards-container">
+    <div class="proxy-content-section proxy-content-item">
+        <table>
+            <caption>{{'proxy.awardPackage.aidAwardTerm'|i18n:[awardPackage.aidYearDesc]}}</caption>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th ng-repeat="period in awardPackage.periodInfo.periods">{{period.termDesc}}</th>
+                    <th>{{'proxy.awardPackage.total'|i18n}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat-start="fund in getFundList()">
+                    <td class="bold-font">{{'proxy.awardPackage.fund'|i18n}}<p>{{fund}}</p></td>
+                    <td ng-repeat="period in awardPackage.periodInfo.periods"></td>
+                    <td class=""></td>
+                </tr>
+                <tr>
+                    <td>{{'proxy.awardPackage.status'|i18n}}</td>
+                    <td ng-repeat="period in awardPackage.periodInfo.periods">{{getFund(period, fund).status}}</td>
+                    <td></td>
+                </tr>
+                <tr ng-repeat-end>
+                    <td>{{'proxy.awardPackage.amount'|i18n}}</td>
+                    <td class="currency-values" ng-repeat="period in awardPackage.periodInfo.periods">{{getFund(period, fund).amount}}</td>
+                    <td class="currency-values">{{awardPackage.periodInfo.fundTotals[fund]}}</td>
+                </tr>
+                <tr>
+                    <td class="bold-font">{{'proxy.awardPackage.totals'|i18n}}</td>
+                    <td class="currency-values currency-totals" ng-repeat="period in awardPackage.periodInfo.periods">{{period.totalTxt}}</td>
+                    <td class="currency-values currency-totals">{{awardPackage.periodInfo.grandTotal}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
