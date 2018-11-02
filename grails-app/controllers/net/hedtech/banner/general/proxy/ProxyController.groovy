@@ -299,7 +299,7 @@ class ProxyController {
             }
         }
 
-        if(result.size() > 1) { // need at leat 1 loan and procDate for loans to be viewable
+        if(result.size() > 1) { // need at least 1 loan and procDate for loans to be viewable
             result.procDate = loanInfo.procDate
             return result
         }

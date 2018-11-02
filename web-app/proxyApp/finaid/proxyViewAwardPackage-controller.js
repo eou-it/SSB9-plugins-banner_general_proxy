@@ -92,8 +92,15 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
             return $filter('i18n')(textKey, [statusData[1]]);
         };
 
-        $scope.now = function() {
-            return moment().format('YYYY-MM-DD');
+        $scope.getStatusTextTermNew = function(status) {
+            var statusData = status.split(':');
+
+            if(statusData[1].trim() === '_unknown_') {
+                return statusData[0] + ': ' + $filter('i18n')('proxy.awardPackage.termStatus.unknown');
+            }
+            else{
+                return status;
+            }
         };
 
         $scope.getFundList = function() {

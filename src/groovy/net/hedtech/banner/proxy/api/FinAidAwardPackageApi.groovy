@@ -515,7 +515,8 @@ declare
 
    lv_PeriodRec        PeriodRecTab;
 
-   lv_unknown          rormval.rormval_desc%TYPE := g\$_nls.get('BWRKRHS1-0028', 'SQL', 'Unknown');
+   --lv_unknown          rormval.rormval_desc%TYPE := g\$_nls.get('BWRKRHS1-0028', 'SQL', 'Unknown');
+   lv_unknown          rormval.rormval_desc%TYPE := '_unknown_';
    i                   PLS_INTEGER;
 
    est_enroll_pell     rpbopts.rpbopts_est_enroll_pell_ind%TYPE := NULL;
@@ -589,7 +590,7 @@ BEGIN
 --         ELSIF default_option = '4' THEN
 --             twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0033', 'SQL', 'Less Than 1/2 Time'));
 --         END IF;
-         lv_nenroll_json := lv_nenroll_json || '"status":"' || default_option || '"';
+         lv_nenroll_json := lv_nenroll_json || '"dfltOption":"' || default_option || '"';
       ELSE
          -- est_enroll_pell = 'Y'
          OPEN  year_c;
@@ -604,7 +605,7 @@ BEGIN
       lv_nenroll_json := lv_nenroll_json || '}}';
    ELSE
       -- status = 'T'
-      lv_nenroll_json := '{"tStatus":{';
+      lv_nenroll_json := '{"tStatus_new":{';
       OPEN  period_c;
       FETCH period_c BULK COLLECT INTO lv_PeriodRec;
       CLOSE period_c;
@@ -633,7 +634,7 @@ BEGIN
             end if;
             --twbkfrmt.p_tabledata(lv_PeriodRec(i).period_desc);
             --twbkfrmt.p_tabledata(lv_PeriodRec(i).xes_desc);
-            lv_nenroll_json := lv_nenroll_json || '"' || lv_PeriodRec(i).period_desc || ':' || lv_PeriodRec(i).xes_desc || '"';
+            lv_nenroll_json := lv_nenroll_json || '"' || lv_PeriodRec(i).period_desc || ': ' || lv_PeriodRec(i).xes_desc || '"';
 --            twbkfrmt.p_tablerowclose;
          END LOOP;
          lv_nenroll_json := lv_nenroll_json || ']';
