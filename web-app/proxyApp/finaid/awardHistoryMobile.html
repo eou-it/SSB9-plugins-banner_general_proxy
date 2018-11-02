@@ -88,7 +88,7 @@
             </div>
 
 
-        <div data-ng-show="award.resources.length &gt; 0">
+        <div data-ng-show="award.resources.length">
 
             <h2 class="proxy-section-heading">{{'proxy.awards.resources.label'|i18n}}</h2>
 
@@ -145,10 +145,18 @@
 
         </div>
 
+        <div data-ng-show="!award.resources.length" class="proxy-bottom-message-container">
+            <div class="proxy-notification-icon blue">
+                <span class="icon-info-CO"></span>
+            </div>
+            <div class="proxy-top-message proxy-notification-text">
+                {{'proxy.awardHistory.message.NO_OUTSIDE_RESOURCE_INFO'|i18n}}
+            </div>
+        </div>
 
     </div>
 
-    <div class="proxy-top-message-container">
+    <div class="proxy-bottom-message-container">
         <div class="proxy-notification-icon blue">
             <span class="icon-info-CO"></span>
         </div>
