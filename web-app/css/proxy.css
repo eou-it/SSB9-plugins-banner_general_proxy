@@ -295,7 +295,8 @@ p.notification-msg {
 }
 
 .proxy-top-message-container,
-.proxy-mid-message-container {
+.proxy-mid-message-container,
+.proxy-bottom-message-container {
     padding: 22px 32px;
     margin: 10px 0 22px;
     background: #eff7ff;
@@ -305,6 +306,10 @@ p.notification-msg {
 .proxy-top-message-container.pi {
     margin-left: 0;
     margin-right: 0;
+}
+
+.proxy-bottom-message-container {
+    margin-top: 20px;
 }
 
 .proxy-notification-icon {
