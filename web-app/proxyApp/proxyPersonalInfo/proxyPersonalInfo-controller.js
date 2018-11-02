@@ -21,6 +21,9 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
         $scope.optOutAdvDate;
         $scope.personalInfoSections = [];
 
+        $scope.setBirthDate = function(data){
+            $scope.proxyProfile.p_birth_date = proxyAppService.stringToDate(data);
+        };
 
         $scope.getPersonalInfo = function() {
             $scope.profileElements = {};
@@ -35,6 +38,9 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     contactIds = ['p_email_address', 'p_ctry_code_phone', 'p_phone_area', 'p_phone_number', 'p_phone_ext'],
                     addressIds = ['p_house_number', 'p_street_line1', 'p_street_line2', 'p_street_line3', 'p_street_line4', 'p_city', 'p_stat_code', 'p_zip', 'p_natn_code', 'p_cnty_code', ''],
                     elem;
+
+                var locale = $('meta[name=locale]').attr("content");
+                response.proxyProfile.p_birth_date = (new Date(response.proxyProfile.p_birth_date)).toLocaleDateString(locale);
 
                 $scope.proxyProfile = response.proxyProfile;
                 $scope.proxyUiRules = response.proxyUiRules;
@@ -102,6 +108,13 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
             _.each(Object.keys($scope.profileElements), function(it) {
                 profile[it] = $scope.profileElements[it].model
             });
+
+
+            var str = ($scope.proxyProfile.p_birth_date.getUTCMonth() + 1).toString() + "/" +
+                $scope.proxyProfile.p_birth_date.getUTCDate() +
+                "/" + $scope.proxyProfile.p_birth_date.getUTCFullYear().toString();
+
+            profile.p_birth_date = str;
 
             proxyAppService.updateProxyPersonalInfo(profile).$promise.then(function(response) {
                 var notifications = [],

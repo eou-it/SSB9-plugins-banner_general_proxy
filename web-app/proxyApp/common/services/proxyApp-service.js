@@ -2,7 +2,7 @@
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootScope, $resource) {
+proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', function ($rootScope, $filter, $resource) {
 
     var fetchConfig = $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'getConfig'}),
@@ -10,6 +10,31 @@ proxyApp.service('proxyAppService', ['$rootScope', '$resource', function ($rootS
             {controller: 'Proxy', action: 'getProxypersonalinformation'}, {query: {method:'GET', isArray:false}}),
         fetchStudentListForProxy = $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'getStudentListForProxy'}, {query: {method:'GET', isArray:false}});
+
+       var dateFmt,
+           calendar = (function(){
+                   var locale = $('meta[name=locale]').attr("content");
+
+                        if(locale.split('-')[0] === 'ar') {
+                           dateFmt = $filter('i18n')('default.date.format');
+                            return $.calendars.instance('islamic');
+                        }
+                   else {
+                            dateFmt = $filter('i18n')('default.date.format').toLowerCase();
+                            return $.calendars.instance();
+                        }
+                }());
+       
+
+       this.stringToDate = function (date) {
+               var result;
+               try {
+                   result = calendar.parseDate(dateFmt, date).toJSDate();
+                       return result;
+                   }
+               catch (exception) {
+                       return null;}
+           };
 
 
     this.config = null;
