@@ -18,8 +18,14 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
          var getAwardPackage = function() {
             if($scope.aidYearHolder.aidYear.code) {
                 proxyAppService.getAwardPackage({aidYear: $scope.aidYearHolder.aidYear.code, id: sessionStorage.getItem("id")}).$promise.then(function (response) {
-                    $scope.awardPackage = response;
-                    $scope.showMessageForNoAwardInfo = !$scope.awardPackage.awardInfo;
+                    if(response.failure || !response.hasAwardInfo) {
+                        $scope.showMessageForNoAwardInfo = true;
+                        $scope.awardPackage = {};
+                    }
+                    else {
+                        $scope.awardPackage = response;
+                        $scope.showMessageForNoAwardInfo = !$scope.awardPackage.awardInfo;
+                    }
                 });
             } else {
                 $scope.showMessageForNoAwardInfo = false;
@@ -96,9 +102,9 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
             var statusData = status.split(':');
 
             if(statusData[1].trim() === '_unknown_') {
-                return statusData[0] + ': ' + $filter('i18n')('proxy.awardPackage.termStatus.unknown');
+                return (statusData[0].length ? statusData[0] + ': ' : '') + $filter('i18n')('proxy.awardPackage.termStatus.unknown');
             }
-            else{
+            else {
                 return status;
             }
         };

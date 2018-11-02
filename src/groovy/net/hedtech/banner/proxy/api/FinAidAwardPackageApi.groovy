@@ -617,7 +617,7 @@ BEGIN
 
 --         twbkfrmt.p_tablerowopen;
 --         twbkfrmt.p_tabledata(lv_unknown);
-         lv_nenroll_json := lv_nenroll_json || '"statuses":["' || lv_unknown || '"]';
+         lv_nenroll_json := lv_nenroll_json || '"statuses":[":' || lv_unknown || '"]';
 --         twbkfrmt.p_tablerowclose;
       ELSE
 --         twbkfrmt.p_tablerowopen;

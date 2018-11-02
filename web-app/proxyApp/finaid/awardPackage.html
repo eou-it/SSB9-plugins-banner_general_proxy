@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <div ng-show="aidYearHolder.aidYear.code">
+    <div ng-show="awardPackage.hasAwardInfo">
         <div class="row auto-clear award-info">
             <div ng-if="awardPackage.needsCalc" class="col-xs-12 col-md-6">
                 <div class="proxy-content-section proxy-content-item">
@@ -126,7 +126,7 @@
                             </div>
                             <div ng-if="awardPackage.enrollment.tStatus_new">
                                 <p class="status-desc">
-                                    <span ng-repeat="status in awardPackage.enrollment.tStatus.statuses">{{getStatusTextTermNew(status)}}</span>
+                                    <span ng-repeat="status in awardPackage.enrollment.tStatus_new.statuses">{{getStatusTextTermNew(status)}}</span>
                                 </p>
                             </div>
                         </div>

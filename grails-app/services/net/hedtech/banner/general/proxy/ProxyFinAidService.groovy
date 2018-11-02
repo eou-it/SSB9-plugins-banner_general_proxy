@@ -54,9 +54,10 @@ class ProxyFinAidService {
         def rorwebrRec = getFinAidAwardMap(sql, sqlText, pidm, aidYear)
 
         if (!rorwebrRec.info_access?.equals('Y')) {
-            return [:]
+            return [hasAwardInfo: false]
         }
         else {
+            result.hasAwardInfo = true
             result.aidYearDesc = rorwebrRec.aidYearDesc
 
             if(rorwebrRec.need_calc_ind.equals('Y')) {
@@ -134,6 +135,6 @@ class ProxyFinAidService {
         ]){ lv_json ->
             json = lv_json
         }
-        return new JsonSlurper().parseText(json)
+        return json ? new JsonSlurper().parseText(json) : null
     }
 }

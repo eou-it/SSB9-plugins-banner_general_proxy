@@ -248,44 +248,54 @@ class ProxyController {
     }
 
     def getAwardPackage() {
-        def result = proxyFinAidService.getAwardPackage(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.aidYear);
-        result.needsCalc?.attendanceCost = currencyFormatHelperService.formatCurrency(result.needsCalc?.attendanceCost)
-        result.needsCalc?.familyContrib = currencyFormatHelperService.formatCurrency(result.needsCalc?.familyContrib)
-        result.needsCalc?.initialNeed = currencyFormatHelperService.formatCurrency(result.needsCalc?.initialNeed)
-        result.needsCalc?.need = currencyFormatHelperService.formatCurrency(result.needsCalc?.need)
-        result.needsCalc?.outsideResrc = currencyFormatHelperService.formatCurrency(result.needsCalc?.outsideResrc)
-
-        result.costOfAttendance?.budgets?.each {
-            it.amount = currencyFormatHelperService.formatCurrency(it.amount)
+        def result
+        try {
+            result = proxyFinAidService.getAwardPackage(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.aidYear);
         }
-        result.costOfAttendance?.totalTxt = currencyFormatHelperService.formatCurrency(result.costOfAttendance?.total)
-
-        if(result.loanInfo) {
-            result.loanInfo = getLoanText(result.loanInfo)
+        catch (Exception e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+            return
         }
 
-        result.awardInfo.aidYearAwards?.aidAwards?.each {
-            it.acceptAmt = formatCurrencyDashZeroes(it.acceptAmt)
-            it.amount = formatCurrencyDashZeroes(it.amount)
-            it.cancelAmt = formatCurrencyDashZeroes(it.cancelAmt)
-            it.declineAmt = formatCurrencyDashZeroes(it.declineAmt)
-            it.offerAmt = formatCurrencyDashZeroes(it.offerAmt)
-        }
-        result.awardInfo.aidYearAwards?.totalAcceptAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalAcceptAmt)
-        result.awardInfo.aidYearAwards?.totalAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalAmt)
-        result.awardInfo.aidYearAwards?.totalCancelAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalCancelAmt)
-        result.awardInfo.aidYearAwards?.totalDeclineAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalDeclineAmt)
-        result.awardInfo.aidYearAwards?.totalOfferAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalOfferAmt)
-
-        result.periodInfo.periods?.each {
-            it.periodAwards.each {
-                it.amount = formatCurrencyDashZeroes(it.amount)
+        if(result.hasAwardInfo) {
+            if(result.needsCalc?.size()) {
+                result.needsCalc.attendanceCost = currencyFormatHelperService.formatCurrency(result.needsCalc.attendanceCost)
+                result.needsCalc.familyContrib = currencyFormatHelperService.formatCurrency(result.needsCalc.familyContrib)
+                result.needsCalc.initialNeed = currencyFormatHelperService.formatCurrency(result.needsCalc.initialNeed)
+                result.needsCalc.need = currencyFormatHelperService.formatCurrency(result.needsCalc.need)
+                result.needsCalc.outsideResrc = currencyFormatHelperService.formatCurrency(result.needsCalc.outsideResrc)
             }
-            it.totalTxt = currencyFormatHelperService.formatCurrency(it.total)
-        }
-        result.periodInfo.grandTotal = currencyFormatHelperService.formatCurrency(result.periodInfo.grandTotal)
-        result.periodInfo.fundTotals.keySet().each {
-            result.periodInfo.fundTotals[it] = currencyFormatHelperService.formatCurrency(result.periodInfo.fundTotals[it])
+
+            result.costOfAttendance?.budgets?.each {
+                it.amount = currencyFormatHelperService.formatCurrency(it.amount)
+            }
+            result.costOfAttendance?.totalTxt = currencyFormatHelperService.formatCurrency(result.costOfAttendance?.total)
+
+            result.loanInfo = getLoanText(result.loanInfo)
+
+            result.awardInfo.aidYearAwards?.aidAwards?.each {
+                it.acceptAmt = formatCurrencyDashZeroes(it.acceptAmt)
+                it.amount = formatCurrencyDashZeroes(it.amount)
+                it.cancelAmt = formatCurrencyDashZeroes(it.cancelAmt)
+                it.declineAmt = formatCurrencyDashZeroes(it.declineAmt)
+                it.offerAmt = formatCurrencyDashZeroes(it.offerAmt)
+            }
+            result.awardInfo.aidYearAwards?.totalAcceptAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalAcceptAmt)
+            result.awardInfo.aidYearAwards?.totalAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalAmt)
+            result.awardInfo.aidYearAwards?.totalCancelAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalCancelAmt)
+            result.awardInfo.aidYearAwards?.totalDeclineAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalDeclineAmt)
+            result.awardInfo.aidYearAwards?.totalOfferAmtTxt = currencyFormatHelperService.formatCurrency(result.awardInfo.aidYearAwards?.totalOfferAmt)
+
+            result.periodInfo.periods?.each {
+                it.periodAwards.each {
+                    it.amount = formatCurrencyDashZeroes(it.amount)
+                }
+                it.totalTxt = currencyFormatHelperService.formatCurrency(it.total)
+            }
+            result.periodInfo.grandTotal = currencyFormatHelperService.formatCurrency(result.periodInfo.grandTotal)
+            result.periodInfo.fundTotals.keySet().each {
+                result.periodInfo.fundTotals[it] = currencyFormatHelperService.formatCurrency(result.periodInfo.fundTotals[it])
+            }
         }
 
         render result as JSON
