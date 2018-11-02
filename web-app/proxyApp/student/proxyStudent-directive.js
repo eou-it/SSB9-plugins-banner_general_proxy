@@ -73,6 +73,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                             scope.hasNextWeek = response.hasNextWeek;
                             scope.hasPrevWeek = response.hasPrevWeek;
                             scope.unassignedSchedule = response.unassignedSchedule;
+                            scope.errorMsg = response.errorMsg;
                             callback(events);
 
                             var dateUsed = moment(response.dateUsed, 'MM/DD/YYYY');

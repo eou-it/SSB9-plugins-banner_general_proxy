@@ -14,6 +14,14 @@
                 {{'proxy.schedule.infoText'|i18n}}
             </p>
         </div>
+        <div ng-show="errorMsg === 'notRegistered'" class="proxy-top-message-container">
+            <div class="proxy-notification-icon blue">
+                <span class="icon-info-CO"></span>
+            </div>
+            <p class="proxy-top-message proxy-notification-text">
+                {{'proxy.schedule.notRegistered'|i18n}}
+            </p>
+        </div>
         <div full-calendar id="calendar" class="ui-widget-content proxy-content-section" role="region"></div>
         <div ng-if="unassignedSchedule.length > 0" class="unassigned proxy-content-section">
             <h2>{{'proxy.schedule.unassignedMeeting'|i18n}}</h2>
