@@ -13,6 +13,7 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
         <meta name="menuEndPoint" content="${request.contextPath}/ssb/menu"/>
         <meta name="menuBaseURL" content="${request.contextPath}/ssb"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="locale" content="${request.locale.toLanguageTag()}" >
         <g:set var="applicationContextRoot" value= "${application.contextPath}"/>
         <meta name="applicationContextRoot" content="${applicationContextRoot}">
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>

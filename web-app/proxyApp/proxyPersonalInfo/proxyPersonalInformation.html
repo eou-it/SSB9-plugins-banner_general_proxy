@@ -48,11 +48,11 @@
             </div>
 
             <div ng-if="profileElement.visible && profileElement.elemId === 'p_birth_date'">
-                <label ng-class="(seprDateErrMsg && !seprDateFocused ? 'field-error' : '')" for="seprDate" ng-bind-html= "profileElement.label" class="input-field-label">
+                <label ng-class="(seprDateErrMsg && !seprDateFocused ? 'field-error' : '')" for="birthDate" ng-bind-html= "profileElement.label" class="input-field-label">
                 </label>
-                <input date-picker ng-model="profileElement.model" pi-input-watcher on-select="setSeprDate" ng-blur="seprDateFocused=false; removeVeteranErrors()"
+                <input date-picker ng-model="profileElement.model" pi-input-watcher on-select="setBirthDate" ng-blur="seprDateFocused=false; removeVeteranErrors()"
                        ng-focus="seprDateFocused=true" ng-class="[(seprDateErrMsg && !seprDateFocused ? 'input-error' : null)]"
-                       class="pi-date-input input-colors" placeholder="{{'personInfo.placeholder.datePicker'|i18n}}" id="seprDate"
+                       class="pi-date-input input-colors" placeholder="{{'personInfo.placeholder.datePicker'|i18n}}" id="birthDate"
                        aria-label="{{'personinfo.veteran.classification.date.discharge.label'|i18n}}"/>
                 <p class="mobile-errors" ng-class="[(!!seprDateErrMsg ? 'field-error error-font-size' : 'no-display')]"
                    role="alert" aria-live="assertive">{{seprDateErrMsg|i18n}}</p>
