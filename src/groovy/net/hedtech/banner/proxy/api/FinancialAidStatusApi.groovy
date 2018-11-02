@@ -36,6 +36,8 @@ declare
   award_package        VARCHAR2(2000) DEFAULT NULL;
   account_summary      VARCHAR2(2000) DEFAULT NULL;
   fin_aid_history      VARCHAR2(2000) DEFAULT NULL;
+  finAidHolds          VARCHAR2(2000) DEFAULT NULL;
+  unSatReq             VARCHAR2(2000) DEFAULT NULL;
   lv_finaid_json       VARCHAR2(8000);
 
   /* Global cursor declarations for package */
@@ -215,17 +217,25 @@ declare
   -- 080501-1
 --     twbkwbis.P_DispInfo('bwrksumm.P_DispSumm','DEFAULT');
   --
---  <<Chk_UnSat_Trk_Req>>
---
---     lv_ReqTab := bwrktrkr.f_get_requirements                                                                           -- 80500-1
---                             ( p_aidy_code      => aidy,                                                                -- 80500-1
---                               p_pidm           => pidm,                                                                -- 80500-1
---                               p_sat_ind        => 'N'                                                                  -- 80500-1
---                             ) ;                                                                                        -- 80500-1
---                                                                                                                        -- 80500-1
---     IF lv_ReqTab.COUNT = 0 THEN                                                                                        -- 80500-1
---         GOTO Chk_Budg;                                                                                                 -- 80500-1
---     END IF;                                                                                                            -- 80500-1
+ <<Chk_UnSat_Trk_Req>>
+
+     lv_ReqTab := bwrktrkr.f_get_requirements                                                                           -- 80500-1
+                             ( p_aidy_code      => aidy,                                                                -- 80500-1
+                               p_pidm           => pidm,                                                                -- 80500-1
+                               p_sat_ind        => 'N'                                                                  -- 80500-1
+                             ) ;                                                                                        -- 80500-1
+                                                                                                                       -- 80500-1
+     IF lv_ReqTab.COUNT = 0 THEN                                                                                        -- 80500-1
+         GOTO Chk_Budg;                                                                                                 -- 80500-1
+     END IF; 
+     
+     
+          unSatReq := '"unSatReq":['
+                       || '{"text":' || '"' ||
+                                 G\$_NLS.Get('BWRKSUM1-0001', 'SQL', 'You have unsatisfied ') ||
+                                 G\$_NLS.Get('BWRKSUM1-0002', 'SQL','student requirements') ||
+                                 G\$_NLS.Get('BWRKSUM1-0003', 'SQL', ' for this aid year.')
+                                  || '"' || '}]';                                                                                                           -- 80500-1
 
 ----
 --  <<UnSat_Req_Exist>>
@@ -458,14 +468,20 @@ declare
 --         twbkfrmt.P_TableClose;
 --     END IF;                                                                                                            -- 80500-1
 --  --
---  <<Chk_Hold>>
---     OPEN bwrkhold.GetFAHoldsC(pidm, aidy); -- 80301-1
---     FETCH bwrkhold.GetFAHoldsC INTO rorhold_rec;
---     IF  bwrkhold.GetFAHoldsC%NOTFOUND THEN
---         CLOSE bwrkhold.GetFAHoldsC;
---         GOTO Chk_Msgs;
---     END IF;
---     CLOSE bwrkhold.GetFAHoldsC;
+  <<Chk_Hold>>
+     OPEN bwrkhold.GetFAHoldsC(pidm, aidy); -- 80301-1
+    FETCH bwrkhold.GetFAHoldsC INTO rorhold_rec;
+    IF  bwrkhold.GetFAHoldsC%NOTFOUND THEN
+         CLOSE bwrkhold.GetFAHoldsC;
+         GOTO Chk_Msgs;
+     END IF;
+     CLOSE bwrkhold.GetFAHoldsC;
+     
+               finAidHolds := '"finAidHolds":['
+                       || '{"text":' || '"' || G\$_NLS.Get('BWRKSUM1-0028', 'SQL','Holds') ||
+                                 G\$_NLS.Get('BWRKSUM1-0029', 'SQL', ' have been placed on your record which will prevent your application for financial aid from being processed.')
+                                  || '"' || '}]';
+                                  
 ----
 --     IF twbkwbis.F_ValidLink('bwrkhold.P_DispHold') THEN                                                                -- 80500-1
 --         twbkfrmt.P_TableOpen('PLAIN',
@@ -485,7 +501,7 @@ declare
 --         twbkfrmt.P_TableClose;
 --     END IF;                                                                                                            -- 80500-1
 --  --
---  <<Chk_Msgs>>
+  <<Chk_Msgs>>
 --     OPEN bwrkamsg.GetAppMsgC(pidm,aidy);
 --     FETCH bwrkamsg.GetAppMsgC INTO appmsg_rec;
 --     IF  bwrkamsg.GetAppMsgC%NOTFOUND THEN
@@ -669,12 +685,20 @@ declare
   IF fin_aid_history IS NULL THEN
       fin_aid_history := '"financialAidHistory":null';
   END IF;
+  IF finAidHolds IS NULL THEN
+      finAidHolds := '"finAidHolds":null';
+  END IF;
+  IF unSatReq IS NULL THEN
+      unSatReq := '"unSatReq":null';
+  END IF;
   
   lv_finaid_json := '{' 
                     || cost_of_attendance || ','
                     || award_package      || ','
                     || account_summary    || ','
-                    || fin_aid_history
+                    || fin_aid_history    || ','
+                    || finAidHolds        || ','
+                    || unSatReq
                     || '}';
   
   ? := lv_finaid_json;

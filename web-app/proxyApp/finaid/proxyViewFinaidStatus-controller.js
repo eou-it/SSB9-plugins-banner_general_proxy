@@ -7,6 +7,10 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
         var sortFinancialAidStatusLines = function(finaidStatus) {
             var retArr = [];
 
+            if (finaidStatus.hasOwnProperty('unSatReq') && finaidStatus.unSatReq) {
+                retArr.push(finaidStatus.unSatReq);
+            }
+
             // Push values, if they exist, into array in a specific order for consistent display to user.
             if (finaidStatus.hasOwnProperty('costOfAttendance') && finaidStatus.costOfAttendance) {
                 retArr.push(finaidStatus.costOfAttendance);
@@ -22,6 +26,10 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
 
             if (finaidStatus.hasOwnProperty('financialAidHistory') && finaidStatus.financialAidHistory) {
                 retArr.push(finaidStatus.financialAidHistory);
+            }
+
+            if (finaidStatus.hasOwnProperty('finAidHolds') && finaidStatus.finAidHolds) {
+                retArr.push(finaidStatus.finAidHolds);
             }
 
             return retArr;
