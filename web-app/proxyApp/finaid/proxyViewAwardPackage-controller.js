@@ -123,12 +123,7 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
                 return award.fundTitle === fund;
             });
 
-            if(periodAward) {
-                return periodAward;
-            }
-            else {
-                return {};
-            }
+            return periodAward ? periodAward : {};
         };
 
         init();
