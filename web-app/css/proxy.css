@@ -795,7 +795,7 @@ p.notification-msg {
     color: #428bca;
 }
 
-.schedDetail h2.course-header {
+.mini-tables h2.course-header {
     font-size: 16px;
     font-weight: bold;
     margin: 0;
@@ -829,36 +829,36 @@ a.panel-title:active {
     content: "\e616";
 }
 
-.schedDetail .proxy-content-item {
+.mini-tables .proxy-content-item {
     padding: 0;
 }
 
-.schedDetail .proxy-content-section.course {
+.mini-tables .proxy-content-section.course {
     box-shadow: 0 5px 10px 0 #CECECE;
 }
 
-.schedDetail .in > .proxy-content-section:first-child {
+.mini-tables .in > .proxy-content-section:first-child {
     margin-top: 0;
 }
 
-.schedDetail table {
+.mini-tables table {
     border: none;
     border-radius: 6px;
 }
 
-.schedDetail table.course {
+.mini-tables table.course {
     border-radius: 0 0 6px 6px;
 }
 
-.schedDetail table tr:hover {
+.mini-tables table tr:hover {
     background: transparent !important;
 }
 
-.schedDetail table tr:hover * {
+.mini-tables table tr:hover * {
     border-radius: 6px;
 }
 
-.schedDetail tr:last-of-type th {
+.mini-tables tr:last-of-type th {
     border-bottom: none;
     border-radius: 6px;
 }
@@ -871,7 +871,7 @@ a.panel-title:active {
     margin: 0;
 }
 
-.schedDetail.awardPackage .award-info > div:first-child {
+.mini-tables.awardPackage .award-info > div:first-child {
     margin-top: 3em;
 }
 
@@ -1012,7 +1012,7 @@ p.term-fund {
     border-radius: 0;
 }
 
-.schedDetail #fundTotals tr:last-of-type th {
+.mini-tables #fundTotals tr:last-of-type th {
     border-bottom: solid 1px #c0ced0;
     border-radius: 0;
 }
@@ -1264,7 +1264,7 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     /* Course Schedule Details - BEGIN */
-    .schedDetail.proxy-page-body {
+    .mini-tables.proxy-page-body {
         padding: 20px 0 0;
     }
 
@@ -1277,11 +1277,11 @@ a.breadcrumbButton.leaf-breadcrumb {
         padding: 0 20px;
     }
 
-    .schedDetail1 .select2-container.proxy-top-input {
+    .schedDetail .select2-container.proxy-top-input {
         float: left;
     }
 
-    .schedDetail .proxy-top-message-container {
+    .mini-tables .proxy-top-message-container {
         margin-top: 10px;
         float: right;
         width: 100%;
@@ -1297,7 +1297,7 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin: 10px 0 1.25em 0;
     }
 
-    .schedDetail .row {
+    .mini-tables .row {
         margin: 0;
     }
 
@@ -1305,7 +1305,7 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin-top: 0;
     }
 
-    .schedDetail h2.course-header {
+    .mini-tables h2.course-header {
         border-radius: 6px;
         border-bottom-style: none;
     }
@@ -1321,13 +1321,13 @@ a.breadcrumbButton.leaf-breadcrumb {
         float: right;
     }
 
-    .schedDetail .proxy-content-section.meetings,
-    .schedDetail .proxy-content-section.course {
+    .mini-tables .proxy-content-section.meetings,
+    .mini-tables .proxy-content-section.course {
         box-shadow: 0 0 10px 0 #CECECE;
         margin-top: 0.75em;
     }
 
-    .schedDetail table.course {
+    .mini-tables table.course {
         border-radius: 6px;
     }
     /* Course Schedule Details - END */
@@ -1350,7 +1350,7 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin-top: 2em;
     }
 
-    .schedDetail.awardPackage .award-info > div:first-child {
+    .mini-tables.awardPackage .award-info > div:first-child {
         margin-top: 0;
     }
 

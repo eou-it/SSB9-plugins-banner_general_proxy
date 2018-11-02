@@ -24,7 +24,7 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
                     }
                     else {
                         $scope.awardPackage = response;
-                        $scope.showMessageForNoAwardInfo = !$scope.awardPackage.awardInfo;
+                        $scope.showMessageForNoAwardInfo = !response.hasAwardInfo;
                     }
                 });
             } else {
