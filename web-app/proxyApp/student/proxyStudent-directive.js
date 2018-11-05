@@ -32,22 +32,70 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
             //        return d.getHours() < 12 ? amPm[0] : amPm[1];
             //    };
 
-                $('#calendar').fullCalendar({
+            var mobileOptions = {
+                    defaultView: 'agendaTwoDay',
+                    aspectRatio: 0.8,
+                    header: {
+                        left: 'title',
+                        center: 'myCustomButton2',
+                        right: ''
+                    },
+                    footer: {
+                        right: '',
+                        center: 'prevWeek prev next nextWeek'
+                    }
+                },
+                desktopOptions = {
+                    defaultView: 'agendaSevenDay',
+                    aspectRatio: 2,
                     header: {
                         left: '',
                         center: 'title',
                         right: ''
                     },
                     footer: {
+                        center: '',
                         right: 'prev next'
+                    }
+                },
+                isMobile = $(window).width() < 768;
+
+                $('#calendar').fullCalendar({
+                    customButtons: {
+                        nextWeek: {
+                            text: 'forward!',
+                            click: function() {
+                                var tgtDate = $('#calendar').fullCalendar('getDate').add(7, 'days');
+                                $('#calendar').fullCalendar('gotoDate', tgtDate);
+                            }
+                        },
+                        prevWeek: {
+                            text: 'backward!',
+                            click: function() {
+                                var tgtDate = $('#calendar').fullCalendar('getDate').subtract(7, 'days');
+                                $('#calendar').fullCalendar('gotoDate', tgtDate);
+                            }
+                        }
                     },
-                    defaultView: 'agendaWeek',
+                    header: isMobile ? mobileOptions.header : desktopOptions.header,
+                    footer: isMobile ? mobileOptions.footer : desktopOptions.footer,
+                    defaultView: isMobile ? mobileOptions.defaultView : desktopOptions.defaultView,
+                    views: {
+                        agendaSevenDay: {
+                            type: 'agenda',
+                            duration: { weeks: 1 }
+                        },
+                        agendaTwoDay: {
+                            type: 'agenda',
+                            duration: { days: 2 }
+                        }
+                    },
+                    aspectRatio: isMobile ? mobileOptions.aspectRatio : desktopOptions.aspectRatio,
                     allDaySlot: false,
                     editable: false,
                     eventColor: '#eff7ff',
                     eventTextColor: '#428bca',
                     eventBorderColor: '#2874bb',
-                    aspectRatio: 2,
                     slotEventOverlap: false,
                     slotDuration: '00:15:00',
                     slotLabelInterval: '01:00',
@@ -66,7 +114,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     isRTL: $.i18n.prop('default.language.direction') == 'rtl',
                     events: function (start, end, timezone, callback) {
                         //var events = JSON.parse(sessionStorage.getItem("classScheduleEvents"));
-                        start.add(1, 'days'); //move start to a Monday to coincide with SQL date processing
+                        //start.add(1, 'days'); //move start to a Monday to coincide with SQL date processing
                         var events;
                         proxyAppService.getCourseSchedule({id: scope.id, date: start.format('MM/DD/YYYY')}).$promise.then(function(response) {
                             events = response.schedule;
@@ -107,7 +155,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                             $ele.hasClass("pendingEvent") ? width : width++;
                         }
                         else
-                            width = view.getColWidth();
+                            //width = view.getColWidth();
 
                         //$ele.css('width', width);
                         if ($.i18n.prop('default.language.direction') == 'rtl') {
@@ -151,7 +199,34 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                             nextBtnElem.attr('disabled', '');
                         }
                         nextBtnElem.addClass('secondary');
+                    },
+                    windowResize: function(view) {
+                        var datePickerTemplate = null,
+                            datePickerElem = null;
+                        if ($(window).width() < 768) {
+                            if(view.name === 'agendaSevenDay') {
+                                $('#calendar').fullCalendar('changeView', 'agendaTwoDay');
+                                $('#calendar').fullCalendar('option', 'aspectRatio', mobileOptions.aspectRatio);
+                                $('#calendar').fullCalendar('option', 'header', mobileOptions.header);
+                                $('#calendar').fullCalendar('option', 'footer', mobileOptions.footer);
 
+                                datePickerTemplate = '<div class="gotodate-block"> <label>'+ goToText +'</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="'+ datePlaceholderText +'" id="goToDate"/> </div>';
+                                datePickerElem = $compile(datePickerTemplate)(scope);
+                                $('.fc-header-toolbar > .fc-right').append(datePickerElem);
+                            }
+                        }
+                        else {
+                            if(view.name === 'agendaTwoDay') {
+                                $('#calendar').fullCalendar('changeView', 'agendaSevenDay');
+                                $('#calendar').fullCalendar('option', 'aspectRatio', desktopOptions.aspectRatio);
+                                $('#calendar').fullCalendar('option', 'header', desktopOptions.header);
+                                $('#calendar').fullCalendar('option', 'footer', desktopOptions.footer);
+
+                                datePickerTemplate = '<div class="gotodate-block"> <label>' + goToText + '</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="' + datePlaceholderText + '" id="goToDate"/> </div>';
+                                datePickerElem = $compile(datePickerTemplate)(scope);
+                                $('.fc-header-toolbar > .fc-right').append(datePickerElem);
+                            }
+                        }
                     }
                 });
 
