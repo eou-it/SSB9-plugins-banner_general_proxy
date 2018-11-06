@@ -144,4 +144,11 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
         }
     };
 
+
+    this.checkStudentPageForAccess = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'checkStudentPageForAccess'}).get(params);
+    };
+
+
 }]);

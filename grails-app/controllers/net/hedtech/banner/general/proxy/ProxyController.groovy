@@ -75,9 +75,47 @@ class ProxyController {
     }
 
 
+    /*
+      Returns the Student List with a set of authorized pages.
+     */
     def getStudentListForProxy(){
-        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
-        render generalSsbProxyService.getStudentListForProxy(p_proxyIDM) as JSON
+
+        def studentList
+
+        log.debug("Get Student List for Proxy")
+
+        if (session["students"] == null) {
+            def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+            studentList = generalSsbProxyService.getStudentListForProxy(p_proxyIDM)
+            session["students"] = studentList
+        }
+        else {
+            studentList = session["students"]
+        }
+
+        render studentList as JSON
+    }
+
+
+    /*
+      Checks the Page for Authorized Access.
+     */
+    def checkStudentPageForAccess() {
+
+        log.debug("Check Student Page For Access for: " + params.name);
+
+        if (params.name) {
+            def students = session["students"]?.students
+            def student = students?.find { it.id == params.id }
+            def page = student?.pages?.find { it.url == params.name }
+
+            if (page == null) {
+                render([failure: true, authorized: false,  message: 'proxy.error.pageAccess'] as JSON)
+                return
+            }else{
+                render([failure: false, authorized: true,  message: 'Access verified'] as JSON)
+            }
+        }
     }
 
 
