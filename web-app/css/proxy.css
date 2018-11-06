@@ -714,7 +714,7 @@ p.notification-msg {
 
 .fc-toolbar.fc-footer-toolbar {
     margin-top: 0em;
-    padding: 1em 1.5em 1em 0;
+    padding: 1em 1.5em 1em 1.5em;
     border-top: 1px solid #c0ced0;
 }
 
