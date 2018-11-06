@@ -76,6 +76,12 @@
                 <div class="proxy-content-section proxy-content-item">
                     <table>
                         <caption>{{'proxy.awardPackage.cumLoanInfo'|i18n:[awardPackage.loanInfo.procDate]}}</caption>
+                        <thead class="loans">
+                            <tr>
+                                <th>{{'proxy.awardPackage.loanType'|i18n}}</th>
+                                <th class="currency-values">{{'proxy.awardPackage.amount'|i18n}}</th>
+                            </tr>
+                        </thead>
                         <tbody>
                             <tr ng-if="awardPackage.loanInfo.subsidized">
                                 <td>{{'proxy.awardPackage.subsidized'|i18n}}</td>
@@ -152,6 +158,17 @@
 
         <div class="proxy-tablet-visible proxy-desktop-visible funds">
             <ng-include src="'proxyApp/finaid/awardPackage-fundsDesktop.html'|webAppResourcePath"></ng-include>
+        </div>
+
+        <div class="msg-container">
+            <div class="proxy-bottom-message-container">
+                <div class="proxy-notification-icon blue">
+                    <span class="icon-info-CO"></span>
+                </div>
+                <div class="proxy-top-message proxy-notification-text">
+                    {{'proxy.awardPackage.haveQuestion'|i18n}}
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -6,31 +6,41 @@
                 <tr>
                     <th>{{'proxy.awardPackage.fund'|i18n}}</th>
                     <th>{{'proxy.awardPackage.status'|i18n}}</th>
-                    <th>{{'proxy.awardPackage.offered'|i18n}}</th>
-                    <th>{{'proxy.awardPackage.accepted'|i18n}}</th>
-                    <th>{{'proxy.awardPackage.declined'|i18n}}</th>
-                    <th>{{'proxy.awardPackage.cancelled'|i18n}}</th>
-                    <th>{{'proxy.awardPackage.total'|i18n}}</th>
+                    <th class="currency-values">{{'proxy.awardPackage.offered'|i18n}}</th>
+                    <th class="currency-values">{{'proxy.awardPackage.accepted'|i18n}}</th>
+                    <th class="currency-values">{{'proxy.awardPackage.declined'|i18n}}</th>
+                    <th class="currency-values">{{'proxy.awardPackage.cancelled'|i18n}}</th>
+                    <th class="currency-values">{{'proxy.awardPackage.total'|i18n}}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="award in awardPackage.awardInfo.aidYearAwards.aidAwards">
                     <td>{{award.fundTitle}}</td>
-                    <td>{{award.status}}</td>
-                    <td class="currency-values">{{award.offerAmt}}</td>
-                    <td class="currency-values">{{award.acceptAmt}}</td>
-                    <td class="currency-values">{{award.declineAmt}}</td>
-                    <td class="currency-values">{{award.cancelAmt}}</td>
+                    <td>{{award.status ? award.status : '-'}}</td>
+                    <td class="currency-values">{{award.offerAmt ? award.offerAmt : '-'}}</td>
+                    <td class="currency-values">{{award.acceptAmt ? award.acceptAmt : '-'}}</td>
+                    <td class="currency-values">{{award.declineAmt ? award.declineAmt : '-'}}</td>
+                    <td class="currency-values">{{award.cancelAmt ? award.cancelAmt : '-'}}</td>
                     <td class="currency-values">{{award.amount}}</td>
                 </tr>
                 <tr>
                     <td class="bold-font">{{'proxy.awardPackage.total'|i18n}}</td>
                     <td>-</td>
-                    <td class="currency-values currency-totals">{{awardPackage.awardInfo.aidYearAwards.totalOfferAmtTxt}}</td>
-                    <td class="currency-values currency-totals">{{awardPackage.awardInfo.aidYearAwards.totalAcceptAmtTxt}}</td>
-                    <td class="currency-values currency-totals">{{awardPackage.awardInfo.aidYearAwards.totalDeclineAmtTxt}}</td>
-                    <td class="currency-values currency-totals">{{awardPackage.awardInfo.aidYearAwards.totalCancelAmtTxt}}</td>
-                    <td class="currency-values currency-totals">{{awardPackage.awardInfo.aidYearAwards.totalAmtTxt}}</td>
+                    <td class="currency-values currency-totals">
+                        {{awardPackage.awardInfo.aidYearAwards.totalOfferAmtTxt ? awardPackage.awardInfo.aidYearAwards.totalOfferAmtTxt : '-'}}
+                    </td>
+                    <td class="currency-values currency-totals">
+                        {{awardPackage.awardInfo.aidYearAwards.totalAcceptAmtTxt ? awardPackage.awardInfo.aidYearAwards.totalAcceptAmtTxt : '-'}}
+                    </td>
+                    <td class="currency-values currency-totals">
+                        {{awardPackage.awardInfo.aidYearAwards.totalDeclineAmtTxt ? awardPackage.awardInfo.aidYearAwards.totalDeclineAmtTxt : '-'}}
+                    </td>
+                    <td class="currency-values currency-totals">
+                        {{awardPackage.awardInfo.aidYearAwards.totalCancelAmtTxt ? awardPackage.awardInfo.aidYearAwards.totalCancelAmtTxt : '-'}}
+                    </td>
+                    <td class="currency-values currency-totals">
+                        {{awardPackage.awardInfo.aidYearAwards.totalAmtTxt}}
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -45,7 +55,7 @@
                 <tr>
                     <th></th>
                     <th ng-repeat="period in awardPackage.periodInfo.periods">{{period.termDesc}}</th>
-                    <th>{{'proxy.awardPackage.total'|i18n}}</th>
+                    <th class="currency-values">{{'proxy.awardPackage.total'|i18n}}</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,12 +66,16 @@
                 </tr>
                 <tr>
                     <td>{{'proxy.awardPackage.status'|i18n}}</td>
-                    <td ng-repeat="period in awardPackage.periodInfo.periods">{{getFund(period, fund).status}}</td>
+                    <td ng-repeat="period in awardPackage.periodInfo.periods">
+                        {{getFund(period, fund).status}}
+                    </td>
                     <td></td>
                 </tr>
                 <tr ng-repeat-end>
                     <td>{{'proxy.awardPackage.amount'|i18n}}</td>
-                    <td class="currency-values" ng-repeat="period in awardPackage.periodInfo.periods">{{getFund(period, fund).amount}}</td>
+                    <td class="currency-values" ng-repeat="period in awardPackage.periodInfo.periods">
+                        {{getFund(period, fund).amount ? getFund(period, fund).amount : '-'}}
+                    </td>
                     <td class="currency-values">{{awardPackage.periodInfo.fundTotals[fund]}}</td>
                 </tr>
                 <tr>

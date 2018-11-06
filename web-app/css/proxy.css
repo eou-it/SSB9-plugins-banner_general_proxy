@@ -910,7 +910,12 @@ a.panel-title:active {
     padding: 1.5em;
 }
 
-td.currency-values {
+thead.loans > tr:last-of-type > th, thead.loans > tr > th {
+    border-bottom: solid 1px #c0ced0;
+}
+
+td.currency-values,
+th.currency-values {
     text-align: right;
 }
 
@@ -1360,11 +1365,15 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .proxy-tablet-visible.funds {
-        padding-bottom: 100px;
+        padding-bottom: 15px;
     }
 
     .awards-container {
         padding: 0 20px;
+    }
+
+    .msg-container {
+        padding: 0 20px 80px;
     }
 
     .funds thead > tr:last-of-type > th,
