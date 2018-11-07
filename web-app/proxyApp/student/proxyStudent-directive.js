@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$compile', function(proxyAppService, $filter, $compile) {
+proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$compile', '$rootScope', function(proxyAppService, $filter, $compile, $rootScope) {
     function topOf(elements) {
         function topOfOne(element) {
             var pos = $(element).position();
@@ -74,7 +74,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
             //        return d.getHours() < 12 ? amPm[0] : amPm[1];
             //    };
 
-            var isMobile = $(window).width() < 768,
+            var isMobile = $rootScope.isMobileView(),
                 addDatePicker = function() {
                     var datePickerTemplate = '<div class="gotodate-block"> <label>' + goToText + '</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="' + datePlaceholderText + '" id="goToDate"/> </div>',
                         datePickerElem = $compile(datePickerTemplate)(scope);
@@ -267,7 +267,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     },
                     windowResize: function(view) {
                         var fc = $('#calendar');
-                        if ($(window).width() < 768) {
+                        if ($rootScope.isMobileView()) {
                             if(view.name === 'agendaSevenDay') {
                                 fc.fullCalendar('changeView', 'agendaTwoDay');
                                 fc.fullCalendar('option', 'aspectRatio', mobileOptions.aspectRatio);
