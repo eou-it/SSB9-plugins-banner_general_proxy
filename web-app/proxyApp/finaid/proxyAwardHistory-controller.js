@@ -5,7 +5,7 @@ proxyAppControllers.controller('proxyAwardHistoryController',['$scope', '$rootSc
     function ($scope, $rootScope, $stateParams, proxyAppService, $filter, $sce, $state, notificationCenterService) {
 
         $scope.awards = {};
-        $scope.messages = {};
+        $scope.messages = [];
         $scope.aidYear = "";
         $scope.studentName = proxyAppService.getStudentName();
 

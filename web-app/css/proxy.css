@@ -168,6 +168,10 @@ ul{
     text-align: right;
 }
 
+.award-hist-top-msg {
+    margin-bottom: 15px;
+}
+
 #content.proxy {
     font-family: OpenSans-regular;
     font-size: 14px;
