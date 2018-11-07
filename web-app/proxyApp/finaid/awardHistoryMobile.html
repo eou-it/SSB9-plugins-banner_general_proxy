@@ -5,6 +5,9 @@
     <div class="proxy-page-student-name">
         {{'proxy.message.viewingStudentInfo'|i18n:[studentName]}}
     </div>
+
+    <div class="notification-msg award-hist-top-msg" ng-repeat="message in messages"><span ng-bind-html="stringifyAwardMesageFor(message)"></span></div>
+
     <div ng-repeat="award in awards" id="awards">
 
             <div class="proxy-content-section proxy-content-item row" ng-repeat="row in award.data.rows">
