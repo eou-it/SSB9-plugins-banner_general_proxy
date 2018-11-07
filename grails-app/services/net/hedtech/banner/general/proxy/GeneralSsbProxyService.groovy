@@ -652,7 +652,19 @@ class GeneralSsbProxyService {
 
         if(scheduleJsonMap && !errorMsg) {
             if(!scheduleJsonMap.hasNextWeek || !scheduleJsonMap.hasPrevWeek) {
-                startDate = scheduleJsonMap.schedStartDate;
+                SimpleDateFormat usDateFmt = new SimpleDateFormat("MM/dd/yyyy")
+                Calendar startDateCal = Calendar.instance
+                Calendar schedStartDateCal = Calendar.instance
+                Calendar schedEndDateCal = Calendar.instance
+                if (startDate) {
+                    startDateCal.setTime(usDateFmt.parse(startDate))
+                    schedStartDateCal.setTime(usDateFmt.parse(scheduleJsonMap.schedStartDate))
+                    schedEndDateCal.setTime(usDateFmt.parse(scheduleJsonMap.schedEndDate))
+                    if ((!scheduleJsonMap.hasPrevWeek && startDateCal.before(schedStartDateCal)) ||
+                            (!scheduleJsonMap.hasNextWeek && startDateCal.after(schedEndDateCal))) {
+                        startDate = scheduleJsonMap.schedStartDate;
+                    }
+                }
             }
         }
 
@@ -660,7 +672,6 @@ class GeneralSsbProxyService {
 
         def resultMap = [
                 schedule: regEvents.registrationEvents,
-                scheduleConflicts: regEvents.conflictingEvents,
                 dateUsed: startDate,
                 hasNextWeek: scheduleJsonMap.hasNextWeek,
                 hasPrevWeek: scheduleJsonMap.hasPrevWeek,
@@ -840,10 +851,11 @@ class GeneralSsbProxyService {
             }
         }
 
-        return [
-                registrationEvents: registrationArray,
-                conflictingEvents: conflictingEvents
-        ]
+        registrationArray.each {
+            it.remove('startCal')
+            it.remove('endCal')
+        }
+        return [registrationEvents: registrationArray]
     }
 
     /*

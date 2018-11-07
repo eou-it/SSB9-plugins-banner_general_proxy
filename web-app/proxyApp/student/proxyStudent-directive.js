@@ -48,6 +48,22 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                 center: '',
                 right: 'prev next'
             }
+        },
+        hasEventWithinPast2Days = function () {
+            var fc = $('#calendar'),
+                calDate = fc.fullCalendar('getDate').hour(0);
+
+            return fc.fullCalendar('clientEvents', function(event) {
+                return (event.start.isBefore(calDate));
+            }).length > 0;
+        },
+        hasEventWithinNext2Days = function () {
+            var fc = $('#calendar'),
+                targetCalDate = fc.fullCalendar('getDate').add(2, 'days').hour(0);
+
+            return fc.fullCalendar('clientEvents', function(event) {
+                return (event.end.isSameOrAfter(targetCalDate));
+            }).length > 0;
         };
 
     return {
@@ -58,7 +74,12 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
             //        return d.getHours() < 12 ? amPm[0] : amPm[1];
             //    };
 
-            var isMobile = $(window).width() < 768;
+            var isMobile = $(window).width() < 768,
+                addDatePicker = function() {
+                    var datePickerTemplate = '<div class="gotodate-block"> <label>' + goToText + '</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="' + datePlaceholderText + '" id="goToDate"/> </div>',
+                        datePickerElem = $compile(datePickerTemplate)(scope);
+                    $('.fc-header-toolbar > .fc-right').append(datePickerElem);
+                };
 
                 $('#calendar').fullCalendar({
                     customButtons: {
@@ -105,7 +126,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     timeFormat: 'h:mm', // 5:00 - 6:30,
                     titleFormat: '['+ weekOfText +'] MMMM DD, YYYY',
 
-                    firstDay: parseInt($.i18n.prop("default.firstDayOfTheWeek")),
+                    firstDay: 1,
                     dayNames: $.i18n.prop("default.gregorian.dayNames").split(','),
                     dayNamesShort: $.i18n.prop("default.gregorian.dayNamesShort").split(','),
                     monthNames: $.i18n.prop("default.gregorian.monthNames").split(','),
@@ -114,7 +135,6 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     isRTL: $.i18n.prop('default.language.direction') == 'rtl',
                     events: function (start, end, timezone, callback) {
                         //var events = JSON.parse(sessionStorage.getItem("classScheduleEvents"));
-                        //start.add(1, 'days'); //move start to a Monday to coincide with SQL date processing
                         var events;
                         proxyAppService.getCourseSchedule({id: scope.id, date: start.format('MM/DD/YYYY')}).$promise.then(function(response) {
                             events = response.schedule;
@@ -154,8 +174,6 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                             width = Math.max(narrow + 6, narrow / .95);
                             $ele.hasClass("pendingEvent") ? width : width++;
                         }
-                        else
-                            //width = view.getColWidth();
 
                         //$ele.css('width', width);
                         if ($.i18n.prop('default.language.direction') == 'rtl') {
@@ -193,6 +211,15 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                             else {
                                 backwardElem.addClass('fc-state-disabled');
                                 backwardElem.attr('disabled', '');
+
+                                if(hasEventWithinPast2Days()) {
+                                    prevBtnElem.removeClass('fc-state-disabled');
+                                    prevBtnElem.removeAttr('disabled');
+                                }
+                                else {
+                                    prevBtnElem.addClass('fc-state-disabled');
+                                    prevBtnElem.attr('disabled', '');
+                                }
                             }
                             backwardElem.addClass('secondary');
 
@@ -203,34 +230,43 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                             else {
                                 forwardElem.addClass('fc-state-disabled');
                                 forwardElem.attr('disabled', '');
+
+                                if(hasEventWithinNext2Days()) {
+                                    nextBtnElem.removeClass('fc-state-disabled');
+                                    nextBtnElem.removeAttr('disabled');
+                                }
+                                else {
+                                    nextBtnElem.addClass('fc-state-disabled');
+                                    nextBtnElem.attr('disabled', '');
+                                }
                             }
                             forwardElem.addClass('secondary');
                         }
-
-                        if(scope.hasPrevWeek) {
-                            prevBtnElem.removeClass('fc-state-disabled');
-                            prevBtnElem.removeAttr('disabled');
-                        }
                         else {
-                            prevBtnElem.addClass('fc-state-disabled');
-                            prevBtnElem.attr('disabled', '');
+
+                            if (scope.hasPrevWeek) {
+                                prevBtnElem.removeClass('fc-state-disabled');
+                                prevBtnElem.removeAttr('disabled');
+                            }
+                            else {
+                                prevBtnElem.addClass('fc-state-disabled');
+                                prevBtnElem.attr('disabled', '');
+                            }
+
+                            if (scope.hasNextWeek) {
+                                nextBtnElem.removeClass('fc-state-disabled');
+                                nextBtnElem.removeAttr('disabled');
+                            }
+                            else {
+                                nextBtnElem.addClass('fc-state-disabled');
+                                nextBtnElem.attr('disabled', '');
+                            }
                         }
                         prevBtnElem.addClass('secondary');
-
-                        if(scope.hasNextWeek) {
-                            nextBtnElem.removeClass('fc-state-disabled');
-                            nextBtnElem.removeAttr('disabled');
-                        }
-                        else {
-                            nextBtnElem.addClass('fc-state-disabled');
-                            nextBtnElem.attr('disabled', '');
-                        }
                         nextBtnElem.addClass('secondary');
                     },
                     windowResize: function(view) {
-                        var datePickerTemplate = null,
-                            datePickerElem = null,
-                            fc = $('#calendar');
+                        var fc = $('#calendar');
                         if ($(window).width() < 768) {
                             if(view.name === 'agendaSevenDay') {
                                 fc.fullCalendar('changeView', 'agendaTwoDay');
@@ -238,9 +274,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                                 fc.fullCalendar('option', 'header', mobileOptions.header);
                                 fc.fullCalendar('option', 'footer', mobileOptions.footer);
 
-                                datePickerTemplate = '<div class="gotodate-block"> <label>'+ goToText +'</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="'+ datePlaceholderText +'" id="goToDate"/> </div>';
-                                datePickerElem = $compile(datePickerTemplate)(scope);
-                                $('.fc-header-toolbar > .fc-right').append(datePickerElem);
+                                addDatePicker();
                             }
                         }
                         else {
@@ -250,18 +284,13 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                                 fc.fullCalendar('option', 'header', desktopOptions.header);
                                 fc.fullCalendar('option', 'footer', desktopOptions.footer);
 
-                                datePickerTemplate = '<div class="gotodate-block"> <label>' + goToText + '</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="' + datePlaceholderText + '" id="goToDate"/> </div>';
-                                datePickerElem = $compile(datePickerTemplate)(scope);
-                                $('.fc-header-toolbar > .fc-right').append(datePickerElem);
+                                addDatePicker();
                             }
                         }
                     }
                 });
 
-                //add date-picker to calendar
-            var datePickerTemplate = '<div class="gotodate-block"> <label>'+ goToText +'</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="'+ datePlaceholderText +'" id="goToDate"/> </div>',
-                datePickerElem = $compile(datePickerTemplate)(scope);
-            $('.fc-header-toolbar > .fc-right').append(datePickerElem);
+            addDatePicker();
 
 
             //$("#calendar div").attr("dir", $.i18n.prop('default.language.direction') == 'ltr' ? "ltr" : "rtl");
