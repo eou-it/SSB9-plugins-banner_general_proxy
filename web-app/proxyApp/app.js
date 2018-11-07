@@ -45,6 +45,8 @@ var proxyApp = angular.module('proxyApp', [
                 var isTablet = window.matchMedia("only screen and (min-width: 768px) and (max-width:1024px)");
                 $rootScope.isTabletView = isTablet.matches;
 
+                $rootScope.isMobileView = isMobile;
+
                 $rootScope.isAndroid = (/(android)/i.test(navigator.userAgent));
 
                 if ($rootScope.isAndroid) {

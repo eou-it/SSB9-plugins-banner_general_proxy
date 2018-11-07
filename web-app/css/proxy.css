@@ -598,11 +598,11 @@ p.notification-msg {
 
 #calendar table {
     background: transparent;
-    border-color: #c0ced0;;
+    border-color: #c0ced0;
     border-style: none;
 }
 
-#calendar .fc-agendaWeek-view > table {
+#calendar .fc-agenda-view > table {
     border-top-style: solid;
     border-top-width: 1px;
     border-left-width: 0px;
@@ -612,27 +612,22 @@ p.notification-msg {
     background: transparent !important;
 }
 
-.fc-toolbar.fc-header-toolbar {
-    display: flex;
-    flex-direction: row-reverse;
-}
-
 .fc-toolbar.fc-header-toolbar .fc-right {
-    flex: 0 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-.fc-toolbar.fc-header-toolbar .fc-center {
-    align-self: center;
-    flex: 1 0 auto;
+.fc-toolbar.fc-header-toolbar .fc-left {
+    float: none;
     display: flex;
-    flex-direction: row-reverse;
+    justify-content: center;
 }
 
 #calendar h2 {
     font-size: 16px;
     font-weight: bold;
-    padding-top: 0.7em;
-    flex: 0.7 0 1.5em;
+    padding-top: 1em;
 }
 
 .gotodate-block {
@@ -640,6 +635,7 @@ p.notification-msg {
     align-items: center;
     padding-top: 1em;
     margin-right: -1.5em;
+    position: relative;
 }
 
 .fc-header-toolbar label {
@@ -652,8 +648,7 @@ p.notification-msg {
 }
 
 .fc-header-toolbar input.hasMultiCalendarPicker.pi-date-input + span.calendar-img {
-    right: 2.5em;
-    position: relative;
+    right: 0;
 }
 
 .proxy .fc-unthemed td.fc-today {
@@ -729,7 +724,7 @@ p.notification-msg {
 
 .fc-toolbar.fc-footer-toolbar {
     margin-top: 0em;
-    padding: 1em 1.5em 1em 0;
+    padding: 1em 1.5em 1em 1.5em;
     border-top: 1px solid #c0ced0;
 }
 
@@ -1510,6 +1505,40 @@ a.breadcrumbButton.leaf-breadcrumb {
         content: none;
     }
     /* Breadcrumbs - BEGIN */
+
+    /* Course Schedule (week at a glance) - BEGIN */
+    .fc-toolbar.fc-header-toolbar {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
+    .fc-toolbar.fc-header-toolbar .fc-right {
+        flex: 0 0 auto;
+        width: unset;
+    }
+
+    .fc-toolbar.fc-header-toolbar .fc-center {
+        align-self: center;
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
+    #calendar h2 {
+        padding-top: 0.7em;
+        flex: 0.7 0 1.5em;
+    }
+
+    .fc-header-toolbar label {
+        flex: 1 0 auto;
+        margin-right: 0.875em;
+    }
+
+    .fc-header-toolbar input.hasMultiCalendarPicker.pi-date-input + span.calendar-img {
+        right: 2.5em;
+        position: relative;
+    }
+    /* Course Schedule (week at a glance) - END */
 }
 
 @media screen and (min-width:1025px) {

@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$compile', function(proxyAppService, $filter, $compile) {
+proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$compile', '$rootScope', function(proxyAppService, $filter, $compile, $rootScope) {
     function topOf(elements) {
         function topOfOne(element) {
             var pos = $(element).position();
@@ -22,7 +22,49 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
 
     var weekOfText = $filter('i18n')('proxy.schedule.weekOf'),
         goToText = $filter('i18n')('proxy.schedule.goTo'),
-        datePlaceholderText = $filter('i18n')('default.date.format.watermark');
+        datePlaceholderText = $filter('i18n')('default.date.format.watermark'),
+        mobileOptions = {
+            defaultView: 'agendaTwoDay',
+            aspectRatio: 0.8,
+            header: {
+                left: 'title',
+                center: '',
+                right: ''
+            },
+            footer: {
+                right: '',
+                center: 'prevWeek prev next nextWeek'
+            }
+        },
+        desktopOptions = {
+            defaultView: 'agendaSevenDay',
+            aspectRatio: 2,
+            header: {
+                left: '',
+                center: 'title',
+                right: ''
+            },
+            footer: {
+                center: '',
+                right: 'prev next'
+            }
+        },
+        hasEventWithinPast2Days = function () {
+            var fc = $('#calendar'),
+                calDate = fc.fullCalendar('getDate').hour(0);
+
+            return fc.fullCalendar('clientEvents', function(event) {
+                return (event.start.isBefore(calDate));
+            }).length > 0;
+        },
+        hasEventWithinNext2Days = function () {
+            var fc = $('#calendar'),
+                targetCalDate = fc.fullCalendar('getDate').add(2, 'days').hour(0);
+
+            return fc.fullCalendar('clientEvents', function(event) {
+                return (event.end.isSameOrAfter(targetCalDate));
+            }).length > 0;
+        };
 
     return {
         link: function(scope, elem, attrs) {
@@ -32,22 +74,49 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
             //        return d.getHours() < 12 ? amPm[0] : amPm[1];
             //    };
 
+            var isMobile = $rootScope.isMobileView(),
+                addDatePicker = function() {
+                    var datePickerTemplate = '<div class="gotodate-block"> <label>' + goToText + '</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="' + datePlaceholderText + '" id="goToDate"/> </div>',
+                        datePickerElem = $compile(datePickerTemplate)(scope);
+                    $('.fc-header-toolbar > .fc-right').append(datePickerElem);
+                };
+
                 $('#calendar').fullCalendar({
-                    header: {
-                        left: '',
-                        center: 'title',
-                        right: ''
+                    customButtons: {
+                        nextWeek: {
+                            text: '>>',
+                            click: function() {
+                                var tgtDate = $('#calendar').fullCalendar('getDate').add(7, 'days');
+                                $('#calendar').fullCalendar('gotoDate', tgtDate);
+                            }
+                        },
+                        prevWeek: {
+                            text: '<<',
+                            click: function() {
+                                var tgtDate = $('#calendar').fullCalendar('getDate').subtract(7, 'days');
+                                $('#calendar').fullCalendar('gotoDate', tgtDate);
+                            }
+                        }
                     },
-                    footer: {
-                        right: 'prev next'
+                    header: isMobile ? mobileOptions.header : desktopOptions.header,
+                    footer: isMobile ? mobileOptions.footer : desktopOptions.footer,
+                    defaultView: isMobile ? mobileOptions.defaultView : desktopOptions.defaultView,
+                    views: {
+                        agendaSevenDay: {
+                            type: 'agenda',
+                            duration: { weeks: 1 }
+                        },
+                        agendaTwoDay: {
+                            type: 'agenda',
+                            duration: { days: 2 }
+                        }
                     },
-                    defaultView: 'agendaWeek',
+                    aspectRatio: isMobile ? mobileOptions.aspectRatio : desktopOptions.aspectRatio,
                     allDaySlot: false,
                     editable: false,
                     eventColor: '#eff7ff',
                     eventTextColor: '#428bca',
                     eventBorderColor: '#2874bb',
-                    aspectRatio: 2,
                     slotEventOverlap: false,
                     slotDuration: '00:15:00',
                     slotLabelInterval: '01:00',
@@ -57,7 +126,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     timeFormat: 'h:mm', // 5:00 - 6:30,
                     titleFormat: '['+ weekOfText +'] MMMM DD, YYYY',
 
-                    firstDay: parseInt($.i18n.prop("default.firstDayOfTheWeek")),
+                    firstDay: 1,
                     dayNames: $.i18n.prop("default.gregorian.dayNames").split(','),
                     dayNamesShort: $.i18n.prop("default.gregorian.dayNamesShort").split(','),
                     monthNames: $.i18n.prop("default.gregorian.monthNames").split(','),
@@ -66,7 +135,6 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     isRTL: $.i18n.prop('default.language.direction') == 'rtl',
                     events: function (start, end, timezone, callback) {
                         //var events = JSON.parse(sessionStorage.getItem("classScheduleEvents"));
-                        start.add(1, 'days'); //move start to a Monday to coincide with SQL date processing
                         var events;
                         proxyAppService.getCourseSchedule({id: scope.id, date: start.format('MM/DD/YYYY')}).$promise.then(function(response) {
                             events = response.schedule;
@@ -106,8 +174,6 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                             width = Math.max(narrow + 6, narrow / .95);
                             $ele.hasClass("pendingEvent") ? width : width++;
                         }
-                        else
-                            width = view.getColWidth();
 
                         //$ele.css('width', width);
                         if ($.i18n.prop('default.language.direction') == 'rtl') {
@@ -121,7 +187,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                         scrollToFirstEvent();
 
                     },
-                    eventAfterAllRender: function (v) {
+                    eventAfterAllRender: function (view) {
                         $("#calendar table.fc-agenda-days ").attr("dir", $.i18n.prop('default.language.direction') == 'ltr' ? "ltr" : "ltr");
                         if ($.i18n.prop('default.language.direction') == 'rtl') {
                             $(".fc-agenda-gutter.fc-widget-header.fc-last").removeClass("fc-last").addClass("fc-fake-last");
@@ -131,34 +197,100 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                         }
 
                         var prevBtnElem = $('.fc-prev-button'),
-                            nextBtnElem = $('.fc-next-button');
-                        if(scope.hasPrevWeek) {
-                            prevBtnElem.removeClass('fc-state-disabled');
-                            prevBtnElem.removeAttr('disabled');
+                            nextBtnElem = $('.fc-next-button'),
+                            backwardElem = null,
+                            forwardElem = null;
+
+                        if(view.name === 'agendaTwoDay')  {
+                            backwardElem = $('.fc-prevWeek-button');
+                            forwardElem = $('.fc-nextWeek-button');
+                            if(scope.hasPrevWeek) {
+                                backwardElem.removeClass('fc-state-disabled');
+                                backwardElem.removeAttr('disabled');
+                            }
+                            else {
+                                backwardElem.addClass('fc-state-disabled');
+                                backwardElem.attr('disabled', '');
+
+                                if(hasEventWithinPast2Days()) {
+                                    prevBtnElem.removeClass('fc-state-disabled');
+                                    prevBtnElem.removeAttr('disabled');
+                                }
+                                else {
+                                    prevBtnElem.addClass('fc-state-disabled');
+                                    prevBtnElem.attr('disabled', '');
+                                }
+                            }
+                            backwardElem.addClass('secondary');
+
+                            if(scope.hasNextWeek) {
+                                forwardElem.removeClass('fc-state-disabled');
+                                forwardElem.removeAttr('disabled');
+                            }
+                            else {
+                                forwardElem.addClass('fc-state-disabled');
+                                forwardElem.attr('disabled', '');
+
+                                if(hasEventWithinNext2Days()) {
+                                    nextBtnElem.removeClass('fc-state-disabled');
+                                    nextBtnElem.removeAttr('disabled');
+                                }
+                                else {
+                                    nextBtnElem.addClass('fc-state-disabled');
+                                    nextBtnElem.attr('disabled', '');
+                                }
+                            }
+                            forwardElem.addClass('secondary');
                         }
                         else {
-                            prevBtnElem.addClass('fc-state-disabled');
-                            prevBtnElem.attr('disabled', '');
+
+                            if (scope.hasPrevWeek) {
+                                prevBtnElem.removeClass('fc-state-disabled');
+                                prevBtnElem.removeAttr('disabled');
+                            }
+                            else {
+                                prevBtnElem.addClass('fc-state-disabled');
+                                prevBtnElem.attr('disabled', '');
+                            }
+
+                            if (scope.hasNextWeek) {
+                                nextBtnElem.removeClass('fc-state-disabled');
+                                nextBtnElem.removeAttr('disabled');
+                            }
+                            else {
+                                nextBtnElem.addClass('fc-state-disabled');
+                                nextBtnElem.attr('disabled', '');
+                            }
                         }
                         prevBtnElem.addClass('secondary');
+                        nextBtnElem.addClass('secondary');
+                    },
+                    windowResize: function(view) {
+                        var fc = $('#calendar');
+                        if ($rootScope.isMobileView()) {
+                            if(view.name === 'agendaSevenDay') {
+                                fc.fullCalendar('changeView', 'agendaTwoDay');
+                                fc.fullCalendar('option', 'aspectRatio', mobileOptions.aspectRatio);
+                                fc.fullCalendar('option', 'header', mobileOptions.header);
+                                fc.fullCalendar('option', 'footer', mobileOptions.footer);
 
-                        if(scope.hasNextWeek) {
-                            nextBtnElem.removeClass('fc-state-disabled');
-                            nextBtnElem.removeAttr('disabled');
+                                addDatePicker();
+                            }
                         }
                         else {
-                            nextBtnElem.addClass('fc-state-disabled');
-                            nextBtnElem.attr('disabled', '');
-                        }
-                        nextBtnElem.addClass('secondary');
+                            if(view.name === 'agendaTwoDay') {
+                                fc.fullCalendar('changeView', 'agendaSevenDay');
+                                fc.fullCalendar('option', 'aspectRatio', desktopOptions.aspectRatio);
+                                fc.fullCalendar('option', 'header', desktopOptions.header);
+                                fc.fullCalendar('option', 'footer', desktopOptions.footer);
 
+                                addDatePicker();
+                            }
+                        }
                     }
                 });
 
-                //add date-picker to calendar
-            var datePickerTemplate = '<div class="gotodate-block"> <label>'+ goToText +'</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="'+ datePlaceholderText +'" id="goToDate"/> </div>',
-                datePickerElem = $compile(datePickerTemplate)(scope);
-            $('.fc-header-toolbar > .fc-right').append(datePickerElem);
+            addDatePicker();
 
 
             //$("#calendar div").attr("dir", $.i18n.prop('default.language.direction') == 'ltr' ? "ltr" : "rtl");
