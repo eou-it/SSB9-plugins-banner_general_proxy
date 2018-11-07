@@ -1,0 +1,67 @@
+<!--*******************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="proxy-page-body mini-tables">
+    <div class="proxy-page-student-name">
+        {{'proxy.message.viewingStudentInfo'|i18n:[studentName]}}
+    </div>
+    <div class="proxy-top-message-container">
+        <div class="proxy-notification-icon blue">
+            <span class="icon-info-CO"></span>
+        </div>
+        <div class="proxy-top-message proxy-notification-text">
+            <div>
+                {{'proxy.acctSummary.message.notIncluded'|i18n}}
+            </div>
+            <div ng-if="!accountSummary.accountBal">
+                {{'proxy.acctSummary.message.noSummary'|i18n}}
+            </div>
+        </div>
+    </div>
+    <div ng-if="accountSummary.accountBal">
+        <h2 class="acct-summ-heading">{{'proxy.acctSummary.label.summaryAcctBalance'|i18n}}</h2>
+        <div class="acct-summ-bal-heading-text" ng-class="getAccountBalColor()">{{accountSummary.accountBalTxt}}</div>
+        <div ng-if="payvendUrl && payvendVendor" class="acct-summ-payvendor">
+            <input ng-click="openVendorUrl()" type="button" value="{{payvendVendor}}" class="primary">
+        </div>
+        <div ng-repeat="term in accountSummary.terms">
+            <h2 class="term-header">
+                <a href="" data-toggle="collapse" data-target="#acctSumm{{$index}}" class="panel-title collapsed">
+                    {{term.termDesc}}
+                    <span class="icon-collapseArrow"></span>
+                </a>
+            </h2>
+            <div class="collapse proxy-content-section acct-summ-term row" id="acctSumm{{$index}}">
+                <div ng-repeat="ledgerItem in term.ledger" ng-class="$first ? 'first-ledger-item' : ''">
+                    <div ng-show="accountSummary.showDetailCode" class="detail-code proxy-content-item-label col-xs-7">{{'proxy.acctSummary.label.detailCode'|i18n}}</div>
+                    <div ng-show="accountSummary.showDetailCode" class="detail-code proxy-content-item-value col-xs-5">{{ledgerItem.detailCode}}</div>
+                    <div class="subsection-divider"><span></span></div>
+                    <div class="proxy-content-item-label col-xs-7">{{'proxy.acctSummary.label.description'|i18n}}</div>
+                    <div class="proxy-content-item-value col-xs-5">{{ledgerItem.description}}</div>
+                    <div class="subsection-divider"><span></span></div>
+                    <div class="proxy-content-item-label col-xs-7">{{'proxy.acctSummary.label.charge'|i18n}}</div>
+                    <div class="proxy-content-item-value col-xs-5 amt">{{ledgerItem.charge}}</div>
+                    <div class="subsection-divider"><span></span></div>
+                    <div class="proxy-content-item-label col-xs-7">{{'proxy.acctSummary.label.payment'|i18n}}</div>
+                    <div class="proxy-content-item-value col-xs-5 amt">{{ledgerItem.payment}}</div>
+                    <div class="subsection-divider"><span></span></div>
+                    <div class="proxy-content-item-label col-xs-7">{{'proxy.acctSummary.label.balance'|i18n}}</div>
+                    <div class="proxy-content-item-value col-xs-5 amt">{{ledgerItem.balance}}</div>
+                    <div class="subsection-divider"><span></span></div>
+                </div>
+                <div class="proxy-content-item-label col-xs-7">{{'proxy.acctSummary.label.termCharges'|i18n}}</div>
+                <div class="proxy-content-item-value col-xs-5 amt-bold">{{term.termCharge}}</div>
+                <div class="subsection-divider"><span></span></div>
+                <div class="proxy-content-item-label col-xs-7">{{'proxy.acctSummary.label.termCredits'|i18n}}</div>
+                <div class="proxy-content-item-value col-xs-5 amt-bold">{{term.termPay}}</div>
+                <div class="subsection-divider"><span></span></div>
+                <div class="proxy-content-item-label col-xs-7 last-term-item">{{'proxy.acctSummary.label.termBalances'|i18n}}</div>
+                <div class="proxy-content-item-value col-xs-5 amt-bold last-term-item">{{term.termBalance}}</div>
+            </div>
+        </div>
+        <div class="proxy-content-section acct-summ-term acct-bal row">
+            <div class="proxy-content-item-label col-xs-6">{{'proxy.acctSummary.label.accountBalance'|i18n}}</div>
+            <div class="proxy-content-item-value col-xs-6 amt-bold" ng-class="getAccountBalColor()">{{accountSummary.acctTotalTxt}}</div>
+        </div>
+    </div>
+</div>

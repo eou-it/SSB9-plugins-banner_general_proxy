@@ -9,6 +9,15 @@ proxyAppControllers.controller('proxyAccountSummaryController',['$scope', '$root
         $scope.payvendUrl = null;
         $scope.payvendVendor = null;
 
+        $scope.getAccountBalColor = function() {
+            var bal = $scope.accountSummary.accountBal;
+            return (bal > 0) ? 'positive-balance' : (bal < 0) ? 'negative-balance' : '';
+        };
+
+        $scope.openVendorUrl = function() {
+            window.open($scope.payvendUrl, '_blank');
+        };
+
         proxyAppService.getConfiguration().$promise.then(function(response) {
             $scope.payvendUrl = response.PAYVEND_URL;
             $scope.payvendVendor = response.PAYVEND_VENDOR;
