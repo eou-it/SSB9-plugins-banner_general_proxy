@@ -1485,6 +1485,10 @@ a.breadcrumbButton.leaf-breadcrumb {
         padding: 0 20px;
     }
 
+    .awards-container.overflow > div.proxy-content-section {
+        overflow-x: scroll;
+    }
+
     .msg-container {
         padding: 0 20px 80px;
     }
