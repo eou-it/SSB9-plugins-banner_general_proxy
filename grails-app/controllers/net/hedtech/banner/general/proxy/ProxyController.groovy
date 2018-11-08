@@ -11,6 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder
 import net.hedtech.banner.security.XssSanitizer
 import net.hedtech.banner.general.person.PersonUtility
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 /**
  * Controller for Proxy
  */
@@ -348,7 +351,13 @@ class ProxyController {
         }
 
         if(result.size() > 1) { // need at least 1 loan and procDate for loans to be viewable
-            result.procDate = loanInfo.procDate
+
+            if (loanInfo.procDate) {
+                // DateFormat from API = MM/DD/YYYY
+                // Convert Date String To Date Object, Json Marshaller will convert Date based on Locale
+                DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+                result.procDate = df.parse(loanInfo.procDate);
+            }
             return result
         }
         else {

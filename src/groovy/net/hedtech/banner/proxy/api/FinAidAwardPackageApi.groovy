@@ -789,6 +789,10 @@ declare
      AND    rcrlds4_curr_rec_ind = 'Y';
 
 BEGIN
+
+dbms_session.set_nls('NLS_DATE_FORMAT',''''||'DD-MON-RRRR'||'''');
+dbms_session.set_nls('NLS_CALENDAR',''''||'GREGORIAN'||'''');
+      
    OPEN loan_info_c;
    FETCH loan_info_c
     INTO agt_sub_total,
