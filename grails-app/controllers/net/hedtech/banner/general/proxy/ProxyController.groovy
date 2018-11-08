@@ -211,6 +211,19 @@ class ProxyController {
     def getCourseScheduleDetail() {
         def result = generalSsbProxyService.getCourseScheduleDetail(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.termCode);
 
+
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+
+        result?.rows?.each{
+
+            it.status_02 = it.status_02 ? df.parse(it.status_02) : it.status_02
+
+            it.tbl_meetings.each{el ->
+                el.meet_start = el.meet_start ? df.parse(el.meet_start) : el.meet_start
+                el.meet_end = el.meet_end ? df.parse(el.meet_end) : el.meet_end
+            }
+        }
+
         render result as JSON
     }
 

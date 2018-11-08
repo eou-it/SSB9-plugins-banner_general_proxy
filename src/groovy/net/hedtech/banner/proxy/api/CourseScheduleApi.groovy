@@ -823,6 +823,10 @@ DECLARE
 --
 
 BEGIN
+
+      dbms_session.set_nls('NLS_DATE_FORMAT',''''||'DD-MON-RRRR'||'''');
+      dbms_session.set_nls('NLS_CALENDAR',''''||'GREGORIAN'||'''');
+      
 --   IF NOT twbkwbis.f_validuser (global_pidm)
 --   THEN
 --      RETURN;
@@ -1035,7 +1039,7 @@ BEGIN
 --         )
 --      );
       lv_course_json := lv_course_json || '"status_01": "' || regcrse.stvrsts_desc || '",';
-      lv_course_json := lv_course_json || '"status_02": "' || TO_CHAR (regcrse.sfrstcr_rsts_date, twbklibs.date_display_fmt) || '",';
+      lv_course_json := lv_course_json || '"status_02": "' || TO_CHAR (regcrse.sfrstcr_rsts_date, 'DD/MM/YYYY') || '",';
 --      twbkfrmt.p_tablerowclose;
 
       -- WaitList automation enhancement begins.
@@ -1100,7 +1104,7 @@ BEGIN
 --         twbkfrmt.p_tabledata (
 --            TO_CHAR (aregcrsec_rec.sfrareg_start_date, twbklibs.date_display_fmt)
 --         );
-         lv_course_json := lv_course_json || '"class_start": "' || TO_CHAR (aregcrsec_rec.sfrareg_start_date, twbklibs.date_display_fmt) || '",';
+         lv_course_json := lv_course_json || '"class_start": "' || TO_CHAR (aregcrsec_rec.sfrareg_start_date, 'MM/DD/YYYY') || '",';
 --         twbkfrmt.p_tablerowclose;
 --         twbkfrmt.p_tablerowopen;
 --         twbkfrmt.p_tabledatalabel (
@@ -1115,7 +1119,7 @@ BEGIN
 --         );
          lv_course_json := lv_course_json || '"expected_comp": "' || TO_CHAR (
                aregcrsec_rec.sfrareg_completion_date,
-               twbklibs.date_display_fmt
+               'MM/DD/YYYY'
             ) || '",';
 --         twbkfrmt.p_tablerowclose;
       END IF;

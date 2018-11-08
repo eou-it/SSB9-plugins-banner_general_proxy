@@ -142,6 +142,9 @@ class ProxyPersonalInformationApi {
         lv_GPBPRXY_ref gp_gpbprxy.gpbprxy_ref;
 
         BEGIN
+        
+        dbms_session.set_nls('NLS_DATE_FORMAT',''''||'DD-MON-RRRR'||'''');
+        dbms_session.set_nls('NLS_CALENDAR',''''||'GREGORIAN'||'''');
 
          ? := gp_gpbprxy.F_Query_One (to_number(?));
 
