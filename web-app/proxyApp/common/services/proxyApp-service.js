@@ -76,6 +76,12 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
             {controller: 'Proxy', action: 'getGrades'}).get(params);
     };
 
+    this.getTermsForRegistration = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'getTermsForRegistration'}).get(params);
+    };
+
+
     this.getFinancialAidStatus = function (params) {
         return $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'getFinancialAidStatus'}).get(params);

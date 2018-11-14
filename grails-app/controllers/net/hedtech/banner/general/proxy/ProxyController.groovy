@@ -245,6 +245,23 @@ class ProxyController {
 
 
     /**
+     * Gets the list of registration terms for student
+     *
+     */
+    def getTermsForRegistration() {
+        def registrationTerms = [:]
+        def pidm = session["currentStudentPidm"]?.toInteger()
+
+        try {
+            registrationTerms."terms" = termProxyService.fetchTermList(pidm, "", 10, 0)
+            render registrationTerms as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+
+    /**
      * Gets the list of aid years model for student
      *
      */

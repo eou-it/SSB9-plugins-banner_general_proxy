@@ -1,8 +1,8 @@
 /********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyViewGradesController',['$scope', 'proxyAppService',
-    function ($scope, proxyAppService) {
+proxyAppControllers.controller('proxyViewGradesController',['$scope', 'proxyAppService', '$stateParams', '$filter',
+    function ($scope, proxyAppService , stateParams, filter) {
 
         $scope.student = {
             name: proxyAppService.getStudentName(),
@@ -12,6 +12,14 @@ proxyAppControllers.controller('proxyViewGradesController',['$scope', 'proxyAppS
         $scope.term = {
             code: {}
         };
+
+        $scope.registered = false;
+
+
+        proxyAppService.getTermsForRegistration().$promise.then(function(response) {
+            $scope.registered = response.terms.length > 0;
+
+        });
 
 
         if(proxyAppService.getTerm()) {
