@@ -199,11 +199,17 @@ class ProxyController {
             it.r_amount_owed = amountTxt
         }
 
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.holds.heading'))
+
         render result as JSON
     }
 
     def getCourseSchedule() {
         def result = generalSsbProxyService.getCourseSchedule(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.date);
+
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.schedule.heading'))
 
         render result as JSON
     }
@@ -223,6 +229,9 @@ class ProxyController {
                 el.meet_end = el.meet_end ? df.parse(el.meet_end) : el.meet_end
             }
         }
+
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.scheduleDetails.heading'))
 
         render result as JSON
     }
@@ -292,6 +301,9 @@ class ProxyController {
      */
     def getGrades(){
         try {
+            //Logs the History for page Access
+            generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.grades.label.studentGrades'))
+
             render gradesProxyService.viewGrades(params)
         } catch (ApplicationException e) {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
@@ -315,12 +327,16 @@ class ProxyController {
             }
         }
 
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.finaid.status.heading'))
+
         render result as JSON
     }
 
     def getAwardPackage() {
         def result
         try {
+
             result = proxyFinAidService.getAwardPackage(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.aidYear);
         }
         catch (Exception e) {
@@ -368,6 +384,9 @@ class ProxyController {
                 result.periodInfo.fundTotals[it] = currencyFormatHelperService.formatCurrency(result.periodInfo.fundTotals[it])
             }
         }
+
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.awardPackage.heading'))
 
         render result as JSON
     }
@@ -425,6 +444,9 @@ class ProxyController {
             }
         }
 
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.awardHistory.heading'))
+
         render result as JSON
     }
 
@@ -444,6 +466,9 @@ class ProxyController {
                 it.payment = formatCurrencyDashZeroes(it.payment)
             }
         }
+
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.acctSummary.title'))
 
         render result as JSON
     }
