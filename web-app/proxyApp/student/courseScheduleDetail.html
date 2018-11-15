@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="select2-container proxy-top-input">
-            <input name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "termHolder.term", "showNA": true}' type="hidden" />
+            <input name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "termHolder.term", "showNA": false}' type="hidden" />
         </div>
         <div ng-if="errorMsg" class="proxy-top-message-container">
             <div class="proxy-notification-icon blue">
