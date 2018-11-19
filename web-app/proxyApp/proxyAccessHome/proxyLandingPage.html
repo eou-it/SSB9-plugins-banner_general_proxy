@@ -1,0 +1,22 @@
+<!--*******************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="proxy-home-content">
+    <h1 class="proxy-landing-page-heading">{{proxyUser}}</h1>
+    <div class="proxy-top-message-container">
+        <div class="proxy-notification-icon blue">
+            <span class="icon-info-CO"></span>
+        </div>
+        <div class="proxy-top-message proxy-notification-text">
+            <div>
+                {{'proxy.landingPage.message.instructions'|i18n}}
+            </div>
+        </div>
+    </div>
+    <div ng-repeat="tile in appTiles" class="proxy-content-section proxy-tile user-tile">
+        <landing-page-app-tile proxy-data="tile"/>
+    </div>
+    <div ng-repeat="proxy in proxyTiles" class="proxy-content-section proxy-tile">
+        <landing-page-proxy-tile proxy-data="proxy"/>
+    </div>
+</div>

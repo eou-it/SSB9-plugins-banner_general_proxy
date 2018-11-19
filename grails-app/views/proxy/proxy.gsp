@@ -68,7 +68,7 @@ Copyright 2017 Ellucian Company L.P. and its affiliates.
 
 <body>
 
-    <div id="content" ng-app="proxyApp" ng-controller="gssLandingPageController" class="container-fluid proxy" aria-relevant="additions" role="main" ng-init="initLandingPage(${proxyProfile})">
+    <div id="content" ng-app="proxyApp" ng-controller="proxyLandingPageController" class="container-fluid proxy" aria-relevant="additions" role="main" ng-init="initLandingPage(${proxyProfile})">
         <div ui-view class="gen-home-main-view"></div>
     </div>
 <div class="body-overlay"></div>

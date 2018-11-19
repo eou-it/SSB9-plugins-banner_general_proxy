@@ -1,16 +1,18 @@
 <!--*******************************************************************************
-  Copyright 2017 Ellucian Company L.P. and its affiliates.
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
-<button ng-click="goProxyApp(proxyData.url)" class="gen-app-tile">
-    <div id="proxyIcon" class="show-icon">
-        <i class="fa fa-cogs fa-4x"></i>
+<div ng-click="goProxyApp(proxyData.url)" class="tile-wrapper">
+    <div class="tile-icon">
+        <img ng-src="{{'images/icons/proxy.png'|webAppResourcePath}}"/>
     </div>
     <div class="tile-content">
         <div class="tile-title">
             {{proxyData.title|i18n}}
         </div>
+        <div class="subsection-divider"><span></span></div>
         <div class="tile-desc">
             {{proxyData.desc|i18n}}
         </div>
     </div>
-</button>
+    <div class="pull-right glyphicon glyphicon-chevron-right"></div>
+</div>

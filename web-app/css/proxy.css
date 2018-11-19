@@ -25,8 +25,11 @@ h2 {
     font-size: 24px;
 }
 
-.gen-home-heading,
-.gen-home-content {
+.proxy-home-content {
+    margin: 30px 155px 100px;
+}
+
+.gen-home-heading {
     position: absolute;
     display: inline-block;
     margin-left: auto;
@@ -41,11 +44,6 @@ h2 {
 
 .gen-home-heading-spacer {
     display: none;
-}
-
-.gen-home-content {
-    top: 220px;
-    height: 500px;
 }
 
 .gen-home-heading .title {
@@ -99,6 +97,27 @@ h2 {
     margin-bottom: 0.675em;
 }
 
+.proxy-tile.user-tile {
+    margin-bottom: 44px;
+    cursor: pointer;
+}
+
+.user-tile .glyphicon {
+    margin: 20px 18px 0 0;
+}
+
+.proxy-tile {
+    width: 100%;
+    height: 145px;
+    margin-bottom: 20px;
+    cursor: default;
+}
+
+.tile-wrapper {
+    height: 100%;
+    padding: 44px;
+}
+
 .gen-app-tile {
     float: left;
     margin-right: 15px;
@@ -113,7 +132,7 @@ h2 {
 
 .tile-icon {
     float: left;
-    width: 25%;
+    margin: 12px 49px 0 0;
 }
 
 .gen-app-tile img {
@@ -122,19 +141,32 @@ h2 {
 
 .tile-content {
     float: left;
-    width: 75%;
+}
+
+.tile-content .subsection-divider span {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .tile-title {
     text-align: left;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
-    padding-bottom: 10px;
+}
+
+.tile-title .student-name {
+    font-family: OpenSans-semibold;
+    margin-left: .3em;
 }
 
 .tile-desc {
-    text-align: left;
+    font-family: OpenSans-regular;
     font-size: 14px;
+}
+
+.select-page {
+    float: right;
+    margin-top: 5px;
 }
 
 .required-field::before {
@@ -204,9 +236,7 @@ h1.proxy-landing-page-heading {
     font-family: OpenSans-semibold;
     font-size: 18px;
     color: #151618;
-    padding: 10px;
-    margin: auto;
-    border-bottom: 1px solid #dddddd;
+    margin-bottom: 30px;
 }
 
 .proxy-page-body {
@@ -1314,6 +1344,10 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin-bottom: 10px;
     }
 
+    .proxy-home-content .proxy-top-message-container {
+        margin-bottom: 20px;
+    }
+
     .proxy-mid-message-container {
         margin: 37px 0 20px;
     }
@@ -1572,14 +1606,9 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin: 0px;
     }
 
-    .proxy .gen-home-heading,
-    .proxy .gen-home-content {
+    .proxy .gen-home-heading {
         width: 425px;
         top:0px;
-    }
-
-    .gen-home-content.single-tile {
-        width: 410px;
     }
 
     .gen-app-tile {

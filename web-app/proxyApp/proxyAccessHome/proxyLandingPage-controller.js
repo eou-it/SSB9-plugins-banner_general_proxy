@@ -1,7 +1,7 @@
 /********************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-proxyAppControllers.controller('gssLandingPageController',['$scope', '$rootScope', '$location', '$stateParams', '$timeout', 'proxyAppService', 'notificationCenterService',
+proxyAppControllers.controller('proxyLandingPageController',['$scope', '$rootScope', '$location', '$stateParams', '$timeout', 'proxyAppService', 'notificationCenterService',
     function ($scope, $rootScope, $location, $stateParams, $timeout, proxyAppService, notificationCenterService) {
 
         // LOCAL FUNCTIONS
@@ -50,13 +50,10 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', '$rootScope
 
                     $scope.proxyTiles.push(
                         {
-                            title: "I am proxy for: " ,
                             desc: student.name,
-                            url: $scope.applicationContextRoot +'/ssb/proxy/proxypersonalinformation',
-                            icon: '../images/personal_info.svg',
                             pages : student.pages,
-                            id: student.id,
-                            open : false
+                            selectedPage: {code: null, description: null},
+                            id: student.id
                         }
                     );
 
@@ -67,8 +64,7 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', '$rootScope
                 {
                     title: 'banner.generalssb.landingpage.personal.title',
                     desc: 'banner.generalssb.landingpage.personal.description',
-                    url: 'proxyPersonalInfo',//$scope.applicationContextRoot +'/ssb/proxy/proxypersonalinformation',
-                    icon: '../images/personal_info.svg'
+                    url: 'proxyPersonalInfo'
                 }
             );
 
@@ -78,12 +74,9 @@ proxyAppControllers.controller('gssLandingPageController',['$scope', '$rootScope
 
         // CONTROLLER VARIABLES
         // --------------------
-        $scope.piConfig = {};
         $scope.proxyTiles = [];
         $scope.appTiles = [];
         $scope.isSingleTile;
-        $scope.firstName = '';
-        $scope.bannerId;
         $scope.pages =[];
 
 
