@@ -94,7 +94,7 @@ proxyAppDirectives.directive('selectBox',['$filter', function($filter) {
     };
 }]);
 
-proxyAppDirectives.directive('contentPageSelectBox',['$filter', '$rootScope', '$state', function($filter, $rootScope, $state) {
+proxyAppDirectives.directive('contentPageSelectBox',['$rootScope', '$state', function($rootScope, $state) {
     return {
         scope: true,
         link: function(scope, elem, attrs) {
