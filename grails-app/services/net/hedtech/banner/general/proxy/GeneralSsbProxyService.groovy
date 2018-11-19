@@ -491,6 +491,31 @@ class GeneralSsbProxyService {
     }
 
 
+    /* Updates Audit data on Proxy Page Access */
+    def updateProxyHistoryOnPageAccess(def pageName) {
+        log.debug('starting updateProxyHistoryOnPageAccess')
+        //get proxy gidm
+        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+        log.debug('p_proxyIDM: ' + p_proxyIDM)
+        try {
+            def sql = new Sql(sessionFactory.getCurrentSession().connection())
+            def sqlText = ProxyPersonalInformationApi.STORE_PAGE_ACCESS_IN_HISTORY
+
+            log.debug('sqlText: ' + sqlText)
+
+            sql.call(sqlText,
+                    [p_proxyIDM, p_proxyIDM, p_proxyIDM, pageName
+                    ])
+
+            log.debug('finished updateProxyHistoryOnPageAccess')
+
+        }catch(Exception e) {
+            log.error('Problem updateProxyHistoryOnPageAccess')
+            log.error(e)
+        }
+    }
+
+
     def checkProxyProfileDataOnUpdate(def params) {
 
         def errorMsgOut = ""

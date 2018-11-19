@@ -28,6 +28,22 @@ class ProxyController {
     def proxyConfigurationService
     def currencyFormatHelperService
 
+    def beforeInterceptor = [action:this.&studentIdCheck]
+
+    private studentIdCheck() {
+        def id = XssSanitizer.sanitize(params.id)
+        if (id) {
+            def students = session["students"]?.students
+            def student = students?.find { it.id == id }
+            if (!student) {
+                log.error('Invalid attempt for Id: ' + id )
+                def response = [message: MessageHelper.message('proxy.error.invalidAttempt')  + id, failure: true]
+                render response as JSON
+            }
+            return true
+        }
+    }
+
     def landingPage() {
         try {
 
@@ -109,7 +125,7 @@ class ProxyController {
 
         if (params.name) {
             def students = session["students"]?.students
-            def student = students?.find { it.id == params.id }
+            def student = students?.find { it.id == XssSanitizer.sanitize(params.id) }
             def page = student?.pages?.find { it.url == params.name }
 
             if (page == null) {
@@ -199,17 +215,23 @@ class ProxyController {
             it.r_amount_owed = amountTxt
         }
 
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.holds.heading'))
+
         render result as JSON
     }
 
     def getCourseSchedule() {
-        def result = generalSsbProxyService.getCourseSchedule(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.date);
+        def result = generalSsbProxyService.getCourseSchedule(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, XssSanitizer.sanitize(params.date));
+
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.schedule.heading'))
 
         render result as JSON
     }
 
     def getCourseScheduleDetail() {
-        def result = generalSsbProxyService.getCourseScheduleDetail(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.termCode);
+        def result = generalSsbProxyService.getCourseScheduleDetail(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, XssSanitizer.sanitize(params.termCode));
 
 
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
@@ -223,6 +245,9 @@ class ProxyController {
                 el.meet_end = el.meet_end ? df.parse(el.meet_end) : el.meet_end
             }
         }
+
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.scheduleDetails.heading'))
 
         render result as JSON
     }
@@ -238,6 +263,23 @@ class ProxyController {
 
         try {
             render termProxyService.fetchTermList(pidm, map.searchString, map.max,  map.offset) as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+
+    /**
+     * Gets the list of registration terms for student
+     *
+     */
+    def getTermsForRegistration() {
+        def registrationTerms = [:]
+        def pidm = session["currentStudentPidm"]?.toInteger()
+
+        try {
+            registrationTerms."terms" = termProxyService.fetchTermList(pidm, "", 10, 0)
+            render registrationTerms as JSON
         } catch (ApplicationException e) {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
@@ -275,6 +317,9 @@ class ProxyController {
      */
     def getGrades(){
         try {
+            //Logs the History for page Access
+            generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.grades.label.studentGrades'))
+
             render gradesProxyService.viewGrades(params)
         } catch (ApplicationException e) {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
@@ -286,7 +331,7 @@ class ProxyController {
      *
      */
     def getFinancialAidStatus() {
-        def result = generalSsbProxyService.getFinancialAidStatus(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.aidYear)
+        def result = generalSsbProxyService.getFinancialAidStatus(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, XssSanitizer.sanitize(params.aidYear))
         result.awardPackage?.each {
             if(it.amount != null) {
                 it.text = it.text + currencyFormatHelperService.formatCurrency(it.amount) + '.'
@@ -298,13 +343,17 @@ class ProxyController {
             }
         }
 
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.finaid.status.heading'))
+
         render result as JSON
     }
 
     def getAwardPackage() {
         def result
         try {
-            result = proxyFinAidService.getAwardPackage(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, params.aidYear);
+
+            result = proxyFinAidService.getAwardPackage(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, XssSanitizer.sanitize(params.aidYear));
         }
         catch (Exception e) {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
@@ -351,6 +400,9 @@ class ProxyController {
                 result.periodInfo.fundTotals[it] = currencyFormatHelperService.formatCurrency(result.periodInfo.fundTotals[it])
             }
         }
+
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.awardPackage.heading'))
 
         render result as JSON
     }
@@ -408,11 +460,14 @@ class ProxyController {
             }
         }
 
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.awardHistory.heading'))
+
         render result as JSON
     }
 
     def getAccountSummary() {
-        def result = generalSsbProxyService.getAccountSummary(PersonUtility.getPerson(params.id).pidm);
+        def result = generalSsbProxyService.getAccountSummary(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm);
         result.accountBalTxt = currencyFormatHelperService.formatCurrency(result.accountBal)
         result.acctTotalTxt = currencyFormatHelperService.formatCurrency(result.acctTotal)
 
@@ -427,6 +482,9 @@ class ProxyController {
                 it.payment = formatCurrencyDashZeroes(it.payment)
             }
         }
+
+        //Logs the History for page Access
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.acctSummary.title'))
 
         render result as JSON
     }

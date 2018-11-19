@@ -45,7 +45,10 @@ var proxyApp = angular.module('proxyApp', [
                 var isTablet = window.matchMedia("only screen and (min-width: 768px) and (max-width:1024px)");
                 $rootScope.isTabletView = isTablet.matches;
 
-                $rootScope.isMobileView = isMobile;
+                $rootScope.isMobileView = function() {
+                    var isMobile = window.matchMedia("only screen and (min-width: 0px) and (max-width: 767px)");
+                    return isMobile.matches;
+                };
 
                 $rootScope.isAndroid = (/(android)/i.test(navigator.userAgent));
 

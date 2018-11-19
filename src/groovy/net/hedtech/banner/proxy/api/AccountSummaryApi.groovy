@@ -66,6 +66,12 @@ declare
    global_pidm  spriden.spriden_pidm%TYPE := ?;
    lv_accSummJson CLOB := '{}';
 BEGIN
+
+-- The NUMBER will be retrieved as 100.99
+-- The banner_general_proxy will handle the actual number format for NLS_TERRITORY
+   dbms_session.set_nls('NLS_TERRITORY',''''||'AMERICA'||'''');
+--
+
 --
 -- Validate the user.
 -- =========================================================
