@@ -1,7 +1,7 @@
 /********************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-proxyAppControllers.controller('gssLandingPageController',['$scope', '$rootScope', '$location', '$stateParams', '$timeout', 'proxyAppService', 'notificationCenterService',
+proxyAppControllers.controller('proxyLandingPageController',['$scope', '$rootScope', '$location', '$stateParams', '$timeout', 'proxyAppService', 'notificationCenterService',
     function ($scope, $rootScope, $location, $stateParams, $timeout, proxyAppService, notificationCenterService) {
 
         // LOCAL FUNCTIONS

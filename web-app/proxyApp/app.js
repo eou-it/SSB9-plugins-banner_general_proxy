@@ -78,12 +78,9 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
     $stateProvider
         .state('home', {
             url: "/home",
-            templateUrl: webAppResourcePathString + '/proxyApp/proxyAccessHome/gssLandingPage.html',
-            controller: 'gssLandingPageController',
+            templateUrl: webAppResourcePathString + '/proxyApp/proxyAccessHome/proxyLandingPage.html',
+            controller: 'proxyLandingPageController',
             resolve: {
-                //piConfigResolve: function (proxyAppService) {
-                //    return proxyAppService.getFromPersonalInfo('PiConfig').$promise;
-                //}
             },
             data: {
                 breadcrumbs: []

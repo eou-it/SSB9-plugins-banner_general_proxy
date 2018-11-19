@@ -4,7 +4,7 @@
 proxyAppDirectives.directive('landingPageAppTile', [ '$state', 'webAppResourcePathString', function ($state, webAppResourcePathString) {
     return{
         restrict: 'E',
-        templateUrl: webAppResourcePathString + '/proxyApp/proxyAccessHome/gssAppTile.html',
+        templateUrl: webAppResourcePathString + '/proxyApp/proxyAccessHome/proxyUserTile.html',
         scope: {
             proxyData: '='
         },
@@ -20,7 +20,7 @@ proxyAppDirectives.directive('landingPageAppTile', [ '$state', 'webAppResourcePa
 proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','webAppResourcePathString', function ($state,$rootScope, webAppResourcePathString) {
     return{
         restrict: 'E',
-        templateUrl: webAppResourcePathString + '/proxyApp/proxyAccessHome/gssProxyTile.html',
+        templateUrl: webAppResourcePathString + '/proxyApp/proxyAccessHome/proxyStudentTile.html',
         scope: {
             proxyData: '='
         }

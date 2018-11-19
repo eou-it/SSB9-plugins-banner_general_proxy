@@ -62,7 +62,7 @@ modules = {
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/notificationcenter-service.js']
 
         // Controllers
-        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/gssLandingPage-controller.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/proxyLandingPage-controller.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyPersonalInfo/proxyPersonalInfo-controller.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyViewHolds-controller.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyViewGrades-controller.js']
@@ -79,8 +79,8 @@ modules = {
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/filters/proxy-filter.js']
 
         // Directives
-        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/selectBox-directive.js']
-        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/gssLandingPage-directive.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/directives/selectBox-directive.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/proxyLandingPage-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/finaid/proxyFinaid-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyPersonalInfo/proxyPersonalInfo-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyStudent-directive.js']
