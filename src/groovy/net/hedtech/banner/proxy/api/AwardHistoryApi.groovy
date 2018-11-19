@@ -158,7 +158,7 @@ DECLARE
       RETURN stvterm_rec.stvterm_desc;
     ELSE
       CLOSE stkterm.stvtermc;
-      RETURN(g\$_nls.get('BWRKRHS1-0099', 'SQL', 'Not Applicable'));
+      RETURN ('Not Applicable');
     END IF;
   END f_gettermdesc;
 --
@@ -290,6 +290,9 @@ DECLARE
   END P_Sel_rorwebr;
 -- 
   BEGIN
+  -- The NUMBER will be retrieved as 100.99
+  -- The banner_general_proxy will handle the actual number format for NLS_TERRITORY
+     dbms_session.set_nls('NLS_TERRITORY',''''||'AMERICA'||'''');
 --
     pidm  := ?; 
     hist_exist := 'N';
@@ -305,10 +308,6 @@ DECLARE
     END IF;
 --
     IF aidy IS NULL THEN
-      msg_no_aid_year := g\$_nls.get('BWRKRHS1-0001',
-                        'SQL',
-                        'No award history has been recorded.%01%',
-                        htf.br);
       msg_no_aid_year := 'NO_AID_YEAR';
       
       GOTO end_outer_loop;
@@ -431,9 +430,6 @@ DECLARE
     <<end_outer_loop>>
     --
     IF hist_exist = 'N' THEN
-      msg_no_hist := g\$_nls.get('BWRKRHS1-0013',
-                        'SQL',
-                        'No award history is available for you at this time, please contact your financial aid office  if you have questions.');
                             
     msg_no_hist :=  'NO_AWARD_HISTORY';
     
