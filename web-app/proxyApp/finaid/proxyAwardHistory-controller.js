@@ -10,29 +10,6 @@ proxyAppControllers.controller('proxyAwardHistoryController',['$scope', '$rootSc
         $scope.studentName = proxyAppService.getStudentName();
 
 
-        $scope.checkStudentPageForAccess = function() {
-            proxyAppService.checkStudentPageForAccess({id: sessionStorage.getItem("id"), name: $state.current.name}).$promise.then(function(response) {
-
-                if(response.failure && !response.authorized) {
-                    $scope.flashMessage = response.message;
-
-                    notificationCenterService.clearNotifications();
-                    notificationCenterService.addNotification(response.message, "error", true);
-
-                    if (!response.authorized) {
-                        $state.go('home',
-                            {reload: true, inherit: false, notify: true}
-                        );
-                        return;
-                    }
-                }else{
-                    load();
-                }
-            });
-
-        };
-
-
         var load = function() {
             proxyAppService.getAwardHistory({id: $stateParams.id ? $stateParams.id : sessionStorage.getItem("id")}).$promise.then(function (response) {
 
@@ -54,6 +31,6 @@ proxyAppControllers.controller('proxyAwardHistoryController',['$scope', '$rootSc
 
         };
 
-
+        load();
     }
 ]);
