@@ -542,11 +542,9 @@ p.notification-msg {
     font-weight: normal;
     border-radius: 4px;
     background-color: #fff;
-    border: 1px solid #B2B3B7;
     box-shadow: none;
     width: 100%;
     height: auto;
-    color: #151618;
     padding: 1em .75em;
     line-height: 136%;
     float: none;
@@ -591,11 +589,11 @@ p.notification-msg {
 
 .proxy .input-colors + span:hover,
 .input-colors.input-error + span:hover {
-    color: #5B5E65;
+    color: #026BC8;
 }
 
 .proxy .input-colors:focus + span {
-    color: #5B5E65;
+    color: #151618;
 }
 
 .text-link {
