@@ -28,14 +28,10 @@
         </div>
         <div class="col-xs-12 col-md-4 col-lg-4" ng-repeat="profileElement in piSection.elements" ng-if="profileElement.visible">
             <div ng-if="profileElement.visible && !profileElement.isWidget">
-                <label ng-class="(!!cityErrMsg && !cityFocused ? 'input-field-label field-error' : 'input-field-label')"
-                       class="input-field-label" for="{{profileElement.elemId}}" ng-bind-html= "profileElement.label"> </label><br>
+                <label class="input-field-label" for="{{profileElement.elemId}}" ng-bind-html= "profileElement.label"> </label><br>
                 <input ng-model="profileElement.model" ng-blur="cityFocused=false;" ng-focus="cityFocused=true"
-                       ng-class="[(!!cityErrMsg && !cityFocused ? 'input-field-error' : null)]" class="text-input-field semi-bold form-spacing"
+                       ng-class="[(!!cityErrMsg && !cityFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                        type="text" placeholder="{{profileElement.placeholder}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="{{profileElement.elemId}}">
-                    <span ng-if="!!cityErrMsg && !cityFocused" class="icon input-fail">
-                        <span class="icon-error ellucian-font"></span>
-                    </span>
                 <p class="input-field-label mobile-errors" ng-class="[(!!cityErrMsg ? 'field-error error-font-size' : 'no-display')]"
                    role="alert" aria-live="assertive">{{cityErrMsg|i18n}}</p>
             </div>
@@ -48,7 +44,7 @@
             </div>
 
             <div ng-if="profileElement.visible && profileElement.elemId === 'p_birth_date'">
-                <label ng-class="(seprDateErrMsg && !seprDateFocused ? 'field-error' : '')" for="birthDate" ng-bind-html= "profileElement.label" class="input-field-label">
+                <label for="birthDate" ng-bind-html="profileElement.label" class="input-field-label">
                 </label>
                 <input date-picker ng-model="profileElement.model" pi-input-watcher on-select="setBirthDate" ng-blur="seprDateFocused=false; removeVeteranErrors()"
                        ng-focus="seprDateFocused=true" ng-class="[(seprDateErrMsg && !seprDateFocused ? 'input-error' : null)]"
