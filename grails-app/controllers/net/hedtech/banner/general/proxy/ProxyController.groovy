@@ -124,9 +124,7 @@ class ProxyController {
         log.debug("Check Student Page For Access for: " + params.name);
 
         if (params.name) {
-            def students = session["students"]?.students
-            def student = students?.find { it.id == XssSanitizer.sanitize(params.id) }
-            def page = student?.pages?.find { it.url == params.name }
+            def page = checkPageForAccess(XssSanitizer.sanitize(params.id), params.name)
 
             if (page == null) {
                 render([failure: true, authorized: false,  message: 'proxy.error.pageAccess'] as JSON)
@@ -222,8 +220,10 @@ class ProxyController {
     }
 
     def getCourseSchedule() {
-        def result = generalSsbProxyService.getCourseSchedule(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, XssSanitizer.sanitize(params.date));
-
+        def id = XssSanitizer.sanitize(params.id)
+        def result = generalSsbProxyService.getCourseSchedule(PersonUtility.getPerson(id).pidm, XssSanitizer.sanitize(params.date));
+        result.hasDetailAccess = checkPageForAccess(id, '/ssb/proxy/courseScheduleDetail') != null
+        
         //Logs the History for page Access
         generalSsbProxyService.updateProxyHistoryOnPageAccess(MessageHelper.message('proxy.schedule.heading'))
 
@@ -331,15 +331,48 @@ class ProxyController {
      *
      */
     def getFinancialAidStatus() {
-        def result = generalSsbProxyService.getFinancialAidStatus(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, XssSanitizer.sanitize(params.aidYear))
+        def id = XssSanitizer.sanitize(params.id)
+        def result = generalSsbProxyService.getFinancialAidStatus(PersonUtility.getPerson(id).pidm, XssSanitizer.sanitize(params.aidYear))
         result.awardPackage?.each {
             if(it.amount != null) {
                 it.text = it.text + currencyFormatHelperService.formatCurrency(it.amount) + '.'
+            }
+            if(it.url != null) {
+                it.hasAccess = checkPageForAccess(id, '/ssb/proxy/awardPackage') != null
+                if(it.hasAccess) {
+                    it.url = '/ssb/proxy/awardPackage'
+                }
+                else {
+                    it.remove('url')
+                }
             }
         }
         result.costOfAttendance?.each {
             if(it.amount != null) {
                 it.text = it.text + currencyFormatHelperService.formatCurrency(it.amount) + '.'
+            }
+        }
+
+
+        if(result.financialAidHistory) {
+            def segment = result.financialAidHistory.find { it.url != null }
+            segment.hasAccess = checkPageForAccess(id, '/ssb/proxy/awardhist') != null
+            if(segment.hasAccess) {
+                segment.url = '/ssb/proxy/awardhist'
+            }
+            else {
+                segment.remove('url')
+            }
+        }
+
+        if(result.accountSummary) {
+            def segment = result.accountSummary.find { it.url != null }
+            segment.hasAccess = checkPageForAccess(id, '/ssb/proxy/acctsumm') != null
+            if(segment.hasAccess) {
+                segment.url = '/ssb/proxy/acctsumm'
+            }
+            else {
+                segment.remove('url')
             }
         }
 
@@ -525,5 +558,13 @@ class ProxyController {
 //                entry.value = DateUtility.parseDateString(entry.value, "yyyy-MM-dd'T'HH:mm:ss'Z'")
             }
         }
+    }
+
+    private String checkPageForAccess(def id, def page) {
+        def students = session["students"]?.students
+        def student = students?.find { it.id == id }
+        def result = student?.pages?.find { it.url == page }
+
+        return result
     }
 }
