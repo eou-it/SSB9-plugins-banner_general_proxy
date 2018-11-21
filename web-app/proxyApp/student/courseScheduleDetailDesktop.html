@@ -11,5 +11,40 @@
                 <ng-include src="'proxyApp/student/courseSchedDetail-courseMeetings.html'|webAppResourcePath"></ng-include>
             </div>
         </div>
+        <div ng-if="!course.tbl_meetings.length" class="col-md-6 meeting-container">
+            <div class="proxy-content-section proxy-content-item meetings">
+                <table>
+                    <th colspan="2">{{'proxy.scheduleDetails.meetingTime'|i18n}}</th>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.type'|i18n}}</th>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.time'|i18n}}</th>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.days'|i18n}}</th>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.where'|i18n}}</th>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.dateRange'|i18n}}</th>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.schedType'|i18n}}</th>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <th>{{'proxy.scheduleDetails.instructors'|i18n}}</th>
+                        <td>-</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
