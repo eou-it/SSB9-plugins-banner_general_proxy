@@ -478,8 +478,10 @@ class GeneralSsbProxyService {
 
             log.debug('sqlText: ' + sqlText)
 
+            def msg = MessageHelper.message("proxy.login.accessHistory")
+
             sql.call(sqlText,
-                    [p_proxyIDM, p_proxyIDM, p_proxyIDM
+                    [p_proxyIDM, p_proxyIDM, p_proxyIDM, msg = msg ? msg : "Display authorization menu"
                     ])
 
             log.debug('finished updateProxyHistoryOnLogin')

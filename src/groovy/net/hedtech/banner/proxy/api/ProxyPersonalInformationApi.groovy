@@ -411,7 +411,7 @@ class ProxyPersonalInformationApi {
          gp_gprhist.P_Create (
             p_proxy_idm    => to_number(?),
             p_person_pidm  => pidm,
-            p_page_name    => G\$_NLS.Get ('BWGKPXYA1-0055', 'SQL', 'Display authorization menu'),
+            p_page_name    => ?,
             p_old_auth_ind => 'L',
             p_new_auth_ind => 'L',
             p_create_user  => goksels.f_get_ssb_id_context,
