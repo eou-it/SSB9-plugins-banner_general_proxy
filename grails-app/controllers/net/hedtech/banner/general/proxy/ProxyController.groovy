@@ -132,7 +132,7 @@ class ProxyController {
         log.debug("Check Student Page For Access for: " + params.name);
 
         if (params.name) {
-            def students = getAllStudentsInSingleList()
+            def students = session["students"]?.students.active
             def student = students?.find { it.id == XssSanitizer.sanitize(params.id) }
             def page = student?.pages?.find { it.url == params.name }
 
