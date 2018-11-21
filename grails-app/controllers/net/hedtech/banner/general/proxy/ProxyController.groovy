@@ -373,7 +373,7 @@ class ProxyController {
                 segment.url = '/ssb/proxy/awardhist'
             }
             else {
-                segment.remove('url')
+                result.financialAidHistory = null
             }
         }
 

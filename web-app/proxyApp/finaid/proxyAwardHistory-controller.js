@@ -10,7 +10,7 @@ proxyAppControllers.controller('proxyAwardHistoryController',['$scope', '$rootSc
         $scope.studentName = proxyAppService.getStudentName();
 
 
-        var load = function() {
+        var init = function() {
             proxyAppService.getAwardHistory({id: $stateParams.id ? $stateParams.id : sessionStorage.getItem("id")}).$promise.then(function (response) {
 
                 if (typeof response.awards !== 'undefined' && response.awards.length > 0) {
@@ -31,6 +31,6 @@ proxyAppControllers.controller('proxyAwardHistoryController',['$scope', '$rootSc
 
         };
 
-        load();
+        init();
     }
 ]);
