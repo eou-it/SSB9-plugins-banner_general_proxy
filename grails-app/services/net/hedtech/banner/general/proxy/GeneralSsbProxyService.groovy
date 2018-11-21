@@ -539,7 +539,7 @@ class GeneralSsbProxyService {
 
             errorMsgOut = errorMsg
             //process i18 error messages proxy.personalinformation.onSave[parameter]
-            errorMsg.split(':').each {
+            errorMsg?.split(':')?.each {
                 def newMessage = MessageHelper.message('proxy.personalinformation.onSave.' + it.replaceAll("\\s", ""))
                 errorMsgOut = errorMsgOut.replace(it, newMessage ? newMessage : it)
             }
