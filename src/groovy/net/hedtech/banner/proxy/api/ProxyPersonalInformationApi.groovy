@@ -265,14 +265,14 @@ class ProxyPersonalInformationApi {
     --
     --
     BEGIN
-    lv_message := G\$_NLS.Get ('BWGKPXYA1-0000', 'SQL', 'Required data missing');
+    lv_message := 'required_data_missing';
 
     -- Check first name (always required)
     IF goksels.f_clean_text(p_first_name) IS NULL
     THEN
     lv_info := 'REQUIRED';
     lv_message :=
-    lv_message || ' : ' || G\$_NLS.Get ('BWGKPXYA1-0001', 'SQL', 'First Name');
+    lv_message || ' : ' || 'p_first_name';
     END IF;
 
     -- Check last name (always required)
@@ -280,7 +280,7 @@ class ProxyPersonalInformationApi {
     THEN
     lv_info := 'REQUIRED';
     lv_message :=
-    lv_message || ' : ' || G\$_NLS.Get ('BWGKPXYA1-0002', 'SQL', 'Last Name');
+    lv_message || ' : ' || 'p_last_name';
     END IF;
 
     -- Check e-mail address (always required)
@@ -288,59 +288,59 @@ class ProxyPersonalInformationApi {
     THEN
     lv_info := 'REQUIRED';
     lv_message :=
-    lv_message || ' : ' || G\$_NLS.Get ('BWGKPXYA1-0003', 'SQL', 'E-Mail Address');
+    lv_message || ' : ' || 'p_email_address';
     END IF;
 
     -- Check name prefix (salutation)
-    P_Check_If_Missing('PROFILE_NAME_PREFIX',     p_name_prefix,     G\$_NLS.Get ('BWGKPXYA1-0004', 'SQL', 'Salutation'));
+    P_Check_If_Missing('PROFILE_NAME_PREFIX',     p_name_prefix,     'p_name_prefix');
     -- Check middle name
-    P_Check_If_Missing('PROFILE_MI',              p_mi,              G\$_NLS.Get ('BWGKPXYA1-0005', 'SQL', 'Middle Name'));
+    P_Check_If_Missing('PROFILE_MI',              p_mi,              'p_mi');
     -- Check surname prefix
-    P_Check_If_Missing('PROFILE_SURNAME_PREFIX',  p_surname_prefix,  G\$_NLS.Get ('BWGKPXYA1-0006', 'SQL', 'Surname Prefix'));
+    P_Check_If_Missing('PROFILE_SURNAME_PREFIX',  p_surname_prefix,  'p_surname_prefix');
     -- Check name suffix
-    P_Check_If_Missing('PROFILE_NAME_SUFFIX',     p_name_suffix,     G\$_NLS.Get ('BWGKPXYA1-0007', 'SQL', 'Name Suffix'));
+    P_Check_If_Missing('PROFILE_NAME_SUFFIX',     p_name_suffix,     'p_name_suffix');
     -- Check preferred first name (nickname)
-    P_Check_If_Missing('PROFILE_PREF_FIRST_NAME', p_pref_first_name, G\$_NLS.Get ('BWGKPXYA1-0008', 'SQL', 'Nickname'));
+    P_Check_If_Missing('PROFILE_PREF_FIRST_NAME', p_pref_first_name, 'p_pref_first_name');
     -- Check phone area code
-    P_Check_If_Missing('PROFILE_PHONE_AREA',      p_phone_area,      G\$_NLS.Get ('BWGKPXYA1-0009', 'SQL', 'Phone Area Code'));
+    P_Check_If_Missing('PROFILE_PHONE_AREA',      p_phone_area,      'p_phone_area');
     -- Check phone number
-    P_Check_If_Missing('PROFILE_PHONE_NUMBER',    p_phone_number,    G\$_NLS.Get ('BWGKPXYA1-0010', 'SQL', 'Phone Number'));
+    P_Check_If_Missing('PROFILE_PHONE_NUMBER',    p_phone_number,    'p_phone_number');
     -- Check phone extension
-    P_Check_If_Missing('PROFILE_PHONE_EXT',       p_phone_ext,       G\$_NLS.Get ('BWGKPXYA1-0011', 'SQL', 'Phone Extension'));
+    P_Check_If_Missing('PROFILE_PHONE_EXT',       p_phone_ext,       'p_phone_ext');
     -- Check phone country code
-    P_Check_If_Missing('PROFILE_PHONE_COUNTRY',   p_ctry_code_phone, G\$_NLS.Get ('BWGKPXYA1-0012', 'SQL', 'Phone Country Code'));
+    P_Check_If_Missing('PROFILE_PHONE_COUNTRY',   p_ctry_code_phone, 'p_ctry_code_phone');
     -- Check house number
-    P_Check_If_Missing('PROFILE_HOUSE_NUMBER',    p_house_number,    G\$_NLS.Get ('BWGKPXYA1-0013', 'SQL', 'House Number'));
+    P_Check_If_Missing('PROFILE_HOUSE_NUMBER',    p_house_number,    'p_house_number');
     -- Check address line 1
-    P_Check_If_Missing('PROFILE_STREET_LINE1',    p_street_line1,    G\$_NLS.Get ('BWGKPXYA1-0014', 'SQL', 'Address Line 1'));
+    P_Check_If_Missing('PROFILE_STREET_LINE1',    p_street_line1,    'p_street_line1');
     -- Check address line 2
-    P_Check_If_Missing('PROFILE_STREET_LINE2',    p_street_line2,    G\$_NLS.Get ('BWGKPXYA1-0015', 'SQL', 'Address Line 2'));
+    P_Check_If_Missing('PROFILE_STREET_LINE2',    p_street_line2,    'p_street_line2');
     -- Check address line 3
-    P_Check_If_Missing('PROFILE_STREET_LINE3',    p_street_line3,    G\$_NLS.Get ('BWGKPXYA1-0016', 'SQL', 'Address Line 3'));
+    P_Check_If_Missing('PROFILE_STREET_LINE3',    p_street_line3,    'p_street_line3');
     -- Check address line 4
-    P_Check_If_Missing('PROFILE_STREET_LINE4',    p_street_line4,    G\$_NLS.Get ('BWGKPXYA1-0017', 'SQL', 'Address Line 4'));
+    P_Check_If_Missing('PROFILE_STREET_LINE4',    p_street_line4,    'p_street_line4');
     -- Check city
-    P_Check_If_Missing('PROFILE_CITY',            p_city,            G\$_NLS.Get ('BWGKPXYA1-0018', 'SQL', 'City'));
+    P_Check_If_Missing('PROFILE_CITY',            p_city,            'p_city');
     -- Check state
-    P_Check_If_Missing('PROFILE_STAT_CODE',       p_stat_code,       G\$_NLS.Get ('BWGKPXYA1-0019', 'SQL', 'State'));
+    P_Check_If_Missing('PROFILE_STAT_CODE',       p_stat_code,       'p_stat_code');
     -- Check zipcode
-    P_Check_If_Missing('PROFILE_ZIP',             p_zip,             G\$_NLS.Get ('BWGKPXYA1-0020', 'SQL', 'Zipcode'));
+    P_Check_If_Missing('PROFILE_ZIP',             p_zip,             'p_zip');
     -- Check county
-    P_Check_If_Missing('PROFILE_CNTY_CODE',       p_cnty_code,       G\$_NLS.Get ('BWGKPXYA1-0021', 'SQL', 'County'));
+    P_Check_If_Missing('PROFILE_CNTY_CODE',       p_cnty_code,       'p_cnty_code');
     -- Check nation
-    P_Check_If_Missing('PROFILE_NATN_CODE',       p_natn_code,       G\$_NLS.Get ('BWGKPXYA1-0022', 'SQL', 'Nation'));
+    P_Check_If_Missing('PROFILE_NATN_CODE',       p_natn_code,       'p_natn_code');
     -- Check gender
-    P_Check_If_Missing('PROFILE_SEX',             p_sex,             G\$_NLS.Get ('BWGKPXYA1-0023', 'SQL', 'Gender'));
+    P_Check_If_Missing('PROFILE_SEX',             p_sex,             'p_sex');
     -- Check national identifier
-    P_Check_If_Missing('PROFILE_SSN',             p_ssn,             G\$_NLS.Get ('BWGKPXYA1-0024', 'SQL', 'SSN/SIN/TIN'));
+    P_Check_If_Missing('PROFILE_SSN',             p_ssn,             'p_ssn');
     -- Check birth date
-    P_Check_If_Missing('PROFILE_BIRTH_DATE',      p_birth_date,      G\$_NLS.Get ('BWGKPXYA1-0025', 'SQL', 'Birthdate'));
+    P_Check_If_Missing('PROFILE_BIRTH_DATE',      p_birth_date,      'p_birth_date');
     -- Also check validity of date
     IF p_birth_date IS NOT NULL THEN
     IF f_validate_date(p_birth_date) IS NULL THEN
     lv_info := 'REQUIRED';
     lv_message :=
-    lv_message || ' : ' || g\$_nls.get ('BWGKPXYA1-0026', 'SQL', 'Birthdate %01% has invalid date format or values.' ,p_birth_date);
+    lv_message || ' : ' || 'p_birth_date_format_error';
     END IF;
     END IF;
 

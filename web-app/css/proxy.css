@@ -29,74 +29,6 @@ h2 {
     margin: 30px 16px 100px;
 }
 
-.gen-home-heading {
-    position: absolute;
-    display: inline-block;
-    margin-left: auto;
-    margin-right: auto;
-    right: 0;
-    left: 0;
-}
-
-.gen-home-heading {
-    top: 25px;
-}
-
-.gen-home-heading-spacer {
-    display: none;
-}
-
-.gen-home-heading .title {
-    font-size: 28px;
-    color: #888D91;
-    padding-bottom: 25px;
-}
-
-.gen-home-heading .greeting-wrapper {
-    clear: both;
-    padding-top: 15px;
-}
-
-.gen-home-heading .avatar {
-    width: 66px;
-    height: 80px;
-    margin-right: 25px;
-    float: left;
-}
-
-.gen-home-heading .avatar svg {
-    width: 66px;
-    height: 80px;
-}
-
-.gen-home-heading .avatar-spacer {
-    display: none;
-}
-
-.gen-home-heading .greeting {
-    font-size: 16px;
-    color: #888D91;
-    margin-top: 10px;
-}
-
-.gen-home-heading .greeting .landingDesc {
-    height: 55px;
-    overflow-y: auto;
-}
-
-.gen-home-title-divider {
-    width: 30px;
-    height: 2px;
-}
-
-.gen-home-title-divider span {
-    border-bottom: 2px solid #989DA2;
-    width: 100%;
-    float: left;
-    margin-top: 1.0em;
-    margin-bottom: 0.675em;
-}
-
 .user-tile .glyphicon {
     display: none;
 }
@@ -133,25 +65,9 @@ h2 {
     padding: 44px 40px;
 }
 
-.gen-app-tile {
-    float: left;
-    margin-right: 15px;
-    padding: 15px 15px 0;
-    text-align: center;
-    border: none;
-    border-bottom: 4px solid #ddd;
-    overflow: hidden;
-    background: white;
-    cursor: pointer;
-}
-
 .tile-icon {
     width: 100%;
     margin: 0 auto 30px;
-}
-
-.gen-app-tile img {
-    margin: -10px 0 0 -10px;
 }
 
 .tile-content {
@@ -252,7 +168,7 @@ h1.proxy-landing-page-heading {
     font-family: OpenSans-semibold;
     font-size: 18px;
     color: #151618;
-    width: 1125px;
+    width: 100%;
     margin: 30px auto;
 }
 
@@ -1214,6 +1130,10 @@ a.breadcrumbButton.leaf-breadcrumb {
         padding: 22px 32px 100px;
     }
 
+    .tile-group {
+        margin: 0 auto;
+    }
+
     .user-tile .glyphicon {
         display: block;
         margin: 20px 18px 0 0;
@@ -1221,7 +1141,7 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .proxy-tile,
     .proxy-tile.user-tile {
-        width: 1125px;
+        width: 100%;
     }
 
     .tile-wrapper {
@@ -1232,12 +1152,12 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .tile-icon {
         float: left;
-        width: unset;
+        width: 32px;
         margin: 12px 49px 0 0;
     }
 
     .tile-content {
-        max-width: 550px;
+        max-width: 50%;
     }
 
     .tile-title,
@@ -1395,8 +1315,12 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin-bottom: 10px;
     }
 
+    .proxy-home-content {
+        margin: 30px 150px 100px;
+    }
+
     .proxy-home-content .proxy-top-message-container {
-        width: 1125px;
+        width: 100%;
         margin: 10px auto 20px;
     }
 
@@ -1447,6 +1371,10 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .select2-container {
         width: 345px;
+    }
+
+    .tile-wrapper .select2-container.top-level {
+        max-width: 35%;
     }
 
     /* Course Schedule Details - BEGIN */
@@ -1656,15 +1584,6 @@ a.breadcrumbButton.leaf-breadcrumb {
         height: auto;
         width: auto;
         margin: 0px;
-    }
-
-    .proxy .gen-home-heading {
-        width: 425px;
-        top:0px;
-    }
-
-    .gen-app-tile {
-        width: 410px;
     }
 
     /* Action Password Page - BEGIN */

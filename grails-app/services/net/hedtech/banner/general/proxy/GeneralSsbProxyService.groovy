@@ -534,7 +534,13 @@ class GeneralSsbProxyService {
                            params.p_city, params.p_stat_code?.code?:"", params.p_zip, params.p_cnty_code?.code?:"", params.p_natn_code?.code?:"",
                            params.p_sex, bDate, params.p_ssn, Sql.VARCHAR
         ]){ errorMsg ->
+
             errorMsgOut = errorMsg
+            //process i18 error messages proxy.personalinformation.onSave[parameter]
+            errorMsg.split(':').each {
+                def newMessage = MessageHelper.message('proxy.personalinformation.onSave.' + it.replaceAll("\\s", ""))
+                errorMsgOut = errorMsgOut.replace(it, newMessage ? newMessage : it)
+            }
         }
 
         return errorMsgOut
@@ -630,7 +636,7 @@ class GeneralSsbProxyService {
 
         studentsListMap <<   getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
 
-        studentsListMap.students.each { it ->
+        studentsListMap.students.active.each { it ->
             def pidm = PersonUtility.getPerson(it.id).pidm
 
             def pages = getProxyPages(gidm, pidm)?.pages

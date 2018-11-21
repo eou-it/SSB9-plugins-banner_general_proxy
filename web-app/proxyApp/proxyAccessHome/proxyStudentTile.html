@@ -1,7 +1,7 @@
 <!--*******************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
-<div  class="tile-wrapper">
+<div  ng-class="proxyData.active ? null : 'disabled'" class="tile-wrapper">
     <div class="tile-icon">
         <img ng-src="{{'images/icons/student.png'|webAppResourcePath}}"/>
     </div>
@@ -14,7 +14,7 @@
             {{'proxy.landingPage.label.expand.to.view'|i18n}}
         </div>
     </div>
-    <div class="select2-container select-page">
+    <div ng-if="proxyData.active" class="select2-container top-level select-page">
         <input content-page-select-box for-select='{"placeholder": "{{"proxy.landingPage.label.select.to.view"|i18n}}", "options": "proxyData.pages", "model": "proxyData.selectedPage"}' type="hidden" />
     </div>
 </div>

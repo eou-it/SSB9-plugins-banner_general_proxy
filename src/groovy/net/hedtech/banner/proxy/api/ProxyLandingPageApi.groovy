@@ -15,21 +15,23 @@ DECLARE
              WHERE GPRXREF_PERSON_PIDM = SPRIDEN_PIDM
              AND SPRIDEN_CHANGE_IND IS NULL
              AND GPRXREF_PROXY_IDM = ?
-                  AND TRUNC (SYSDATE) BETWEEN TRUNC (GPRXREF_START_DATE)
-                                          AND TRUNC (GPRXREF_STOP_DATE)
                   AND EXISTS (SELECT 'Y' FROM GOBTPAC 
                   WHERE GOBTPAC_PIDM = GPRXREF_PERSON_PIDM
                   AND GOBTPAC_PIN_DISABLED_IND = 'N')
          ORDER BY F_Format_Name (GPRXREF_PERSON_PIDM, 'LFMI');
 
- students varchar2(3000);
+  active varchar2(3000);
+  inactive varchar2(3000);
+  student varchar2(3000);
+  students varchar2(3000);
 
 BEGIN
 
       -- Loop through potential Banner Web users
       -- Only show users if they have the Proxy Management role
 
-  students := '{ "students":[';
+     active := '"active":[';
+     inactive := '"inactive":[';
 
       FOR person IN C_PersonList
       LOOP
@@ -47,18 +49,32 @@ BEGIN
                IF lv_attr_nt (i)."value" = 'TRUE'
                THEN
 
-                      students := students || '{' ||
+                      student := '{' ||
                       '"name" ' || ':' || '"' || f_format_name (person.GPRXREF_PERSON_PIDM, 'FML') || '"' ||
                       ',"id" ' || ':'  || '"' || person.ID || '"' || '},';
+                      
+                      IF TRUNC(SYSDATE) BETWEEN TRUNC(person.GPRXREF_START_DATE) AND TRUNC (person.GPRXREF_STOP_DATE)
+                      THEN
+                         active := active || student;
+                      ELSE
+                         inactive := inactive || student;
+                      END IF;
                   END IF;
             END LOOP;
 
          END IF;
       END LOOP;
 
-     students := TRIM(TRAILING ',' FROM students );
+     active := TRIM(TRAILING ',' FROM active );
+     active := active || ']';
+     
+     inactive := TRIM(TRAILING ',' FROM inactive );
+     inactive := inactive || ']';
 
-     students := students || ']}';
+     students := '{ "students":{'
+                 || active || ','
+                 || inactive
+                 || '}}';
 
      ? := students;
 
