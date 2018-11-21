@@ -1364,6 +1364,10 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin-right: 10px;
     }
 
+    .proxy-bottom-buttons input.only-submit {
+        margin-left: 130px;
+    }
+
     .select-term-top {
         padding-top: 45px;
         padding-bottom: 0;

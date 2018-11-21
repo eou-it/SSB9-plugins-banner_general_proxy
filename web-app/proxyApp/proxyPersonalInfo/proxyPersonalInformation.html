@@ -72,16 +72,16 @@
 
     <div class="proxy-bottom-buttons">
         <div class="proxy-mobile-visible">
-            <input ng-click="save()"   type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
-            <input ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
+            <input ng-click="save()" type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
+            <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
         </div>
         <div class="proxy-tablet-visible">
-            <input ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
-            <input ng-click="save()"   type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
+            <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
+            <input ng-class="profileRequired ? 'only-submit' : null" ng-click="save()" type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
         </div>
         <div class="proxy-desktop-visible">
-            <input ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
-            <input ng-click="save()"   type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
+            <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
+            <input ng-class="profileRequired ? 'only-submit' : null" ng-click="save()" type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
         </div>
     </div>
 </div>
