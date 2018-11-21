@@ -141,6 +141,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                             scope.hasNextWeek = response.hasNextWeek;
                             scope.hasPrevWeek = response.hasPrevWeek;
                             scope.unassignedSchedule = response.unassignedSchedule;
+                            scope.hasDetailAccess = response.hasDetailAccess;
                             scope.errorMsg = response.errorMsg;
                             callback(events);
 
@@ -153,7 +154,9 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     eventRender: function (event, element, view) {
                         var options = {},
                             html = event.isConflicted ? '<span class="icon-info-CO"></span>' : '',
-                            courseLinkTemplate = html+'<a ui-sref="/ssb/proxy/courseScheduleDetail({id: id})"> '+ event.title +'</a><br><span>'+ event.location +'</span>',
+                            courseLinkTemplate = scope.hasDetailAccess ?
+                                html+'<a ui-sref="/ssb/proxy/courseScheduleDetail({crn: '+ event.crn +', termCode: '+ event.term +', termDesc: \''+ event.termDesc +'\'})"> '+ event.title +'</a><br><span>'+ event.location +'</span>' :
+                                html+'<span> '+ event.title +'</span><br><span>'+ event.location +'</span>',
                             courseLinkElem = $compile(courseLinkTemplate)(scope);
 
                         options.term = event.term;

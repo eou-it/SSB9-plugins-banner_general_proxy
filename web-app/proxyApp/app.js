@@ -182,7 +182,10 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
                 breadcrumbs: [{label: 'proxy.scheduleDetails.heading'}]
             },
             params: {
-                id: null
+                id: null,
+                crn: null,
+                termCode: null,
+                termDesc: null
             }
         })
         .state('/ssb/proxy/awardPackage',{

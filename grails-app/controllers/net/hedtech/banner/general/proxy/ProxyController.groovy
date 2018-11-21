@@ -231,7 +231,11 @@ class ProxyController {
     }
 
     def getCourseScheduleDetail() {
-        def result = generalSsbProxyService.getCourseScheduleDetail(PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm, XssSanitizer.sanitize(params.termCode));
+        def result = generalSsbProxyService.getCourseScheduleDetail(
+                PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm,
+                XssSanitizer.sanitize(params.termCode),
+                XssSanitizer.sanitize(params.crn)
+        );
 
 
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");

@@ -5,6 +5,7 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope',
     function ($scope, $rootScope, $stateParams, proxyAppService, $filter) {
 
         $scope.schedule = {};
+        $scope.crn = null;
         $scope.termHolder = {
             term: {}
         };
@@ -12,9 +13,9 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope',
             $scope.termHolder.term = proxyAppService.getTerm();
         }
 
-        var getDetailSchedule = function() {
+        var getDetailSchedule = function(crn) {
             if($scope.termHolder.term.code) {
-                proxyAppService.getDetailSchedule({termCode: $scope.termHolder.term.code, id: $scope.id}).$promise.then(function (response) {
+                proxyAppService.getDetailSchedule({crn: crn, termCode: $scope.termHolder.term.code, id: $scope.id}).$promise.then(function (response) {
                     $scope.schedule = response.rows;
                     $scope.errorMsg = response.errorMsg;
 
@@ -52,11 +53,19 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope',
 
             $scope.id = sessionStorage.getItem('id');
             $scope.studentName = proxyAppService.getStudentName();
+            if($stateParams.termCode) {
+                $scope.termHolder.term.code = $stateParams.termCode;
+                $scope.termHolder.term.description = $stateParams.termDesc;
+                proxyAppService.setTerm($scope.termHolder.term);
+            }
+            if($stateParams.crn) {
+                $scope.crn = $stateParams.crn;
+            }
 
             $('#term', this.$el).on('change', function (event) {
                 proxyAppService.setTerm($scope.termHolder.term);
                 if(event.target.value !== 'not/app') { // don't run query on "Not Applicable" selection
-                    getDetailSchedule();
+                    getDetailSchedule(null);
                 }
                 else {
                     $scope.termHolder.term.code = null;
@@ -66,7 +75,7 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope',
                 }
             });
 
-            getDetailSchedule();
+            getDetailSchedule($scope.crn);
         };
 
         init();

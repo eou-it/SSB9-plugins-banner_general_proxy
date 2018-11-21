@@ -26,7 +26,13 @@
         <div ng-if="unassignedSchedule.length > 0" class="unassigned proxy-content-section">
             <h2>{{'proxy.schedule.unassignedMeeting'|i18n}}</h2>
             <div ng-repeat="course in unassignedSchedule" class="unassigned-meeting">
-                <a ui-sref="/ssb/proxy/courseScheduleDetail({id: id})" class="text-link">{{course.crse_subj_code}} {{course.crse_crse_numb}}-{{course.crse_seq_numb}}</a> - {{course.crse_crn}} {{course.crse_ptrm_code == null ? course.crse_stvschd_desc : 'TBA'}}
+                <a ng-if="hasDetailAccess" ui-sref="/ssb/proxy/courseScheduleDetail({crn: {{course.crse_crn}}, termCode: {{course.crse_term_code}}, termDesc:'{{course.crse_term_desc}}'})" class="text-link">
+                    {{course.crse_subj_code}} {{course.crse_crse_numb}}-{{course.crse_seq_numb}}
+                </a>
+                <span ng-if="!hasDetailAccess">
+                    {{course.crse_subj_code}} {{course.crse_crse_numb}}-{{course.crse_seq_numb}}
+                </span>
+                - {{course.crse_crn}} {{course.crse_ptrm_code == null ? course.crse_stvschd_desc : 'TBA'}}
             </div>
         </div>
     </div>

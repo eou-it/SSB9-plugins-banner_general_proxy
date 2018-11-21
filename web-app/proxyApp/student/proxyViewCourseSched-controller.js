@@ -9,6 +9,7 @@ proxyAppControllers.controller('proxyViewCourseSchedController',['$scope', '$roo
         $scope.unassignedSchedule = {};
         $scope.hasPrevWeek = false;
         $scope.hasNextWeek = false;
+        $scope.hasDetailAccess = false;
         $scope.id = sessionStorage.getItem("id");
         $scope.studentName = proxyAppService.getStudentName();
         $scope.tgtDate = null;

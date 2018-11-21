@@ -662,7 +662,6 @@ class GeneralSsbProxyService {
         def scheduleJson = ""
         def tbaScheduleJson = ""
         def errorMsg = ""
-        //def sqlText = sqlFileLoadService.getSqlTextMap().getWeeklyCourseSchedule?.sqlText
         def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
@@ -707,14 +706,13 @@ class GeneralSsbProxyService {
         return resultMap
     }
 
-    def getCourseScheduleDetail(def pidm, def term) {
+    def getCourseScheduleDetail(def pidm, def term, def crn) {
         def scheduleJson = ""
         def errorMsg = ""
-        //def sqlText = sqlFileLoadService.getSqlTextMap().getCourseScheduleDetail?.sqlText
         def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE_DETAIL
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        sql.call(sqlText, [ term, pidm, Sql.VARCHAR
+        sql.call(sqlText, [ crn, term, pidm, Sql.VARCHAR
         ]){ lv_sched_json ->
             scheduleJson = lv_sched_json
         }
@@ -758,7 +756,7 @@ class GeneralSsbProxyService {
     }
 
     public static
-    def createRegistrationEvent(id, term, crn, title, date, beginTime, endTime, className, subject = null, courseNumber = null) {
+    def createRegistrationEvent(id, term, termDesc, crn, title, date, beginTime, endTime, className, subject = null, courseNumber = null) {
         Calendar startCal = Calendar.instance
         Calendar endCal = Calendar.instance
         startCal.setTime(date.getTime())
@@ -778,6 +776,7 @@ class GeneralSsbProxyService {
         registrationMap.allDay = false
         registrationMap.className = className
         registrationMap.term = term
+        registrationMap.termDesc = termDesc
         registrationMap.crn = crn
         registrationMap.subject = subject ?: ""
         registrationMap.courseNumber = courseNumber ?: ""
@@ -802,7 +801,7 @@ class GeneralSsbProxyService {
         boolean isDateWithinMeetingDates = !startDateCal.before(ssrmeetStartCal) && !startDateCal.after(ssrmeetEndCal)
 
         if(isDateWithinMeetingDates) {
-            def regEvent = createRegistrationEvent(id, event.meeting_term_code, event.meeting_crn, event.courseTitle,
+            def regEvent = createRegistrationEvent(id, event.meeting_term_code, event.meeting_term_desc, event.meeting_crn, event.courseTitle,
                     startDateCal, event.meeting_begin_time, event.meeting_end_time, 'proxy-event', event.meeting_subj_code,
                     event.meeting_crse_numb)
 

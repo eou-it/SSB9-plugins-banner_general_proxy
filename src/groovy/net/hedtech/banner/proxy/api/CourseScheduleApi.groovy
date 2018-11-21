@@ -355,6 +355,7 @@ declare
          CLOSE gtvmtypc;
 
          lv_sched_json := lv_sched_json || '"meeting_term_code": "' || meeting_tab (row_count).term_code || '",';
+         lv_sched_json := lv_sched_json || '"meeting_term_desc": "' || bwcklibs.f_term_desc(meeting_tab (row_count).term_code) || '",';
          lv_sched_json := lv_sched_json || '"meeting_crn": "' || meeting_tab (row_count).crn || '",';
          lv_sched_json := lv_sched_json || '"meeting_subj_code": "' || meeting_tab (row_count).subj_code || '",';
          lv_sched_json := lv_sched_json || '"meeting_crse_numb": "' || meeting_tab (row_count).crse_numb || '",';
@@ -488,6 +489,7 @@ declare
             lv_tba_sched_json := lv_tba_sched_json || ', {';
          END IF;
          lv_tba_sched_json := lv_tba_sched_json || '"crse_term_code": "' || crse_rec.term_code || '",';
+         lv_tba_sched_json := lv_tba_sched_json || '"crse_term_desc": "' || bwcklibs.f_term_desc(crse_rec.term_code) || '",';
          lv_tba_sched_json := lv_tba_sched_json || '"crse_crn": "' || crse_rec.crn || '",';
          lv_tba_sched_json := lv_tba_sched_json || '"crse_subj_code": "' || crse_rec.subj_code || '",';
          lv_tba_sched_json := lv_tba_sched_json || '"crse_crse_numb": "' || crse_rec.crse_numb || '",';
@@ -670,9 +672,9 @@ DECLARE
    aregcrsec_rec  aregcrsec%ROWTYPE;
 --  end BWCKGEN globals
 
-   crn          VARCHAR2(6) DEFAULT NULL;
-   term_in      stvterm.stvterm_code%TYPE := ?;
-   lv_pidm  spriden.spriden_pidm%TYPE     := ?;
+   crn      VARCHAR2(6)               := ?;
+   term_in  stvterm.stvterm_code%TYPE := ?;
+   lv_pidm  spriden.spriden_pidm%TYPE := ?;
    lv_tot_credit_hr VARCHAR2(12) default null;
    lv_course_title_caption VARCHAR2(120) default null;
    lv_dowebctlogin VARCHAR2(1);
