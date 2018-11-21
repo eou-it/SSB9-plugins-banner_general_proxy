@@ -630,7 +630,7 @@ class GeneralSsbProxyService {
 
         studentsListMap <<   getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
 
-        studentsListMap.students.each { it ->
+        studentsListMap.students.active.each { it ->
             def pidm = PersonUtility.getPerson(it.id).pidm
 
             def pages = getProxyPages(gidm, pidm)?.pages
