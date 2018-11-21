@@ -15,8 +15,30 @@ var proxyApp = angular.module('proxyApp', [
     'datePickerApp',
     'xe-ui-components'])
     .run(
-        ['$rootScope', '$state', '$stateParams', '$filter', 'breadcrumbService',
-            function ($rootScope, $state, $stateParams, $filter, breadcrumbService) {
+        ['$rootScope', '$state', '$stateParams', '$filter', 'proxyAppService', 'breadcrumbService', 'notificationCenterService',
+            function ($rootScope, $state, $stateParams, $filter, proxyAppService, breadcrumbService, notificationCenterService) {
+                $rootScope.$on('$stateChangeStart',
+                    function(event, toState, toParams, fromState, fromParams, options) {
+                        if(!['/home', '/proxypersonalinformation'].includes(toState.url)) {
+                            proxyAppService.checkStudentPageForAccess({id: sessionStorage.getItem("id"), name: toState.name}).$promise.then(function(response) {
+
+                                if (response.failure && !response.authorized) {
+                                    notificationCenterService.clearNotifications();
+                                    notificationCenterService.addNotification(response.message, "error", true);
+                                    event.preventDefault();
+                                    // transitionTo() promise will be rejected with
+                                    // a 'transition prevented' error
+
+                                    if (!response.authorized) {
+                                        $state.go('home',
+                                            {reload: true, inherit: false, notify: true}
+                                        );
+                                    }
+                                }
+                            });
+                        }
+                    });
+
                 $rootScope.$state = $state;
                 $rootScope.$stateParams = $stateParams;
                 $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
@@ -160,7 +182,10 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
                 breadcrumbs: [{label: 'proxy.scheduleDetails.heading'}]
             },
             params: {
-                id: null
+                id: null,
+                crn: null,
+                termCode: null,
+                termDesc: null
             }
         })
         .state('/ssb/proxy/awardPackage',{

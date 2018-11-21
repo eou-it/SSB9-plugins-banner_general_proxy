@@ -133,9 +133,9 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
         }
     };
 
-    this.setTerm = function(termrObj) {
-        sessionStorage.setItem("termCode", termrObj.code);
-        sessionStorage.setItem("termDesc", termrObj.description);
+    this.setTerm = function(termObj) {
+        sessionStorage.setItem("termCode", termObj.code);
+        sessionStorage.setItem("termDesc", termObj.description);
     };
 
     this.getTerm = function() {
