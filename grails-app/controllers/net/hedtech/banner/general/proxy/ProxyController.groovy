@@ -30,10 +30,18 @@ class ProxyController {
 
     def beforeInterceptor = [action:this.&studentIdCheck]
 
+    private getAllStudentsInSingleList() {
+        def students = []
+        students.addAll(session["students"]?.students.active)
+        students.addAll(session["students"]?.students.inactive)
+
+        students
+    }
+
     private studentIdCheck() {
         def id = XssSanitizer.sanitize(params.id)
         if (id) {
-            def students = session["students"]?.students
+            def students = getAllStudentsInSingleList()
             def student = students?.find { it.id == id }
             if (!student) {
                 log.error('Invalid attempt for Id: ' + id )
@@ -124,7 +132,7 @@ class ProxyController {
         log.debug("Check Student Page For Access for: " + params.name);
 
         if (params.name) {
-            def students = session["students"]?.students
+            def students = session["students"]?.students.active
             def student = students?.find { it.id == XssSanitizer.sanitize(params.id) }
             def page = student?.pages?.find { it.url == params.name }
 

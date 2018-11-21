@@ -1,8 +1,8 @@
 /********************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-proxyAppControllers.controller('proxyLandingPageController',['$scope', '$rootScope', '$location', '$stateParams', '$timeout', 'proxyAppService', 'notificationCenterService',
-    function ($scope, $rootScope, $location, $stateParams, $timeout, proxyAppService, notificationCenterService) {
+proxyAppControllers.controller('proxyLandingPageController',['$scope', '$rootScope', '$location', '$stateParams', '$timeout', '$filter', 'proxyAppService', 'notificationCenterService',
+    function ($scope, $rootScope, $location, $stateParams, $timeout, $filter, proxyAppService, notificationCenterService) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -43,20 +43,31 @@ proxyAppControllers.controller('proxyLandingPageController',['$scope', '$rootSco
             $('#bannerMenu').removeClass('show').addClass('hide');
 
             proxyAppService.getStudentListForProxy().$promise.then(function (response) {
-                $scope.students = response.students;
-                $scope.proxyUser = toCamelCase(response.proxyProfile.p_first_name) + " " + toCamelCase(response.proxyProfile.p_last_name);
-
-                _.each($scope.students, function(student) {
-
+                var addStudentProxyTile = function(student, isActive) {
                     $scope.proxyTiles.push(
                         {
                             desc: student.name,
                             pages : student.pages,
                             selectedPage: {code: null, description: null},
-                            id: student.id
+                            id: student.id,
+                            active: isActive
                         }
                     );
+                };
 
+                $scope.students = response.students;
+                $scope.proxyUser = toCamelCase(response.proxyProfile.p_first_name) + " " + toCamelCase(response.proxyProfile.p_last_name);
+
+                _.each($scope.students.active, function(student) {
+                    addStudentProxyTile(student, true);
+                });
+
+                _.each($scope.students.inactive, function(student) {
+                    addStudentProxyTile(student, false);
+
+                    if ($stateParams.onLoadNotifications.length === 0) {
+                        notificationCenterService.addNotification($filter('i18n')('proxy.error.accessExpired', [student.name]), $rootScope.notificationErrorType, true);
+                    }
                 });
             });
 
