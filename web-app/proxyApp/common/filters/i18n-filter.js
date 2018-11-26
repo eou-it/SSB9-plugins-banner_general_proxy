@@ -1,3 +1,6 @@
+/********************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+********************************************************************************/
 angular.module('I18n', []).
     filter('i18n', function () {
         return function (key, data) {
