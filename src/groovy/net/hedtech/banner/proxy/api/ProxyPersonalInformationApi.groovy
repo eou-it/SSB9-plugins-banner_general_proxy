@@ -572,12 +572,7 @@ class ProxyPersonalInformationApi {
                           END;
                           
            lv_message :=
-           lv_message
-           || G\$_NLS.Get ('BWGKPXYA1-0099',
-                 'SQL',
-                 'Proxy profile changes submitted by proxy user %01% %02% %03%',
-                 lv_GPBPRXY_rec.R_FIRST_NAME, lv_GPBPRXY_rec.R_LAST_NAME,
-                 '<P>');
+           lv_message || ? || ' ' || lv_GPBPRXY_rec.R_FIRST_NAME || ' ' || lv_GPBPRXY_rec.R_LAST_NAME || ' ' || '<P>';
                           
          gp_gpbeltr.P_Create (
          p_syst_code        => 'PROXY',
