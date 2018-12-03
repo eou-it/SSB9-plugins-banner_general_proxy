@@ -429,30 +429,25 @@ class ProxyPersonalInformationApi {
     """
 
     public final static String STORE_PAGE_ACCESS_IN_HISTORY = """
-    DECLARE
+
+ DECLARE
     lv_hold_rowid  gb_common.internal_record_id_type;
     lv_RETP        gtvretp.gtvretp_code%TYPE;
     pidm           GPRXREF.GPRXREF_PERSON_PIDM%TYPE;
-    --
-    CURSOR refProxy is SELECT DISTINCT GPRXREF_PERSON_PIDM
-    FROM GPRXREF
-    WHERE GPRXREF_PROXY_IDM = ?;
-    --
-    BEGIN
-    OPEN refProxy;
-    FETCH refProxy INTO pidm;
-    CLOSE refProxy;
-    --
-    lv_RETP := gp_gprxref.F_GetXREF_RETP (?, pidm);
-    --
+    --  
+       
+  BEGIN
+  
+   lv_RETP := gp_gprxref.F_GetXREF_RETP (?, ?);
+   
    IF bwgkprxy.F_GetOption ('PAGE_DISPLAY_IN_HISTORY', lv_RETP) = 'Y'
       THEN
          gp_gprhist.P_Create (
-            p_proxy_idm    => to_number(?),
-            p_person_pidm  => pidm,
+            p_proxy_idm    => ?,
+            p_person_pidm  => ?,
             p_page_name    => ?,
-            p_old_auth_ind => 'L',
-            p_new_auth_ind => 'L',
+            p_old_auth_ind => 'V',
+            p_new_auth_ind => 'V',
             p_create_user  => goksels.f_get_ssb_id_context,
             p_create_date  => SYSDATE,
             p_user_id      => goksels.f_get_ssb_id_context,

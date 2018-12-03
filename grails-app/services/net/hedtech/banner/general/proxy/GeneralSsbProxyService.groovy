@@ -499,7 +499,7 @@ class GeneralSsbProxyService {
 
 
     /* Updates Audit data on Proxy Page Access */
-    def updateProxyHistoryOnPageAccess(def pageName) {
+    def updateProxyHistoryOnPageAccess(def pidm, def pageName) {
         log.debug('starting updateProxyHistoryOnPageAccess')
         //get proxy gidm
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
@@ -511,7 +511,7 @@ class GeneralSsbProxyService {
             log.debug('sqlText: ' + sqlText)
 
             sql.call(sqlText,
-                    [p_proxyIDM, p_proxyIDM, p_proxyIDM, pageName
+                    [p_proxyIDM, pidm, p_proxyIDM, pidm , pageName
                     ])
 
             log.debug('finished updateProxyHistoryOnPageAccess')
