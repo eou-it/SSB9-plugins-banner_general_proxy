@@ -15,6 +15,14 @@
         </div>
     </div>
     <div ng-if="proxyData.active" class="select2-container top-level select-page">
-        <input content-page-select-box for-select='{"placeholder": "{{"proxy.landingPage.label.select.to.view"|i18n}}", "options": "proxyData.pages", "model": "proxyData.selectedPage"}' type="hidden" />
+        <xe-ui-select id="select2MultipleLabel" ng-model="proxyData.selectedPage" on-select="onTileSelect(proxyData.selectedPage.url)"
+                      theme="select2" search-enabled="false">
+            <xe-ui-select-match placeholder="{{'proxy.landingPage.label.select.to.view'|i18n}}">
+                {{$select.selected.desc ? $select.selected.desc : ('proxy.landingPage.label.select.to.view'|i18n)}}
+            </xe-ui-select-match>
+            <xe-ui-select-choices repeat="page in proxyData.pages | propsFilter: {desc: $select.search}">
+                <div ng-bind-html="page.desc | highlight: $select.search"></div>
+            </xe-ui-select-choices>
+        </xe-ui-select>
     </div>
 </div>
