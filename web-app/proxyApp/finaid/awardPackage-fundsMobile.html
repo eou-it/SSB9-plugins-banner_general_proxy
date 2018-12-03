@@ -8,7 +8,7 @@
         <tbody>
         <tr>
             <th>{{'proxy.awardPackage.status'|i18n}}</th>
-            <td class="currency-values">{{award.status ? award.status : '-'}}</td>
+            <td class="currency-values">{{award.status ? ('proxy.awardPackage.status.'+award.status|i18n) : '-'}}</td>
         </tr>
         <tr>
             <th>{{'proxy.awardPackage.offered'|i18n}}</th>
@@ -81,21 +81,13 @@
                 <span class="icon-collapseArrow"></span>
             </a>
         </h3>
-        <div class="collapse in" id="period{{$index}}">
+        <div class="collapse" id="period{{$index}}">
             <div ng-repeat="periodAward in period.periodAwards"  class="period-fund-container">
                 <table class="proxy-content-section proxy-content-item">
                     <caption class="year-award-fund">
                         {{'proxy.awardPackage.fund'|i18n}}<p>{{periodAward.fundTitle}}</p>
                     </caption>
                     <tbody>
-                    <!-- <tr> year-award-container
-                        <th>{{'proxy.awardPackage.status'|i18n}}</th>
-                        <td class="currency-values">{{periodAward.status}}</td>
-                    </tr>
-                    <tr>
-                        <th>{{'proxy.awardPackage.amount'|i18n}}</th>
-                        <td class="currency-values">{{periodAward.amount}}</td>
-                    </tr> {{'proxy.awardPackage.amount'|i18n}} -->
                     <tr>
                         <td class="bold-font">
                             {{'proxy.awardPackage.status'|i18n}}
@@ -123,7 +115,7 @@
                 <span class="icon-collapseArrow"></span>
             </a>
         </h3>
-        <div class="collapse in period-fund-container" id="fundTotals">
+        <div class="collapse period-fund-container" id="fundTotals">
             <table class="proxy-content-section proxy-content-item">
                 <thead>
                 <th>{{'proxy.awardPackage.fund'|i18n}}</th>

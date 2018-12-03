@@ -1503,7 +1503,23 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .awards-container.overflow > div.proxy-content-section {
-        overflow-x: scroll;
+        /*overflow-x: scroll;*/
+    }
+
+    .awards-container.overflow table th,
+    .awards-container.overflow table tr td,
+    .awards-container.overflow table > thead > tr > th {
+        padding: 1.5em 1em;
+    }
+
+    .awards-container.overflow table > thead > tr > th:first-child,
+    .awards-container.overflow table > tbody > tr > td:first-child {
+        padding-left: 1.5em;
+    }
+
+    .awards-container.overflow table > thead > tr > th:last-child,
+    .awards-container.overflow table > tbody > tr > td:last-child {
+        padding-right: 1.5em;
     }
 
     .msg-container {
