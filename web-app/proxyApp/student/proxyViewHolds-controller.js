@@ -11,5 +11,19 @@ proxyAppControllers.controller('proxyViewHoldsController',['$scope', '$rootScope
             $scope.holds = response;
         });
 
+        $scope.stringifyHoldsFor = function(hold) {
+            var translatedHolds = [];
+            _.each(hold.hold_for, function(val) {
+                translatedHolds.push($filter('i18n')('proxy.holds.type.'+ val));
+                }
+            );
+
+            return translatedHolds.join("|");
+        };
+
+        $scope.translateMobile = function(hold) {
+            return $scope.isMobileView() ? $filter('i18n')('proxy.holds.type.' + hold) : $filter('i18n')('proxy.holds.type.' + hold) + "|";
+
+        };
     }
 ]);
