@@ -1158,6 +1158,7 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .tile-content {
         max-width: 50%;
+        margin-top: 12px;
     }
 
     .tile-title,
@@ -1659,7 +1660,7 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .proxy-home-content {
-        margin: 30px 16px 100px;
+        margin: 30px 16px 200px;
     }
 
     .proxy-home-content .proxy-top-message-container {
