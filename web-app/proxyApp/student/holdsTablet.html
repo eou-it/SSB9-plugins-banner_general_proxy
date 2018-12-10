@@ -18,15 +18,15 @@
             </div>
         </div>
     </div>
-    <div class="proxy-content-item row" ng-repeat="hold in holds.rows">
-        <div class="proxy-content-item-label col-xs-12">{{'proxy.holds.label.holdType.colon'|i18n}}</div>
-        <div class="col-xs-12 break-long-words">{{hold.stvhold_desc}}</div>
+    <div class="proxy-content-section proxy-content-item row" ng-repeat="hold in holds.rows">
+        <div class="proxy-content-item-label col-xs-6">{{'proxy.holds.label.holdType.colon'|i18n}}</div>
+        <div class="col-xs-6 break-long-words">{{hold.stvhold_desc}}</div>
         <div class="subsection-divider"><span></span></div>
         <div class="clearfix subsection-divider-spacer"></div>
         <div class="proxy-content-item-label col-xs-6">{{'proxy.holds.label.fromDate.colon'|i18n}}</div>
         <div class="proxy-content-item-label col-xs-6">{{'proxy.holds.label.toDate.colon'|i18n}}</div>
-        <div class="col-xs-6">{{hold.r_from_date}}</div>
-        <div class="col-xs-6">{{hold.r_to_date}}</div>
+        <div class="col-xs-6 break-long-words">{{hold.r_from_date}}</div>
+        <div class="col-xs-6 break-long-words">{{hold.r_to_date}}</div>
         <div class="subsection-divider"><span></span></div>
         <div class="clearfix subsection-divider-spacer"></div>
         <div class="proxy-content-item-label col-xs-6">{{'proxy.holds.label.amount.colon'|i18n}}</div>

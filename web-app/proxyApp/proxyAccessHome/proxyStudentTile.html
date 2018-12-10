@@ -6,12 +6,8 @@
         <img ng-src="{{'images/icons/student.png'|webAppResourcePath}}"/>
     </div>
     <div class="tile-content">
-        <div class="tile-title">
+        <div class="tile-title break-long-words">
             {{'proxy.landingPage.label.proxy.for'|i18n}}<span class="student-name">{{proxyData.desc}}</span>
-        </div>
-        <div class="subsection-divider"><span></span></div>
-        <div class="tile-desc">
-            {{'proxy.landingPage.label.expand.to.view'|i18n}}
         </div>
     </div>
     <div ng-if="proxyData.active" class="select2-container top-level select-page">

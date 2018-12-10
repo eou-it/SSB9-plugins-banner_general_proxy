@@ -60,6 +60,7 @@ modules = {
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/breadcrumb-service.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/proxyApp-service.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/notificationcenter-service.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/proxyEmail-service.js']
 
         // Controllers
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/proxyLandingPage-controller.js']
