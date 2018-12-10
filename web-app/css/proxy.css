@@ -204,11 +204,6 @@ p.notification-msg {
     padding: 15px;
 }
 
-.hold-process-bubble {
-    display: inline-block;
-    line-height: 2.25em;
-}
-
 .proxy-content-item {
     background: #ffffff;
     margin-top: 20px;
@@ -217,7 +212,6 @@ p.notification-msg {
 
 .proxy-content-item-label {
     font-family: OpenSans-semibold;
-    margin-bottom: 14px;
 }
 
 .subsection-divider {
@@ -842,7 +836,7 @@ a.panel-title:active {
 
 /* Award Package - BEGIN */
 .awardPackage div.row,
-.awardPackage [class^="col-"], [class*=" col-"] {
+.awardPackage [class^="col-"] {
     padding: 0;
     margin: 0;
 }
@@ -1475,7 +1469,7 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     /* Award Package - BEGIN  */
     .awardPackage div.row,
-    .awardPackage [class^="col-"], [class*=" col-"] {
+    .awardPackage [class^="col-"] {
         padding: 0 10px;
     }
 

@@ -18,11 +18,11 @@ proxyAppControllers.controller('proxyViewHoldsController',['$scope', '$rootScope
                 }
             );
 
-            return translatedHolds.join("|");
+            return translatedHolds.join(" | ");
         };
 
-        $scope.translateMobile = function(hold) {
-            return $scope.isMobileView() ? $filter('i18n')('proxy.holds.type.' + hold) : $filter('i18n')('proxy.holds.type.' + hold) + "|";
+        $scope.translateHoldProcess = function(hold) {
+            return $filter('i18n')('proxy.holds.type.' + hold);
 
         };
     }
