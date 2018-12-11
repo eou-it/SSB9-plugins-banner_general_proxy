@@ -353,7 +353,7 @@ class ProxyController {
         def id = XssSanitizer.sanitize(params.id)
         def pidm = PersonUtility.getPerson(id)?.pidm
 
-        def result = generalSsbProxyService.getFinancialAidStatus(pidm, XssSanitizer.sanitize(params.aidYear))
+        def result = proxyFinAidService.getFinancialAidStatus(pidm, XssSanitizer.sanitize(params.aidYear))
         result.awardPackage?.each {
             if(it.amount != null) {
                 it.text = it.text + currencyFormatHelperService.formatCurrency(it.amount) + '.'

@@ -670,22 +670,6 @@ class GeneralSsbProxyService {
     }
 
 
-    def getFinancialAidStatus(def pidm, def aidYear = null) {
-        def finaidJson = ""
-        def sqlText = FinancialAidStatusApi.FINANCIAL_AID_SUMMARY
-
-        def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        sql.call(sqlText, [pidm, aidYear, Sql.VARCHAR
-        ]){ lv_finaid_json ->
-            finaidJson = lv_finaid_json
-        }
-
-        def resultMap = finaidJson ? new JsonSlurper().parseText(finaidJson) : [:]
-
-        resultMap
-    }
-
-
     /*
      * Private method to convert Date for birthday parameter. TODO
      */
