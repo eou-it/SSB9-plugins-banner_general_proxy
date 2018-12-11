@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <div class="proxy-content-item row" ng-repeat="hold in holds.rows">
+    <div class="proxy-content-section proxy-content-item row" ng-repeat="hold in holds.rows">
         <div class="proxy-content-item-label col-xs-12">{{'proxy.holds.label.holdType.colon'|i18n}}</div>
         <div class="col-xs-12 break-long-words">{{hold.stvhold_desc}}</div>
         <div class="subsection-divider"><span></span></div>
@@ -39,8 +39,8 @@
         <div class="proxy-content-item-label col-xs-6">{{'proxy.holds.label.processAffected.colon'|i18n}}</div>
         <div class="col-xs-6 break-long-words">{{hold.stvorig_desc}}</div>
         <div class="col-xs-6">
-            <div class="hold-process-bubble" ng-repeat="processAffected in hold.hold_for">
-                {{translateMobile(processAffected)}}
+            <div class="break-long-words" ng-repeat="processAffected in hold.hold_for">
+                {{translateHoldProcess(processAffected)}}
             </div>
         </div>
     </div>
