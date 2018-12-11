@@ -5,17 +5,12 @@ package net.hedtech.banner.general.proxy
 
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
-import net.hedtech.banner.proxy.api.AccountSummaryApi
-import net.hedtech.banner.proxy.api.FinAidAwardPackageApi
-import net.hedtech.banner.proxy.api.FinancialAidStatusApi
 import net.hedtech.banner.proxy.api.ProxyLandingPageApi
 import net.hedtech.banner.proxy.api.ProxyPersonalInformationApi
 import net.hedtech.banner.proxy.api.PinManagementApi
-import net.hedtech.banner.proxy.api.CourseScheduleApi
 
 import org.apache.log4j.Logger
 import net.hedtech.banner.i18n.MessageHelper
-import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.context.request.RequestContextHolder
 import oracle.jdbc.driver.OracleTypes
@@ -27,8 +22,6 @@ import java.text.SimpleDateFormat
 import net.hedtech.banner.general.system.State
 import net.hedtech.banner.general.system.Nation
 import net.hedtech.banner.general.system.County
-import net.hedtech.banner.general.system.SdaCrosswalkConversion
-import net.hedtech.banner.i18n.LocalizeUtil
 
 import net.hedtech.banner.exceptions.ApplicationException
 
