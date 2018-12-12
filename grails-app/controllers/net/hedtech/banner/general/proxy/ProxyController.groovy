@@ -25,6 +25,7 @@ class ProxyController {
     def termProxyService
     def gradesProxyService
     def proxyFinAidService
+    def proxyStudentService
     def proxyConfigurationService
     def currencyFormatHelperService
 
@@ -233,7 +234,7 @@ class ProxyController {
         def id = XssSanitizer.sanitize(params.id)
         def pidm = PersonUtility.getPerson(id)?.pidm
 
-        def result = generalSsbProxyService.getCourseSchedule(pidm, XssSanitizer.sanitize(params.date));
+        def result = proxyStudentService.getCourseSchedule(pidm, XssSanitizer.sanitize(params.date));
         result.hasDetailAccess = checkPageForAccess(id, '/ssb/proxy/courseScheduleDetail') != null
         
         //Logs the History for page Access
@@ -245,7 +246,7 @@ class ProxyController {
     def getCourseScheduleDetail() {
         def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
 
-        def result = generalSsbProxyService.getCourseScheduleDetail(
+        def result = proxyStudentService.getCourseScheduleDetail(
                 pidm,
                 XssSanitizer.sanitize(params.termCode),
                 XssSanitizer.sanitize(params.crn)
@@ -352,7 +353,7 @@ class ProxyController {
         def id = XssSanitizer.sanitize(params.id)
         def pidm = PersonUtility.getPerson(id)?.pidm
 
-        def result = generalSsbProxyService.getFinancialAidStatus(pidm, XssSanitizer.sanitize(params.aidYear))
+        def result = proxyFinAidService.getFinancialAidStatus(pidm, XssSanitizer.sanitize(params.aidYear))
         result.awardPackage?.each {
             if(it.amount != null) {
                 it.text = it.text + currencyFormatHelperService.formatCurrency(it.amount) + '.'
@@ -526,7 +527,7 @@ class ProxyController {
     def getAccountSummary() {
         def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
 
-        def result = generalSsbProxyService.getAccountSummary(pidm);
+        def result = proxyStudentService.getAccountSummary(pidm);
         result.accountBalTxt = currencyFormatHelperService.formatCurrency(result.accountBal)
         result.acctTotalTxt = currencyFormatHelperService.formatCurrency(result.acctTotal)
 

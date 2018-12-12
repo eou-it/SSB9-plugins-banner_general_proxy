@@ -37,41 +37,47 @@ class GradesProxyService {
     private final String OPTION_ALL_COURSES = '-2'
     private final int OPTION_ALL_COURSES_INT = -2
     private final String INSTITUTIONAL_GPA_RULE_MAP = 'institutionalGPARuleMap'
+
+    def proxyStudentService
     def session
     def sessionFactory
 
     def viewGrades(def params) {
-
-        session = RequestContextHolder.currentRequestAttributes().getSession()
-
-        def studentPidm = session."currentStudentPidm".toInteger()
-
-        params.levelCode = OPTION_ALL
-        params.studyPathCode = OPTION_ALL_COURSES
-
-        params.pageMaxSize = 10
-        params.pageOffset = 0
-
-        def filterData = prepareFilterData(params, studentPidm)
-        def pagingAndSortParams = preparePagingAndSortParams(params)
-        def courses = HistoryStudentCourseDetail.fetchSearchByPidmTermLevelAndStudyPath(filterData, pagingAndSortParams)
-        def courseDetails = new ArrayList(courses.size())
-        courses.each { it ->
-            CourseDetailDecorator courseDetail = new CourseDetailDecorator(it)
-            courseDetail.campusDescription = getCampusDescription(courseDetail.campusCode)
-            courseDetails.add(courseDetail)
+        if (!proxyStudentService.checkIfStudentInstalled()) {
+            return [:] as JSON
         }
-        def courseDetailsMap = getFormattedGpaInformationMap(courseDetails)
-        def totalCount = HistoryStudentCourseDetail.countAllByPidmTermLevelAndStudyPath(filterData)
+        else {
+            session = RequestContextHolder.currentRequestAttributes().getSession()
 
-        def model = [
-                success    : true,
-                data       : courseDetailsMap,
-                totalCount : totalCount,
-                pageOffset : params.pageOffset ?: 0,
-                pageMaxSize: params.pageMaxSize ?: 0
-        ]
-         model as JSON
+            def studentPidm = session."currentStudentPidm".toInteger()
+
+            params.levelCode = OPTION_ALL
+            params.studyPathCode = OPTION_ALL_COURSES
+
+            params.pageMaxSize = 10
+            params.pageOffset = 0
+
+            def filterData = prepareFilterData(params, studentPidm)
+            def pagingAndSortParams = preparePagingAndSortParams(params)
+            def courses = HistoryStudentCourseDetail.fetchSearchByPidmTermLevelAndStudyPath(filterData, pagingAndSortParams)
+            def courseDetails = new ArrayList(courses.size())
+            courses.each { it ->
+                CourseDetailDecorator courseDetail = new CourseDetailDecorator(it)
+                courseDetail.campusDescription = getCampusDescription(courseDetail.campusCode)
+                courseDetails.add(courseDetail)
+            }
+            def courseDetailsMap = getFormattedGpaInformationMap(courseDetails)
+            def totalCount = HistoryStudentCourseDetail.countAllByPidmTermLevelAndStudyPath(filterData)
+
+            def model = [
+                    success    : true,
+                    data       : courseDetailsMap,
+                    totalCount : totalCount,
+                    pageOffset : params.pageOffset ?: 0,
+                    pageMaxSize: params.pageMaxSize ?: 0
+            ]
+            model as JSON
+        }
     }
 
 
