@@ -40,7 +40,7 @@
         <div class="clearfix subsection-divider-spacer"></div>
         <div class="proxy-content-item-label col-xs-6">{{'proxy.holds.label.originator.colon'|i18n}}</div>
         <div class="proxy-content-item-label col-xs-6">{{'proxy.holds.label.processAffected.colon'|i18n}}</div>
-        <div class="proxy-content-item-value col-xs-6 break-long-words">{{hold.stvorig_desc}}</div>
+        <div class="proxy-content-item-value col-xs-6 break-long-words">{{hold.stvorig_desc|emptyValToDash}}</div>
         <div class="proxy-content-item-value col-xs-6">
             {{stringifyHoldsFor(hold)}}
         </div>

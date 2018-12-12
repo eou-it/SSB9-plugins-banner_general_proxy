@@ -37,10 +37,11 @@
         <div class="clearfix subsection-divider-spacer"></div>
         <div class="proxy-content-item-label col-xs-6">{{'proxy.holds.label.originator.colon'|i18n}}</div>
         <div class="proxy-content-item-label col-xs-6">{{'proxy.holds.label.processAffected.colon'|i18n}}</div>
-        <div class="col-xs-6 break-long-words">{{hold.stvorig_desc}}</div>
+        <div class="col-xs-6 break-long-words">{{hold.stvorig_desc|emptyValToDash}}</div>
         <div class="col-xs-6">
             <div class="break-long-words" ng-repeat="processAffected in hold.hold_for">
                 {{translateHoldProcess(processAffected)}}
+                <div ng-if="!$last" class="subsection-divider"><span class="tight"></span></div>
             </div>
         </div>
     </div>

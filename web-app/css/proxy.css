@@ -229,6 +229,11 @@ p.notification-msg {
     margin-bottom: 0.675em;
 }
 
+.subsection-divider span.tight {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
 .subsection-divider-spacer {
     height: 25px;
 }
