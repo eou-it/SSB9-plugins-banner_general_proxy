@@ -7,8 +7,15 @@ import net.hedtech.banner.student.history.HistoryTermForStudentGrades
 
 class TermProxyService {
 
+    def proxyStudentService
+
     def fetchTermList(def pidm, def searchString, def max, def offset) {
-        def  terms = HistoryTermForStudentGrades.fetchAllTermsByStudentPidmAndTerm(pidm, searchString, max, offset)
-        return terms
+        if (!proxyStudentService.checkIfStudentInstalled()) {
+            return []
+        }
+        else {
+            def terms = HistoryTermForStudentGrades.fetchAllTermsByStudentPidmAndTerm(pidm, searchString, max, offset)
+            return terms
+        }
     }
 }

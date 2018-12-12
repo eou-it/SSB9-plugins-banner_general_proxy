@@ -9,7 +9,7 @@ proxyApp.service( 'breadcrumbService', ['$filter',function ($filter) {
     this.reset = function() {
         constantBreadCrumb = [
             {
-                label: 'banner.generalssb.landingpage.title',
+                label: 'proxy.landingpage.title',
                 url: '/'
             }
         ];

@@ -204,11 +204,6 @@ p.notification-msg {
     padding: 15px;
 }
 
-.hold-process-bubble {
-    display: inline-block;
-    line-height: 2.25em;
-}
-
 .proxy-content-item {
     background: #ffffff;
     margin-top: 20px;
@@ -217,7 +212,6 @@ p.notification-msg {
 
 .proxy-content-item-label {
     font-family: OpenSans-semibold;
-    margin-bottom: 14px;
 }
 
 .subsection-divider {
@@ -233,6 +227,11 @@ p.notification-msg {
     float: left;
     margin-top: 1.0em;
     margin-bottom: 0.675em;
+}
+
+.subsection-divider span.tight {
+    margin-top: 3px;
+    margin-bottom: 3px;
 }
 
 .subsection-divider-spacer {
@@ -842,7 +841,7 @@ a.panel-title:active {
 
 /* Award Package - BEGIN */
 .awardPackage div.row,
-.awardPackage [class^="col-"], [class*=" col-"] {
+.awardPackage [class^="col-"] {
     padding: 0;
     margin: 0;
 }
@@ -1124,8 +1123,8 @@ a.breadcrumbButton.leaf-breadcrumb {
 /***********************/
 /* Media Query Section */
 /***********************/
-
 @media screen and (min-width:768px) {
+
     .proxy-page-body {
         padding: 22px 32px 100px;
     }
@@ -1158,6 +1157,7 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .tile-content {
         max-width: 50%;
+        margin-top: 12px;
     }
 
     .tile-title,
@@ -1474,7 +1474,7 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     /* Award Package - BEGIN  */
     .awardPackage div.row,
-    .awardPackage [class^="col-"], [class*=" col-"] {
+    .awardPackage [class^="col-"] {
         padding: 0 10px;
     }
 
@@ -1576,70 +1576,6 @@ a.breadcrumbButton.leaf-breadcrumb {
         right: 2.5em;
         position: relative;
     }
-    /* Course Schedule (week at a glance) - END */
-}
-
-@media screen and (min-width:1025px) {
-    #content.proxy {
-        margin-top: 0;
-    }
-
-    .proxy-mobile-visible,
-    .proxy-tablet-visible {
-        visibility: hidden;
-        position: absolute;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        height: 1px;
-        width: 1px;
-        margin: -1px;
-        padding: 0;
-        border: 0;
-    }
-
-    .proxy-desktop-visible {
-        visibility: visible;
-        position: relative;
-        overflow: auto;
-        height: auto;
-        width: auto;
-        margin: 0px;
-    }
-
-    /* Action Password Page - BEGIN */
-    .proxy-pin-mgmt.splashBg {
-        height: 360px;
-        width: 705px;
-        margin: 140px auto 0px;
-    }
-
-    .primary.submit-btn {
-        width: 36%;
-    }
-
-    .proxy-pin-mgmt.splashBg .copyright {
-        position: absolute;
-        bottom: 0;
-        margin-bottom: 2em;
-        margin-right: 3em;
-    }
-    /* Action Password Page - END   */
-
-    /* Reset PIN Page - END   */
-    .reset-pin.proxy-pin-mgmt.splashBg {
-        height: unset;
-        margin: 70px auto 0px;
-    }
-    /* Reset PIN Page - END   */
-
-    /* Course Schedule Details - BEGIN  */
-    .proxy-header-container {
-        display: inline-block;
-        float: left;
-        width: 100%;
-        padding: 0 20px;
-    }
-    /* Course Schedule Details - END  */
 }
 
 /*Tablet device*/
@@ -1675,7 +1611,7 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .proxy-home-content {
-        margin: 30px 16px 100px;
+        margin: 30px 16px 200px;
     }
 
     .proxy-home-content .proxy-top-message-container {
@@ -1747,4 +1683,68 @@ a.breadcrumbButton.leaf-breadcrumb {
         font-family: OpenSans-semibold;
         margin-right: 8px;
     }
+}
+
+/* Desktop */
+@media screen and (min-width:1025px) {
+    #content.proxy {
+        margin-top: 0;
+    }
+
+    .proxy-mobile-visible,
+    .proxy-tablet-visible {
+        visibility: hidden;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+    }
+
+    .proxy-desktop-visible {
+        visibility: visible;
+        position: relative;
+        overflow: auto;
+        height: auto;
+        width: auto;
+        margin: 0px;
+    }
+
+    /* Action Password Page - BEGIN */
+    .proxy-pin-mgmt.splashBg {
+        height: 360px;
+        width: 705px;
+        margin: 140px auto 0px;
+    }
+
+    .primary.submit-btn {
+        width: 36%;
+    }
+
+    .proxy-pin-mgmt.splashBg .copyright {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 2em;
+        margin-right: 3em;
+    }
+    /* Action Password Page - END   */
+
+    /* Reset PIN Page - END   */
+    .reset-pin.proxy-pin-mgmt.splashBg {
+        height: unset;
+        margin: 70px auto 0px;
+    }
+    /* Reset PIN Page - END   */
+
+    /* Course Schedule Details - BEGIN  */
+    .proxy-header-container {
+        display: inline-block;
+        float: left;
+        width: 100%;
+        padding: 0 20px;
+    }
+
 }

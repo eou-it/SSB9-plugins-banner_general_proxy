@@ -39,12 +39,8 @@
             <td>{{hold.r_to_date}}</td>
             <td>{{hold.r_amount_owed}}</td>
             <td>{{hold.r_reason}}</td>
-            <td>{{hold.stvorig_desc}}</td>
-            <td>
-                <div class="hold-process-bubble" ng-repeat="processAffected in hold.hold_for">
-                    <xe-badge xe-label="{{processAffected}}" xe-type="rejected"></xe-badge>
-                </div>
-            </td>
+            <td>{{hold.stvorig_desc|emptyValToDash}}</td>
+            <td>{{stringifyHoldsFor(hold)}}</td>
         </tr>
     </table>
 </div>

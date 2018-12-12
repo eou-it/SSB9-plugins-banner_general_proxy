@@ -1,8 +1,9 @@
 /********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$rootScope','$state','$filter','$location','proxyAppService','notificationCenterService',
-    function ($scope, $rootScope, $state, $filter, $location, proxyAppService, notificationCenterService) {
+proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$rootScope','$state','$filter','$location',
+    'proxyAppService','notificationCenterService','proxyEmailService',
+    function ($scope, $rootScope, $state, $filter, $location, proxyAppService, notificationCenterService, proxyEmailService) {
 
         var init = function () {
             $scope.getPersonalInfo();
@@ -106,7 +107,8 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
         };
 
         $scope.save = function() {
-            var profile = {};
+            var profile = {},
+                errorMsg;
 
             _.each(Object.keys($scope.profileElements), function(it) {
                 profile[it] = $scope.profileElements[it].model
@@ -122,6 +124,17 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     "/" + $scope.proxyProfile.p_birth_date.getUTCFullYear().toString();
 
                 profile.p_birth_date = str;
+            }
+
+            if (profile.p_email_address) {
+                errorMsg = proxyEmailService.getErrorEmailAddress(profile.p_email_address);
+
+                if (errorMsg) {
+                    notificationCenterService.clearNotifications();
+                    notificationCenterService.addNotification(errorMsg, "error", true);
+
+                    return; // DO NOT UPDATE
+                }
             }
 
             proxyAppService.updateProxyPersonalInfo(profile).$promise.then(function(response) {

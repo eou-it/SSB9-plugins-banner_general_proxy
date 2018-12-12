@@ -14,6 +14,12 @@ proxyAppControllers.controller('proxyViewGradesController',['$scope', 'proxyAppS
         };
 
         $scope.registered = false;
+        $scope.holds = true;
+
+
+        proxyAppService.getHolds({id: sessionStorage.getItem("id")}).$promise.then(function(response) {
+            $scope.holds = response.rows.length > 0;
+        });
 
 
         proxyAppService.getTermsForRegistration().$promise.then(function(response) {
