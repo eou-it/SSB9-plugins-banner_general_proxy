@@ -1,7 +1,7 @@
 <!--*******************************************************************************
   Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
-<div ng-if="awardPackage.awardInfo.aidYearAwards" class="awards-container overflow">
+<div ng-if="awardPackage.awardInfo.aidYearAwards" class="awards-container proxy-desktop-visible">
     <div class="proxy-content-section proxy-content-item">
         <table>
             <caption>{{'proxy.awardPackage.aidAward'|i18n:[awardPackage.aidYearDesc]}}</caption>
@@ -47,6 +47,53 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+<div ng-if="awardPackage.awardInfo.aidYearAwards" class="awards-container compact proxy-tablet-visible">
+    <h2 class="proxy-content-section">{{'proxy.awardPackage.aidAward'|i18n:[awardPackage.aidYearDesc]}}</h2>
+    <div ng-repeat="award in awardPackage.awardInfo.aidYearAwards.aidAwards" class="proxy-content-section proxy-content-item row">
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.fund'|i18n}}</div>
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.status'|i18n}}</div>
+        <div class="proxy-content-item-label col-xs-3 offset-3-flip">{{'proxy.awardPackage.offered'|i18n}}</div>
+        <div class="proxy-content-item col-xs-3 break-long-words">{{award.fundTitle}}</div>
+        <div class="proxy-content-item col-xs-3 break-long-words">{{award.status ? ('proxy.awardPackage.status.'+award.status|i18n) : '-'}}</div>
+        <div class="proxy-content-item col-xs-3 offset-3-flip break-long-words">{{award.offerAmt ? award.offerAmt : '-'}}</div>
+        <div class="subsection-divider"><span></span></div>
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.accepted'|i18n}}</div>
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.declined'|i18n}}</div>
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.cancelled'|i18n}}</div>
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.total'|i18n}}</div>
+        <div class="proxy-content-item col-xs-3 break-long-words">{{award.acceptAmt ? award.acceptAmt : '-'}}</div>
+        <div class="proxy-content-item col-xs-3 break-long-words">{{award.declineAmt ? award.declineAmt : '-'}}</div>
+        <div class="proxy-content-item col-xs-3 break-long-words">{{award.cancelAmt ? award.cancelAmt : '-'}}</div>
+        <div class="proxy-content-item col-xs-3 break-long-words">{{award.amount}}</div>
+    </div>
+    <div class="proxy-content-section proxy-content-item row">
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.fund'|i18n}}</div>
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.status'|i18n}}</div>
+        <div class="proxy-content-item-label col-xs-3 offset-3-flip">{{'proxy.awardPackage.offered'|i18n}}</div>
+        <div class="proxy-content-item col-xs-3 break-long-words bold-font">{{'proxy.awardPackage.total'|i18n}}</div>
+        <div class="proxy-content-item col-xs-3 break-long-words">-</div>
+        <div class="proxy-content-item col-xs-3 offset-3-flip break-long-words bold-font">
+            {{awardPackage.awardInfo.aidYearAwards.totalOfferAmtTxt ? awardPackage.awardInfo.aidYearAwards.totalOfferAmtTxt : '-'}}
+        </div>
+        <div class="subsection-divider"><span></span></div>
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.accepted'|i18n}}</div>
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.declined'|i18n}}</div>
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.cancelled'|i18n}}</div>
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.total'|i18n}}</div>
+        <div class="proxy-content-item col-xs-3 break-long-words bold-font">
+            {{awardPackage.awardInfo.aidYearAwards.totalAcceptAmtTxt ? awardPackage.awardInfo.aidYearAwards.totalAcceptAmtTxt : '-'}}
+        </div>
+        <div class="proxy-content-item col-xs-3 break-long-words bold-font">
+            {{awardPackage.awardInfo.aidYearAwards.totalDeclineAmtTxt ? awardPackage.awardInfo.aidYearAwards.totalDeclineAmtTxt : '-'}}
+        </div>
+        <div class="proxy-content-item col-xs-3 break-long-words bold-font">
+            {{awardPackage.awardInfo.aidYearAwards.totalCancelAmtTxt ? awardPackage.awardInfo.aidYearAwards.totalCancelAmtTxt : '-'}}
+        </div>
+        <div class="proxy-content-item col-xs-3 break-long-words bold-font">
+            {{awardPackage.awardInfo.aidYearAwards.totalAmtTxt}}
+        </div>
     </div>
 </div>
 

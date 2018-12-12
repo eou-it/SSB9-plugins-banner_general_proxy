@@ -76,7 +76,7 @@
     <h2 class="period-award-title">{{'proxy.awardPackage.aidAwardTerm'|i18n:[awardPackage.aidYearDesc]}}</h2>
     <div ng-repeat="period in awardPackage.periodInfo.periods" class="period">
         <h3>
-            <a href="" data-toggle="collapse" data-target="#period{{$index}}" class="panel-title">
+            <a href="" data-toggle="collapse" data-target="#period{{$index}}" class="panel-title collapsed">
                 {{period.termDesc}}
                 <span class="icon-collapseArrow"></span>
             </a>
@@ -110,7 +110,7 @@
     </div>
     <div>
         <h3>
-            <a href="" data-toggle="collapse" data-target="#fundTotals" class="panel-title">
+            <a href="" data-toggle="collapse" data-target="#fundTotals" class="panel-title collapsed">
                 {{'proxy.awardPackage.totals'|i18n}}
                 <span class="icon-collapseArrow"></span>
             </a>

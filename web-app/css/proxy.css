@@ -932,7 +932,7 @@ th.currency-values {
     padding: 0;
 }
 
-td.bold-font {
+td.bold-font, .bold-font{
     font-family: OpenSans-semibold;
 }
 
@@ -1482,12 +1482,23 @@ a.breadcrumbButton.leaf-breadcrumb {
         clear:left;
     }
 
+    .offset-3-flip {
+        margin-right: 25%;
+    }
+
     .awardPackage div.row.statuses {
         padding: 0;
     }
 
     .awardPackage div.proxy-content-section {
         margin-top: 2em;
+    }
+
+    .awardPackage h2.proxy-content-section {
+        margin-top: 2em;
+        font-size: 1.2em;
+        font-family: OpenSans-semibold;
+        padding: 1.25em;
     }
 
     .mini-tables.awardPackage .award-info > div:first-child {
@@ -1499,26 +1510,36 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .awards-container {
-        padding: 0 20px;
+        padding: 0 20px 10px;
     }
 
-    .awards-container.overflow > div.proxy-content-section {
-        /*overflow-x: scroll;*/
+    .awards-container.proxy-tablet-visible .proxy-content-item-label {
+        padding-left: 20px;
+        margin-top: 1em;
     }
 
-    .awards-container.overflow table th,
-    .awards-container.overflow table tr td,
-    .awards-container.overflow table > thead > tr > th {
+    .awards-container.proxy-tablet-visible .proxy-content-item .proxy-content-item {
+        padding-left: 20px;
+        margin-top: 0;
+    }
+
+    .awards-container.proxy-tablet-visible .subsection-divider span {
+        margin-bottom: 0;
+    }
+
+    .awards-container.compact table th,
+    .awards-container.compact table tr td,
+    .awards-container.compact table > thead > tr > th {
         padding: 1.5em 1em;
     }
 
-    .awards-container.overflow table > thead > tr > th:first-child,
-    .awards-container.overflow table > tbody > tr > td:first-child {
+    .awards-container.compact table > thead > tr > th:first-child,
+    .awards-container.compact table > tbody > tr > td:first-child {
         padding-left: 1.5em;
     }
 
-    .awards-container.overflow table > thead > tr > th:last-child,
-    .awards-container.overflow table > tbody > tr > td:last-child {
+    .awards-container.compact table > thead > tr > th:last-child,
+    .awards-container.compact table > tbody > tr > td:last-child {
         padding-right: 1.5em;
     }
 
@@ -1682,6 +1703,10 @@ a.breadcrumbButton.leaf-breadcrumb {
     .course-title-label {
         font-family: OpenSans-semibold;
         margin-right: 8px;
+    }
+
+    .awards-container.compact > div.proxy-content-section {
+        padding: 0 0 1em 0;
     }
 }
 
