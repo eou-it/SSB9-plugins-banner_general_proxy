@@ -260,8 +260,8 @@ declare
 -- ==================================================
       row_count := 0;
 
-      lv_sched_json := '{"schedStartDate":"' || to_char(template_start_date, 'MM/DD/YYYY') || '", ';
-      lv_sched_json := lv_sched_json || '"schedEndDate":"' || to_char(template_end_date, 'MM/DD/YYYY') || '", ';
+      lv_sched_json := '{"schedStartDate":"' || to_char(template_start_date, 'MM/DD/YYYY', 'NLS_CALENDAR = Gregorian') || '", ';
+      lv_sched_json := lv_sched_json || '"schedEndDate":"' || to_char(template_end_date, 'MM/DD/YYYY', 'NLS_CALENDAR = Gregorian') || '", ';
       lv_sched_json := lv_sched_json || '"rows": [';
 
 
@@ -370,8 +370,8 @@ declare
          lv_sched_json := lv_sched_json || '"meeting_fri_day": "' || meeting_tab (row_count).fri_day || '",';
          lv_sched_json := lv_sched_json || '"meeting_sat_day": "' || meeting_tab (row_count).sat_day || '",';
          lv_sched_json := lv_sched_json || '"meeting_sun_day": "' || meeting_tab (row_count).sun_day || '",';
-         lv_sched_json := lv_sched_json || '"meeting_ssrmeet_start_date": "' || to_char(meeting_tab (row_count).ssrmeet_start_date,'MM/DD/YYYY') || '",';
-         lv_sched_json := lv_sched_json || '"meeting_ssrmeet_end_date": "' || to_char(meeting_tab (row_count).ssrmeet_end_date,'MM/DD/YYYY') || '",';
+         lv_sched_json := lv_sched_json || '"meeting_ssrmeet_start_date": "' || to_char(meeting_tab (row_count).ssrmeet_start_date,'MM/DD/YYYY', 'NLS_CALENDAR = Gregorian') || '",';
+         lv_sched_json := lv_sched_json || '"meeting_ssrmeet_end_date": "' || to_char(meeting_tab (row_count).ssrmeet_end_date,'MM/DD/YYYY', 'NLS_CALENDAR = Gregorian') || '",';
          lv_sched_json := lv_sched_json || '"meeting_sfrareg_start_date": "' || meeting_tab (row_count).sfrareg_start_date || '",';
          lv_sched_json := lv_sched_json || '"meeting_sfrareg_completion_date": "' || meeting_tab (row_count).sfrareg_completion_date || '",';
          lv_sched_json := lv_sched_json || '"meeting_begin_time": "' || meeting_tab (row_count).begin_time || '",';

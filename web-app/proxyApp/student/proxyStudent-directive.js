@@ -23,6 +23,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
     var weekOfText = $filter('i18n')('proxy.schedule.weekOf'),
         goToText = $filter('i18n')('proxy.schedule.goTo'),
         datePlaceholderText = $filter('i18n')('default.date.format.watermark'),
+        locale = $('meta[name=locale]').attr("content"),
         mobileOptions = {
             defaultView: 'agendaTwoDay',
             aspectRatio: 0.8,
@@ -125,14 +126,14 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     columnHeaderFormat: 'DD ddd',
                     timeFormat: 'h:mm', // 5:00 - 6:30,
                     titleFormat: '['+ weekOfText +'] MMMM DD, YYYY',
-
                     firstDay: 1,
+                    isRTL: $.i18n.prop('default.language.direction') == 'rtl',
+                    locale: locale,
                     dayNames: $.i18n.prop("default.gregorian.dayNames").split(','),
                     dayNamesShort: $.i18n.prop("default.gregorian.dayNamesShort").split(','),
                     monthNames: $.i18n.prop("default.gregorian.monthNames").split(','),
                     monthNamesShort: $.i18n.prop("default.gregorian.monthNamesShort").split(','),
                     axisFormat: $.i18n.prop('events.row.time.format'),
-                    isRTL: $.i18n.prop('default.language.direction') == 'rtl',
                     events: function (start, end, timezone, callback) {
                         //var events = JSON.parse(sessionStorage.getItem("classScheduleEvents"));
                         var events;

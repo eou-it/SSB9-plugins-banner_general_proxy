@@ -51,6 +51,7 @@ modules = {
 
         resource url: [plugin: 'banner-general-proxy', file: 'js/lib/moment.min.js']
         resource url: [plugin: 'banner-general-proxy', file: 'js/fullcalendar/fullcalendar.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'js/fullcalendar/locale-all.js']
         resource url:[plugin:"banner-general-proxy", file:"css/fontawesome/css/font-awesome.css"]
 
         //Main configuration file
