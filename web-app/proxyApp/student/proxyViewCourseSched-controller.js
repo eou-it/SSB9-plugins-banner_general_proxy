@@ -16,7 +16,8 @@ proxyAppControllers.controller('proxyViewCourseSchedController',['$scope', '$roo
 
         $scope.goToDate = function(date) {
             if(date) {
-                $('#calendar').fullCalendar( 'gotoDate', date);
+                var isoDate = moment(proxyAppService.stringToDate(date));
+                $('#calendar').fullCalendar( 'gotoDate', isoDate);
                 $scope.tgtDate = date;
             }
         };

@@ -11,30 +11,31 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
         fetchStudentListForProxy = $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'getStudentListForProxy'}, {query: {method:'GET', isArray:false}});
 
-       var dateFmt,
-           calendar = (function(){
-                   var locale = $('meta[name=locale]').attr("content");
+    var dateFmt,
+        calendar = (function(){
+            var locale = $('meta[name=locale]').attr("content");
 
-                        if(locale.split('-')[0] === 'ar') {
-                           dateFmt = $filter('i18n')('default.date.format');
-                            return $.calendars.instance('islamic');
-                        }
-                   else {
-                            dateFmt = $filter('i18n')('default.date.format').toLowerCase();
-                            return $.calendars.instance();
-                        }
-                }());
-       
+            if(locale.split('-')[0] === 'ar') {
+                dateFmt = $filter('i18n')('default.date.format');
+                return $.calendars.instance('islamic');
+            }
+            else {
+                dateFmt = $filter('i18n')('default.date.format').toLowerCase();
+                return $.calendars.instance();
+            }
+        }());
 
-       this.stringToDate = function (date) {
-               var result;
-               try {
-                   result = calendar.parseDate(dateFmt, date).toJSDate();
-                       return result;
-                   }
-               catch (exception) {
-                       return null;}
-           };
+
+    this.stringToDate = function (date) {
+        var result;
+        try {
+            result = calendar.parseDate(dateFmt, date).toJSDate();
+            return result;
+        }
+        catch (exception) {
+            return null;
+        }
+    };
 
 
     this.config = null;
