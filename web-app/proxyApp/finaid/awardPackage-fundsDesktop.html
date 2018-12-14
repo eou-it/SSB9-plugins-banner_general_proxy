@@ -54,34 +54,37 @@
     <div ng-repeat="award in awardPackage.awardInfo.aidYearAwards.aidAwards" class="proxy-content-section proxy-content-item row">
         <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.fund'|i18n}}</div>
         <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.status'|i18n}}</div>
-        <div class="proxy-content-item-label col-xs-3 offset-3-flip">{{'proxy.awardPackage.offered'|i18n}}</div>
+        <div class="proxy-content-item-label col-xs-3 col-xs-offset-3">{{'proxy.awardPackage.total'|i18n}}</div>
         <div class="proxy-content-item col-xs-3 break-long-words">{{award.fundTitle}}</div>
         <div class="proxy-content-item col-xs-3 break-long-words">{{award.status ? ('proxy.awardPackage.status.'+award.status|i18n) : '-'}}</div>
-        <div class="proxy-content-item col-xs-3 offset-3-flip break-long-words">{{award.offerAmt ? award.offerAmt : '-'}}</div>
+        <div class="proxy-content-item col-xs-3 col-xs-offset-3 break-long-words">{{award.amount}}</div>
         <div class="subsection-divider"><span></span></div>
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.offered'|i18n}}</div>
         <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.accepted'|i18n}}</div>
         <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.declined'|i18n}}</div>
         <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.cancelled'|i18n}}</div>
-        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.total'|i18n}}</div>
+        <div class="proxy-content-item col-xs-3 break-long-words">{{award.offerAmt ? award.offerAmt : '-'}}</div>
         <div class="proxy-content-item col-xs-3 break-long-words">{{award.acceptAmt ? award.acceptAmt : '-'}}</div>
         <div class="proxy-content-item col-xs-3 break-long-words">{{award.declineAmt ? award.declineAmt : '-'}}</div>
         <div class="proxy-content-item col-xs-3 break-long-words">{{award.cancelAmt ? award.cancelAmt : '-'}}</div>
-        <div class="proxy-content-item col-xs-3 break-long-words">{{award.amount}}</div>
     </div>
     <div class="proxy-content-section proxy-content-item row">
         <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.fund'|i18n}}</div>
         <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.status'|i18n}}</div>
-        <div class="proxy-content-item-label col-xs-3 offset-3-flip">{{'proxy.awardPackage.offered'|i18n}}</div>
+        <div class="proxy-content-item-label col-xs-3 col-xs-offset-3">{{'proxy.awardPackage.total'|i18n}}</div>
         <div class="proxy-content-item col-xs-3 break-long-words bold-font">{{'proxy.awardPackage.total'|i18n}}</div>
         <div class="proxy-content-item col-xs-3 break-long-words">-</div>
-        <div class="proxy-content-item col-xs-3 offset-3-flip break-long-words bold-font">
-            {{awardPackage.awardInfo.aidYearAwards.totalOfferAmtTxt ? awardPackage.awardInfo.aidYearAwards.totalOfferAmtTxt : '-'}}
+        <div class="proxy-content-item col-xs-3 col-xs-offset-3 break-long-words bold-font">
+            {{awardPackage.awardInfo.aidYearAwards.totalAmtTxt}}
         </div>
         <div class="subsection-divider"><span></span></div>
+        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.offered'|i18n}}</div>
         <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.accepted'|i18n}}</div>
         <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.declined'|i18n}}</div>
         <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.cancelled'|i18n}}</div>
-        <div class="proxy-content-item-label col-xs-3">{{'proxy.awardPackage.total'|i18n}}</div>
+        <div class="proxy-content-item col-xs-3 break-long-words bold-font">
+            {{awardPackage.awardInfo.aidYearAwards.totalOfferAmtTxt ? awardPackage.awardInfo.aidYearAwards.totalOfferAmtTxt : '-'}}
+        </div>
         <div class="proxy-content-item col-xs-3 break-long-words bold-font">
             {{awardPackage.awardInfo.aidYearAwards.totalAcceptAmtTxt ? awardPackage.awardInfo.aidYearAwards.totalAcceptAmtTxt : '-'}}
         </div>
@@ -90,9 +93,6 @@
         </div>
         <div class="proxy-content-item col-xs-3 break-long-words bold-font">
             {{awardPackage.awardInfo.aidYearAwards.totalCancelAmtTxt ? awardPackage.awardInfo.aidYearAwards.totalCancelAmtTxt : '-'}}
-        </div>
-        <div class="proxy-content-item col-xs-3 break-long-words bold-font">
-            {{awardPackage.awardInfo.aidYearAwards.totalAmtTxt}}
         </div>
     </div>
 </div>
@@ -115,14 +115,14 @@
                     <td class=""></td>
                 </tr>
                 <tr>
-                    <td>{{'proxy.awardPackage.status'|i18n}}</td>
+                    <td class="bold-font">{{'proxy.awardPackage.status'|i18n}}</td>
                     <td ng-repeat="period in awardPackage.periodInfo.periods">
                         {{getFund(period, fund).status}}
                     </td>
                     <td></td>
                 </tr>
                 <tr ng-repeat-end>
-                    <td>{{'proxy.awardPackage.amount'|i18n}}</td>
+                    <td class="bold-font">{{'proxy.awardPackage.amount'|i18n}}</td>
                     <td ng-repeat="period in awardPackage.periodInfo.periods">
                         {{getFund(period, fund).amount ? getFund(period, fund).amount : '-'}}
                     </td>
