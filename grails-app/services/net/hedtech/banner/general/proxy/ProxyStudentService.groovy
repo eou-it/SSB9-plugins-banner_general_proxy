@@ -219,7 +219,7 @@ class ProxyStudentService {
         registrationMap.id = id
         registrationMap.title = title
         registrationMap.startCal = startCal
-        registrationMap.start = startCal.time.format(LocalizeUtil.message("default.date.time.ISO8601.format", null, LocaleContextHolder.getLocale()))
+        registrationMap.start = startCal.time.format("yyyy-MM-dd'T'HH:mm:ss")
         endCal.set(Calendar.HOUR_OF_DAY, endTime.substring(0, 2).toInteger())
         endCal.set(Calendar.MINUTE, endTime.substring(2, 4).toInteger())
         registrationMap.endCal = endCal
