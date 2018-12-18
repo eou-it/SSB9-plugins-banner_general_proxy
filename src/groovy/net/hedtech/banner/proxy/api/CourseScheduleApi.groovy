@@ -235,6 +235,7 @@ declare
 -- The template end dates can be derived as one week before
 -- the start dates.
 -- ==================================================
+      dbms_session.set_nls('NLS_CALENDAR',''''||'GREGORIAN'||'''');
       lv_temp_fmt := twbklibs.date_input_fmt;
       twbklibs.date_input_fmt := 'MM/DD/YYYY';
 
@@ -380,7 +381,7 @@ declare
          lv_sched_json := lv_sched_json || '"meeting_room_code": "' || meeting_tab (row_count).room_code || '",';
          lv_sched_json := lv_sched_json || '"meeting_mtyp_code": "' || meeting_tab (row_count).mtyp_code || '",';
          lv_sched_json := lv_sched_json || '"meeting_gtvmtyp_code": "' || meeting_tab (row_count).gtvmtyp_desc || '",';
-         lv_sched_json := lv_sched_json || '"courseTitle": "' || bwcklibs.f_course_title (meeting_tab (row_count).term_code, meeting_tab (row_count).crn) || '",';
+         lv_sched_json := lv_sched_json || '"courseTitle": "' || bwcklibs.f_course_title (meeting_tab (row_count).term_code, meeting_tab (row_count).crn) || '"';
 
          lv_sched_json := lv_sched_json || '}';
 
