@@ -51,7 +51,6 @@ modules = {
 
         resource url: [plugin: 'banner-general-proxy', file: 'js/lib/moment.min.js']
         resource url: [plugin: 'banner-general-proxy', file: 'js/fullcalendar/fullcalendar.js']
-        //resource url: [plugin: 'banner-general-proxy', file: 'js/fullcalendar/locale-all.js']
         resource url:[plugin:"banner-general-proxy", file:"css/fontawesome/css/font-awesome.css"]
 
         //Main configuration file
@@ -104,7 +103,8 @@ modules = {
     'proxyAppRTL' {
         dependsOn "bannerWebRTL, proxyApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsRTL"
         // CSS
-        resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar-rtl.css'], attrs: [media: 'screen, projection']
+        resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar.css'], attrs: [media: 'screen, projection']
+        resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar-rtl-patch.css'], attrs: [media: 'screen, projection']
 
         resource url: [plugin: 'banner-general-proxy', file: 'css/proxy-rtl.css'], attrs: [media: 'screen, projection']
         resource url: [plugin: 'banner-general-proxy', file: 'css/proxy-patch-rtl.css'], attrs: [media: 'screen, projection']
