@@ -108,6 +108,16 @@ BEGIN
                                  p_pin_disabled_ind   => 'N',
                                  p_email_address      => lv_GPBELTR_rec.R_PROXY_NEW_DATA,
                                  p_user_id            => USER);
+                                 
+               -- Invalidate any outstanding actions related to changing e-mail address
+               -- The new e-mail action can override a cancel e-mail action
+               UPDATE GPBELTR
+                  SET GPBELTR_CTYP_EXE_DATE = SYSDATE,
+                      GPBELTR_ACTIVITY_DATE = SYSDATE
+                WHERE GPBELTR_CTYP_CODE = 'CANCEL_EMAIL_NOA'
+                      AND GPBELTR_CTYP_EXE_DATE IS NULL
+                      AND GPBELTR_PROXY_IDM = lv_GPBELTR_rec.R_PROXY_IDM;
+                      
             bwgkprxy.P_MatchLoad (lv_GPBELTR_rec.R_PROXY_IDM);
             gb_common.P_Commit;
          ELSIF lv_GPBELTR_rec.R_CTYP_CODE = 'CANCEL_EMAIL_NOA' or lv_GPBELTR_rec.R_CTYP_CODE = 'CANCEL_EMAIL'
