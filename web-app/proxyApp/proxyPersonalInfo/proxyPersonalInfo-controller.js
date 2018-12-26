@@ -103,6 +103,36 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 $scope.profileElements['p_sex'].isWidget = true;
 
                 $scope.profileElements['p_opt_out_adv_date'].isWidget = true;
+
+                // assign placeholders
+
+                $scope.profileElements['p_name_prefix'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_name_prefix');
+                $scope.profileElements['p_first_name'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_first_name');
+                $scope.profileElements['p_mi'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_mi');
+                $scope.profileElements['p_surname_prefix'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_surname_prefix');
+                $scope.profileElements['p_last_name'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_last_name');
+                $scope.profileElements['p_name_suffix'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_name_suffix');
+                $scope.profileElements['p_pref_first_name'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_pref_first_name');
+                $scope.profileElements['p_email_address'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_email_address');
+                $scope.profileElements['p_ctry_code_phone'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_ctry_code_phone');
+                $scope.profileElements['p_phone_area'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_phone_area');
+                $scope.profileElements['p_phone_number'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_phone_number');
+                $scope.profileElements['p_phone_ext'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_phone_ext');
+                $scope.profileElements['p_house_number'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_house_number');
+                $scope.profileElements['p_street_line1'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_street_line1');
+                $scope.profileElements['p_street_line2'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_street_line2');
+                $scope.profileElements['p_street_line3'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_street_line3');
+                $scope.profileElements['p_street_line4'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_street_line4');
+                $scope.profileElements['p_street_line4'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_street_line4');
+                $scope.profileElements['p_city'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_city');
+                $scope.profileElements['p_stat_code'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_stat_code');
+                $scope.profileElements['p_zip'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_zip');
+                $scope.profileElements['p_natn_code'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_natn_code');
+                $scope.profileElements['p_cnty_code'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_cnty_code');
+                $scope.profileElements['p_sex'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_sex');
+                $scope.profileElements['p_birth_date'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_birth_date');
+                $scope.profileElements['p_ssn'].placeholder = $filter('i18n')('proxy.personalinformation.placeholder.p_ssn');
+
             });
         };
 
