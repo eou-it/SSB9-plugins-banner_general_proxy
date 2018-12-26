@@ -139,7 +139,7 @@ BEGIN
                UPDATE GPBELTR
                   SET GPBELTR_CTYP_EXE_DATE = SYSDATE,
                       GPBELTR_ACTIVITY_DATE = SYSDATE
-                WHERE     GPBELTR_CTYP_CODE = 'NEW_EMAIL'
+                WHERE     GPBELTR_CTYP_CODE = 'NEW_EMAIL_NOA'
                       AND GPBELTR_CTYP_EXE_DATE IS NULL
                       AND GPBELTR_PROXY_IDM = lv_GPBELTR_rec.R_PROXY_IDM;
 
