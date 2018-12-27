@@ -31,6 +31,11 @@ class ProxyController {
 
     def beforeInterceptor = [action:this.&studentIdCheck]
 
+    private final static String AWARD_PACKAGE_URL = '/ssb/proxy/awardPackage';
+    private final static String ACCOUNT_SUMMARY_URL = '/ssb/proxy/acctsumm';
+    private final static String AWARD_HISTORY_URL = '/ssb/proxy/awardhist';
+
+
     private getAllStudentsInSingleList() {
         def students = []
         students.addAll(session["students"]?.students.active)
@@ -354,46 +359,53 @@ class ProxyController {
         def pidm = PersonUtility.getPerson(id)?.pidm
 
         def result = proxyFinAidService.getFinancialAidStatus(pidm, XssSanitizer.sanitize(params.aidYear))
-        result.awardPackage?.each {
-            if(it.amount != null) {
-                it.text = it.text + currencyFormatHelperService.formatCurrency(it.amount) + '.'
+
+        if (result.awardPackage) {
+            if(result.awardPackage.amount != null) {
+                result.awardPackage.textParams = [currencyFormatHelperService.formatCurrency(result.awardPackage.amount)]
             }
-            if(it.url != null) {
-                it.hasAccess = checkPageForAccess(id, '/ssb/proxy/awardPackage') != null
-                if(it.hasAccess) {
-                    it.url = '/ssb/proxy/awardPackage'
+
+            result.awardPackage.remove('amount')
+
+            if (result.awardPackage.url) {
+                result.awardPackage.hasAccess = checkPageForAccess(id, AWARD_PACKAGE_URL) != null
+
+                if(result.awardPackage.hasAccess) {
+                    result.awardPackage.url = AWARD_PACKAGE_URL
                 }
                 else {
-                    it.remove('url')
+                    result.awardPackage.remove('url')
                 }
             }
         }
-        result.costOfAttendance?.each {
-            if(it.amount != null) {
-                it.text = it.text + currencyFormatHelperService.formatCurrency(it.amount) + '.'
+
+        if (result.costOfAttendance) {
+            if(result.costOfAttendance.amount != null) {
+                result.costOfAttendance.textParams = [currencyFormatHelperService.formatCurrency(result.costOfAttendance.amount)]
+            }
+
+            result.costOfAttendance.remove('amount')
+        }
+
+        if(result.financialAidHistory?.url) {
+            result.financialAidHistory.hasAccess = checkPageForAccess(id, AWARD_HISTORY_URL) != null
+
+            if(result.financialAidHistory.hasAccess) {
+                result.financialAidHistory.url = AWARD_HISTORY_URL
+            }
+            else {
+                result.financialAidHistory.remove('url')
             }
         }
 
+        if(result.accountSummary?.url) {
+            result.accountSummary.hasAccess = checkPageForAccess(id, ACCOUNT_SUMMARY_URL) != null
 
-        if(result.financialAidHistory) {
-            def segment = result.financialAidHistory.find { it.url != null }
-            segment.hasAccess = checkPageForAccess(id, '/ssb/proxy/awardhist') != null
-            if(segment.hasAccess) {
-                segment.url = '/ssb/proxy/awardhist'
+            if(result.accountSummary.hasAccess) {
+                result.accountSummary.url = ACCOUNT_SUMMARY_URL
             }
             else {
-                result.financialAidHistory = null
-            }
-        }
-
-        if(result.accountSummary) {
-            def segment = result.accountSummary.find { it.url != null }
-            segment.hasAccess = checkPageForAccess(id, '/ssb/proxy/acctsumm') != null
-            if(segment.hasAccess) {
-                segment.url = '/ssb/proxy/acctsumm'
-            }
-            else {
-                segment.remove('url')
+                result.accountSummary.remove('url')
             }
         }
 

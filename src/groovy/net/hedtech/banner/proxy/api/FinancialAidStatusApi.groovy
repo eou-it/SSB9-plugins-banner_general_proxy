@@ -14,7 +14,7 @@ declare
   award_dtl_rec        bwrkrhst.award_dtl_type;
   award_found          VARCHAR2(1) := 'N';
   rorsapr_rec          RORSAPR%ROWTYPE;
-  lv_ReqTab            bwrktrkr.ReqRecTab;                                                                            -- 80500-1
+  lv_ReqTab            bwrktrkr.ReqRecTab;
   rtvsapr_rec          rtvsapr%ROWTYPE;
   stvterm_rec          stvterm%ROWTYPE;
   othres1_rec          bwrkrhst.othres1_type;
@@ -35,8 +35,8 @@ declare
   award_package        VARCHAR2(2000) DEFAULT NULL;
   account_summary      VARCHAR2(2000) DEFAULT NULL;
   fin_aid_history      VARCHAR2(2000) DEFAULT NULL;
-  finAidHolds          VARCHAR2(2000) DEFAULT NULL;
-  unSatReq             VARCHAR2(2000) DEFAULT NULL;
+  fin_aid_holds        VARCHAR2(2000) DEFAULT NULL;
+  unsat_req            VARCHAR2(2000) DEFAULT NULL;
   lv_finaid_json       VARCHAR2(8000);
 
   /* Global cursor declarations for package */
@@ -155,22 +155,14 @@ BEGIN
          GOTO Chk_Budg;
      END IF; 
      
-     
-     unSatReq := '"unSatReq":['
-                   || '{"text":' || '"' ||
-                             G\$_NLS.Get('BWRKSUM1-0001', 'SQL', 'You have unsatisfied ') ||
-                             G\$_NLS.Get('BWRKSUM1-0002', 'SQL','student requirements') ||
-                             G\$_NLS.Get('BWRKSUM1-0003', 'SQL', ' for this aid year.')
-                              || '"' || '}]';
+     unsat_req := '"unSatReq":{"text":"UNSATISFIED_REQS"}';
 
   <<Chk_Budg>>
      IF  total_budget_amt IS NULL THEN
          GOTO Chk_Awd;
      END IF;
 
-     cost_of_attendance := '"costOfAttendance":['
-                       || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0008', 'SQL', 'Your estimated cost of attendance is ') || '"'
-                       ||  ', "amount": ' || total_budget_amt || '}]';
+     cost_of_attendance := '"costOfAttendance":{"text":"EST_COST_OF_ATTD"' || ', "amount":' || total_budget_amt || '}';
 
   <<Chk_Awd>>
      OPEN bwrkrhst.GetAwdDtlC(pidm,aidy);
@@ -189,12 +181,8 @@ BEGIN
         FETCH calc_rprawrd_offer_amt INTO total_offer_amt ;
         CLOSE calc_rprawrd_offer_amt ;
      
-        award_package := '"awardPackage":['
-                        || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0010', 'SQL', 'You have been ') || '"},'
-                        || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0011', 'SQL', 'awarded ') || '", "url":"' || 'dummy' || '"},'
-                        || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0012', 'SQL', 'financial aid which totals ')
-                        ||  '", "amount":' || total_offer_amt || '}'
-                        || ']';
+        award_package := '"awardPackage":'
+                         || '{"text":"AWARDED_FINAID", "url":"' || 'dummy' || '", "amount":' || total_offer_amt || '}';
      END IF;
 
   <<Chk_Hold>>
@@ -206,10 +194,7 @@ BEGIN
      END IF;
      CLOSE bwrkhold.GetFAHoldsC;
      
-     finAidHolds := '"finAidHolds":['
-                    || '{"text":' || '"' || G\$_NLS.Get('BWRKSUM1-0028', 'SQL','Holds')
-                    || G\$_NLS.Get('BWRKSUM1-0029', 'SQL', ' have been placed on your record which will prevent your application for financial aid from being processed.')
-                    || '"' || '}]';
+     fin_aid_holds := '"finAidHolds":{"text":"HOLDS_PLACED"}';
 
   <<Chk_Acct>>
      OPEN bwrklhst.GetLoanDtlC(pidm, aidy);
@@ -258,11 +243,7 @@ BEGIN
         END IF;
      END IF;
 
-     account_summary := '"accountSummary":['
-                        || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0034', 'SQL', 'You have financial aid credits which appear within your ') || '"},'
-                        || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0035', 'SQL','account summary') || '", "url":"' || 'dummy' || '"},'
-                        || '{"text":"' || '."}'
-                        || ']'; 
+     account_summary := '"accountSummary":{"text":"CREDITS_IN_ACCT_SUMMARY", "url":"' || 'dummy' || '"}';
 
   <<Chk_Hist>>
      OPEN bwrkrhst.GetActiveAidYearC(pidm);
@@ -279,11 +260,7 @@ BEGIN
      END IF;
 
   <<Disp_Hist>>
-     fin_aid_history := '"financialAidHistory":['
-                        || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0038', 'SQL', 'View your ') || '"},'
-                        || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0039', 'SQL', 'financial aid history') || '", "url":"' || 'dummy' || '"},'
-                        || '{"text":"' || G\$_NLS.Get('BWRKSUM1-0040', 'SQL', '.') || '"}'
-                        || ']'; 
+     fin_aid_history := '"financialAidHistory":{"text":"VIEW_FINAID_SUMMARY", "url":"' || 'dummy' || '"}';
 
   <<End_Summ>>
     IF cost_of_attendance IS NULL THEN
@@ -298,11 +275,11 @@ BEGIN
     IF fin_aid_history IS NULL THEN
       fin_aid_history := '"financialAidHistory":null';
     END IF;
-    IF finAidHolds IS NULL THEN
-      finAidHolds := '"finAidHolds":null';
+    IF fin_aid_holds IS NULL THEN
+      fin_aid_holds := '"finAidHolds":null';
     END IF;
-    IF unSatReq IS NULL THEN
-      unSatReq := '"unSatReq":null';
+    IF unsat_req IS NULL THEN
+      unsat_req := '"unSatReq":null';
     END IF;
   
     lv_finaid_json := '{' 
@@ -310,8 +287,8 @@ BEGIN
                       || award_package      || ','
                       || account_summary    || ','
                       || fin_aid_history    || ','
-                      || finAidHolds        || ','
-                      || unSatReq
+                      || fin_aid_holds        || ','
+                      || unsat_req
                       || '}';
 
     ? := lv_finaid_json;
