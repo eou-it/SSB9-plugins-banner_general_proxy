@@ -82,7 +82,6 @@ modules = {
         // Directives
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/directives/selectBox-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/proxyLandingPage-directive.js']
-        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/finaid/proxyFinaid-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyPersonalInfo/proxyPersonalInfo-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyStudent-directive.js']
     }

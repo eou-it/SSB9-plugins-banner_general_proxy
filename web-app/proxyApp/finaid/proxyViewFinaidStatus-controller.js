@@ -7,11 +7,11 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
         var sortFinancialAidStatusLines = function(finaidStatus) {
             var retArr = [];
 
+            // Push values, if they exist, into array in a specific order for consistent display to user.
             if (finaidStatus.hasOwnProperty('unSatReq') && finaidStatus.unSatReq) {
                 retArr.push(finaidStatus.unSatReq);
             }
 
-            // Push values, if they exist, into array in a specific order for consistent display to user.
             if (finaidStatus.hasOwnProperty('costOfAttendance') && finaidStatus.costOfAttendance) {
                 retArr.push(finaidStatus.costOfAttendance);
             }
@@ -38,6 +38,12 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
         $scope.financialAidStatus = [];
         $scope.aidYearHolder = {
             aidYear: {}
+        };
+
+        $scope.stringifyFinaidStatusMessageFor = function(statusLine) {
+            var translatedText = $filter('i18n')('proxy.finaid.status.message.' + statusLine.text, statusLine.textParams);
+
+            return translatedText ? translatedText : statusLine.text;
         };
 
         var init = function() {
