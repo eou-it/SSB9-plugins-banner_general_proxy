@@ -433,16 +433,16 @@ class GeneralSsbProxyService {
         def updatePersonlInformationEmailMessage = MessageHelper.message("proxy.personalinformation.update.email.message")
 
         try {
-        sql.call(sqlText, [p_proxyIDM,params.p_first_name, params.p_last_name,
-                           params.p_mi, params.p_surname_prefix, params.p_name_prefix,
-                           params.p_name_suffix, params.p_pref_first_name, params.p_phone_area,
-                           params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
-                           params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
-                           params.p_city, params.p_stat_code?.code ?: "", params.p_zip, params.p_cnty_code?.code ?: "", params.p_natn_code?.code ?: "",
-                           params.p_sex, birthdateString, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", updatePersonlInformationEmailMessage,  params.p_email_address, Sql.VARCHAR
-        ]){ errorMsg ->
-            errorMsgOut = errorMsg
-        }
+            sql.call(sqlText, [p_proxyIDM,params.p_first_name, params.p_last_name,
+                               params.p_mi, params.p_surname_prefix, params.p_name_prefix,
+                               params.p_name_suffix, params.p_pref_first_name, params.p_phone_area,
+                               params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
+                               params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
+                               params.p_city, params.p_stat_code?.code ?: "", params.p_zip, params.p_cnty_code?.code ?: "", params.p_natn_code?.code ?: "",
+                               params.p_sex, birthdateString, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", updatePersonlInformationEmailMessage,  params.p_email_address, Sql.VARCHAR
+            ]){ errorMsg ->
+                errorMsgOut = errorMsg
+            }
             log.debug('finished updateProxyProfile')
         } catch (Exception e) {
             log.error('updateProxyProfile')
@@ -454,9 +454,6 @@ class GeneralSsbProxyService {
         if (errorMsgOut){
             throw new ApplicationException("", MessageHelper.message("proxy.personalinformation.onSave." + errorMsgOut))
         }
-
-
-
     }
 
 
@@ -594,7 +591,7 @@ class GeneralSsbProxyService {
         def sqlText1 = ProxyPersonalInformationApi.CHECK_PROXY_PROFILE_REQUIRED_DATA
 
         DateFormat usFormat = new SimpleDateFormat("MM/dd/yyyy");
-        def birthdateString = usFormat.format(proxyProfile.p_birth_date)
+        def birthdateString = proxyProfile.p_birth_date ? usFormat.format(proxyProfile.p_birth_date) : null
 
         sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText1, [p_proxyIDM, proxyProfile.p_first_name, proxyProfile.p_mi, proxyProfile.p_last_name,
@@ -662,11 +659,16 @@ class GeneralSsbProxyService {
      * Private method to convert Date for birthday parameter
      */
     private String formatBirthdate(String bDate) {
-        DateFormat javascriptFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date date = javascriptFormat.parse(bDate)
-        SimpleDateFormat usFormat = new SimpleDateFormat("MM/dd/yyyy")
-        String dateString = usFormat.format(date)
+        if(bDate) {
+            DateFormat javascriptFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date date = javascriptFormat.parse(bDate)
+            SimpleDateFormat usFormat = new SimpleDateFormat("MM/dd/yyyy")
+            String dateString = usFormat.format(date)
 
-        return dateString
+            return dateString
+        }
+        else {
+            return bDate
+        }
     }
 }
