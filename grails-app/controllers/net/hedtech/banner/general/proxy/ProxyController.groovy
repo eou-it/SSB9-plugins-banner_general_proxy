@@ -100,7 +100,11 @@ class ProxyController {
             Map response = [failure: false]
             render response as JSON
         }
+        catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage( e ) as JSON
+        }
         catch(Exception e){
+            log.error(e)
             def response = [message: e.message, failure: true]
             render response as JSON
         }

@@ -21,6 +21,7 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
             }
             else {
                 dateFmt = $filter('i18n')('default.date.format').toLowerCase();
+                dateFmt = dateFmt.replace(/mmm/i, 'M'); // short month format is M, not MMM, for jQuery calendar
                 return $.calendars.instance();
             }
         }());
