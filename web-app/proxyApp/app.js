@@ -19,7 +19,7 @@ var proxyApp = angular.module('proxyApp', [
             function ($rootScope, $state, $stateParams, $filter, proxyAppService, breadcrumbService, notificationCenterService) {
                 $rootScope.$on('$stateChangeStart',
                     function(event, toState, toParams, fromState, fromParams, options) {
-                        if(!['/home', '/proxypersonalinformation'].includes(toState.url)) {
+                        if(toState.url !== '/home' && toState.url !== '/proxypersonalinformation') {
                             proxyAppService.checkStudentPageForAccess({id: sessionStorage.getItem("id"), name: toState.name}).$promise.then(function(response) {
 
                                 if (response.failure && !response.authorized) {
