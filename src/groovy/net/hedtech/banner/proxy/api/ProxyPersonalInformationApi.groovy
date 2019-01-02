@@ -475,6 +475,8 @@ class ProxyPersonalInformationApi {
       lv_email1             gpbprxy.gpbprxy_email_address%TYPE;
       lv_email2             gpbprxy.gpbprxy_email_address%TYPE;
       
+      lv_temp_fmt              VARCHAR2 (30);
+      
       hold_proxy_idm        gpbprxy.gpbprxy_proxy_idm%TYPE;
 
 
@@ -516,7 +518,10 @@ class ProxyPersonalInformationApi {
          END GET_DATE;
 
      BEGIN
-     
+        dbms_session.set_nls('NLS_CALENDAR',''''||'GREGORIAN'||'''');
+        lv_temp_fmt := twbklibs.date_input_fmt;
+        twbklibs.date_input_fmt := 'MM/DD/YYYY';
+      
      hold_proxy_idm := ?;
      
           -- Get the proxy record
@@ -565,6 +570,8 @@ class ProxyPersonalInformationApi {
                           EXCEPTION
                              WHEN OTHERS THEN lv_info := 'DATA_ERROR';
                           END;
+                          
+           twbklibs.date_input_fmt := lv_temp_fmt;
                           
            lv_message :=
            lv_message || ? || ' ' || lv_GPBPRXY_rec.R_FIRST_NAME || ' ' || lv_GPBPRXY_rec.R_LAST_NAME || ' ' || '<P>';

@@ -23,7 +23,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
         $scope.personalInfoSections = [];
 
         $scope.setBirthDate = function(data){
-            $scope.proxyProfile.p_birth_date = proxyAppService.stringToDate(data);
+            $scope.proxyProfile.p_birth_date = data;
         };
 
         $scope.getPersonalInfo = function() {
@@ -42,12 +42,6 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
 
                 $scope.proxyProfile = response.proxyProfile;
                 $scope.proxyUiRules = response.proxyUiRules;
-
-                // Date Conversion TODO
-                if (response.proxyProfile.p_birth_date != null && response.proxyProfile.p_birth_date.length != 0) {
-                    var locale = $('meta[name=locale]').attr("content");
-                    $scope.proxyProfile.p_birth_date = (new Date(response.proxyProfile.p_birth_date)).toLocaleDateString(locale);
-                }
 
                 _.each(Object.keys($scope.proxyProfile), function (it) {
                     var required = $scope.proxyUiRules[it] ? $scope.proxyUiRules[it].required : false;
@@ -141,19 +135,13 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 errorMsg;
 
             _.each(Object.keys($scope.profileElements), function(it) {
-                profile[it] = $scope.profileElements[it].model
+                profile[it] = $scope.profileElements[it].model;
             });
 
-
-            // Date Conversion TODO
-            if ($scope.profileElements["p_birth_date"].model.length != 0) {
+            if ($scope.profileElements["p_birth_date"].model) {
                 $scope.proxyProfile.p_birth_date = proxyAppService.stringToDate($scope.profileElements["p_birth_date"].model);
 
-                var str = ($scope.proxyProfile.p_birth_date.getUTCMonth() + 1).toString() + "/" +
-                    $scope.proxyProfile.p_birth_date.getUTCDate() +
-                    "/" + $scope.proxyProfile.p_birth_date.getUTCFullYear().toString();
-
-                profile.p_birth_date = str;
+                profile.p_birth_date = $scope.proxyProfile.p_birth_date;
             }
 
             if (profile.p_email_address) {

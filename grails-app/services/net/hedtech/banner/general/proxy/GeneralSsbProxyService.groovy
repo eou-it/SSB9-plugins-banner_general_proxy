@@ -137,9 +137,6 @@ class GeneralSsbProxyService {
 
         def sqlText = ProxyPersonalInformationApi.PROXY_PERSONAL_INFORMATION
 
-
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
         def proxyProfile = [:]
 
         sql.call(sqlText, [CURSOR_PARAMETER, gidm]) { profile ->
@@ -167,7 +164,7 @@ class GeneralSsbProxyService {
                 proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE)?: new Nation()
                 proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE)?: new County()
                 proxyProfile.p_sex = data.GPBPRXY_SEX
-                proxyProfile.p_birth_date = (data.GPBPRXY_BIRTH_DATE==null) ? "" : df.format(data.GPBPRXY_BIRTH_DATE)
+                proxyProfile.p_birth_date = data.GPBPRXY_BIRTH_DATE
                 proxyProfile.p_ssn = data.GPBPRXY_SSN
                 proxyProfile.p_opt_out_adv_date = (data.GPBPRXY_OPT_OUT_ADV_DATE==null) ? false: true
             }
@@ -431,7 +428,7 @@ class GeneralSsbProxyService {
 
         def sqlText = ProxyPersonalInformationApi.UPDATE_PROFILE
 
-        def bDate = dateFormat(params.p_birth_date)
+        String birthdateString = formatBirthdate(params.p_birth_date)
 
         def updatePersonlInformationEmailMessage = MessageHelper.message("proxy.personalinformation.update.email.message")
 
@@ -442,7 +439,7 @@ class GeneralSsbProxyService {
                            params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
                            params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
                            params.p_city, params.p_stat_code?.code ?: "", params.p_zip, params.p_cnty_code?.code ?: "", params.p_natn_code?.code ?: "",
-                           params.p_sex, bDate, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", updatePersonlInformationEmailMessage,  params.p_email_address, Sql.VARCHAR
+                           params.p_sex, birthdateString, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", updatePersonlInformationEmailMessage,  params.p_email_address, Sql.VARCHAR
         ]){ errorMsg ->
             errorMsgOut = errorMsg
         }
@@ -522,7 +519,7 @@ class GeneralSsbProxyService {
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
         def sqlText = ProxyPersonalInformationApi.CHECK_PROXY_PROFILE_REQUIRED_DATA
 
-        def bDate = dateFormat(params.p_birth_date)
+        def birthdateString = formatBirthdate(params.p_birth_date)
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText, [p_proxyIDM, params.p_first_name, params.p_mi, params.p_last_name,
@@ -531,7 +528,7 @@ class GeneralSsbProxyService {
                            params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
                            params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
                            params.p_city, params.p_stat_code?.code?:"", params.p_zip, params.p_cnty_code?.code?:"", params.p_natn_code?.code?:"",
-                           params.p_sex, bDate, params.p_ssn, Sql.VARCHAR
+                           params.p_sex, birthdateString, params.p_ssn, Sql.VARCHAR
         ]){ errorMsg ->
 
             errorMsgOut = errorMsg
@@ -561,9 +558,6 @@ class GeneralSsbProxyService {
 
         def sqlText = ProxyPersonalInformationApi.PROXY_PERSONAL_INFORMATION
 
-
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
         def proxyProfile = [:]
 
         sql.call(sqlText, [CURSOR_PARAMETER, p_proxyIDM]) { profile ->
@@ -591,7 +585,7 @@ class GeneralSsbProxyService {
                 proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE) ?: new Nation()
                 proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE) ?: new County()
                 proxyProfile.p_sex = data.GPBPRXY_SEX
-                proxyProfile.p_birth_date = (data.GPBPRXY_BIRTH_DATE == null) ? "" : df.format(data.GPBPRXY_BIRTH_DATE)
+                proxyProfile.p_birth_date = data.GPBPRXY_BIRTH_DATE
                 proxyProfile.p_ssn = data.GPBPRXY_SSN
                 proxyProfile.p_opt_out_adv_date = (data.GPBPRXY_OPT_OUT_ADV_DATE == null) ? false : true
             }}
@@ -599,7 +593,8 @@ class GeneralSsbProxyService {
 
         def sqlText1 = ProxyPersonalInformationApi.CHECK_PROXY_PROFILE_REQUIRED_DATA
 
-        def bDate = dateFormat(proxyProfile.p_birth_date)
+        DateFormat usFormat = new SimpleDateFormat("MM/dd/yyyy");
+        def birthdateString = usFormat.format(proxyProfile.p_birth_date)
 
         sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText1, [p_proxyIDM, proxyProfile.p_first_name, proxyProfile.p_mi, proxyProfile.p_last_name,
@@ -608,7 +603,7 @@ class GeneralSsbProxyService {
                             proxyProfile.p_phone_number, proxyProfile.p_phone_ext, proxyProfile.p_ctry_code_phone,
                             proxyProfile.p_house_number, proxyProfile.p_street_line1, proxyProfile.p_street_line2, proxyProfile.p_street_line3, proxyProfile.p_street_line4,
                             proxyProfile.p_city, proxyProfile.p_stat_code?.code?:"", proxyProfile.p_zip, proxyProfile.p_cnty_code?.code?:"", proxyProfile.p_natn_code?.code?:"",
-                            proxyProfile.p_sex, bDate, proxyProfile.p_ssn, Sql.VARCHAR
+                            proxyProfile.p_sex, birthdateString, proxyProfile.p_ssn, Sql.VARCHAR
         ]) { errorMsg ->
             errorMsgOut = errorMsg
         }
@@ -664,24 +659,14 @@ class GeneralSsbProxyService {
 
 
     /*
-     * Private method to convert Date for birthday parameter. TODO
+     * Private method to convert Date for birthday parameter
      */
-    private dateFormat(def birthDate){
-        java.util.Date dDate
-        SimpleDateFormat sdfmt0 = new SimpleDateFormat("yyyy-MM-dd")
-        SimpleDateFormat sdfmt1 = new SimpleDateFormat("MM/dd/yyyy")
-        SimpleDateFormat sdfmt2= new SimpleDateFormat("MM/dd/yyyy")
-        def bDate
+    private String formatBirthdate(String bDate) {
+        DateFormat javascriptFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date date = javascriptFormat.parse(bDate)
+        SimpleDateFormat usFormat = new SimpleDateFormat("MM/dd/yyyy")
+        String dateString = usFormat.format(date)
 
-        if (! birthDate ){
-            bDate = ""
-        } else if ( birthDate.contains("-") ){
-            dDate = sdfmt0.parse( birthDate );
-            bDate = sdfmt2.format( dDate );
-        }else{
-            dDate = sdfmt1.parse( birthDate );
-            bDate = sdfmt2.format( dDate );
-        }
-         return bDate
+        return dateString
     }
 }
