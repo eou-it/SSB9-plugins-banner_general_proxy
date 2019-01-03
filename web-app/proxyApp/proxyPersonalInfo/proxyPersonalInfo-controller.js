@@ -47,7 +47,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     var required = $scope.proxyUiRules[it] ? $scope.proxyUiRules[it].required : false;
 
                     $scope.profileElements[it] = {
-                        label: required ? ($filter('i18n')('proxy.personalinformation.label.' + it) + '<font color="red">*</font>') : $filter('i18n')('proxy.personalinformation.label.' + it),
+                        label: required ? ($filter('i18n')('proxy.personalinformation.label.' + it) + '<font color="#CD3B3E">*</font>') : $filter('i18n')('proxy.personalinformation.label.' + it),
                         model: $scope.proxyProfile[it],
                         fieldLength: $scope.proxyUiRules[it].fieldLength,
                         elemId: it,
