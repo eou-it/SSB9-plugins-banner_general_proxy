@@ -60,6 +60,7 @@ modules = {
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/breadcrumb-service.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/proxyApp-service.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/notificationcenter-service.js']
+        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/services/proxyEmail-service.js']
 
         // Controllers
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/proxyLandingPage-controller.js']
@@ -81,7 +82,6 @@ modules = {
         // Directives
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/directives/selectBox-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/proxyLandingPage-directive.js']
-        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/finaid/proxyFinaid-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyPersonalInfo/proxyPersonalInfo-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/student/proxyStudent-directive.js']
     }
@@ -102,7 +102,8 @@ modules = {
     'proxyAppRTL' {
         dependsOn "bannerWebRTL, proxyApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsRTL"
         // CSS
-        resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar-rtl.css'], attrs: [media: 'screen, projection']
+        resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar.css'], attrs: [media: 'screen, projection']
+        resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar-rtl-patch.css'], attrs: [media: 'screen, projection']
 
         resource url: [plugin: 'banner-general-proxy', file: 'css/proxy-rtl.css'], attrs: [media: 'screen, projection']
         resource url: [plugin: 'banner-general-proxy', file: 'css/proxy-patch-rtl.css'], attrs: [media: 'screen, projection']

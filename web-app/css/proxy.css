@@ -103,7 +103,7 @@ h2 {
 
 .required-field::before {
     content: "*";
-    color: red;
+    color: #CD3B3E;
 }
 
 .proxy table th:last-child, .table>thead>tr>th:last-child, .dashboard th:nth-of-type(8), .dashboard th:nth-of-type(9) {
@@ -204,9 +204,8 @@ p.notification-msg {
     padding: 15px;
 }
 
-.hold-process-bubble {
-    display: inline-block;
-    line-height: 2.25em;
+.error-text {
+    color: #D42928;
 }
 
 .proxy-content-item {
@@ -217,7 +216,6 @@ p.notification-msg {
 
 .proxy-content-item-label {
     font-family: OpenSans-semibold;
-    margin-bottom: 14px;
 }
 
 .subsection-divider {
@@ -233,6 +231,11 @@ p.notification-msg {
     float: left;
     margin-top: 1.0em;
     margin-bottom: 0.675em;
+}
+
+.subsection-divider span.tight {
+    margin-top: 3px;
+    margin-bottom: 3px;
 }
 
 .subsection-divider-spacer {
@@ -303,7 +306,7 @@ p.notification-msg {
 .proxy-top-message {
     font-family: OpenSans-semibold;
     font-size: 16px;
-    color: #428bca;
+    color: #2874BB;
 }
 
 .select-term-top {
@@ -377,6 +380,10 @@ p.notification-msg {
 .amt-bold {
     font-family: OpenSans-semibold;
     text-align: right;
+}
+
+.proxy table th {
+    color: #151618;
 }
 
 /* Action Password Page - BEGIN */
@@ -826,23 +833,25 @@ a.panel-title:active {
     border-radius: 0 0 6px 6px;
 }
 
-.mini-tables table tr:hover {
-    background: transparent !important;
-}
-
+.mini-tables table tr:hover,
 .mini-tables table tr:hover * {
     border-radius: 6px;
 }
 
 .mini-tables tr:last-of-type th {
+    background: transparent;
     border-bottom: none;
     border-radius: 6px;
+}
+
+.mini-tables tr th {
+    background: transparent;
 }
 /* Course Schedule Details - END */
 
 /* Award Package - BEGIN */
 .awardPackage div.row,
-.awardPackage [class^="col-"], [class*=" col-"] {
+.awardPackage [class^="col-"] {
     padding: 0;
     margin: 0;
 }
@@ -899,11 +908,11 @@ th.currency-values {
 }
 
 .status-desc {
-    border-bottom: solid 2px #c4c4c4;
+    border-bottom: solid 1px #D9D9D9;
     background-color: #f8f8f8;
     margin: 0;
     padding: 1.25em;
-    color: #2086df;
+    color: #026BC8;
 }
 
 .year-award-container {
@@ -933,7 +942,7 @@ th.currency-values {
     padding: 0;
 }
 
-td.bold-font {
+td.bold-font, .bold-font{
     font-family: OpenSans-semibold;
 }
 
@@ -1007,11 +1016,11 @@ p.term-fund {
 }
 
 .positive-balance {
-    color: #168140;
+    color: #00804D;
 }
 
 .negative-balance {
-    color: #B32335;
+    color: #D42848;
 }
 
 .acct-summ-heading {
@@ -1124,8 +1133,8 @@ a.breadcrumbButton.leaf-breadcrumb {
 /***********************/
 /* Media Query Section */
 /***********************/
-
 @media screen and (min-width:768px) {
+
     .proxy-page-body {
         padding: 22px 32px 100px;
     }
@@ -1158,6 +1167,7 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .tile-content {
         max-width: 50%;
+        margin-top: 12px;
     }
 
     .tile-title,
@@ -1474,7 +1484,7 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     /* Award Package - BEGIN  */
     .awardPackage div.row,
-    .awardPackage [class^="col-"], [class*=" col-"] {
+    .awardPackage [class^="col-"] {
         padding: 0 10px;
     }
 
@@ -1490,6 +1500,13 @@ a.breadcrumbButton.leaf-breadcrumb {
         margin-top: 2em;
     }
 
+    .awardPackage h2.proxy-content-section {
+        margin-top: 2em;
+        font-size: 1.2em;
+        font-family: OpenSans-semibold;
+        padding: 1.25em;
+    }
+
     .mini-tables.awardPackage .award-info > div:first-child {
         margin-top: 0;
     }
@@ -1499,11 +1516,37 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .awards-container {
-        padding: 0 20px;
+        padding: 0 20px 10px;
     }
 
-    .awards-container.overflow > div.proxy-content-section {
-        overflow-x: scroll;
+    .awards-container.proxy-tablet-visible .proxy-content-item-label {
+        padding-left: 20px;
+        margin-top: 1em;
+    }
+
+    .awards-container.proxy-tablet-visible .proxy-content-item .proxy-content-item {
+        padding-left: 20px;
+        margin-top: 0;
+    }
+
+    .awards-container.proxy-tablet-visible .subsection-divider span {
+        margin-bottom: 0;
+    }
+
+    .awards-container.compact table th,
+    .awards-container.compact table tr td,
+    .awards-container.compact table > thead > tr > th {
+        padding: 1.5em 1em;
+    }
+
+    .awards-container.compact table > thead > tr > th:first-child,
+    .awards-container.compact table > tbody > tr > td:first-child {
+        padding-left: 1.5em;
+    }
+
+    .awards-container.compact table > thead > tr > th:last-child,
+    .awards-container.compact table > tbody > tr > td:last-child {
+        padding-right: 1.5em;
     }
 
     .msg-container {
@@ -1560,70 +1603,6 @@ a.breadcrumbButton.leaf-breadcrumb {
         right: 2.5em;
         position: relative;
     }
-    /* Course Schedule (week at a glance) - END */
-}
-
-@media screen and (min-width:1025px) {
-    #content.proxy {
-        margin-top: 0;
-    }
-
-    .proxy-mobile-visible,
-    .proxy-tablet-visible {
-        visibility: hidden;
-        position: absolute;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        height: 1px;
-        width: 1px;
-        margin: -1px;
-        padding: 0;
-        border: 0;
-    }
-
-    .proxy-desktop-visible {
-        visibility: visible;
-        position: relative;
-        overflow: auto;
-        height: auto;
-        width: auto;
-        margin: 0px;
-    }
-
-    /* Action Password Page - BEGIN */
-    .proxy-pin-mgmt.splashBg {
-        height: 360px;
-        width: 705px;
-        margin: 140px auto 0px;
-    }
-
-    .primary.submit-btn {
-        width: 36%;
-    }
-
-    .proxy-pin-mgmt.splashBg .copyright {
-        position: absolute;
-        bottom: 0;
-        margin-bottom: 2em;
-        margin-right: 3em;
-    }
-    /* Action Password Page - END   */
-
-    /* Reset PIN Page - END   */
-    .reset-pin.proxy-pin-mgmt.splashBg {
-        height: unset;
-        margin: 70px auto 0px;
-    }
-    /* Reset PIN Page - END   */
-
-    /* Course Schedule Details - BEGIN  */
-    .proxy-header-container {
-        display: inline-block;
-        float: left;
-        width: 100%;
-        padding: 0 20px;
-    }
-    /* Course Schedule Details - END  */
 }
 
 /*Tablet device*/
@@ -1659,7 +1638,7 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .proxy-home-content {
-        margin: 30px 16px 100px;
+        margin: 30px 16px 200px;
     }
 
     .proxy-home-content .proxy-top-message-container {
@@ -1731,4 +1710,72 @@ a.breadcrumbButton.leaf-breadcrumb {
         font-family: OpenSans-semibold;
         margin-right: 8px;
     }
+
+    .awards-container.compact > div.proxy-content-section {
+        padding: 0 0 1em 0;
+    }
+}
+
+/* Desktop */
+@media screen and (min-width:1025px) {
+    #content.proxy {
+        margin-top: 0;
+    }
+
+    .proxy-mobile-visible,
+    .proxy-tablet-visible {
+        visibility: hidden;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+    }
+
+    .proxy-desktop-visible {
+        visibility: visible;
+        position: relative;
+        overflow: auto;
+        height: auto;
+        width: auto;
+        margin: 0px;
+    }
+
+    /* Action Password Page - BEGIN */
+    .proxy-pin-mgmt.splashBg {
+        height: 360px;
+        width: 705px;
+        margin: 140px auto 0px;
+    }
+
+    .primary.submit-btn {
+        width: 36%;
+    }
+
+    .proxy-pin-mgmt.splashBg .copyright {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 2em;
+        margin-right: 3em;
+    }
+    /* Action Password Page - END   */
+
+    /* Reset PIN Page - END   */
+    .reset-pin.proxy-pin-mgmt.splashBg {
+        height: unset;
+        margin: 70px auto 0px;
+    }
+    /* Reset PIN Page - END   */
+
+    /* Course Schedule Details - BEGIN  */
+    .proxy-header-container {
+        display: inline-block;
+        float: left;
+        width: 100%;
+        padding: 0 20px;
+    }
+
 }

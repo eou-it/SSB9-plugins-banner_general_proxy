@@ -66,7 +66,7 @@
         </div>
         <div class="subsection-divider"><span></span></div>
         <div class="copyright">
-            <p>&copy; <g:message code="net.hedtech.banner.login.copyright1"/></p>
+            <p>&copy; <g:message code="default.copyright.startyear"/><g:message code="default.copyright.endyear"/> <g:message code="default.copyright.message"/></p>
 
             <p><g:message code="net.hedtech.banner.login.copyright2"/></p>
         </div>

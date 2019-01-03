@@ -3,18 +3,15 @@
  *******************************************************************************/
 
 proxyApp.service( 'breadcrumbService', ['$filter',function ($filter) {
-    var constantBreadCrumb = [],
-        appUrl = "";
+    var constantBreadCrumb = [];
 
     this.reset = function() {
         constantBreadCrumb = [
             {
-                label: 'banner.generalssb.landingpage.title',
+                label: 'proxy.landingpage.title',
                 url: '/'
             }
         ];
-
-        appUrl = document.location.origin + document.location.pathname + "#";
     };
 
     this.setBreadcrumbs = function (bc) {

@@ -1,0 +1,20 @@
+/********************************************************************************
+  Copyright 2018 Ellucian Company L.P. and its affiliates.
+********************************************************************************/
+.fc-toolbar.fc-header-toolbar {
+    direction: rtl;
+}
+
+.fc-toolbar .fc-right {
+    float: left;
+}
+
+.fc .fc-toolbar > * > *,
+.fc .fc-toolbar > * > :first-child {
+    float: right;
+    margin-left: .75em;
+}
+
+.fc .fc-toolbar > * > :last-child {
+    margin-left: 0;
+}

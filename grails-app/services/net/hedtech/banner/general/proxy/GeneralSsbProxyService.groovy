@@ -5,17 +5,12 @@ package net.hedtech.banner.general.proxy
 
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
-import net.hedtech.banner.proxy.api.AccountSummaryApi
-import net.hedtech.banner.proxy.api.FinAidAwardPackageApi
-import net.hedtech.banner.proxy.api.FinancialAidStatusApi
 import net.hedtech.banner.proxy.api.ProxyLandingPageApi
 import net.hedtech.banner.proxy.api.ProxyPersonalInformationApi
 import net.hedtech.banner.proxy.api.PinManagementApi
-import net.hedtech.banner.proxy.api.CourseScheduleApi
 
 import org.apache.log4j.Logger
 import net.hedtech.banner.i18n.MessageHelper
-import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.context.request.RequestContextHolder
 import oracle.jdbc.driver.OracleTypes
@@ -27,19 +22,16 @@ import java.text.SimpleDateFormat
 import net.hedtech.banner.general.system.State
 import net.hedtech.banner.general.system.Nation
 import net.hedtech.banner.general.system.County
-import net.hedtech.banner.general.system.SdaCrosswalkConversion
-import net.hedtech.banner.i18n.LocalizeUtil
 
 import net.hedtech.banner.exceptions.ApplicationException
 
 import net.hedtech.banner.general.person.PersonUtility
 
 class GeneralSsbProxyService {
-    private final Logger log = Logger.getLogger(getClass())
+    private static final log  = Logger.getLogger(GeneralSsbProxyService.class)
     def sessionFactory                     // injected by Spring
     def dataSource                         // injected by Spring
     def grailsApplication                  // injected by Spring
-    def sqlFileLoadService
     def preferredNameService
 
 
@@ -145,9 +137,6 @@ class GeneralSsbProxyService {
 
         def sqlText = ProxyPersonalInformationApi.PROXY_PERSONAL_INFORMATION
 
-
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
         def proxyProfile = [:]
 
         sql.call(sqlText, [CURSOR_PARAMETER, gidm]) { profile ->
@@ -175,7 +164,7 @@ class GeneralSsbProxyService {
                 proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE)?: new Nation()
                 proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE)?: new County()
                 proxyProfile.p_sex = data.GPBPRXY_SEX
-                proxyProfile.p_birth_date = (data.GPBPRXY_BIRTH_DATE==null) ? "" : df.format(data.GPBPRXY_BIRTH_DATE)
+                proxyProfile.p_birth_date = data.GPBPRXY_BIRTH_DATE
                 proxyProfile.p_ssn = data.GPBPRXY_SSN
                 proxyProfile.p_opt_out_adv_date = (data.GPBPRXY_OPT_OUT_ADV_DATE==null) ? false: true
             }
@@ -439,21 +428,21 @@ class GeneralSsbProxyService {
 
         def sqlText = ProxyPersonalInformationApi.UPDATE_PROFILE
 
-        def bDate = dateFormat(params.p_birth_date)
+        String birthdateString = formatBirthdate(params.p_birth_date)
 
         def updatePersonlInformationEmailMessage = MessageHelper.message("proxy.personalinformation.update.email.message")
 
         try {
-        sql.call(sqlText, [p_proxyIDM,params.p_first_name, params.p_last_name,
-                           params.p_mi, params.p_surname_prefix, params.p_name_prefix,
-                           params.p_name_suffix, params.p_pref_first_name, params.p_phone_area,
-                           params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
-                           params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
-                           params.p_city, params.p_stat_code?.code ?: "", params.p_zip, params.p_cnty_code?.code ?: "", params.p_natn_code?.code ?: "",
-                           params.p_sex, bDate, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", updatePersonlInformationEmailMessage,  params.p_email_address, Sql.VARCHAR
-        ]){ errorMsg ->
-            errorMsgOut = errorMsg
-        }
+            sql.call(sqlText, [p_proxyIDM,params.p_first_name, params.p_last_name,
+                               params.p_mi, params.p_surname_prefix, params.p_name_prefix,
+                               params.p_name_suffix, params.p_pref_first_name, params.p_phone_area,
+                               params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
+                               params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
+                               params.p_city, params.p_stat_code?.code ?: "", params.p_zip, params.p_cnty_code?.code ?: "", params.p_natn_code?.code ?: "",
+                               params.p_sex, birthdateString, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", updatePersonlInformationEmailMessage,  params.p_email_address, Sql.VARCHAR
+            ]){ errorMsg ->
+                errorMsgOut = errorMsg
+            }
             log.debug('finished updateProxyProfile')
         } catch (Exception e) {
             log.error('updateProxyProfile')
@@ -465,9 +454,6 @@ class GeneralSsbProxyService {
         if (errorMsgOut){
             throw new ApplicationException("", MessageHelper.message("proxy.personalinformation.onSave." + errorMsgOut))
         }
-
-
-
     }
 
 
@@ -499,7 +485,7 @@ class GeneralSsbProxyService {
 
 
     /* Updates Audit data on Proxy Page Access */
-    def updateProxyHistoryOnPageAccess(def pageName) {
+    def updateProxyHistoryOnPageAccess(def pidm, def pageName) {
         log.debug('starting updateProxyHistoryOnPageAccess')
         //get proxy gidm
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
@@ -511,7 +497,7 @@ class GeneralSsbProxyService {
             log.debug('sqlText: ' + sqlText)
 
             sql.call(sqlText,
-                    [p_proxyIDM, p_proxyIDM, p_proxyIDM, pageName
+                    [p_proxyIDM, pidm, p_proxyIDM, pidm , pageName
                     ])
 
             log.debug('finished updateProxyHistoryOnPageAccess')
@@ -530,7 +516,7 @@ class GeneralSsbProxyService {
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
         def sqlText = ProxyPersonalInformationApi.CHECK_PROXY_PROFILE_REQUIRED_DATA
 
-        def bDate = dateFormat(params.p_birth_date)
+        def birthdateString = formatBirthdate(params.p_birth_date)
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText, [p_proxyIDM, params.p_first_name, params.p_mi, params.p_last_name,
@@ -539,7 +525,7 @@ class GeneralSsbProxyService {
                            params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
                            params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
                            params.p_city, params.p_stat_code?.code?:"", params.p_zip, params.p_cnty_code?.code?:"", params.p_natn_code?.code?:"",
-                           params.p_sex, bDate, params.p_ssn, Sql.VARCHAR
+                           params.p_sex, birthdateString, params.p_ssn, Sql.VARCHAR
         ]){ errorMsg ->
 
             errorMsgOut = errorMsg
@@ -569,9 +555,6 @@ class GeneralSsbProxyService {
 
         def sqlText = ProxyPersonalInformationApi.PROXY_PERSONAL_INFORMATION
 
-
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
         def proxyProfile = [:]
 
         sql.call(sqlText, [CURSOR_PARAMETER, p_proxyIDM]) { profile ->
@@ -599,7 +582,7 @@ class GeneralSsbProxyService {
                 proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE) ?: new Nation()
                 proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE) ?: new County()
                 proxyProfile.p_sex = data.GPBPRXY_SEX
-                proxyProfile.p_birth_date = (data.GPBPRXY_BIRTH_DATE == null) ? "" : df.format(data.GPBPRXY_BIRTH_DATE)
+                proxyProfile.p_birth_date = data.GPBPRXY_BIRTH_DATE
                 proxyProfile.p_ssn = data.GPBPRXY_SSN
                 proxyProfile.p_opt_out_adv_date = (data.GPBPRXY_OPT_OUT_ADV_DATE == null) ? false : true
             }}
@@ -607,7 +590,8 @@ class GeneralSsbProxyService {
 
         def sqlText1 = ProxyPersonalInformationApi.CHECK_PROXY_PROFILE_REQUIRED_DATA
 
-        def bDate = dateFormat(proxyProfile.p_birth_date)
+        DateFormat usFormat = new SimpleDateFormat("MM/dd/yyyy");
+        def birthdateString = proxyProfile.p_birth_date ? usFormat.format(proxyProfile.p_birth_date) : null
 
         sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText1, [p_proxyIDM, proxyProfile.p_first_name, proxyProfile.p_mi, proxyProfile.p_last_name,
@@ -616,7 +600,7 @@ class GeneralSsbProxyService {
                             proxyProfile.p_phone_number, proxyProfile.p_phone_ext, proxyProfile.p_ctry_code_phone,
                             proxyProfile.p_house_number, proxyProfile.p_street_line1, proxyProfile.p_street_line2, proxyProfile.p_street_line3, proxyProfile.p_street_line4,
                             proxyProfile.p_city, proxyProfile.p_stat_code?.code?:"", proxyProfile.p_zip, proxyProfile.p_cnty_code?.code?:"", proxyProfile.p_natn_code?.code?:"",
-                            proxyProfile.p_sex, bDate, proxyProfile.p_ssn, Sql.VARCHAR
+                            proxyProfile.p_sex, birthdateString, proxyProfile.p_ssn, Sql.VARCHAR
         ]) { errorMsg ->
             errorMsgOut = errorMsg
         }
@@ -671,249 +655,20 @@ class GeneralSsbProxyService {
     }
 
 
-    def getCourseSchedule(def pidm, def startDate = null) {
-        def scheduleJson = ""
-        def tbaScheduleJson = ""
-        def errorMsg = ""
-        def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE
-
-        def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        sql.call(sqlText, [startDate, pidm, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR
-        ]){ lv_sched_json, lv_tba_sched_json, lv_errorMsg ->
-            scheduleJson = lv_sched_json
-            tbaScheduleJson = lv_tba_sched_json
-            errorMsg = lv_errorMsg
-        }
-
-        def scheduleJsonMap = scheduleJson ? new JsonSlurper().parseText(scheduleJson) : [:]
-
-        if(scheduleJsonMap && !errorMsg) {
-            if(!scheduleJsonMap.hasNextWeek || !scheduleJsonMap.hasPrevWeek) {
-                SimpleDateFormat usDateFmt = new SimpleDateFormat("MM/dd/yyyy")
-                Calendar startDateCal = Calendar.instance
-                Calendar schedStartDateCal = Calendar.instance
-                Calendar schedEndDateCal = Calendar.instance
-                if (startDate) {
-                    startDateCal.setTime(usDateFmt.parse(startDate))
-                    schedStartDateCal.setTime(usDateFmt.parse(scheduleJsonMap.schedStartDate))
-                    schedEndDateCal.setTime(usDateFmt.parse(scheduleJsonMap.schedEndDate))
-                    if ((!scheduleJsonMap.hasPrevWeek && startDateCal.before(schedStartDateCal)) ||
-                            (!scheduleJsonMap.hasNextWeek && startDateCal.after(schedEndDateCal))) {
-                        startDate = scheduleJsonMap.schedStartDate;
-                    }
-                }
-            }
-        }
-
-        def regEvents = getRegistrationEventsForSchedule(scheduleJsonMap.rows, startDate)
-
-        def resultMap = [
-                schedule: regEvents.registrationEvents,
-                dateUsed: startDate,
-                hasNextWeek: scheduleJsonMap.hasNextWeek,
-                hasPrevWeek: scheduleJsonMap.hasPrevWeek,
-                unassignedSchedule: new JsonSlurper().parseText(tbaScheduleJson).rows,
-                errorMsg: errorMsg
-        ]
-
-        return resultMap
-    }
-
-    def getCourseScheduleDetail(def pidm, def term, def crn) {
-        def scheduleJson = ""
-        def errorMsg = ""
-        def sqlText = CourseScheduleApi.WEEKLY_COURSE_SCHEDULE_DETAIL
-
-        def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        sql.call(sqlText, [ crn, term, pidm, Sql.VARCHAR
-        ]){ lv_sched_json ->
-            scheduleJson = lv_sched_json
-        }
-
-        def resultMap = new JsonSlurper().parseText(scheduleJson)
-
-        return resultMap
-    }
-
-    def getFinancialAidStatus(def pidm, def aidYear = null) {
-        def finaidJson = ""
-        def sqlText = FinancialAidStatusApi.FINANCIAL_AID_SUMMARY
-
-        def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        sql.call(sqlText, [pidm, aidYear, Sql.VARCHAR
-        ]){ lv_finaid_json ->
-            finaidJson = lv_finaid_json
-        }
-
-        def resultMap = finaidJson ? new JsonSlurper().parseText(finaidJson) : [:]
-
-        resultMap
-    }
-
-    def getAccountSummary(def pidm) {
-        def accSummJson
-        def sqlText = AccountSummaryApi.ACCOUNT_SUMMARY
-
-        def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        sql.call(sqlText, [pidm, Sql.CLOB
-        ]){ lv_accSumm_json ->
-            accSummJson = lv_accSumm_json.asciiStream.text
-        }
-
-        def resultMap = new JsonSlurper().parseText(accSummJson)
-
-        def gtvsdaxValue = SdaCrosswalkConversion.fetchAllByInternalAndInternalGroup('WEBDETCODE', 'WEBACCTSUM')[0]?.external
-        resultMap.showDetailCode = gtvsdaxValue == 'Y'
-
-        resultMap
-    }
-
-    public static
-    def createRegistrationEvent(id, term, termDesc, crn, title, date, beginTime, endTime, className, subject = null, courseNumber = null) {
-        Calendar startCal = Calendar.instance
-        Calendar endCal = Calendar.instance
-        startCal.setTime(date.getTime())
-        endCal.setTime(date.getTime())
-        startCal.set(Calendar.HOUR_OF_DAY, beginTime.substring(0, 2).toInteger())
-        startCal.set(Calendar.MINUTE, beginTime.substring(2, 4).toInteger())
-        def registrationMap = [:]
-        registrationMap.id = id
-        registrationMap.title = title
-        registrationMap.startCal = startCal
-        registrationMap.start = startCal.time.format(LocalizeUtil.message("default.date.time.ISO8601.format", null, LocaleContextHolder.getLocale()))
-        endCal.set(Calendar.HOUR_OF_DAY, endTime.substring(0, 2).toInteger())
-        endCal.set(Calendar.MINUTE, endTime.substring(2, 4).toInteger())
-        registrationMap.endCal = endCal
-        registrationMap.end = endCal.time.format(LocalizeUtil.message("default.date.time.ISO8601.format", null, LocaleContextHolder.getLocale()))
-        registrationMap.editable = false
-        registrationMap.allDay = false
-        registrationMap.className = className
-        registrationMap.term = term
-        registrationMap.termDesc = termDesc
-        registrationMap.crn = crn
-        registrationMap.subject = subject ?: ""
-        registrationMap.courseNumber = courseNumber ?: ""
-        return registrationMap
-    }
-
-    private registrationEventTimesConflict(event, existingEvents) {
-        def hasConflict = false
-
-        existingEvents.reverse().find {
-            if ( !(event.startCal.before(it.startCal) || event.startCal.after(it.endCal)) ) {
-                hasConflict = true
-                return true
-            }
-        }
-
-        hasConflict
-    }
-
-    private addRegistrationEvent(event, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, dayOfWeek, eventsAlreadyOnSchedule, registrationArray, conflictingEvents) {
-        startDateCal.set(Calendar.DAY_OF_WEEK, dayOfWeek)
-        boolean isDateWithinMeetingDates = !startDateCal.before(ssrmeetStartCal) && !startDateCal.after(ssrmeetEndCal)
-
-        if(isDateWithinMeetingDates) {
-            def regEvent = createRegistrationEvent(id, event.meeting_term_code, event.meeting_term_desc, event.meeting_crn, event.courseTitle,
-                    startDateCal, event.meeting_begin_time, event.meeting_end_time, 'proxy-event', event.meeting_subj_code,
-                    event.meeting_crse_numb)
-
-            if(event.meeting_bldg_code) {
-                regEvent.location = event.meeting_bldg_code + ' ' + event.meeting_room_code
-            }
-            else {
-                regEvent.location = MessageHelper.getMessage('proxy.schedule.Tba')
-            }
-
-            if (registrationEventTimesConflict(regEvent, eventsAlreadyOnSchedule[dayOfWeek])) {
-                regEvent.isConflicted = true
-            }
-
-            registrationArray.add(regEvent)
-            eventsAlreadyOnSchedule[dayOfWeek].add(regEvent)
-        }
-    }
-
-    private getRegistrationEventsForSchedule(def weeklySchedule, def startDate) {
-        def registrationArray = []
-        def conflictingEvents = []
-        def eventsAlreadyOnSchedule = [
-                (Calendar.MONDAY):    [],
-                (Calendar.TUESDAY):   [],
-                (Calendar.WEDNESDAY): [],
-                (Calendar.THURSDAY):  [],
-                (Calendar.FRIDAY):    [],
-                (Calendar.SATURDAY):  [],
-                (Calendar.SUNDAY):    []
-        ]
-
-        SimpleDateFormat usDateFmt = new SimpleDateFormat("MM/dd/yyyy")
-
-        Calendar startDateCal = Calendar.instance
-        if(startDate) {
-            startDateCal.setTime(usDateFmt.parse(startDate))
-        }
-        def id = new Date().getTime()
-        weeklySchedule.each {
-
-            //SSRMEET dates should never be null but use a default date far in the past or future just in case
-            Calendar ssrmeetStartCal = Calendar.instance
-            ssrmeetStartCal.setTime(usDateFmt.parse(it.meeting_ssrmeet_start_date ?: '12/31/5000'))
-
-            Calendar ssrmeetEndCal = Calendar.instance
-            ssrmeetEndCal.setTime(usDateFmt.parse(it.meeting_ssrmeet_end_date ?: '01/02/1970'))
-
-            if(it.meeting_begin_time && it.meeting_end_time) {
-                if (it.meeting_mon_day) {
-                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.MONDAY,    eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
-                }
-                if (it.meeting_tue_day) {
-                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.TUESDAY,   eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
-                }
-                if (it.meeting_wed_day) {
-                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.WEDNESDAY, eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
-                }
-                if (it.meeting_thu_day) {
-                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.THURSDAY,  eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
-                }
-                if (it.meeting_fri_day) {
-                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.FRIDAY,    eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
-                }
-                if (it.meeting_sat_day) {
-                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.SATURDAY,  eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
-                }
-                if (it.meeting_sun_day) {
-                    addRegistrationEvent(it, id, startDateCal, ssrmeetStartCal, ssrmeetEndCal, Calendar.SUNDAY,    eventsAlreadyOnSchedule, registrationArray, conflictingEvents)
-                }
-            }
-        }
-
-        registrationArray.each {
-            it.remove('startCal')
-            it.remove('endCal')
-        }
-        return [registrationEvents: registrationArray]
-    }
-
     /*
-     * Private method to convert Date for birthday parameter. TODO
+     * Private method to convert Date for birthday parameter
      */
-    private dateFormat(def birthDate){
-        java.util.Date dDate
-        SimpleDateFormat sdfmt0 = new SimpleDateFormat("yyyy-MM-dd")
-        SimpleDateFormat sdfmt1 = new SimpleDateFormat("MM/dd/yyyy")
-        SimpleDateFormat sdfmt2= new SimpleDateFormat("MM/dd/yyyy")
-        def bDate
+    private String formatBirthdate(String bDate) {
+        if(bDate) {
+            DateFormat javascriptFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date date = javascriptFormat.parse(bDate)
+            SimpleDateFormat usFormat = new SimpleDateFormat("MM/dd/yyyy")
+            String dateString = usFormat.format(date)
 
-        if (! birthDate ){
-            bDate = ""
-        } else if ( birthDate.contains("-") ){
-            dDate = sdfmt0.parse( birthDate );
-            bDate = sdfmt2.format( dDate );
-        }else{
-            dDate = sdfmt1.parse( birthDate );
-            bDate = sdfmt2.format( dDate );
+            return dateString
         }
-         return bDate
+        else {
+            return bDate
+        }
     }
 }

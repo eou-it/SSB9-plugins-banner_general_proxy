@@ -26,7 +26,10 @@
         <table class="proxy-content-section">
             <tr ng-repeat="statusLine in financialAidStatus">
                 <td>
-                    <text-with-links text-data="statusLine" class="collapse-font"></text-with-links>
+                    <span ng-if="statusLine.url" class="proxy-base-font">
+                        <a ui-sref="{{statusLine.url}}" class="text-link">{{stringifyFinaidStatusMessageFor(statusLine)}}</a>
+                    </span>
+                    <span ng-if="!statusLine.url" class="proxy-base-font">{{stringifyFinaidStatusMessageFor(statusLine)}}</span>
                 </td>
             </tr>
         </table>

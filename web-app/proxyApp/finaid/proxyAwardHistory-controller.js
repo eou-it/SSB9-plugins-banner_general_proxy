@@ -25,7 +25,7 @@ proxyAppControllers.controller('proxyAwardHistoryController',['$scope', '$rootSc
         };
 
 
-        $scope.stringifyAwardMesageFor = function(message) {
+        $scope.stringifyAwardMessageFor = function(message) {
 
             return ($filter('i18n')('proxy.awardHistory.message.'+ message) ? $sce.trustAsHtml("<b>" + $filter('i18n')('proxy.awardHistory.message.'+ message) + "</b>") : message);
 

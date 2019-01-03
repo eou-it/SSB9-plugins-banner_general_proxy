@@ -1,8 +1,9 @@
 /********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$rootScope','$state','$filter','$location','proxyAppService','notificationCenterService',
-    function ($scope, $rootScope, $state, $filter, $location, proxyAppService, notificationCenterService) {
+proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$rootScope','$state','$filter','$location',
+    'proxyAppService','notificationCenterService','proxyEmailService',
+    function ($scope, $rootScope, $state, $filter, $location, proxyAppService, notificationCenterService, proxyEmailService) {
 
         var init = function () {
             $scope.getPersonalInfo();
@@ -22,7 +23,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
         $scope.personalInfoSections = [];
 
         $scope.setBirthDate = function(data){
-            $scope.proxyProfile.p_birth_date = proxyAppService.stringToDate(data);
+            $scope.proxyProfile.p_birth_date = data;
         };
 
         $scope.getPersonalInfo = function() {
@@ -42,17 +43,11 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 $scope.proxyProfile = response.proxyProfile;
                 $scope.proxyUiRules = response.proxyUiRules;
 
-                // Date Conversion TODO
-                if (response.proxyProfile.p_birth_date != null && response.proxyProfile.p_birth_date.length != 0) {
-                    var locale = $('meta[name=locale]').attr("content");
-                    $scope.proxyProfile.p_birth_date = (new Date(response.proxyProfile.p_birth_date)).toLocaleDateString(locale);
-                }
-
                 _.each(Object.keys($scope.proxyProfile), function (it) {
                     var required = $scope.proxyUiRules[it] ? $scope.proxyUiRules[it].required : false;
 
                     $scope.profileElements[it] = {
-                        label: required ? ($filter('i18n')('proxy.personalinformation.label.' + it) + '<font color="red">*</font>') : $filter('i18n')('proxy.personalinformation.label.' + it),
+                        label: required ? ($filter('i18n')('proxy.personalinformation.label.' + it) + '<font color="#CD3B3E">*</font>') : $filter('i18n')('proxy.personalinformation.label.' + it),
                         model: $scope.proxyProfile[it],
                         fieldLength: $scope.proxyUiRules[it].fieldLength,
                         elemId: it,
@@ -102,26 +97,62 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 $scope.profileElements['p_sex'].isWidget = true;
 
                 $scope.profileElements['p_opt_out_adv_date'].isWidget = true;
+
+                // assign placeholders
+
+                $scope.profileElements['p_name_prefix'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_name_prefix');
+                $scope.profileElements['p_first_name'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_first_name');
+                $scope.profileElements['p_mi'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_mi');
+                $scope.profileElements['p_surname_prefix'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_surname_prefix');
+                $scope.profileElements['p_last_name'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_last_name');
+                $scope.profileElements['p_name_suffix'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_name_suffix');
+                $scope.profileElements['p_pref_first_name'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_pref_first_name');
+                $scope.profileElements['p_email_address'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_email_address');
+                $scope.profileElements['p_ctry_code_phone'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_ctry_code_phone');
+                $scope.profileElements['p_phone_area'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_phone_area');
+                $scope.profileElements['p_phone_number'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_phone_number');
+                $scope.profileElements['p_phone_ext'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_phone_ext');
+                $scope.profileElements['p_house_number'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_house_number');
+                $scope.profileElements['p_street_line1'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_street_line1');
+                $scope.profileElements['p_street_line2'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_street_line2');
+                $scope.profileElements['p_street_line3'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_street_line3');
+                $scope.profileElements['p_street_line4'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_street_line4');
+                $scope.profileElements['p_street_line4'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_street_line4');
+                $scope.profileElements['p_city'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_city');
+                $scope.profileElements['p_stat_code'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_stat_code');
+                $scope.profileElements['p_zip'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_zip');
+                $scope.profileElements['p_natn_code'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_natn_code');
+                $scope.profileElements['p_cnty_code'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_cnty_code');
+                $scope.profileElements['p_sex'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_sex');
+                $scope.profileElements['p_birth_date'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_birth_date');
+                $scope.profileElements['p_ssn'].placeholder = $filter('i18n')('proxy.personalinformation.p_ssn');
+
             });
         };
 
         $scope.save = function() {
-            var profile = {};
+            var profile = {},
+                errorMsg;
 
             _.each(Object.keys($scope.profileElements), function(it) {
-                profile[it] = $scope.profileElements[it].model
+                profile[it] = $scope.profileElements[it].model;
             });
 
-
-            // Date Conversion TODO
-            if ($scope.profileElements["p_birth_date"].model.length != 0) {
+            if ($scope.profileElements["p_birth_date"].model) {
                 $scope.proxyProfile.p_birth_date = proxyAppService.stringToDate($scope.profileElements["p_birth_date"].model);
 
-                var str = ($scope.proxyProfile.p_birth_date.getUTCMonth() + 1).toString() + "/" +
-                    $scope.proxyProfile.p_birth_date.getUTCDate() +
-                    "/" + $scope.proxyProfile.p_birth_date.getUTCFullYear().toString();
+                profile.p_birth_date = $scope.proxyProfile.p_birth_date;
+            }
 
-                profile.p_birth_date = str;
+            if (profile.p_email_address) {
+                errorMsg = proxyEmailService.getErrorEmailAddress(profile.p_email_address);
+
+                if (errorMsg) {
+                    notificationCenterService.clearNotifications();
+                    notificationCenterService.addNotification(errorMsg, "error", true);
+
+                    return; // DO NOT UPDATE
+                }
             }
 
             proxyAppService.updateProxyPersonalInfo(profile).$promise.then(function(response) {
