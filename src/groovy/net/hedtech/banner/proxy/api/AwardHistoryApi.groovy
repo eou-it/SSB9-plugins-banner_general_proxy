@@ -441,14 +441,18 @@ DECLARE
     IF (msg_no_hist IS NOT NULL OR msg_no_aid_year IS NOT NULL) THEN
         lv_award_message_json := '"messages": [';
         
-        IF (msg_no_hist IS NOT NULL OR msg_no_aid_year IS NULL) THEN                    
-          lv_award_message_json := lv_award_message_json || '"' || msg_no_hist || '"' || ']';         
-        ELSIF (msg_no_hist IS NULL OR msg_no_aid_year IS NULL) THEN
-           lv_award_message_json := lv_award_message_json || '"' || msg_no_aid_year || '"' || ']';
+        IF (msg_no_hist IS NOT NULL and msg_no_aid_year IS NOT NULL) THEN                    
+          lv_award_message_json := lv_award_message_json || '"' || msg_no_aid_year || '",';
+          lv_award_message_json := lv_award_message_json || '"' || msg_no_hist || '"';
         ELSE
-          lv_award_message_json := lv_award_message_json || '{' || msg_no_hist|| '}';
-          lv_award_message_json := lv_award_message_json || ', {' || msg_no_aid_year|| '}]';
+          IF (msg_no_hist IS NOT NULL) THEN
+            lv_award_message_json := lv_award_message_json || '"' || msg_no_hist || '"';
+          ELSIF (msg_no_aid_year IS NOT NULL) THEN
+            lv_award_message_json := lv_award_message_json || '"' || msg_no_aid_year || '"';
+          END IF;
         END IF;
+        
+        lv_award_message_json := lv_award_message_json || ']';
                
     END IF;  
       -- new final json     
