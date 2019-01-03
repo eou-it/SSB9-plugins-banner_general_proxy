@@ -51,7 +51,7 @@ var proxyApp = angular.module('proxyApp', [
                             finaidDests = ['/ssb/proxy/awardPackage', '/ssb/proxy/awardhist', '/ssb/proxy/acctsumm'];
 
                         if ( (fromState.name === '/ssb/proxy/crsesched' && toState.name === '/ssb/proxy/courseScheduleDetail') ||
-                             (fromState.name === '/ssb/proxy/finaidappsumm' && finaidDests.includes(toState.name))) {
+                             (fromState.name === '/ssb/proxy/finaidappsumm' && _.contains(finaidDests, toState.name))) {
                             breadcrumbs.push.apply(breadcrumbs, fromState.data.breadcrumbs);
 
                             // If any breadcrumbs were indeed pushed, set the URL of the "from state" to be the URL for
