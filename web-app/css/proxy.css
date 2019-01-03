@@ -833,17 +833,19 @@ a.panel-title:active {
     border-radius: 0 0 6px 6px;
 }
 
-.mini-tables table tr:hover {
-    background: transparent !important;
-}
-
+.mini-tables table tr:hover,
 .mini-tables table tr:hover * {
     border-radius: 6px;
 }
 
 .mini-tables tr:last-of-type th {
+    background: transparent;
     border-bottom: none;
     border-radius: 6px;
+}
+
+.mini-tables tr th {
+    background: transparent;
 }
 /* Course Schedule Details - END */
 
