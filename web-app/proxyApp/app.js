@@ -42,9 +42,35 @@ var proxyApp = angular.module('proxyApp', [
                 $rootScope.$state = $state;
                 $rootScope.$stateParams = $stateParams;
                 $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+                    var contextualizeBreadcrumbs = function() {
+                        // Set up breadcrumbs to display correctly in various contexts, e.g. when navigating from
+                        // "Course Schedule" to "Course Schedule Details" or from "Financial Aid Application Summary
+                        // Status" to "Award Package".
+
+                        var breadcrumbs = [],
+                            finaidDests = ['/ssb/proxy/awardPackage', '/ssb/proxy/awardhist', '/ssb/proxy/acctsumm'];
+
+                        if ( (fromState.name === '/ssb/proxy/crsesched' && toState.name === '/ssb/proxy/courseScheduleDetail') ||
+                             (fromState.name === '/ssb/proxy/finaidappsumm' && finaidDests.includes(toState.name))) {
+                            breadcrumbs.push.apply(breadcrumbs, fromState.data.breadcrumbs);
+
+                            // If any breadcrumbs were indeed pushed, set the URL of the "from state" to be the URL for
+                            // the last breadcrumb. (In the current implementation, there will never be more than one
+                            // breadcrumb here anyway, but if any nodes are added in the future, the last -- read most
+                            // recent -- breadcrumb should be that of the "from state.")
+                            if (breadcrumbs) {
+                                breadcrumbs[breadcrumbs.length - 1].url = fromState.url;
+                            }
+                        }
+
+                        breadcrumbs.push.apply(breadcrumbs, toState.data.breadcrumbs);
+
+                        return breadcrumbs;
+                    };
+
                     $state.previous = fromState;
                     $state.previousParams = fromParams;
-                    breadcrumbService.setBreadcrumbs(toState.data.breadcrumbs);
+                    breadcrumbService.setBreadcrumbs(contextualizeBreadcrumbs());
                     breadcrumbService.refreshBreadcrumbs();
                 });
 
