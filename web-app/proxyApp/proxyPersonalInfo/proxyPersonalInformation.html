@@ -16,7 +16,7 @@
             {{'proxy.personalinformation.topMessage'|i18n}}
         </div>
     </div>
-    <span  ng-if="flashMessage">
+    <span ng-if="flashMessage" class="error-text">
         <span class="icon-error ellucian-font"></span>{{flashMessage}}
     </span>
     <div class="row pi-section" ng-repeat="piSection in personalInfoSections">

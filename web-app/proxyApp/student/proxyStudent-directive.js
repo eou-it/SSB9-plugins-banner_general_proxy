@@ -93,7 +93,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     allDaySlot: false,
                     editable: false,
                     eventColor: '#eff7ff',
-                    eventTextColor: '#428bca',
+                    eventTextColor: '#2874BB',
                     eventBorderColor: '#2874bb',
                     slotEventOverlap: false,
                     slotDuration: '00:15:00',
