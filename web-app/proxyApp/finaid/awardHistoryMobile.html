@@ -6,7 +6,14 @@
         {{'proxy.message.viewingStudentInfo'|i18n:[studentName]}}
     </div>
 
-    <div class="notification-msg award-hist-top-msg" ng-repeat="message in messages"><span ng-bind-html="stringifyAwardMesageFor(message)"></span></div>
+    <div ng-repeat="message in messages" class="proxy-top-message-container">
+        <div class="proxy-notification-icon blue">
+            <span class="icon-info-CO"></span>
+        </div>
+        <p class="proxy-top-message proxy-notification-text">
+            {{'proxy.awardHistory.message.'+message|i18n}}
+        </p>
+    </div>
 
     <div ng-repeat="award in awards" id="awards">
 
@@ -14,7 +21,7 @@
 
                 <div ng-if="row.fund_title != 'AWARD_TOTAL'">
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.fund'|i18n}}</div>
-                <div class="col-xs-6"  ng-bind-html="stringifyAwardMesageFor(row.fund_title)"></div>
+                <div class="col-xs-6"  ng-bind-html="stringifyAwardMessageFor(row.fund_title)"></div>
 
                 <div class="subsection-divider"><span></span></div>
                 <div class="clearfix subsection-divider-spacer"></div>
@@ -53,7 +60,7 @@
                 </div>
 
                 <div ng-if="row.fund_title == 'AWARD_TOTAL'">
-                    <div class="proxy-content-item-label col-xs-6"  ng-bind-html="stringifyAwardMesageFor(row.fund_title)"></div>
+                    <div class="proxy-content-item-label col-xs-6"  ng-bind-html="stringifyAwardMessageFor(row.fund_title)"></div>
                     <div class="subsection-divider"><span></span></div>
 
                     <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.offered'|i18n}}</div>
@@ -100,7 +107,7 @@
                 <div ng-if="resource.resource_desc != 'RESOURCE_TOTAL' && resource.resource_desc != 'CALCULATED_RESOURCE'">
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.additionalResource'|i18n}}</div>
-                <div align="right" class="col-xs-6 break-long-words" ng-bind-html="stringifyAwardMesageFor(resource.resource_desc)"></div>
+                <div align="right" class="col-xs-6 break-long-words" ng-bind-html="stringifyAwardMessageFor(resource.resource_desc)"></div>
 
                 <div class="subsection-divider"><span></span></div>
 
@@ -122,7 +129,7 @@
 
                 <div ng-if="resource.resource_desc == 'RESOURCE_TOTAL'">
 
-                    <div class="proxy-content-item-label col-xs-6" ng-bind-html="stringifyAwardMesageFor(resource.resource_desc)"></div>
+                    <div class="proxy-content-item-label col-xs-6" ng-bind-html="stringifyAwardMessageFor(resource.resource_desc)"></div>
                     <div class="subsection-divider"><span></span></div>
 
                     <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.expectedAmount'|i18n}}</div>
@@ -137,7 +144,7 @@
 
                 <div ng-if="resource.resource_desc == 'CALCULATED_RESOURCE'">
 
-                    <div class="proxy-content-item-label col-xs-6" ng-bind-html="stringifyAwardMesageFor(resource.resource_desc)"></div>
+                    <div class="proxy-content-item-label col-xs-6" ng-bind-html="stringifyAwardMessageFor(resource.resource_desc)"></div>
                     <div align="right" class="col-xs-6 break-long-words proxy-content-item-label">{{resource.actual_amt}}</div>
 
                 </div>

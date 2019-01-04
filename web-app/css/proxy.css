@@ -103,7 +103,7 @@ h2 {
 
 .required-field::before {
     content: "*";
-    color: red;
+    color: #CD3B3E;
 }
 
 .proxy table th:last-child, .table>thead>tr>th:last-child, .dashboard th:nth-of-type(8), .dashboard th:nth-of-type(9) {
@@ -204,6 +204,10 @@ p.notification-msg {
     padding: 15px;
 }
 
+.error-text {
+    color: #D42928;
+}
+
 .proxy-content-item {
     background: #ffffff;
     margin-top: 20px;
@@ -302,7 +306,7 @@ p.notification-msg {
 .proxy-top-message {
     font-family: OpenSans-semibold;
     font-size: 16px;
-    color: #428bca;
+    color: #2874BB;
 }
 
 .select-term-top {
@@ -376,6 +380,10 @@ p.notification-msg {
 .amt-bold {
     font-family: OpenSans-semibold;
     text-align: right;
+}
+
+.proxy table th {
+    color: #151618;
 }
 
 /* Action Password Page - BEGIN */
@@ -825,17 +833,19 @@ a.panel-title:active {
     border-radius: 0 0 6px 6px;
 }
 
-.mini-tables table tr:hover {
-    background: transparent !important;
-}
-
+.mini-tables table tr:hover,
 .mini-tables table tr:hover * {
     border-radius: 6px;
 }
 
 .mini-tables tr:last-of-type th {
+    background: transparent;
     border-bottom: none;
     border-radius: 6px;
+}
+
+.mini-tables tr th {
+    background: transparent;
 }
 /* Course Schedule Details - END */
 
@@ -898,11 +908,11 @@ th.currency-values {
 }
 
 .status-desc {
-    border-bottom: solid 2px #c4c4c4;
+    border-bottom: solid 1px #D9D9D9;
     background-color: #f8f8f8;
     margin: 0;
     padding: 1.25em;
-    color: #2086df;
+    color: #026BC8;
 }
 
 .year-award-container {
@@ -1006,11 +1016,11 @@ p.term-fund {
 }
 
 .positive-balance {
-    color: #168140;
+    color: #00804D;
 }
 
 .negative-balance {
-    color: #B32335;
+    color: #D42848;
 }
 
 .acct-summ-heading {

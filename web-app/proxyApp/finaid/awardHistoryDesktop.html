@@ -9,7 +9,14 @@
         </div>
     </div>
 
-    <p class="notification-msg" ng-repeat="message in messages"><span ng-bind-html="stringifyAwardMesageFor(message)"></span></p>
+    <div ng-repeat="message in messages" class="proxy-top-message-container">
+        <div class="proxy-notification-icon blue">
+            <span class="icon-info-CO"></span>
+        </div>
+        <p class="proxy-top-message proxy-notification-text">
+            {{'proxy.awardHistory.message.'+message|i18n}}
+        </p>
+    </div>
 
     <div ng-repeat="award in awards" id="awardhistory">
 
@@ -30,7 +37,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="row in award.data.rows">
-                <td ng-bind-html="stringifyAwardMesageFor(row.fund_title)"></td>
+                <td ng-bind-html="stringifyAwardMessageFor(row.fund_title)"></td>
                 <td align="right">{{row.offer_amt}}</td>
                 <td align="right">{{row.accept_amt}}</td>
                 <td align="right">{{row.decline_amt}}</td>
@@ -58,7 +65,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="resource in award.resources">
-                    <td ng-bind-html="stringifyAwardMesageFor(resource.resource_desc)"></td>
+                    <td ng-bind-html="stringifyAwardMessageFor(resource.resource_desc)"></td>
                     <td align="right" ng-bind-html="resource.term_code"></td>
                     <td align="right">{{resource.est_amt}}</td>
                     <td align="right">{{resource.actual_amt}}</td>
