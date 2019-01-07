@@ -1384,7 +1384,7 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .select2-container {
-        /*width: 345px;*/
+        width: 345px;
     }
 
     .tile-wrapper .select2-container.top-level {

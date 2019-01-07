@@ -129,3 +129,59 @@ proxyAppDirectives.directive('legalSexSelect', function() {
         }
     };
 });
+
+proxyAppDirectives.directive('genssbXeDropdown', ['$parse', function($parse) {
+    return {
+        restrict: 'EA',
+        scope: true,
+        template: '<xe-ui-select id="select2MultipleLabel" ng-model="modelHolder[modelName]" on-select="onSelectFn()"\n' +
+            '             reach-infinity="refreshData($select.search, true)" theme="select2" search-enabled="true">\n' +
+            '   <xe-ui-select-match placeholder="{{selPlaceholder}}">\n' +
+            '       {{$select.selected.description ? $select.selected.description : selPlaceholder}}\n' +
+            '   </xe-ui-select-match>\n' +
+            '   <xe-ui-select-choices minimum-input-length="" refresh-delay="200" repeat="item in selectItems track by $index"\n' +
+            '                         refresh="refreshData($select.search)">\n' +
+            '   <span ng-switch="isLoading">\n' +
+            '       <span ng-switch-when="true"></span>\n' +
+            '       <div ng-switch-default="any" ng-bind-html="item.description | highlight: $select.search"></div>\n' +
+            '   </span>\n' +
+            '   </xe-ui-select-choices>\n' +
+            '</xe-ui-select>',
+        link: function(scope, elem, attrs) {
+            var curPage = 0, stopLoading = false, fetchFn = $parse(attrs.fetchFunction)(scope);
+            scope.modelHolder = $parse(attrs.modelHolder)(scope);
+            scope.modelName = attrs.modelName;
+            scope.onSelectFn = $parse(attrs.onSelectFn)(scope);
+            scope.selPlaceholder = attrs.dropdownPlaceholder;
+
+            scope.refreshData = function(search, loadingMore) {
+                if (!loadingMore) {
+                    // new search
+                    scope.selectItems = [];
+                    curPage = 0;
+                    stopLoading = false;
+                }
+
+                if(!scope.isLoading && !stopLoading) {
+                    if(loadingMore) {
+                        // get more results from current search
+                        curPage++;
+                    }
+
+                    scope.isLoading = true;
+                    fetchFn({
+                        searchString: search ? search : '',
+                        offset: curPage,
+                        max: 10
+                    }).$promise.then(function (response) {
+                        scope.selectItems = scope.selectItems.concat(response);
+                        scope.isLoading = false;
+                        if (response.length < 10) {
+                            stopLoading = true; // we found everything
+                        }
+                    });
+                }
+            };
+        }
+    };
+}]);

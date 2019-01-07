@@ -49,6 +49,7 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
 
         $scope.id = $stateParams.id;
         $scope.studentName = proxyAppService.getStudentName();
+
         $scope.onAidYearSelect = function () {
             proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
             if($scope.aidYearHolder.aidYear.code) {
@@ -64,11 +65,14 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
                 $scope.aidYears = [];
                 curPage = 0;
                 stopLoading = false;
-            } else {
-                // get more results from current search
-                curPage++;
             }
+
             if(!$scope.isLoading && !stopLoading) {
+                if(loadingMore) {
+                    // get more results from current search
+                    curPage++;
+                }
+
                 $scope.isLoading = true;
                 proxyAppService.getAidYears({
                     searchString: search ? search : '',
@@ -82,34 +86,9 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
                     }
                 });
             }
-            // $http({
-            //     url: '/PlatformSandboxApp/ssb/uiCatalog/platformAngularComponents/getUISelectData',
-            //     method: "GET",
-            //     params:{ searchString: search, offest: curPage, max: 10}
-            //
-            // }).then(function(res) {
-            //     $scope.options = res.data.result;
-            //     $scope.isLoading = false;
-            // }, function(error) {
-            //     $scope.isLoading = false;
-            //     console.error(error);
-            // })
-
         };
 
         var init = function() {
-            // $('#aidyear', this.$el).on('change', function (event) {
-            //     proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
-            //     if(event.target.value != 'not/app') { // don't run query on "Not Applicable" selection
-            //         proxyAppService.getFinancialAidStatus({aidYear: event.target.value, id: $scope.id}).$promise.then(function (response) {
-            //             $scope.financialAidStatus = sortFinancialAidStatusLines(response);
-            //         });
-            //     }
-            // });
-
-            // proxyAppService.getAidYears().$promise.then(function(response) {
-            //     $scope.aidYears = response;
-            // });
 
             if(proxyAppService.getAidYear()) {
                 $scope.aidYearHolder.aidYear = proxyAppService.getAidYear();

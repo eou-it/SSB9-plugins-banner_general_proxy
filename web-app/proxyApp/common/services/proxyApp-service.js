@@ -163,5 +163,9 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
             {controller: 'Proxy', action: 'getAidYears'}).query(params);
     };
 
+    this.getTerms = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'getTerms'}).query(params);
+    };
 
 }]);
