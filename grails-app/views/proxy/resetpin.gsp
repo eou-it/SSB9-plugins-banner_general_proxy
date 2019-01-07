@@ -60,7 +60,7 @@
             <input class="eds-text-field reset-input" type="password" name="p_pin2"
                    placeholder="<g:message code="proxy.passwordManagement.verifyNewPassword.label"/>" required>
             <br>
-            <input class="primary submit-btn" type="submit" value="<g:message code="proxy.passwordManagement.signIn"/>">
+            <input class="primary submit-btn" type="submit" value="<g:message code="proxy.label.submit"/>">
         </div>
         <input type="hidden" name="gidm" value="${gidm}" />
     </form>
