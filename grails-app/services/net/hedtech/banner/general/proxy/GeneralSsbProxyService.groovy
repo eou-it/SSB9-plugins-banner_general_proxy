@@ -428,7 +428,7 @@ class GeneralSsbProxyService {
 
         def sqlText = ProxyPersonalInformationApi.UPDATE_PROFILE
 
-        String birthdateString = formatBirthdate(params.p_birth_date)
+        String birthdateString = formatAndValidateBirthdate(params.p_birth_date)
 
         def updatePersonlInformationEmailMessage = MessageHelper.message("proxy.personalinformation.update.email.message")
 
@@ -516,7 +516,7 @@ class GeneralSsbProxyService {
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
         def sqlText = ProxyPersonalInformationApi.CHECK_PROXY_PROFILE_REQUIRED_DATA
 
-        def birthdateString = formatBirthdate(params.p_birth_date)
+        def birthdateString = formatAndValidateBirthdate(params.p_birth_date)
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText, [p_proxyIDM, params.p_first_name, params.p_mi, params.p_last_name,
@@ -656,15 +656,19 @@ class GeneralSsbProxyService {
 
 
     /*
-     * Private method to convert Date for birthday parameter
+     * Private method to convert Date and validate it for birthday parameter
      */
-    private String formatBirthdate(String bDate) {
+    private String formatAndValidateBirthdate(String bDate) {
         if(bDate) {
             DateFormat javascriptFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Date date = javascriptFormat.parse(bDate)
-            SimpleDateFormat usFormat = new SimpleDateFormat("MM/dd/yyyy")
-            String dateString = usFormat.format(date)
-
+            String dateString = null
+            Calendar tooOldDate = new Date().toCalendar()
+            tooOldDate.add(Calendar.YEAR, -150)
+            if(tooOldDate.before(date.toCalendar())) {
+                SimpleDateFormat usFormat = new SimpleDateFormat("MM/dd/yyyy")
+                dateString = usFormat.format(date)
+            }
             return dateString
         }
         else {
