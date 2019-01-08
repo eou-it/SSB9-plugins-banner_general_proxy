@@ -41,6 +41,9 @@ proxyAppControllers.controller('proxyLandingPageController',['$scope', '$rootSco
             $('#menuContainer').removeClass('show').addClass('hide');
             $('#menu').removeClass('show').addClass('hide');
             $('#bannerMenu').removeClass('show').addClass('hide');
+            //disable tools button
+            $('#toolsButton').removeClass('show').addClass('hide');
+            $('#branding').removeAttr('href');
 
             proxyAppService.getStudentListForProxy().$promise.then(function (response) {
                 var addStudentProxyTile = function(student, isActive) {
