@@ -40,17 +40,18 @@
         <div class="ellucianName"></div>
 
         <div class="reset-input-section">
-            <div class="loginMsg">
+            <div class="loginMsgReset">
                 <g:message code="proxy.passwordManagement.resetMsg"/>
             </div>
-            <p class="reset-msg">
-                <g:message code="proxy.passwordManagement.changePassword"/>
-            </p>
-
+            <br>
+            <div>
+                <p class="reset-msg">
+                    <g:message code="proxy.passwordManagement.changePassword"/>
+                </p>
+            </div>
             <g:if test='${flash.message}'>
                 <span class="icon-error"></span ><span class="actionpassword">${flash.message}</span>
             </g:if>
-
             <input class="eds-text-field reset-input" type="text" name="p_email"
                    placeholder="<g:message code="proxy.passwordManagement.email.address.label"/>" required>
             <input class="eds-text-field reset-input" type="password" name="p_pin_orig"
