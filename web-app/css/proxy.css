@@ -826,12 +826,12 @@ a.panel-title:active {
     float: right;
 }
 
-.icon-collapseArrow::before {
-    content: "\e642";
-}
-
 .collapsed .icon-collapseArrow::before {
     content: "\e616";
+}
+
+.icon-collapseArrow::before {
+    content: "\e642";
 }
 
 .mini-tables .proxy-content-item {
