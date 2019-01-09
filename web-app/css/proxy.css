@@ -593,6 +593,19 @@ p.notification-msg {
 #calendar table tr:hover {
     background: transparent !important;
 }
+/* IE11 */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .proxy .fc-toolbar {
+        text-align: center;
+        white-space:nowrap;
+        margin-left: 4em;
+        width: 100%;}
+
+    .proxy .fc-right {
+        padding-left: 70em;
+    }
+
+}
 
 .fc-toolbar.fc-header-toolbar .fc-right {
     width: 100%;
