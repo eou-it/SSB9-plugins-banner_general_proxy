@@ -4,13 +4,15 @@
 <div ng-show="termHolder.term.code">
     <div ng-repeat="course in schedule">
         <h2 class="course-header">
-            <a href="" data-toggle="collapse" data-target="#schedDetails{{$index}}" class="panel-title">
+            <a href="" data-toggle="collapse" data-target="#schedDetails{{$index}}"
+               ng-class="{'collapsed': (schedule.length > 1)}" class="panel-title">
                 {{course.course_title}}
                 <span class="icon-collapseArrow"></span>
             </a>
         </h2>
-        <div class="collapse" id="schedDetails{{$index}}">
-            <div class="proxy-content-section proxy-content-item course">
+        <div ng-class="{'open in': (schedule.length === 1), 'collapse': (schedule.length > 1)}" class=""
+             id="schedDetails{{$index}}">
+            <div class="proxy-content-section course">
                 <ng-include src="'proxyApp/student/courseSchedDetail-course.html'|webAppResourcePath"></ng-include>
             </div>
             <div class="proxy-content-section proxy-content-item meetings" ng-repeat="meeting in course.tbl_meetings">
