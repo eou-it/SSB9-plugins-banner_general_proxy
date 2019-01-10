@@ -1301,8 +1301,11 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .reset-pin-form .primary.submit-btn {
-        margin: 1em 0 1em;
-        padding: 1.25em 1.5em;
+        width: 33%;
+        margin: 1em 0 1em 0.5em;
+        font-size: 1em;
+        padding: 1em 1.5em;
+        font-family: sans-serif !important;
     }
     /* Reset PIN Page - END   */
 
