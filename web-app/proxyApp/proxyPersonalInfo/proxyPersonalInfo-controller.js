@@ -74,10 +74,10 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 });
 
                 $scope.personalInfoSections = [
-                    {heading: 'Personal Details', elements: $scope.detailsElements},
-                    {heading: 'Contact',          elements: $scope.contactElements},
-                    {heading: 'Address',          elements: $scope.addressElements},
-                    {heading: 'Other Info',       elements: $scope.otherElements}
+                    {heading: $filter('i18n')('proxy.personalinformation.label.personalDetails'), elements: $scope.detailsElements},
+                    {heading: $filter('i18n')('proxy.personalinformation.label.contact'),          elements: $scope.contactElements},
+                    {heading: $filter('i18n')('proxy.personalinformation.label.address'),          elements: $scope.addressElements},
+                    {heading: $filter('i18n')('proxy.personalinformation.label.otherInfo'),       elements: $scope.otherElements}
                 ];
 
                 $scope.profileElements['p_birth_date'].isWidget = true;
