@@ -66,9 +66,11 @@ proxyAppControllers.controller('proxyLandingPageController',['$scope', '$rootSco
                 });
 
                 _.each($scope.students.inactive, function(student) {
+                    var onLoadNotifications = $stateParams.onLoadNotifications;
+
                     addStudentProxyTile(student, false);
 
-                    if ($stateParams.onLoadNotifications.length === 0) {
+                    if (!onLoadNotifications || onLoadNotifications.length === 0) {
                         notificationCenterService.addNotification($filter('i18n')('proxy.error.accessExpired', [student.name]), $rootScope.notificationErrorType, true);
                     }
                 });
