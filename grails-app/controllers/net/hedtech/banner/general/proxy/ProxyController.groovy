@@ -359,8 +359,10 @@ class ProxyController {
      *
      */
     def getFinancialAidStatus() {
+        try{
         def id = XssSanitizer.sanitize(params.id)
-        def pidm = PersonUtility.getPerson(id)?.pidm
+
+        def pidm = id ? PersonUtility.getPerson(id)?.pidm : session["currentStudentPidm"]
 
         def result = proxyFinAidService.getFinancialAidStatus(pidm, XssSanitizer.sanitize(params.aidYear))
 
@@ -417,6 +419,10 @@ class ProxyController {
         generalSsbProxyService.updateProxyHistoryOnPageAccess(pidm, MessageHelper.message('proxy.finaid.status.heading'))
 
         render result as JSON
+
+        }catch (Exception e) {
+            render([failure: true, authorized: false,  message: MessageHelper.message('proxy.error.dataError')] as JSON)
+        }
     }
 
     def getAwardPackage() {
