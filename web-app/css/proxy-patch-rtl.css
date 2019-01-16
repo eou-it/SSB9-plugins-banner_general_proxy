@@ -13,6 +13,10 @@
     border-top-style: solid;
 }
 
+.right {
+    text-align: right;
+}
+
 .proxy-pin-mgmt.reset-pin.splashBg {
     direction: rtl;
 }
