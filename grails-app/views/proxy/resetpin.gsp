@@ -7,14 +7,18 @@
     <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
 
-    <link rel="stylesheet" href="${resource(plugin: 'bannerCore', dir: 'css', file: 'login.css')}"/>
-    <link rel="stylesheet" href="${resource(plugin: 'bannerGeneralProxy', dir: 'css', file: 'proxy.css')}"/>
-    <link rel="stylesheet" href="${resource(plugin: 'bannerUiSs', dir: 'css', file: 'eds.css')}"/>
     <g:if test="${message(code: 'default.language.direction') == 'rtl'}">
+        <link rel="stylesheet" href="${resource(plugin: 'bannerCore', dir: 'css', file: 'login.css')}"/>
         <link rel="stylesheet" href="${resource(plugin: 'bannerCore', dir: 'css', file: 'rtl-login.css')}"/>
         <link rel="stylesheet" href="${resource(plugin: 'bannerGeneralProxy', dir: 'css', file: 'proxy-rtl.css')}"/>
+        <link rel="stylesheet" href="${resource(plugin: 'bannerGeneralProxy', dir: 'css', file: 'proxy-patch-rtl.css')}"/>
         <link rel="stylesheet" href="${resource(plugin: 'bannerUiSs', dir: 'css', file: 'eds-rtl.css')}"/>
     </g:if>
+    <g:else>
+        <link rel="stylesheet" href="${resource(plugin: 'bannerCore', dir: 'css', file: 'login.css')}"/>
+        <link rel="stylesheet" href="${resource(plugin: 'bannerGeneralProxy', dir: 'css', file: 'proxy.css')}"/>
+        <link rel="stylesheet" href="${resource(plugin: 'bannerUiSs', dir: 'css', file: 'eds.css')}"/>
+    </g:else>
 
     <link rel="apple-touch-icon" sizes="57x57" href="${resource(plugin: 'bannerCore', dir:'images/eds/',file:'apple-touch-icon-57x57.png')}"/>
     <link rel="apple-touch-icon" sizes="60x60" href="${resource(plugin: 'bannerCore', dir:'images/eds/',file:'apple-touch-icon-60x60.png')}"/>
