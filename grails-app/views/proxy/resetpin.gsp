@@ -7,14 +7,18 @@
     <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
 
-    <link rel="stylesheet" href="${resource(plugin: 'bannerCore', dir: 'css', file: 'login.css')}"/>
-    <link rel="stylesheet" href="${resource(plugin: 'bannerGeneralProxy', dir: 'css', file: 'proxy.css')}"/>
-    <link rel="stylesheet" href="${resource(plugin: 'bannerUiSs', dir: 'css', file: 'eds.css')}"/>
     <g:if test="${message(code: 'default.language.direction') == 'rtl'}">
+        <link rel="stylesheet" href="${resource(plugin: 'bannerCore', dir: 'css', file: 'login.css')}"/>
         <link rel="stylesheet" href="${resource(plugin: 'bannerCore', dir: 'css', file: 'rtl-login.css')}"/>
         <link rel="stylesheet" href="${resource(plugin: 'bannerGeneralProxy', dir: 'css', file: 'proxy-rtl.css')}"/>
+        <link rel="stylesheet" href="${resource(plugin: 'bannerGeneralProxy', dir: 'css', file: 'proxy-patch-rtl.css')}"/>
         <link rel="stylesheet" href="${resource(plugin: 'bannerUiSs', dir: 'css', file: 'eds-rtl.css')}"/>
     </g:if>
+    <g:else>
+        <link rel="stylesheet" href="${resource(plugin: 'bannerCore', dir: 'css', file: 'login.css')}"/>
+        <link rel="stylesheet" href="${resource(plugin: 'bannerGeneralProxy', dir: 'css', file: 'proxy.css')}"/>
+        <link rel="stylesheet" href="${resource(plugin: 'bannerUiSs', dir: 'css', file: 'eds.css')}"/>
+    </g:else>
 
     <link rel="apple-touch-icon" sizes="57x57" href="${resource(plugin: 'bannerCore', dir:'images/eds/',file:'apple-touch-icon-57x57.png')}"/>
     <link rel="apple-touch-icon" sizes="60x60" href="${resource(plugin: 'bannerCore', dir:'images/eds/',file:'apple-touch-icon-60x60.png')}"/>
@@ -40,17 +44,18 @@
         <div class="ellucianName"></div>
 
         <div class="reset-input-section">
-            <div class="loginMsg">
+            <div class="loginMsgReset">
                 <g:message code="proxy.passwordManagement.resetMsg"/>
             </div>
-            <p class="reset-msg">
-                <g:message code="proxy.passwordManagement.changePassword"/>
-            </p>
-
+            <br>
+            <div>
+                <p class="reset-msg">
+                    <g:message code="proxy.passwordManagement.changePassword"/>
+                </p>
+            </div>
             <g:if test='${flash.message}'>
                 <span class="icon-error"></span ><span class="actionpassword">${flash.message}</span>
             </g:if>
-
             <input class="eds-text-field reset-input" type="text" name="p_email"
                    placeholder="<g:message code="proxy.passwordManagement.email.address.label"/>" required>
             <input class="eds-text-field reset-input" type="password" name="p_pin_orig"
@@ -60,7 +65,7 @@
             <input class="eds-text-field reset-input" type="password" name="p_pin2"
                    placeholder="<g:message code="proxy.passwordManagement.verifyNewPassword.label"/>" required>
             <br>
-            <input class="primary submit-btn" type="submit" value="<g:message code="proxy.passwordManagement.signIn"/>">
+            <input class="primary submit-btn" type="submit" value="<g:message code="proxy.label.submit"/>">
         </div>
         <input type="hidden" name="gidm" value="${gidm}" />
     </form>

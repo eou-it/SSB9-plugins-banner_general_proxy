@@ -426,6 +426,10 @@ p.notification-msg {
     font-size: 1.5em;
 }
 
+.proxy-pin-mgmt.splashBg .loginMsgReset {
+    font-weight: bold;
+}
+
 .eds-text-field.action-input {
     width: 100%;
     margin: 1em 0;
@@ -464,8 +468,14 @@ p.notification-msg {
 .eds-text-field.reset-input {
     width: 100%;
     margin: 0.75em 0;
-    font-family: sans-serif !important;
-    font-size: 1.2em !important;
+    border-radius: 4px;
+    border: 1px solid #B2B3B7;
+    padding: 1em 0.75em !important;
+    box-sizing: border-box;
+    webkit-box-sizing: border-box;
+    background-color: #FFFFFF;
+    font-family: OpenSans-semibold !important;
+    text-align: left;
 }
 
 .eds-text-field.reset-input:focus:not([valid]) {
@@ -582,6 +592,19 @@ p.notification-msg {
 
 #calendar table tr:hover {
     background: transparent !important;
+}
+/* IE11 */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .proxy .fc-toolbar {
+        text-align: center;
+        white-space:nowrap;
+        margin-left: 4em;
+        width: 100%;}
+
+    .proxy .fc-right {
+        padding-left: 70em;
+    }
+
 }
 
 .fc-toolbar.fc-header-toolbar .fc-right {
@@ -803,12 +826,12 @@ a.panel-title:active {
     float: right;
 }
 
-.icon-collapseArrow::before {
-    content: "\e642";
-}
-
 .collapsed .icon-collapseArrow::before {
     content: "\e616";
+}
+
+.icon-collapseArrow::before {
+    content: "\e642";
 }
 
 .mini-tables .proxy-content-item {
@@ -1278,8 +1301,11 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .reset-pin-form .primary.submit-btn {
-        margin: 1em 0 1em;
-        padding: 1.25em 1.5em;
+        width: 33%;
+        margin: 1em 0 1em 0.5em;
+        font-size: 1em;
+        padding: 1em 1.5em;
+        font-family: sans-serif !important;
     }
     /* Reset PIN Page - END   */
 
@@ -1756,7 +1782,6 @@ a.breadcrumbButton.leaf-breadcrumb {
     }
 
     .proxy-pin-mgmt.splashBg .copyright {
-        position: absolute;
         bottom: 0;
         margin-bottom: 2em;
         margin-right: 3em;

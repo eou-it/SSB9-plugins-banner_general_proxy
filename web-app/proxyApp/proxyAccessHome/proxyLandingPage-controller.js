@@ -41,6 +41,9 @@ proxyAppControllers.controller('proxyLandingPageController',['$scope', '$rootSco
             $('#menuContainer').removeClass('show').addClass('hide');
             $('#menu').removeClass('show').addClass('hide');
             $('#bannerMenu').removeClass('show').addClass('hide');
+            //disable tools button
+            $('#Preference').removeClass('show').addClass('hide');
+            $('#branding').removeAttr('href');
 
             proxyAppService.getStudentListForProxy().$promise.then(function (response) {
                 var addStudentProxyTile = function(student, isActive) {
@@ -63,9 +66,11 @@ proxyAppControllers.controller('proxyLandingPageController',['$scope', '$rootSco
                 });
 
                 _.each($scope.students.inactive, function(student) {
+                    var onLoadNotifications = $stateParams.onLoadNotifications;
+
                     addStudentProxyTile(student, false);
 
-                    if ($stateParams.onLoadNotifications.length === 0) {
+                    if (!onLoadNotifications || onLoadNotifications.length === 0) {
                         notificationCenterService.addNotification($filter('i18n')('proxy.error.accessExpired', [student.name]), $rootScope.notificationErrorType, true);
                     }
                 });

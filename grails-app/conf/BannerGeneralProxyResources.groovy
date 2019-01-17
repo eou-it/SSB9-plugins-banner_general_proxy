@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 modules = {
@@ -87,7 +87,7 @@ modules = {
     }
 
     'proxyAppLTR' {
-        dependsOn "bannerWebLTR, proxyApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsLTR"
+        dependsOn "bannerWebLTR, proxyApp, i18n-core, glyphicons, bootstrapLTR, auroraCommon, commonComponents, commonComponentsLTR"
         // CSS
         resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar.css'], attrs: [media: 'screen, projection']
 
@@ -100,7 +100,7 @@ modules = {
     }
 
     'proxyAppRTL' {
-        dependsOn "bannerWebRTL, proxyApp, i18n-core, glyphicons, bootstrap, auroraCommon, commonComponents, commonComponentsRTL"
+        dependsOn "bannerWebRTL, proxyApp, i18n-core, glyphicons, bootstrapRTL, auroraCommon, commonComponents, commonComponentsRTL"
         // CSS
         resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar.css'], attrs: [media: 'screen, projection']
         resource url: [plugin: 'banner-general-proxy', file: 'css/fullcalendar/fullcalendar-rtl-patch.css'], attrs: [media: 'screen, projection']

@@ -38,6 +38,9 @@ var proxyApp = angular.module('proxyApp', [
                                 }
                             });
                         }
+
+                        // Prevent notifications from a previous page from displaying
+                        notificationCenterService.clearNotifications();
                     });
 
                 $rootScope.$state = $state;

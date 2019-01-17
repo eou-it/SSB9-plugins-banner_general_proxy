@@ -159,30 +159,6 @@ class ProxyPersonalInformationApi {
     DECLARE
     lv_message VARCHAR2 (30000);
 
-    FUNCTION f_validate_date (p_date VARCHAR2)
-    RETURN VARCHAR2
-    IS
-    f_date    DATE;
-    BEGIN
-    IF p_date IS NOT NULL THEN
-    BEGIN
-    IF twbkwbis.f_isdate (p_date, twbklibs.date_input_fmt) THEN
-    f_date := twbkwbis.f_fmtdate (p_date);
-    IF trunc(( sysdate - f_date)/365) > 150 THEN -- if the birthdate makes them over 150, error
-    RETURN NULL;
-    ELSE
-    RETURN p_date;
-    END IF;
-    ELSE
-    RETURN NULL;
-    END IF;
-    EXCEPTION
-    WHEN OTHERS THEN
-    RETURN NULL;
-    END;
-    END IF;
-    RETURN NULL;
-    END f_validate_date;
 
     FUNCTION f_find_missing_data(
             p_proxy_idm          gpbprxy.gpbprxy_proxy_idm%TYPE,
@@ -340,7 +316,7 @@ class ProxyPersonalInformationApi {
     P_Check_If_Missing('PROFILE_BIRTH_DATE',      p_birth_date,      'p_birth_date');
     -- Also check validity of date
     IF p_birth_date IS NOT NULL THEN
-    IF f_validate_date(p_birth_date) IS NULL THEN
+    IF p_birth_date IS NULL THEN
     lv_info := 'REQUIRED';
     lv_message :=
     lv_message || ' : ' || 'p_birth_date_format_error';
@@ -480,30 +456,6 @@ class ProxyPersonalInformationApi {
       hold_proxy_idm        gpbprxy.gpbprxy_proxy_idm%TYPE;
 
 
-         FUNCTION f_validate_date (p_date VARCHAR2)
-           RETURN VARCHAR2
-         IS
-           f_date    DATE;
-         BEGIN
-           IF p_date IS NOT NULL THEN
-             BEGIN
-               IF twbkwbis.f_isdate (p_date, twbklibs.date_input_fmt) THEN
-                 f_date := twbkwbis.f_fmtdate (p_date);
-                 IF trunc(( sysdate - f_date)/365) > 150 THEN -- if the birthdate makes them over 150, error
-                   RETURN NULL;
-                 ELSE
-                   RETURN p_date;
-                 END IF;
-               ELSE
-                 RETURN NULL;
-               END IF;
-             EXCEPTION
-               WHEN OTHERS THEN
-                 RETURN NULL;
-             END;
-           END IF;
-           RETURN NULL;
-         END f_validate_date;
 
          FUNCTION GET_DATE(p_ind VARCHAR2) RETURN DATE
          IS
@@ -562,7 +514,7 @@ class ProxyPersonalInformationApi {
                                 p_cnty_code          => goksels.f_clean_text(?),
                                 p_natn_code          => goksels.f_clean_text(?),
                                 p_sex                => goksels.f_clean_text(?),
-                                p_birth_date         => TO_DATE (f_validate_date(?), twbklibs.date_input_fmt),
+                                p_birth_date         => TO_DATE (?, twbklibs.date_input_fmt),
                                 p_ssn                => goksels.f_clean_text(?),
                                 p_opt_out_adv_date   => GET_DATE(?),
                                 p_user_id            => goksels.f_get_ssb_id_context,
