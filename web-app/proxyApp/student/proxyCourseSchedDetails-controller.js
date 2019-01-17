@@ -15,38 +15,39 @@ proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope',
             $scope.termHolder.term = proxyAppService.getTerm();
         }
 
+        $scope.termsFetcher = proxyAppService.getTerms;
         $scope.onTermSelect = function () {
             getDetailSchedule($scope.crn);
         };
-        var curPage = 0, stopLoading = false;
-        $scope.refreshData = function(search, loadingMore) {
-            if (!loadingMore) {
-                // new search
-                $scope.terms = [];
-                curPage = 0;
-                stopLoading = false;
-            }
-
-            if(!$scope.isLoading && !stopLoading) {
-                if(loadingMore) {
-                    // get more results from current search
-                    curPage++;
-                }
-
-                $scope.isLoading = true;
-                proxyAppService.getTerms({
-                    searchString: search ? search : '',
-                    offset: curPage,
-                    max: 10
-                }).$promise.then(function (response) {
-                    $scope.terms = $scope.terms.concat(response);
-                    $scope.isLoading = false;
-                    if (response.length < 10) {
-                        stopLoading = true; // we found everything
-                    }
-                });
-            }
-        };
+        // var curPage = 0, stopLoading = false;
+        // $scope.refreshData = function(search, loadingMore) {
+        //     if (!loadingMore) {
+        //         // new search
+        //         $scope.terms = [];
+        //         curPage = 0;
+        //         stopLoading = false;
+        //     }
+        //
+        //     if(!$scope.isLoading && !stopLoading) {
+        //         if(loadingMore) {
+        //             // get more results from current search
+        //             curPage++;
+        //         }
+        //
+        //         $scope.isLoading = true;
+        //         proxyAppService.getTerms({
+        //             searchString: search ? search : '',
+        //             offset: curPage,
+        //             max: 10
+        //         }).$promise.then(function (response) {
+        //             $scope.terms = $scope.terms.concat(response);
+        //             $scope.isLoading = false;
+        //             if (response.length < 10) {
+        //                 stopLoading = true; // we found everything
+        //             }
+        //         });
+        //     }
+        // };
 
         var getDetailSchedule = function(crn) {
             if($scope.termHolder.term.code) {

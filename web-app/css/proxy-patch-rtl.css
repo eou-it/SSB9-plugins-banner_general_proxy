@@ -13,6 +13,10 @@
     border-top-style: solid;
 }
 
+ul.select2-result-single {
+    padding-left: 0;
+}
+
 .right {
     text-align: right;
 }
@@ -26,8 +30,26 @@
 }
 
 @media screen and (min-width:768px) {
+    .dropdown-container {
+        width: 40%;
+        max-width: 345px;
+        display: inline-block;
+    }
+
+    .select2-container {
+        width: 100%;
+    }
+
+    .schedDetail .dropdown-container.proxy-top-input {
+        float: right;
+    }
+
     .row.auto-clear .col-md-6:nth-child(2n+1) {
         clear: right;
+    }
+
+    div.course-container {
+        padding-left: 0;
     }
 
     .flex-wrapper {
