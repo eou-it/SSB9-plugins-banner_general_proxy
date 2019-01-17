@@ -9,22 +9,6 @@
                 {{'proxy.message.viewingStudentInfo'|i18n:[studentName]}}
             </div>
         </div>
-        <!--<div class="select2-container proxy-top-input">-->
-            <!--<input name="aidyear" id="aidyear" select-box for-select='{"placeholder": "{{"proxy.selectAidYear.label"|i18n}}", "action": "Proxy/getAidYears", "model": "aidYearHolder.aidYear", "showNA": false}' type="hidden" />-->
-        <!--</div>-->
-        <!--<xe-ui-select id="select2MultipleLabel" ng-model="aidYearHolder.aidYear" on-select="onAidYearSelect()"-->
-                      <!--reach-infinity="refreshData($select.search, true)" theme="select2" search-enabled="true">-->
-            <!--<xe-ui-select-match placeholder="{{'proxy.selectAidYear.label'|i18n}}">-->
-                <!--{{$select.selected.description ? $select.selected.description : ('proxy.selectAidYear.label'|i18n)}}-->
-            <!--</xe-ui-select-match>-->
-            <!--<xe-ui-select-choices minimum-input-length="" refresh-delay="200" repeat="aidYear in aidYears track by $index"-->
-                                  <!--refresh="refreshData($select.search)">-->
-            <!--<span ng-switch="isLoading">-->
-                <!--<span ng-switch-when="true"></span>-->
-                <!--<div ng-switch-default="any" ng-bind-html="aidYear.description | highlight: $select.search"></div>-->
-            <!--</span>-->
-            <!--</xe-ui-select-choices>-->
-        <!--</xe-ui-select>-->
         <div class="dropdown-container">
             <genssb-xe-dropdown fetch-function="aidYearFetcher" model-holder="aidYearHolder" model-name="aidYear"
                                 on-select-fn="onSelect" dropdown-placeholder="{{'proxy.selectAidYear.label'|i18n}}">

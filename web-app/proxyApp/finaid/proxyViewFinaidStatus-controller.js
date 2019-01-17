@@ -59,35 +59,6 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
                 });
             }
         };
-        // var curPage = 0, stopLoading = false;
-        // $scope.refreshData = function(search, loadingMore) {
-        //     if (!loadingMore) {
-        //         // new search
-        //         $scope.aidYears = [];
-        //         curPage = 0;
-        //         stopLoading = false;
-        //     }
-        //
-        //     if(!$scope.isLoading && !stopLoading) {
-        //         if(loadingMore) {
-        //             // get more results from current search
-        //             curPage++;
-        //         }
-        //
-        //         $scope.isLoading = true;
-        //         proxyAppService.getAidYears({
-        //             searchString: search ? search : '',
-        //             offset: curPage,
-        //             max: 10
-        //         }).$promise.then(function (response) {
-        //             $scope.aidYears = $scope.aidYears.concat(response);
-        //             $scope.isLoading = false;
-        //             if (response.length < 10) {
-        //                 stopLoading = true; // we found everything
-        //             }
-        //         });
-        //     }
-        // };
 
         var init = function() {
 
