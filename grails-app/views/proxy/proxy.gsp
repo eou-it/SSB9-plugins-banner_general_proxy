@@ -17,6 +17,7 @@ Copyright 2018 Ellucian Company L.P. and its affiliates.
         <g:set var="applicationContextRoot" value= "${application.contextPath}"/>
         <meta name="applicationContextRoot" content="${applicationContextRoot}">
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
+        <meta name="proxyProfile" content="${proxyProfile}">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <g:set var="guestUser" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('guestUser')}"/>
 
@@ -67,8 +68,7 @@ Copyright 2018 Ellucian Company L.P. and its affiliates.
 </head>
 
 <body>
-
-    <div id="content" ng-app="proxyApp" ng-controller="proxyLandingPageController" class="container-fluid proxy" aria-relevant="additions" role="main" ng-init="initLandingPage(${proxyProfile})">
+    <div id="content" ng-app="proxyApp" class="container-fluid proxy" aria-relevant="additions" role="main">
         <div ui-view class="gen-home-main-view"></div>
     </div>
 <div class="body-overlay"></div>

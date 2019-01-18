@@ -70,7 +70,7 @@
         <p class="lbl" id="opt-out-adv-date-txt"><label for="opt_out_adv_date">{{'proxy.personalinformation.label.p_opt_out_adv_date'|i18n}}</label></p>
     </div>
 
-    <div class="proxy-bottom-buttons">
+    <div ng-if = "personalInfoSections.length > 0" class="proxy-bottom-buttons">
         <div class="proxy-mobile-visible">
             <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
             <input ng-click="save()" type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">

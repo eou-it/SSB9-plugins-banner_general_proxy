@@ -18,29 +18,36 @@ var proxyApp = angular.module('proxyApp', [
     .run(
         ['$rootScope', '$state', '$stateParams', '$filter', 'proxyAppService', 'breadcrumbService', 'notificationCenterService',
             function ($rootScope, $state, $stateParams, $filter, proxyAppService, breadcrumbService, notificationCenterService) {
+                $rootScope.notificationErrorType = "error";
+                $rootScope.notificationSuccessType = "success";
+                $rootScope.notificationWarningType = "warning";
+                $rootScope.flashNotification = true;
+
                 $rootScope.$on('$stateChangeStart',
                     function(event, toState, toParams, fromState, fromParams, options) {
+                        // Prevent notifications from a previous page from displaying
+                        notificationCenterService.clearNotifications();
+
                         if(toState.url !== '/home' && toState.url !== '/proxypersonalinformation') {
                             proxyAppService.checkStudentPageForAccess({id: sessionStorage.getItem("id"), name: toState.name}).$promise.then(function(response) {
+                                var notifications = [];
 
                                 if (response.failure && !response.authorized) {
-                                    notificationCenterService.clearNotifications();
-                                    notificationCenterService.addNotification(response.message, "error", true);
+                                    notifications.push({message: response.message,
+                                                        messageType: $rootScope.notificationErrorType,
+                                                        flashType: $rootScope.flashNotification});
+
                                     event.preventDefault();
                                     // transitionTo() promise will be rejected with
                                     // a 'transition prevented' error
 
-                                    if (!response.authorized) {
-                                        $state.go('home',
-                                            {reload: true, inherit: false, notify: true}
-                                        );
-                                    }
+                                    $state.go('home',
+                                        {onLoadNotifications: notifications},
+                                        {reload: true, inherit: false, notify: true}
+                                    );
                                 }
                             });
                         }
-
-                        // Prevent notifications from a previous page from displaying
-                        notificationCenterService.clearNotifications();
                     });
 
                 $rootScope.$state = $state;
@@ -80,10 +87,7 @@ var proxyApp = angular.module('proxyApp', [
 
                 $(document.body).removeAttr("role");
                 $("html").attr("dir", $filter('i18n')('default.language.direction') === 'ltr' ? "ltr" : "rtl");
-                $rootScope.notificationErrorType = "error";
-                $rootScope.notificationSuccessType = "success";
-                $rootScope.notificationWarningType = "warning";
-                $rootScope.flashNotification = true;
+
                 //IE fix
                 if (!window.location.origin) {
                     window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
@@ -111,6 +115,8 @@ var proxyApp = angular.module('proxyApp', [
                 $rootScope.playAudibleMessage = null;
 
                 $rootScope.applicationContextRoot = $('meta[name=applicationContextRoot]').attr("content");
+
+                $rootScope.profileRequired = ('true' === $('meta[name=proxyProfile]').attr("content"));
             }
         ]
     );

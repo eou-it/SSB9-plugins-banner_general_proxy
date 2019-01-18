@@ -1,8 +1,8 @@
 /********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$rootScope','$stateParams', 'proxyAppService', '$filter',
-    function ($scope, $rootScope, $stateParams, proxyAppService, $filter) {
+proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$rootScope','$stateParams', 'proxyAppService', '$filter', 'notificationCenterService',
+    function ($scope, $rootScope, $stateParams, proxyAppService, $filter, notificationCenterService) {
 
         var sortFinancialAidStatusLines = function(finaidStatus) {
             var retArr = [];
@@ -55,7 +55,7 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
             proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
             if($scope.aidYearHolder.aidYear.code) {
                 proxyAppService.getFinancialAidStatus({aidYear: $scope.aidYearHolder.aidYear.code, id: $scope.id}).$promise.then(function (response) {
-                    $scope.financialAidStatus = sortFinancialAidStatusLines(response);
+                    handleResponse(response);
                 });
             }
         };
@@ -68,11 +68,23 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
 
             if($scope.aidYearHolder.aidYear.code) {
                 proxyAppService.getFinancialAidStatus({aidYear: $scope.aidYearHolder.aidYear.code, id: sessionStorage.getItem("id")}).$promise.then(function (response) {
-                    $scope.financialAidStatus = sortFinancialAidStatusLines(response);
+                    handleResponse(response);
                 });
             }
         };
 
+
+        var handleResponse = function(response){
+            if(response.failure) {
+                $scope.financialAidStatus=[];
+                notificationCenterService.clearNotifications();
+                notificationCenterService.addNotification(response.message, "error", true);
+            }else {
+                $scope.financialAidStatus = sortFinancialAidStatusLines(response);
+            }
+        }
+
         init();
+
     }
 ]);
