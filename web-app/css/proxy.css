@@ -509,6 +509,24 @@ p.notification-msg {
 }
 /* Reset PIN page - END */
 
+.profile-dropdown .select2-container {
+    height: 50px;
+    width: 100%;
+}
+
+.profile-dropdown .ui-select-container .select2-choice {
+    height: 100%;
+}
+
+.profile-dropdown .ui-select-container.ng-not-empty .select2-choice {
+    border-color: #151618;
+}
+
+.profile-dropdown .ui-select-container .select2-choice > .select2-chosen {
+    padding-top: 0.5em;
+    display: inline-block;
+}
+
 .proxy input.hasMultiCalendarPicker.pi-date-input {
     font-weight: normal;
     border-radius: 4px;

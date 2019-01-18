@@ -130,11 +130,24 @@ proxyAppDirectives.directive('legalSexSelect', function() {
     };
 });
 
-proxyAppDirectives.directive('genssbXeDropdown', ['$parse', function($parse) {
+proxyAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function($parse, $filter) {
+    var getDescriptionFromAddressComponent = function(item) {
+            if('webDescription' in item && item.webDescription) {
+                return item.webDescription;
+            }
+            else if('nation' in item && item.nation) {
+                return item.nation;
+            }
+            else {
+                return item.description;
+            }
+        },
+        notApplicableText = $filter('i18n')('personInfo.label.notApplicable');
+
     return {
         restrict: 'EA',
         scope: true,
-        template: '<xe-ui-select id="select2MultipleLabel" ng-model="modelHolder[modelName]" on-select="onSelectFn()"\n' +
+        template: '<xe-ui-select ng-model="modelHolder[modelName]" on-select="onSelectFn()"\n' +
             '             reach-infinity="refreshData($select.search, true)" theme="select2" search-enabled="true">\n' +
             '   <xe-ui-select-match placeholder="{{selPlaceholder}}">\n' +
             '       {{$select.selected.description ? $select.selected.description : selPlaceholder}}\n' +
@@ -148,16 +161,20 @@ proxyAppDirectives.directive('genssbXeDropdown', ['$parse', function($parse) {
             '   </xe-ui-select-choices>\n' +
             '</xe-ui-select>',
         link: function(scope, elem, attrs) {
-            var curPage = 0, stopLoading = false, fetchFn = $parse(attrs.fetchFunction)(scope);
+            var curPage = 0, stopLoading = false, fetchFn = $parse(attrs.fetchFunction)(scope),
+                initItemList = function() {
+                    return (attrs.showNa === 'true' ? [{code: null, description: notApplicableText}] : []);
+                };
             scope.modelHolder = $parse(attrs.modelHolder)(scope);
             scope.modelName = attrs.modelName;
             scope.onSelectFn = $parse(attrs.onSelectFn)(scope);
             scope.selPlaceholder = attrs.dropdownPlaceholder;
+            scope.selectItems = initItemList();
 
             scope.refreshData = function(search, loadingMore) {
                 if (!loadingMore) {
                     // new search
-                    scope.selectItems = [];
+                    scope.selectItems = initItemList();
                     curPage = 0;
                     stopLoading = false;
                 }
@@ -174,7 +191,12 @@ proxyAppDirectives.directive('genssbXeDropdown', ['$parse', function($parse) {
                         offset: curPage,
                         max: 10
                     }).$promise.then(function (response) {
-                        scope.selectItems = scope.selectItems.concat(response);
+                        _.each(response, function(item) {
+                            scope.selectItems.push({
+                                code: item.code,
+                                description: getDescriptionFromAddressComponent(item)
+                            });
+                        });
                         scope.isLoading = false;
                         if (response.length < 10) {
                             stopLoading = true; // we found everything
