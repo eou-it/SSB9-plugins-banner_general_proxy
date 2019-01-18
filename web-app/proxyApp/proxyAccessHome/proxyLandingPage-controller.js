@@ -96,16 +96,6 @@ proxyAppControllers.controller('proxyLandingPageController',['$scope', '$rootSco
         $scope.pages =[];
 
 
-        // CONTROLLER FUNCTIONS
-        // --------------------
-        $scope.initLandingPage = function(profileReq)
-        {
-            //This function is sort of private constructor for controller
-            $rootScope.profileRequired = profileReq;
-
-        };
-
-
 
         // INITIALIZE
         // ----------

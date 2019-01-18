@@ -242,6 +242,27 @@ p.notification-msg {
     height: 25px;
 }
 
+.dropdown-container {
+}
+
+.ui-select-container {
+    background: #FFFFFF;
+    width: 100%;
+}
+
+.ui-select-container .select2-choice {
+    margin-left: 0;
+}
+
+.ui-select-dropdown {
+    margin-left: 0;
+    width: 100%;
+}
+
+.ui-select-dropdown .select2-search input {
+    width: 100% !important;
+}
+
 .gpa-summary-header {
     background: #ffffff;
     font-family: OpenSans-semibold;
@@ -487,6 +508,24 @@ p.notification-msg {
     padding: 1.25em 1.5em;
 }
 /* Reset PIN page - END */
+
+.profile-dropdown .select2-container {
+    height: 50px;
+    width: 100%;
+}
+
+.profile-dropdown .ui-select-container .select2-choice {
+    height: 100%;
+}
+
+.profile-dropdown .ui-select-container.ng-not-empty .select2-choice {
+    border-color: #151618;
+}
+
+.profile-dropdown .ui-select-container .select2-choice > .select2-chosen {
+    padding-top: 0.5em;
+    display: inline-block;
+}
 
 .proxy input.hasMultiCalendarPicker.pi-date-input {
     font-weight: normal;
@@ -1162,6 +1201,20 @@ a.breadcrumbButton.leaf-breadcrumb {
         padding: 22px 32px 100px;
     }
 
+    .dropdown-container {
+        width: 40%;
+        max-width: 345px;
+    }
+
+    .dropdown-container .select2-container {
+        width: 100%;
+    }
+
+    .schedDetail .dropdown-container {
+        display: inline-block;
+        float: left;
+    }
+
     .tile-group {
         margin: 0 auto;
     }
@@ -1413,7 +1466,11 @@ a.breadcrumbButton.leaf-breadcrumb {
         width: 345px;
     }
 
-    .tile-wrapper .select2-container.top-level {
+    .tile-wrapper .select2-container {
+        width: 100%;
+    }
+
+    .tile-wrapper > .select2-container.top-level {
         max-width: 35%;
     }
 

@@ -168,4 +168,19 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
             {controller: 'Proxy', action: 'getTerms'}).query(params);
     };
 
+    this.getCountyList = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'PersonalInformationDetails', action: 'getCountyList'}).query(params);
+    };
+
+    this.getStateList = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'PersonalInformationDetails', action: 'getStateList'}).query(params);
+    };
+
+    this.getNationList = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'PersonalInformationDetails', action: 'getNationList'}).query(params);
+    };
+
 }]);

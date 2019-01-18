@@ -421,6 +421,7 @@ class ProxyController {
         render result as JSON
 
         }catch (Exception e) {
+            log.error(e)
             render([failure: true, authorized: false,  message: MessageHelper.message('proxy.error.dataError')] as JSON)
         }
     }

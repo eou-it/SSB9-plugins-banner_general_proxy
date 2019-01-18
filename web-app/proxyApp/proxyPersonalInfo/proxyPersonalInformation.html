@@ -36,11 +36,11 @@
                    role="alert" aria-live="assertive">{{cityErrMsg|i18n}}</p>
             </div>
 
-            <div ng-if="profileElement.visible && profileElement.isDropdown">
+            <div ng-if="profileElement.visible && profileElement.isDropdown" class="profile-dropdown">
                 <label class="input-field-label" ng-bind-html= "profileElement.label"></label><br>
-                <input select-box for-select='{"placeholder": "{{profileElement.placeholder}}", "action": "PersonalInformationDetails/get{{profileElement.fetch}}List", "model": "profileElement.model", "showNA": true}' type="hidden" />
-                <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                   role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
+                <genssb-xe-dropdown fetch-function="profileElement.fetch" model-holder="profileElement" model-name="model"
+                                    show-na="true" dropdown-placeholder="{{profileElement.placeholder}}">
+                </genssb-xe-dropdown>
             </div>
 
             <div ng-if="profileElement.visible && profileElement.elemId === 'p_birth_date'">
@@ -54,11 +54,16 @@
                    role="alert" aria-live="assertive">{{seprDateErrMsg|i18n}}</p>
             </div>
 
-            <div ng-if="profileElement.visible && profileElement.elemId === 'p_sex'">
+            <div ng-if="profileElement.visible && profileElement.elemId === 'p_sex'" class="profile-dropdown">
                 <label class="input-field-label" ng-bind-html= "profileElement.label"></label><br>
-                <input legal-sex-select profile-item="profileElement" type="hidden" />
-                <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                   role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
+                <xe-ui-select ng-model="profileElement.model" theme="select2" search-enabled="false">
+                    <xe-ui-select-match placeholder="{{profileElement.placeholder}}">
+                        {{$select.selected.description ? $select.selected.description : profileElement.placeholder}}
+                    </xe-ui-select-match>
+                    <xe-ui-select-choices repeat="choice in legalSexChoices">
+                        <div ng-bind-html="choice.description"></div>
+                    </xe-ui-select-choices>
+                </xe-ui-select>
             </div>
 
 
@@ -70,7 +75,7 @@
         <p class="lbl" id="opt-out-adv-date-txt"><label for="opt_out_adv_date">{{'proxy.personalinformation.label.p_opt_out_adv_date'|i18n}}</label></p>
     </div>
 
-    <div class="proxy-bottom-buttons">
+    <div ng-if = "personalInfoSections.length > 0" class="proxy-bottom-buttons">
         <div class="proxy-mobile-visible">
             <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
             <input ng-click="save()" type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">

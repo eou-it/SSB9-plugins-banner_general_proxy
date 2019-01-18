@@ -9,23 +9,10 @@
                 {{'proxy.message.viewingStudentInfo'|i18n:[studentName]}}
             </div>
         </div>
-        <!--<div class="select2-container proxy-top-input">-->
-            <!--<input name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "termHolder.term", "showNA": false}' type="hidden" />-->
-        <!--</div>-->
-        <div class="select2-container proxy-top-input">
-        <xe-ui-select id="select2MultipleLabel" ng-model="termHolder.term" on-select="onTermSelect()"
-                      reach-infinity="refreshData($select.search, true)" theme="select2" search-enabled="true">
-            <xe-ui-select-match placeholder="{{'proxy.label.term.selectTerm'|i18n}}">
-                {{$select.selected.description ? $select.selected.description : ('proxy.label.term.selectTerm'|i18n)}}
-            </xe-ui-select-match>
-            <xe-ui-select-choices minimum-input-length="" refresh-delay="200" repeat="term in terms track by $index"
-                                  refresh="refreshData($select.search)">
-            <span ng-switch="isLoading">
-                <span ng-switch-when="true"></span>
-                <div ng-switch-default="any" ng-bind-html="term.description | highlight: $select.search"></div>
-            </span>
-            </xe-ui-select-choices>
-        </xe-ui-select>
+        <div class="dropdown-container proxy-top-input">
+            <genssb-xe-dropdown fetch-function="termsFetcher" model-holder="termHolder" model-name="term"
+                                on-select-fn="onTermSelect" dropdown-placeholder="{{'proxy.label.term.selectTerm'|i18n}}">
+            </genssb-xe-dropdown>
         </div>
         <div ng-if="errorMsg" class="proxy-top-message-container">
             <div class="proxy-notification-icon blue">

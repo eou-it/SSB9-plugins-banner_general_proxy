@@ -159,10 +159,10 @@ class GeneralSsbProxyService {
                 proxyProfile.p_street_line3 = data.GPBPRXY_STREET_LINE3
                 proxyProfile.p_street_line4 = data.GPBPRXY_STREET_LINE4
                 proxyProfile.p_city = data.GPBPRXY_CITY
-                proxyProfile.p_stat_code = State.findByCode(data.GPBPRXY_STAT_CODE)?: new State()
+                proxyProfile.p_stat_code = State.findByCode(data.GPBPRXY_STAT_CODE)?: null
                 proxyProfile.p_zip = data.GPBPRXY_ZIP
-                proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE)?: new Nation()
-                proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE)?: new County()
+                proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE)?: null
+                proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE)?: null
                 proxyProfile.p_sex = data.GPBPRXY_SEX
                 proxyProfile.p_birth_date = data.GPBPRXY_BIRTH_DATE
                 proxyProfile.p_ssn = data.GPBPRXY_SSN

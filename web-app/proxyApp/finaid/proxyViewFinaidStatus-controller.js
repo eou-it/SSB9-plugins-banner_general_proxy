@@ -1,8 +1,8 @@
 /********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$rootScope','$stateParams', 'proxyAppService', '$filter',
-    function ($scope, $rootScope, $stateParams, proxyAppService, $filter) {
+proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$rootScope','$stateParams', 'proxyAppService', '$filter', 'notificationCenterService',
+    function ($scope, $rootScope, $stateParams, proxyAppService, $filter, notificationCenterService) {
 
         var sortFinancialAidStatusLines = function(finaidStatus) {
             var retArr = [];
@@ -50,40 +50,12 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
         $scope.id = $stateParams.id;
         $scope.studentName = proxyAppService.getStudentName();
 
+        $scope.aidYearFetcher = proxyAppService.getAidYears;
         $scope.onAidYearSelect = function () {
             proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
             if($scope.aidYearHolder.aidYear.code) {
                 proxyAppService.getFinancialAidStatus({aidYear: $scope.aidYearHolder.aidYear.code, id: $scope.id}).$promise.then(function (response) {
-                    $scope.financialAidStatus = sortFinancialAidStatusLines(response);
-                });
-            }
-        };
-        var curPage = 0, stopLoading = false;
-        $scope.refreshData = function(search, loadingMore) {
-            if (!loadingMore) {
-                // new search
-                $scope.aidYears = [];
-                curPage = 0;
-                stopLoading = false;
-            }
-
-            if(!$scope.isLoading && !stopLoading) {
-                if(loadingMore) {
-                    // get more results from current search
-                    curPage++;
-                }
-
-                $scope.isLoading = true;
-                proxyAppService.getAidYears({
-                    searchString: search ? search : '',
-                    offset: curPage,
-                    max: 10
-                }).$promise.then(function (response) {
-                    $scope.aidYears = $scope.aidYears.concat(response);
-                    $scope.isLoading = false;
-                    if (response.length < 10) {
-                        stopLoading = true; // we found everything
-                    }
+                    handleResponse(response);
                 });
             }
         };
@@ -96,11 +68,23 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
 
             if($scope.aidYearHolder.aidYear.code) {
                 proxyAppService.getFinancialAidStatus({aidYear: $scope.aidYearHolder.aidYear.code, id: sessionStorage.getItem("id")}).$promise.then(function (response) {
-                    $scope.financialAidStatus = sortFinancialAidStatusLines(response);
+                    handleResponse(response);
                 });
             }
         };
 
+
+        var handleResponse = function(response){
+            if(response.failure) {
+                $scope.financialAidStatus=[];
+                notificationCenterService.clearNotifications();
+                notificationCenterService.addNotification(response.message, "error", true);
+            }else {
+                $scope.financialAidStatus = sortFinancialAidStatusLines(response);
+            }
+        }
+
         init();
+
     }
 ]);

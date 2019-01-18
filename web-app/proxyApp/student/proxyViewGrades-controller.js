@@ -22,6 +22,7 @@ proxyAppControllers.controller('proxyViewGradesController',['$scope', 'proxyAppS
                 proxyAppService.setTerm($scope.termHolder.term);
             });
         };
+        $scope.termsFetcher = proxyAppService.getTerms;
 
 
         proxyAppService.getHolds({id: sessionStorage.getItem("id")}).$promise.then(function(response) {
