@@ -1,5 +1,5 @@
 /********************************************************************************
-  Copyright 2018 Ellucian Company L.P. and its affiliates.
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 /* General Styles */
 body {
@@ -117,11 +117,6 @@ h2 {
 .proxy-profile-form input.hasMultiCalendarPicker.pi-date-input + span.calendar-img {
     right: 5px;
 }
-
-/*ul{*/
-    /*margin:0;*/
-    /*padding:0 20px;*/
-/*}*/
 
 .right {
     text-align: right;
