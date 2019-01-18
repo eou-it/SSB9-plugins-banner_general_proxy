@@ -1,5 +1,5 @@
 <!--*******************************************************************************
-  Copyright 2018 Ellucian Company L.P. and its affiliates.
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="proxy-page-body mini-tables awardPackage">
     <div class="proxy-header-container">
@@ -9,8 +9,10 @@
                 {{'proxy.message.viewingStudentInfo'|i18n:[studentName]}}
             </div>
         </div>
-        <div class="select2-container proxy-top-input">
-            <input name="aidyear" id="aidyear" select-box for-select='{"placeholder": "{{"proxy.selectAidYear.label"|i18n}}", "action": "Proxy/getAidYears", "model": "aidYearHolder.aidYear", "showNA": false}' type="hidden" />
+        <div class="dropdown-container">
+            <genssb-xe-dropdown fetch-function="aidYearFetcher" model-holder="aidYearHolder" model-name="aidYear"
+                                on-select-fn="onSelect" dropdown-placeholder="{{'proxy.selectAidYear.label'|i18n}}">
+            </genssb-xe-dropdown>
         </div>
         <div ng-show="showMessageForNoAwardInfo" class="proxy-mid-message-container">
             <div class="proxy-notification-icon blue">

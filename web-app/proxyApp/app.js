@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 var proxyAppControllers = angular.module('proxyAppControllers', []);
 var proxyAppDirectives = angular.module('proxyAppDirectives', []);
@@ -13,7 +13,8 @@ var proxyApp = angular.module('proxyApp', [
     'ui.bootstrap',
     'I18n',
     'datePickerApp',
-    'xe-ui-components'])
+    'xe-ui-components',
+    'ui.select'])
     .run(
         ['$rootScope', '$state', '$stateParams', '$filter', 'proxyAppService', 'breadcrumbService', 'notificationCenterService',
             function ($rootScope, $state, $stateParams, $filter, proxyAppService, breadcrumbService, notificationCenterService) {

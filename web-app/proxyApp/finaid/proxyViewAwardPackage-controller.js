@@ -1,5 +1,5 @@
 /********************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stateParams', 'proxyAppService', '$filter',
     function ($scope, $rootScope, $stateParams, proxyAppService, $filter) {
@@ -14,6 +14,18 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
         $scope.awardPackage = {};
         $scope.studentName = proxyAppService.getStudentName();
         $scope.showMessageForNoAwardInfo = false;
+
+        $scope.aidYearFetcher = proxyAppService.getAidYears;
+        $scope.onSelect = function () {
+            proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
+            if(!$scope.aidYearHolder.aidYear.code) {
+                $scope.awardPackage = {};
+                $scope.showMessageForNoAwardInfo = false;
+                $scope.$apply();
+            } else {
+                getAwardPackage();
+            }
+        };
 
          var getAwardPackage = function() {
             if($scope.aidYearHolder.aidYear.code) {
@@ -35,19 +47,6 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
         var init = function() {
             getAwardPackage();
         };
-
-        $('#aidyear', this.$el).on('change', function (event) {
-            proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
-
-            if(event.target.value === 'not/app') {
-                // don't run query on "Not Applicable" selection and reset to empty award package
-                $scope.awardPackage = {};
-                $scope.showMessageForNoAwardInfo = false;
-                $scope.$apply();
-            } else {
-                getAwardPackage();
-            }
-        });
 
         $scope.getStatusTextNonPell = function(option) {
             var textKey = '';

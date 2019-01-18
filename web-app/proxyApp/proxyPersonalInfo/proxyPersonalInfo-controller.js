@@ -1,12 +1,12 @@
 /********************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$rootScope','$state','$filter','$location',
     'proxyAppService','notificationCenterService','proxyEmailService',
     function ($scope, $rootScope, $state, $filter, $location, proxyAppService, notificationCenterService, proxyEmailService) {
 
         var init = function () {
-            $scope.getPersonalInfo();
+            getPersonalInfo();
         };
 
         $scope.guestUserName = CommonContext.user;
@@ -21,12 +21,17 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
         $scope.otherElements;
         $scope.optOutAdvDate;
         $scope.personalInfoSections = [];
+        $scope.legalSexChoices = [
+            {code: 'M', description: $filter('i18n')('proxy.personalinformation.label.male')},
+            {code: 'F', description: $filter('i18n')('proxy.personalinformation.label.female')},
+            {code: 'N', description: $filter('i18n')('proxy.personalinformation.label.unknown')}
+        ];
 
         $scope.setBirthDate = function(data){
             $scope.proxyProfile.p_birth_date = data;
         };
 
-        $scope.getPersonalInfo = function() {
+        var getPersonalInfo = function() {
             $scope.profileElements = {};
             $scope.detailsElements = [];
             $scope.contactElements = [];
@@ -82,19 +87,34 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
 
                 $scope.profileElements['p_birth_date'].isWidget = true;
 
-                $scope.profileElements['p_cnty_code'].fetch = 'County';
+                $scope.profileElements['p_cnty_code'].fetch = proxyAppService.getCountyList;
                 $scope.profileElements['p_cnty_code'].isWidget = true;
                 $scope.profileElements['p_cnty_code'].isDropdown = true;
 
-                $scope.profileElements['p_stat_code'].fetch = 'State';
+                $scope.profileElements['p_stat_code'].fetch = proxyAppService.getStateList;
                 $scope.profileElements['p_stat_code'].isWidget = true;
                 $scope.profileElements['p_stat_code'].isDropdown = true;
 
-                $scope.profileElements['p_natn_code'].fetch = 'Nation';
+                $scope.profileElements['p_natn_code'].fetch = proxyAppService.getNationList;
                 $scope.profileElements['p_natn_code'].isWidget = true;
                 $scope.profileElements['p_natn_code'].isDropdown = true;
+                if($scope.proxyProfile['p_natn_code']) {
+                    $scope.profileElements['p_natn_code'].model = {
+                        code: $scope.proxyProfile['p_natn_code'].code,
+                        description: $scope.proxyProfile['p_natn_code'].nation
+                    };
+                }
 
                 $scope.profileElements['p_sex'].isWidget = true;
+                if($scope.proxyProfile['p_sex']) {
+                    $scope.profileElements['p_sex'].model = {
+                        code: $scope.profileElements['p_sex'].model,
+                        description: $scope.profileElements['p_sex'].model === 'M' ? $filter('i18n')('proxy.personalinformation.label.male') :
+                            $scope.profileElements['p_sex'].model === 'F' ? $filter('i18n')('proxy.personalinformation.label.female') :
+                                $filter('i18n')('proxy.personalinformation.label.unknown')
+                    };
+                }
+
 
                 $scope.profileElements['p_opt_out_adv_date'].isWidget = true;
 
@@ -155,6 +175,10 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 }
             }
 
+            if (profile.p_sex) {
+                profile.p_sex = profile.p_sex.code;
+            }
+
             proxyAppService.updateProxyPersonalInfo(profile).$promise.then(function(response) {
                 var notifications = [],
                     doStateGoSuccess = function() {
@@ -196,7 +220,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
             // If it *has* previously been filled out successfully -- meaning this is just an update -- Cancel
             // simply returns to the landing page.
             if ($rootScope.profileRequired) {
-                $scope.getPersonalInfo();
+                getPersonalInfo();
             } else {
                 $state.go('home',
                     {reload: true, inherit: false, notify: true}

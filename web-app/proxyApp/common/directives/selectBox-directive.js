@@ -1,5 +1,5 @@
 /*******************************************************************************
-  Copyright 2018 Ellucian Company L.P. and its affiliates.
+  Copyright 2018-2019 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 proxyAppDirectives.directive('selectBox',['$filter', function($filter) {
 
@@ -94,76 +94,6 @@ proxyAppDirectives.directive('selectBox',['$filter', function($filter) {
     };
 }]);
 
-proxyAppDirectives.directive('contentPageSelectBox',['$rootScope', '$state', function($rootScope, $state) {
-    return {
-        scope: true,
-        link: function(scope, elem, attrs) {
-            var data = angular.fromJson(attrs.forSelect),
-                dataModelItem = scope.$eval(data.model),
-                pageData = scope.$eval(data.options),
-                options = [],
-                setId = function() {
-                    jQuery.ajax({
-                        url: "proxy/setId",
-                        data: {"id": scope.proxyData.id},
-                        async: false
-                    });
-                },
-                goProxyApp = function(url) {
-
-                    //clear storage for Term Selector
-                    if (sessionStorage.getItem("termCode")){
-                        sessionStorage.removeItem("termCode");
-                    }
-
-                    if (sessionStorage.getItem("termDesc")){
-                        sessionStorage.removeItem("termDesc");
-                    }
-
-                    //clear storage for AidYear Selector
-                    if (sessionStorage.getItem("aidYearCode")){
-                        sessionStorage.removeItem("aidYearCode");
-                    }
-
-                    if (sessionStorage.getItem("aidYearDesc")){
-                        sessionStorage.removeItem("aidYearDesc");
-                    }
-
-
-                    sessionStorage.setItem("id", scope.proxyData.id);
-                    sessionStorage.setItem("name", scope.proxyData.desc);
-
-                    $rootScope.studentName = scope.proxyData.desc;
-                    $state.go(url, {id: scope.proxyData.id});
-                };
-
-
-            $.each(pageData, function(i, item) {
-                options.push({
-                    id:   item.url,
-                    text: item.desc
-                });
-            });
-
-            elem.select2({
-                width: '100%',
-                placeholder: data.placeholder,
-                data: options,
-                formatSelection: function(item) {
-                    dataModelItem.code = item.id;
-                    dataModelItem.description = item.text;
-
-                    return item.text;
-                }
-            });
-
-            elem.on('change', function (event) {
-                setId();
-                goProxyApp(event.val);
-            });
-        }
-    };
-}]);
 
 proxyAppDirectives.directive('legalSexSelect', function() {
 
@@ -199,3 +129,81 @@ proxyAppDirectives.directive('legalSexSelect', function() {
         }
     };
 });
+
+proxyAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function($parse, $filter) {
+    var getDescriptionFromAddressComponent = function(item) {
+            if('webDescription' in item && item.webDescription) {
+                return item.webDescription;
+            }
+            else if('nation' in item && item.nation) {
+                return item.nation;
+            }
+            else {
+                return item.description;
+            }
+        },
+        notApplicableText = $filter('i18n')('personInfo.label.notApplicable');
+
+    return {
+        restrict: 'EA',
+        scope: true,
+        template: '<xe-ui-select ng-model="modelHolder[modelName]" on-select="onSelectFn()"\n' +
+            '             reach-infinity="refreshData($select.search, true)" theme="select2" search-enabled="true">\n' +
+            '   <xe-ui-select-match placeholder="{{selPlaceholder}}">\n' +
+            '       {{$select.selected.description ? $select.selected.description : selPlaceholder}}\n' +
+            '   </xe-ui-select-match>\n' +
+            '   <xe-ui-select-choices minimum-input-length="" refresh-delay="200" repeat="item in selectItems track by $index"\n' +
+            '                         refresh="refreshData($select.search)">\n' +
+            '   <span ng-switch="isLoading">\n' +
+            '       <span ng-switch-when="true"></span>\n' +
+            '       <div ng-switch-default="any" ng-bind-html="item.description | highlight: $select.search"></div>\n' +
+            '   </span>\n' +
+            '   </xe-ui-select-choices>\n' +
+            '</xe-ui-select>',
+        link: function(scope, elem, attrs) {
+            var curPage = 0, stopLoading = false, fetchFn = $parse(attrs.fetchFunction)(scope),
+                initItemList = function() {
+                    return (attrs.showNa === 'true' ? [{code: null, description: notApplicableText}] : []);
+                };
+            scope.modelHolder = $parse(attrs.modelHolder)(scope);
+            scope.modelName = attrs.modelName;
+            scope.onSelectFn = $parse(attrs.onSelectFn)(scope);
+            scope.selPlaceholder = attrs.dropdownPlaceholder;
+            scope.selectItems = initItemList();
+
+            scope.refreshData = function(search, loadingMore) {
+                if (!loadingMore) {
+                    // new search
+                    scope.selectItems = initItemList();
+                    curPage = 0;
+                    stopLoading = false;
+                }
+
+                if(!scope.isLoading && !stopLoading) {
+                    if(loadingMore) {
+                        // get more results from current search
+                        curPage++;
+                    }
+
+                    scope.isLoading = true;
+                    fetchFn({
+                        searchString: search ? search : '',
+                        offset: curPage,
+                        max: 10
+                    }).$promise.then(function (response) {
+                        _.each(response, function(item) {
+                            scope.selectItems.push({
+                                code: item.code,
+                                description: getDescriptionFromAddressComponent(item)
+                            });
+                        });
+                        scope.isLoading = false;
+                        if (response.length < 10) {
+                            stopLoading = true; // we found everything
+                        }
+                    });
+                }
+            };
+        }
+    };
+}]);
