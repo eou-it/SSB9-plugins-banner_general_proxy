@@ -1,5 +1,5 @@
 <!--*******************************************************************************
-  Copyright 2018 Ellucian Company L.P. and its affiliates.
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="proxy-page-body">
     <div class="clearfix">
@@ -40,11 +40,9 @@
     </div>
 
     <div class="select-term" data-ng-show="registered && holds!=true">
-        <div class="select2-container">
-            <input setup-term-selector name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "term.code", "showNA": true}' type="hidden" />
-            <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"
-               role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
-        </div>
+        <genssb-xe-dropdown fetch-function="termsFetcher" model-holder="termHolder" model-name="term"
+                            on-select-fn="onTermSelect" dropdown-placeholder="{{'proxy.label.term.selectTerm'|i18n}}">
+        </genssb-xe-dropdown>
     </div>
 
     <div ng-show="student.grades.length">

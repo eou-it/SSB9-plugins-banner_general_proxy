@@ -1,17 +1,24 @@
 /********************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 proxyAppControllers.controller('proxyCourseSchedDetails',['$scope','$rootScope','$stateParams', 'proxyAppService', '$filter',
     function ($scope, $rootScope, $stateParams, proxyAppService, $filter) {
 
         $scope.schedule = {};
         $scope.crn = null;
+        $scope.terms = [];
         $scope.termHolder = {
             term: {}
         };
+
         if(proxyAppService.getTerm()) {
             $scope.termHolder.term = proxyAppService.getTerm();
         }
+
+        $scope.termsFetcher = proxyAppService.getTerms;
+        $scope.onTermSelect = function () {
+            getDetailSchedule($scope.crn);
+        };
 
         var getDetailSchedule = function(crn) {
             if($scope.termHolder.term.code) {

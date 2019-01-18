@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', function ($rootScope, $filter, $resource) {
@@ -158,5 +158,29 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
             {controller: 'Proxy', action: 'checkStudentPageForAccess'}).get(params);
     };
 
+    this.getAidYears = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'getAidYears'}).query(params);
+    };
+
+    this.getTerms = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'getTerms'}).query(params);
+    };
+
+    this.getCountyList = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'PersonalInformationDetails', action: 'getCountyList'}).query(params);
+    };
+
+    this.getStateList = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'PersonalInformationDetails', action: 'getStateList'}).query(params);
+    };
+
+    this.getNationList = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'PersonalInformationDetails', action: 'getNationList'}).query(params);
+    };
 
 }]);

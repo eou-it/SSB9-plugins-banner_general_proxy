@@ -1,5 +1,5 @@
 /********************************************************************************
-  Copyright 2018 Ellucian Company L.P. and its affiliates.
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 #calendar table > tbody.fc-body > tr > td.fc-widget-content:first-child {
     padding-right: 0;
@@ -11,4 +11,60 @@
 
 #calendar table > tbody > tr:nth-child(4n-3) > td:first-child {
     border-top-style: solid;
+}
+
+ul.select2-result-single {
+    padding-left: 0;
+}
+
+.right {
+    text-align: right;
+}
+
+.acct-summ-bal-heading-text {
+    unicode-bidi: embed;
+}
+
+.proxy-pin-mgmt.reset-pin.splashBg {
+    direction: rtl;
+}
+
+@media screen and (min-width:768px) {
+    .dropdown-container {
+        width: 40%;
+        max-width: 345px;
+        display: inline-block;
+    }
+
+    .select2-container {
+        width: 100%;
+    }
+
+    .schedDetail .dropdown-container.proxy-top-input {
+        float: right;
+    }
+
+    .row.auto-clear .col-md-6:nth-child(2n+1) {
+        clear: right;
+    }
+
+    div.course-container {
+        padding-left: 0;
+    }
+
+    .flex-wrapper {
+        flex-direction: row;
+    }
+
+    .proxy-pin-mgmt.splashBg .loginMsg {
+        margin: 0;
+    }
+
+    .actionPw-form {
+        direction: rtl;
+    }
+
+    .actionPW-text {
+        text-align: right;
+    }
 }

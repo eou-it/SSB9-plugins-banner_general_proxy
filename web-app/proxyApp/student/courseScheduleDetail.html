@@ -1,5 +1,5 @@
 <!--*******************************************************************************
-  Copyright 2018 Ellucian Company L.P. and its affiliates.
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="proxy-page-body mini-tables schedDetail">
     <div class="proxy-header-container">
@@ -9,8 +9,10 @@
                 {{'proxy.message.viewingStudentInfo'|i18n:[studentName]}}
             </div>
         </div>
-        <div class="select2-container proxy-top-input">
-            <input name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "termHolder.term", "showNA": false}' type="hidden" />
+        <div class="dropdown-container proxy-top-input">
+            <genssb-xe-dropdown fetch-function="termsFetcher" model-holder="termHolder" model-name="term"
+                                on-select-fn="onTermSelect" dropdown-placeholder="{{'proxy.label.term.selectTerm'|i18n}}">
+            </genssb-xe-dropdown>
         </div>
         <div ng-if="errorMsg" class="proxy-top-message-container">
             <div class="proxy-notification-icon blue">
