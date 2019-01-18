@@ -40,11 +40,20 @@
     </div>
 
     <div class="select-term" data-ng-show="registered && holds!=true">
-        <div class="select2-container">
-            <input setup-term-selector name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "term.code", "showNA": false}' type="hidden" />
-            <p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"
-               role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>
-        </div>
+        <!--<div class="select2-container">-->
+            <!--<input setup-term-selector name="term" id="term" select-box for-select='{"placeholder": "{{"proxy.label.term.selectTerm"|i18n}}", "action": "Proxy/getTerms", "model": "term.code", "showNA": false}' type="hidden" />-->
+            <!--<p class="input-field-label mobile-errors" ng-class="[(!!stateErrMsg ? 'field-error error-font-size' : 'no-display')]"-->
+               <!--role="alert" aria-live="assertive">{{stateErrMsg|i18n}}</p>-->
+        <!--</div>-->
+        <xe-ui-select id="select2MultipleLabel" ng-model="termHolder.term" on-select="onTermSelect()"
+                      theme="select2" search-enabled="true">
+            <xe-ui-select-match placeholder="{{'proxy.label.term.selectTerm'|i18n}}">
+                {{$select.selected.description ? $select.selected.description : ('proxy.label.term.selectTerm'|i18n)}}
+            </xe-ui-select-match>
+            <xe-ui-select-choices repeat="term in terms | propsFilter: {description: $select.search}">
+                <div ng-bind-html="term.description | highlight: $select.search"></div>
+            </xe-ui-select-choices>
+        </xe-ui-select>
     </div>
 
     <div ng-show="student.grades.length" class="grades-list">

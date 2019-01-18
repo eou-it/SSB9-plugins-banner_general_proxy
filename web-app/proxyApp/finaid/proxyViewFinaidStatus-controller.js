@@ -39,6 +39,7 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
         $scope.aidYearHolder = {
             aidYear: {}
         };
+        $scope.aidYears = [];
 
         $scope.stringifyFinaidStatusMessageFor = function(statusLine) {
             var translatedText = $filter('i18n')('proxy.finaid.status.message.' + statusLine.text, statusLine.textParams);
@@ -46,19 +47,48 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
             return translatedText ? translatedText : statusLine.text;
         };
 
-        var init = function() {
+        $scope.id = $stateParams.id;
+        $scope.studentName = proxyAppService.getStudentName();
 
-            $scope.id = $stateParams.id;
-            $scope.studentName = proxyAppService.getStudentName();
+        $scope.onAidYearSelect = function () {
+            proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
+            if($scope.aidYearHolder.aidYear.code) {
+                proxyAppService.getFinancialAidStatus({aidYear: $scope.aidYearHolder.aidYear.code, id: $scope.id}).$promise.then(function (response) {
+                    $scope.financialAidStatus = sortFinancialAidStatusLines(response);
+                });
+            }
+        };
+        var curPage = 0, stopLoading = false;
+        $scope.refreshData = function(search, loadingMore) {
+            if (!loadingMore) {
+                // new search
+                $scope.aidYears = [];
+                curPage = 0;
+                stopLoading = false;
+            }
 
-            $('#aidyear', this.$el).on('change', function (event) {
-                proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
-                if(event.target.value != 'not/app') { // don't run query on "Not Applicable" selection
-                    proxyAppService.getFinancialAidStatus({aidYear: event.target.value, id: $scope.id}).$promise.then(function (response) {
-                        $scope.financialAidStatus = sortFinancialAidStatusLines(response);
-                    });
+            if(!$scope.isLoading && !stopLoading) {
+                if(loadingMore) {
+                    // get more results from current search
+                    curPage++;
                 }
-            });
+
+                $scope.isLoading = true;
+                proxyAppService.getAidYears({
+                    searchString: search ? search : '',
+                    offset: curPage,
+                    max: 10
+                }).$promise.then(function (response) {
+                    $scope.aidYears = $scope.aidYears.concat(response);
+                    $scope.isLoading = false;
+                    if (response.length < 10) {
+                        stopLoading = true; // we found everything
+                    }
+                });
+            }
+        };
+
+        var init = function() {
 
             if(proxyAppService.getAidYear()) {
                 $scope.aidYearHolder.aidYear = proxyAppService.getAidYear();

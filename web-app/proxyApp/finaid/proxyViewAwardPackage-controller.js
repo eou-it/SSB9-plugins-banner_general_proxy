@@ -15,6 +15,47 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
         $scope.studentName = proxyAppService.getStudentName();
         $scope.showMessageForNoAwardInfo = false;
 
+        $scope.aidYearFetcher = proxyAppService.getAidYears;
+        $scope.onSelect = function () {
+            proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
+            if(!$scope.aidYearHolder.aidYear.code) {
+                $scope.awardPackage = {};
+                $scope.showMessageForNoAwardInfo = false;
+                $scope.$apply();
+            } else {
+                getAwardPackage();
+            }
+        };
+        // var curPage = 0, stopLoading = false;
+        // $scope.refreshData = function(search, loadingMore) {
+        //     if (!loadingMore) {
+        //         // new search
+        //         $scope.aidYears = [];
+        //         curPage = 0;
+        //         stopLoading = false;
+        //     }
+        //
+        //     if(!$scope.isLoading && !stopLoading) {
+        //         if(loadingMore) {
+        //             // get more results from current search
+        //             curPage++;
+        //         }
+        //
+        //         $scope.isLoading = true;
+        //         proxyAppService.getAidYears({
+        //             searchString: search ? search : '',
+        //             offset: curPage,
+        //             max: 10
+        //         }).$promise.then(function (response) {
+        //             $scope.aidYears = $scope.aidYears.concat(response);
+        //             $scope.isLoading = false;
+        //             if (response.length < 10) {
+        //                 stopLoading = true; // we found everything
+        //             }
+        //         });
+        //     }
+        // };
+
          var getAwardPackage = function() {
             if($scope.aidYearHolder.aidYear.code) {
                 proxyAppService.getAwardPackage({aidYear: $scope.aidYearHolder.aidYear.code, id: sessionStorage.getItem("id")}).$promise.then(function (response) {
@@ -36,18 +77,18 @@ proxyAppControllers.controller('proxyAwardPackage',['$scope','$rootScope','$stat
             getAwardPackage();
         };
 
-        $('#aidyear', this.$el).on('change', function (event) {
-            proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
-
-            if(event.target.value === 'not/app') {
-                // don't run query on "Not Applicable" selection and reset to empty award package
-                $scope.awardPackage = {};
-                $scope.showMessageForNoAwardInfo = false;
-                $scope.$apply();
-            } else {
-                getAwardPackage();
-            }
-        });
+        // $('#aidyear', this.$el).on('change', function (event) {
+        //     proxyAppService.setAidYear($scope.aidYearHolder.aidYear);
+        //
+        //     if(event.target.value === 'not/app') {
+        //         // don't run query on "Not Applicable" selection and reset to empty award package
+        //         $scope.awardPackage = {};
+        //         $scope.showMessageForNoAwardInfo = false;
+        //         $scope.$apply();
+        //     } else {
+        //         getAwardPackage();
+        //     }
+        // });
 
         $scope.getStatusTextNonPell = function(option) {
             var textKey = '';
