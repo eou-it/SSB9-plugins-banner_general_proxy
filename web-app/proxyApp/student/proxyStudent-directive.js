@@ -1,11 +1,11 @@
 /*******************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$compile', '$rootScope', function(proxyAppService, $filter, $compile, $rootScope) {
 
-    var weekOfText = $filter('i18n')('proxy.schedule.weekOf'),
-        goToText = $filter('i18n')('proxy.schedule.goTo'),
+    var goToText = $filter('i18n')('proxy.schedule.goTo'),
         datePlaceholderText = $filter('i18n')('default.date.format.watermark'),
+        titleFormat = $filter('i18n')('js.datepicker.tooltipDateFormat'),
         mobileOptions = {
             defaultView: 'agendaTwoDay',
             aspectRatio: 0.8,
@@ -48,6 +48,13 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                 return (event.end.isSameOrAfter(targetCalDate));
             }).length > 0;
         };
+
+    //convert jquery date format (js.datepicker.tooltipDateFormat) to moment date format
+    titleFormat = titleFormat.replace(/''/g, "'")  //use "'" for literal ' instead "''"
+        .replace(/'([^']+)'/g, '[$1]')             //use "[...]" for literals instead "'...'"
+        .replace(/d(?![^\[]*\])/g, 'D')            //use "D" for short day of month instead "d"
+        .replace(/DD/g, 'dddd')                    //use "dddd" for long day of week instead "DD"
+        .replace(/yyyy/g, 'YYYY');                 //use "YYYY" for 4-digit year instead "yyyy"
 
     return {
         link: function(scope, elem, attrs) {
@@ -102,7 +109,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     scrollTime: '08:00:00',
                     columnHeaderFormat: 'DD ddd',
                     timeFormat: 'h:mm', // 5:00 - 6:30,
-                    titleFormat: '['+ weekOfText +'] MMMM DD, YYYY',
+                    titleFormat: titleFormat,
                     firstDay: 1,
                     isRTL: isRTL,
                     dayNames: $.i18n.prop("default.gregorian.dayNames").split(','),
