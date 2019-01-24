@@ -414,6 +414,8 @@ class GeneralSsbProxyService {
         log.debug('Parameters: ' + params)
 
         def  errorMsgOut = ""
+        def errorStatusOut = ""
+        def emailChangeOut = ""
 
         def updateRulesErrors = checkProxyProfileDataOnUpdate(params)
 
@@ -439,9 +441,11 @@ class GeneralSsbProxyService {
                                params.p_phone_number, params.p_phone_ext, params.p_ctry_code_phone,
                                params.p_house_number, params.p_street_line1, params.p_street_line2, params.p_street_line3, params.p_street_line4,
                                params.p_city, params.p_stat_code?.code ?: "", params.p_zip, params.p_cnty_code?.code ?: "", params.p_natn_code?.code ?: "",
-                               params.p_sex, birthdateString, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", updatePersonlInformationEmailMessage,  params.p_email_address, Sql.VARCHAR
-            ]){ errorMsg ->
+                               params.p_sex, birthdateString, params.p_ssn, params.p_opt_out_adv_date ? "Y" : "N", updatePersonlInformationEmailMessage,  params.p_email_address, Sql.VARCHAR, Sql.VARCHAR, Sql.VARCHAR
+            ]){ errorMsg, errorStatus, emailChange ->
                 errorMsgOut = errorMsg
+                errorStatusOut = errorStatus
+                emailChangeOut = emailChange
             }
             log.debug('finished updateProxyProfile')
         } catch (Exception e) {
@@ -451,8 +455,12 @@ class GeneralSsbProxyService {
             sql?.close()
         }
 
-        if (errorMsgOut){
+        if (errorMsgOut && errorStatusOut.equals("Y")){
             throw new ApplicationException("", MessageHelper.message("proxy.personalinformation.onSave." + errorMsgOut))
+        }else if(errorMsgOut && errorStatusOut.equals("N") && emailChangeOut.equals("Y")){
+            return MessageHelper.message("proxy.personalinformation.onSave." + errorMsgOut)
+        }else{
+            return ""
         }
     }
 

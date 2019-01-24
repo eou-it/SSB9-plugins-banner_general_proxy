@@ -181,8 +181,8 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
 
             proxyAppService.updateProxyPersonalInfo(profile).$promise.then(function(response) {
                 var notifications = [],
-                    doStateGoSuccess = function() {
-                        notifications.push({message: 'proxy.personalinformation.label.saveSuccess',
+                    doStateGoSuccess = function(messageOnSave) {
+                        notifications.push({message:  messageOnSave ? messageOnSave : 'proxy.personalinformation.label.saveSuccess',
                             messageType: $scope.notificationSuccessType,
                             flashType: $scope.flashNotification});
 
@@ -208,7 +208,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     if (!$('#breadcrumb-panel').is(":visible"))
                         $("#breadcrumb-panel").show();
 
-                    doStateGoSuccess();
+                    doStateGoSuccess(response.message);
                 }
 
             });

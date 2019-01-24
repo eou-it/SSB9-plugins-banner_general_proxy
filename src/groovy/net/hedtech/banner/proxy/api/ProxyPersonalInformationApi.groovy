@@ -454,6 +454,9 @@ class ProxyPersonalInformationApi {
       lv_temp_fmt              VARCHAR2 (30);
       
       hold_proxy_idm        gpbprxy.gpbprxy_proxy_idm%TYPE;
+      
+      error_status     VARCHAR2(1) := 'N';
+      email_change     VARCHAR2(1) := 'N';
 
 
 
@@ -521,6 +524,7 @@ class ProxyPersonalInformationApi {
                                 p_rowid              => lv_GPBPRXY_rec.R_INTERNAL_RECORD_ID);
                           EXCEPTION
                              WHEN OTHERS THEN lv_info := 'DATA_ERROR';
+                             error_status := 'Y';
                           END;
                           
            twbklibs.date_input_fmt := lv_temp_fmt;
@@ -568,9 +572,11 @@ class ProxyPersonalInformationApi {
          IF lv_GPBPRXY_ref%FOUND
          THEN
             lv_info := 'EMAIL_DUPLICATE';
+            error_status := 'Y';
             CLOSE lv_GPBPRXY_ref;
         ELSE
             lv_info := 'NEW_EMAIL';
+            email_change := 'Y';
             -- Send first message using existing e-mail address with CANCEL_EMAIL action
             gp_gpbeltr.P_Create (
                p_syst_code        => 'PROXY',
@@ -676,9 +682,12 @@ class ProxyPersonalInformationApi {
       bwgkprxy.P_SendEmail (lv_hold_rowid);
             
              CLOSE lv_GPBPRXY_ref;
+             error_status := 'N';
          END IF;
       END IF;    
          ? := lv_info;
+         ? := error_status;
+         ? := email_change;
       END ;
 
           """

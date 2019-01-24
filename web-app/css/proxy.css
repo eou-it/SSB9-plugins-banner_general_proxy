@@ -402,6 +402,10 @@ p.notification-msg {
     color: #151618;
 }
 
+.proxy table td {
+    color: #151618;
+}
+
 /* Action Password Page - BEGIN */
 .proxy-pin-mgmt.pageBg {
     overflow: auto;
@@ -804,9 +808,6 @@ p.notification-msg {
     padding: 0.625em 0.5em 0;
 }
 
-.proxy-event a {
-    color: #428bca;
-}
 
 .unassigned {
     margin-top: 1.5em;
