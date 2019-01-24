@@ -60,6 +60,9 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
         link: function(scope, elem, attrs) {
             var isMobile = $rootScope.isMobileView(),
                 isRTL = $.i18n.prop('default.language.direction') === 'rtl',
+                clockFormat = $filter('i18n')('default.timebox.clock.format'), // 12 or 24
+                timeFormatKey = (clockFormat && clockFormat === '24') ? 'timebox.24hr.format' : 'default.time.12hour.display.format',
+                timeFormat = $filter('i18n')(timeFormatKey),
                 addDatePicker = function() {
                     var datePickerTemplate = '<div class="gotodate-block"> <label>' + goToText + '</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="' + datePlaceholderText + '" id="goToDate"/> </div>',
                         datePickerElem = $compile(datePickerTemplate)(scope);
@@ -105,10 +108,10 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     slotEventOverlap: false,
                     slotDuration: '00:15:00',
                     slotLabelInterval: '01:00',
-                    slotLabelFormat: 'h:mm a',
+                    slotLabelFormat: timeFormat,
                     scrollTime: '08:00:00',
                     columnHeaderFormat: 'DD ddd',
-                    timeFormat: 'h:mm', // 5:00 - 6:30,
+                    timeFormat: timeFormat,
                     titleFormat: titleFormat,
                     firstDay: 1,
                     isRTL: isRTL,
@@ -116,7 +119,6 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     dayNamesShort: $.i18n.prop("default.gregorian.dayNamesShort").split(','),
                     monthNames: $.i18n.prop("default.gregorian.monthNames").split(','),
                     monthNamesShort: $.i18n.prop("default.gregorian.monthNamesShort").split(','),
-                    axisFormat: $.i18n.prop('events.row.time.format'),
                     events: function (start, end, timezone, callback) {
                         var events;
                         proxyAppService.getCourseSchedule({id: scope.id, date: start.format('MM/DD/YYYY')}).$promise.then(function(response) {
