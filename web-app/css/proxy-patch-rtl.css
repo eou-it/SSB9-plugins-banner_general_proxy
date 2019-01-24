@@ -17,6 +17,11 @@ ul.select2-result-single {
     padding-left: 0;
 }
 
+.profile-dropdown .select2-container.ui-select-container .select2-choice > .select2-chosen {
+    width: 90%;
+    margin-right: 0.85em;
+}
+
 .right {
     text-align: right;
 }
