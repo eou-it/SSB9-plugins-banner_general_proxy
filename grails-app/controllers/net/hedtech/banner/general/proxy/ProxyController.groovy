@@ -580,7 +580,7 @@ class ProxyController {
         return result
     }
 
-    def getConfig() {
+    def getWebTailorConfig() {
         try {
             def map = [:]
             proxyConfigurationService.getProxyParams().each {
@@ -590,6 +590,14 @@ class ProxyController {
             }
 
             render map as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+    def getConfig() {
+        try {
+            render proxyConfigurationService.getProxyGatewayParamsForPayment() as JSON
         } catch (ApplicationException e) {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
