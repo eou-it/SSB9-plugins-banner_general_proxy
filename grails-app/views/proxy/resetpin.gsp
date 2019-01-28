@@ -52,10 +52,11 @@
                 <p class="reset-msg">
                     <g:message code="proxy.passwordManagement.changePassword"/>
                 </p>
+
+                <g:if test='${flash.message}'>
+                    <span class="icon-error"></span ><span class="actionpassword">${flash.message}</span>
+                </g:if>
             </div>
-            <g:if test='${flash.message}'>
-                <span class="icon-error"></span ><span class="actionpassword">${flash.message}</span>
-            </g:if>
             <input class="eds-text-field reset-input" type="text" name="p_email"
                    placeholder="<g:message code="proxy.passwordManagement.email.address.label"/>" required>
             <input class="eds-text-field reset-input" type="password" name="p_pin_orig"

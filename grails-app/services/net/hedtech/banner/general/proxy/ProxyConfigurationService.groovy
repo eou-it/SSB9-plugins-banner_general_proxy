@@ -24,6 +24,15 @@ class ProxyConfigurationService extends ServiceBase {
             [paramKey: PAYVEND_VENDOR]
     ]
 
+
+    /**
+     * Get a Proxy Payment Gateway Configuration.
+     * @return Map of a Proxy Payment Gateway Configuration Parameters
+     */
+    def getProxyGatewayParamsForPayment () {
+        return grails.util.Holders.getConfig()?.proxy?.payment?.gateway
+    }
+
     /**
      * Get all configuration params for the Proxy app from Web Tailor.
      * @return Map of all Proxy configuration parameter keys and values

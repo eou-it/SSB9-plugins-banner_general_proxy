@@ -808,6 +808,9 @@ p.notification-msg {
     padding: 0.625em 0.5em 0;
 }
 
+.proxy-event a {
+    color: #2874BB;
+}
 
 .unassigned {
     margin-top: 1.5em;
