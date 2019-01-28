@@ -130,7 +130,7 @@ proxyAppDirectives.directive('legalSexSelect', function() {
     };
 });
 
-proxyAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function($parse, $filter) {
+personalInformationAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function($parse, $filter) {
     var getDescriptionFromAddressComponent = function(item) {
             if('webDescription' in item && item.webDescription) {
                 return item.webDescription;
@@ -148,11 +148,11 @@ proxyAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function(
         restrict: 'EA',
         scope: true,
         template: '<xe-ui-select ng-model="modelHolder[modelName]" on-select="onSelectFn()"\n' +
-            '             reach-infinity="refreshData($select.search, true)" theme="select2" search-enabled="true">\n' +
+            '             reach-infinity="refreshData($select.search, true)" theme="select2" search-enabled="true" ng-disabled="isDisabled">\n' +
             '   <xe-ui-select-match placeholder="{{selPlaceholder}}">\n' +
             '       {{$select.selected.description ? $select.selected.description : selPlaceholder}}\n' +
             '   </xe-ui-select-match>\n' +
-            '   <xe-ui-select-choices minimum-input-length="" refresh-delay="200" repeat="item in selectItems track by $index"\n' +
+            '   <xe-ui-select-choices minimum-input-length="" refresh-delay="200" repeat="item in selectItems"\n' +
             '                         refresh="refreshData($select.search)">\n' +
             '   <span ng-switch="isLoading">\n' +
             '       <span ng-switch-when="true"></span>\n' +
@@ -170,11 +170,12 @@ proxyAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function(
             scope.onSelectFn = $parse(attrs.onSelectFn)(scope);
             scope.selPlaceholder = attrs.dropdownPlaceholder;
             scope.selectItems = initItemList();
+            scope.isDisabled = $parse(attrs.isDisabled)(scope);
 
             scope.refreshData = function(search, loadingMore) {
-                if (!loadingMore) {
+                var isNewSearch = !loadingMore || (stopLoading && scope.selectItems.length === 0);
+                if (isNewSearch) {
                     // new search
-                    scope.selectItems = initItemList();
                     curPage = 0;
                     stopLoading = false;
                 }
@@ -191,11 +192,12 @@ proxyAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function(
                         offset: curPage,
                         max: 10
                     }).$promise.then(function (response) {
+                        if(isNewSearch) {
+                            scope.selectItems = initItemList();
+                        }
                         _.each(response, function(item) {
-                            scope.selectItems.push({
-                                code: item.code,
-                                description: getDescriptionFromAddressComponent(item)
-                            });
+                            item.description = getDescriptionFromAddressComponent(item);
+                            scope.selectItems.push(item);
                         });
                         scope.isLoading = false;
                         if (response.length < 10) {
