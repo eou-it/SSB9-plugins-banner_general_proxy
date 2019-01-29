@@ -498,21 +498,27 @@ class GeneralSsbProxyService {
         //get proxy gidm
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
         log.debug('p_proxyIDM: ' + p_proxyIDM)
-        try {
-            def sql = new Sql(sessionFactory.getCurrentSession().connection())
-            def sqlText = ProxyPersonalInformationApi.STORE_PAGE_ACCESS_IN_HISTORY
+        log.debug('pidm: ' + pidm)
+        if (pidm) {
+            try {
+                def sql = new Sql(sessionFactory.getCurrentSession().connection())
+                def sqlText = ProxyPersonalInformationApi.STORE_PAGE_ACCESS_IN_HISTORY
 
-            log.debug('sqlText: ' + sqlText)
+                log.debug('sqlText: ' + sqlText)
 
-            sql.call(sqlText,
-                    [p_proxyIDM, pidm, p_proxyIDM, pidm , pageName
-                    ])
+                sql.call(sqlText,
+                        [p_proxyIDM, pidm, p_proxyIDM, pidm, pageName
+                        ])
 
-            log.debug('finished updateProxyHistoryOnPageAccess')
+                log.debug('finished updateProxyHistoryOnPageAccess')
 
-        }catch(Exception e) {
-            log.error('Problem updateProxyHistoryOnPageAccess')
-            log.error(e)
+
+            } catch (Exception e) {
+                log.error('Problem updateProxyHistoryOnPageAccess')
+                log.error(e)
+            }
+        }else{
+            log.error('Problem updateProxyHistoryOnPageAccess. Pidm is missing')
         }
     }
 
