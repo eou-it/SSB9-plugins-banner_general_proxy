@@ -28,6 +28,7 @@ class ProxyController {
     def proxyStudentService
     def proxyConfigurationService
     def currencyFormatHelperService
+    def messageSource
 
     def beforeInterceptor = [action:this.&studentIdCheck]
 
@@ -232,9 +233,6 @@ class ProxyController {
             it.r_amount_owed = amountTxt
         }
 
-        //Logs the History for page Access
-        generalSsbProxyService.updateProxyHistoryOnPageAccess(pidm, MessageHelper.message('proxy.holds.heading'))
-
         render result as JSON
     }
 
@@ -244,9 +242,6 @@ class ProxyController {
 
         def result = proxyStudentService.getCourseSchedule(pidm, XssSanitizer.sanitize(params.date));
         result.hasDetailAccess = checkPageForAccess(id, '/ssb/proxy/courseScheduleDetail') != null
-        
-        //Logs the History for page Access
-        generalSsbProxyService.updateProxyHistoryOnPageAccess(pidm, MessageHelper.message('proxy.schedule.heading'))
 
         render result as JSON
     }
@@ -272,9 +267,6 @@ class ProxyController {
                 el.meet_end = el.meet_end ? df.parse(el.meet_end) : el.meet_end
             }
         }
-
-        //Logs the History for page Access
-        generalSsbProxyService.updateProxyHistoryOnPageAccess(pidm, MessageHelper.message('proxy.scheduleDetails.heading'))
 
         render result as JSON
     }
@@ -338,15 +330,24 @@ class ProxyController {
         render "PIDM context set"
     }
 
+
+    /**
+     * @param params Proxy Page Name
+     * @return response on history context set
+     */
+    def updateProxyHistoryOnPageAccess(params){
+        def logHistoryMessage = messageSource.getMessage(XssSanitizer.sanitize(params?.label), null, Locale.ENGLISH)
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], logHistoryMessage)
+        render logHistoryMessage + " on update history context set"
+    }
+
+
     /**
      * Gets the grades model for the student
      *
      */
     def getGrades(){
         try {
-            //Logs the History for page Access
-            generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], MessageHelper.message('proxy.grades.label.studentGrades'))
-
             render gradesProxyService.viewGrades(params)
         } catch (ApplicationException e) {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
@@ -414,9 +415,6 @@ class ProxyController {
             }
         }
 
-        //Logs the History for page Access
-        generalSsbProxyService.updateProxyHistoryOnPageAccess(pidm, MessageHelper.message('proxy.finaid.status.heading'))
-
         render result as JSON
 
         }catch (Exception e) {
@@ -479,9 +477,6 @@ class ProxyController {
             }
         }
 
-        //Logs the History for page Access
-        generalSsbProxyService.updateProxyHistoryOnPageAccess(pidm, MessageHelper.message('proxy.awardPackage.heading'))
-
         render result as JSON
     }
 
@@ -540,9 +535,6 @@ class ProxyController {
             }
         }
 
-        //Logs the History for page Access
-        generalSsbProxyService.updateProxyHistoryOnPageAccess(pidm, MessageHelper.message('proxy.awardHistory.heading'))
-
         render result as JSON
     }
 
@@ -564,9 +556,6 @@ class ProxyController {
                 it.payment = formatCurrencyDashZeroes(it.payment)
             }
         }
-
-        //Logs the History for page Access
-        generalSsbProxyService.updateProxyHistoryOnPageAccess(pidm, MessageHelper.message('proxy.acctSummary.title'))
 
         render result as JSON
     }

@@ -28,6 +28,12 @@ var proxyApp = angular.module('proxyApp', [
                         // Prevent notifications from a previous page from displaying
                         notificationCenterService.clearNotifications();
 
+
+                        //Logs the History for the Proxy Page Access
+                        if ( typeof toState.data.breadcrumbs[0] !== "undefined") {
+                            proxyAppService.updateProxyHistoryOnPageAccess((toState.data.breadcrumbs[0].label));
+                        }
+
                         if(toState.url !== '/home' && toState.url !== '/proxypersonalinformation') {
                             proxyAppService.checkStudentPageForAccess({id: sessionStorage.getItem("id"), name: toState.name}).$promise.then(function(response) {
                                 var notifications = [];

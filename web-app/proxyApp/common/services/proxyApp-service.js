@@ -27,6 +27,21 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
         }());
 
 
+    var updateProxyHistoryOnPageAccess = function(label) {
+        jQuery.ajax({
+            url: "proxy/updateProxyHistoryOnPageAccess",
+            data: {"label": label},
+            async: true
+        })};
+
+
+    //Logs the History for the Proxy Page Access
+    this.updateProxyHistoryOnPageAccess = function(label){
+        updateProxyHistoryOnPageAccess(label);
+    }
+
+
+
     this.stringToDate = function (date) {
         var result;
         try {
