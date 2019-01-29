@@ -17,7 +17,9 @@
 
     <div ng-repeat="award in awards" id="awards">
 
-            <div class="proxy-content-section proxy-content-item row" ng-repeat="row in award.data.rows">
+        <div class="proxy-content-section proxy-content-item bold row">{{'proxy.awardHistory.heading.label'|i18n:[award.aidYear]}}</div>
+
+        <div class="proxy-content-section proxy-content-item row" ng-repeat="row in award.data.rows">
 
                 <div ng-if="row.fund_title != 'AWARD_TOTAL'">
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.fund'|i18n}}</div>
@@ -51,12 +53,12 @@
                 <div class="subsection-divider"><span></span></div>
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.total'|i18n}}</div>
-                <div align="right" class="col-xs-6 proxy-content-item-label">{{row.total_amt}}</div>
+                <div align="right" class="col-xs-6">{{row.total_amt}}</div>
 
                 <div class="subsection-divider"><span></span></div>
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.paidToDate'|i18n}}</div>
-                <div align="right" class="col-xs-6 proxy-content-item-label">{{row.paid_amt}}</div>
+                <div align="right" class="col-xs-6">{{row.paid_amt}}</div>
                 </div>
 
                 <div ng-if="row.fund_title == 'AWARD_TOTAL'">
@@ -86,16 +88,16 @@
 
                     <div class="subsection-divider"><span></span></div>
 
-                    <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.total'|i18n}}</div>
-                    <div align="right" class="col-xs-6 proxy-content-item-label">{{row.total_amt}}</div>
+                    <div class="proxy-content-item-label bold col-xs-6">{{'proxy.awardPackage.totals'|i18n}}</div>
+                    <div align="right" class="col-xs-6 proxy-content-item-label bold">{{row.total_amt}}</div>
 
                     <div class="subsection-divider"><span></span></div>
 
-                    <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.paidToDate'|i18n}}</div>
-                    <div align="right" class="col-xs-6 proxy-content-item-label">{{row.paid_amt}}</div>
+                    <div class="proxy-content-item-label bold col-xs-6">{{'proxy.awardHistory.label.paidToDate'|i18n}}</div>
+                    <div align="right" class="col-xs-6 proxy-content-item-label bold">{{row.paid_amt}}</div>
                 </div>
 
-            </div>
+        </div>
 
 
         <div data-ng-show="award.resources.length">
