@@ -180,7 +180,7 @@ END ;
       lv_pinhash       gpbprxy.gpbprxy_pin%TYPE;
       lv_salt          gpbprxy.gpbprxy_salt%TYPE;
       lv_msg           gb_common.err_type;
-      lv_error         varchar2(20);
+      lv_error         varchar2(2000);
       lv_GPBPRXY_rec   gp_gpbprxy.gpbprxy_rec;
       lv_GPBPRXY_ref   gp_gpbprxy.gpbprxy_ref;
       lv_context_hash  gpbprxy.gpbprxy_pin%TYPE;
@@ -245,21 +245,21 @@ END ;
              p_pin_reusechk_ind => 'N',
              error_message      => lv_msg);
            if lv_msg is not null then
-             lv_error := 'ERR_GUAPPRF';
+             lv_error := lv_msg;
            else
            -- The PIN rules do not check for leading spaces so we have to do that here, just in case
              IF TRIM(NVL (?, 'x')) <>  NVL (?, 'x') THEN
                lv_error := 'ERR_GUAPPRF';
-               lv_msg   := g\$_NLS.Get('BWGKPXYA1-0050','SQL', 'PIN values may not start with or end with a space');
+               lv_msg   := '';
              END IF;
            end if;
       ELSIF LENGTH (NVL (?, 'x')) < bwgkprxy.F_GetOption ('PIN_LENGTH_MINIMUM') OR
             LENGTH (NVL (?, 'x')) < bwgkprxy.F_GetOption ('PIN_LENGTH_MINIMUM') THEN
-              lv_error := 'ERR_TOOSHORT';
-              lv_msg := 'Minimum PIN length: ' || NVL (bwgkprxy.F_GetOption ('PIN_LENGTH_MINIMUM'), '6');
+              lv_msg := 'Minimum Password length: ' || NVL (bwgkprxy.F_GetOption ('PIN_LENGTH_MINIMUM'), '6');
+              lv_error := lv_msg;
       ELSIF TRIM(NVL (?, 'x')) <>  NVL (?, 'x') THEN
               lv_error := 'ERR_GUAPPRF';
-              lv_msg   := g\$_NLS.Get('BWGKPXYA1-0051','SQL', 'PIN values may not start with or end with a space');
+              lv_msg   := '';
       END IF;
 
       IF lv_error is not null then
