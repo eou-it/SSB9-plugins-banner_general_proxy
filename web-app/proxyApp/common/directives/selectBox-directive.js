@@ -130,7 +130,7 @@ proxyAppDirectives.directive('legalSexSelect', function() {
     };
 });
 
-personalInformationAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function($parse, $filter) {
+proxyAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function($parse, $filter) {
     var getDescriptionFromAddressComponent = function(item) {
             if('webDescription' in item && item.webDescription) {
                 return item.webDescription;
