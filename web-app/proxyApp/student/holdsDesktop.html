@@ -1,5 +1,5 @@
 <!--*******************************************************************************
-  Copyright 2018 Ellucian Company L.P. and its affiliates.
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="proxy-page-body">
     <div class="clearfix">
@@ -37,7 +37,7 @@
             <td>{{hold.stvhold_desc}}</td>
             <td>{{hold.r_from_date}}</td>
             <td>{{hold.r_to_date}}</td>
-            <td>{{hold.r_amount_owed}}</td>
+            <td class="amt">{{hold.r_amount_owed}}</td>
             <td>{{hold.r_reason}}</td>
             <td>{{hold.stvorig_desc|emptyValToDash}}</td>
             <td>{{stringifyHoldsFor(hold)}}</td>
