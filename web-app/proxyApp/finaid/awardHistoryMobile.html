@@ -1,5 +1,5 @@
 <!--*******************************************************************************
-  Copyright 2018 Ellucian Company L.P. and its affiliates.
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="proxy-page-body">
     <div class="proxy-page-student-name">
@@ -30,35 +30,35 @@
 
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.offered'|i18n}}</div>
-                <div align="right" class="col-xs-6 break-long-words">{{row.offer_amt}}</div>
+                <div class="col-xs-6 amt break-long-words">{{row.offer_amt}}</div>
 
                 <div class="subsection-divider"><span></span></div>
 
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.accepted'|i18n}}</div>
-                <div align="right" class="col-xs-6 break-long-words">{{row.accept_amt}}</div>
+                <div class="col-xs-6 amt break-long-words">{{row.accept_amt}}</div>
 
                 <div class="subsection-divider"><span></span></div>
 
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.declined'|i18n}}</div>
-                <div align="right" class="col-xs-6 break-long-words">{{row.decline_amt}}</div>
+                <div class="col-xs-6 amt break-long-words">{{row.decline_amt}}</div>
 
                 <div class="subsection-divider"><span></span></div>
 
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.cancelled'|i18n}}</div>
-                <div align="right" class="col-xs-6 break-long-words">{{row.cancel_amt}}</div>
+                <div class="col-xs-6 amt break-long-words">{{row.cancel_amt}}</div>
 
                 <div class="subsection-divider"><span></span></div>
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.total'|i18n}}</div>
-                <div align="right" class="col-xs-6">{{row.total_amt}}</div>
+                <div class="col-xs-6 amt">{{row.total_amt}}</div>
 
                 <div class="subsection-divider"><span></span></div>
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.paidToDate'|i18n}}</div>
-                <div align="right" class="col-xs-6">{{row.paid_amt}}</div>
+                <div class="col-xs-6 amt">{{row.paid_amt}}</div>
                 </div>
 
                 <div ng-if="row.fund_title == 'AWARD_TOTAL'">
@@ -66,35 +66,35 @@
                     <div class="subsection-divider"><span></span></div>
 
                     <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.offered'|i18n}}</div>
-                    <div align="right" class="col-xs-6 break-long-words">{{row.offer_amt}}</div>
+                    <div class="col-xs-6 amt break-long-words">{{row.offer_amt}}</div>
 
                     <div class="subsection-divider"><span></span></div>
 
 
                     <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.accepted'|i18n}}</div>
-                    <div align="right" class="col-xs-6 break-long-words">{{row.accept_amt}}</div>
+                    <div class="col-xs-6 amt break-long-words">{{row.accept_amt}}</div>
 
                     <div class="subsection-divider"><span></span></div>
 
 
                     <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.declined'|i18n}}</div>
-                    <div align="right" class="col-xs-6 break-long-words">{{row.decline_amt}}</div>
+                    <div class="col-xs-6 amt break-long-words">{{row.decline_amt}}</div>
 
                     <div class="subsection-divider"><span></span></div>
 
 
                     <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.cancelled'|i18n}}</div>
-                    <div align="right" class="col-xs-6 break-long-words">{{row.cancel_amt}}</div>
+                    <div class="col-xs-6 amt break-long-words">{{row.cancel_amt}}</div>
 
                     <div class="subsection-divider"><span></span></div>
 
                     <div class="proxy-content-item-label bold col-xs-6">{{'proxy.awardPackage.totals'|i18n}}</div>
-                    <div align="right" class="col-xs-6 proxy-content-item-label bold">{{row.total_amt}}</div>
+                    <div class="col-xs-6 amt proxy-content-item-label bold">{{row.total_amt}}</div>
 
                     <div class="subsection-divider"><span></span></div>
 
                     <div class="proxy-content-item-label bold col-xs-6">{{'proxy.awardHistory.label.paidToDate'|i18n}}</div>
-                    <div align="right" class="col-xs-6 proxy-content-item-label bold">{{row.paid_amt}}</div>
+                    <div class="col-xs-6 amt proxy-content-item-label bold">{{row.paid_amt}}</div>
                 </div>
 
         </div>
@@ -109,22 +109,22 @@
                 <div ng-if="resource.resource_desc != 'RESOURCE_TOTAL' && resource.resource_desc != 'CALCULATED_RESOURCE'">
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.additionalResource'|i18n}}</div>
-                <div align="right" class="col-xs-6 break-long-words" ng-bind-html="stringifyAwardMessageFor(resource.resource_desc)"></div>
+                <div class="col-xs-6 break-long-words" ng-bind-html="stringifyAwardMessageFor(resource.resource_desc)"></div>
 
                 <div class="subsection-divider"><span></span></div>
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.term'|i18n}}</div>
-                <div align="right" class="col-xs-6 break-long-words" ng-bind-html="resource.term_code"></div>
+                <div class="col-xs-6 break-long-words" ng-bind-html="resource.term_code"></div>
 
                 <div class="subsection-divider"><span></span></div>
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.expectedAmount'|i18n}}</div>
-                <div align="right" class="col-xs-6 break-long-words">{{resource.est_amt}}</div>
+                <div class="col-xs-6 amt break-long-words">{{resource.est_amt}}</div>
 
                 <div class="subsection-divider"><span></span></div>
 
                 <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.actualAmount'|i18n}}</div>
-                <div align="right" class="col-xs-6 break-long-words">{{resource.actual_amt}}</div>
+                <div class="col-xs-6 amt break-long-words">{{resource.actual_amt}}</div>
 
 
                 </div>
@@ -135,19 +135,19 @@
                     <div class="subsection-divider"><span></span></div>
 
                     <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.expectedAmount'|i18n}}</div>
-                    <div align="right" class="col-xs-6 proxy-content-item-label">{{resource.est_amt}}</div>
+                    <div class="col-xs-6 amt proxy-content-item-label">{{resource.est_amt}}</div>
 
                     <div class="subsection-divider"><span></span></div>
 
                     <div class="proxy-content-item-label col-xs-6">{{'proxy.awardHistory.label.actualAmount'|i18n}}</div>
-                    <div align="right" class="col-xs-6 break-long-words proxy-content-item-label">{{resource.actual_amt}}</div>
+                    <div class="col-xs-6 amt break-long-words proxy-content-item-label">{{resource.actual_amt}}</div>
 
                 </div>
 
                 <div ng-if="resource.resource_desc == 'CALCULATED_RESOURCE'">
 
                     <div class="proxy-content-item-label col-xs-6" ng-bind-html="stringifyAwardMessageFor(resource.resource_desc)"></div>
-                    <div align="right" class="col-xs-6 break-long-words proxy-content-item-label">{{resource.actual_amt}}</div>
+                    <div class="col-xs-6 amt break-long-words proxy-content-item-label">{{resource.actual_amt}}</div>
 
                 </div>
 
