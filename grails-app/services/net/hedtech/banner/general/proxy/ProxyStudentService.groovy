@@ -1,5 +1,5 @@
 /********************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
@@ -19,10 +19,8 @@ import java.text.SimpleDateFormat
 
 class ProxyStudentService {
 
-    private static final log  = Logger.getLogger(GeneralSsbProxyService.class)
+    private static final log  = Logger.getLogger(ProxyStudentService.class)
     def sessionFactory                     // injected by Spring
-    def dataSource                         // injected by Spring
-    def grailsApplication                  // injected by Spring
 
     def getAccountSummary(def pidm) {
         if (!checkIfStudentInstalled()) {

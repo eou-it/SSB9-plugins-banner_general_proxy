@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.general.proxy
 
@@ -551,9 +551,9 @@ class ProxyController {
             it.termPay = currencyFormatHelperService.formatCurrency(it.termPay)
 
             it.ledger.each {
-                it.balance = formatCurrencyDashZeroes(it.balance)
-                it.charge = formatCurrencyDashZeroes(it.charge)
-                it.payment = formatCurrencyDashZeroes(it.payment)
+                it.balance = currencyFormatHelperService.formatCurrency(it.balance)
+                it.charge = it.charge > 0 ? currencyFormatHelperService.formatCurrency(it.charge) : ''
+                it.payment = it.payment > 0 ? currencyFormatHelperService.formatCurrency(it.payment) : ''
             }
         }
 

@@ -1085,11 +1085,11 @@ p.term-fund {
     margin-left: 20px;
 }
 
-.positive-balance {
+.acct-summ-term .positive-balance, .positive-balance {
     color: #00804D;
 }
 
-.negative-balance {
+.acct-summ-term .negative-balance, .negative-balance {
     color: #D42848;
 }
 
