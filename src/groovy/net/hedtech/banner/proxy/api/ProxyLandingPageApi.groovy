@@ -10,6 +10,9 @@ class ProxyLandingPageApi {
 DECLARE
   lv_attr_nt     G_ATTRIBUTE_NT;
   lv_minify_ext  varchar2(04);
+  TYPE T_desc_table IS TABLE OF TWGBWMNU.TWGBWMNU_DESC%TYPE
+  index by binary_integer;
+  lv_used_desc   T_desc_table;
 
   CURSOR C_PersonList
       IS
@@ -51,6 +54,12 @@ BEGIN
             LOOP
                IF lv_attr_nt (i)."value" = 'TRUE'
                THEN
+                IF lv_used_desc.EXISTS (person.GPRXREF_PERSON_PIDM)
+                  THEN
+                     NULL;
+                 ELSE
+                  lv_used_desc (person.GPRXREF_PERSON_PIDM) :=
+                        person.GPRXREF_PERSON_PIDM;
 
                       student := '{' ||
                       '"name" ' || ':' || '"' || f_format_name (person.GPRXREF_PERSON_PIDM, 'FML') || '"' ||
@@ -63,6 +72,7 @@ BEGIN
                          inactive := inactive || student;
                       END IF;
                   END IF;
+                 END IF;
             END LOOP;
 
          END IF;
