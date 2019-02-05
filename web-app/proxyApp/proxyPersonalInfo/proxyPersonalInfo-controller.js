@@ -64,26 +64,38 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     // Group elements for presentation on page
                     elem = $scope.profileElements[it];
 
-                    if ($.inArray(it, detailsIds) > -1) {
-                        $scope.detailsElements.push(elem);
-                    } else if ($.inArray(it, contactIds) > -1) {
-                        $scope.contactElements.push(elem);
-                    } else if ($.inArray(it, addressIds) > -1) {
-                        $scope.addressElements.push(elem);
-                    } else if (it === 'p_opt_out_adv_date') {
-                        $scope.optOutAdvDate = elem;
-                    } else {
-                        $scope.otherElements.push(elem);
-                    }
+                   if (elem.visible) {
+                       if ($.inArray(it, detailsIds) > -1) {
+                           $scope.detailsElements.push(elem);
+                       } else if ($.inArray(it, contactIds) > -1) {
+                           $scope.contactElements.push(elem);
+                       } else if ($.inArray(it, addressIds) > -1) {
+                           $scope.addressElements.push(elem);
+                       } else if (it === 'p_opt_out_adv_date') {
+                           $scope.optOutAdvDate = elem;
+                       } else {
+                           $scope.otherElements.push(elem);
+                       }
+                   }
 
                 });
 
-                $scope.personalInfoSections = [
-                    {heading: $filter('i18n')('proxy.personalinformation.label.personalDetails'), elements: $scope.detailsElements},
-                    {heading: $filter('i18n')('proxy.personalinformation.label.contact'),          elements: $scope.contactElements},
-                    {heading: $filter('i18n')('proxy.personalinformation.label.address'),          elements: $scope.addressElements},
-                    {heading: $filter('i18n')('proxy.personalinformation.label.otherInfo'),       elements: $scope.otherElements}
-                ];
+
+                if ($scope.detailsElements.length> 0){
+                    $scope.personalInfoSections.push({heading: $filter('i18n')('proxy.personalinformation.label.personalDetails'), elements: $scope.detailsElements})
+                }
+
+                if ($scope.contactElements.length> 0){
+                    $scope.personalInfoSections.push({heading: $filter('i18n')('proxy.personalinformation.label.contact'), elements: $scope.contactElements})
+                }
+
+                if ($scope.addressElements.length> 0){
+                    $scope.personalInfoSections.push({heading: $filter('i18n')('proxy.personalinformation.label.address'), elements: $scope.addressElements})
+                }
+
+                if ($scope.otherElements.length> 0){
+                    $scope.personalInfoSections.push({heading: $filter('i18n')('proxy.personalinformation.label.otherInfo'), elements: $scope.otherElements})
+                }
 
                 $scope.profileElements['p_birth_date'].isWidget = true;
 
