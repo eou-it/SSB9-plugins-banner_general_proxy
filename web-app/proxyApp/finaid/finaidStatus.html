@@ -10,7 +10,8 @@
     </div>
     <div class="dropdown-container select-term-top">
         <genssb-xe-dropdown fetch-function="aidYearFetcher" model-holder="aidYearHolder" model-name="aidYear"
-                            on-select-fn="onAidYearSelect" dropdown-placeholder="{{'proxy.selectAidYear.label'|i18n}}">
+                            on-select-fn="onAidYearSelect" search-enabled="false"
+                            dropdown-placeholder="{{'proxy.selectAidYear.label'|i18n}}">
         </genssb-xe-dropdown>
     </div>
     <div ng-show="aidYearHolder.aidYear.code">
