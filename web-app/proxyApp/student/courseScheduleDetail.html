@@ -11,7 +11,8 @@
         </div>
         <div class="dropdown-container proxy-top-input">
             <genssb-xe-dropdown fetch-function="termsFetcher" model-holder="termHolder" model-name="term"
-                                on-select-fn="onTermSelect" dropdown-placeholder="{{'proxy.label.term.selectTerm'|i18n}}">
+                                on-select-fn="onTermSelect" search-enabled="false"
+                                dropdown-placeholder="{{'proxy.label.term.selectTerm'|i18n}}">
             </genssb-xe-dropdown>
         </div>
         <div ng-if="errorMsg" class="proxy-top-message-container">
