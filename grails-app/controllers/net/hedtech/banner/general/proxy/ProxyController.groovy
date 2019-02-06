@@ -607,6 +607,11 @@ class ProxyController {
     }
 
     private String checkPageForAccess(def id, def page) {
+
+        if (!id) {
+            id = PersonUtility.getPerson(session["currentStudentPidm"])?.bannerId
+        }
+        
         def students = session["students"]?.students.active
         def student = students?.find { it.id == id }
         def result = student?.pages?.find { it.url == page }
