@@ -191,6 +191,9 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 profile.p_sex = profile.p_sex.code;
             }
 
+            //Show a Wait Message. It will be replaced by Success message after response is processed.
+            notificationCenterService.addNotification('proxy.personalinformation.onSave.waitMessage', 'success', true);
+
             proxyAppService.updateProxyPersonalInfo(profile).$promise.then(function(response) {
                 var notifications = [],
                     doStateGoSuccess = function(messageOnSave) {
