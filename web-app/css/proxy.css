@@ -1203,7 +1203,7 @@ a.breadcrumbButton.leaf-breadcrumb {
 /***********************/
 /* Media Query Section */
 /***********************/
-@media screen and (min-width:769px) {
+@media screen and (min-width:768px) {
 
     .proxy-page-body {
         padding: 22px 32px 100px;
@@ -1697,7 +1697,7 @@ a.breadcrumbButton.leaf-breadcrumb {
 }
 
 /* Mobile device */
-@media screen and (max-width:768px) {
+@media screen and (max-width:767px) {
     span.breadcrumbButton.leaf-breadcrumb {
         width: 90%;
         height: 50px;
@@ -1713,7 +1713,7 @@ a.breadcrumbButton.leaf-breadcrumb {
 }
 
 /*Tablet device*/
-@media screen and (min-width: 769px) and (max-width: 1024px) {
+@media screen and (min-width: 768px) and (max-width: 1024px) {
     .proxy-mobile-visible,
     .proxy-desktop-visible {
         visibility: hidden;

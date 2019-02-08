@@ -34,7 +34,7 @@ ul.select2-result-single {
     direction: rtl;
 }
 
-@media screen and (min-width:769px) {
+@media screen and (min-width:768px) {
     .dropdown-container {
         width: 40%;
         max-width: 345px;
