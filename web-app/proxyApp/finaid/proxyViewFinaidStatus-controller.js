@@ -1,8 +1,8 @@
 /********************************************************************************
  Copyright 2019 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$rootScope','$stateParams', 'proxyAppService', '$filter', 'notificationCenterService',
-    function ($scope, $rootScope, $stateParams, proxyAppService, $filter, notificationCenterService) {
+proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope', '$state','$rootScope','$stateParams', 'proxyAppService', '$filter', 'notificationCenterService',
+    function ($scope, $state, $rootScope, $stateParams, proxyAppService, $filter, notificationCenterService) {
 
         var sortFinancialAidStatusLines = function(finaidStatus) {
             var retArr = [];
@@ -60,6 +60,11 @@ proxyAppControllers.controller('proxyViewFinaidStatusController',['$scope','$roo
             }
         };
 
+        $scope.goTo = function(url) {
+            $state.go(url,{id: $stateParams.id ? $stateParams.id : sessionStorage.getItem("id")});
+        };
+
+        
         var init = function() {
 
             if(proxyAppService.getAidYear()) {
