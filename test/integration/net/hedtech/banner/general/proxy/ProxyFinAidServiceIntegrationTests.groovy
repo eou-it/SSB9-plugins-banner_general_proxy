@@ -31,15 +31,24 @@ class ProxyFinAidServiceIntegrationTests extends BaseIntegrationTestCase {
     void testFetchAidYearList() {
         def result = proxyFinAidService.fetchAidYearList()
 
-        assertTrue 2 <= result.size()
+        assertTrue 3 <= result.size()
         assertTrue result.code.contains('1819')
-        assertTrue result.description.contains('2018-2019 Award Year')
+        assertTrue result.description.contains('2018 - 2019 Aid Year')
+        assertTrue result.code.contains('1314')
+        assertTrue result.description.contains('1314 aid year (2014)')
+        assertTrue result.code.contains('1920')
+        assertTrue result.description.contains('2019-2020 Award Year')
     }
 
     @Test
     void testFetchAidYearListOffset() {
         def result = proxyFinAidService.fetchAidYearList(2, 2, '')
-        assertTrue 0 >= result.size()
+
+        assertTrue result.size() > 0 && result.size() < 3
+        assertTrue result.code.contains('1314')
+        assertTrue result.description.contains('1314 aid year (2014)')
+        assertTrue result.code.contains('1920')
+        assertTrue result.description.contains('2019-2020 Award Year')
     }
 
     @Test
@@ -48,6 +57,6 @@ class ProxyFinAidServiceIntegrationTests extends BaseIntegrationTestCase {
         def result = proxyFinAidService.getAwardPackage(pidm, '1819')
 
         assertNotNull result
-        assertEquals 0, result.size()
+        assertFalse result.hasAwardInfo
     }
 }
