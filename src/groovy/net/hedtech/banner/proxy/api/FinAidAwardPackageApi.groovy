@@ -6,9 +6,6 @@ package net.hedtech.banner.proxy.api
 
 class FinAidAwardPackageApi {
     public final static String GET_NEED_CALCULATION = """
---PROCEDURE P_ShowNeedCalc(pidm  NUMBER,
---                         aidy  robinst.robinst_aidy_code%TYPE,
---                         WIDTH VARCHAR2) IS
 declare
    pidm  NUMBER := ?;
    aidy  robinst.robinst_aidy_code%TYPE := ?;
@@ -59,7 +56,6 @@ declare
            WHERE  rnvand0_aidy_code = aidy
            AND    rnvand0_pidm = pidm) x;
 
-   -- 081000-1
    CURSOR resources_c(pidm NUMBER,
                      aidy robinst.robinst_aidy_code%TYPE) IS
       SELECT rprarsc_resource_desc,
@@ -89,7 +85,6 @@ declare
                 AND    rortprd_aprd_code = rorstat_aprd_code)));
 
 BEGIN
-   -- 081401-2
    IF (rbk_period_budget.f_period_budget_enabled(aidy) = 'N')
    THEN
       OPEN need_calc_c;
@@ -100,19 +95,19 @@ BEGIN
            need;
       CLOSE need_calc_c;
 
-      -- Other resources                                                         -- 081000-1
+      -- Other resources
       OPEN resources_c(pidm, aidy);
       FETCH resources_c
       INTO resources_r;
       WHILE resources_c%FOUND LOOP
          resource_amount := resource_amount +
-                           NVL(NVL(resources_r.actual_amt, resources_r.est_amt), 0); -- 081200-5
+                           NVL(NVL(resources_r.actual_amt, resources_r.est_amt), 0);
          FETCH resources_c
          INTO resources_r;
       END LOOP;
       CLOSE resources_c;
 
-      -- Contracts and Exemptions                                                -- 081000-1
+      -- Contracts and Exemptions
       rokrefc.p_get_arsc_data(p_resultset_inout => arsc_c,
                               p_aidy_code       => aidy,
                               p_pidm            => pidm);
@@ -122,7 +117,7 @@ BEGIN
         IF arsc_r.arsc_rec_info_access_ind = 'Y' THEN
           resource_amount := resource_amount + NVL(NVL(arsc_r.arsc_rec_actual_amt,
                                                        arsc_r.arsc_rec_estimated_amt),
-                                                   0); -- 081200-5
+                                                   0);
         END IF;
         FETCH arsc_c
          INTO arsc_r;
@@ -153,45 +148,20 @@ BEGIN
       END IF;
    END IF;
 
-   --twbkfrmt.p_tableopen('DATADISPLAY',
-   --                   cattributes  => rb_misc_parameter.f_get_data(p_parameter => 'HTML_TABLE_PARMS',
-   --                                                                p_key       => 'bwrkrhst.P_ShowNeedCalc') || -- 081801-4
-   --                                   'width="' || WIDTH || '" SUMMARY= "' ||
-   --                                   g\$_nls.get('BWRKRHS1-0016',
-   --                                              'SQL',
-   --                                              'This table lists the need calculation.') || '"',
-   --                   ccaption     => g\$_nls.get('BWRKRHS1-0017',
-   --                                              'SQL',
-   --                                              'Need Calculation'));
- /* 081401-1 Removed
-      twbkfrmt.P_TableRowOpen;
-      twbkfrmt.P_TableDataHeader(g\$_nls.get('BWRKRHS1-0019', 'SQL', 'Component'));
-      twbkfrmt.P_TableDataHeader(g\$_nls.get('BWRKRHS1-0020', 'SQL', 'Amount'), 'right');
-      twbkfrmt.P_TableRowClose;
- */
+
    lv_json := '{';
-   --P_ShowCalcDetail(g\$_nls.get('BWRKRHS1-0018', 'SQL', 'Cost of Attendance'), budget_amount);
    lv_json := lv_json || '"attendanceCost": ' || nvl(budget_amount,0) || ',';
-   --P_ShowCalcDetail(g\$_nls.get('BWRKRHS1-0019', 'SQL', 'Estimated Family Contribution'), efc);
    lv_json := lv_json || '"familyContrib": ' || nvl(efc,0) || ',';
-   --P_ShowCalcDetail(g\$_nls.get('BWRKRHS1-0020', 'SQL', 'Initial Need'), init_need);
    lv_json := lv_json || '"initialNeed": ' || nvl(init_need,0) || ',';
-   --P_ShowCalcDetail(g\$_nls.get('BWRKRHS1-0021', 'SQL', 'Outside Resource'), resource_amount);
    lv_json := lv_json || '"outsideResrc": ' || nvl(resource_amount,0) || ',';
-   --P_ShowCalcDetail(g\$_nls.get('BWRKRHS1-0022', 'SQL', 'Need'), need);
    lv_json := lv_json || '"need": ' || nvl(need,0);
    lv_json := lv_json || '}';
--- twbkfrmt.p_tableclose;
--- htp.br;
+
    ? := lv_json;
 end;
---END P_ShowNeedCalc;
 """
 
     public final static String GET_HOUSING_STATUS = """
---PROCEDURE P_ShowHousing(pidm  NUMBER,
---                       aidy  robinst.robinst_aidy_code%TYPE,
---                       WIDTH VARCHAR2) IS
 declare
    pidm  NUMBER := ?;
    aidy  robinst.robinst_aidy_code%TYPE := ?;
@@ -219,51 +189,28 @@ declare
 
       IF housing_c%FOUND
       THEN
---         twbkfrmt.p_tableopen('DATADISPLAY',
---                              cattributes  => rb_misc_parameter.f_get_data(p_parameter => 'HTML_TABLE_PARMS',
---                                                                           p_key       => 'bwrkrhst.P_ShowHousing') || -- 081801-4
---                                              'width="' || WIDTH || '" SUMMARY= "' ||
---                                              g\$_nls.get('BWRKRHS1-0025',
---                                                         'SQL',
---                                                         'This table lists the housing.') || '"',
---                              ccaption     => g\$_nls.get('BWRKRHS1-0026', 'SQL', 'Housing'));
-
---         twbkfrmt.p_tablerowopen;
---         twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0027', 'SQL', 'Status'));
---         twbkfrmt.p_tablerowclose;
-
 
          lv_house_json := '{"rows": [';
          lv_count := 0;
          WHILE housing_c%FOUND LOOP
---            twbkfrmt.p_tablerowopen;
---            twbkfrmt.p_tabledata(housing);
             lv_count := lv_count + 1;
             if lv_count > 1
             then
                lv_house_json := lv_house_json || ',';
             end if;
             lv_house_json := lv_house_json || '"' || housing || '"';
---            twbkfrmt.p_tablerowclose;
             FETCH housing_c
              INTO housing;
          END LOOP;
          lv_house_json := lv_house_json || ']}';
 
---         twbkfrmt.p_tableclose;
---         htp.br;
       END IF;
       CLOSE housing_c;
    ? := lv_house_json;
 end;
---END P_ShowHousing;
 """
 
     public final static String GET_ENROLLMENT = """
---PROCEDURE P_ShowEnrollment(pidm   NUMBER,
---                          aidy   robinst.robinst_aidy_code%TYPE,
---                          WIDTH  VARCHAR2,
---                          status rorwebr.rorwebr_enrollment_status%TYPE) IS
 declare
    pidm   NUMBER := ?;
    aidy   robinst.robinst_aidy_code%TYPE := ?;
@@ -318,44 +265,23 @@ declare
       FETCH enrollment_desc_c
         INTO period_desc;
       IF enrollment_desc_c%FOUND THEN
---         twbkfrmt.p_tablerowopen;
          IF period IS NOT NULL THEN
---           twbkfrmt.p_tabledata(period || ': ');
             lv_enrollment_desc := period || ':';
          END IF;
---         twbkfrmt.p_tabledata(period_desc);
          lv_enrollment_desc := lv_enrollment_desc || period_desc;
---         twbkfrmt.p_tablerowclose;
       END IF;
       CLOSE enrollment_desc_c;
       return lv_enrollment_desc;
    END f_showenrollmentdesc;
 BEGIN
---   twbkfrmt.p_tableopen('DATADISPLAY',
---                        cattributes  => rb_misc_parameter.f_get_data(p_parameter => 'HTML_TABLE_PARMS',
---                                                                     p_key       => 'bwrkrhst.P_ShowEnrollment') || -- 081801-4
---                                        'width="' || WIDTH || '" SUMMARY= "' ||
---                                        g\$_nls.get('BWRKRHS1-0036',
---                                                   'SQL',
---                                                   'This table lists the expected enrollment status.') || '"',
---                        ccaption     => g\$_nls.get('BWRKRHS1-0037',
---                                                   'SQL',
---                                                   'Expected Enrollment'));
 
-   IF rb_common.f_sel_robinst_aidy_end_year(aidy) >= 2015 THEN                                                   -- 8180101-1
-      --P_ShowNewEnrollment                                                                                       -- 8180101-1
-      --   ( pidm   =>  pidm,                                                                                     -- 8180101-1
-      --     aidy   =>  aidy,                                                                                     -- 8180101-1
-      --     status =>  status                                                                                    -- 8180101-1
-      --   ) ;                                                                                                    -- 8180101-1
-      GOTO get_out;                                                                                             -- 8180101-1
-   END IF;                                                                                                       -- 8180101-1
+
+   IF rb_common.f_sel_robinst_aidy_end_year(aidy) >= 2015 THEN  -- 8180101-1
+      GOTO get_out;
+   END IF;
 
    IF status = 'F' THEN
       lv_enroll_json := '{"fStatus": {';
---      twbkfrmt.p_tablerowopen;
---      twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0038', 'SQL', 'Status'));
---      twbkfrmt.p_tablerowclose;
 
       OPEN est_enroll_pell_c;
       FETCH est_enroll_pell_c
@@ -364,17 +290,6 @@ BEGIN
       CLOSE est_enroll_pell_c;
 
       IF est_enroll_pell = 'N' THEN
-         -- 80201-3
---         IF default_option = '1' THEN
---           twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0039', 'SQL', 'Full-Time'));
---         ELSIF default_option = '2' THEN
---           twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0040', 'SQL', '3/4 Time'));
---         ELSIF default_option = '3' THEN
---           twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0041', 'SQL', '1/2 Time'));
---         ELSIF default_option = '4' THEN
---           twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0042', 'SQL', 'Less Than 1/2 Time'));
---         END IF;
-         --
          lv_enroll_json := lv_enroll_json || '"dfltOption":"' || default_option || '"';
       ELSE
          -- est_enroll_pell = 'Y'
@@ -388,15 +303,11 @@ BEGIN
                 exp_enroll_stat;
          CLOSE period_c;
          IF exp_enroll_stat IS NOT NULL THEN
---            p_showenrollmentdesc(aidy, NULL, 'RCRAPP1_EXP_ENROLL_STATUS', exp_enroll_stat);
             lv_enroll_json := lv_enroll_json || '"status":"' ||
                f_showenrollmentdesc(aidy, NULL, 'RCRAPP1_EXP_ENROLL_STATUS', exp_enroll_stat) ||
                '"';
          ELSE
---            twbkfrmt.p_tablerowopen;
---            twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0043', 'SQL', 'Unknown'));
             lv_enroll_json := lv_enroll_json || '"status":"_unknown_"';
---            twbkfrmt.p_tablerowclose;
          END IF;
       END IF;
       lv_enroll_json := lv_enroll_json || '}}';
@@ -416,51 +327,30 @@ BEGIN
                   (summer_t IS NOT NULL OR fall IS NOT NULL OR winter IS NOT NULL OR
                   spring IS NOT NULL OR summer_n IS NOT NULL) THEN
 
-      --         twbkfrmt.p_tablerowopen;
-      --         twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0044', 'SQL', 'Status'));
-      --         twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0045', 'SQL', ''));
-      --         twbkfrmt.p_tablerowclose;
-
-      --         p_showenrollmentdesc(aidy,
-      --                              g\$_nls.get('BWRKRHS1-0046', 'SQL', 'Summer'),
-      --                              'RCRAPP1_RQST_FA_SUMMER_THIS_YR',
-      --                              summer_t);
                lv_enroll_json := lv_enroll_json || '"' ||
                      f_showenrollmentdesc(aidy,
                                     'summer',
                                     'RCRAPP1_RQST_FA_SUMMER_THIS_YR',
                                     summer_t) || '",';
-      --         p_showenrollmentdesc(aidy,
-      --                              g\$_nls.get('BWRKRHS1-0047', 'SQL', 'Fall'),
-      --                              'RCRAPP1_RQST_FA_FALL_THIS_YR',
-      --                              fall);
+
                lv_enroll_json := lv_enroll_json || '"' ||
                      f_showenrollmentdesc(aidy,
                                     'fall',
                                     'RCRAPP1_RQST_FA_FALL_THIS_YR',
                                     fall) || '",';
-      --         p_showenrollmentdesc(aidy,
-      --                              g\$_nls.get('BWRKRHS1-0048', 'SQL', 'Winter'),
-      --                              'RCRAPP1_RQST_FA_WINTER_NEXT_YR',
-      --                              winter);
+
                lv_enroll_json := lv_enroll_json || '"' ||
                      f_showenrollmentdesc(aidy,
                                     'winter',
                                     'RCRAPP1_RQST_FA_WINTER_NEXT_YR',
                                     winter) || '",';
-      --         p_showenrollmentdesc(aidy,
-      --                              g\$_nls.get('BWRKRHS1-0049', 'SQL', 'Spring'),
-      --                              'RCRAPP1_RQST_FA_SPRING_NEXT_YR',
-      --                              spring);
+
                lv_enroll_json := lv_enroll_json || '"' ||
                      f_showenrollmentdesc(aidy,
                                     'spring',
                                     'RCRAPP1_RQST_FA_SPRING_NEXT_YR',
                                     spring) || '",';
-      --         p_showenrollmentdesc(aidy,
-      --                              g\$_nls.get('BWRKRHS1-0050', 'SQL', 'Summer'),
-      --                              'RCRAPP1_RQST_FA_SUMMER_NEXT_YR',
-      --                              summer_n);
+
                lv_enroll_json := lv_enroll_json || '"' ||
                      f_showenrollmentdesc(aidy,
                                     'nSummer',
@@ -468,14 +358,7 @@ BEGIN
                                     summer_n) || '"';
          --
       ELSE
---         twbkfrmt.p_tablerowopen;
---         twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0051', 'SQL', 'Status'));
---         twbkfrmt.p_tablerowclose;
-
---         twbkfrmt.p_tablerowopen;
---         twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0052', 'SQL', 'Unknown'));
          lv_enroll_json := lv_enroll_json || '"status:unknown"';
---         twbkfrmt.p_tablerowclose;
       END IF;
 
       CLOSE period_c;
@@ -484,18 +367,10 @@ BEGIN
 
    << get_out >>
    ? := lv_enroll_json;
---   twbkfrmt.p_tableclose;
---   htp.br;
 end;
---END P_ShowEnrollment;
 """
 
     public final static String GET_NEW_ENROLLMENT = """
---PROCEDURE P_ShowNewEnrollment
---           ( pidm   NUMBER,
---             aidy   robinst.robinst_aidy_code%TYPE,
---             status rorwebr.rorwebr_enrollment_status%TYPE
---           ) IS
 declare
    pidm   NUMBER := ?;
    aidy   robinst.robinst_aidy_code%TYPE := ?;
@@ -515,7 +390,6 @@ declare
 
    lv_PeriodRec        PeriodRecTab;
 
-   --lv_unknown          rormval.rormval_desc%TYPE := g\$_nls.get('BWRKRHS1-0028', 'SQL', 'Unknown');
    lv_unknown          rormval.rormval_desc%TYPE := '_unknown_';
    i                   PLS_INTEGER;
 
@@ -570,9 +444,6 @@ declare
 
 BEGIN
    IF status = 'F' THEN
---      twbkfrmt.p_tablerowopen;
---      twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0029', 'SQL', 'Status'));
---      twbkfrmt.p_tablerowclose;
       lv_nenroll_json := '{"fStatus":{';
       OPEN  est_enroll_pell_c;
       FETCH est_enroll_pell_c INTO est_enroll_pell,
@@ -581,15 +452,6 @@ BEGIN
 
       IF est_enroll_pell = 'N' THEN
          -- 80201-3
---         IF default_option = '1' THEN
---             twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0030', 'SQL', 'Full-Time'));
---         ELSIF default_option = '2' THEN
---             twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0031', 'SQL', '3/4 Time'));
---         ELSIF default_option = '3' THEN
---             twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0032', 'SQL', '1/2 Time'));
---         ELSIF default_option = '4' THEN
---             twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0033', 'SQL', 'Less Than 1/2 Time'));
---         END IF;
          lv_nenroll_json := lv_nenroll_json || '"dfltOption":"' || default_option || '"';
       ELSE
          -- est_enroll_pell = 'Y'
@@ -597,10 +459,9 @@ BEGIN
          FETCH year_c INTO lv_year_xes,
                            lv_year_desc ;
          CLOSE year_c;
---         twbkfrmt.p_tablerowopen;
---         twbkfrmt.p_tabledata(lv_year_desc);
+
          lv_nenroll_json := lv_nenroll_json || '"status":"' || lv_year_desc || '"';
---         twbkfrmt.p_tablerowclose;
+
       END IF;
       lv_nenroll_json := lv_nenroll_json || '}}';
    ELSE
@@ -611,31 +472,15 @@ BEGIN
       CLOSE period_c;
 
       IF lv_PeriodRec.COUNT = 0 THEN
---         twbkfrmt.p_tablerowopen;
---         twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0034', 'SQL', 'Status'));
---         twbkfrmt.p_tablerowclose;
-
---         twbkfrmt.p_tablerowopen;
---         twbkfrmt.p_tabledata(lv_unknown);
          lv_nenroll_json := lv_nenroll_json || '"statuses":[":' || lv_unknown || '"]';
---         twbkfrmt.p_tablerowclose;
       ELSE
---         twbkfrmt.p_tablerowopen;
---         twbkfrmt.p_tabledataheader('');
---         twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0035', 'SQL', 'Status'));
---         twbkfrmt.p_tablerowclose;
-
          lv_nenroll_json := lv_nenroll_json || '"statuses":[';
          FOR i IN lv_PeriodRec.FIRST .. lv_PeriodRec.LAST
          LOOP
---            twbkfrmt.p_tablerowopen;
             if i > 1 then
                lv_nenroll_json := lv_nenroll_json || ',';
             end if;
-            --twbkfrmt.p_tabledata(lv_PeriodRec(i).period_desc);
-            --twbkfrmt.p_tabledata(lv_PeriodRec(i).xes_desc);
             lv_nenroll_json := lv_nenroll_json || '"' || lv_PeriodRec(i).period_desc || ': ' || lv_PeriodRec(i).xes_desc || '"';
---            twbkfrmt.p_tablerowclose;
          END LOOP;
          lv_nenroll_json := lv_nenroll_json || ']';
       END IF;
@@ -648,14 +493,10 @@ end;
 """
 
     public final static String GET_COST_OF_ATTENDANCE = """
---PROCEDURE p_showcoa(pidm  NUMBER,
---                    aidy  robinst.robinst_aidy_code%TYPE,
---                    WIDTH VARCHAR2) IS
 declare
    pidm  NUMBER := ?;
    aidy  robinst.robinst_aidy_code%TYPE := ?;
 
-   -- p_display_budget
    p_aidy_code rbracmp.rbracmp_aidy_code%TYPE;
    p_pidm      rbracmp.rbracmp_pidm%TYPE;
    p_caption   VARCHAR2(50);
@@ -686,80 +527,41 @@ BEGIN
    -- 081401-01
    IF (rbk_period_budget.f_period_budget_enabled(aidy) = 'N') OR
       (f_get_pbud_info_access_ind = 'Y') THEN
---      bwrkbudg.p_display_budget(p_aidy_code => aidy,
---                               p_pidm      => pidm,
---                               p_caption   => g\$_nls.get('BWRKRHS1-0023',
---                                                         'SQL',
---                                                         'Cost of Attendance'), -- 081500-2
---                               p_header    => g\$_nls.get('BWRKRHS1-0024',
---                                                         'SQL',
---                                                         'Component'), -- 081500-2
---                               p_width     => WIDTH);
+
       p_aidy_code := aidy;
       p_pidm := pidm;
---      p_caption := 'Cost of Attendance';
---      p_header := 'Component';
---      p_width := WIDTH;
 
-    --BEGIN p_display_budget
+
       IF rbk_period_budget.f_period_budget_enabled(p_aidy_code) = 'N' THEN
---         lv_BudgetTab := f_get_budget(p_aidy_code, p_pidm);
          lv_BudgetTab := bwrkbudg.f_get_budget(p_aidy_code, p_pidm);
       ELSE
---         lv_BudgetTab := rbkpfrm.f_get_budget(p_aidy_code, p_pidm, f_get_budget_efc_ind(p_aidy_code, p_pidm));
          lv_BudgetTab := rbkpfrm.f_get_budget(p_aidy_code, p_pidm, bwrkbudg.f_get_budget_efc_ind(p_aidy_code, p_pidm));
       END IF;
 
       IF lv_BudgetTab.COUNT > 0 THEN
---         IF p_width IS NOT NULL THEN
---            width_attribute := 'width="' || p_width;
---         END IF;
-
---         twbkfrmt.P_TableOpen('DATADISPLAY',
---                              cattributes => rb_misc_parameter.F_Get_Data(
---                                                        p_parameter => 'HTML_TABLE_PARMS',
---                                                        p_key       => 'bwrkbudg.P_DispBudg') ||                           -- 081401-1
---                                             width_attribute || '" SUMMARY= "' ||
---                                             g\$_nls.get('BWRKBUD1-0002', 'SQL', 'This table lists the cost of attendance.') || '"',
---                              ccaption    =>G\$_NLS.FormatMsg('x', 'SQL', p_caption));
 
          lv_budg_json := '{"budgets":[';
          FOR i IN lv_BudgetTab.FIRST .. lv_BudgetTab.LAST LOOP
---            twbkfrmt.P_TableRowOpen;
             if i > 1 then
                lv_budg_json := lv_budg_json || ',';
             end if;
---            twbkfrmt.P_TableData(lv_BudgetTab(i).description);
             lv_budg_json := lv_budg_json || '{"desc":"' || lv_BudgetTab(i).description ||'",';
---            twbkfrmt.P_TableData(to_char(lv_BudgetTab(i).amount, 'L999G999G999G999D99'), calign => 'right');                -- 081401-1
             lv_budg_json := lv_budg_json || '"amount":' || lv_BudgetTab(i).amount || '}';
---            twbkfrmt.P_TableRowClose;
             total := total + lv_BudgetTab(i).amount;
          END LOOP;
          lv_budg_json := lv_budg_json || '],';
 
          total := LEAST(total, 999999999999.99);
 
---         twbkfrmt.P_TableRowOpen;
---         twbkfrmt.P_TableDataLabel(g\$_nls.get('BWRKBUD1-0003', 'SQL', 'Total:'), ccolspan => '1');
---         twbkfrmt.P_TableData(to_char(total, 'L999G999G999G999D99'), 'right');
          lv_budg_json := lv_budg_json || '"total":' || total || '}';
---         twbkfrmt.P_TableRowClose;
 
---         twbkfrmt.P_TableClose;
---         htp.br;
       END IF;
-    --END p_display_budget
    END IF;
    ? := lv_budg_json;
 end;
---END p_showcoa;
 """
 
     public final static String GET_CUM_LOAN_INFO = """
---PROCEDURE P_ShowCumLoanInfo(pidm  NUMBER,
---                            aidy  robinst.robinst_aidy_code%TYPE,
---                            WIDTH VARCHAR2) IS
 declare
    pidm  NUMBER := ?;
    aidy  robinst.robinst_aidy_code%TYPE := ?;
@@ -810,61 +612,30 @@ dbms_session.set_nls('NLS_CALENDAR',''''||'GREGORIAN'||'''');
       agt_plus_total <> 0 OR
       perk_cumulative_amt <> 0 OR
       teach_loan_total <> 0 THEN
-      -- 80300-6
 
---      twbkfrmt.p_tableopen('DATADISPLAY',
---                           cattributes  => rb_misc_parameter.f_get_data(p_parameter => 'HTML_TABLE_PARMS',
---                                                                        p_key       => 'bwrkrhst.P_ShowCumLoanInfo') || -- 081801-4
---                                           'width="' || WIDTH || '" SUMMARY= "' ||
---                                           g\$_nls.get('BWRKRHS1-0053',
---                                                      'SQL',
---                                                      'This table lists the cumulative loan information.') || '"',
---                           ccaption     => g\$_nls.get('BWRKRHS1-0054',
---                                                      'SQL',
---                                                      'Cumulative Loan Information as of<br>') ||
---                                           to_char(proc_date, g\$_date.get_nls_date_format));
       lv_loan_json := lv_loan_json || '"procDate":"' || to_char(proc_date,'MM/DD/YYYY') || '",';
 
-
-      --twbkfrmt.p_tablerowopen;
-      --twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0055', 'SQL', 'Loan Type'));
-      --twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0056', 'SQL', 'Amount'), 'right');
-      --twbkfrmt.p_tablerowclose;
-
---      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0057', 'SQL', 'Subsidized'),
---                          agt_sub_total);
       lv_loan_json := lv_loan_json || '"subsidized":' || agt_sub_total || ',';
---      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0058', 'SQL', 'Unsubsidized'),
---                          agt_unsub_total);
+
       lv_loan_json := lv_loan_json || '"unsubsidized":' || agt_unsub_total || ',';
---      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0059', 'SQL', 'Graduate PLUS'),
---                          agt_gr_plus_total);
+
       lv_loan_json := lv_loan_json || '"gradPlus":' || agt_gr_plus_total || ',';
---      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0060', 'SQL', 'Parent PLUS'),
---                          agt_plus_total);
+
       lv_loan_json := lv_loan_json || '"parentPlus":' || agt_plus_total || ',';
---      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0061', 'SQL', 'Perkins'),
---                          perk_cumulative_amt);
+
       lv_loan_json := lv_loan_json || '"perkins":' || perk_cumulative_amt || ',';
---      P_ShowCumLoanDetail(g\$_nls.get('BWRKRHS1-0062',
---                                     'SQL',
---                                     'Direct Unsubsidized (TEACH)'),
---                          teach_loan_total); -- 80300-6
+
       lv_loan_json := lv_loan_json || '"directUnsub":' || teach_loan_total;
 
---      twbkfrmt.p_tableclose;
---      htp.br;
    END IF;
    lv_loan_json := lv_loan_json || '}';
    CLOSE loan_info_c;
 
    ? := lv_loan_json;
 end;
---END P_ShowCumLoanInfo;
 """
 
     public final static String GET_AWARD_INFO = """
---P_ShowAwardInfo
 declare
    pidm   NUMBER := ?;
    aidy   robinst.robinst_aidy_code%TYPE := ?;
@@ -1168,54 +939,7 @@ FUNCTION f_award_exists(pidm     NUMBER,
             AND    rprawrd_pidm = rpratrm_pidm
             AND    rprawrd_fund_code = rpratrm_fund_code)
     AND    ((rorwebr_rec.rorwebr_fund_zero_amt_ind = 'N' AND rprawrd_offer_amt > 0) OR rorwebr_rec.rorwebr_fund_zero_amt_ind = 'Y');
-    /* 081500-1
-            SELECT 'X'
-              FROM RPRAWRD,
-                   RTVAWST,
-                   RFRBASE  -- 80300-4
-             WHERE RPRAWRD_PIDM      = pidm
-               AND RPRAWRD_AWST_CODE = RTVAWST_CODE
-               AND NVL(RPRAWRD_INFO_ACCESS_IND, 'Y') = 'Y'
-               AND RPRAWRD_FUND_CODE = RFRBASE_FUND_CODE -- 80300-4
-               AND RFRBASE_INFO_ACCESS_IND = 'Y'
-               AND RTVAWST_INFO_ACCESS_IND = 'Y'
-               AND (RPRAWRD_FUND_CODE IN
-                     (SELECT RPRATRM_FUND_CODE
-                        FROM RPRATRM,
-                             ROBPRDS                                                -- 080900-1
-                       WHERE 1=1 -- ROBPRDS_AIDY_CODE = aidy                        -- 081201-1
-                         AND ROBPRDS_PERIOD    = RPRATRM_PERIOD
-                         AND RPRATRM_AIDY_CODE = RPRAWRD_AIDY_CODE
-                         AND RPRATRM_PIDM      = RPRAWRD_PIDM
-                         AND RPRATRM_FUND_CODE = RPRAWRD_FUND_CODE
-                         AND (  (   NVL(RFRBASE_FED_FUND_ID, '*')  = 'PELL'         -- 081000-1
-                                AND RPRATRM_OFFER_AMT > 0                           -- 081000-1
-                                AND bwrkolib.F_CheckPellCrossover(                  -- 081000-1
-                                       aidy,                                        -- 081000-1
-                                       pidm,                                        -- 081000-1
-                                       RPRAWRD_AIDY_CODE,                           -- 081000-1
-                                       RPRATRM_PERIOD) = 'Y'                        -- 081000-1
-                                )                                                   -- 081000-1
-                             OR (   NVL(RFRBASE_FED_FUND_ID, '*') <> 'PELL'         -- 081000-1
-                                AND RPRAWRD_AIDY_CODE = aidy                        -- 081000-1
-                                AND (  (term_zero_awrd = 'N' AND RPRATRM_OFFER_AMT > 0)
-                                    OR  term_zero_awrd = 'Y')
-                                )
-                             )
-                     )
-                   OR NOT EXISTS -- 071401-2
-                     (SELECT 'X'
-                        FROM RPRATRM
-                       WHERE RPRAWRD_AIDY_CODE = RPRATRM_AIDY_CODE
-                         AND RPRAWRD_PIDM      = RPRATRM_PIDM
-                         AND RPRAWRD_FUND_CODE = RPRATRM_FUND_CODE
-                     )
-                   )
-               AND ( (fund_zero_amt  = 'N' AND RPRAWRD_OFFER_AMT > 0)
-                   OR fund_zero_amt  = 'Y')
-               AND ( (webAccpt = 'Y' AND F_AllowWebUpdate(pidm, aidy, RPRAWRD_FUND_CODE) = 'Y')
-                   OR webAccpt = 'N');
-    */
+
   BEGIN
     -- Check the packing group.If they don't have a group,they don't have awards.
     OPEN getpackgroup_c;
@@ -1245,43 +969,6 @@ PROCEDURE P_GetAwardData( p_award_data   OUT fund_data_tab_type,
   BEGIN
     -- Builds a table of unique periods in a student's award package (p_period_list)
     -- Also builds an award detail data structure that looks something like this:
-    /*
-    award data table (indexed sequentially from 1, orderd by print_seq_no+fund_code)
-      -> period award data table (indexed by robprds_seq_no)
-
-    A data example might look like this:
-
-    award_data(1)  -- these indexes are sequential, in the order that funds should appear (print_seq_no+fund_code)
-      fund_code  => 'PELL'
-      fund_title => 'Federal PELL Grant'
-      periods(100) =>    -- simce this is indexed by robprds_seq_no, it can skip values based on the actual data in the tables
-          award_detail_c%ROWTYPE: period      => 'FALL_2012'
-                                  period_desc => 'Fall 2012'
-                                  fund_code   => 'PELL'
-                                  fund_title  => 'Federal PELL Grant'
-                                  status      => 'ACPT'
-                                  ...
-      periods(101) =>
-          award_detail_c%ROWTYPE: period      => 'SPRING_2013'
-                                  period_desc => 'Spring 2013'
-                                  fund_code   => 'PELL'
-                                  fund_title  => 'Federal PELL Grant'
-                                  status      => 'ACPT'
-                                  ...
-    award_data(2)
-      fund_code  => 'STFD'
-      fund_title => 'Stafford Loan'
-      periods(101) =>
-      periods(101) =>
-          award_detail_c%ROWTYPE: period      => 'SPRING_2013'
-                                  period_desc => 'Spring 2013'
-                                  fund_code   => 'STFD'
-                                  fund_title  => 'Stafford Loan'
-                                  status      => 'ACPT'
-                                  ...
-    award_data(3)
-      ...
-    */
 
     FOR i IN award_detail_c LOOP
       -- only create a new fund record if the fund code has changed
@@ -1322,60 +1009,31 @@ PROCEDURE P_GetAwardData( p_award_data   OUT fund_data_tab_type,
                 p_award_data    =>  lv_award_data                                                                      -- 8.23-3
               ) = 'Y' THEN                                                                                             -- 8.23-3
 
-            --lv_term_desc  :=  G\$_NLS.FormatMsg('x', 'SQL',                                                          -- 8.23-3
-            --                                f_getinfotext('bwrkrhst.P_AwardOverviewTab', 'BBAY_DESC'),                 -- 8.23-3
-            --                                lv_period_list(period_seq_no));                                            -- 8.23-3
             lv_term_desc := lv_period_list(period_seq_no);
          ELSE                                                                                                          -- 8.23-3
-            --lv_term_desc  :=  G\$_NLS.FormatMsg('x', 'SQL',                                                           -- 8.23-3
-            --                               f_getinfotext('bwrkrhst.P_AwardOverviewTab', 'TERM_DESC'),                  -- 8.23-3
-            --                               lv_period_list(period_seq_no));                                             -- 8.23-3
             lv_term_desc := lv_period_list(period_seq_no);
          END IF;                                                                                                        -- 8.23-3
       END IF ;
 
       lv_period_json := lv_period_json || '{';
-      --twbkfrmt.p_tableopen('DATADISPLAY',
-      --                     cattributes  => rb_misc_parameter.f_get_data(p_parameter => 'HTML_TABLE_PARMS',
-      --                                                                  p_key       => 'bwrkrhst.P_AcceptAwardOfferTab') || -- 080500-4
-      --                                     'width="' || WIDTH || '" SUMMARY= "' ||
-      --                                     g\$_nls.get('BWRKRHS1-0084',
-      --                                                'SQL',
-      --                                                'This table lists the award information.') || '"',
-      --                     ccaption     => lv_term_desc);                                                               -- 8.23-3
-   --                         ccaption     => g\$_nls.get('BWRKRHS1-0084',                                                  -- 8.23-3
-   --                                                    'SQL',                                                            -- 8.23-3
-   --                                                    'Financial Aid Award for the %01%',                               -- 8.23-3
-   --                                                    lv_term_desc ));
+
       lv_period_json := lv_period_json || '"termDesc":"' || lv_term_desc || '",';
-      -- First row of header
-      --twbkfrmt.p_tablerowopen;
-      --twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0085', 'SQL', 'Fund'));
-      --twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0086', 'SQL', 'Status'));
-      --twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0087', 'SQL', 'Total'));
-      --twbkfrmt.p_tablerowclose;
 
       lv_period_json := lv_period_json || '"periodAwards": [';
       lv_fi := lv_award_data.FIRST ;
       WHILE lv_fi IS NOT NULL LOOP
-         --twbkfrmt.p_tablerowopen;
 
          IF lv_award_data(lv_fi).periods.EXISTS( period_seq_no ) THEN
             lv_count := lv_count + 1;
             if lv_count > 1 then
                lv_period_json := lv_period_json || ',';
             end if;
-            --P_PrintCell_FundTitle( p_fund_code => lv_award_data(lv_fi).fund_code,
-            --                       p_fund_title => lv_award_data(lv_fi).fund_title,
-            --                       p_aidy_code => aidy ) ;
+
             lv_period_json := lv_period_json || '{"fundTitle":"' || lv_award_data(lv_fi).fund_title || '",';
 
-            --twbkfrmt.p_tabledata( lv_award_data(lv_fi).periods(period_seq_no).period_status ) ;
             lv_period_json := lv_period_json || '"status":"' || lv_award_data(lv_fi).periods(period_seq_no).period_status || '",';
-            --twbkfrmt.p_tabledata( TO_CHAR(lv_award_data(lv_fi).periods(period_seq_no).amt, 'L999G999G999D99'),
-            --                      calign => 'right' ) ;
+
             lv_period_json := lv_period_json || '"amount":' || nvl(lv_award_data(lv_fi).periods(period_seq_no).amt,0) || '}';
-            --twbkfrmt.p_tablerowclose;
 
             lv_total_amt := NVL(lv_total_amt,0) + lv_award_data(lv_fi).periods(period_seq_no).amt ;
          END IF ;
@@ -1383,18 +1041,10 @@ PROCEDURE P_GetAwardData( p_award_data   OUT fund_data_tab_type,
       END LOOP ;
       lv_period_json := lv_period_json || '],';
 
-      --twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0088', 'SQL', 'Total'), cattributes=>'style="font-weight: bold;"');
-      --htp.print('<td></td>') ;
-      --twbkfrmt.p_tabledata( TO_CHAR( lv_total_amt, 'L999G999G999D99'),
-      --                               calign => 'right');  -- grand total for the period
       lv_period_json := lv_period_json || '"total": ' || nvl(lv_total_amt,0) || '}';
 
-      --twbkfrmt.p_tablerowclose;
-      --twbkfrmt.p_tableclose;
    END P_Show_PA_PeriodBlock ;
 
-
-   --PROCEDURE P_Show_PA_V IS
    FUNCTION P_Show_PA_V RETURN VARCHAR2 IS
       lv_pi BINARY_INTEGER ;
       lv_periods_json VARCHAR2(32000);
@@ -1407,9 +1057,7 @@ PROCEDURE P_GetAwardData( p_award_data   OUT fund_data_tab_type,
          if lv_count > 1 then
             lv_periods_json := lv_periods_json || ',';
          end if;
-         --P_Show_PA_PeriodBlock(lv_pi) ;
          P_Show_PA_PeriodBlock(lv_pi, lv_periods_json) ;
-         --htp.br ;
          lv_pi := lv_period_list.NEXT(lv_pi) ;
       END LOOP ;
       lv_periods_json := lv_periods_json || ']}';
@@ -1479,21 +1127,13 @@ PROCEDURE P_GetAwardData( p_award_data   OUT fund_data_tab_type,
       END LOOP ;
 
       IF lv_offered = TRUE THEN
-         --IF rorwebr_rec.rorwebr_offer_image IS NOT NULL THEN
             p_out_status_img := 'offer' ;
-         --END IF ;
       ELSIF lv_accepted = TRUE THEN
-         --IF rorwebr_rec.rorwebr_accept_image IS NOT NULL THEN
             p_out_status_img := 'accept' ;
-         --END IF ;
       ELSIF lv_declined = TRUE THEN
-         --IF rorwebr_rec.rorwebr_decline_image IS NOT NULL THEN
             p_out_status_img := 'decline' ;
-         --END IF ;
       ELSIF lv_cancelled = TRUE THEN
-         --IF rorwebr_rec.rorwebr_cancel_image IS NOT NULL THEN
             p_out_status_img := 'cancel' ;
-         --END IF ;
       END IF ;
    END P_Calc_AwardAidyAmtStatus ;
 
@@ -1515,66 +1155,29 @@ PROCEDURE P_GetAwardData( p_award_data   OUT fund_data_tab_type,
 
       lv_count NUMBER := 0;
    BEGIN
-      --twbkfrmt.p_tableopen('DATADISPLAY',
-      --                     cattributes  => rb_misc_parameter.f_get_data(p_parameter => 'HTML_TABLE_PARMS',
-      --                                                                  p_key       => 'bwrkrhst.P_AcceptAwardOfferTab') || -- 080500-4
-      --                                     'width="' || WIDTH || '" SUMMARY= "' ||
-      --                                     g\$_nls.get('BWRKRHS1-0089',
-      --                                                'SQL',
-      --                                                'This table lists the award information.') || '"',
-      --                     ccaption     => g\$_nls.get('BWRKRHS1-0090',
-      --                                                'SQL',
-      --                                                'Financial Aid Award for the %01%',
-      --                                                bwrkolib.f_validaidy(aidy) ));
+
       lv_aidyr_json := lv_aidyr_json || '{';
-      -- Header
-      --twbkfrmt.p_tablerowopen;
-      --twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0091', 'SQL', 'Fund'));
-      --twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0092', 'SQL', 'Status'));
-      --IF rorwebr_rec.rorwebr_aidy_award_ind = 'D' THEN  -- then also display ofrd/acpt/decl/cncl amounts
-      --  twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0093', 'SQL', 'Offered'));
-      --  twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0094', 'SQL', 'Accepted'));
-      --  IF rorwebr_rec.rorwebr_fund_zero_amt_ind != 'N' THEN
-      --    twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0095', 'SQL', 'Declined'));
-      --    twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0096', 'SQL', 'Cancelled'));
-      --  END IF ;
-      --END IF ;
-      --twbkfrmt.p_tabledataheader(g\$_nls.get('BWRKRHS1-0097', 'SQL', 'Total'));
-      --twbkfrmt.p_tablerowclose;
 
       lv_aidyr_json := lv_aidyr_json || '"aidAwards":[';
       lv_fi := lv_award_data.FIRST ;
       WHILE lv_fi IS NOT NULL LOOP
-         --twbkfrmt.p_tablerowopen;
          lv_count := lv_count + 1;
          if lv_count > 1 then
             lv_aidyr_json := lv_aidyr_json || ',';
          end if;
          lv_aidyr_json := lv_aidyr_json || '{';
-         --P_PrintCell_FundTitle( p_fund_code => lv_award_data(lv_fi).fund_code,
-         --                       p_fund_title => lv_award_data(lv_fi).fund_title,
-         --                       p_aidy_code => aidy ) ;
          lv_aidyr_json := lv_aidyr_json || '"fundTitle":"' || lv_award_data(lv_fi).fund_title || '"';
          P_Calc_AwardAidyAmtStatus( lv_fi, lv_amt, lv_status_img,
                                    lv_offer_amt, lv_accept_amt, lv_decline_amt,
                                    lv_cancel_amt ) ;
-         --twbkfrmt.p_tabledata( lv_status_img ) ;
          lv_aidyr_json := lv_aidyr_json || ',"status":"' || lv_status_img || '"';
 
 
          IF rorwebr_rec.rorwebr_aidy_award_ind = 'D' THEN  -- then also display ofrd/acpt/decl/cncl amounts
-            --twbkfrmt.p_tabledata( TO_CHAR( lv_offer_amt, 'L999G999G999D99'),
-            --                      calign => 'right' ) ;
             lv_aidyr_json := lv_aidyr_json || ',"offerAmt":' || nvl(lv_offer_amt,0) || ',';
-            --twbkfrmt.p_tabledata( TO_CHAR( lv_accept_amt, 'L999G999G999D99'),
-            --                      calign => 'right' ) ;
             lv_aidyr_json := lv_aidyr_json || '"acceptAmt":' || nvl(lv_accept_amt,0) || '';
             IF rorwebr_rec.rorwebr_fund_zero_amt_ind != 'N' THEN
-               --twbkfrmt.p_tabledata( TO_CHAR( lv_decline_amt, 'L999G999G999D99'),
-               --                      calign => 'right' ) ;
                lv_aidyr_json := lv_aidyr_json || ',"declineAmt":' || nvl(lv_decline_amt,0) || ',';
-               --twbkfrmt.p_tabledata( TO_CHAR( lv_cancel_amt, 'L999G999G999D99'),
-               --                    calign => 'right' ) ;
                lv_aidyr_json := lv_aidyr_json || '"cancelAmt":' || nvl(lv_cancel_amt,0) || '';
             END IF ;
 
@@ -1594,10 +1197,7 @@ PROCEDURE P_GetAwardData( p_award_data   OUT fund_data_tab_type,
 
          END IF ;
 
-         --twbkfrmt.p_tabledata( TO_CHAR( lv_amt, 'L999G999G999D99'),
-         --                      calign => 'right' ) ;
          lv_aidyr_json := lv_aidyr_json || ',"amount":' || nvl(lv_amt,0);
-         --twbkfrmt.p_tablerowclose;
          lv_aidyr_json := lv_aidyr_json || '}';
 
          lv_total_amt := NVL(lv_total_amt,0) + lv_amt ;
@@ -1607,45 +1207,29 @@ PROCEDURE P_GetAwardData( p_award_data   OUT fund_data_tab_type,
       END LOOP ;
       lv_aidyr_json := lv_aidyr_json || ']';
 
-      --twbkfrmt.p_tabledata(g\$_nls.get('BWRKRHS1-0098', 'SQL', 'Total'), cattributes=>'style="font-weight: bold;"');
-      --htp.print('<td></td>') ;
-
       IF rorwebr_rec.rorwebr_aidy_award_ind = 'D' THEN  -- then also display ofrd/acpt/decl/cncl amounts
-         --twbkfrmt.p_tabledata( TO_CHAR( lv_total_offer_amt, 'L999G999G999D99'),
-         --                      calign => 'right',cattributes=>'style="font-weight: bold;"' ) ;
+
          lv_aidyr_json := lv_aidyr_json || ',"totalOfferAmt":' || nvl(lv_total_offer_amt,0) || ',';
-         --twbkfrmt.p_tabledata( TO_CHAR( lv_total_accept_amt, 'L999G999G999D99'),
-         --                      calign => 'right',cattributes=>'style="font-weight: bold;"' ) ;
+
          lv_aidyr_json := lv_aidyr_json || '"totalAcceptAmt":' || nvl(lv_total_accept_amt,0);
          IF rorwebr_rec.rorwebr_fund_zero_amt_ind != 'N' THEN
-            --twbkfrmt.p_tabledata( TO_CHAR( lv_total_decline_amt, 'L999G999G999D99'),
-            --                     calign => 'right',cattributes=>'style="font-weight: bold;"' ) ;
             lv_aidyr_json := lv_aidyr_json || ',"totalDeclineAmt":' || nvl(lv_total_decline_amt,0) || ',';
-            --twbkfrmt.p_tabledata( TO_CHAR( lv_total_cancel_amt, 'L999G999G999D99'),
-            --                     calign => 'right',cattributes=>'style="font-weight: bold;"' ) ;
             lv_aidyr_json := lv_aidyr_json || '"totalCancelAmt":' || nvl(lv_total_cancel_amt,0);
          END IF ;
       END IF ;
 
-      --twbkfrmt.p_tabledata( TO_CHAR( lv_total_amt, 'L999G999G999D99'),
-      --                      calign => 'right',cattributes=>'style="font-weight: bold;"');  -- grand total for the year
       lv_aidyr_json := lv_aidyr_json || ',"totalAmt":' || nvl(lv_total_amt,0);
-      --twbkfrmt.p_tablerowclose;
 
-      --twbkfrmt.p_tableclose;
       lv_aidyr_json := lv_aidyr_json || '}';
    END P_Show_AA ;
 
 BEGIN
-   --bwrkolib.P_ProcessUserDefTxt( pidm, aidy, 'FA' ) ;
    P_Sel_rorwebr(aidy);
 
    -- Check for no awards
    IF NOT f_award_exists(pidm, aidy) OR info_access = 'N' THEN
       lv_award_json := '{}';
       lv_period_json := '{}';
-   --   RETURN;
-   -- END IF;
    else
 
    P_GetAwardData( lv_award_data, lv_period_list ) ;
@@ -1653,43 +1237,21 @@ BEGIN
    IF rorwebr_rec.rorwebr_aidy_award_ind IN ('D','S') THEN
      -- The logic for D and S Aidyear Awards is so similar that
      -- they are both handled by the same procedure
-     --P_Show_AA ;  -- Show Aidyear Awards
      lv_award_json := '{"aidYearAwards":';
      P_Show_AA(lv_award_json);
      lv_award_json := lv_award_json || '}';
    END IF ; -- IF rorwebr_rec.rorwebr_aidy_award_ind = 'N' or anything else, don't display anything
 
-   -- determine if we need a spacer - only if one of each table is shown
-   --IF rorwebr_rec.rorwebr_aidy_award_ind != 'N' AND
-   --   rorwebr_rec.rorwebr_prds_award_ind != 'N' THEN
-   --  htp.br ;
-   --END IF ;
-
-   --IF rorwebr_rec.rorwebr_prds_award_ind = 'H' THEN
-   --  P_Show_PA_H ;  -- Show Period Awards - Horizontal
-   --ELSIF rorwebr_rec.rorwebr_prds_award_ind = 'V' THEN
-   --  P_Show_PA_V ;  -- Show Period Awards - Vertical
-   --ELSIF rorwebr_rec.rorwebr_prds_award_ind = 'D' THEN
-   --  P_Show_PA_D ;  -- Show Period Awards - Double
-   --END IF ; -- IF rorwebr_rec.rorwebr_prds_award_ind = 'N' or anything else, don't display anything
-
    IF rorwebr_rec.rorwebr_prds_award_ind IN ('H','V', 'D') THEN
       lv_period_json := P_Show_PA_V;
    END IF;
    end if;
-   --htp.br;
-
-   --EXCEPTION WHEN OTHERS THEN
-   --  htp.p('<hr><font size="+3"><bold>' || SQLERRM || '<br><pre>' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE || '</pre></font><hr>') ;
---END P_ShowAwardInfo;
    ? := lv_award_json;
    ? := lv_period_json;
 END;
---P_ShowAwardInfo
 """
 
     public final static String GET_RORWEBRREC = """
---PROCEDURE P_Sel_rorwebr(aidy robinst.robinst_aidy_code%TYPE) IS
 declare
    pidm NUMBER := ?;
    aidy robinst.robinst_aidy_code%TYPE := ?;
