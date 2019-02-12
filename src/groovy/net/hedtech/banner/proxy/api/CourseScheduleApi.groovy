@@ -6,16 +6,6 @@ package net.hedtech.banner.proxy.api
 class CourseScheduleApi {
 
     public final static String WEEKLY_COURSE_SCHEDULE = """
---
--- P_CRSESCHD.
--- Displays the Week at a glance page.
--- ==================================================
---   PROCEDURE P_CrseSchd (
---      start_date_in   IN   VARCHAR2 DEFAULT NULL,
---      error_msg_in    IN   VARCHAR2 DEFAULT NULL,
---      error_date_in   IN   VARCHAR2 DEFAULT NULL
---   )
---   IS
 declare
 --
 -- Cursor to read meeting records.
@@ -209,25 +199,6 @@ declare
       lv_has_next_wk           VARCHAR2(6) := 'false';
    BEGIN
 
-   -- Validate CHAR/VARCHAR2 post variables
---    twbksecr.p_chk_parms_05(start_date_in, error_msg_in, error_date_in); /*080701-1*/
-
--- Check for valid user.
--- ==================================================
---      IF NOT twbkwbis.f_validuser (global_pidm)
---      THEN
---         RETURN;
---      END IF;
-
---
--- Start the web page.
--- ==================================================
---      bwckfrmt.p_open_doc ('bwskfshd.P_CrseSchd');
---
--- Display info text.
--- ==================================================
---      twbkwbis.p_dispinfo ('bwskfshd.P_CrseSchd', 'DEFAULT');
---
 -- Populate a pl/sql table with the start and end dates
 -- for each template. A template is a frame of time when the
 -- user's schedule remains static. A template starts on the
@@ -389,33 +360,6 @@ declare
          NULL;
       END LOOP read_classes_loop;
 
---
--- Display any error messages, and the go to date input field.
--- ===========================================================
---      bwckweek.p_goto_date (
---         error_msg_in,
---         error_date_in,
---         start_date,
---         'bwskfshd.p_proc_crse_schd'
---      );
---
--- Display the Weekly schedule table
--- ==================================================
---      bwckweek.p_disp_grid (
---         meeting_tab,
---         template_tab,
---         max_template_index,
---         todays_template_index,
---         template_start_date,
---         'bwskfshd.P_CrseSchd',
---         'bwskfshd.P_CrseSchdDetl',
---         slots_in_hour,
---         slot_length,
---         min_time,
---         max_time,
---         row_count,
---         no_schd
---      );
       IF todays_template_index > 1
       THEN
          lv_has_prev_wk := 'true';
@@ -475,17 +419,6 @@ declare
 
          row_count := row_count + 1;
 
---         bwckweek.p_disp_unassigned (
---            crse_rec.term_code,
---            crse_rec.crn,
---            crse_rec.subj_code,
---            crse_rec.crse_numb,
---            crse_rec.seq_numb,
---           crse_rec.ptrm_code,
---            crse_rec.stvschd_desc,
---            'bwskfshd.P_CrseSchdDetl',
---            row_count
---         );
          IF row_count = 1
          THEN
             lv_tba_sched_json := lv_tba_sched_json || '{';
@@ -519,22 +452,8 @@ declare
 -- ==================================================
       IF no_schd
       THEN
---         twbkfrmt.p_printmessage (
---            G\$_NLS.Get ('BWSKFSH1-0000',
---              'SQL',
---               'You are not currently registered'
---            ),
---            'ERROR'
---         );
          lv_errorMsg := 'notRegistered';
       END IF;
-
---
--- Close out.
--- ==================================================
---      HTP.br;
---      twbkwbis.p_closedoc (curr_release);
---   END P_CrseSchd;
 
    ? := lv_sched_json;
    ? := lv_tba_sched_json;
@@ -674,7 +593,6 @@ DECLARE
                         AND x.sfrareg_term_code = a.sfrareg_term_code);
 
    aregcrsec_rec  aregcrsec%ROWTYPE;
---  end BWCKGEN globals
 
    crn      VARCHAR2(6)               := ?;
    term_in  stvterm.stvterm_code%TYPE := ?;
@@ -706,7 +624,6 @@ DECLARE
                    )
              );
 
--- BWCKFRMT stuff
    CURSOR regsc (
       term_in   stvterm.stvterm_code%TYPE,
       crn_in    ssbsect.ssbsect_crn%TYPE,
@@ -743,8 +660,6 @@ DECLARE
                        p_crn ssbsect.ssbsect_crn%TYPE,
                        p_cat sirasgn.sirasgn_category%TYPE DEFAULT NULL)
       IS
---         SELECT f_format_name (sirasgn_pidm, 'FMIL') instr_name,
---         SELECT 'X' instr_name, sirasgn_pidm,
            SELECT sirasgn_pidm,
                 sirasgn_primary_ind, spriden_last_name, spriden_first_name, spriden_mi,
                 spriden_surname_prefix
@@ -804,7 +719,6 @@ DECLARE
 
          IF instr_pidms.COUNT > 0
          THEN
-   --         twbkfrmt.p_tabledataopen;
             FOR j IN 1..instr_pidms.COUNT
             LOOP
                IF j = 1
@@ -817,15 +731,11 @@ DECLARE
                lv_json := lv_json || '"instructor": "' || instr_names(j) || '"}';
             END LOOP;
 
-   --         twbkfrmt.p_tabledataclose;
-   --      ELSE
-   --         twbkfrmt.p_tabledata (ccolspan => '1');
          END IF;
          lv_json := lv_json || ']}';
          RETURN lv_json;
 
    END;
--- end BWCKFRMT stuff
 --
 
 BEGIN
@@ -833,44 +743,17 @@ BEGIN
       dbms_session.set_nls('NLS_DATE_FORMAT',''''||'DD-MON-RRRR'||'''');
       dbms_session.set_nls('NLS_CALENDAR',''''||'GREGORIAN'||'''');
       
---   IF NOT twbkwbis.f_validuser (global_pidm)
---   THEN
---      RETURN;
---   END IF;
-
    IF NOT bwskflib.f_validviewterm (term_in, stvterm_rec, sorrtrm_rec)
    THEN
       NULL;
    END IF;
 
---   IF NVL (twbkwbis.f_getparam (global_pidm, 'STUFAC_IND'), 'STU') = 'FAC'
---   THEN
---      genpidm :=
---          TO_NUMBER (twbkwbis.f_getparam (global_pidm, 'STUPIDM'), '999999999');
---      call_path := 'F';
---      not_registered_message :=
---        g\$_nls.get ('BWCKGEN1-0009',
---           'SQL',
---           'No schedule available for selected term.');
---   ELSE
---      genpidm := global_pidm;
       genpidm := lv_pidm;
       call_path := 'S';
---      not_registered_message :=
---        g\$_nls.get ('BWCKGEN1-0010',
---           'SQL',
---           'You are not currently registered for the term.');
---   END IF;
 
    term := term_in;
    row_count := 0;
 
---   IF call_path = 'S'
---   THEN
---      bwckfrmt.p_open_doc ('bwskfshd.P_CrseSchdDetl', term);
---   END IF;
-
---   twbkwbis.p_dispinfo ('bwskfshd.P_CrseSchdDetl', 'DEFAULT');
    cpinuse := twbkwbis.f_fetchwtparam ('cpinuse');
 
    IF cpinuse = 'Y'
@@ -918,15 +801,7 @@ BEGIN
          OPEN tot_credit_hr_c (genpidm, term);
          FETCH tot_credit_hr_c INTO tot_credit_hr;
          CLOSE tot_credit_hr_c;
--- Prints header:
 --------
-
---         twbkfrmt.p_printtext (
---            g\$_nls.get ('BWCKGEN1-0011', 'SQL', 'Total Credit Hours') || ': ' ||
---               LTRIM (TO_CHAR (tot_credit_hr, '99990D990'))
---         );
---         HTP.br;
---         HTP.br;
          lv_tot_credit_hr :=  LTRIM (TO_CHAR (tot_credit_hr, '99990D990'));
          lv_course_json := lv_course_json || '{"tot_credits":"' || lv_tot_credit_hr || '",';
       ELSE
@@ -945,53 +820,8 @@ BEGIN
       IF makewebctlink = 'N' OR
          regcrse.ssbsect_intg_cde IS NULL
       THEN
---         twbkfrmt.p_tableopen (
---            'DATADISPLAY',
---            cattributes   => 'SUMMARY="' ||
---                                g\$_nls.get ('BWCKGEN1-0012',
---                                   'SQL',
---                                   'This layout table is used to present the schedule course detail') ||
---                                '"',
---            ccaption      => bwcklibs.f_course_title (
---                                term_in,
---                                regcrse.ssbsect_crn
---                             ) ||
---                                ' - ' ||
---                                regcrse.ssbsect_subj_code ||
---                                ' ' ||
---                                regcrse.ssbsect_crse_numb ||
---                                ' - ' ||
---                               regcrse.ssbsect_seq_numb
---         );
          lv_dowebctlogin := 'Y';
       ELSE
---         twbkfrmt.p_tableopen (
---            'DATADISPLAY',
---            cattributes   => 'SUMMARY="' ||
---                                g\$_nls.get ('BWCKGEN1-0013',
---                                   'SQL',
---                                   'This layout table is used to present the schedule course detail') ||
---                                '"'
---         );
---         webctlink :=
---           bwcklibs.f_course_title (term_in, regcrse.ssbsect_crn) || ' - ' ||
---              regcrse.ssbsect_subj_code ||
---              ' ' ||
---              regcrse.ssbsect_crse_numb ||
---              ' - ' ||
---              regcrse.ssbsect_seq_numb;
---         webctlink :=
---           twbkfrmt.f_printanchor (
---              webctlogin,
---              webctlink,
---              '',
---              '',
---              bwckfrmt.f_anchor_focus (webctlogin)
---           );
---         twbkfrmt.p_tableheader (
---            twbkfrmt.f_printtext (webctlink, BYPASS_ESC=>'Y'),
---            ccolspan   => 3, cattributes=>'BYPASS_ESC=Y'
---         );
          lv_dowebctlogin := 'N';
       END IF;
       lv_course_title_caption := bwcklibs.f_course_title (
@@ -1008,67 +838,22 @@ BEGIN
       lv_course_json := lv_course_json || '"webctlogin": "' || webctlogin || '",';
       lv_course_json := lv_course_json || '"course_title": "' || lv_course_title_caption || '",';
 
---      twbkfrmt.p_tablerowopen;
---      twbkfrmt.p_tabledatalabel (
---         g\$_nls.get ('BWCKGEN1-0014', 'SQL', 'Associated Term:'),
---         ccolspan   => 2
---      );
---      twbkfrmt.p_tabledata (bwcklibs.f_term_desc (term_in));
-      lv_course_json := lv_course_json || '"assoc_term": "' || bwcklibs.f_term_desc (term_in) || '",';
---      twbkfrmt.p_tablerowclose;
---      twbkfrmt.p_tablerowopen;
---      twbkfrmt.p_tabledatalabel (
---         twbkfrmt.f_printtext (
---            '<ACRONYM title = "' ||
---               g\$_nls.get ('BWCKGEN1-0015', 'SQL', 'Course Reference Number') ||
---               '">' ||
---               g\$_nls.get ('BWCKGEN1-0016', 'SQL', 'CRN') ||
---               '</ACRONYM>'
---         ) ||
---            ':',
---         ccolspan   => 2
---      );
---      twbkfrmt.p_tabledata (regcrse.ssbsect_crn);
       lv_course_json := lv_course_json || '"crn": "' || regcrse.ssbsect_crn || '",';
---      twbkfrmt.p_tablerowclose;
---      twbkfrmt.p_tablerowopen;
---      twbkfrmt.p_tabledatalabel (
---         g\$_nls.get ('BWCKGEN1-0017', 'SQL', 'Status:'),
---         ccolspan   => 2
---      );
---      twbkfrmt.p_tabledata (
---         g\$_nls.get ('BWCKGEN1-0018',
---            'SQL',
---            '%01% on %02%',
---            regcrse.stvrsts_desc,
---            TO_CHAR (regcrse.sfrstcr_rsts_date, twbklibs.date_display_fmt)
---         )
---      );
+
       lv_course_json := lv_course_json || '"status_01": "' || regcrse.stvrsts_desc || '",';
       lv_course_json := lv_course_json || '"status_02": "' || TO_CHAR (regcrse.sfrstcr_rsts_date, 'DD/MM/YYYY') || '",';
---      twbkfrmt.p_tablerowclose;
 
       -- WaitList automation enhancement begins.
       IF sfkwlat.f_display_position(term, regcrse.ssbsect_crn) = 'Y' AND
          sfkwlat.f_wl_automation_active( term, regcrse.ssbsect_crn ) = 'Y' AND
          regcrse.stvrsts_voice_type = 'L'
       THEN
---        twbkfrmt.p_tablerowopen;
---        twbkfrmt.p_tabledatalabel(
---            g\$_nls.get('BWCKGEN1-0019', 'SQL', 'Waitlist Position:'),
---            ccolspan   => 2
---        );
---        twbkfrmt.p_tabledata(
---            sfkwlat.f_get_wl_pos( p_pidm  =>  genpidm,
---                                  p_term  =>  term_in,
---                                  p_crn   =>  regcrse.ssbsect_crn
---                                )
---        );
+
         lv_course_json := lv_course_json || '"waitlist_pos": "' || sfkwlat.f_get_wl_pos( p_pidm  =>  genpidm,
                                   p_term  =>  term_in,
                                   p_crn   =>  regcrse.ssbsect_crn
                                 ) || '",';
---        twbkfrmt.p_tablerowclose;
+
         lv_wl_notification_ref := sb_wl_notification.f_query_one( p_term_code  =>  term_in,
                                                                   p_crn        =>  regcrse.ssbsect_crn ,
                                                                   p_pidm       =>  genpidm );
@@ -1078,145 +863,41 @@ BEGIN
         END IF;
         CLOSE lv_wl_notification_ref;
 
---        twbkfrmt.p_tablerowopen;
---        twbkfrmt.p_tabledatalabel(
---            g\$_nls.get('BWCKGEN1-0020', 'SQL', 'Notification Expires:'),
---            ccolspan   => 2
---        );
---        twbkfrmt.p_tabledata(
---            TO_CHAR ( lv_wl_notification_rec.r_end_date,
---                      twbklibs.twgbwrul_rec.twgbwrul_date_fmt
---                    ) ||
---            ' ' ||
---            TO_CHAR ( lv_wl_notification_rec.r_end_date,
---                      twbklibs.twgbwrul_rec.twgbwrul_time_fmt
---                    )
---        );
         lv_course_json := lv_course_json || '"notif_expire": "' || TO_CHAR ( lv_wl_notification_rec.r_end_date,
                       twbklibs.twgbwrul_rec.twgbwrul_time_fmt
                     ) || '",';
 
---        twbkfrmt.p_tablerowclose;
       END IF ;
       -- Waitlist automation enhancement ends.
 
       IF sfkolrl.f_open_learning_course (term_in, regcrse.ssbsect_crn)
       THEN
---         twbkfrmt.p_tablerowopen;
---         twbkfrmt.p_tabledatalabel (
---            g\$_nls.get ('BWCKGEN1-0021', 'SQL', 'Class Start Date:'),
---            ccolspan   => 2
---         );
---         twbkfrmt.p_tabledata (
---            TO_CHAR (aregcrsec_rec.sfrareg_start_date, twbklibs.date_display_fmt)
---         );
          lv_course_json := lv_course_json || '"class_start": "' || TO_CHAR (aregcrsec_rec.sfrareg_start_date, 'MM/DD/YYYY') || '",';
---         twbkfrmt.p_tablerowclose;
---         twbkfrmt.p_tablerowopen;
---         twbkfrmt.p_tabledatalabel (
---            g\$_nls.get ('BWCKGEN1-0022', 'SQL', 'Expected Completion Date:'),
---            ccolspan   => 2
---         );
---         twbkfrmt.p_tabledata (
---            TO_CHAR (
---               aregcrsec_rec.sfrareg_completion_date,
---               twbklibs.date_display_fmt
---            )
---         );
+
          lv_course_json := lv_course_json || '"expected_comp": "' || TO_CHAR (
                aregcrsec_rec.sfrareg_completion_date,
                'MM/DD/YYYY'
             ) || '",';
---         twbkfrmt.p_tablerowclose;
+
       END IF;
 
---      twbkfrmt.p_tablerowopen;
---      twbkfrmt.p_tabledatalabel (
---         g\$_nls.get ('BWCKGEN1-0023', 'SQL', 'Assigned Instructor:'),
---         ccolspan   => 2
---      );
-
---      bwckfrmt.p_instructor_links ( -- just get the names, and email addresses
---               regcrse.sfrstcr_term_code, regcrse.sfrstcr_crn,
---               regcrse.ssbsect_ptrm_code, aregcrsec_rec.sfrareg_instructor_pidm,
---               call_path);
       lv_course_json := lv_course_json || '"instructors": ' || p_instructor_links ( -- just get the names, and email addresses
                regcrse.sfrstcr_term_code, regcrse.sfrstcr_crn,
                regcrse.ssbsect_ptrm_code, aregcrsec_rec.sfrareg_instructor_pidm,
                call_path) || ',';
 
---      twbkfrmt.p_tablerowclose;
---      twbkfrmt.p_tablerowopen;
---      twbkfrmt.p_tabledatalabel (
---         g\$_nls.get ('BWCKGEN1-0024', 'SQL', 'Grade Mode:'),
---         ccolspan   => 2
---      );
---      bwckfrmt.p_disp_grade_mode (term_in, regcrse.ssbsect_crn);
       OPEN regsc (term_in, regcrse.ssbsect_crn, genpidm);
       FETCH regsc INTO regs_rec;
       CLOSE regsc;
       lv_course_json := lv_course_json || '"grade_mode": "' || regs_rec.stvgmod_desc || '",';
---     twbkfrmt.p_tablerowclose;
---      twbkfrmt.p_tablerowopen;
---      twbkfrmt.p_tabledatalabel (
---         g\$_nls.get ('BWCKGEN1-0025', 'SQL', 'Credits:'),
---         ccolspan   => 2
---      );
---      bwckfrmt.p_disp_credit_hours (term_in, regcrse.ssbsect_crn);
+
       lv_course_json := lv_course_json || '"credits": "' || TO_CHAR (regs_rec.sfrstcr_credit_hr, '9990D990') || '",';
---      twbkfrmt.p_tablerowclose;
---      twbkfrmt.p_tablerowopen;
---      twbkfrmt.p_tabledatalabel (
---         g\$_nls.get ('BWCKGEN1-0026', 'SQL', 'Level:'),
---         ccolspan   => 2
---      );
---      bwckfrmt.p_disp_level (term_in, regcrse.ssbsect_crn);
+
       lv_course_json := lv_course_json || '"level": "' || regs_rec.stvlevl_desc || '",';
---      twbkfrmt.p_tablerowclose;
---      twbkfrmt.p_tablerowopen;
---      twbkfrmt.p_tabledatalabel (
---         g\$_nls.get ('BWCKGEN1-0027', 'SQL', 'Campus:'),
---         ccolspan   => 2
---      );
---      twbkfrmt.p_tabledata (regcrse.stvcamp_desc);
+      
       lv_course_json := lv_course_json || '"campus": "' || regcrse.stvcamp_desc || '",';
---      twbkfrmt.p_tablerowclose;
 
-      --
-      -- HEOA support start
-      --
 
-      --
-      -- HEOA support stop
-      --
---      IF sylncrsec_rec.ssrsyln_section_url IS NOT NULL
---      THEN
---         twbkfrmt.p_tablerowopen;
---         twbkfrmt.p_tabledatalabel (
---            twbkfrmt.f_printtext (
---               g\$_nls.get ('BWCKGEN1-0028', 'SQL', 'Course ') ||
---                  '<ACRONYM title = "' ||
---                  g\$_nls.get ('BWCKGEN1-0029',
---                     'SQL',
---                     'Uniform Resource Locator') ||
---                  '">' ||
---                  g\$_nls.get ('BWCKGEN1-0030', 'SQL', 'URL') ||
---                  '</ACRONYM>' ||
---                  ':'
---            ),
---            ccolspan   => 2
---         );
---         twbkfrmt.p_tabledata (
---            twbkfrmt.f_printanchor (
---               twbkfrmt.f_encodeurl (sylncrsec_rec.ssrsyln_section_url),
---               sylncrsec_rec.ssrsyln_section_url
---            )
---         );
---         twbkfrmt.p_tablerowclose;
---      END IF;
-
---      twbkfrmt.p_tableclose;
---      bwckfrmt.p_disp_meeting_times (term_in, regcrse.ssbsect_crn);
       pdm_crn_in := regcrse.ssbsect_crn;
       pdm_term_in := term_in;
 --    p_disp_meeting_times as inline BEGIN
@@ -1231,14 +912,6 @@ BEGIN
          END IF;
          meeting_times_found := TRUE;
 
---         IF bwcklibs.ssrmeetc%rowcount = 1
---         THEN
---            p_open_table;
---         END IF;
-
---         twbkfrmt.p_tablerowopen;
-         /* type */
---         twbkfrmt.p_tabledata (ssrmeet.gtvmtyp_desc);
          lv_course_json := lv_course_json || '"type": "' || ssrmeet.gtvmtyp_desc || '",';
          /* time */
          pdm_hold_beg_time :=
@@ -1267,35 +940,9 @@ BEGIN
             pdm_hold_end_time := SUBSTR (pdm_hold_end_time, 1, 30);
          END IF;
 
---         IF ssrmeet.ssrmeet_begin_time IS NULL
---         THEN
---            twbkfrmt.p_tabledata (
---               twbkfrmt.f_printtext (
---                  '<ABBR title = "' ||
---                     g\$_nls.get ('BWCKFRM1-0021', 'SQL', 'To Be Announced') ||
---                     '">' ||
---                     g\$_nls.get ('BWCKFRM1-0022', 'SQL', 'TBA') ||
---                     '</ABBR>'
---               )
---            );
---         ELSE
---            twbkfrmt.p_tabledata (pdm_hold_beg_time || ' - ' || pdm_hold_end_time);
---         END IF;
          lv_course_json := lv_course_json || '"times":"' || pdm_hold_beg_time || ' - ' || pdm_hold_end_time || '",';
 
          /* days */
---         twbkfrmt.p_tabledata (
---            LTRIM (
---               RTRIM (g\$_date.nls_abv_day(ssrmeet.ssrmeet_mon_day) ||
---                      g\$_date.nls_abv_day(ssrmeet.ssrmeet_tue_day) ||
---                      g\$_date.nls_abv_day(ssrmeet.ssrmeet_wed_day) ||
---                      g\$_date.nls_abv_day(ssrmeet.ssrmeet_thu_day) ||
---                      g\$_date.nls_abv_day(ssrmeet.ssrmeet_fri_day) ||
---                      g\$_date.nls_abv_day(ssrmeet.ssrmeet_sat_day) ||
---                      g\$_date.nls_abv_day(ssrmeet.ssrmeet_sun_day)
---               )
---            )
---         );
          lv_course_json := lv_course_json || '"days": "' || ssrmeet.ssrmeet_mon_day ||
                       ssrmeet.ssrmeet_tue_day ||
                       ssrmeet.ssrmeet_wed_day ||
@@ -1309,23 +956,10 @@ BEGIN
 --         IF ssrmeet.ssrmeet_bldg_code IS NULL
          IF ssrmeet.ssrmeet_bldg_code IS NOT NULL
          THEN
---            twbkfrmt.p_tabledata (
---               twbkfrmt.f_printtext (
---                  '<ABBR title = "' ||
---                     g\$_nls.get ('BWCKFRM1-0023', 'SQL', 'To Be Announced') ||
---                     '">' ||
---                     g\$_nls.get ('BWCKFRM1-0024', 'SQL', 'TBA') ||
---                     '</ABBR>'
---               )
---            );
---       ELSE
             lv_sched_count := 0;
             FOR stvbldg IN stkbldg.stvbldgc (ssrmeet.ssrmeet_bldg_code)
             LOOP
                lv_sched_count := lv_sched_count + 1;
---               twbkfrmt.p_tabledata (
---                  stvbldg.stvbldg_desc || ' ' || ssrmeet.ssrmeet_room_code
---               );
                IF lv_sched_count > 1
                THEN
                   lv_course_json := lv_course_json || ',';
@@ -1336,11 +970,7 @@ BEGIN
          lv_course_json := lv_course_json || '],';
 
          /* date range */
---         twbkfrmt.p_tabledata (
---            TO_CHAR (ssrmeet.ssrmeet_start_date, twbklibs.date_display_fmt) ||
---               ' - ' ||
---               TO_CHAR (ssrmeet.ssrmeet_end_date, twbklibs.date_display_fmt)
---         );
+
          lv_course_json := lv_course_json || '"meet_start": "' || TO_CHAR (ssrmeet.ssrmeet_start_date, 'MM/DD/YYYY') || '",';
          lv_course_json := lv_course_json || '"meet_end": "' || TO_CHAR (ssrmeet.ssrmeet_end_date, 'MM/DD/YYYY') || '",';
 
@@ -1350,7 +980,6 @@ BEGIN
          FOR stvschd IN stkschd.stvschdc (ssrmeet.ssrmeet_schd_code)
          LOOP
             lv_sched_count := lv_sched_count + 1;
---            twbkfrmt.p_tabledata (stvschd.stvschd_desc);
             IF lv_sched_count > 1
             THEN
                lv_course_json := lv_course_json || ',';
@@ -1361,11 +990,6 @@ BEGIN
 
 
          /* instructors */
---         p_instructor_list(
---            pdm_term_in, pdm_crn_in, ssrmeet.ssrmeet_catagory, p_display_email => TRUE
---            );
---       should already have this info
---         twbkfrmt.p_tablerowclose;
          lv_course_json := lv_course_json || '}';
       END LOOP;
       lv_course_json := lv_course_json || ']';
@@ -1381,13 +1005,6 @@ BEGIN
             LOOP
                IF NVL (sirasgnc_row.sirasgn_primary_ind, 'N') = 'Y'
                THEN
---                  primary_ind :=
---                    '(' || '<ABBR title= "' ||
---                       g\$_nls.get ('BWCKFRM1-0025', 'SQL', 'Primary') ||
---                       '">' ||
---                       g\$_nls.get ('BWCKFRM1-0026', 'SQL', 'P') ||
---                       '</ABBR>' ||
---                       ')';
                   primary_ind := 'P';
                ELSE
                   primary_ind := '';
@@ -1401,8 +1018,6 @@ BEGIN
                   hold_instr_name :=
                      (sirasgnc_row.spriden_first_name||' '||sirasgnc_row.spriden_mi||' '||sirasgnc_row.spriden_last_name);
                END IF;
---               temp_instr_name := hold_instr_name || ' ' || primary_ind ||
---                  bwckfrmt.f_disp_instr_email_icon (sirasgnc_row.sirasgn_pidm);
                temp_instr_name := '"'||  hold_instr_name || ' ' || primary_ind || '"';
 
                IF instr_name IS NULL
@@ -1417,42 +1032,27 @@ BEGIN
 
             IF instr_name IS NOT NULL
             THEN
---               p_open_table;
---               twbkfrmt.p_tablerowopen;
---               twbkfrmt.p_tabledatadead (ccolspan => 6);
---               twbkfrmt.p_tabledata (instr_name, cattributes=>'BYPASS_ESC=Y');
                lv_course_json := lv_course_json || '"instr_names": [' || instr_name || ']';
---               twbkfrmt.p_tablerowclose;
             END IF;
          END IF;
       END IF;
 
       meeting_times_found := false;
 
---      IF table_opened
---      THEN
---         twbkfrmt.p_tableclose;
---      END IF;
-
       instr_name := NULL;
---      HTP.br;
---   END p_disp_meeting_times;
---    p_disp_meeting_times as inline END
+
 
       lv_course_json := lv_course_json || '}';
    END LOOP;
    lv_course_json := lv_course_json || '],';
    IF row_count = 0
    THEN
---      twbkfrmt.p_printmessage (not_registered_message);
       lv_errorMsg := 'notRegistered';
    END IF;
    lv_course_json := lv_course_json || '"errorMsg": "'|| lv_errorMsg ||'"}';
 
    ? := lv_course_json;
---   dbms_output.put_line(lv_course_json);
---   bwckfrmt.p_disp_back_anchor;
---END P_DispCrseSchdDetl;
+
 END;
 """
 
