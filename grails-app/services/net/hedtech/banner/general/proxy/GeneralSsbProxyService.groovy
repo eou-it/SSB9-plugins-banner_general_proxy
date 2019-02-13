@@ -624,7 +624,6 @@ class GeneralSsbProxyService {
     }
 
 
-
     def getStudentListForProxy(def gidm) {
 
         def studentList = ""
