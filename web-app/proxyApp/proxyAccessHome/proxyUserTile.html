@@ -14,5 +14,5 @@
             {{proxyData.desc|i18n}}
         </div>
     </div>
-    <div class="pull-right glyphicon glyphicon-chevron-right"></div>
+    <div ng-class="'glyphicon-chevron-' + (isRTL ? 'left' : 'right')" class="pull-right glyphicon"></div>
 </div>
