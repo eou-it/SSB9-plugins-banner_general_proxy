@@ -80,6 +80,7 @@ modules = {
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/filters/proxy-filter.js']
 
         // Directives
+        resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/directives/proxy-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/common/directives/selectBox-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyAccessHome/proxyLandingPage-directive.js']
         resource url: [plugin: 'banner-general-proxy', file: 'proxyApp/proxyPersonalInfo/proxyPersonalInfo-directive.js']
