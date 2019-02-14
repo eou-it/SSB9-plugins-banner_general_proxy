@@ -837,7 +837,7 @@ BEGIN
       lv_course_json := lv_course_json || '"doWebCtLink": "' || lv_dowebctlogin|| '",';
       lv_course_json := lv_course_json || '"webctlogin": "' || webctlogin || '",';
       lv_course_json := lv_course_json || '"course_title": "' || lv_course_title_caption || '",';
-
+      lv_course_json := lv_course_json || '"assoc_term": "' || bwcklibs.f_term_desc (term_in) || '",';
       lv_course_json := lv_course_json || '"crn": "' || regcrse.ssbsect_crn || '",';
 
       lv_course_json := lv_course_json || '"status_01": "' || regcrse.stvrsts_desc || '",';
