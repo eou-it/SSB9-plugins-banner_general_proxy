@@ -48,7 +48,7 @@ class ProxyController {
     private studentIdCheck() {
         def id = XssSanitizer.sanitize(params.id)
         if (id) {
-            def students = getAllStudentsInSingleList()
+            def students = session["students"]?.students.active
             def student = students?.find { it.id == id }
             if (!student) {
                 log.error('Invalid attempt for Id: ' + id )
