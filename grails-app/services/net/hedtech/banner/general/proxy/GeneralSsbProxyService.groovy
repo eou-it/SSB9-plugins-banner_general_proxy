@@ -16,6 +16,7 @@ import org.springframework.web.context.request.RequestContextHolder
 import oracle.jdbc.driver.OracleTypes
 import groovy.sql.OutParameter
 
+import java.sql.SQLException
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -448,9 +449,10 @@ class GeneralSsbProxyService {
                 emailChangeOut = emailChange
             }
             log.debug('finished updateProxyProfile')
-        } catch (Exception e) {
-            log.error('updateProxyProfile')
-            log.error(e)
+        } catch (SQLException e) {
+            log.error('updateProxyProfile() - '+ e)
+            def ae = new ApplicationException( GeneralSsbProxyService.class, e )
+            throw ae
         } finally {
             sql?.close()
         }
