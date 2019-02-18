@@ -25,8 +25,8 @@ proxyAppControllers.controller('proxyViewGradesController',['$scope', 'proxyAppS
         $scope.termsFetcher = proxyAppService.getTerms;
 
 
-        proxyAppService.getHolds({id: sessionStorage.getItem("id")}).$promise.then(function(response) {
-            $scope.holds = response.rows.length > 0;
+        proxyAppService.getViewGradesHolds({id: sessionStorage.getItem("id")}).$promise.then(function(response) {
+            $scope.holds = response.viewGradesHolds;
         });
 
 

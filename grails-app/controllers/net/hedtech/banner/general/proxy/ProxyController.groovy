@@ -236,6 +236,20 @@ class ProxyController {
         render result as JSON
     }
 
+
+    /**
+     * Gets the View Grades Holds model for the student
+     *
+     */
+    def getViewGradesHolds() {
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+
+        def result = gradesProxyService.getViewGradesHolds(pidm);
+
+        render result as JSON
+    }
+
+
     def getCourseSchedule() {
         def id = XssSanitizer.sanitize(params.id)
         def pidm = PersonUtility.getPerson(id)?.pidm
