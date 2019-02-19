@@ -32,6 +32,10 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                 right: 'prev next'
             }
         },
+        locale = $('meta[name=locale]').attr("content"),
+        lang = locale.split('-')[0],
+        meridiem = [$filter('i18n')('default.time.am'), $filter('i18n')('default.time.pm')],
+
         hasEventWithinPast2Days = function () {
             var fc = $('#calendar'),
                 calDate = fc.fullCalendar('getDate').hour(0);
@@ -40,6 +44,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                 return (event.start.isBefore(calDate));
             }).length > 0;
         },
+
         hasEventWithinNext2Days = function () {
             var fc = $('#calendar'),
                 targetCalDate = fc.fullCalendar('getDate').add(2, 'days').hour(0);
@@ -47,9 +52,84 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
             return fc.fullCalendar('clientEvents', function(event) {
                 return (event.end.isSameOrAfter(targetCalDate));
             }).length > 0;
+        },
+
+        // Load localization meridiem (AM/PM) overrides as translated in Platform properties.
+        // Regarding the code in this function:  This code was pulled from one of the FullCalendar locale files, i.e.
+        // fullcalendar-3.9.0/locale/ar.js, which I was unfortunately only able to find in minified form.  Anything
+        // found to be unneeded for the immediate purpose at hand was stripped out, and other relevant modifications
+        // were made.  See https://fullcalendar.io/docs/locale for more information.
+        loadLocalization = function (locale, meridiem) {
+            !function (e, t) {
+                "object" == typeof exports && "object" == typeof module ?
+                                module.exports = t(require("moment"), require("fullcalendar")) : "function" == typeof define && define.amd ?
+                                    define(["moment", "fullcalendar"], t) : "object" == typeof exports ?
+                                        t(require("moment"), require("fullcalendar")) : t(e.moment, e.FullCalendar)
+            }("undefined" != typeof self ? self : this, function (e, t) {
+                return function (e) {
+                    function t(n) {
+                        if (r[n]) return r[n].exports;
+                        var o = r[n] = {
+                            i: n,
+                            l: !1,
+                            exports: {}
+                        };
+                        return e[n].call(o.exports, o, o.exports, t), o.l = !0, o.exports
+                    }
+
+                    var r = {};
+                    return t.m = e, t.c = r, t.d = function (e, r, n) {
+                        t.o(e, r) || Object.defineProperty(e, r, {
+                            configurable: !1,
+                            enumerable: !0,
+                            get: n
+                        })
+                    }, t.n = function (e) {
+                        var r = e && e.__esModule ? function () {
+                            return e.default
+                        } : function () {
+                            return e
+                        };
+                        return t.d(r, "a", r), r
+                    }, t.o = function (e, t) {
+                        return Object.prototype.hasOwnProperty.call(e, t)
+                    }, t.p = "", t(t.s = 79)
+                }({
+                    0: function (t, r) {
+                        t.exports = e
+                    },
+                    1: function (e, r) {
+                        e.exports = t
+                    },
+                    79: function (e, t, r) {
+                        Object.defineProperty(t, "__esModule", {
+                            value: !0
+                        }), r(80);
+                        var n = r(1);
+                        n.locale(locale, {})
+                    },
+                    80: function (e, t, r) {
+                        !function (e, t) {
+                            t(r(0))
+                        }(0, function (e) {
+                            return e.updateLocale(locale, {
+                                meridiem: function (e, t, r) {
+                                    return e < 12 ? meridiem[0] : meridiem[1]
+                                }
+                            })
+                        })
+                    }
+                })
+            });
         };
 
-    //convert jquery date format (js.datepicker.tooltipDateFormat) to moment date format
+    // Load the current locale override, which FullCalendar will use by default, i.e. it doesn't need to be specified
+    // to FullCalendar with a "locale" option (per https://fullcalendar.io/docs/locale: "If you are simply loading one
+    // locale, you do not need to specify the locale option. FullCalendar will look at the most recent locale file
+    // loaded and use it.").
+    loadLocalization(locale, meridiem);
+
+    //convert jquery date format (js.datepicker.tooltipDateFormat) to MomentJS (used by FullCalendar) date format
     titleFormat = titleFormat.replace(/''/g, "'")  //use "'" for literal ' instead "''"
         .replace(/'([^']+)'/g, '[$1]')             //use "[...]" for literals instead "'...'"
         .replace(/d(?![^\[]*\])/g, 'D')            //use "D" for short day of month instead "d"
@@ -60,9 +140,15 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
         link: function(scope, elem, attrs) {
             var isMobile = $rootScope.isMobileView(),
                 isRTL = $.i18n.prop('default.language.direction') === 'rtl',
+                columnHeaderFormat = (lang === 'es') ? 'ddd DD' : 'DD ddd', // Specified by translation team
+
+                // Platform provides the default.time.format property, which should be adjusted for a 12/24 hour clock.
+                // However, at least for en-US (default messages.properties file), that property doesn't include AM/PM
+                // in the format, so here we pick the best format based on the 12/24 hour clock.
                 clockFormat = $filter('i18n')('default.timebox.clock.format'), // 12 or 24
                 timeFormatKey = (clockFormat && clockFormat === '24') ? 'timebox.24hr.format' : 'default.time.12hour.display.format',
                 timeFormat = $filter('i18n')(timeFormatKey),
+
                 addDatePicker = function() {
                     var datePickerTemplate = '<div class="gotodate-block"> <label>' + goToText + '</label> <input date-picker ng-model="tgtDate" pi-input-watcher on-select="goToDate" class="eds-text-field pi-date-input input-colors" placeholder="' + datePlaceholderText + '" id="goToDate"/> </div>',
                         datePickerElem = $compile(datePickerTemplate)(scope);
@@ -110,7 +196,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     slotLabelInterval: '01:00',
                     slotLabelFormat: timeFormat,
                     scrollTime: '08:00:00',
-                    columnHeaderFormat: 'DD ddd',
+                    columnHeaderFormat: columnHeaderFormat,
                     timeFormat: timeFormat,
                     titleFormat: titleFormat,
                     firstDay: 1,

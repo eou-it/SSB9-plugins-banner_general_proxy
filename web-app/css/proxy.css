@@ -755,7 +755,6 @@ p.notification-msg {
 }
 
 .fc-axis.fc-time.fc-widget-content {
-    text-transform: uppercase;
     font: 11px opensans-semibold;
     border-style: none;
 }
