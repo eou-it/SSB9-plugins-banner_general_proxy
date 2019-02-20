@@ -98,6 +98,7 @@ class ProxyController {
         try {
 
             Map response = [failure: false, message: generalSsbProxyService.updateProxyProfile(updatedProfile)]
+            session["students"] = null
             render response as JSON
         }
         catch (ApplicationException e) {
