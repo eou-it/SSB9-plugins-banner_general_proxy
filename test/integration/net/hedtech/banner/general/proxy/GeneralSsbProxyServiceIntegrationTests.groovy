@@ -36,6 +36,7 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
             transactionManager.getTransaction().setRollbackOnly()                 // and make sure we don't commit to the database
             sessionFactory?.queryCache?.clear()                                     //clear the query cache when ehcache is being used
         }
+
         // super.setup() not called to prevent logging in as admin user which does not have necessary permissions
     }
 
@@ -56,6 +57,10 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
     @Test
     void testStudentList() {
         def gidm = getProxyIdm('mrbunny@gvalleyu.edu')
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.eachRow("select user as test1 from dual", {trow ->
+            println "user: ${trow.test1}"
+        })
         def result = generalSsbProxyService.getStudentListForProxy(gidm)
 
         assertNotNull result.students
