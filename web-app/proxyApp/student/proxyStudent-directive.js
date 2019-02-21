@@ -5,7 +5,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
 
     var goToText = $filter('i18n')('proxy.schedule.goTo'),
         datePlaceholderText = $filter('i18n')('default.date.format.watermark'),
-        titleFormat = $filter('i18n')('js.datepicker.tooltipDateFormat'),
+        titleFormat,
         mobileOptions = {
             defaultView: 'agendaTwoDay',
             aspectRatio: 0.8,
@@ -129,12 +129,21 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
     // loaded and use it.").
     loadLocalization(locale, meridiem);
 
-    //convert jquery date format (js.datepicker.tooltipDateFormat) to MomentJS (used by FullCalendar) date format
-    titleFormat = titleFormat.replace(/''/g, "'")  //use "'" for literal ' instead "''"
-        .replace(/'([^']+)'/g, '[$1]')             //use "[...]" for literals instead "'...'"
-        .replace(/d(?![^\[]*\])/g, 'D')            //use "D" for short day of month instead "d"
-        .replace(/DD/g, 'dddd')                    //use "dddd" for long day of week instead "DD"
-        .replace(/yyyy/g, 'YYYY');                 //use "YYYY" for 4-digit year instead "yyyy"
+    // Convert date format to MomentJS date format (used by FullCalendar)
+    if (lang === 'ar') {
+        titleFormat = $filter('i18n')('default.date.format'); // Platform i18n date format is specified for Arabic
+
+        titleFormat = titleFormat.replace(/dd/g, 'DD') //use "DD" for short day of month instead of "dd"
+            .replace(/yyyy/g, 'YYYY');                 //use "YYYY" for 4-digit year instead "yyyy"
+    } else {
+        titleFormat = $filter('i18n')('js.datepicker.tooltipDateFormat'); // Use jquery date format
+
+        titleFormat = titleFormat.replace(/''/g, "'")  //use "'" for literal ' instead "''"
+            .replace(/'([^']+)'/g, '[$1]')             //use "[...]" for literals instead "'...'"
+            .replace(/d(?![^\[]*\])/g, 'D')            //use "D" for short day of month instead "d"
+            .replace(/DD/g, 'dddd')                    //use "dddd" for long day of week instead "DD"
+            .replace(/yyyy/g, 'YYYY');                 //use "YYYY" for 4-digit year instead "yyyy"
+    }
 
     return {
         link: function(scope, elem, attrs) {
