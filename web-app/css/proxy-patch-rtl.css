@@ -30,8 +30,16 @@ ul.select2-result-single {
     unicode-bidi: embed;
 }
 
-.proxy-pin-mgmt.reset-pin.splashBg {
+.proxy-pin-mgmt.reset-pin.splashBg,
+.proxy-pin-mgmt.splashBg .copyright,
+.splashBg .loginMsg,
+.actionPW-text {
     direction: rtl;
+}
+
+.proxy-pin-mgmt .loginMsg .icon-error {
+    padding-left: 1em;
+    margin-left: 0.5em;
 }
 
 @media screen and (min-width:768px) {
