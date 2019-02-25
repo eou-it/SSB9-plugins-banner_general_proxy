@@ -149,7 +149,7 @@ proxyAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function(
         scope: true,
         template: '<xe-ui-select ng-model="modelHolder[modelName]" on-select="onSelectFn()"\n' +
             '             reach-infinity="refreshData($select.search, true)" theme="select2" search-enabled="searchEnabled" ng-disabled="isDisabled">\n' +
-            '   <xe-ui-select-match placeholder="{{selPlaceholder}}">\n' +
+            '   <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select)" placeholder="{{selPlaceholder}}">\n' +
             '       {{$select.selected.description ? $select.selected.description : selPlaceholder}}\n' +
             '   </xe-ui-select-match>\n' +
             '   <xe-ui-select-choices minimum-input-length="" refresh-delay="200" repeat="item in selectItems"\n' +
@@ -164,7 +164,9 @@ proxyAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function(
             var curPage = 0, stopLoading = false, fetchFn = $parse(attrs.fetchFunction)(scope),
                 initItemList = function() {
                     return (attrs.showNa === 'true' ? [{code: null, description: notApplicableText}] : []);
-                };
+                },
+                focusText = attrs.focusText;
+
             scope.modelHolder = $parse(attrs.modelHolder)(scope);
             scope.modelName = attrs.modelName;
             scope.onSelectFn = $parse(attrs.onSelectFn)(scope);
@@ -206,6 +208,10 @@ proxyAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function(
                         }
                     });
                 }
+            };
+
+            scope.setupSelectCtrlFocusser = function($selectCtrl) {
+                $selectCtrl.focusserTitle = focusText;
             };
         }
     };

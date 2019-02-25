@@ -39,25 +39,23 @@
             <div ng-if="profileElement.visible && profileElement.isDropdown" class="profile-dropdown">
                 <label class="input-field-label" ng-bind-html= "profileElement.label"></label><br>
                 <genssb-xe-dropdown fetch-function="profileElement.fetch" model-holder="profileElement" model-name="model"
-                                    show-na="true" dropdown-placeholder="{{profileElement.placeholder}}">
+                                    show-na="true" dropdown-placeholder="{{profileElement.placeholder}}"
+                                    focus-text="{{profileElement.placeholder}}">
                 </genssb-xe-dropdown>
             </div>
 
             <div ng-if="profileElement.visible && profileElement.elemId === 'p_birth_date'">
                 <label for="birthDate" ng-bind-html="profileElement.label" class="input-field-label">
                 </label>
-                <input date-picker ng-model="profileElement.model" pi-input-watcher on-select="setBirthDate" ng-blur="seprDateFocused=false; removeVeteranErrors()"
-                       ng-focus="seprDateFocused=true" ng-class="[(seprDateErrMsg && !seprDateFocused ? 'input-error' : null)]"
+                <input date-picker ng-model="profileElement.model" pi-input-watcher on-select="setBirthDate"
                        class="pi-date-input input-colors" placeholder="{{profileElement.placeholder}}" id="birthDate"
-                       aria-label="{{'personinfo.veteran.classification.date.discharge.label'|i18n}}"/>
-                <p class="mobile-errors" ng-class="[(!!seprDateErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                   role="alert" aria-live="assertive">{{seprDateErrMsg|i18n}}</p>
+                       aria-label="{{profileElement.placeholder}}"/>
             </div>
 
             <div ng-if="profileElement.visible && profileElement.elemId === 'p_sex'" class="profile-dropdown">
-                <label class="input-field-label" ng-bind-html= "profileElement.label"></label><br>
-                <xe-ui-select ng-model="profileElement.model" theme="select2" search-enabled="false">
-                    <xe-ui-select-match placeholder="{{profileElement.placeholder}}">
+                <label class="input-field-label" ng-bind-html="profileElement.label" for="sexSelector"></label><br>
+                <xe-ui-select ng-model="profileElement.model" theme="select2" search-enabled="false" id="sexSelector">
+                    <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, profileElement.label)" placeholder="{{profileElement.placeholder}}">
                         {{$select.selected.description ? $select.selected.description : profileElement.placeholder}}
                     </xe-ui-select-match>
                     <xe-ui-select-choices repeat="choice in legalSexChoices">

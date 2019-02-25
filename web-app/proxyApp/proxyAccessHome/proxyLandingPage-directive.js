@@ -18,7 +18,8 @@ proxyAppDirectives.directive('landingPageAppTile', [ '$state', '$rootScope', 'we
     };
 }]);
 
-proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','webAppResourcePathString', function ($state,$rootScope, webAppResourcePathString) {
+proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','webAppResourcePathString', '$filter',
+    function ($state,$rootScope, webAppResourcePathString, $filter) {
     return{
         restrict: 'E',
         templateUrl: webAppResourcePathString + '/proxyApp/proxyAccessHome/proxyStudentTile.html',
@@ -65,6 +66,9 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
 
                 setId();
                 goProxyApp(pageUrl);
+            };
+            scope.setupSelectCtrlFocusser = function($selectCtrl) {
+                $selectCtrl.focusserTitle = scope.proxyData.desc + '. '+ $filter('i18n')('proxy.landingPage.label.select.to.view');
             };
         }
     };
