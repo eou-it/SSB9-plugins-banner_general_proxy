@@ -27,6 +27,10 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
             {code: 'N', description: $filter('i18n')('proxy.personalinformation.label.unknown')}
         ];
 
+        $scope.setupSelectCtrlFocusser = function($selectCtrl, text) {
+            $selectCtrl.focusserTitle = text;
+        };
+
         $scope.setBirthDate = function(data){
             $scope.proxyProfile.p_birth_date = data;
         };
