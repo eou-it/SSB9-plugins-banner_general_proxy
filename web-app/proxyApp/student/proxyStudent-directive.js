@@ -54,6 +54,30 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
             }).length > 0;
         },
 
+        doConvert = function (config, date) {
+            var convertedDate = '';
+
+            config.date = date;
+
+            $.ajax({
+                url: 'dateConverter',
+                type: 'GET',
+                async: false,
+                timeout: 1000,
+                data: config,
+                success: function(result) {
+                    convertedDate = result;
+                },
+                error: function (jqXHR, textStatus) {
+                    throw new Error('Failed to convert date: ' + textStatus);
+                }
+            });
+
+            delete config.date;
+
+            return convertedDate;
+        },
+
         // Load localization meridiem (AM/PM) overrides as translated in Platform properties.
         // Regarding the code in this function:  This code was pulled from one of the FullCalendar locale files, i.e.
         // fullcalendar-3.9.0/locale/ar.js, which I was unfortunately only able to find in minified form.  Anything
@@ -133,43 +157,18 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
     if (lang === 'ar') {
         titleFormat = $filter('i18n')('default.date.format'); // Platform i18n date format is specified for Arabic
 
-        // This formatRange override converts the dates in the calendar title to Hijri.
+        // This formatRange override converts the dates in the calendar TITLE to Hijri.
         $.fullCalendar.View.mixin({
             formatRange: function (range, isAllDay, formatStr, separator) {
                 var end = range.end,
                     startConverted,
                     endConverted,
                     fromFormat = 'MM/DD/YYYY',
-
                     convertConfig = {
                         fromDateFormat: 'MM/dd/yyyy',
                         fromULocale:    'ar_US@calendar=gregorian',
                         toULocale:      'ar@calendar=islamic-civil',
                         toDateFormat:   titleFormat
-                    },
-
-                    doConvert = function (config, date) {
-                        var convertedDate = '';
-
-                        config.date = date;
-
-                        $.ajax({
-                            url: '/BannerGeneralSsb/ssb/dateConverter',
-                            type: 'GET',
-                            async: false,
-                            timeout: 1000,
-                            data: config,
-                            success: function(result) {
-                                convertedDate = result;
-                            },
-                            error: function (jqXHR, textStatus) {
-                                throw new Error('Failed to convert date: ' + textStatus);
-                            }
-                        });
-
-                        delete config.date;
-
-                        return convertedDate;
                     };
 
                 if (isAllDay) {
@@ -180,6 +179,76 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                 endConverted   = doConvert(convertConfig, end.format(fromFormat));
 
                 return startConverted + ' - ' + endConverted;
+            }
+        });
+
+        // This renderHeadDateCellHtml override converts the dates in the calendar COLUMN HEADINGS to Hijri.
+        $.fullCalendar.TimeGrid.mixin({
+            renderHeadDateCellHtml: function (date, colspan, otherAttrs) {
+                var convertedDate,
+                    fromFormat = 'MM/DD/YYYY',
+                    convertConfig = {
+                        fromDateFormat: 'MM/dd/yyyy',
+                        fromULocale: 'ar_US@calendar=gregorian',
+                        toULocale: 'ar@calendar=islamic-civil',
+                        toDateFormat: 'dd EEEE'
+                    },
+                    htmlEscape = function(s) {
+                        return (s + '').replace(/&/g, '&amp;')
+                            .replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;')
+                            .replace(/'/g, '&#039;')
+                            .replace(/"/g, '&quot;')
+                            .replace(/\n/g, '<br />');
+                    };
+
+                var t = this;
+                var view = t.view;
+                var isDateValid = t.dateProfile.activeUnzonedRange.containsDate(date); // TODO: called too frequently. cache somehow.
+                var classNames = [
+                    'fc-day-header',
+                    view.calendar.theme.getClass('widgetHeader')
+                ];
+                var innerHtml;
+                if (typeof t.opt('columnHeaderHtml') === 'function') {
+                    innerHtml = t.opt('columnHeaderHtml')(date);
+                }
+                else if (typeof t.opt('columnHeaderText') === 'function') {
+                    innerHtml = htmlEscape(t.opt('columnHeaderText')(date));
+                }
+                else {
+                    // Convert column head to valid Hijri day-of-week and day-in-month
+                    convertedDate = doConvert(convertConfig, date.format(fromFormat));
+                    innerHtml = htmlEscape(convertedDate);
+                }
+                // if only one row of days, the classNames on the header can represent the specific days beneath
+                if (t.rowCnt === 1) {
+                    classNames = classNames.concat(
+                        // includes the day-of-week class
+                        // noThemeHighlight=true (don't highlight the header)
+                        t.getDayClasses(date, true));
+                }
+                else {
+                    classNames.push('fc-' + util_1.dayIDs[date.day()]); // only add the day-of-week class
+                }
+                return '' +
+                    '<th class="' + classNames.join(' ') + '"' +
+                    ((isDateValid && t.rowCnt) === 1 ?
+                        ' data-date="' + date.format('YYYY-MM-DD') + '"' :
+                        '') +
+                    (colspan > 1 ?
+                        ' colspan="' + colspan + '"' :
+                        '') +
+                    (otherAttrs ?
+                        ' ' + otherAttrs :
+                        '') +
+                    '>' +
+                    (isDateValid ?
+                        // don't make a link if the heading could represent multiple days, or if there's only one day (forceOff)
+                        view.buildGotoAnchorHtml({ date: date, forceOff: t.rowCnt > 1 || t.colCnt === 1 }, innerHtml) :
+                        // if not valid, display text, but no link
+                        innerHtml) +
+                    '</th>';
             }
         });
     } else {
