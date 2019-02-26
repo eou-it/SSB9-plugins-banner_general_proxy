@@ -133,8 +133,55 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
     if (lang === 'ar') {
         titleFormat = $filter('i18n')('default.date.format'); // Platform i18n date format is specified for Arabic
 
-        titleFormat = titleFormat.replace(/dd/g, 'DD') //use "DD" for short day of month instead of "dd"
-            .replace(/yyyy/g, 'YYYY');                 //use "YYYY" for 4-digit year instead "yyyy"
+        // This formatRange override converts the dates in the calendar title to Hijri.
+        $.fullCalendar.View.mixin({
+            formatRange: function (range, isAllDay, formatStr, separator) {
+                var end = range.end,
+                    startConverted,
+                    endConverted,
+                    fromFormat = 'MM/DD/YYYY',
+
+                    convertConfig = {
+                        fromDateFormat: 'MM/dd/yyyy',
+                        fromULocale:    'ar_US@calendar=gregorian',
+                        toULocale:      'ar@calendar=islamic-civil',
+                        toDateFormat:   titleFormat
+                    },
+
+                    doConvert = function (config, date) {
+                        var convertedDate = '';
+
+                        config.date = date;
+
+                        $.ajax({
+                            url: '/BannerGeneralSsb/ssb/dateConverter',
+                            type: 'GET',
+                            async: false,
+                            timeout: 1000,
+                            data: config,
+                            success: function(result) {
+                                convertedDate = result;
+                            },
+                            error: function (jqXHR, textStatus) {
+                                throw new Error('Failed to convert date: ' + textStatus);
+                            }
+                        });
+
+                        delete config.date;
+
+                        return convertedDate;
+                    };
+
+                if (isAllDay) {
+                    end = end.clone().subtract(1); // convert to inclusive. last ms of previous day
+                }
+
+                startConverted = doConvert(convertConfig, range.start.format(fromFormat));
+                endConverted   = doConvert(convertConfig, end.format(fromFormat));
+
+                return startConverted + ' - ' + endConverted;
+            }
+        });
     } else {
         titleFormat = $filter('i18n')('js.datepicker.tooltipDateFormat'); // Use jquery date format
 
