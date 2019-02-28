@@ -1,5 +1,5 @@
 /********************************************************************************
-  Copyright 2018 Ellucian Company L.P. and its affiliates.
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 .fc-toolbar.fc-header-toolbar {
     direction: rtl;
@@ -17,4 +17,8 @@
 
 .fc .fc-toolbar > * > :last-child {
     margin-left: 0;
+}
+
+td.fc-axis.fc-time.fc-widget-content  {
+    direction:rtl;
 }

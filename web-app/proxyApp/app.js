@@ -99,6 +99,8 @@ var proxyApp = angular.module('proxyApp', [
                     window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
                 }
 
+                $rootScope.isRTL = $('meta[name=dir]').attr("content") === 'rtl';
+
                 $rootScope.isDesktopView = isDesktop();
 
                 // Above, we use the isDesktop function implemented in the banner_ui_ss plugin, which thus far has

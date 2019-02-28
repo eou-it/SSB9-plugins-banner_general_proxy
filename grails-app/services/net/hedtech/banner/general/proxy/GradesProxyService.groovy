@@ -4,6 +4,7 @@
 package net.hedtech.banner.general.proxy
 
 import groovy.sql.Sql
+import net.hedtech.banner.proxy.api.ViewGradesApi
 import net.hedtech.banner.student.history.HistoryTermForStudentGrades
 
 import grails.converters.JSON
@@ -16,12 +17,15 @@ import org.springframework.security.core.context.SecurityContextHolder
 import net.hedtech.banner.general.system.Term
 import org.springframework.web.context.request.RequestContextHolder
 
+import java.sql.SQLException
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
 import net.hedtech.banner.student.history.HistoryUtility
 import net.hedtech.banner.student.CourseDetailDecorator
 import net.hedtech.banner.student.history.HistoryStudentCourseDetail
+
+import net.hedtech.banner.exceptions.ApplicationException
 
 
 class GradesProxyService {
@@ -41,6 +45,32 @@ class GradesProxyService {
     def proxyStudentService
     def session
     def sessionFactory
+
+
+    def getViewGradesHolds(def pidm){
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+
+        def holds
+
+        try {
+            def sqlText = ViewGradesApi.VIEW_GRADES_HOLDS
+            sql.call(sqlText, [pidm, Sql.VARCHAR])
+                    { holdsOut ->
+                        holds = holdsOut
+                    }
+            log.debug('finished getViewGradesHolds')
+        } catch (SQLException e) {
+            log.error('getViewGradesHolds() - '+ e)
+            def ae = new ApplicationException( GradesProxyService.class, e )
+            throw ae
+        } finally {
+            sql?.close()
+        }
+
+        return [viewGradesHolds: holds.equals("Y")]
+    }
+
 
     def viewGrades(def params) {
         if (!proxyStudentService.checkIfStudentInstalled()) {
