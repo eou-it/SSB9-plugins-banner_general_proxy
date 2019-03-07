@@ -265,6 +265,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
         link: function(scope, elem, attrs) {
             var isMobile = $rootScope.isMobileView(),
                 isRTL = $.i18n.prop('default.language.direction') === 'rtl',
+                firstDay = $.i18n.prop('default.firstDayOfTheWeek'),
                 columnHeaderFormat = (lang === 'es') ? 'ddd DD' : 'DD ddd', // Specified by translation team
 
                 // Platform provides the default.time.format property, which should be adjusted for a 12/24 hour clock.
@@ -324,7 +325,7 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     columnHeaderFormat: columnHeaderFormat,
                     timeFormat: timeFormat,
                     titleFormat: titleFormat,
-                    firstDay: 1,
+                    firstDay: (!firstDay || isNaN(firstDay)) ? 0 : firstDay,
                     isRTL: isRTL,
                     dayNames: $.i18n.prop("default.gregorian.dayNames").split(','),
                     dayNamesShort: $.i18n.prop("default.gregorian.dayNamesShort").split(','),
