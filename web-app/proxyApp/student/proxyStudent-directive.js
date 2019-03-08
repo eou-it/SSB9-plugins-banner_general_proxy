@@ -155,7 +155,8 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
 
     // Convert date format to MomentJS date format (used by FullCalendar)
     if (lang === 'ar') {
-        titleFormat = $filter('i18n')('default.date.format'); // Platform i18n date format is specified for Arabic
+        // Message property specified as correct for Arabic
+        titleFormat = $filter('i18n')('default.date.format');
 
         // This formatRange override converts the dates in the calendar TITLE to Hijri.
         $.fullCalendar.View.mixin({
@@ -251,8 +252,17 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                     '</th>';
             }
         });
+    } else if (lang === 'pt') {
+        // Message property specified as correct for Portuguese
+        titleFormat = $filter('i18n')('communication.default.dateFormat');
+
+        titleFormat = titleFormat.replace(/''/g, "'")  //use "'" for literal ' instead "''"
+            .replace(/'([^']+)'/g, '[$1]')             //use "[...]" for literals instead "'...'"
+            .replace(/d(?![^\[]*\])/g, 'D')            //use "D" for short day of month instead "d"
+            .replace(/yyyy/g, 'YYYY');                 //use "YYYY" for 4-digit year instead "yyyy"
     } else {
-        titleFormat = $filter('i18n')('js.datepicker.tooltipDateFormat'); // Use jquery date format
+        // Message property specified as correct for all other locales
+        titleFormat = $filter('i18n')('js.datepicker.tooltipDateFormat');
 
         titleFormat = titleFormat.replace(/''/g, "'")  //use "'" for literal ' instead "''"
             .replace(/'([^']+)'/g, '[$1]')             //use "[...]" for literals instead "'...'"
