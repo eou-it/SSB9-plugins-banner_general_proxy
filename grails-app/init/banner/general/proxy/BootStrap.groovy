@@ -1,3 +1,5 @@
+package banner.general.proxy
+
 /*******************************************************************************
 Copyright 2018 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
@@ -9,9 +11,10 @@ import grails.converters.JSON
 import grails.util.Environment
 import org.apache.commons.logging.LogFactory
 import org.apache.log4j.Logger
-import org.codehaus.groovy.grails.commons.ApplicationAttributes
-import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
+import grails.core.ApplicationAttributes
+import org.grails.plugins.web.taglib.ValidationTagLib
 import org.springframework.context.i18n.LocaleContextHolder as LCH
+
 
 /**
  * Executes arbitrary code at bootstrap time.
