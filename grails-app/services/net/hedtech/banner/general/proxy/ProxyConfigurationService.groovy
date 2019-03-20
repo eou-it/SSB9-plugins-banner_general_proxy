@@ -6,10 +6,11 @@ package net.hedtech.banner.general.proxy
 import groovy.sql.Sql
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.service.ServiceBase
+import grails.gorm.transactions.Transactional
 
+@Transactional
 class ProxyConfigurationService extends ServiceBase {
 
-    static transactional = true
 
     static final def PAYVEND_TRANS_TIMEOUT = 'PAYVEND_TRANS_TIMEOUT'
     static final def PAYVEND_URL = 'PAYVEND_URL'
