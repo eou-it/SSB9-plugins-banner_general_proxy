@@ -35,3 +35,5 @@ grails-app/i18n/messages_en_PS.properties
 bannerTransform.jar
 .slcache/
 *.imp
+build/
+.gradle/**/*
