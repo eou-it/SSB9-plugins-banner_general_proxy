@@ -11,7 +11,7 @@ import grails.converters.JSON
 import groovy.json.StringEscapeUtils
 import net.hedtech.banner.i18n.MessageHelper
 import org.apache.commons.lang.StringUtils
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONObject
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.core.context.SecurityContextHolder
 import net.hedtech.banner.general.system.Term

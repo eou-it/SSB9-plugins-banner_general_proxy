@@ -5,7 +5,7 @@ package net.hedtech.banner.general.proxy
 
 import net.hedtech.banner.exceptions.ApplicationException
 import org.apache.log4j.Logger
-import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
+import org.grails.plugins.web.taglib.ValidationTagLib
 
 class ProxyControllerUtility {
 

@@ -9,10 +9,10 @@ import net.hedtech.banner.exceptions.BusinessLogicValidationException
 import net.hedtech.banner.i18n.MessageHelper
 import net.hedtech.banner.service.ServiceBase
 import org.apache.log4j.Logger
-import org.codehaus.groovy.grails.web.context.ServletContextHolder as SCH
+import grails.web.context.ServletContextHolder as SCH
 
 //import net.hedtech.banner.student.registration.RegistrationStudentCourseRegistration
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes as GA
+import org.grails.web.util.GrailsApplicationAttributes as GA
 
 import java.sql.CallableStatement
 import java.sql.SQLException

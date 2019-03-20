@@ -1,0 +1,20 @@
+include ':banner-core'
+project(':banner-core').projectDir = new File('../banner_core')
+
+include ':i18n-core'
+project(':i18n-core').projectDir = new File('../i18n_core')
+
+include ':grails-constraints'
+project(':grails-constraints').projectDir = new File('../grails_constraints')
+
+include ':banner-codenarc'
+project(':banner-codenarc').projectDir = new File('../banner_codenarc')
+
+include ':banner-general-utility'
+project(':banner-general-utility').projectDir = new File('../banner_general_utility')
+
+include ':banner-ui-ss'
+project(':banner-ui-ss').projectDir = new File('../banner-ui-ss')
+
+
+
