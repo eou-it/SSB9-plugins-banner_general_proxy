@@ -9,7 +9,6 @@ import net.hedtech.banner.proxy.api.ProxyLandingPageApi
 import net.hedtech.banner.proxy.api.ProxyPersonalInformationApi
 import net.hedtech.banner.proxy.api.PinManagementApi
 
-import org.apache.log4j.Logger
 import net.hedtech.banner.i18n.MessageHelper
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.context.request.RequestContextHolder
@@ -20,16 +19,19 @@ import java.sql.SQLException
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
-import net.hedtech.banner.general.system.State
-import net.hedtech.banner.general.system.Nation
-import net.hedtech.banner.general.system.County
+//import net.hedtech.banner.general.system.State
+//import net.hedtech.banner.general.system.Nation
+//import net.hedtech.banner.general.system.County
 
 import net.hedtech.banner.exceptions.ApplicationException
 
 import net.hedtech.banner.general.person.PersonUtility
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 class GeneralSsbProxyService {
-    private static final log  = Logger.getLogger(GeneralSsbProxyService.class)
+    static Logger logger = LoggerFactory.getLogger(GeneralSsbProxyService.class)
     def sessionFactory                     // injected by Spring
     def dataSource                         // injected by Spring
     def grailsApplication                  // injected by Spring
@@ -160,10 +162,10 @@ class GeneralSsbProxyService {
                 proxyProfile.p_street_line3 = data.GPBPRXY_STREET_LINE3
                 proxyProfile.p_street_line4 = data.GPBPRXY_STREET_LINE4
                 proxyProfile.p_city = data.GPBPRXY_CITY
-                proxyProfile.p_stat_code = State.findByCode(data.GPBPRXY_STAT_CODE)?: null
+                //proxyProfile.p_stat_code = State.findByCode(data.GPBPRXY_STAT_CODE)?: null
                 proxyProfile.p_zip = data.GPBPRXY_ZIP
-                proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE)?: null
-                proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE)?: null
+                //proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE)?: null
+                //proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE)?: null
                 proxyProfile.p_sex = data.GPBPRXY_SEX
                 proxyProfile.p_birth_date = data.GPBPRXY_BIRTH_DATE
                 proxyProfile.p_ssn = data.GPBPRXY_SSN
@@ -411,8 +413,8 @@ class GeneralSsbProxyService {
 
     def updateProxyProfile(def params) {
 
-        log.debug('updateProxyProfile')
-        log.debug('Parameters: ' + params)
+        logger.debug('updateProxyProfile')
+        logger.debug('Parameters: ' + params)
 
         def  errorMsgOut = ""
         def errorStatusOut = ""
@@ -448,9 +450,9 @@ class GeneralSsbProxyService {
                 errorStatusOut = errorStatus
                 emailChangeOut = emailChange
             }
-            log.debug('finished updateProxyProfile')
+            logger.debug('finished updateProxyProfile')
         } catch (SQLException e) {
-            log.error('updateProxyProfile() - '+ e)
+            logger.error('updateProxyProfile() - '+ e)
             def ae = new ApplicationException( GeneralSsbProxyService.class, e )
             throw ae
         } finally {
@@ -469,15 +471,15 @@ class GeneralSsbProxyService {
 
     /* Updates Audit data on ProxyHistoryOnLogin */
     def updateProxyHistoryOnLogin() {
-        log.debug('starting updateProxyHistoryOnLogin')
+        logger.debug('starting updateProxyHistoryOnLogin')
         //get proxy gidm
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
-        log.debug('p_proxyIDM: ' + p_proxyIDM)
+        logger.debug('p_proxyIDM: ' + p_proxyIDM)
         try {
             def sql = new Sql(sessionFactory.getCurrentSession().connection())
             def sqlText = ProxyPersonalInformationApi.STORE_LOGIN_IN_HISTORY
 
-            log.debug('sqlText: ' + sqlText)
+            logger.debug('sqlText: ' + sqlText)
 
             def msg = MessageHelper.message("proxy.login.accessHistory")
 
@@ -485,42 +487,42 @@ class GeneralSsbProxyService {
                     [p_proxyIDM, p_proxyIDM, p_proxyIDM, msg = msg ? msg : "Display authorization menu"
                     ])
 
-            log.debug('finished updateProxyHistoryOnLogin')
+            logger.debug('finished updateProxyHistoryOnLogin')
 
         }catch(Exception e) {
-            log.error('Problem setting updateProxyHistoryOnLogin')
-            log.error(e)
+            logger.error('Problem setting updateProxyHistoryOnLogin')
+            logger.error(e)
         }
     }
 
 
     /* Updates Audit data on Proxy Page Access */
     def updateProxyHistoryOnPageAccess(def pidm, def pageName) {
-        log.debug('starting updateProxyHistoryOnPageAccess')
+        logger.debug('starting updateProxyHistoryOnPageAccess')
         //get proxy gidm
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
-        log.debug('p_proxyIDM: ' + p_proxyIDM)
-        log.debug('pidm: ' + pidm)
+        logger.debug('p_proxyIDM: ' + p_proxyIDM)
+        logger.debug('pidm: ' + pidm)
         if (pidm) {
             try {
                 def sql = new Sql(sessionFactory.getCurrentSession().connection())
                 def sqlText = ProxyPersonalInformationApi.STORE_PAGE_ACCESS_IN_HISTORY
 
-                log.debug('sqlText: ' + sqlText)
+                logger.debug('sqlText: ' + sqlText)
 
                 sql.call(sqlText,
                         [p_proxyIDM, pidm, p_proxyIDM, pidm, pageName
                         ])
 
-                log.debug('finished updateProxyHistoryOnPageAccess')
+                logger.debug('finished updateProxyHistoryOnPageAccess')
 
 
             } catch (Exception e) {
-                log.error('Problem updateProxyHistoryOnPageAccess')
-                log.error(e)
+                logger.error('Problem updateProxyHistoryOnPageAccess')
+                logger.error(e)
             }
         }else{
-            log.error('Problem updateProxyHistoryOnPageAccess. Pidm is missing')
+            logger.error('Problem updateProxyHistoryOnPageAccess. Pidm is missing')
         }
     }
 
@@ -593,10 +595,10 @@ class GeneralSsbProxyService {
                 proxyProfile.p_street_line3 = data.GPBPRXY_STREET_LINE3
                 proxyProfile.p_street_line4 = data.GPBPRXY_STREET_LINE4
                 proxyProfile.p_city = data.GPBPRXY_CITY
-                proxyProfile.p_stat_code = State.findByCode(data.GPBPRXY_STAT_CODE) ?: new State()
+                //proxyProfile.p_stat_code = State.findByCode(data.GPBPRXY_STAT_CODE) ?: new State()
                 proxyProfile.p_zip = data.GPBPRXY_ZIP
-                proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE) ?: new Nation()
-                proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE) ?: new County()
+                //proxyProfile.p_natn_code = Nation.findByCode(data.GPBPRXY_NATN_CODE) ?: new Nation()
+                //proxyProfile.p_cnty_code = County.findByCode(data.GPBPRXY_CNTY_CODE) ?: new County()
                 proxyProfile.p_sex = data.GPBPRXY_SEX
                 proxyProfile.p_birth_date = data.GPBPRXY_BIRTH_DATE
                 proxyProfile.p_ssn = data.GPBPRXY_SSN

@@ -5,19 +5,21 @@ package net.hedtech.banner.general.proxy
 
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
-import net.hedtech.banner.general.system.InstitutionalDescription
-import net.hedtech.banner.general.system.SdaCrosswalkConversion
+//import net.hedtech.banner.general.system.InstitutionalDescription
+//import net.hedtech.banner.general.system.SdaCrosswalkConversion
 import net.hedtech.banner.i18n.MessageHelper
 import net.hedtech.banner.proxy.api.AccountSummaryApi
 import net.hedtech.banner.proxy.api.CourseScheduleApi
-import org.apache.log4j.Logger
 import org.springframework.web.context.request.RequestContextHolder
 
 import java.text.SimpleDateFormat
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 class ProxyStudentService {
 
-    private static final log  = Logger.getLogger(ProxyStudentService.class)
+    static Logger logger = LoggerFactory.getLogger(ProxyStudentService.class)
     def sessionFactory                     // injected by Spring
 
     def getAccountSummary(def pidm) {

@@ -17,9 +17,12 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
     def generalSsbProxyService
     def dataSource
     def conn
+    def sessionFactory
 
     @Before
     public void setUp() {
+
+        println "sessionFactory: " + sessionFactory
         formContext = ['SELFSERVICE']
 
         if (formContext) {

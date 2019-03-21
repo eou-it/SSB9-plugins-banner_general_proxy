@@ -9,11 +9,11 @@ import net.hedtech.banner.converters.json.JSONDomainMarshaller
 import net.hedtech.banner.i18n.LocalizeUtil
 import grails.converters.JSON
 import grails.util.Environment
-import org.apache.commons.logging.LogFactory
-import org.apache.log4j.Logger
 import grails.core.ApplicationAttributes
 import org.grails.plugins.web.taglib.ValidationTagLib
 import org.springframework.context.i18n.LocaleContextHolder as LCH
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 /**
@@ -23,7 +23,8 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
  * */
 class BootStrap {
 
-    def log = Logger.getLogger(this.getClass())
+    static Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     def localizer = { mapToLocalize ->
         new ValidationTagLib().message(mapToLocalize)
@@ -58,7 +59,7 @@ class BootStrap {
 
 
         grailsApplication.controllerClasses.each {
-            log.info "adding log property to controller: $it"
+            logger.info "adding log property to controller: $it"
             // Note: weblogic throws an error if we try to inject the method if it is already present
             if (!it.metaClass.methods.find { m -> m.name.matches("getLog") }) {
                 def name = it.name // needed as this 'it' is not visible within the below closure...
@@ -71,7 +72,7 @@ class BootStrap {
 
         grailsApplication.allClasses.each {
             if (it.name?.contains("plugin.resource")) {
-                log.info "adding log property to plugin.resource: $it"
+                logger.info "adding log property to plugin.resource: $it"
 
                 // Note: weblogic throws an error if we try to inject the method if it is already present
                 if (!it.metaClass.methods.find { m -> m.name.matches("getLog") }) {

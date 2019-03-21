@@ -72,6 +72,8 @@ grails {
         compile project(":banner-ui-ss")
         compile project(":banner-core")
         compile project(":banner-general-utility")
+        compile project(":banner-general-person")
+        compile project(":banner-general-validation-common")
     }
 }
 bootRun {

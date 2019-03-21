@@ -16,6 +16,12 @@ project(':banner-codenarc').projectDir = new File('../banner_codenarc')
 include ':banner-general-utility'
 project(':banner-general-utility').projectDir = new File('../banner_general_utility')
 
+include ':banner-general-person'
+project(':banner-general-person').projectDir = new File('../banner_general_person')
+
+include ':banner-general-validation-common'
+project(':banner-general-validation-common').projectDir = new File('../banner_general_validation_common')
+
 
 
 

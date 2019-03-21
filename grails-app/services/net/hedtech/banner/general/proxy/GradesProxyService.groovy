@@ -14,7 +14,7 @@ import org.apache.commons.lang.StringUtils
 import org.grails.web.json.JSONObject
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.core.context.SecurityContextHolder
-import net.hedtech.banner.general.system.Term
+//import net.hedtech.banner.general.system.Term
 import org.springframework.web.context.request.RequestContextHolder
 
 import java.sql.SQLException
