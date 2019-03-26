@@ -1,5 +1,3 @@
-include ':banner-ui-ss'
-project(':banner-ui-ss').projectDir = new File('../banner_ui_ss')
 
 include ':banner-core'
 project(':banner-core').projectDir = new File('../banner_core')

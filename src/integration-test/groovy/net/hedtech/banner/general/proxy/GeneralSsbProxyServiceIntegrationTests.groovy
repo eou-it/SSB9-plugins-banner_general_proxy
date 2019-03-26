@@ -3,15 +3,20 @@
  *******************************************************************************/
 package net.hedtech.banner.general.proxy
 
+
+import net.hedtech.banner.general.person.PersonUtility
+
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import groovy.sql.Sql
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
-import net.hedtech.banner.general.person.PersonUtility
-import net.hedtech.banner.security.FormContext
+import static groovy.test.GroovyAssert.*
 
+@Integration
+@Rollback
 class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
 
     def generalSsbProxyService
@@ -21,33 +26,15 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
 
     @Before
     public void setUp() {
-
-        println "sessionFactory: " + sessionFactory
-        formContext = ['SELFSERVICE']
-
-        if (formContext) {
-            FormContext.set( formContext )
-        }
-
-        if (useTransactions) {
-            sessionFactory.currentSession.with {
-                connection().rollback()                 // needed to protect from other tests
-                clear()                                 // needed to protect from other tests
-                disconnect()                            // needed to release the old database connection
-                reconnect( dataSource.getConnection() ) // get a new connection that has unlocked the needed roles
-            }
-            transactionManager.getTransaction().setRollbackOnly()                 // and make sure we don't commit to the database
-            sessionFactory?.queryCache?.clear()                                     //clear the query cache when ehcache is being used
-        }
-
-        // super.setup() not called to prevent logging in as admin user which does not have necessary permissions
+        formContext = ['GUAGMNU'] // Since we are not testing a controller, we need to explicitly set this
+        super.setUp()
     }
+
 
     @After
     public void tearDown() {
         super.tearDown()
     }
-
 
     @Test
     void testTokenError() {
@@ -74,10 +61,11 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
 
     @Test
     void testStudentListNoAccess() {
-        def result = generalSsbProxyService.getStudentListForProxy(-1)
+        def resul = generalSsbProxyService.getStudentListForProxy(-1)
 
         assertTrue result?.students?.active.size() == 0
     }
+
 
     @Test
     void testSetProxyExpiredActionLink() {

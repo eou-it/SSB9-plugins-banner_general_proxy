@@ -69,7 +69,7 @@ dependencies {
 // Added for BannerXE - Internal plugin dependency
 grails {
     plugins {
-        compile project(":banner-ui-ss")
+        //compile project(":banner-ui-ss")
         compile project(":banner-core")
         compile project(":banner-general-utility")
         compile project(":banner-general-person")
