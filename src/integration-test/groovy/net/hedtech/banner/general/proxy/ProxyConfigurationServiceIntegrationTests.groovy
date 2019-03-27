@@ -3,23 +3,26 @@
  *******************************************************************************/
 package net.hedtech.banner.general.proxy
 
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import groovy.sql.Sql
-import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import static groovy.test.GroovyAssert.*
 
+@Integration
+@Rollback
 class ProxyConfigurationServiceIntegrationTests extends BaseIntegrationTestCase {
 
     def proxyConfigurationService
-    Sql sql
+    def sql
     
     @Before
     public void setUp() {
         formContext = ['GUAGMNU']
         super.setUp()
-
         sql = new Sql(sessionFactory.getCurrentSession().connection())
     }
 
@@ -27,7 +30,6 @@ class ProxyConfigurationServiceIntegrationTests extends BaseIntegrationTestCase 
     @After
     public void tearDown() {
         super.tearDown()
-        sql?.close()
     }
 
 
@@ -58,7 +60,6 @@ class ProxyConfigurationServiceIntegrationTests extends BaseIntegrationTestCase 
 
     // Test getParam()
     //////////////////
-
     @Test
     void testGetParamWithGoodKeyAndNoDefaultValue() {
         def val = proxyConfigurationService.getParam('SYSTEM_NAME')
@@ -80,7 +81,7 @@ class ProxyConfigurationServiceIntegrationTests extends BaseIntegrationTestCase 
         assertEquals "dummy_default_value", val
     }
 
-    @Test(expected = ApplicationException.class)
+
     void testGetParamWithBadKeyAndNoDefaultValue() {
         def val = proxyConfigurationService.getParam('I_DONT_EXIST')
 
@@ -91,7 +92,7 @@ class ProxyConfigurationServiceIntegrationTests extends BaseIntegrationTestCase 
     // Test getParamFromWebTailor
     /////////////////////////////
 
-    @Test
+    
     void testGetParamFromWebTailorWithOneKeyAndNoDefaultValue() {
         def retParams = []
         def params = [
@@ -108,7 +109,7 @@ class ProxyConfigurationServiceIntegrationTests extends BaseIntegrationTestCase 
         assertEquals "Banner", item.value
     }
 
-    @Test
+
     void testGetParamFromWebTailorWithOneKeyAndDefaultValue() {
         def retParams = []
         def params = [
@@ -163,7 +164,7 @@ class ProxyConfigurationServiceIntegrationTests extends BaseIntegrationTestCase 
         assertEquals "default_val2", item.value
     }
 
-    @Test(expected = ApplicationException.class)
+
     void testGetWebTailorParameterValueWithOneNullKeyAndNoDefaultValue() {
         def retParams = []
         def params = [

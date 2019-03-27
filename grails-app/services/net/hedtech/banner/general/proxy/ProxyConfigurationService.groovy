@@ -43,14 +43,10 @@ class ProxyConfigurationService extends ServiceBase {
         Sql sql = new Sql(sessionFactory.getCurrentSession().connection())
 
         // Gather Web Tailor params
-        try {
             proxyConfigParams.each {
                 def param = getParamFromWebTailor(sql, it)
                 retParams[param.key] = param.value
             }
-        } finally {
-            sql?.close()
-        }
 
         retParams
     }
@@ -69,12 +65,8 @@ class ProxyConfigurationService extends ServiceBase {
                 paramKey: key,
                 defaultValue: defaultValue
         ]
-
-        try {
             getParamFromWebTailor(sql, requestedParam).value
-        } finally {
-            sql?.close()
-        }
+
     }
 
     def getParamFromWebTailor (sql, map) {
