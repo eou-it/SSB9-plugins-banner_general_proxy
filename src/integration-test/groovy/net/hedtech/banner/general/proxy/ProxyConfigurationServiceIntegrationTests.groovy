@@ -92,7 +92,7 @@ class ProxyConfigurationServiceIntegrationTests extends BaseIntegrationTestCase 
     // Test getParamFromWebTailor
     /////////////////////////////
 
-    
+
     void testGetParamFromWebTailorWithOneKeyAndNoDefaultValue() {
         def retParams = []
         def params = [
