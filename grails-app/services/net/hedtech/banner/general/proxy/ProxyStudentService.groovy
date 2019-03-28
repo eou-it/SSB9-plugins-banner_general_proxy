@@ -5,8 +5,8 @@ package net.hedtech.banner.general.proxy
 
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
-//import net.hedtech.banner.general.system.InstitutionalDescription
-//import net.hedtech.banner.general.system.SdaCrosswalkConversion
+import net.hedtech.banner.general.system.InstitutionalDescription
+import net.hedtech.banner.general.system.SdaCrosswalkConversion
 import net.hedtech.banner.i18n.MessageHelper
 import net.hedtech.banner.proxy.api.AccountSummaryApi
 import net.hedtech.banner.proxy.api.CourseScheduleApi

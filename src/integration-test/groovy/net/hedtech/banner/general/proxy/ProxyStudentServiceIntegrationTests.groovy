@@ -3,14 +3,17 @@
  *******************************************************************************/
 package net.hedtech.banner.general.proxy
 
-import groovy.sql.Sql
+import net.hedtech.banner.general.person.PersonUtility
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
-import net.hedtech.banner.general.person.PersonUtility
+import static groovy.test.GroovyAssert.*
 
+@Integration
+@Rollback
 class ProxyStudentServiceIntegrationTests extends BaseIntegrationTestCase {
 
     def proxyStudentService
