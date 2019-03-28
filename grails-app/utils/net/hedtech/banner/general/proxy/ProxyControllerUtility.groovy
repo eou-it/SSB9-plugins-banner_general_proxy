@@ -4,12 +4,12 @@
 package net.hedtech.banner.general.proxy
 
 import net.hedtech.banner.exceptions.ApplicationException
-import org.apache.log4j.Logger
 import org.grails.plugins.web.taglib.ValidationTagLib
-
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 class ProxyControllerUtility {
 
-    static def log = Logger.getLogger('net.hedtech.banner.general.PersonalInformationControllerUtility')
+    static def logger = LoggerFactory.getLogger('net.hedtech.banner.general.PersonalInformationControllerUtility')
 
     public static getFetchListParams(params) {
         def maxItems = params.max as int
@@ -26,7 +26,7 @@ class ProxyControllerUtility {
         def model = [:]
 
         model.failure = true
-        log.error(e)
+        logger.error(e)
 
         try {
             def extractError = e.returnMap({ mapToLocalize -> new ValidationTagLib().message(mapToLocalize) })
@@ -40,7 +40,7 @@ class ProxyControllerUtility {
             return model
         }
         catch (Exception ex) {
-            log.error(ex)
+            logger.error(ex)
             model.message = e.message
             return model
         }

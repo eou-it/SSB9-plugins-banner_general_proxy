@@ -8,7 +8,8 @@ import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.exceptions.BusinessLogicValidationException
 import net.hedtech.banner.i18n.MessageHelper
 import net.hedtech.banner.service.ServiceBase
-import org.apache.log4j.Logger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import grails.web.context.ServletContextHolder as SCH
 
 //import net.hedtech.banner.student.registration.RegistrationStudentCourseRegistration
@@ -24,7 +25,7 @@ import java.sql.Types
 
 class HistoryUtility {
 
-    private static final log = Logger.getLogger(HistoryUtility.class)
+    static Logger logger = LoggerFactory.getLogger(HistoryUtility.class)
 
     public static String DEFAULT_ROUND_CODE = "R"
     public static Integer DEFAULT_DEFAULT_DISPLAY_NUMBER = 3
@@ -58,14 +59,14 @@ class HistoryUtility {
             result = sql.firstRow(selectSql)
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result[0]
@@ -104,14 +105,14 @@ class HistoryUtility {
             result = sql.firstRow(selSql, [name: gradeScaleName, term: term, courseReferenceNumber: courseReferenceNumber])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result?.valid as boolean
@@ -141,14 +142,14 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
     }
@@ -179,14 +180,14 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
     }
@@ -230,7 +231,7 @@ class HistoryUtility {
             }
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
@@ -238,7 +239,7 @@ class HistoryUtility {
                 sql?.close()
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
     }
@@ -261,14 +262,14 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
     }
@@ -298,14 +299,14 @@ class HistoryUtility {
             result = sql.firstRow(selectSql, [gradeCode, termCode, levelCode])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result ? result[0] as boolean : false
@@ -354,14 +355,14 @@ class HistoryUtility {
             result = sql.firstRow(selectSql, [gradeIncompleteFinal, levelCode, effectiveTerm])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result ? result[0] as boolean : false
@@ -390,14 +391,14 @@ class HistoryUtility {
             incompleteFinalError = sqlCall.getString(6)
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return ['isValidGradeIncompleteFinal': isValidGradeIncompleteFinal, 'errorCode': incompleteFinalError]
@@ -420,14 +421,14 @@ class HistoryUtility {
             callableStatement.executeQuery()
             courseTermRestrictionExists = callableStatement.getString(1)
         } catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 callableStatement?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return courseTermRestrictionExists
@@ -451,14 +452,14 @@ class HistoryUtility {
             result = sql.rows(selectSql, [pidm: pidm, term: term, level: level, studyPath: studyPath])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result
@@ -482,14 +483,14 @@ class HistoryUtility {
             result = sql.firstRow(selectSql, [pidm: pidm, level: level, studyPath: studyPath, gpaType: gpaType])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result
@@ -516,14 +517,14 @@ class HistoryUtility {
             result = sql.firstRow(selectSql, [level, gradeCode, term, level, gradeCode, term])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result ? result[0] as boolean : false
@@ -552,14 +553,14 @@ class HistoryUtility {
             encryptedPassword = cs.getString(1)
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 cs?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return encryptedPassword
@@ -613,14 +614,14 @@ class HistoryUtility {
             ]
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                log.error "Sql Statement is already closed, no need to close it."
+                logger.error "Sql Statement is already closed, no need to close it."
             }
         }
         return result
@@ -712,14 +713,14 @@ class HistoryUtility {
             result = sql.rows(selectSql, [pidm: pidm, level: level])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result
@@ -787,14 +788,14 @@ class HistoryUtility {
             ]
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result
@@ -815,14 +816,14 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            logger.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
     }
@@ -951,14 +952,14 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility.rollingGradeForEachStudent: ", e)
+            logger.error("Error executing sql in HistoryUtility.rollingGradeForEachStudent: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                log.trace "Sql Statement is already closed, no need to close it."
+                logger.trace "Sql Statement is already closed, no need to close it."
             }
         }
     }
