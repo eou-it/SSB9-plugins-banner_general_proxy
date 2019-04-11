@@ -1,15 +1,16 @@
+/*********************************************************************************
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
+ *********************************************************************************/
+
 package banner.general.proxy
 
-/** *******************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
- ********************************************************************************* */
-
+import grails.plugins.*
 
 /**
  * A Grails plugin which is the Banner General Personal Information sub-application in the
  * consolidated Banner XE application.
  **/
-class BannerGeneralProxyGrailsPlugin {
+class BannerGeneralProxyGrailsPlugin extends Plugin {
 
     // Note: the groupId 'should' be used when deploying this plugin via the 'grails maven-deploy --repository=snapshots' command,
     // however it is not being picked up.  Consequently, a pom.xml file is added to the root directory with the correct groupId
