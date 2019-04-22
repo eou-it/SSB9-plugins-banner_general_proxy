@@ -22,6 +22,7 @@ Copyright 2018 Ellucian Company L.P. and its affiliates.
         <g:set var="guestUser" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('guestUser')}"/>
 
         <asset:javascript src="modules/ess-proxy-application-mf.js"/>
+        <asset:stylesheet src="modules/ess-proxy-applicationLTR-mf.css"/>
 
     </g:applyLayout>
 
