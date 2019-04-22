@@ -2,7 +2,7 @@
  Copyright 2019 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$rootScope','$state','$filter','$location',
-    'proxyAppService','notificationCenterService','proxyEmailService',
+    'proxyAppService','notificationCenterService',
     function ($scope, $rootScope, $state, $filter, $location, proxyAppService, notificationCenterService, proxyEmailService) {
 
         var init = function () {

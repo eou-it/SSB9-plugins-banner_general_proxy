@@ -21,14 +21,7 @@ Copyright 2018 Ellucian Company L.P. and its affiliates.
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <g:set var="guestUser" value="${org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes()?.request?.session?.getAttribute('guestUser')}"/>
 
-        <g:if test="${guestUser}">
-            <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
-                <r:require modules="proxyAppRTL"/>
-            </g:if>
-            <g:else>
-                <r:require modules="proxyAppLTR"/>
-            </g:else>
-        </g:if>
+        <asset:javascript src="modules/ess-proxy-application-mf.js"/>
 
     </g:applyLayout>
 

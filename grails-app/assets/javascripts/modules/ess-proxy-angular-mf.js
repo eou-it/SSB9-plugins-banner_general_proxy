@@ -1,0 +1,13 @@
+//= require js/angular/angular.min.js
+//= require js/angular/angular-resource.min.js
+//= require js/angular/angular-route.min.js
+//= require js/angular/angular-sanitize.min.js
+//= require js/angular/angular-animate.min.js
+//= require js/angular/angular-ui-router.min.js
+//= require js/angular/angular-messages.min.js
+//= require js/angular/angular-translate.min.js
+//= require js/angular/ui-bootstrap-tpls-1.3.3.min.js
+//= require js/angular/angular-touch.js
+//= require js/angular/angular-dateparser.min.js
+//= require js/angular/position.js
+//= require js/angular/lrInfiniteScroll.js

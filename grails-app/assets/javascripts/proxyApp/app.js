@@ -131,7 +131,7 @@ var proxyApp = angular.module('proxyApp', [
         ]
     );
 
-proxyApp.constant('webAppResourcePathString', '../plugins/banner-general-proxy-0.1');
+proxyApp.constant('webAppResourcePathString', '../assets');
 
 
 proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePathString) {
@@ -146,7 +146,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
     $stateProvider
         .state('home', {
             url: "/home",
-            templateUrl: webAppResourcePathString + '/proxyApp/proxyAccessHome/proxyLandingPage.html',
+            templateUrl: '../assets/proxyApp/proxyAccessHome/proxyLandingPage.html',
             controller: 'proxyLandingPageController',
             resolve: {
             },
@@ -159,7 +159,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
         })
         .state('proxyPersonalInfo', {
             url: "/proxypersonalinformation",
-            templateUrl: webAppResourcePathString + '/proxyApp/proxyPersonalInfo/proxyPersonalInformation.html',
+            templateUrl: '../assets/proxyApp/proxyPersonalInfo/proxyPersonalInformation.html',
             controller: 'proxyPersonalInformationController',
             resolve: {
             },
@@ -169,7 +169,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
         })
         .state('/ssb/proxy/holds', {
             url: "/viewHolds",
-            templateUrl: webAppResourcePathString + '/proxyApp/student/holds.html',
+            templateUrl: '../assets/proxyApp/student/holds.html',
             controller: 'proxyViewHoldsController',
             resolve: {
             },
@@ -183,7 +183,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
         })
         .state('/ssb/proxy/grades', {
             url: "/viewGrades",
-            templateUrl: webAppResourcePathString + '/proxyApp/student/grades.html',
+            templateUrl: '../assets/proxyApp/student/grades.html',
             controller: 'proxyViewGradesController',
             resolve: {
             },
@@ -194,7 +194,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
         })
         .state('/ssb/proxy/finaidappsumm', {
             url: "/financialaidstatus",
-            templateUrl: webAppResourcePathString + '/proxyApp/finaid/finaidStatus.html',
+            templateUrl: '../assets/proxyApp/finaid/finaidStatus.html',
             controller: 'proxyViewFinaidStatusController',
             resolve: {
             },
@@ -207,7 +207,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
         })
         .state('/ssb/proxy/crsesched', {
             url: "/courseSchedule",
-            templateUrl: webAppResourcePathString + '/proxyApp/student/courseSchedule.html',
+            templateUrl: '../assets/proxyApp/student/courseSchedule.html',
             controller: 'proxyViewCourseSchedController',
             resolve: {
             },
@@ -220,7 +220,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
         })
         .state('/ssb/proxy/courseScheduleDetail',{
             url: "/courseScheduleDetail",
-            templateUrl: webAppResourcePathString + '/proxyApp/student/courseScheduleDetail.html',
+            templateUrl: '../assets/proxyApp/student/courseScheduleDetail.html',
             controller: 'proxyCourseSchedDetails',
             resolve: {
             },
@@ -236,7 +236,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
         })
         .state('/ssb/proxy/awardPackage',{
             url: "/awardPackage",
-            templateUrl: webAppResourcePathString + '/proxyApp/finaid/awardPackage.html',
+            templateUrl: '../assets/proxyApp/finaid/awardPackage.html',
             controller: 'proxyAwardPackage',
             resolve: {
             },
@@ -249,7 +249,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
         })
         .state('/ssb/proxy/awardhist', {
             url: "/awardHistory",
-            templateUrl: webAppResourcePathString + '/proxyApp/finaid/awardHistory.html',
+            templateUrl: '../assets/proxyApp/finaid/awardHistory.html',
             controller: 'proxyAwardHistoryController',
             resolve: {
             },
@@ -262,7 +262,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
         })
         .state('/ssb/proxy/acctsumm', {
             url: "/accountSummary",
-            templateUrl: webAppResourcePathString + '/proxyApp/student/accountSummary.html',
+            templateUrl: '../assets/proxyApp/student/accountSummary.html',
             controller: 'proxyAccountSummaryController',
             resolve: {
             },
