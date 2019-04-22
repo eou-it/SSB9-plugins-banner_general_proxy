@@ -30,6 +30,9 @@ import net.hedtech.banner.general.person.PersonUtility
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import grails.gorm.transactions.Transactional
+
+@Transactional
 class GeneralSsbProxyService {
     static Logger logger = LoggerFactory.getLogger(GeneralSsbProxyService.class)
     def sessionFactory                     // injected by Spring
