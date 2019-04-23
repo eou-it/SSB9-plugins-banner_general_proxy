@@ -3,13 +3,12 @@
 ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
+import groovy.util.logging.Slf4j
 import net.hedtech.banner.exceptions.ApplicationException
 import org.grails.plugins.web.taglib.ValidationTagLib
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-class ProxyControllerUtility {
 
-    static def logger = LoggerFactory.getLogger('net.hedtech.banner.general.PersonalInformationControllerUtility')
+@Slf4j
+class ProxyControllerUtility {
 
     public static getFetchListParams(params) {
         def maxItems = params.max as int
@@ -26,7 +25,7 @@ class ProxyControllerUtility {
         def model = [:]
 
         model.failure = true
-        logger.error(e)
+        log.error(e.toString())
 
         try {
             def extractError = e.returnMap({ mapToLocalize -> new ValidationTagLib().message(mapToLocalize) })
@@ -40,7 +39,7 @@ class ProxyControllerUtility {
             return model
         }
         catch (Exception ex) {
-            logger.error(ex)
+            log.error(ex)
             model.message = e.message
             return model
         }

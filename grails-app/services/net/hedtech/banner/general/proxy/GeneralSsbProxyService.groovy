@@ -459,7 +459,7 @@ class GeneralSsbProxyService {
             def ae = new ApplicationException( GeneralSsbProxyService.class, e )
             throw ae
         } finally {
-            sql?.close()
+            //sql?.close()
         }
 
         if (errorMsgOut && errorStatusOut.equals("Y")){

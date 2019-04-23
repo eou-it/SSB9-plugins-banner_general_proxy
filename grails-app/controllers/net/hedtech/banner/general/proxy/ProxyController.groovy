@@ -94,7 +94,8 @@ class ProxyController {
 
 
     def updateProxypersonalinformation() {
-        def updatedProfile = fixJSONObjectForCast(request?.JSON ?: params)
+        def updatedProfile = request?.JSON ?: params
+        //def updatedProfile = fixJSONObjectForCast(request?.JSON ?: params)
         try {
 
             Map response = [failure: false, message: generalSsbProxyService.updateProxyProfile(updatedProfile)]
@@ -105,7 +106,7 @@ class ProxyController {
             render ProxyControllerUtility.returnFailureMessage( e ) as JSON
         }
         catch(Exception e){
-            log.error(e)
+            log.error(e.toString())
             def response = [message: e.message, failure: true]
             render response as JSON
         }
