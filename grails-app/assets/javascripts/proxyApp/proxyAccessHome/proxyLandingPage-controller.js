@@ -78,8 +78,8 @@ proxyAppControllers.controller('proxyLandingPageController',['$scope', '$rootSco
 
             $scope.appTiles.push(
                 {
-                    title: 'banner.generalssb.landingpage.personal.title',
-                    desc: 'banner.generalssb.landingpage.personal.description',
+                    title: $filter('i18n')('proxy.landingpage.personal.title'),
+                    desc: $filter('i18n')('proxy.landingpage.personal.description'),
                     url: 'proxyPersonalInfo'
                 }
             );
