@@ -3,29 +3,28 @@
  ***************************************************************************** */
 package net.hedtech.banner.student.history
 
+import grails.util.Holders
+import groovy.util.logging.Slf4j
 import groovy.sql.Sql
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.exceptions.BusinessLogicValidationException
 import net.hedtech.banner.i18n.MessageHelper
 import net.hedtech.banner.service.ServiceBase
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import grails.web.context.ServletContextHolder as SCH
-
-//import net.hedtech.banner.student.registration.RegistrationStudentCourseRegistration
 import org.grails.web.util.GrailsApplicationAttributes as GA
 
 import java.sql.CallableStatement
 import java.sql.SQLException
 import java.sql.Types
+import org.hibernate.SessionFactory
 
 /*
  *  Utility for History module
  */
 
+@Slf4j
 class HistoryUtility {
 
-    static Logger logger = LoggerFactory.getLogger(HistoryUtility.class)
 
     public static String DEFAULT_ROUND_CODE = "R"
     public static Integer DEFAULT_DEFAULT_DISPLAY_NUMBER = 3
@@ -50,8 +49,7 @@ class HistoryUtility {
 
     public static def fetchNextValueFromSequenceGenerator() {
         def selectSql = """SELECT shbgseq.nextval FROM dual"""
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         def sql
         def result = []
         try {
@@ -59,14 +57,14 @@ class HistoryUtility {
             result = sql.firstRow(selectSql)
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result[0]
@@ -75,8 +73,7 @@ class HistoryUtility {
 
     public
     static boolean validateGradeScaleForSection(String gradeScaleName, String term, String courseReferenceNumber) {
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         def selSql = """SELECT 'Y' as valid
                             FROM SHBGSCH G, SSBSECT S, SCBCRSE C
                             WHERE SHBGSCH_NAME = :name
@@ -105,14 +102,14 @@ class HistoryUtility {
             result = sql.firstRow(selSql, [name: gradeScaleName, term: term, courseReferenceNumber: courseReferenceNumber])
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result?.valid as boolean
@@ -124,8 +121,7 @@ class HistoryUtility {
 
     public static void updateComponentMarks(String term, String courseReferenceNumber, Integer gradeComponentId,
                                             String inclusionIndicator, String sectionUpdateIndicator, String dbAction, Date date) {
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         CallableStatement sqlCall
         try {
             def connection = sessionFactory.currentSession.connection()
@@ -142,14 +138,14 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
     }
@@ -161,8 +157,7 @@ class HistoryUtility {
     public
     static void updateSubComponentMarks(String term, String courseReferenceNumber, Integer gradeComponentId, Integer gradeSubComponentId,
                                         String sectionUpdateIndicator, String componentUpdateIndicator, String dbAction, Date date) {
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         CallableStatement sqlCall
         try {
             def connection = sessionFactory.currentSession.connection()
@@ -180,14 +175,14 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
     }
@@ -197,8 +192,7 @@ class HistoryUtility {
      */
 
     public static void calculateComponentMarksForSection(String term, String courseReferenceNumber) {
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         CallableStatement sqlCall
         def sql
         try {
@@ -231,7 +225,7 @@ class HistoryUtility {
             }
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
@@ -239,7 +233,7 @@ class HistoryUtility {
                 sql?.close()
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
     }
@@ -249,8 +243,7 @@ class HistoryUtility {
      */
 
     public static void calculateCompositeMarksForSection(String term, String courseReferenceNumber) {
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         CallableStatement sqlCall
         try {
             def connection = sessionFactory.currentSession.connection()
@@ -262,14 +255,14 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
     }
@@ -299,14 +292,14 @@ class HistoryUtility {
             result = sql.firstRow(selectSql, [gradeCode, termCode, levelCode])
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result ? result[0] as boolean : false
@@ -346,8 +339,7 @@ class HistoryUtility {
                                                              and b.shrgrde_term_code_effective <= shrtckg_term_code
                                                            )
                                                      ) """
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         def sql
         def result = []
         try {
@@ -355,14 +347,14 @@ class HistoryUtility {
             result = sql.firstRow(selectSql, [gradeIncompleteFinal, levelCode, effectiveTerm])
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result ? result[0] as boolean : false
@@ -371,8 +363,7 @@ class HistoryUtility {
 
     public static
     def isValidGradeIncompleteFinal(String level, String effectiveTerm, String grade, String gradeIncompleteFinal) {
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         CallableStatement sqlCall
         def incompleteFinalError
         def isValidGradeIncompleteFinal
@@ -391,14 +382,14 @@ class HistoryUtility {
             incompleteFinalError = sqlCall.getString(6)
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return ['isValidGradeIncompleteFinal': isValidGradeIncompleteFinal, 'errorCode': incompleteFinalError]
@@ -406,8 +397,7 @@ class HistoryUtility {
 
 
     public static boolean isCourseTermRestrictionExists(String subject, String courseNumber, String term) {
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         CallableStatement callableStatement
         boolean courseTermRestrictionExists = false
         try {
@@ -421,14 +411,14 @@ class HistoryUtility {
             callableStatement.executeQuery()
             courseTermRestrictionExists = callableStatement.getString(1)
         } catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 callableStatement?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return courseTermRestrictionExists
@@ -443,8 +433,7 @@ class HistoryUtility {
                             AND SHRTGSP_TERM_CODE = :term
                             AND SHRTGSP_LEVL_CODE = :level
                             AND SHRTGSP_STSP_KEY_SEQUENCE = :studyPath """
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         def sql
         def result = []
         try {
@@ -452,14 +441,14 @@ class HistoryUtility {
             result = sql.rows(selectSql, [pidm: pidm, term: term, level: level, studyPath: studyPath])
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result
@@ -474,8 +463,7 @@ class HistoryUtility {
                             AND SHRLGSP_LEVL_CODE = :level
                             AND SHRLGSP_STSP_KEY_SEQUENCE = :studyPath
                             AND SHRLGSP_GPA_TYPE_IND = :gpaType """
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         def sql
         def result
         try {
@@ -483,14 +471,14 @@ class HistoryUtility {
             result = sql.firstRow(selectSql, [pidm: pidm, level: level, studyPath: studyPath, gpaType: gpaType])
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result
@@ -508,8 +496,7 @@ class HistoryUtility {
                                                     WHERE SHRGRDE.SHRGRDE_LEVL_CODE = ?
                                                     AND SHRGRDE.SHRGRDE_CODE = ?
                                                     AND SHRGRDE.SHRGRDE_TERM_CODE_EFFECTIVE > ?)"""
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         def sql
         def result = []
         try {
@@ -517,14 +504,14 @@ class HistoryUtility {
             result = sql.firstRow(selectSql, [level, gradeCode, term, level, gradeCode, term])
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result ? result[0] as boolean : false
@@ -542,8 +529,7 @@ class HistoryUtility {
         def encryptedPassword
         CallableStatement cs
         try {
-            def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-            def sessionFactory = ctx.sessionFactory
+            SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
             def connection = sessionFactory.currentSession.connection()
             String queryString = "{ ? = call sokrest.f_encrypt(?) }"
             cs = connection.prepareCall(queryString)
@@ -553,14 +539,14 @@ class HistoryUtility {
             encryptedPassword = cs.getString(1)
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 cs?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return encryptedPassword
@@ -587,8 +573,7 @@ class HistoryUtility {
      * */
 
     public static Map fetchGpaRuleForStudent(Integer pidm, String level, String campus, String term) {
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         CallableStatement sqlCall
         Map result = new HashMap<String, Object>()
         try {
@@ -614,14 +599,14 @@ class HistoryUtility {
             ]
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.error "Sql Statement is already closed, no need to close it."
+                log.error "Sql Statement is already closed, no need to close it."
             }
         }
         return result
@@ -704,8 +689,7 @@ class HistoryUtility {
                                                  AND SHRTRCE_LEVL_CODE = :level
                                                  GROUP BY SHRTRCE_SUBJ_CODE))
                             ORDER BY STVSUBJ_CODE"""
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         def sql
         def result = []
         try {
@@ -713,14 +697,14 @@ class HistoryUtility {
             result = sql.rows(selectSql, [pidm: pidm, level: level])
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sql?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result
@@ -733,8 +717,7 @@ class HistoryUtility {
      * */
 
     public static Map calculateStudentSubjectGpa(Integer pidm, String subject, String level) {
-        def ctx = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)
-        def sessionFactory = ctx.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         CallableStatement sqlCall
         def result = [:]
         try {
@@ -788,14 +771,14 @@ class HistoryUtility {
             ]
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
         return result
@@ -804,7 +787,7 @@ class HistoryUtility {
 
     public static void calculateGpa(Integer pidm, String termCode, String finAidIndicator = 'N') {
         if (!pidm || !termCode) return
-        def sessionFactory = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)?.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         CallableStatement sqlCall
         try {
             def connection = sessionFactory?.currentSession?.connection()
@@ -816,14 +799,14 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtility: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
     }
@@ -932,7 +915,7 @@ class HistoryUtility {
         if (!paramMap.pidm || !paramMap.termCode || !paramMap.crn || !paramMap.userId || !paramMap.reportMode) {
             throw new ApplicationException('HistoryUtility', new BusinessLogicValidationException("rollGradeForStudent.required.parameter.missing", null))
         }
-        def sessionFactory = SCH.servletContext.getAttribute(GA.APPLICATION_CONTEXT)?.sessionFactory
+        SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         CallableStatement sqlCall
         try {
             def connection = sessionFactory?.currentSession?.connection()
@@ -952,14 +935,14 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            logger.error("Error executing sql in HistoryUtility.rollingGradeForEachStudent: ", e)
+            log.error("Error executing sql in HistoryUtility.rollingGradeForEachStudent: ", e)
             throw e
         }
         finally {
             try {
                 sqlCall?.close()
             } catch (SQLException se) { /* squash it*/
-                logger.trace "Sql Statement is already closed, no need to close it."
+                log.trace "Sql Statement is already closed, no need to close it."
             }
         }
     }
