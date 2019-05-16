@@ -1,3 +1,5 @@
+//= require lib/moment.min.js
+//= require fullcalendar/fullcalendar.js
 //= require proxyApp/app.js
 //= require proxyApp/common/directives/proxy-directive.js
 //= require proxyApp/common/directives/selectBox-directive.js
