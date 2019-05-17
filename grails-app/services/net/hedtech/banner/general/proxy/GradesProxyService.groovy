@@ -3,6 +3,7 @@
 ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
+import grails.gorm.transactions.Transactional
 import groovy.sql.Sql
 import net.hedtech.banner.proxy.api.ViewGradesApi
 import net.hedtech.banner.student.history.HistoryTermForStudentGrades
@@ -27,7 +28,7 @@ import net.hedtech.banner.student.history.HistoryStudentCourseDetail
 
 import net.hedtech.banner.exceptions.ApplicationException
 
-
+@Transactional
 class GradesProxyService {
 
     private final String GPA_TYPE_INSTITUTIONAL = 'I'
@@ -65,7 +66,7 @@ class GradesProxyService {
             def ae = new ApplicationException( GradesProxyService.class, e )
             throw ae
         } finally {
-            sql?.close()
+            //sql?.close()
         }
 
         return [viewGradesHolds: holds.equals("Y")]
@@ -226,7 +227,7 @@ class GradesProxyService {
             stvcampRow = sql.firstRow("select * from STVCAMP where STVCAMP_CODE = ?", [campCode])
 
         } finally {
-            sql?.close() // note that the test will close the connection, since it's our current session's connection
+            //sql?.close() // note that the test will close the connection, since it's our current session's connection
         }
         return stvcampRow.STVCAMP_DESC
     }

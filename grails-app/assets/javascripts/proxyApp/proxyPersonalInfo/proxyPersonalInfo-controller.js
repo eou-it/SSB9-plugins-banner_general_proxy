@@ -32,7 +32,8 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
         };
 
         $scope.setBirthDate = function(data){
-            $scope.proxyProfile.p_birth_date = data;
+            //$scope.proxyProfile.p_birth_date = data;
+            $scope.profileElements["p_birth_date"].model = data;
         };
 
         var getPersonalInfo = function() {
