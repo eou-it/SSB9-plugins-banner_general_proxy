@@ -3,4 +3,5 @@
 *= require modules/commonComponentsLTR-mf.css
 *= require proxy/main.css
 *= require modules/proxyAppLTR-mf.css
+*= require fullcalendar/fullcalendar.css
 */
