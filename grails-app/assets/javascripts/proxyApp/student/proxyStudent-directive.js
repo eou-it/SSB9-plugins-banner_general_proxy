@@ -136,11 +136,11 @@ proxyAppDirectives.directive('fullCalendar',['proxyAppService', '$filter', '$com
                         !function (e, t) {
                             t(r(0))
                         }(0, function (e) {
-                            return e.updateLocale(locale, {
+                           /*return e.updateLocale(locale, {
                                 meridiem: function (e, t, r) {
                                     return e < 12 ? meridiem[0] : meridiem[1]
                                 }
-                            })
+                            })*/
                         })
                     }
                 })
