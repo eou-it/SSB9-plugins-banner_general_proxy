@@ -675,6 +675,25 @@ class GeneralSsbProxyService {
     }
 
 
+    def getPaymentCenterToken() {
+
+        def gidm = SecurityContextHolder?.context?.authentication?.principal?.gidm
+
+        def connection = new Sql(sessionFactory.getCurrentSession().connection())
+        def tokenOut
+
+        Sql sql = new Sql(connection)
+        try {
+            sql.call("{$Sql.VARCHAR = call gokauth.F_GetProxyAuthToken(${gidm})") { token -> tokenOut = token }
+        } catch (e) {
+            log.error("ERROR: Could not generate token for the Payment Service. $e")
+            throw e
+        }
+
+        return tokenOut
+    }
+
+
     /*
      * Private method to convert Date and validate it for birthday parameter
      */

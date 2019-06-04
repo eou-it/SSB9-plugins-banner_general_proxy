@@ -13,6 +13,8 @@ import net.hedtech.banner.testing.BaseIntegrationTestCase
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.springframework.security.core.context.SecurityContextHolder
+
 import static groovy.test.GroovyAssert.*
 
 @Integration
@@ -49,7 +51,6 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
         def gidm = getProxyIdm('mrbunny@gvalleyu.edu')
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.eachRow("select user as test1 from dual", {trow ->
-            println "user: ${trow.test1}"
         })
         def result = generalSsbProxyService.getStudentListForProxy(gidm)
 
@@ -92,6 +93,31 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
         def page = result.pages.find { it -> it.url.equals("/ssb/proxy/courseScheduleDetail") }
 
         assertNotNull page
+    }
+
+
+    @Test
+    void testPaymentCenterToken() {
+        def token
+        def gidm = getProxyIdm('mrbunny@gvalleyu.edu')
+
+        SecurityContextHolder?.context?.authentication?.principal?.gidm = new Integer(gidm)
+
+        token = generalSsbProxyService.getPaymentCenterToken()
+        assertNotNull token
+
+        def connection = new Sql(sessionFactory.getCurrentSession().connection())
+        def idmOut
+
+        Sql sql = new Sql(connection)
+        try {
+            sql.call("{$Sql.INTEGER = call gokauth.F_GetProxyIDMFromAuthToken(${token})") { idm -> idmOut = idm }
+        } catch (e) {
+            log.error("ERROR: Could not generate token for the Payment Service. $e")
+            throw e
+        }
+
+        assertEquals idmOut.toString(), gidm
     }
 
 

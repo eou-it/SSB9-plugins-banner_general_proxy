@@ -15,6 +15,7 @@ class ProxyConfigurationService extends ServiceBase {
     static final def PAYVEND_TRANS_TIMEOUT = 'PAYVEND_TRANS_TIMEOUT'
     static final def PAYVEND_URL = 'PAYVEND_URL'
     static final def PAYVEND_VENDOR = 'PAYVEND_VENDOR'
+    def generalSsbProxyService
 
     /**
      * Proxy app configuration parameters to retrieve
@@ -33,6 +34,19 @@ class ProxyConfigurationService extends ServiceBase {
     def getProxyGatewayParamsForPayment () {
         return grails.util.Holders.getConfig()?.proxy?.payment?.gateway
     }
+
+
+    /**
+     * Get a Proxy Payment Center Configuration.
+     * @return Map of a Proxy Payment Center Configuration Parameters
+     */
+    def getProxyPaymentServiceParamsForPayment () {
+        return [url : grails.util.Holders.getConfig()?.banner.touchnet.paymentCenter.url,
+                enabled : grails.util.Holders.getConfig()?.banner.touchnet.paymentCenter.enabled,
+                expiresIn : grails.util.Holders.getConfig()?.banner.touchnet.paymentCenter.expiresIn,
+                token : generalSsbProxyService.getPaymentCenterToken()]
+    }
+
 
     /**
      * Get all configuration params for the Proxy app from Web Tailor.
