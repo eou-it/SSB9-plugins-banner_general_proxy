@@ -3,6 +3,7 @@
  ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
+import grails.util.Holders
 import groovy.sql.Sql
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.service.ServiceBase
@@ -32,19 +33,14 @@ class ProxyConfigurationService extends ServiceBase {
      * @return Map of a Proxy Payment Gateway Configuration Parameters
      */
     def getProxyGatewayParamsForPayment () {
-        return grails.util.Holders.getConfig()?.proxy?.payment?.gateway
-    }
+        def enabled = Holders.config?.proxy.payment.gateway.PAYVEND_ENABLED
+        def authToken = enabled ? generalSsbProxyService.getPaymentCenterToken() : ""
 
-
-    /**
-     * Get a Proxy Payment Center Configuration.
-     * @return Map of a Proxy Payment Center Configuration Parameters
-     */
-    def getProxyPaymentServiceParamsForPayment () {
-        return [url : grails.util.Holders.getConfig()?.banner.touchnet.paymentCenter.url,
-                enabled : grails.util.Holders.getConfig()?.banner.touchnet.paymentCenter.enabled,
-                expiresIn : grails.util.Holders.getConfig()?.banner.touchnet.paymentCenter.expiresIn,
-                token : generalSsbProxyService.getPaymentCenterToken()]
+        return [PAYVEND_URL : grails.util.Holders.getConfig()?.proxy?.payment?.gateway?.PAYVEND_URL,
+                PAYVEND_VENDOR : grails.util.Holders.getConfig()?.proxy?.payment?.gateway?.PAYVEND_VENDOR,
+                PAYVEND_PROCESS_CENTER_ENABLED : enabled,
+                authToken : authToken
+                ]
     }
 
 

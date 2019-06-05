@@ -9,18 +9,52 @@ proxyAppControllers.controller('proxyAccountSummaryController',['$scope', '$root
         $scope.payvendUrl = null;
         $scope.payvendVendor = null;
 
+        function submit_post_via_hidden_form(url, params) {
+            var f = $("<form target='TOUCHNET' method='POST' style='display:none;'></form>").attr({
+                action: url
+            }).appendTo(document.body);
+
+            for (var i in params) {
+                if (params.hasOwnProperty(i)) {
+                    $('<input type="hidden" />').attr({
+                        name: i,
+                        value: params[i]
+                    }).appendTo(f);
+                }
+            }
+
+            f.submit();
+
+            f.remove();
+        }
+
+
         $scope.getAccountBalColor = function() {
             var bal = $scope.accountSummary.accountBal;
             return (bal > 0) ? 'positive-balance' : (bal < 0) ? 'negative-balance' : '';
         };
 
         $scope.openVendorUrl = function() {
-            window.open($scope.payvendUrl, '_blank');
+
+            if ($scope.payvendProcessCenterEnabled){
+
+                submit_post_via_hidden_form(
+                    $scope.payvendUrl,
+                    {
+                        token: $scope.authToken
+                    }
+                );
+
+            }else {
+                window.open($scope.payvendUrl, '_blank');
+            }
         };
 
         proxyAppService.getConfiguration().$promise.then(function(response) {
             $scope.payvendUrl = response.PAYVEND_URL;
             $scope.payvendVendor = response.PAYVEND_VENDOR;
+            $scope.payvendProcessCenterEnabled = response.PAYVEND_PROCESS_CENTER_ENABLED
+            $scope.authToken = response.autToken;
         });
 
         proxyAppService.getAccountSummary({id: sessionStorage.getItem("id")}).$promise.then(function(response) {
