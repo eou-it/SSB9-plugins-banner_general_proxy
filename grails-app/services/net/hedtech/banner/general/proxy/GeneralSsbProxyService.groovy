@@ -9,7 +9,6 @@ import net.hedtech.banner.proxy.api.ProxyLandingPageApi
 import net.hedtech.banner.proxy.api.ProxyPersonalInformationApi
 import net.hedtech.banner.proxy.api.PinManagementApi
 
-import org.apache.log4j.Logger
 import net.hedtech.banner.i18n.MessageHelper
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.context.request.RequestContextHolder
@@ -28,8 +27,14 @@ import net.hedtech.banner.exceptions.ApplicationException
 
 import net.hedtech.banner.general.person.PersonUtility
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import grails.gorm.transactions.Transactional
+
+@Transactional
 class GeneralSsbProxyService {
-    private static final log  = Logger.getLogger(GeneralSsbProxyService.class)
+    static Logger logger = LoggerFactory.getLogger(GeneralSsbProxyService.class)
     def sessionFactory                     // injected by Spring
     def dataSource                         // injected by Spring
     def grailsApplication                  // injected by Spring
@@ -411,8 +416,8 @@ class GeneralSsbProxyService {
 
     def updateProxyProfile(def params) {
 
-        log.debug('updateProxyProfile')
-        log.debug('Parameters: ' + params)
+        logger.debug('updateProxyProfile')
+        logger.debug('Parameters: ' + params)
 
         def  errorMsgOut = ""
         def errorStatusOut = ""
@@ -448,13 +453,13 @@ class GeneralSsbProxyService {
                 errorStatusOut = errorStatus
                 emailChangeOut = emailChange
             }
-            log.debug('finished updateProxyProfile')
+            logger.debug('finished updateProxyProfile')
         } catch (SQLException e) {
-            log.error('updateProxyProfile() - '+ e)
+            logger.error('updateProxyProfile() - '+ e)
             def ae = new ApplicationException( GeneralSsbProxyService.class, e )
             throw ae
         } finally {
-            sql?.close()
+            //sql?.close()
         }
 
         if (errorMsgOut && errorStatusOut.equals("Y")){
@@ -469,15 +474,15 @@ class GeneralSsbProxyService {
 
     /* Updates Audit data on ProxyHistoryOnLogin */
     def updateProxyHistoryOnLogin() {
-        log.debug('starting updateProxyHistoryOnLogin')
+        logger.debug('starting updateProxyHistoryOnLogin')
         //get proxy gidm
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
-        log.debug('p_proxyIDM: ' + p_proxyIDM)
+        logger.debug('p_proxyIDM: ' + p_proxyIDM)
         try {
             def sql = new Sql(sessionFactory.getCurrentSession().connection())
             def sqlText = ProxyPersonalInformationApi.STORE_LOGIN_IN_HISTORY
 
-            log.debug('sqlText: ' + sqlText)
+            logger.debug('sqlText: ' + sqlText)
 
             def msg = MessageHelper.message("proxy.login.accessHistory")
 
@@ -485,42 +490,42 @@ class GeneralSsbProxyService {
                     [p_proxyIDM, p_proxyIDM, p_proxyIDM, msg = msg ? msg : "Display authorization menu"
                     ])
 
-            log.debug('finished updateProxyHistoryOnLogin')
+            logger.debug('finished updateProxyHistoryOnLogin')
 
         }catch(Exception e) {
-            log.error('Problem setting updateProxyHistoryOnLogin')
-            log.error(e)
+            logger.error('Problem setting updateProxyHistoryOnLogin')
+            logger.error(e)
         }
     }
 
 
     /* Updates Audit data on Proxy Page Access */
     def updateProxyHistoryOnPageAccess(def pidm, def pageName) {
-        log.debug('starting updateProxyHistoryOnPageAccess')
+        logger.debug('starting updateProxyHistoryOnPageAccess')
         //get proxy gidm
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
-        log.debug('p_proxyIDM: ' + p_proxyIDM)
-        log.debug('pidm: ' + pidm)
+        logger.debug('p_proxyIDM: ' + p_proxyIDM)
+        logger.debug('pidm: ' + pidm)
         if (pidm) {
             try {
                 def sql = new Sql(sessionFactory.getCurrentSession().connection())
                 def sqlText = ProxyPersonalInformationApi.STORE_PAGE_ACCESS_IN_HISTORY
 
-                log.debug('sqlText: ' + sqlText)
+                logger.debug('sqlText: ' + sqlText)
 
                 sql.call(sqlText,
                         [p_proxyIDM, pidm, p_proxyIDM, pidm, pageName
                         ])
 
-                log.debug('finished updateProxyHistoryOnPageAccess')
+                logger.debug('finished updateProxyHistoryOnPageAccess')
 
 
             } catch (Exception e) {
-                log.error('Problem updateProxyHistoryOnPageAccess')
-                log.error(e)
+                logger.error('Problem updateProxyHistoryOnPageAccess')
+                logger.error(e)
             }
         }else{
-            log.error('Problem updateProxyHistoryOnPageAccess. Pidm is missing')
+            logger.error('Problem updateProxyHistoryOnPageAccess. Pidm is missing')
         }
     }
 
@@ -667,6 +672,25 @@ class GeneralSsbProxyService {
         }
 
         return new JsonSlurper().parseText(proxyPages)
+    }
+
+
+    def getPaymentCenterToken() {
+
+        def gidm = SecurityContextHolder?.context?.authentication?.principal?.gidm
+
+        def connection = new Sql(sessionFactory.getCurrentSession().connection())
+        def tokenOut
+
+        Sql sql = new Sql(connection)
+        try {
+            sql.call("{$Sql.VARCHAR = call gokauth.F_GetProxyAuthToken(${gidm})") { token -> tokenOut = token }
+        } catch (e) {
+            log.error("ERROR: Could not generate token for the Payment Service. $e")
+            throw e
+        }
+
+        return tokenOut
     }
 
 

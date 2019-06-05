@@ -3,17 +3,20 @@
  ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
+import grails.util.Holders
 import groovy.sql.Sql
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.service.ServiceBase
+import grails.gorm.transactions.Transactional
 
+@Transactional
 class ProxyConfigurationService extends ServiceBase {
 
-    static transactional = true
 
     static final def PAYVEND_TRANS_TIMEOUT = 'PAYVEND_TRANS_TIMEOUT'
     static final def PAYVEND_URL = 'PAYVEND_URL'
     static final def PAYVEND_VENDOR = 'PAYVEND_VENDOR'
+    def generalSsbProxyService
 
     /**
      * Proxy app configuration parameters to retrieve
@@ -30,8 +33,16 @@ class ProxyConfigurationService extends ServiceBase {
      * @return Map of a Proxy Payment Gateway Configuration Parameters
      */
     def getProxyGatewayParamsForPayment () {
-        return grails.util.Holders.getConfig()?.proxy?.payment?.gateway
+        def enabled = Holders.config?.proxy.payment.gateway.PAYVEND_ENABLED
+        def authToken = enabled ? generalSsbProxyService.getPaymentCenterToken() : ""
+
+        return [PAYVEND_URL : grails.util.Holders.getConfig()?.proxy?.payment?.gateway?.PAYVEND_URL,
+                PAYVEND_VENDOR : grails.util.Holders.getConfig()?.proxy?.payment?.gateway?.PAYVEND_VENDOR,
+                PAYVEND_PROCESS_CENTER_ENABLED : enabled,
+                authToken : authToken
+                ]
     }
+
 
     /**
      * Get all configuration params for the Proxy app from Web Tailor.
@@ -42,14 +53,10 @@ class ProxyConfigurationService extends ServiceBase {
         Sql sql = new Sql(sessionFactory.getCurrentSession().connection())
 
         // Gather Web Tailor params
-        try {
             proxyConfigParams.each {
                 def param = getParamFromWebTailor(sql, it)
                 retParams[param.key] = param.value
             }
-        } finally {
-            sql?.close()
-        }
 
         retParams
     }
@@ -68,12 +75,8 @@ class ProxyConfigurationService extends ServiceBase {
                 paramKey: key,
                 defaultValue: defaultValue
         ]
-
-        try {
             getParamFromWebTailor(sql, requestedParam).value
-        } finally {
-            sql?.close()
-        }
+
     }
 
     def getParamFromWebTailor (sql, map) {

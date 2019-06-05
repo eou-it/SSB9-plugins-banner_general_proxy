@@ -6,7 +6,7 @@ package net.hedtech.banner.general.proxy
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.i18n.MessageHelper
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
 import net.hedtech.banner.security.XssSanitizer
 import net.hedtech.banner.general.person.PersonUtility
@@ -94,7 +94,8 @@ class ProxyController {
 
 
     def updateProxypersonalinformation() {
-        def updatedProfile = fixJSONObjectForCast(request?.JSON ?: params)
+        def updatedProfile = request?.JSON ?: params
+        //def updatedProfile = fixJSONObjectForCast(request?.JSON ?: params)
         try {
 
             Map response = [failure: false, message: generalSsbProxyService.updateProxyProfile(updatedProfile)]
@@ -105,7 +106,7 @@ class ProxyController {
             render ProxyControllerUtility.returnFailureMessage( e ) as JSON
         }
         catch(Exception e){
-            log.error(e)
+            log.error(e.toString())
             def response = [message: e.message, failure: true]
             render response as JSON
         }
