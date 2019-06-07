@@ -278,6 +278,7 @@ proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePath
 proxyApp.config(['$locationProvider',
     function ($locationProvider) {
         $locationProvider.html5Mode(false);
+        $locationProvider.hashPrefix('');
     }
 ]);
 
