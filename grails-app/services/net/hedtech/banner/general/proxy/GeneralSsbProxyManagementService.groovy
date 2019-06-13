@@ -45,4 +45,43 @@ class GeneralSsbProxyManagementService {
         return studentsListMap
     }
 
+
+    def createProxyProfile(def params) {
+
+        logger.debug('createProxyProfile')
+        logger.debug('Parameters: ' + params)
+
+        def errorMsgOut = ""
+        def errorStatusOut = ""
+        def gidmOut
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+
+        def sqlText = ProxyManagementApi.CREATE_PROXY
+
+        try {
+            sql.call(sqlText, [params.pidm, params.p_email, params.p_email_verify, params.p_last, params.p_first,
+                               Sql.VARCHAR, Sql.VARCHAR, Sql.NUMERIC
+            ]){ errorMsg, errorStatus, gidm ->
+                errorMsgOut = errorMsg
+                errorStatusOut = errorStatus
+                gidmOut = gidm
+            }
+            logger.debug('finished createProxyProfile')
+        } catch (SQLException e) {
+            logger.error('createProxyProfile() - '+ e)
+            def ae = new ApplicationException( GeneralSsbProxyManagementService.class, e )
+            throw ae
+        } finally {
+            //sql?.close()
+        }
+
+        if (errorMsgOut && errorStatusOut.equals("Y")){
+            throw new ApplicationException("", MessageHelper.message("proxyManagement.onSave." + errorMsgOut))
+
+        }else{
+            return gidmOut
+        }
+    }
+
 }

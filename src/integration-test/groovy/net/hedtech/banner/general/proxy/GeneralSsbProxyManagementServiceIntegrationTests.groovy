@@ -47,4 +47,159 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
         assertNotNull result.proxies[0]."gidm"
     }
 
+
+    @Test
+    void createProxy() {
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "a@aol.com"
+        params."p_email_verify" = "a@aol.com"
+        params."p_last" = "Abc"
+        params."p_first" = "ABX"
+        params."pidm" = pidm
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+            assertNotNull gidm
+
+            def result = generalSsbProxyManagementService.getProxyList(pidm)
+
+            assertTrue result.proxies.findAll { it.email == "a@aol.com" }.size() > 0
+
+        } catch (Exception e) {
+            fail("Could not generate IDM. " + e)
+        } finally {
+            deleteDBEntry(gidm);
+        }
+    }
+
+    @Test
+    void verifyEmailProxy() {
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "a@aol.com"
+        params."p_email_verify" = "a@aol1.com"
+        params."p_last" = "Abc"
+        params."p_first" = "ABX"
+        params."pidm" = pidm
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+        } catch (Exception e) {
+            assertTrue e.getMessage().contains("NOEMAILMATCH")
+        } finally {
+            deleteDBEntry(gidm);
+        }
+    }
+
+    @Test
+    void testEmailFormat() {
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "aaol.com"
+        params."p_email_verify" = "aaol.com"
+        params."p_last" = "Abc"
+        params."p_first" = "ABX"
+        params."pidm" = pidm
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+        } catch (Exception e) {
+            assertTrue e.getMessage().contains("BADEMAIL")
+        } finally {
+            deleteDBEntry(gidm);
+        }
+    }
+
+    @Test
+    void testRequiredLastNameOrFirstNameOrEmail() {
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "a@aol.com"
+        params."p_email_verify" = "a@aol.com"
+        params."p_last" = "Abc"
+        params."p_first" = "ABX"
+        params."pidm" = pidm
+
+        try {
+            params."p_email" = ""
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+        } catch (Exception e) {
+            assertTrue e.getMessage().contains("REQUIRED")
+        } finally {
+            deleteDBEntry(gidm);
+        }
+
+        try {
+            params."p_last" = ""
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+        } catch (Exception e) {
+            assertTrue e.getMessage().contains("REQUIRED")
+        } finally {
+            deleteDBEntry(gidm);
+        }
+
+        try {
+            params."p_first" = ""
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+        } catch (Exception e) {
+            assertTrue e.getMessage().contains("REQUIRED")
+        } finally {
+            deleteDBEntry(gidm);
+        }
+    }
+
+    @Test
+    void testEmailInUse() {
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "a@aol.com"
+        params."p_email_verify" = "a@aol.com"
+        params."p_last" = "Abc"
+        params."p_first" = "ABX"
+        params."pidm" = pidm
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+            fail("Email In Use")
+        } catch (Exception e) {
+            assertTrue e.getMessage().contains("EMAILINUSE")
+        } finally {
+            deleteDBEntry(gidm);
+        }
+    }
+
+    void deleteDBEntry(def idm) {
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        try {
+            sql.executeUpdate("""
+                delete from GPRXREF
+                where GPRXREF_proxy_idm = ?
+          """, [idm])
+            sql.executeUpdate("""
+                delete from gpbprxy
+               where gpbprxy_proxy_idm = ?
+           """, [idm])
+            sql.commit();
+        } finally {
+            //sql?.close()
+        }
+    }
+
 }
