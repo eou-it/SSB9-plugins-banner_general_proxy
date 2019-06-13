@@ -69,6 +69,8 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
 
             assertTrue result.proxies.findAll { it.email == "a@aol.com" }.size() > 0
 
+            assertTrue checkUrl(gidm)
+
         } catch (Exception e) {
             fail("Could not generate IDM. " + e)
         } finally {
@@ -200,6 +202,23 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
         } finally {
             //sql?.close()
         }
+    }
+
+
+    def checkUrl(def idm){
+        def url
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        try {
+            def query = """SELECT gpbeltr_ctyp_url url FROM gpbeltr WHERE gpbeltr_proxy_idm = :idm
+                           and gpbeltr_ctyp_code = 'NEW_PROXY_NOA' """
+            url = sql?.firstRow(query,[idm: idm])?.url
+        } finally {
+            //sql?.close()
+        }
+
+        url.contains("BannerGeneralSsb/ssb/proxy/proxyAction?p_token")
+
     }
 
 }
