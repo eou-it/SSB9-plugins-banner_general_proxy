@@ -55,7 +55,12 @@ h2 {
 }
 
 .proxy-mgmt-main-heading {
+    float: left;
     margin-bottom: 30px;
+}
+
+.proxy-mgmt-add-new-proxy {
+    float: right;
 }
 
 .proxy-notification-box {
