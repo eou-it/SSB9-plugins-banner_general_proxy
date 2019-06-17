@@ -122,8 +122,8 @@ proxyManagementApp.config(function ($stateProvider, $urlRouterProvider, webAppRe
     $stateProvider
         .state('home', {
             url: "/home",
-            templateUrl: '../assets/proxyManagementApp/proxyManagementHome/proxyMgmtLandingPage.html',
-            controller: 'proxyMgmtLandingPageController',
+            templateUrl: '../assets/proxyManagementApp/proxyManagementHome/proxyMgmtMain.html',
+            controller: 'proxyMgmtMainController',
             resolve: {
             },
             data: {

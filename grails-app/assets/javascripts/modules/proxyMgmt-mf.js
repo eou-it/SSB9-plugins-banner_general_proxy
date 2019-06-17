@@ -3,4 +3,4 @@
 //= require proxyManagementApp/common/filters/webAppResourcePath-filter.js
 //= require proxyManagementApp/common/services/breadcrumb-service.js
 //= require proxyManagementApp/common/services/notificationcenter-service.js
-//= require proxyManagementApp/proxyManagementHome/proxyMgmtLandingPage-controller.js
+//= require proxyManagementApp/proxyManagementHome/proxyMgmtMain-controller.js

@@ -1,7 +1,7 @@
 /********************************************************************************
   Copyright 2019 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-proxyMgmtAppControllers.controller('proxyMgmtLandingPageController',['$scope', '$rootScope', '$location', '$stateParams', '$timeout', '$filter', 'notificationCenterService',
+proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootScope', '$location', '$stateParams', '$timeout', '$filter', 'notificationCenterService',
     function ($scope, $rootScope, $location, $stateParams, $timeout, $filter, notificationCenterService) {
 
         // LOCAL FUNCTIONS
