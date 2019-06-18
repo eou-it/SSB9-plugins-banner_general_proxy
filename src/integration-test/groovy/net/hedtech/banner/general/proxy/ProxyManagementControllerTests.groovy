@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 package net.hedtech.banner.general.proxy
@@ -21,7 +21,7 @@ import org.junit.Test
 @Integration
 @Rollback
 class ProxyManagementControllerTests extends BaseIntegrationTestCase {
-  def controller
+    def controller
     /**
      * The setup method will run before all test case method executions start.
      */
@@ -60,6 +60,28 @@ class ProxyManagementControllerTests extends BaseIntegrationTestCase {
 
         assertNotNull jsonData
         assertTrue jsonData."proxies".size() > 0
+
+    }
+
+
+    @Test
+    void testGetProxy(){
+        mockRequest()
+        SSBSetUp('MYE000001', '111111')
+        controller.request.contentType = "text/json"
+        def params = [ id: "A00017091", gidm: -99999627]
+
+        controller.params.putAll(params)
+        controller.getProxy()
+        def data = controller.response.contentAsString
+        assertNotNull data
+
+        def jsonData = JSON.parse( data )
+
+        assertNotNull jsonData
+        assertNotNull jsonData?."proxyProfile"?.gidm
+        assertNotNull jsonData?."proxyProfile"?.pidm
+
     }
 
     public GrailsWebRequest mockRequest() {

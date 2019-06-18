@@ -5,14 +5,13 @@ package net.hedtech.banner.general.proxy
 
 import grails.gorm.transactions.Transactional
 import groovy.json.JsonSlurper
+import groovy.sql.OutParameter
 import groovy.sql.Sql
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.i18n.MessageHelper
 import net.hedtech.banner.proxy.api.ProxyManagementApi
-import org.springframework.security.core.context.SecurityContextHolder
-
+import oracle.jdbc.driver.OracleTypes
 import java.sql.SQLException
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -84,4 +83,33 @@ class GeneralSsbProxyManagementService {
         }
     }
 
+
+    public def getProxyProfile(def gidm, def pidm) {
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+
+        // special OutParameter for cursor type
+        OutParameter CURSOR_PARAMETER = new OutParameter() {
+            public int getType() {
+                return OracleTypes.CURSOR;
+            }
+        };
+
+        def sqlText = ProxyManagementApi.PROXY_PROFILE
+
+        def proxyProfile = [:]
+
+        sql.call(sqlText, [CURSOR_PARAMETER, gidm, pidm]) { profile ->
+            profile.eachRow() { data ->
+                proxyProfile.gidm = data.GPRXREF_PROXY_IDM
+                proxyProfile.pidm = data.GPRXREF_PERSON_PIDM
+                proxyProfile.p_retp_code = data.GPRXREF_RETP_CODE
+                proxyProfile.p_passphrase = data.GPRXREF_PASSPHRASE
+                proxyProfile.p_start_date = data.GPRXREF_START_DATE
+                proxyProfile.p_stop_date = data.GPRXREF_STOP_DATE
+            }
+        }
+
+        return [proxyProfile : proxyProfile]
+    }
 }
