@@ -371,31 +371,6 @@ a.proxy-icon-link:focus {
     cursor: pointer;
 }
 
-.pi-footer-container {
-    position: absolute;
-    bottom: 49px;
-    left: 0;
-}
-
-.pi-footer {
-    background: white;
-    position: fixed;
-    width: 100%;
-    z-index: 2;
-}
-
-.pi-footer-container.buffer-zone {
-    position: relative;
-    visibility: hidden;
-    bottom: auto;
-    left: auto;
-}
-
-.pi-footer-container.buffer-zone > .pi-footer {
-    position: relative;
-    visibility: hidden;
-}
-
 .overview-wrapper {
     padding: 15px;
     text-align: center;
@@ -515,17 +490,6 @@ a.proxy-icon-link:focus {
 .details-section-edit > a.add-item-link > span.icon-add-CO,
 .details-section-edit > a.add-item-link > span.icon-edit-CO {
     padding-left: 10px;
-}
-
-.pi-footer > a.add-item-link {
-    padding: 1em;
-    display: inline-block;
-    width: 50%;
-}
-
-.pi-footer > a.add-item-link > span.icon-add-CO,
-.pi-footer > a.add-item-link > span.icon-edit-CO {
-    padding-right: 10px;
 }
 
 a.add-item-link {

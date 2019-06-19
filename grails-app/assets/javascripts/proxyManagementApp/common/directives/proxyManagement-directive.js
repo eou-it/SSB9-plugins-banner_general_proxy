@@ -13,3 +13,14 @@ proxyMgmtAppDirectives.directive('proxyMgmtDeleteButton', ['$filter', function (
         templateUrl: $filter('webAppResourcePath')('proxyManagementApp/proxyManagementHome/proxyMgmtDeleteButton.html')
     };
 }]);
+
+proxyMgmtAppDirectives.directive('proxyMgmtMobileFooterButton', ['$filter', function ($filter) {
+    return {
+        restrict: 'E',
+        scope: {
+            clickFunction: '='
+        },
+        transclude: true,
+        templateUrl: $filter('webAppResourcePath')('proxyManagementApp/proxyManagementHome/proxyMgmtMobileFooterButton.html')
+    };
+}]);

@@ -24,7 +24,11 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
         init = function() {
             proxyMgmtAppService.getProxyList().$promise.then(function (response) {
                 $scope.proxies = response.proxies;
-                $scope.proxies = mockProxyData.proxies;
+
+                // TODO: REMOVE ONCE NO LONGER NEEDED
+                if (confirm('FOR TESTING PURPOSES: Show existing proxies?')) {
+                    $scope.proxies = mockProxyData.proxies;
+                }
             });
 
             displayNotificationsOnStateLoad();
