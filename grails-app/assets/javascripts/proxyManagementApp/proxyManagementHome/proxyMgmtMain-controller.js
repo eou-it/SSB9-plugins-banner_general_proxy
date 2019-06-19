@@ -1,8 +1,9 @@
 /********************************************************************************
   Copyright 2019 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootScope', '$location', '$stateParams', '$timeout', '$filter', 'notificationCenterService',
-    function ($scope, $rootScope, $location, $stateParams, $timeout, $filter, notificationCenterService) {
+proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootScope', '$location', '$stateParams', '$timeout',
+    '$filter', 'notificationCenterService', 'proxyMgmtAppService',
+    function ($scope, $rootScope, $location, $stateParams, $timeout, $filter, notificationCenterService, proxyMgmtAppService) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -21,12 +22,57 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
         },
 
         init = function() {
+            proxyMgmtAppService.getProxyList().$promise.then(function (response) {
+                $scope.proxies = response.proxies;
+                $scope.proxies = mockProxyData.proxies;
+            });
+
             displayNotificationsOnStateLoad();
         };
+
+        // TODO: TEMPORARY DATA - REMOVE ONCE NO LONGER NEEDED
+        var mockProxyData = {
+            "proxies":
+                [
+                    {
+                        "gidm": "-99999627",
+                        "firstName": "French",
+                        "lastName": "Horne",
+                        "email": "daren.dunn@ellucian.com"
+                    },
+                    {
+                        "gidm": "-99998824",
+                        "firstName": "Hoot",
+                        "lastName": "Owl",
+                        "email": "improxy86@gmail.com"
+                    },
+                    {
+                        "gidm": "-99998822",
+                        "firstName": "Night",
+                        "lastName": "Owl",
+                        "email": "improxy85@gmail.com"
+                    },
+                    {
+                        "gidm": "-99998880",
+                        "firstName": "Robin",
+                        "lastName": "Red",
+                        "email": "improxy84@gmail.com"
+                    },
+                    {
+                        "gidm": "-99999695",
+                        "firstName": "Sue",
+                        "lastName": "Sarasue",
+                        "email": "improxy24@gmail.com"
+                    }
+                ]
+        };
+        // END TEMPORARY DATA
 
 
         // CONTROLLER VARIABLES
         // --------------------
+        $scope.proxies = [];
+
 
         // INITIALIZE
         // ----------

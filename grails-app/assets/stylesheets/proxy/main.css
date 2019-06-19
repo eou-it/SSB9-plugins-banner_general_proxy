@@ -356,15 +356,15 @@ input:disabled {
     clear: both;
 }
 
-.pi-edit-item-link {
+.proxy-edit-item-link {
     margin-right: 0.75em;
     float: left;
-    padding-top: 0.35em;
+    padding-top: 0.25em;
 }
 
-a.pi-icon-link,
-a.pi-icon-link:hover,
-a.pi-icon-link:focus {
+a.proxy-icon-link,
+a.proxy-icon-link:hover,
+a.proxy-icon-link:focus {
     font-size: 24px;
     color: #026BC8;
     text-decoration: none;
@@ -1006,7 +1006,8 @@ button.closebtn {
     float: left;
 }
 
-.email-detail {
+.email-detail,
+.proxy-item-detail {
     float: left;
     width: 100%;
     word-break: break-all;
