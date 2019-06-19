@@ -187,6 +187,37 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
         }
     }
 
+
+    @Test
+    void testShowProxyProfile() {
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "a@aol.com"
+        params."p_email_verify" = "a@aol.com"
+        params."p_last" = "Abc"
+        params."p_first" = "ABX"
+        params."pidm" = pidm
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+            def profile = generalSsbProxyManagementService.getProxyProfile(gidm, pidm)
+
+            assertTrue gidm == profile?.proxyProfile?.gidm
+            assertTrue pidm == profile?.proxyProfile?.pidm
+            assertEquals "AAA", profile?.proxyProfile?.p_retp_code
+            assertNotNull profile?.proxyProfile?.p_start_date
+            assertNotNull profile?.proxyProfile?.p_stop_date
+
+        } catch (Exception e) {
+            fail("Could get Proxy Profile. " + e)
+        } finally {
+            deleteDBEntry(gidm);
+        }
+    }
+
     void deleteDBEntry(def idm) {
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         try {
@@ -218,7 +249,5 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
         }
 
         url.contains("BannerGeneralSsb/ssb/proxy/proxyAction?p_token")
-
     }
-
 }

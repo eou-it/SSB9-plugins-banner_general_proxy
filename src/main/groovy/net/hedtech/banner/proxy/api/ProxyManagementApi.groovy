@@ -1,3 +1,7 @@
+/*******************************************************************************
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
+
 package net.hedtech.banner.proxy.api
 
 class ProxyManagementApi {
@@ -432,4 +436,18 @@ END IF;
    ? := lv_proxyIDM;
    END;
 """
+
+    public final static String PROXY_PROFILE  = """
+       DECLARE
+         lv_GPRXREF_rec gp_gprxref.gprxref_rec;
+         lv_GPRXREF_ref gp_gprxref.gprxref_ref;
+--
+       BEGIN
+--        
+        dbms_session.set_nls('NLS_DATE_FORMAT',''''||'DD-MON-RRRR'||'''');
+        dbms_session.set_nls('NLS_CALENDAR',''''||'GREGORIAN'||'''');
+        ? := gp_gprxref.F_Query_One (?,?);
+--
+        END;
+    """
 }

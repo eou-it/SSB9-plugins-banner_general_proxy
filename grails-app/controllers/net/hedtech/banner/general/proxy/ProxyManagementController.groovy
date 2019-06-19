@@ -7,9 +7,6 @@ import grails.converters.JSON
 import net.hedtech.banner.general.person.PersonUtility
 import net.hedtech.banner.security.XssSanitizer
 
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-
 /**
  * Controller for Proxy Management
  */
@@ -24,11 +21,28 @@ class ProxyManagementController {
         render view: "proxyManagement"
     }
 
+
+    /*
+     Returns the list of Proxies.
+    */
     def getProxies() {
         def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
 
-        def  proxies = generalSsbProxyManagementService.getProxyList(pidm)
+        def proxies = generalSsbProxyManagementService.getProxyList(pidm)
 
         render proxies as JSON
+    }
+
+    /*
+     Returns the single instance of the Proxy.
+    */
+    def getProxy() {
+        def proxy
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+        def gidm = XssSanitizer.sanitize(params.gidm)
+
+        proxy = generalSsbProxyManagementService.getProxyProfile(gidm, pidm)
+
+        render proxy as JSON
     }
 }
