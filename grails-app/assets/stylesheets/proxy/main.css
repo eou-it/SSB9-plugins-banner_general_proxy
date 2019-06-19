@@ -356,44 +356,19 @@ input:disabled {
     clear: both;
 }
 
-.pi-edit-item-link {
+.proxy-edit-item-link {
     margin-right: 0.75em;
     float: left;
-    padding-top: 0.35em;
+    padding-top: 0.25em;
 }
 
-a.pi-icon-link,
-a.pi-icon-link:hover,
-a.pi-icon-link:focus {
+a.proxy-icon-link,
+a.proxy-icon-link:hover,
+a.proxy-icon-link:focus {
     font-size: 24px;
     color: #026BC8;
     text-decoration: none;
     cursor: pointer;
-}
-
-.pi-footer-container {
-    position: absolute;
-    bottom: 49px;
-    left: 0;
-}
-
-.pi-footer {
-    background: white;
-    position: fixed;
-    width: 100%;
-    z-index: 2;
-}
-
-.pi-footer-container.buffer-zone {
-    position: relative;
-    visibility: hidden;
-    bottom: auto;
-    left: auto;
-}
-
-.pi-footer-container.buffer-zone > .pi-footer {
-    position: relative;
-    visibility: hidden;
 }
 
 .overview-wrapper {
@@ -515,17 +490,6 @@ a.pi-icon-link:focus {
 .details-section-edit > a.add-item-link > span.icon-add-CO,
 .details-section-edit > a.add-item-link > span.icon-edit-CO {
     padding-left: 10px;
-}
-
-.pi-footer > a.add-item-link {
-    padding: 1em;
-    display: inline-block;
-    width: 50%;
-}
-
-.pi-footer > a.add-item-link > span.icon-add-CO,
-.pi-footer > a.add-item-link > span.icon-edit-CO {
-    padding-right: 10px;
 }
 
 a.add-item-link {
@@ -1006,7 +970,8 @@ button.closebtn {
     float: left;
 }
 
-.email-detail {
+.email-detail,
+.proxy-item-detail {
     float: left;
     width: 100%;
     word-break: break-all;

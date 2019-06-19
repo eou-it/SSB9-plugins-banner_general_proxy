@@ -1,0 +1,23 @@
+<!--*******************************************************************************
+Copyright 2019 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="row">
+    <div ng-repeat="proxy in proxies" class="item-wrapper col-xs-12 col-md-6 col-lg-4">
+        <div class="proxy-item-detail">
+            <div class="proxy-item-name">
+                {{proxy.firstName}} {{proxy.lastName}}
+            </div>
+            <div>
+                <span class="email-text" dir="ltr">{{proxy.email}}</span>
+            </div>
+        </div>
+        <div class="button-block">
+            <a ng-click="PLACEHOLDER(proxy)" enter-key="PLACEHOLDER(proxy)" class="proxy-edit-item-link proxy-icon-link"
+               title="{{'proxy.management.button.title.editProxy'|i18n}}" tabindex="0">
+                <span class="icon-edit-CO"></span>
+                <div class="hidden-link-text-for-reader">{{'proxy.management.button.title.editProxy'|i18n}}</div>
+            </a>
+            <proxy-mgmt-delete-button item="email" click-function="confirmEmailDelete" button-title="{{'proxy.management.button.title.deleteProxy'|i18n}}"/>
+        </div>
+    </div>
+</div>

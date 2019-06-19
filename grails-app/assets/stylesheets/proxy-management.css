@@ -105,6 +105,34 @@ h2 {
     color: #2874BB;
 }
 
+.proxy-item-name {
+    font-family: OpenSans-semibold;
+}
+
+.proxy-mgmt-footer-container {
+    position: absolute;
+    bottom: 49px;
+    left: 0;
+}
+
+.proxy-mgmt-footer {
+    background: white;
+    position: fixed;
+    width: 100%;
+    z-index: 2;
+}
+
+.proxy-mgmt-footer > a.add-item-link {
+    padding: 1em;
+    display: inline-block;
+    width: 50%;
+}
+
+.proxy-mgmt-footer > a.add-item-link > span.icon-add-CO,
+.proxy-mgmt-footer > a.add-item-link > span.icon-edit-CO {
+    padding-right: 10px;
+}
+
 
 /***********************/
 /* Media Query Section */

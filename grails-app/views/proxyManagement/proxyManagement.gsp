@@ -36,14 +36,17 @@ Copyright 2019 Ellucian Company L.P. and its affiliates.
     <script type="text/javascript">
         // Track calling page for breadcrumbs
         (function () {
-            // URLs to exclude from updating genMainCallingPage.  No breadcrumbs for "/BannerGeneralSsb/" URLs
-            // (i.e. the applicationName variable below) or App Nav should be created for the landing page.
+            // URLs to exclude from updating genAppCallingPage, because they're actually either the authentication
+            // page, a part of the Personal Information app, or App Nav, and are not "calling pages."
             var referrerUrl = document.referrer,
-                    excludedRegex = [
-                        /\${applicationContextRoot}\//,
-                        /\/seamless/
-                    ],
-                    isExcluded;
+                excludedRegex = [
+                    /\${applicationContextRoot}\/login\/auth$/,
+                    /\${applicationContextRoot}\/ssb\/survey\/survey$/,
+                    /\${applicationContextRoot}\/resetPassword\/validateans$/,
+                    /\${applicationContextRoot}\/ssb\/personalInformation\/resetPasswordWithSecurityQuestions$/,
+                    /\/seamless/
+                ],
+                isExcluded;
 
             if (referrerUrl) {
                 isExcluded = _.find(excludedRegex, function (regex) {
@@ -52,7 +55,7 @@ Copyright 2019 Ellucian Company L.P. and its affiliates.
 
                 if (!isExcluded) {
                     // Track this page
-                    sessionStorage.setItem('proxyCallingPage', referrerUrl);
+                    sessionStorage.setItem('genAppCallingPage', referrerUrl);
                 }
             }
         })();
