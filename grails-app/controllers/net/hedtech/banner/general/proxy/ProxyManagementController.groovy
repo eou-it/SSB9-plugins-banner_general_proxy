@@ -6,6 +6,7 @@ package net.hedtech.banner.general.proxy
 import grails.converters.JSON
 import net.hedtech.banner.general.person.PersonUtility
 import net.hedtech.banner.security.XssSanitizer
+import org.springframework.security.core.context.SecurityContextHolder
 
 /**
  * Controller for Proxy Management
@@ -26,7 +27,8 @@ class ProxyManagementController {
      Returns the list of Proxies.
     */
     def getProxies() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
 
         def proxies = generalSsbProxyManagementService.getProxyList(pidm)
 
@@ -38,7 +40,7 @@ class ProxyManagementController {
     */
     def getProxy() {
         def proxy
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
         def gidm = XssSanitizer.sanitize(params.gidm)
 
         proxy = generalSsbProxyManagementService.getProxyProfile(gidm, pidm)

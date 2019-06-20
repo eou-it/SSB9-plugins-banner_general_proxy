@@ -210,6 +210,10 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
             assertEquals "AAA", profile?.proxyProfile?.p_retp_code
             assertNotNull profile?.proxyProfile?.p_start_date
             assertNotNull profile?.proxyProfile?.p_stop_date
+            assertNull profile?.proxyProfile?.p_desc
+
+            assertNotNull profile?.proxyUiRules?."p_passphrase"."visible"
+            assertNotNull profile?.proxyUiRules?."p_reset_pin"."visible"
 
         } catch (Exception e) {
             fail("Could get Proxy Profile. " + e)

@@ -25,52 +25,10 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
             proxyMgmtAppService.getProxyList().$promise.then(function (response) {
                 $scope.proxies = response.proxies;
 
-                // TODO: REMOVE ONCE NO LONGER NEEDED
-                if (confirm('FOR TESTING PURPOSES: Show existing proxies?')) {
-                    $scope.proxies = mockProxyData.proxies;
-                }
             });
 
             displayNotificationsOnStateLoad();
         };
-
-        // TODO: TEMPORARY DATA - REMOVE ONCE NO LONGER NEEDED
-        var mockProxyData = {
-            "proxies":
-                [
-                    {
-                        "gidm": "-99999627",
-                        "firstName": "French",
-                        "lastName": "Horne",
-                        "email": "daren.dunn@ellucian.com"
-                    },
-                    {
-                        "gidm": "-99998824",
-                        "firstName": "Hoot",
-                        "lastName": "Owl",
-                        "email": "improxy86@gmail.com"
-                    },
-                    {
-                        "gidm": "-99998822",
-                        "firstName": "Night",
-                        "lastName": "Owl",
-                        "email": "improxy85@gmail.com"
-                    },
-                    {
-                        "gidm": "-99998880",
-                        "firstName": "Robin",
-                        "lastName": "Red",
-                        "email": "improxy84@gmail.com"
-                    },
-                    {
-                        "gidm": "-99999695",
-                        "firstName": "Sue",
-                        "lastName": "Sarasue",
-                        "email": "improxy24@gmail.com"
-                    }
-                ]
-        };
-        // END TEMPORARY DATA
 
 
         // CONTROLLER VARIABLES

@@ -450,4 +450,29 @@ END IF;
 --
         END;
     """
+
+    public final static String PROXY_PROFILE_UI_RULES = """
+    DECLARE
+    show_p_passphrase       VARCHAR2(1);
+    show_p_reset_pin        VARCHAR2(1);
+    r_retp_code             GTVRETP.GTVRETP_CODE%TYPE;
+
+    BEGIN
+--    
+    r_retp_code := ?;
+--
+    IF bwgkprxy.F_GetOption ('ENABLE_PASSPHRASE', r_retp_code) = 'Y' THEN
+      show_p_passphrase := 'Y';
+    END IF;
+    
+    IF bwgkprxy.F_GetOption ('ENABLE_RESET_PIN', r_retp_code) = 'Y' THEN
+      show_p_reset_pin := 'Y';
+    END IF;
+ 
+    ? := NVL(show_p_passphrase,'N');
+    ? := NVL(show_p_reset_pin,'N');
+    --
+    END;
+
+    """
 }

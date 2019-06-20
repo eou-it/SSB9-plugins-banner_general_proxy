@@ -107,9 +107,25 @@ class GeneralSsbProxyManagementService {
                 proxyProfile.p_passphrase = data.GPRXREF_PASSPHRASE
                 proxyProfile.p_start_date = data.GPRXREF_START_DATE
                 proxyProfile.p_stop_date = data.GPRXREF_STOP_DATE
+                proxyProfile.p_desc = data.GPRXREF_PROXY_DESC
             }
         }
 
-        return [proxyProfile : proxyProfile]
+        def proxyUiRules = [:]
+        sqlText = ProxyManagementApi.PROXY_PROFILE_UI_RULES
+
+        sql.call(sqlText, [proxyProfile.p_retp_code, Sql.VARCHAR, Sql.VARCHAR ])
+                { show_p_passphrase, show_p_reset_pin ->
+
+                    if (show_p_passphrase.equals("Y")) {
+                        proxyUiRules."p_passphrase" = [visible: true]
+                    }
+
+                    if (show_p_reset_pin.equals("Y")) {
+                        proxyUiRules."p_reset_pin" = [visible: true]
+                    }
+                }
+
+        return [proxyProfile : proxyProfile, proxyUiRules : proxyUiRules]
     }
 }

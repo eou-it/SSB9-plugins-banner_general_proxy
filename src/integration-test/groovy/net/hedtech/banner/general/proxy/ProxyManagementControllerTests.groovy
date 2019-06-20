@@ -45,12 +45,8 @@ class ProxyManagementControllerTests extends BaseIntegrationTestCase {
     @Test
     void testListProxies(){
         mockRequest()
-        SSBSetUp('MYE000001', '111111')
+        SSBSetUp('A00017091', '111111')
         controller.request.contentType = "text/json"
-        def params = [ id: "A00017091" ]
-
-        controller.params.putAll(params)
-
         controller.getProxies()
         def data = controller.response.contentAsString
 
@@ -67,9 +63,9 @@ class ProxyManagementControllerTests extends BaseIntegrationTestCase {
     @Test
     void testGetProxy(){
         mockRequest()
-        SSBSetUp('MYE000001', '111111')
+        SSBSetUp('A00017091', '111111')
         controller.request.contentType = "text/json"
-        def params = [ id: "A00017091", gidm: -99999627]
+        def params = [gidm: -99999627]
 
         controller.params.putAll(params)
         controller.getProxy()
@@ -77,10 +73,13 @@ class ProxyManagementControllerTests extends BaseIntegrationTestCase {
         assertNotNull data
 
         def jsonData = JSON.parse( data )
-
+        //check data
         assertNotNull jsonData
         assertNotNull jsonData?."proxyProfile"?.gidm
         assertNotNull jsonData?."proxyProfile"?.pidm
+        //check UI Controls
+        assertNotNull jsonData?."proxyUiRules"?."p_passphrase"."visible"
+        assertNotNull jsonData?."proxyUiRules"?."p_reset_pin"."visible"
 
     }
 
