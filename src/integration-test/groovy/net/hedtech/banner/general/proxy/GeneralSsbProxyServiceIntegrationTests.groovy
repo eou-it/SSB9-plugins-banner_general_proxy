@@ -62,7 +62,7 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
 
     @Test
     void testStudentListNoAccess() {
-        def resul = generalSsbProxyService.getStudentListForProxy(-1)
+        def result = generalSsbProxyService.getStudentListForProxy(-1)
 
         assertTrue result?.students?.active.size() == 0
     }
