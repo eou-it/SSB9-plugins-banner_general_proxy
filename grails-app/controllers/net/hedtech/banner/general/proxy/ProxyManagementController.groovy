@@ -4,6 +4,7 @@
 package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
+import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.person.PersonUtility
 import net.hedtech.banner.security.XssSanitizer
 import org.springframework.security.core.context.SecurityContextHolder
@@ -46,5 +47,26 @@ class ProxyManagementController {
         proxy = generalSsbProxyManagementService.getProxyProfile(gidm, pidm)
 
         render proxy as JSON
+    }
+
+    /*
+     Delete Proxy.
+     */
+    def deleteProxy() {
+        def proxy = request?.JSON ?: params
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        proxy.pidm = pidm
+
+        try {
+            generalSsbProxyManagementService.deleteProxyProfile(proxy)
+
+            def proxies = generalSsbProxyManagementService.getProxyList(pidm)
+
+            render proxies as JSON
+
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
     }
 }

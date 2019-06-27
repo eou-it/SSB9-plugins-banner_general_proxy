@@ -128,4 +128,38 @@ class GeneralSsbProxyManagementService {
 
         return [proxyProfile : proxyProfile, proxyUiRules : proxyUiRules]
     }
+
+    def deleteProxyProfile(def params) {
+
+        logger.debug('deleteProxyProfile')
+        logger.debug('Parameters: ' + params)
+
+        def errorMsgOut = ""
+        def errorStatusOut = ""
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+
+        def sqlText = ProxyManagementApi.DELETE_PROXY
+
+        try {
+            sql.call(sqlText, [params.pidm, params.gidm,
+                               Sql.VARCHAR, Sql.VARCHAR
+            ]){ errorMsg, errorStatus ->
+                errorMsgOut = errorMsg
+                errorStatusOut = errorStatus
+            }
+            logger.debug('finished deleteProxyProfile')
+        } catch (SQLException e) {
+            logger.error('deleteProxyProfile() - '+ e)
+            def ae = new ApplicationException( GeneralSsbProxyManagementService.class, e )
+            throw ae
+        } finally {
+            //sql?.close()
+        }
+
+        if (errorMsgOut && errorStatusOut.equals("Y")) {
+            throw new ApplicationException("", MessageHelper.message("proxyManagement.onDelete." + errorMsgOut))
+        }
+    }
+
 }

@@ -12,4 +12,10 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
         return fetchProxies.query();
     };
 
+    this.deleteProxy = function (entity) {
+        console.log("PROXY: " + JSON.stringify(entity));
+        return $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'deleteProxy'}, {delete: {method:'POST'}}).delete(entity);
+    };
+
 }]);

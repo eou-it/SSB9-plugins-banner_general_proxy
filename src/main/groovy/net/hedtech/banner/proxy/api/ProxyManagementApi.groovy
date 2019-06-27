@@ -475,4 +475,186 @@ END IF;
     END;
 
     """
+
+    public final static String DELETE_PROXY = """
+   DECLARE
+     p_proxyIDM  gpbprxy.gpbprxy_proxy_idm%TYPE;
+     p_personPIDM spriden.spriden_pidm%TYPE;
+     lv_hold_rowid  gb_common.internal_record_id_type;
+     error_status   VARCHAR2(1) := 'N';
+     lv_info        twgrinfo.twgrinfo_label%TYPE;
+     lv_count         NUMBER;
+     
+ -- to apply mep code to Banner9 url for proxy e-mail communication
+
+   FUNCTION F_ApplyMepCodeToProxyURL (endpoint IN VARCHAR2) RETURN VARCHAR2 IS
+   BEGIN
+    IF g\$_vpdi_security.G\$_IS_MIF_ENABLED THEN
+           IF INSTR(endpoint,'?') != 0 THEN
+         RETURN REPLACE(endpoint,'?','?mepCode='|| g\$_vpdi_security.G\$_VPDI_GET_INST_CODE_FNC || '&');
+    ELSE
+         RETURN (endpoint || '?mepCode=' || g\$_vpdi_security.G\$_VPDI_GET_INST_CODE_FNC);
+    END IF;
+    ELSE
+        RETURN endpoint;
+    END IF;
+   END F_ApplyMepCodeToProxyURL;
+   
+     
+  -- Get the URL for accessing Banner 9 Proxy
+   FUNCTION F_getProxyURL(
+      p_action          VARCHAR2 DEFAULT NULL)
+      RETURN VARCHAR2
+   IS
+      CURSOR gurocfg_c (
+         p_appid_in gurocfg.gurocfg_gubappl_app_id%TYPE,
+         p_config_in gurocfg.gurocfg_name%TYPE)
+      IS
+       SELECT gurocfg_value
+         FROM gurocfg
+        WHERE gurocfg_gubappl_app_id = p_appid_in
+          AND gurocfg_name      =  p_config_in
+          AND gurocfg_type      =  'string';
+
+      lv_use_ban9 VARCHAR2(1);
+      lv_key VARCHAR2(1000);
+      lv_endpoint VARCHAR2(60);
+      lv_proxy_url VARCHAR2(1000);
+   BEGIN
+--
+         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         FETCH gurocfg_c INTO lv_proxy_url;
+         
+         IF gurocfg_c%NOTFOUND
+         THEN
+            raise_application_error(-20103, 'Could not build URL for proxy e-mail communication');
+         END IF;
+         CLOSE gurocfg_c;
+
+         lv_key := 'proxyAccessURL.' || p_action;
+         OPEN gurocfg_c('BAN9_PROXY', lv_key);
+         FETCH gurocfg_c INTO lv_endpoint;
+
+         -- process mep context
+         -- it adds the mepCode parameter if system is under mep context
+         lv_endpoint := F_ApplyMepCodeToProxyURL(lv_endpoint);
+         IF gurocfg_c%NOTFOUND
+         THEN
+            raise_application_error(-20103, 'Could not build URL for proxy e-mail communication');
+         END IF;
+         CLOSE gurocfg_c;
+      
+      RETURN lv_proxy_url || lv_endpoint;
+   END F_getProxyURL;
+
+     
+     FUNCTION F_Delete_Relationship (p_proxyIDM gpbprxy.gpbprxy_proxy_idm%TYPE, p_personPIDM spriden.spriden_pidm%TYPE)
+  RETURN VARCHAR2
+IS
+   lv_delete      VARCHAR2(01);
+   lv_days        NUMBER;
+   CURSOR current_views_c
+   IS
+     SELECT 'Y'
+       FROM gprhist
+      WHERE gprhist_new_auth_ind = 'V'
+        AND gprhist_proxy_idm    = p_proxyIDM
+        AND gprhist_person_pidm  = p_personPIDM
+        AND TRUNC(gprhist_activity_date) > trunc(SYSDATE) - lv_days;
+BEGIN
+-- if deletes are not allowed then return N
+   IF NVL(gorsrin.f_getoption('ENABLE_DELETE_RELATIONSHIP', NULL, 'PROXY'),'N') <> 'Y' THEN
+     RETURN 'N';
+   END IF;
+-- get the number of days that must be past since the last view
+   lv_days := NVL(gorsrin.f_getoption('ENABLE_DELETE_AFTER_DAYS', NULL, 'PROXY'),999999);
+-- now check to see if there have been any recent views
+   lv_delete := 'N';
+   OPEN current_views_c;
+   FETCH current_views_c INTO lv_delete;
+   CLOSE current_views_c;
+   IF NVL(lv_delete,'N') = 'Y' THEN
+     RETURN 'N';
+   ELSE
+     RETURN 'Y';
+   END IF;
+
+END F_Delete_Relationship;
+
+    BEGIN
+--
+    p_personPIDM := ?;
+    p_proxyIDM := ?;
+    
+-- See if we can delete a proxy relationship
+      IF F_Delete_Relationship(p_proxyIDM, p_personPIDM) = 'N' THEN
+        lv_info := 'PROXYNOTDELETED';
+        error_status := 'Y';
+        goto final_step;
+       END IF;
+
+   -- Need to send letter before we actually delete
+
+      -- Send message with generic login URL since no action is required
+      gp_gpbeltr.P_Create (
+         p_syst_code      => 'PROXY',
+         p_ctyp_code      => 'DELETE_RELATIONSHIP',
+         p_ctyp_url       => F_getProxyURL('DELETE_RELATIONSHIP'),  -- NULL,
+         p_ctyp_exp_date  => NULL,
+         p_ctyp_exe_date  => NULL,
+         p_transmit_date  => NULL,
+         p_proxy_idm      => p_proxyIDM,
+         p_proxy_old_data => NULL,
+         p_proxy_new_data => NULL,
+         p_person_pidm    => p_personPIDM,
+         p_user_id        => goksels.f_get_ssb_id_context,
+         p_create_date    => SYSDATE,
+         p_create_user    => goksels.f_get_ssb_id_context,
+         p_rowid_out      => lv_hold_rowid
+         );
+      gb_common.P_Commit;
+      bwgkprxy.P_SendEmail(lv_hold_rowid);
+
+      DELETE
+        FROM gprhist
+       WHERE gprhist_proxy_idm   = p_proxyIDM
+         AND gprhist_person_pidm = p_personPIDM;
+      DELETE
+        FROM gprauth
+       WHERE gprauth_proxy_idm   = p_proxyIDM
+         AND gprauth_person_pidm = p_personPIDM;
+      DELETE
+        FROM gpbeltr
+       WHERE gpbeltr_proxy_idm   = p_proxyIDM
+         AND gpbeltr_person_pidm = p_personPIDM;
+      DELETE
+        FROM genbpsh
+       WHERE genbpsh_gidm        = p_proxyIDM
+         AND genbpsh_person_pidm = p_personPIDM;
+      DELETE
+        FROM gprxref
+       WHERE gprxref_proxy_idm   = p_proxyIDM
+         AND gprxref_person_pidm = p_personPIDM;
+   -- if there are no relationships left, then delete gpbprxy and geniden rows as well
+      SELECT COUNT(*)
+        INTO lv_COUNT
+        FROM gprxref
+       WHERE gprxref_proxy_idm   = p_proxyIDM;
+      IF lv_count = 0 THEN
+        DELETE
+          FROM gpbprxy
+         WHERE gpbprxy_proxy_idm = p_proxyIDM;
+        DELETE
+          FROM geniden
+         WHERE geniden_gidm = p_proxyIDM;
+      END IF;
+      COMMIT;
+      
+      <<final_step>>
+        lv_info := 'DELETED';
+        error_status := 'N';
+        ? := lv_info;
+        ? := error_status;
+   END;
+"""
 }

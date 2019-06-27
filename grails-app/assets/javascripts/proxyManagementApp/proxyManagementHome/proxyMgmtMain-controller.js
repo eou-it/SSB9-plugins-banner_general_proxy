@@ -35,6 +35,40 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
         // --------------------
         $scope.proxies = [];
 
+        $scope.cancelNotification = function () {
+            notificationCenterService.clearNotifications();
+        };
+
+        $scope.confirmDeleteProxy = function (proxy) {
+            var deleteProxy = function () {
+                $scope.cancelNotification();
+
+                proxyMgmtAppService.deleteProxy(proxy).$promise.then(function (response) {
+
+                    if (response.failure) {
+                        notificationCenterService.displayNotification(response.message, $scope.notificationErrorType);
+                    } else {
+                        // Refresh proxy list
+                        $scope.proxies = response.proxies;
+                    }
+                });
+            };
+
+            var prompts = [
+                {
+                    label: $filter('i18n')('proxyManagement.button.cancel'),
+                    action: $scope.cancelNotification
+                },
+                {
+                    label: $filter('i18n')('proxyManagement.button.delete'),
+                    action: deleteProxy
+                }
+            ];
+
+            notificationCenterService.displayNotification('proxyManagement.confirm.proxy.delete.text', 'warning', false, prompts);
+        };
+
+
 
         // INITIALIZE
         // ----------
