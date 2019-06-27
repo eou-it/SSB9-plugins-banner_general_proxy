@@ -162,4 +162,20 @@ class GeneralSsbProxyManagementService {
         }
     }
 
+    def getProxyStartStopDates(def relationshipCode) {
+
+        def startStopDates = [:]
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        def sqlText = ProxyManagementApi.PROXY_START_STOP_DATES
+
+        sql.call(sqlText, [relationshipCode, Sql.TIMESTAMP, Sql.TIMESTAMP ])
+                { start_date, stop_date ->
+
+                    startStopDates.startDate = start_date
+                    startStopDates.stopDate  = stop_date
+                }
+
+        return startStopDates
+    }
+
 }

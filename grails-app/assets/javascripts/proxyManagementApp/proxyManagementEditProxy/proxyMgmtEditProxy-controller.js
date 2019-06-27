@@ -57,6 +57,13 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             $selectCtrl.focusserTitle = text;
         };
 
+        $scope.updateDateRange = function() {
+            proxyMgmtAppService.getProxyStartStopDates({relationshipCode: 'A'}).$promise.then(function (response) {
+                $scope.proxy.p_start_date = response.startDate;
+                $scope.proxy.p_stop_date = response.stopDate;
+            });
+        };
+
 
 
         // CONTROLLER VARIABLES

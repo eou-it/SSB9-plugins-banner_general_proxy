@@ -657,4 +657,15 @@ END F_Delete_Relationship;
         ? := error_status;
    END;
 """
+
+    public final static String PROXY_START_STOP_DATES = """
+   DECLARE
+     start_date gprxref.gprxref_start_date%TYPE := TRUNC(SYSDATE);
+     stop_date  gprxref.gprxref_stop_date%TYPE := TRUNC(SYSDATE + bwgkprxy.F_GetOption ('ACCESS_WINDOW_DAYS', ?));
+     
+    BEGIN
+        ? := start_date;
+        ? := stop_date;
+   END;
+"""
 }

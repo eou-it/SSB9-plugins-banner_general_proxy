@@ -21,4 +21,9 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
             {controller: 'ProxyManagement', action: 'deleteProxy'}, {delete: {method:'POST'}}).delete(entity);
     };
 
+    this.getProxyStartStopDates = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'getProxyStartStopDates'}).get(params);
+    };
+
 }]);
