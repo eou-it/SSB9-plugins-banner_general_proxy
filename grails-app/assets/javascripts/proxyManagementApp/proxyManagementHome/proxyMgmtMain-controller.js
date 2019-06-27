@@ -56,16 +56,16 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
 
             var prompts = [
                 {
-                    label: $filter('i18n')('proxyManagement.button.cancel'),
+                    label: $filter('i18n')('proxyManagement.label.button.cancel'),
                     action: $scope.cancelNotification
                 },
                 {
-                    label: $filter('i18n')('proxyManagement.button.delete'),
+                    label: $filter('i18n')('proxyManagement.label.button.delete'),
                     action: deleteProxy
                 }
             ];
-
-            notificationCenterService.displayNotification('proxyManagement.confirm.proxy.delete.text', 'warning', false, prompts);
+            
+            notificationCenterService.addNotification('proxyManagement.confirm.proxy.delete.text', 'warning', false, prompts);
         };
 
 
