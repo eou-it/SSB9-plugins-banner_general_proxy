@@ -7,7 +7,6 @@ proxyManagementApp.service('notificationCenterService', ['$filter', function ($f
 
     this.localMessageCenter = null;
     this.clearNotifications = function() {
-        //debugger;
         if (window.notifications !== undefined) {
             notifications.clearNotifications();
         }

@@ -16,8 +16,6 @@ var proxyManagementApp = angular.module('proxyManagementApp', [
     'xe-ui-components',
     'ui.select'])
     .run(
-        // ['$rootScope', '$state', '$stateParams', '$filter', 'proxyAppService', 'breadcrumbService', 'notificationCenterService',
-        //     function ($rootScope, $state, $stateParams, $filter, proxyAppService, breadcrumbService, notificationCenterService) {
         ['$rootScope', '$state', '$stateParams', '$filter', 'breadcrumbService', 'notificationCenterService',
             function ($rootScope, $state, $stateParams, $filter, breadcrumbService, notificationCenterService) {
                 $rootScope.notificationErrorType = "error";
@@ -118,6 +116,7 @@ proxyManagementApp.config(function ($stateProvider, $urlRouterProvider, webAppRe
 
     /*************************************************************************
      * Defining all the different states of the proxyManagementApp landing pages. *
+     * proxyMgmtEditProxyDesktop.html
      *************************************************************************/
     $stateProvider
         .state('home', {
@@ -128,6 +127,19 @@ proxyManagementApp.config(function ($stateProvider, $urlRouterProvider, webAppRe
             },
             data: {
                 breadcrumbs: []
+            },
+            params: {
+                id: null
+            }
+        })
+        .state('editProxy', {
+            url: "/editProxy",
+            templateUrl: '../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtEditProxy.html',
+            controller: 'proxyMgmtEditProxyController',
+            resolve: {
+            },
+            data: {
+                breadcrumbs: [{label: 'proxy.management.title.proxyInformation'}]
             },
             params: {
                 id: null

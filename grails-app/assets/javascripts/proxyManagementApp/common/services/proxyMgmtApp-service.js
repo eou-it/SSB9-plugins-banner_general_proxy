@@ -12,6 +12,10 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
         return fetchProxies.query();
     };
 
+    this.getProxy = function (params) {
+        return null; //TODO: TEMPORARY PLACEHOLDER
+    };
+
     this.deleteProxy = function (entity) {
         return $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'deleteProxy'}, {delete: {method:'POST'}}).delete(entity);

@@ -17,7 +17,7 @@ proxyManagementApp.service( 'breadcrumbService', ['$filter', '$rootScope', funct
         constantBreadCrumb = [
             {
                 label: 'general.breadcrumb.proxyManagement',
-                url: ''
+                url: '/home'
             }
         ];
 
