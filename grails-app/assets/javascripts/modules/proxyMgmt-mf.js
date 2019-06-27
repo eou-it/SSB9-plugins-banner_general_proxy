@@ -6,3 +6,4 @@
 //= require proxyManagementApp/common/services/notificationcenter-service.js
 //= require proxyManagementApp/common/services/proxyMgmtApp-service.js
 //= require proxyManagementApp/proxyManagementHome/proxyMgmtMain-controller.js
+//= require proxyManagementApp/proxyManagementEditProxy/proxyMgmtEditProxy-controller.js

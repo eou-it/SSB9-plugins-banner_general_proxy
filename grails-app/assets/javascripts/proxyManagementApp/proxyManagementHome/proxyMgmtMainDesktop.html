@@ -5,10 +5,10 @@
     <div class="proxy-mgmt-main-container">
         <div class="clearfix">
             <div class="proxy-mgmt-main-heading">
-                <h2>{{'proxy.management.title'|i18n}}</h2>
+                <h2>{{'proxy.management.title.proxyManagement'|i18n}}</h2>
             </div>
             <div class="proxy-mgmt-add-new-proxy">
-                <a ng-click="PLACEHOLDER()" enter-key="PLACEHOLDER()" class="add-item-link" tabindex="0">
+                <a ui-sref="editProxy" class="add-item-link" tabindex="0">
                     <span class="icon-add-CO"></span> <span>{{'proxy.management.label.addNew'|i18n}}</span>
                 </a>
             </div>
@@ -22,7 +22,7 @@
                         </div>
                         <div class="proxy-notification-text blue">
                             <div>
-                                {{'proxy.management.no.proxies.available'|i18n}}
+                                {{'proxy.management.message.noProxiesAvailable'|i18n}}
                             </div>
                         </div>
                     </div>

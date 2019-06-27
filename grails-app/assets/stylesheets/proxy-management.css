@@ -59,6 +59,28 @@ h2 {
     margin-bottom: 30px;
 }
 
+.proxy-info-main-heading {
+    margin-bottom: 30px;
+}
+
+.proxy-info-subheading {
+    font-size: 18px;
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+.proxy-info-subheading .page-top {
+    margin-top: 0;
+}
+
+.proxy-info-subheading .bold {
+    font-family: OpenSans-semibold;
+}
+
+.proxy-info-subheading .italic {
+    font-style: italic;
+}
+
 .proxy-mgmt-add-new-proxy {
     float: right;
 }
