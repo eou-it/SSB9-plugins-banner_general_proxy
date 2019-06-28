@@ -43,7 +43,10 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                     p_retp_code: null,
                     p_start_date: null,
                     p_stop_date: null,
-                    pages: null
+                    pages: [
+                        {url:"/ssb/proxy/holds", desc: "Student Holds", auth: false},
+                        {url:"/ssb/proxy/grades", desc: "Midterm and Final Grades", auth: false}
+                    ]
                 };
 
             }
@@ -56,11 +59,13 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             $selectCtrl.focusserTitle = text;
         };
 
-        $scope.updateDateRange = function() {
+        $scope.handleRelationshipChange = function() {
             proxyMgmtAppService.getProxyStartStopDates({relationshipCode: $scope.proxy.p_retp_code.code}).$promise.then(function (response) {
                 $scope.proxy.p_start_date = response.startDate;
                 $scope.proxy.p_stop_date = response.stopDate;
             });
+
+            $scope.isRelationshipSelected = !!$scope.proxy.p_retp_code;
         };
 
 
@@ -78,6 +83,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             desc:         $filter('i18n')('proxy.management.label.description'),
             passphrase:   $filter('i18n')('proxy.management.label.passphrase')
         };
+        $scope.isRelationshipSelected = false;
         $scope.relationshipChoices = [
             // TODO: BELOW CHOICES ARE PLACEHOLDERS. IMPLEMENT DYNAMICALLY WITH I18N FILTER, ALONG THE LINES OF EXAMPLE BELOW:
             // {code: 'P', description: $filter('i18n')('proxy.personalinformation.label.parent')},
