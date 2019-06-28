@@ -13,12 +13,19 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
     };
 
     this.getProxy = function (params) {
-        return null; //TODO: TEMPORARY PLACEHOLDER
+        return $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'getProxy'}).get(params);
     };
 
     this.deleteProxy = function (entity) {
         return $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'deleteProxy'}, {delete: {method:'POST'}}).delete(entity);
+    };
+
+    this.createProxy = function (entity) {
+        console.log(entity);
+        return $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'createProxy'}, {delete: {method:'POST'}}).save(entity);
     };
 
 }]);
