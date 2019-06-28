@@ -45,7 +45,7 @@
         <div class="row">
             <div class="col-xs-12 col-md-6 col-lg-4">
                 <label class="input-field-label" for="relationship">{{'proxy.management.label.relationship'|i18n}}</label><br>
-                <xe-ui-select ng-model="proxy.p_retp_code" theme="select2" search-enabled="false" ng-change="updateDateRange()" id="relationship">
+                <xe-ui-select ng-model="proxy.p_retp_code" theme="select2" search-enabled="false" ng-change="handleRelationshipChange()" id="relationship">
                     <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxy.management.label.relationship'|i18n)" placeholder="{{placeholder.relationship}}">
                         {{$select.selected.description ? $select.selected.description : placeholder.relationship}}
                     </xe-ui-select-match>
@@ -92,8 +92,15 @@
             <span class="bold">{{'proxy.management.title.authorizations'|i18n}}</span>
             <span class="italic">{{'proxy.management.label.hint.required'|i18n}}</span>
         </div>
+        <div ng-if="isRelationshipSelected" class="row">
+            <div class="col-xs-12 col-md-6 col-lg-4">
+                    <div ng-repeat="authItem in proxy.pages">
+                        <input ng-model="authItem.auth" class="dir-profile-nav-check" type="checkbox" aria-labelledby="dir-item{{$index}}"/>
+                        <span class="lbl">{{authItem.desc}}</span>
+                    </div>
+            </div>
+        </div>
     </div>
-
     <div class="proxy-bottom-buttons">
         <div class="proxy-desktop-visible">
             <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
