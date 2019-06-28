@@ -1,9 +1,9 @@
 /********************************************************************************
   Copyright 2019 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$rootScope', '$location', '$stateParams', '$timeout',
+proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$rootScope', '$state','$location', '$stateParams', '$timeout',
     '$filter', 'notificationCenterService', 'proxyMgmtAppService',
-    function ($scope, $rootScope, $location, $stateParams, $timeout, $filter, notificationCenterService, proxyMgmtAppService) {
+    function ($scope, $rootScope, $state,$location, $stateParams, $timeout, $filter, notificationCenterService, proxyMgmtAppService) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -29,8 +29,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 $scope.isCreateNew = false;
 
                 proxyMgmtAppService.getProxy({gidm: gidm}).$promise.then(function (response) {
-                    $scope.proxy = response.proxy;
-
+                    $scope.proxy = response.proxyProfile;
                 });
             } else {
                 // Create "new proxy" object
@@ -87,6 +86,45 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             {code: 'A', description: 'Advisor'}
         ];
 
+        $scope.setStartDate = function(data){
+            $scope.proxy.p_start_date = data;
+        };
+
+        $scope.setStopDate = function(data){
+            $scope.proxy.p_stop_date = data;
+        };
+
+        $scope.save = function() {
+            proxyMgmtAppService.createProxy($scope.proxy).$promise.then(function(response) {
+            var notifications = [],
+                doStateGoSuccess = function(messageOnSave) {
+                    notifications.push({message:  messageOnSave ? messageOnSave : 'proxyManagement.label.saveSuccess',
+                        messageType: $scope.notificationSuccessType,
+                        flashType: $scope.flashNotification});
+
+                    $state.go('home',
+                        {onLoadNotifications: notifications},
+                        {reload: true, inherit: false, notify: true}
+                    );
+                };
+
+            if(response.failure) {
+                $scope.flashMessage = response.message;
+
+                notificationCenterService.clearNotifications();
+                notificationCenterService.addNotification(response.message, "error", true);
+
+            } else {
+                doStateGoSuccess(response.message);
+            }
+        });
+        };
+
+        $scope.cancel = function() {
+                $state.go('home',
+                    {reload: true, inherit: false, notify: true}
+                );
+        };
 
         // INITIALIZE
         // ----------

@@ -133,7 +133,7 @@ proxyManagementApp.config(function ($stateProvider, $urlRouterProvider, webAppRe
             }
         })
         .state('editProxy', {
-            url: "/editProxy",
+            url: "/editProxy/:gidm",
             templateUrl: '../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtEditProxy.html',
             controller: 'proxyMgmtEditProxyController',
             resolve: {

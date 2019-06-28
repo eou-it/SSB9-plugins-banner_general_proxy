@@ -83,7 +83,7 @@
         <div class="row">
             <div class="col-xs-12 col-md-6 col-lg-4">
                 <label class="input-field-label" for="passphrase">{{'proxy.management.label.passphrase'|i18n}}</label><br>
-                <input ng-model="proxy.passphrase"
+                <input ng-model="proxy.p_passphrase"
                        class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                        type="text" placeholder="{{placeholder.passphrase}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="passphrase">
             </div>
@@ -91,6 +91,13 @@
         <div class="proxy-info-subheading">
             <span class="bold">{{'proxy.management.title.authorizations'|i18n}}</span>
             <span class="italic">{{'proxy.management.label.hint.required'|i18n}}</span>
+        </div>
+    </div>
+
+    <div class="proxy-bottom-buttons">
+        <div class="proxy-desktop-visible">
+            <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
+            <input ng-class="profileRequired ? 'only-submit' : null" ng-click="save()" type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
         </div>
     </div>
 </div>
