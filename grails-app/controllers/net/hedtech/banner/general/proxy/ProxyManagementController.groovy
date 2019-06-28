@@ -69,4 +69,21 @@ class ProxyManagementController {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
     }
+
+    /*
+     * Get proxy start/stop dates
+     */
+    def getProxyStartStopDates() {
+        def params = request?.JSON ?: params
+        def relationshipCode = params.relationshipCode
+
+        try {
+            def startStopDates = generalSsbProxyManagementService.getProxyStartStopDates(relationshipCode)
+
+            render startStopDates as JSON
+
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
 }
