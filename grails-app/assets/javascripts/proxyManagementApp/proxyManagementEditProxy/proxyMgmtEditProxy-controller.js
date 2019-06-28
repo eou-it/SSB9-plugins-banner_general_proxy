@@ -95,6 +95,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         };
 
         $scope.save = function() {
+            notificationCenterService.addNotification('proxy.personalinformation.onSave.waitMessage', 'success', true);
             proxyMgmtAppService.createProxy($scope.proxy).$promise.then(function(response) {
             var notifications = [],
                 doStateGoSuccess = function(messageOnSave) {

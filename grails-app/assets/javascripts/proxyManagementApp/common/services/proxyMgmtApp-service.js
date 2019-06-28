@@ -23,7 +23,6 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
     };
 
     this.createProxy = function (entity) {
-        console.log(entity);
         return $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'createProxy'}, {delete: {method:'POST'}}).save(entity);
     };

@@ -373,8 +373,8 @@ begin
 IF error_status != 'Y' THEN
  lv_proxyIDM := F_GetProxyIDM (goksels.f_clean_text(p_email), /*p_email*/
                               goksels.f_clean_text(p_last), /*p_last*/
-                              goksels.f_clean_text(p_first), /*p_first*/
-                              global_pidm);
+                              goksels.f_clean_text(p_first) /*p_first*/
+                              );
 --
    lv_GPRXREF_ref := gp_gprxref.F_Query_One (lv_proxyIDM, global_pidm);
    FETCH lv_GPRXREF_ref INTO lv_GPRXREF_rec;
