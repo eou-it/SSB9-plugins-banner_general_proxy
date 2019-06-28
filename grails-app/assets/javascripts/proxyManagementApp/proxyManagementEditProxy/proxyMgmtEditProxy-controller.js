@@ -57,7 +57,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         };
 
         $scope.updateDateRange = function() {
-            proxyMgmtAppService.getProxyStartStopDates({relationshipCode: 'A'}).$promise.then(function (response) {
+            proxyMgmtAppService.getProxyStartStopDates({relationshipCode: $scope.proxy.p_retp_code.code}).$promise.then(function (response) {
                 $scope.proxy.p_start_date = response.startDate;
                 $scope.proxy.p_stop_date = response.stopDate;
             });
@@ -81,9 +81,9 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.relationshipChoices = [
             // TODO: BELOW CHOICES ARE PLACEHOLDERS. IMPLEMENT DYNAMICALLY WITH I18N FILTER, ALONG THE LINES OF EXAMPLE BELOW:
             // {code: 'P', description: $filter('i18n')('proxy.personalinformation.label.parent')},
-            {code: 'P', description: 'Parent'},
-            {code: 'G', description: 'Guardian'},
-            {code: 'A', description: 'Advisor'}
+            {code: 'PARENT', description: 'Parent'},
+            {code: 'EMPLOYER', description: 'Employer'},
+            {code: 'ADVISOR', description: 'Advisor'}
         ];
 
         $scope.setStartDate = function(data){
