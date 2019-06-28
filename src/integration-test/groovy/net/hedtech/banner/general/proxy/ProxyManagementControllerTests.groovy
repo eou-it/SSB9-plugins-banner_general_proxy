@@ -83,6 +83,27 @@ class ProxyManagementControllerTests extends BaseIntegrationTestCase {
 
     }
 
+
+    @Test
+    void testGetProxyStartStopDates(){
+        mockRequest()
+        SSBSetUp('A00017091', '111111')
+        controller.request.contentType = "text/json"
+        def params = [relationshipCode: 'PARENT']
+
+        controller.params.putAll(params)
+        controller.getProxyStartStopDates()
+        def data = controller.response.contentAsString
+        assertNotNull data
+
+        def jsonData = JSON.parse( data )
+        //check data
+        assertNotNull jsonData
+        assertNotNull jsonData.startDate
+        assertNotNull jsonData.stopDate
+
+    }
+
     public GrailsWebRequest mockRequest() {
         GrailsMockHttpServletRequest mockRequest = new GrailsMockHttpServletRequest();
         GrailsMockHttpServletResponse mockResponse = new GrailsMockHttpServletResponse();

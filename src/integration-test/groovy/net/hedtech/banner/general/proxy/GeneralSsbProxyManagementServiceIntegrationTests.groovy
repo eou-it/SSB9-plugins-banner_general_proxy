@@ -266,6 +266,18 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
     }
 
 
+    @Test
+    void testGetProxyStartStopDates() {
+        def relationshipCode = "PARENT"
+        def startStopDates = generalSsbProxyManagementService.getProxyStartStopDates(relationshipCode)
+
+        assertNotNull startStopDates
+        assertNotNull startStopDates.startDate
+        assertNotNull startStopDates.stopDate
+        assertTrue   startStopDates.stopDate.after(startStopDates.startDate)
+    }
+
+
 
     void deleteDBEntry(def idm) {
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
