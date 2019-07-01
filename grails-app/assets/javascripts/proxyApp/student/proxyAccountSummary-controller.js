@@ -54,7 +54,7 @@ proxyAppControllers.controller('proxyAccountSummaryController',['$scope', '$root
             $scope.payvendUrl = response.PAYVEND_URL;
             $scope.payvendVendor = response.PAYVEND_VENDOR;
             $scope.payvendProcessCenterEnabled = response.PAYVEND_PROCESS_CENTER_ENABLED
-            $scope.authToken = response.autToken;
+            $scope.authToken = response.authToken;
         });
 
         proxyAppService.getAccountSummary({id: sessionStorage.getItem("id")}).$promise.then(function(response) {
