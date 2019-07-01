@@ -178,4 +178,44 @@ class GeneralSsbProxyManagementService {
         return startStopDates
     }
 
+    // Updates Proxy Profile Without Authorization Pages
+    def updateProxyProfile(def params) {
+
+        logger.debug('updateProxyProfile')
+        logger.debug('Parameters: ' + params)
+
+        def  errorMsgOut = ""
+        def errorStatusOut = ""
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+
+        def sqlText = ProxyManagementApi.UPDARE_PROXY
+
+        try {
+            sql.call(sqlText, [params.pidm, params.gidm, params.p_retp_code.code, params.p_desc,
+                               params.p_start_date, params.p_stop_date, params.p_passphrase,
+                               Sql.VARCHAR, Sql.VARCHAR
+            ]){ errorMsg, errorStatus ->
+                errorMsgOut = errorMsg
+                errorStatusOut = errorStatus
+            }
+            logger.debug('finished updateProxyProfile')
+        } catch (SQLException e) {
+            logger.error('updateProxyProfile() - '+ e)
+            def ae = new ApplicationException(GeneralSsbProxyManagementService.class, e )
+            throw ae
+        } finally {
+            //sql?.close()
+        }
+
+        if (errorMsgOut && errorStatusOut.equals("Y")){
+            throw new ApplicationException("", MessageHelper.message("proxyManagement.onUpdate." + errorMsgOut))
+        }else if(errorMsgOut && errorStatusOut.equals("N")){
+            return MessageHelper.message("proxy.personalinformation.onSave." + errorMsgOut)
+        }else{
+            return ""
+        }
+
+    }
+
 }

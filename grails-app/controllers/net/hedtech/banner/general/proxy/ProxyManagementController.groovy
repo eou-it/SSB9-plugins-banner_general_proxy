@@ -106,4 +106,29 @@ class ProxyManagementController {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
     }
+
+
+    /*
+     Updates Proxy.
+    */
+    def updateProxy(){
+
+        def map = request?.JSON ?: params
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        map.pidm = pidm
+
+        try {
+            Map response = [gidm: map.gidm, failure: false, message: generalSsbProxyManagementService.updateProxyProfile(map)]
+            render response as JSON
+        }
+        catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage( e ) as JSON
+        }
+        catch(Exception e){
+            log.error(e.toString())
+            def response = [message: e.message, failure: true]
+            render response as JSON
+        }
+    }
 }

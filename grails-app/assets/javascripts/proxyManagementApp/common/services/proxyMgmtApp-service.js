@@ -27,6 +27,12 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
             {controller: 'ProxyManagement', action: 'createProxy'}, {delete: {method:'POST'}}).save(entity);
     };
 
+    this.updateProxy = function (entity) {
+        console.log(JSON.stringify(entity));
+        return $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'updateProxy'}, {delete: {method:'POST'}}).save(entity);
+    };
+
     this.getProxyStartStopDates = function (params) {
         return $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'getProxyStartStopDates'}).get(params);

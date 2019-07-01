@@ -102,29 +102,62 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
         $scope.save = function() {
             notificationCenterService.addNotification('proxy.personalinformation.onSave.waitMessage', 'success', true);
-            proxyMgmtAppService.createProxy($scope.proxy).$promise.then(function(response) {
-            var notifications = [],
-                doStateGoSuccess = function(messageOnSave) {
-                    notifications.push({message:  messageOnSave ? messageOnSave : 'proxyManagement.label.saveSuccess',
-                        messageType: $scope.notificationSuccessType,
-                        flashType: $scope.flashNotification});
 
-                    $state.go('home',
-                        {onLoadNotifications: notifications},
-                        {reload: true, inherit: false, notify: true}
-                    );
-                };
+            if ($scope.isCreateNew) {
+                proxyMgmtAppService.createProxy($scope.proxy).$promise.then(function (response) {
+                    var notifications = [],
+                        doStateGoSuccess = function (messageOnSave) {
+                            notifications.push({
+                                message: messageOnSave ? messageOnSave : 'proxyManagement.label.saveSuccess',
+                                messageType: $scope.notificationSuccessType,
+                                flashType: $scope.flashNotification
+                            });
 
-            if(response.failure) {
-                $scope.flashMessage = response.message;
+                            $state.go('home',
+                                {onLoadNotifications: notifications},
+                                {reload: true, inherit: false, notify: true}
+                            );
+                        };
 
-                notificationCenterService.clearNotifications();
-                notificationCenterService.addNotification(response.message, "error", true);
+                    if (response.failure) {
+                        $scope.flashMessage = response.message;
 
-            } else {
-                doStateGoSuccess(response.message);
+                        notificationCenterService.clearNotifications();
+                        notificationCenterService.addNotification(response.message, "error", true);
+
+                    } else {
+                        doStateGoSuccess(response.message);
+                    }
+                });
+            }else{
+
+                proxyMgmtAppService.updateProxy($scope.proxy).$promise.then(function (response) {
+                    var notifications = [],
+                        doStateGoSuccess = function (messageOnSave) {
+                            notifications.push({
+                                message: messageOnSave ? messageOnSave : 'proxyManagement.label.saveSuccess',
+                                messageType: $scope.notificationSuccessType,
+                                flashType: $scope.flashNotification
+                            });
+
+                            $state.go('home',
+                                {onLoadNotifications: notifications},
+                                {reload: true, inherit: false, notify: true}
+                            );
+                        };
+
+                    if (response.failure) {
+                        $scope.flashMessage = response.message;
+
+                        notificationCenterService.clearNotifications();
+                        notificationCenterService.addNotification(response.message, "error", true);
+
+                    } else {
+                        doStateGoSuccess(response.message);
+                    }
+                });
+
             }
-        });
         };
 
         $scope.cancel = function() {

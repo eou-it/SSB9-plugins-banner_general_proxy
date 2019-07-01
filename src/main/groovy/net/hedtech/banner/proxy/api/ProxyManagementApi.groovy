@@ -668,4 +668,157 @@ END F_Delete_Relationship;
         ? := stop_date;
    END;
 """
+
+    public final static String UPDARE_PROXY = """
+DECLARE
+   lv_hold_rowid  gb_common.internal_record_id_type;
+   lv_GPRXREF_rec gp_gprxref.gprxref_rec;
+   lv_GPRXREF_ref gp_gprxref.gprxref_ref;
+   lv_RETP        gtvretp.gtvretp_code%TYPE;
+   p_RETP         gtvretp.gtvretp_code%TYPE;
+   p_desc         GPRXREF.GPRXREF_PROXY_DESC%TYPE;
+   p_proxyIDM     gpbprxy.gpbprxy_proxy_idm%TYPE;
+   global_pidm    spriden.spriden_pidm%TYPE;
+   lv_start_date  gprxref.gprxref_start_date%TYPE ;
+   lv_stop_date   gprxref.gprxref_stop_date%TYPE ;
+   error_status   VARCHAR2(1) := 'N';
+   lv_info        twgrinfo.twgrinfo_label%TYPE;
+   p_start_date   gprxref.gprxref_start_date%TYPE;
+   p_stop_date    gprxref.gprxref_stop_date%TYPE;
+   p_phrase       GPRXREF.GPRXREF_PASSPHRASE%TYPE; 
+   
+   lv_temp_fmt              VARCHAR2 (30);
+   
+BEGIN
+        lv_info := 'UPDATED';
+        dbms_session.set_nls('NLS_CALENDAR',''''||'GREGORIAN'||'''');
+        lv_temp_fmt := twbklibs.date_input_fmt;
+        twbklibs.date_input_fmt := 'MM/DD/YYYY';
+        
+  global_pidm := ?;
+  p_proxyIDM := ?;
+  p_RETP := ?;
+  p_desc := ?;
+  p_start_date := TO_DATE (?, twbklibs.date_input_fmt);
+  p_stop_date := TO_DATE (?, twbklibs.date_input_fmt);
+  p_phrase := ?;
+--
+ lv_GPRXREF_ref := gp_gprxref.F_Query_One (p_proxyIDM, global_pidm);
+--
+   FETCH lv_GPRXREF_ref INTO lv_GPRXREF_rec;
+--   
+   IF lv_GPRXREF_ref%FOUND THEN
+--   
+-- RETP_CODE UPDATE
+   IF lv_GPRXREF_rec.R_RETP_CODE != p_RETP then    
+-- Get previous relationship type
+      lv_RETP := gp_gprxref.F_GetXREF_RETP(p_proxyIDM, global_pidm);
+      
+      lv_start_date  := NVL(lv_start_date,TRUNC(SYSDATE));
+      lv_stop_date := NVL(lv_stop_date,TRUNC(SYSDATE + bwgkprxy.F_GetOption ('ACCESS_WINDOW_DAYS', p_RETP)));
+--
+   gp_gprxref.P_Update (
+      p_proxy_idm   => p_proxyIDM,
+      p_person_pidm => global_pidm,
+      p_retp_code   => p_RETP,
+      --p_start_date  => p_start_date,
+      --p_stop_date   => p_stop_date,
+      p_user_id     => goksels.f_get_ssb_id_context
+      );
+--      
+   gb_common.P_Commit;
+   bwgkprxy.P_MatchLoad (p_proxyIDM);
+
+-- Send message with generic login URL since no action is required
+      gp_gpbeltr.P_Create (
+         p_syst_code      => 'PROXY',
+         p_ctyp_code      => 'UPDATE_RELATIONSHIP',
+         p_ctyp_url       => bwgkprxy.F_getProxyURL('UPDATE_RELATIONSHIP'),
+         p_ctyp_exp_date  => NULL,
+         p_ctyp_exe_date  => NULL,
+         p_transmit_date  => NULL,
+         p_proxy_idm      => p_proxyIDM,
+         p_proxy_old_data => lv_RETP,
+         p_proxy_new_data => p_RETP,
+         p_person_pidm    => global_pidm,
+         p_user_id        => goksels.f_get_ssb_id_context,
+         p_create_date    => SYSDATE,
+         p_create_user    => goksels.f_get_ssb_id_context,
+         p_rowid_out      => lv_hold_rowid
+         );
+
+      gb_common.P_Commit;
+      bwgkprxy.P_SendEmail(lv_hold_rowid);
+      error_status := 'N';
+--      
+   END IF;
+--
+--    UPDATE PASSPHRASE 
+--
+     IF NVL(lv_GPRXREF_rec.R_PASSPHRASE,'X') != p_phrase THEN
+      gp_gprxref.P_Update (
+      p_proxy_idm   => p_proxyIDM,
+      p_person_pidm => global_pidm,
+      p_passphrase  => p_phrase,
+      p_user_id     => goksels.f_get_ssb_id_context
+      );
+       gb_common.P_Commit;
+       error_status := 'N';
+     END IF;
+-- 
+--    UPDATE DESCRIPTION    
+    IF NVL(lv_GPRXREF_rec.R_PROXY_DESC,'X')  != p_desc THEN
+     
+      gp_gprxref.P_Update (
+      p_proxy_idm   => p_proxyIDM,
+      p_person_pidm => global_pidm,
+      p_proxy_desc  => p_desc,
+      p_user_id     => goksels.f_get_ssb_id_context
+      );
+      
+      gb_common.P_Commit;
+      
+      error_status := 'N';
+      
+     END IF;
+     
+     -- UPDATE DATES
+     
+     IF (p_start_date > p_stop_date) THEN
+      lv_info := 'DATESCOMPAREERROR';
+      error_status := 'Y';
+     END IF;
+     
+     IF lv_GPRXREF_rec.R_START_DATE  != p_start_date THEN
+       gp_gprxref.P_Update (
+         p_proxy_idm   => p_proxyIDM,
+         p_person_pidm => global_pidm,
+         p_start_date  => p_start_date,
+         p_user_id     => goksels.f_get_ssb_id_context
+         );
+          gb_common.P_Commit;
+          bwgkprxy.P_MatchLoad (p_proxyIDM);
+      END IF;
+      
+      IF lv_GPRXREF_rec.R_STOP_DATE  != p_stop_date THEN
+       gp_gprxref.P_Update (
+         p_proxy_idm   => p_proxyIDM,
+         p_person_pidm => global_pidm,
+         p_stop_date  => p_stop_date,
+         p_user_id     => goksels.f_get_ssb_id_context
+         );
+          gb_common.P_Commit;
+          bwgkprxy.P_MatchLoad (p_proxyIDM);
+      END IF;
+     -- END UPDATE DATES
+   END IF;
+       
+CLOSE lv_GPRXREF_ref;
+
+        --lv_info := 'UPDATED';
+        --error_status := 'N';
+        ? := lv_info;
+        ? := error_status;  
+END;
+"""
 }
