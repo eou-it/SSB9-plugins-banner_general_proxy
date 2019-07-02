@@ -28,6 +28,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 // Set up for "edit proxy"
                 $scope.isCreateNew = false;
 
+                $scope.isRelationshipSelected = true;
+
                 proxyMgmtAppService.getProxy({gidm: gidm}).$promise.then(function (response) {
                     $scope.proxy = response.proxyProfile;
                 });

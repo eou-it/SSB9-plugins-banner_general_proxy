@@ -28,7 +28,6 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
     };
 
     this.updateProxy = function (entity) {
-        console.log(JSON.stringify(entity));
         return $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'updateProxy'}, {delete: {method:'POST'}}).save(entity);
     };

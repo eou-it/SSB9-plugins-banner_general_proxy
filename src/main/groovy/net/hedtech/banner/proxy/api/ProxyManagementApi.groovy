@@ -821,4 +821,159 @@ CLOSE lv_GPRXREF_ref;
         ? := error_status;  
 END;
 """
+
+
+    public final static String PROXY_PAGES = """
+DECLARE
+  CURSOR C_AuthorizationList (
+      p_RETP gprxref.gprxref_retp_code%TYPE)
+   IS
+        SELECT m.twgbwmnu_name     AS menu_name,
+               m.twgbwmnu_desc     AS menu_desc,
+               o.twgrmenu_url_text AS menu_text,
+               o.twgrmenu_url      AS menu_url,
+               o.twgrmenu_sequence AS menu_seq
+          FROM TWGRMENU o, TWGBWMNU m
+         WHERE o.twgrmenu_name = m.twgbwmnu_name
+         AND  o.twgrmenu_url like '%/proxy/%'
+           AND m.twgbwmnu_source_ind =
+              (SELECT NVL (MAX (n.twgbwmnu_source_ind), 'B')
+                 FROM twgbwmnu n
+                WHERE n.twgbwmnu_name = m.twgbwmnu_name
+                  AND n.twgbwmnu_source_ind = 'L')
+           AND o.twgrmenu_source_ind =
+              (SELECT NVL (MAX (p.twgrmenu_source_ind), 'B')
+                 FROM twgrmenu p
+                WHERE p.twgrmenu_name = o.twgrmenu_name
+                  AND p.twgrmenu_source_ind = 'L')
+           AND o.twgrmenu_name LIKE 'PROXY_ACCESS_' || p_RETP || '%'
+           AND NVL(o.twgrmenu_enabled, 'N')       = 'Y'
+           AND NVL(m.twgbwmnu_enabled_ind,'N')    = 'Y'
+           AND NVL(m.twgbwmnu_adm_access_ind,'N') = 'N'
+           AND NVL(o.twgrmenu_enabled,'N')        = 'Y'
+      ORDER BY menu_desc, menu_name, menu_seq;
+
+lv_RETP        gtvretp.gtvretp_code%TYPE;
+pages          VARCHAR2(32000);
+auth           VARCHAR2(1);
+
+BEGIN
+lv_RETP := ?;
+--
+pages:= '{ "pages":[';
+--
+FOR auth_rec IN C_AuthorizationList (lv_RETP)
+--
+      LOOP
+      IF bwgkprxy.F_GetAuthInd (?,?, auth_rec.menu_url) = 'Y' THEN
+         auth := 'Y';
+      ELSE
+         auth := 'N';
+      END IF;
+                                                                      
+            pages := pages || '{' ||
+                      '"url" ' || ':' || '"' || auth_rec.menu_url || '"' ||
+                      ',"desc" ' || ':'  || '"' || auth_rec.menu_text || '"' || 
+                      ',"auth" ' || ':'  || '"' || auth || '"' ||
+                      '},';
+      END LOOP;
+--
+     pages := TRIM(TRAILING ',' FROM pages );
+--
+     pages := pages || ']}';
+
+     ? := pages;
+--
+END;
+    """
+
+    public final static String MANAGE_AUTHORIZATION = """
+  DECLARE
+  --
+  p_proxyIDM gpbprxy.gpbprxy_proxy_idm%TYPE;
+  p_page     gprauth.gprauth_page_name%TYPE;
+  p_checked  VARCHAR2(10);
+  
+   lv_auth_ind   gprauth.gprauth_auth_ind%TYPE;
+   lv_checked    VARCHAR2(32) ;
+   lv_hold_rowid gb_common.internal_record_id_type;
+   global_pidm spriden.spriden_pidm%TYPE;
+  --
+  BEGIN
+  p_proxyIDM := ?;
+  global_pidm := ?;
+  p_page := ?;
+  p_checked := ?;
+  
+  lv_checked := UPPER(p_checked);
+  
+   -- Get current value of authorization indicator (Y or N)
+   -- If no existing auth record then N will be returned
+   -- A page that has been disabled will also return N
+   lv_auth_ind := bwgkprxy.F_GetAuthInd (p_proxyIDM, global_pidm, p_page);
+
+   -- Double check that the page is valid for this person before enabling it for proxy access
+   IF lv_checked = 'TRUE' AND lv_auth_ind = 'N'
+   THEN
+      IF gp_gprauth.F_Exists (
+            p_proxy_idm   => p_proxyIDM,
+            p_person_pidm => global_pidm,
+            p_page_name   => p_page
+            ) = 'Y'
+      THEN
+         gp_gprauth.P_Update (
+            p_proxy_idm   => p_proxyIDM,
+            p_person_pidm => global_pidm,
+            p_page_name   => p_page,
+            p_auth_ind    => 'Y',
+            p_user_id     => goksels.f_get_ssb_id_context
+            );
+      ELSE
+         gp_gprauth.P_Create (
+            p_proxy_idm   => p_proxyIDM,
+            p_person_pidm => global_pidm,
+            p_page_name   => p_page,
+            p_auth_ind    => 'Y',
+            p_create_user => goksels.f_get_ssb_id_context,
+            p_create_date => SYSDATE,
+            p_user_id     => goksels.f_get_ssb_id_context,
+            p_rowid_out   => lv_hold_rowid
+            );
+      END IF;
+      gb_common.P_Commit;
+   END IF;
+
+   IF lv_checked = 'FALSE' AND lv_auth_ind = 'Y'
+   THEN
+      IF gp_gprauth.F_Exists (
+            p_proxy_idm   => p_proxyIDM,
+            p_person_pidm => global_pidm,
+            p_page_name   => p_page
+            ) = 'Y'
+      THEN
+         gp_gprauth.P_Update (
+            p_proxy_idm   => p_proxyIDM,
+            p_person_pidm => global_pidm,
+            p_page_name   => p_page,
+            p_auth_ind    => 'N',
+            p_user_id     => goksels.f_get_ssb_id_context
+            );
+      ELSE
+         gp_gprauth.P_Create (
+            p_proxy_idm   => p_proxyIDM,
+            p_person_pidm => global_pidm,
+            p_page_name   => p_page,
+            p_auth_ind    => 'N',
+            p_create_user => goksels.f_get_ssb_id_context,
+            p_create_date => SYSDATE,
+            p_user_id     => goksels.f_get_ssb_id_context,
+            p_rowid_out   => lv_hold_rowid
+            );
+      END IF;
+      gb_common.P_Commit;
+   END IF;
+  
+  END;
+"""
+
 }

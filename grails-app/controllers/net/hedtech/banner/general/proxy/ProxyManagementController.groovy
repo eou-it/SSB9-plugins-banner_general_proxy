@@ -119,7 +119,18 @@ class ProxyManagementController {
         map.pidm = pidm
 
         try {
-            Map response = [gidm: map.gidm, failure: false, message: generalSsbProxyManagementService.updateProxyProfile(map)]
+
+            generalSsbProxyManagementService.updateProxyProfile(map)
+            map?.pages?.each{
+                def authParams = [:]
+                authParams."gidm" = map.gidm
+                authParams."pidm" = pidm
+                authParams."page" = it.url
+                authParams."checked" = it.auth ? "TRUE":"FALSE"
+                generalSsbProxyManagementService.manageProxyPagesAuthorization(authParams)
+            }
+
+            Map response = [gidm: map.gidm, failure: false, message: "PROXY-UPDATED"]
             render response as JSON
         }
         catch (ApplicationException e) {

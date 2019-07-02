@@ -111,6 +111,25 @@ class GeneralSsbProxyManagementService {
             }
         }
 
+        def  proxyPages = ""
+
+        sqlText = ProxyManagementApi.PROXY_PAGES
+
+        sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [proxyProfile.p_retp_code, gidm, pidm, Sql.VARCHAR
+        ]){ proxyPagesJson ->
+            proxyPages = proxyPagesJson
+        }
+
+
+        def authPages = new JsonSlurper().parseText(proxyPages)
+        
+
+        authPages?.pages.each{
+            it?.auth = (it.auth == "Y")? true : false
+        }
+        proxyProfile << authPages
+
         def proxyUiRules = [:]
         sqlText = ProxyManagementApi.PROXY_PROFILE_UI_RULES
 
@@ -216,6 +235,16 @@ class GeneralSsbProxyManagementService {
             return ""
         }
 
+    }
+
+    def manageProxyPagesAuthorization(def params) {
+
+        def sqlText = ProxyManagementApi.MANAGE_AUTHORIZATION
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [params.gidm, params.pidm,
+                           params.page, params?.checked?.toString()?.toUpperCase()
+        ])
     }
 
 }
