@@ -24,18 +24,17 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
 
     this.createProxy = function (entity) {
         return $resource('../ssb/:controller/:action',
-            {controller: 'ProxyManagement', action: 'createProxy'}, {delete: {method:'POST'}}).save(entity);
+            {controller: 'ProxyManagement', action: 'createUpdateProxy'}, {delete: {method:'POST'}}).save(entity);
     };
 
     this.updateProxy = function (entity) {
-        console.log(JSON.stringify(entity));
         return $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'updateProxy'}, {delete: {method:'POST'}}).save(entity);
     };
 
-    this.getProxyStartStopDates = function (params) {
+    this.getDataModelOnRelationshipChange = function (params) {
         return $resource('../ssb/:controller/:action',
-            {controller: 'ProxyManagement', action: 'getProxyStartStopDates'}).get(params);
+            {controller: 'ProxyManagement', action: 'getDataModelOnRelationshipChange'}).get(params);
     };
 
 }]);

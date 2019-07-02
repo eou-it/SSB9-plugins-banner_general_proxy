@@ -111,6 +111,25 @@ class GeneralSsbProxyManagementService {
             }
         }
 
+        def  proxyPages = ""
+
+        sqlText = ProxyManagementApi.PROXY_PAGES
+
+        sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [proxyProfile.p_retp_code, gidm, pidm, Sql.VARCHAR
+        ]){ proxyPagesJson ->
+            proxyPages = proxyPagesJson
+        }
+
+
+        def authPages = new JsonSlurper().parseText(proxyPages)
+        
+
+        authPages?.pages.each{
+            it?.auth = (it.auth == "Y")? true : false
+        }
+        proxyProfile << authPages
+
         def proxyUiRules = [:]
         sqlText = ProxyManagementApi.PROXY_PROFILE_UI_RULES
 
@@ -215,6 +234,47 @@ class GeneralSsbProxyManagementService {
         }else{
             return ""
         }
+
+    }
+
+    def manageProxyPagesAuthorization(def params) {
+
+        def sqlText = ProxyManagementApi.MANAGE_AUTHORIZATION
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [params.gidm, params.pidm,
+                           params.page, params?.checked?.toString()?.toUpperCase()
+        ])
+    }
+
+    def getProxyPages(def params) {
+
+        def  proxyPages = ""
+
+        def sqlText = ProxyManagementApi.PROXY_PAGES
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [params.p_retp_code, params.gidm, params.pidm, Sql.VARCHAR
+        ]){ proxyPagesJson ->
+            proxyPages = proxyPagesJson
+        }
+
+        def authPages = new JsonSlurper().parseText(proxyPages)
+        authPages?.pages.each{
+            it?.auth = (it.auth == "Y")? true : false
+        }
+
+        return authPages
+    }
+
+    def getDataModelOnRelationshipChange(def params){
+
+        def data = [:]
+
+        data.pages = getProxyPages(params)
+        data.dates = getProxyStartStopDates(params.p_retp_code)
+
+        data
 
     }
 

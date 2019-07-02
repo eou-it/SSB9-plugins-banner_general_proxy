@@ -40,6 +40,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 // Set up for "edit proxy"
                 $scope.isCreateNew = false;
 
+                $scope.isRelationshipSelected = true;
+
                 proxyMgmtAppService.getProxy({gidm: gidm}).$promise.then(function (response) {
                     $scope.proxy = response.proxyProfile;
 
@@ -75,9 +77,10 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         };
 
         $scope.handleRelationshipChange = function() {
-            proxyMgmtAppService.getProxyStartStopDates({relationshipCode: $scope.proxy.p_retp_code.code}).$promise.then(function (response) {
-                $scope.proxy.p_start_date = response.startDate;
-                $scope.proxy.p_stop_date = response.stopDate;
+            proxyMgmtAppService.getDataModelOnRelationshipChange({gidm: $scope.proxy.gidm, p_retp_code: $scope.proxy.p_retp_code.code}).$promise.then(function (response) {
+                $scope.proxy.p_start_date = response.dates.startDate;
+                $scope.proxy.p_stop_date = response.dates.stopDate;
+                $scope.proxy.pages = response.pages.pages;
             });
 
             setSelectedRelationship($scope.proxy.p_retp_code);
@@ -107,7 +110,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             // {code: 'P', description: $filter('i18n')('proxy.personalinformation.label.parent')},
             {code: 'PARENT', description: 'Parent'},
             {code: 'EMPLOYER', description: 'Employer'},
-            {code: 'ADVISOR', description: 'Advisor'}
+            {code: 'ADVISOR', description: 'Advisor'},
+            {code: 'SIBLING', description: 'Sibling'}
         ];
 
         $scope.setStartDate = function(data){
