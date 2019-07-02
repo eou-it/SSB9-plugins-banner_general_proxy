@@ -81,6 +81,11 @@ h2 {
     font-style: italic;
 }
 
+.proxy-base-info-summary {
+    font-size: 28px;
+    margin: 10px 0 20px;
+}
+
 .proxy-mgmt-add-new-proxy {
     float: right;
 }

@@ -21,8 +21,20 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             }, 200);
         },
 
+        setSelectedRelationship = function(code) {
+            $scope.selectedRelationship = $scope.relationshipChoices.find(function (rel) {
+                return rel.code == code;
+            });
+
+            $scope.isRelationshipSelected = !!code;
+        },
+
         init = function() {
             var gidm = $stateParams.gidm;
+
+            $scope.firstName = $stateParams.firstName;
+            $scope.lastName = $stateParams.lastName;
+            $scope.email = $stateParams.email;
 
             if (gidm) {
                 // Set up for "edit proxy"
@@ -30,6 +42,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
                 proxyMgmtAppService.getProxy({gidm: gidm}).$promise.then(function (response) {
                     $scope.proxy = response.proxyProfile;
+
+                    setSelectedRelationship($scope.proxy.p_retp_code);
                 });
             } else {
                 // Create "new proxy" object
@@ -49,6 +63,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                     ]
                 };
 
+                setSelectedRelationship($scope.proxy.p_retp_code);
             }
 
             displayNotificationsOnStateLoad();
@@ -65,15 +80,17 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 $scope.proxy.p_stop_date = response.stopDate;
             });
 
-            $scope.isRelationshipSelected = !!$scope.proxy.p_retp_code;
+            setSelectedRelationship($scope.proxy.p_retp_code);
         };
-
 
 
         // CONTROLLER VARIABLES
         // --------------------
         $scope.isCreateNew = true;
         $scope.proxy;
+        $scope.firstName;
+        $scope.lastName;
+        $scope.email;
         $scope.placeholder = {
             first_name:   $filter('i18n')('proxy.management.placeholder.first_name'),
             last_name:    $filter('i18n')('proxy.management.placeholder.last_name'),
@@ -84,6 +101,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             passphrase:   $filter('i18n')('proxy.management.label.passphrase')
         };
         $scope.isRelationshipSelected = false;
+        $scope.selectedRelationship = null;
         $scope.relationshipChoices = [
             // TODO: BELOW CHOICES ARE PLACEHOLDERS. IMPLEMENT DYNAMICALLY WITH I18N FILTER, ALONG THE LINES OF EXAMPLE BELOW:
             // {code: 'P', description: $filter('i18n')('proxy.personalinformation.label.parent')},
