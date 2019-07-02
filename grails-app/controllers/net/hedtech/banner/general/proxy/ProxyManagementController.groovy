@@ -91,14 +91,51 @@ class ProxyManagementController {
     }
 
     /*
-     * Get proxy start/stop dates
-     */
-    def getProxyStartStopDates() {
-        def params = request?.JSON ?: params
-        def relationshipCode = params.relationshipCode
+      Create Full Proxy Profile with the Authorization Pages .
+    */
+    def createUpdateProxy(){
+
+        def map = request?.JSON ?: params
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        map.pidm = pidm
 
         try {
-            def startStopDates = generalSsbProxyManagementService.getProxyStartStopDates(relationshipCode)
+            def gidm = generalSsbProxyManagementService.createProxyProfile(map)
+            map.gidm = gidm
+
+            generalSsbProxyManagementService.updateProxyProfile(map)
+            map?.pages?.each{
+                def authParams = [:]
+                authParams."gidm" = map.gidm
+                authParams."pidm" = pidm
+                authParams."page" = it.url
+                authParams."checked" = it.auth ? "TRUE":"FALSE"
+                generalSsbProxyManagementService.manageProxyPagesAuthorization(authParams)
+            }
+
+            Map response = [gidm: map.gidm, failure: false, message: "PROXY-CREATED"]
+            render response as JSON
+        }
+        catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage( e ) as JSON
+        }
+        catch(Exception e){
+            log.error(e.toString())
+            def response = [message: e.message, failure: true]
+            render response as JSON
+        }
+    }
+
+    /*
+     * Get proxy start/stop dates
+     */
+    def getDataModelOnRelationshipChange() {
+        def params = request?.JSON ?: params
+        try {
+            def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+            params.pidm = pidm
+            def startStopDates = generalSsbProxyManagementService.getDataModelOnRelationshipChange(params)
 
             render startStopDates as JSON
 
