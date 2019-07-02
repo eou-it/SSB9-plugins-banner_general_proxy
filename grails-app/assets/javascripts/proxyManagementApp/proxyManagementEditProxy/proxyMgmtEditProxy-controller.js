@@ -22,9 +22,13 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         },
 
         setSelectedRelationship = function(code) {
-            $scope.selectedRelationship = $scope.relationshipChoices.find(function (rel) {
+            $scope.proxyAuxData.selectedRelationship = $scope.relationshipChoices.find(function (rel) {
                 return rel.code == code;
             });
+
+            if (!$scope.proxyAuxData.selectedRelationship) {
+                $scope.proxyAuxData.selectedRelationship = {code: null, description: null};
+            }
 
             $scope.isRelationshipSelected = !!code;
         },
@@ -32,9 +36,9 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         init = function() {
             var gidm = $stateParams.gidm;
 
-            $scope.firstName = $stateParams.firstName;
-            $scope.lastName = $stateParams.lastName;
-            $scope.email = $stateParams.email;
+            $scope.proxyAuxData.firstName = $stateParams.firstName;
+            $scope.proxyAuxData.lastName = $stateParams.lastName;
+            $scope.proxyAuxData.email = $stateParams.email;
 
             if (gidm) {
                 // Set up for "edit proxy"
@@ -77,13 +81,11 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         };
 
         $scope.handleRelationshipChange = function() {
-            proxyMgmtAppService.getDataModelOnRelationshipChange({gidm: $scope.proxy.gidm, p_retp_code: $scope.proxy.p_retp_code.code}).$promise.then(function (response) {
+            proxyMgmtAppService.getDataModelOnRelationshipChange({gidm: $scope.proxy.gidm, p_retp_code: $scope.proxyAuxData.selectedRelationship.code}).$promise.then(function (response) {
                 $scope.proxy.p_start_date = response.dates.startDate;
                 $scope.proxy.p_stop_date = response.dates.stopDate;
                 $scope.proxy.pages = response.pages.pages;
             });
-
-            setSelectedRelationship($scope.proxy.p_retp_code);
         };
 
 
@@ -91,9 +93,13 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         // --------------------
         $scope.isCreateNew = true;
         $scope.proxy;
-        $scope.firstName;
-        $scope.lastName;
-        $scope.email;
+        $scope.proxyAuxData = {
+            selectedRelationship: {code: null, description: null},
+            firstName: null,
+            lastName: null,
+            email: null
+        };
+
         $scope.placeholder = {
             first_name:   $filter('i18n')('proxy.management.placeholder.first_name'),
             last_name:    $filter('i18n')('proxy.management.placeholder.last_name'),
@@ -104,7 +110,6 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             passphrase:   $filter('i18n')('proxy.management.label.passphrase')
         };
         $scope.isRelationshipSelected = false;
-        $scope.selectedRelationship = null;
         $scope.relationshipChoices = [
             // TODO: BELOW CHOICES ARE PLACEHOLDERS. IMPLEMENT DYNAMICALLY WITH I18N FILTER, ALONG THE LINES OF EXAMPLE BELOW:
             // {code: 'P', description: $filter('i18n')('proxy.personalinformation.label.parent')},

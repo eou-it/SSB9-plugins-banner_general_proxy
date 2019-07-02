@@ -46,7 +46,7 @@
         </div>
         <div ng-if="!isCreateNew">
             <div class="proxy-base-info-summary">
-                <span>{{firstName}}</span> <span>{{lastName}}</span> ({{email}})
+                <span>{{proxyAuxData.firstName}}</span> <span>{{proxyAuxData.lastName}}</span> ({{proxyAuxData.email}})
             </div>
             <div class="proxy-info-main-heading">
                 <h2>{{'proxy.management.title.proxyInformation'|i18n}}</h2>
@@ -55,7 +55,7 @@
         <div class="row">
             <div class="col-xs-12 col-md-6 col-lg-4">
                 <label class="input-field-label" for="relationship">{{'proxy.management.label.relationship'|i18n}}</label><br>
-                <xe-ui-select ng-model="selectedRelationship" theme="select2" search-enabled="false" ng-change="handleRelationshipChange()" id="relationship">
+                <xe-ui-select ng-model="proxyAuxData.selectedRelationship" theme="select2" search-enabled="false" ng-change="handleRelationshipChange()" id="relationship">
                     <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxy.management.label.relationship'|i18n)" placeholder="{{placeholder.relationship}}">
                         {{$select.selected.description ? $select.selected.description : placeholder.relationship}}
                     </xe-ui-select-match>
