@@ -96,20 +96,65 @@
                 <input ng-model="proxy.p_passphrase"
                        class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                        type="text" placeholder="{{placeholder.passphrase}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="passphrase">
+
             </div>
         </div>
+
+        <div ng-if="!isCreateNew" class="row">
+            <div class="col-xs-12 col-md-6 col-lg-4">
+            <div class="proxy-mgmt-email-passphrase">
+                <a ng-click="emailPassphrase()" class="add-item-link" tabindex="0">
+                    <span class="icon-email-CO"></span> <span>{{'proxyManagement.label.email.passphrase'|i18n}}</span>
+                </a>
+            </div>
+            </div>
+        </div>
+
+        <div ng-if="!isCreateNew" class="row">
+            <div class="col-xs-12 col-md-6 col-lg-4">
+                <div class="proxy-mgmt-email-passphrase">
+                    <a ng-click="resetPin()" class="add-item-link" tabindex="0">
+                        <span class="icon-refresh-CO"></span> <span>{{'proxyManagement.label.reset.pin'|i18n}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
         <div class="proxy-info-subheading">
             <span class="bold">{{'proxy.management.title.authorizations'|i18n}}</span>
             <span class="italic">{{'proxy.management.label.hint.required'|i18n}}</span>
         </div>
+
+
         <div ng-if="isRelationshipSelected" class="row">
-            <div class="col-xs-12 col-md-6 col-lg-4">
+            <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-select-all-pages">
+                <input  class="dir-profile-nav-check" type="checkbox" ng-click="toggleSelect()"/>
+                <span class="lbl">{{'proxyManagement.label.selecttAll'|i18n}}</span>
+            </div>
+
+        </div>
+
+        <div ng-if="isRelationshipSelected" class="row">
+            <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-pages">
                 <div ng-repeat="authItem in proxy.pages">
                     <input ng-model="authItem.auth" class="dir-profile-nav-check" type="checkbox" aria-labelledby="dir-item{{$index}}"/>
                     <span class="lbl">{{authItem.desc}}</span>
                 </div>
             </div>
+
         </div>
+
+        <div ng-if="!isCreateNew" class="row">
+            <div class="col-xs-12 col-md-6 col-lg-4">
+                <div class="proxy-mgmt-email-passphrase">
+                    <a ng-click="emailAuthentications()" class="add-item-link" tabindex="0">
+                        <span class="icon-email-CO"></span> <span>{{'proxyManagement.label.email.authorizations'|i18n}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="proxy-bottom-buttons">
         <div class="proxy-desktop-visible">

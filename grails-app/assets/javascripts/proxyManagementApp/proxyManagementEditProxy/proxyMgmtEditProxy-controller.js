@@ -101,6 +101,36 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             });
         };
 
+        $scope.emailPassphrase = function() {
+
+            if  (!$scope.proxy.p_passphrase){
+
+            notificationCenterService.addNotification('proxyManagement.profile.error.passphrase', "error", true);
+
+            }else{
+                //TO DO
+            }
+            };
+
+
+        $scope.resetPin = function() {
+            //TO DO
+        };
+
+
+        $scope.emailAuthentications = function() {
+            //TO DO
+        };
+
+        //toggle all checkboxes
+        $scope.toggleSelect = function(){
+
+            $scope.proxy.pages.forEach(function (page) {
+                    page.auth = event.target.checked;
+                });
+
+        };
+
 
         // CONTROLLER VARIABLES
         // --------------------
