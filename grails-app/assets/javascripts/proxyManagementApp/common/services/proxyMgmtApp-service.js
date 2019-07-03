@@ -5,7 +5,9 @@
 proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$resource', function ($rootScope, $filter, $resource) {
 
     var fetchProxies = $resource('../ssb/:controller/:action',
-            {controller: 'ProxyManagement', action: 'getProxies'}, {query: {method:'GET', isArray:false}});
+            {controller: 'ProxyManagement', action: 'getProxies'}, {query: {method:'GET', isArray:false}}),
+        fetchRelationshipOptions = $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'getRelationshipOptions'}, {query: {method:'GET', isArray:false}});
 
 
     this.getProxyList = function () {
@@ -35,6 +37,10 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
     this.getDataModelOnRelationshipChange = function (params) {
         return $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'getDataModelOnRelationshipChange'}).get(params);
+    };
+
+    this.getRelationshipOptions = function () {
+        return fetchRelationshipOptions.query();
     };
 
 }]);

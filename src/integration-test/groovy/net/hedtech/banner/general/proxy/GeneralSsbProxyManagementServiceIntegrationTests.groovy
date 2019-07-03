@@ -278,6 +278,22 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
     }
 
 
+    @Test
+    void testGetRelationshipOptions() {
+        def id = 'A00017091'
+        def pidm = PersonUtility.getPerson(id)?.pidm
+
+        def result = generalSsbProxyManagementService.getRelationshipOptions(pidm)
+
+        assertNotNull result
+        assertNotNull result.relationships
+        assertTrue result.relationships.size() > 0
+        assertNotNull result.relationships[0]
+        assertNotNull result.relationships[0].code
+        assertNotNull result.relationships[0].description
+    }
+
+
 
     void deleteDBEntry(def idm) {
         def sql = new Sql(sessionFactory.getCurrentSession().connection())

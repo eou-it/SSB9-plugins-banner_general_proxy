@@ -97,10 +97,34 @@ class ProxyManagementControllerTests extends BaseIntegrationTestCase {
         assertNotNull data
 
         def jsonData = JSON.parse( data )
+        
         //check data
         assertNotNull jsonData
         assertNotNull jsonData.startDate
         assertNotNull jsonData.stopDate
+
+    }
+
+
+    @Test
+    void testGetRelationshipOptions(){
+        mockRequest()
+        SSBSetUp('A00017091', '111111')
+        controller.request.contentType = "text/json"
+
+        controller.getRelationshipOptions()
+        def data = controller.response.contentAsString
+        assertNotNull data
+
+        def jsonData = JSON.parse( data )
+
+        //check data
+        assertNotNull jsonData
+        assertNotNull jsonData.relationships
+        assertTrue jsonData.relationships.size() > 0
+        assertNotNull jsonData.relationships[0]
+        assertNotNull jsonData.relationships[0].code
+        assertNotNull jsonData.relationships[0].description
 
     }
 

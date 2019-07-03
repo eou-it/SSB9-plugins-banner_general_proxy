@@ -179,4 +179,27 @@ class ProxyManagementController {
             render response as JSON
         }
     }
+
+
+    /**
+     * Get list of options for Relationship select input control.
+     */
+    def getRelationshipOptions() {
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+
+        try {
+            def result = generalSsbProxyManagementService.getRelationshipOptions(pidm)
+
+            render result as JSON
+        }
+        catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage( e ) as JSON
+        }
+        catch(Exception e){
+            log.error(e.toString())
+            def response = [message: e.message, failure: true]
+            render response as JSON
+        }
+    }
 }

@@ -976,4 +976,44 @@ END;
   END;
 """
 
+    public final static String RELATIONSHIP_OPTION_LIST = """
+  DECLARE
+     global_syst CONSTANT gtvsyst.gtvsyst_code%TYPE := 'PROXY';
+     lv_access   VARCHAR2(01);
+     global_pidm spriden.spriden_pidm%TYPE;
+     rel_list    VARCHAR2(32000);
+     
+     CURSOR C_RETPlist
+         RETURN GTVRETP%ROWTYPE
+     IS
+         SELECT *
+            FROM GTVRETP
+         WHERE EXISTS (SELECT 1 FROM GEBSRTP WHERE GEBSRTP_SYST_CODE = global_syst AND GEBSRTP_RETP_CODE = GTVRETP_CODE)
+         ORDER BY GTVRETP_DESC;
+
+  BEGIN
+     global_pidm := ?;
+     rel_list:= '{ "relationships":[';
+      
+     FOR lv_GTVRETP_rec IN C_RETPlist
+     LOOP
+        -- Check to see if the user actually can access this relationship
+            lv_access := bwgkpxym.f_check_proxy_relationship_sql(global_syst
+                                                             ,lv_GTVRETP_rec.GTVRETP_CODE
+                                                             ,global_pidm
+                                                             );
+        IF lv_access = 'Y' THEN
+           rel_list := rel_list || '{"code": "' || lv_GTVRETP_rec.GTVRETP_CODE || '", ' ||
+                                    '"description": "' || lv_GTVRETP_rec.GTVRETP_DESC ||
+                                    '"},';
+        END IF;
+     END LOOP;
+
+     rel_list := TRIM(TRAILING ',' FROM rel_list);
+     rel_list := rel_list || ']}';
+     
+     ? := rel_list;
+  END;
+"""
+
 }
