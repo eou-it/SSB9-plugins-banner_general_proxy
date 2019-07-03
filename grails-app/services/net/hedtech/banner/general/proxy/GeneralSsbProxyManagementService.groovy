@@ -181,7 +181,7 @@ class GeneralSsbProxyManagementService {
         }
     }
 
-    def getProxyStartStopDates(def relationshipCode) {
+    def getProxyStartStopDates(relationshipCode) {
 
         def startStopDates = [:]
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
@@ -276,6 +276,20 @@ class GeneralSsbProxyManagementService {
 
         data
 
+    }
+
+    def getRelationshipOptions(pidm) {
+
+        def relationships
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        def sqlText = ProxyManagementApi.RELATIONSHIP_OPTION_LIST
+
+        sql.call(sqlText, [pidm, Sql.VARCHAR ])
+                { relationshipsJson ->
+                    relationships = relationshipsJson
+                }
+
+        relationships ? new JsonSlurper().parseText(relationships) : [:]
     }
 
 }

@@ -40,6 +40,19 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             $scope.proxyAuxData.lastName = $stateParams.lastName;
             $scope.proxyAuxData.email = $stateParams.email;
 
+            proxyMgmtAppService.getRelationshipOptions().$promise.then(function(response) {
+                if (response.failure) {
+                    $scope.flashMessage = response.message;
+
+                    notificationCenterService.clearNotifications();
+                    notificationCenterService.addNotification(response.message, "error", true);
+
+                } else {
+                    $scope.relationshipChoices = response.relationships;
+                }
+            });
+
+
             if (gidm) {
                 // Set up for "edit proxy"
                 $scope.isCreateNew = false;
@@ -110,14 +123,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             passphrase:   $filter('i18n')('proxy.management.label.passphrase')
         };
         $scope.isRelationshipSelected = false;
-        $scope.relationshipChoices = [
-            // TODO: BELOW CHOICES ARE PLACEHOLDERS. IMPLEMENT DYNAMICALLY WITH I18N FILTER, ALONG THE LINES OF EXAMPLE BELOW:
-            // {code: 'P', description: $filter('i18n')('proxy.personalinformation.label.parent')},
-            {code: 'PARENT', description: 'Parent'},
-            {code: 'EMPLOYER', description: 'Employer'},
-            {code: 'ADVISOR', description: 'Advisor'},
-            {code: 'SIBLING', description: 'Sibling'}
-        ];
+        $scope.relationshipChoices = [];
 
         $scope.setStartDate = function(data){
             $scope.proxy.p_start_date = data;
