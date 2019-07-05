@@ -116,8 +116,26 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             };
 
 
-        $scope.resetPin = function() {
-            //TO DO
+        $scope.resetPassword = function() {
+            proxyMgmtAppService.resetProxyPassword({gidm: $scope.proxy.gidm}).$promise.then(function (response) {
+                var messageType, message;
+
+                if (response.failure) {
+                    messageType = 'error';
+                    message = response.message;
+                } else {
+                    if (response.resetStatus == 'NOTACTIVE') {
+                        messageType = 'error';
+                        message = 'proxyManagement.message.resetPasswordFailure';
+                    } else {
+                        messageType = 'success';
+                        message = 'proxyManagement.message.resetPasswordSuccess';
+                    }
+                }
+
+                notificationCenterService.clearNotifications();
+                notificationCenterService.addNotification(message, messageType, true);
+            });
         };
 
 

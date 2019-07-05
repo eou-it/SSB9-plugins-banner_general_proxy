@@ -202,4 +202,26 @@ class ProxyManagementController {
             render response as JSON
         }
     }
+
+
+    def resetProxyPassword() {
+
+        def params = request?.JSON ?: params
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+
+        try {
+            def status = generalSsbProxyManagementService.resetProxyPassword(params.gidm, pidm)
+
+            def response = [resetStatus: status, failure: false]
+            render response as JSON
+        }
+        catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage( e ) as JSON
+        }
+        catch(Exception e){
+            log.error(e.toString())
+            def response = [message: e.message, failure: true]
+            render response as JSON
+        }
+    }
 }

@@ -284,12 +284,26 @@ class GeneralSsbProxyManagementService {
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         def sqlText = ProxyManagementApi.RELATIONSHIP_OPTION_LIST
 
-        sql.call(sqlText, [pidm, Sql.VARCHAR ])
+        sql.call(sqlText, [pidm, Sql.VARCHAR])
                 { relationshipsJson ->
                     relationships = relationshipsJson
                 }
 
         relationships ? new JsonSlurper().parseText(relationships) : [:]
+    }
+
+    def resetProxyPassword(gidm, pidm) {
+
+        def status
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        def sqlText = ProxyManagementApi.RESET_PROXY_PASSWORD
+
+        sql.call(sqlText, [gidm, pidm, Sql.VARCHAR])
+                { resetStatus ->
+                    status = resetStatus
+                }
+
+        status
     }
 
 }

@@ -178,7 +178,6 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
 
         try {
             gidm = generalSsbProxyManagementService.createProxyProfile(params)
-            gidm = generalSsbProxyManagementService.createProxyProfile(params)
             fail("Email In Use")
         } catch (Exception e) {
             assertTrue e.getMessage().contains("EMAILINUSE")
@@ -291,6 +290,35 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
         assertNotNull result.relationships[0]
         assertNotNull result.relationships[0].code
         assertNotNull result.relationships[0].description
+    }
+
+
+    // TODO: implement test *with* relationships and authorizations
+    @Test
+    void testResetProxyPasswordWithNoRelationshipsOrAuthorizations() {
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "a@aol.com"
+        params."p_email_verify" = "a@aol.com"
+        params."p_last" = "Abc"
+        params."p_first" = "ABX"
+        params."pidm" = pidm
+
+        def resetStatus
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+            resetStatus = generalSsbProxyManagementService.resetProxyPassword(gidm, pidm)
+        } catch (Exception e) {
+            fail("Could not RESET PROXY PASSWORD. " + e)
+        } finally {
+            deleteDBEntry(gidm);
+        }
+
+        assertEquals 'NOTACTIVE', resetStatus
     }
 
 
