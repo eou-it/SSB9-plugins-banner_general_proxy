@@ -98,6 +98,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 $scope.proxy.p_start_date = response.dates.startDate;
                 $scope.proxy.p_stop_date = response.dates.stopDate;
                 $scope.proxy.pages = response.pages.pages;
+                $scope.proxy.p_retp_code = $scope.proxyAuxData.selectedRelationship.code;
 
                 $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
             });
