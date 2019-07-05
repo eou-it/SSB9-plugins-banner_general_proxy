@@ -1016,4 +1016,75 @@ END;
   END;
 """
 
+    public final static String RESET_PROXY_PASSWORD = """
+  DECLARE
+     global_syst   CONSTANT gtvsyst.gtvsyst_code%TYPE := 'PROXY';
+     p_proxyIDM    gpbprxy.gpbprxy_proxy_idm%TYPE;
+     global_pidm   spriden.spriden_pidm%TYPE;
+     lv_hold_rowid gb_common.internal_record_id_type;
+     lv_RETP       gtvretp.gtvretp_code%TYPE;
+     lv_pinhash    gpbprxy.gpbprxy_pin%TYPE;
+     lv_salt       gpbprxy.gpbprxy_salt%TYPE;
+     reset_status  VARCHAR2(10);
+
+  BEGIN
+     p_proxyIDM  := ?;
+     global_pidm := ?;
+     
+     -- Get relationship type
+     lv_RETP := gp_gprxref.F_GetXREF_RETP(p_proxyIDM, global_pidm);
+
+     -- Reset PIN only if active relationship record found
+     IF lv_RETP = 'AAA' OR bwgkprxy.F_GetAuthCount(p_proxyIDM, global_pidm) = 0
+     THEN
+        reset_status := 'NOTACTIVE';
+     ELSE
+        -- get a new salt as well
+        lv_salt := gspcrpt.f_get_salt(26);
+        gspcrpt.p_saltedhash( lv_salt, lv_salt, lv_pinhash);
+
+        gp_gpbprxy.P_Update (
+           p_proxy_idm        => p_proxyIDM,
+           p_pin              => lv_pinhash,
+           p_salt             => lv_salt,
+           p_pin_disabled_ind => 'R',
+           p_pin_exp_date     => SYSDATE - 1,
+           p_inv_login_cnt    => 0,
+           p_user_id          => goksels.f_get_ssb_id_context
+        );
+
+        gp_gpbeltr.P_Create (
+           p_syst_code      => global_syst,
+           p_ctyp_code      => 'PIN_RESET',
+           p_ctyp_url       => NULL,
+           p_ctyp_exp_date  => SYSDATE + bwgkprxy.F_GetOption ('ACTION_VALID_DAYS', lv_RETP),
+           p_ctyp_exe_date  => NULL,
+           p_transmit_date  => NULL,
+           p_proxy_idm      => p_proxyIDM,
+           p_proxy_old_data => NULL,
+           p_proxy_new_data => NULL,
+           p_person_pidm    => global_pidm,
+           p_user_id        => goksels.f_get_ssb_id_context,
+           p_create_date    => SYSDATE,
+           p_create_user    => goksels.f_get_ssb_id_context,
+           p_rowid_out      => lv_hold_rowid
+        );
+
+        gp_gpbeltr.P_Update (
+           p_ctyp_url => bwgkprxy.F_getProxyURL('PIN_RESET') || twbkbssf.F_Encode (lv_hold_rowid),
+           p_user_id  => goksels.f_get_ssb_id_context,
+           p_rowid    => lv_hold_rowid
+        );
+
+        gb_common.P_Commit;
+        bwgkprxy.P_SendEmail(lv_hold_rowid);
+      
+        reset_status := 'SUCCESS';
+
+     END IF;
+     
+     ? := reset_status;
+  END;
+"""
+
 }

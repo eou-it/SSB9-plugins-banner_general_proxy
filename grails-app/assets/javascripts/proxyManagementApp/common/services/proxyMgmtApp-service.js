@@ -43,4 +43,9 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
         return fetchRelationshipOptions.query();
     };
 
+    this.resetProxyPassword = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'resetProxyPassword'}).get(params);
+    };
+
 }]);

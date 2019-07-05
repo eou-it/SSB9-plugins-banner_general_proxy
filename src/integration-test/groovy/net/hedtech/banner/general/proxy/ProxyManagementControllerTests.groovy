@@ -85,14 +85,14 @@ class ProxyManagementControllerTests extends BaseIntegrationTestCase {
 
 
     @Test
-    void testGetProxyStartStopDates(){
+    void testGetDataModelOnRelationshipChange(){
         mockRequest()
         SSBSetUp('A00017091', '111111')
         controller.request.contentType = "text/json"
         def params = [relationshipCode: 'PARENT']
 
         controller.params.putAll(params)
-        controller.getProxyStartStopDates()
+        controller.getDataModelOnRelationshipChange()
         def data = controller.response.contentAsString
         assertNotNull data
 
@@ -100,8 +100,10 @@ class ProxyManagementControllerTests extends BaseIntegrationTestCase {
         
         //check data
         assertNotNull jsonData
-        assertNotNull jsonData.startDate
-        assertNotNull jsonData.stopDate
+        assertNotNull jsonData.dates
+        assertNotNull jsonData.dates.startDate
+        assertNotNull jsonData.dates.stopDate
+        assertNotNull jsonData.pages
 
     }
 
@@ -125,6 +127,27 @@ class ProxyManagementControllerTests extends BaseIntegrationTestCase {
         assertNotNull jsonData.relationships[0]
         assertNotNull jsonData.relationships[0].code
         assertNotNull jsonData.relationships[0].description
+
+    }
+
+
+    @Test
+    void testResetProxyPassword(){
+        mockRequest()
+        SSBSetUp('A00017091', '111111')
+        controller.request.contentType = "text/json"
+        def params = [gidm: -99999627]
+
+        controller.params.putAll(params)
+        controller.resetProxyPassword()
+        def data = controller.response.contentAsString
+        assertNotNull data
+
+        def jsonData = JSON.parse( data )
+
+        //check data
+        assertNotNull jsonData
+        assertNotNull jsonData.resetStatus
 
     }
 
