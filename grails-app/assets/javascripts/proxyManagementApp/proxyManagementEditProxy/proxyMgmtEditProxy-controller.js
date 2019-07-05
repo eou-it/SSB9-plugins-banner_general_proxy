@@ -98,6 +98,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 $scope.proxy.p_start_date = response.dates.startDate;
                 $scope.proxy.p_stop_date = response.dates.stopDate;
                 $scope.proxy.pages = response.pages.pages;
+
+                $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
             });
         };
 
@@ -171,7 +173,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                     var notifications = [],
                         doStateGoSuccess = function (messageOnSave) {
                             notifications.push({
-                                message: messageOnSave ? messageOnSave : 'proxyManagement.label.saveSuccess',
+                                message: messageOnSave ? messageOnSave : 'proxyManagement.label.createSuccess',
                                 messageType: $scope.notificationSuccessType,
                                 flashType: $scope.flashNotification
                             });
@@ -198,7 +200,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                     var notifications = [],
                         doStateGoSuccess = function (messageOnSave) {
                             notifications.push({
-                                message: messageOnSave ? messageOnSave : 'proxyManagement.label.saveSuccess',
+                                message: messageOnSave ? messageOnSave : 'proxyManagement.label.updateSuccess',
                                 messageType: $scope.notificationSuccessType,
                                 flashType: $scope.flashNotification
                             });

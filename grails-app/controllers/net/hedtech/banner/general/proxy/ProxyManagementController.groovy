@@ -114,7 +114,7 @@ class ProxyManagementController {
                 generalSsbProxyManagementService.manageProxyPagesAuthorization(authParams)
             }
 
-            Map response = [gidm: map.gidm, failure: false, message: "PROXY-CREATED"]
+            Map response = [gidm: map.gidm, failure: false]
             render response as JSON
         }
         catch (ApplicationException e) {
@@ -167,7 +167,7 @@ class ProxyManagementController {
                 generalSsbProxyManagementService.manageProxyPagesAuthorization(authParams)
             }
 
-            Map response = [gidm: map.gidm, failure: false, message: "PROXY-UPDATED"]
+            Map response = [gidm: map.gidm, failure: false]
             render response as JSON
         }
         catch (ApplicationException e) {

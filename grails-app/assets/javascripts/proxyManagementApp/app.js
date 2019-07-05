@@ -129,7 +129,8 @@ proxyManagementApp.config(function ($stateProvider, $urlRouterProvider, webAppRe
                 breadcrumbs: []
             },
             params: {
-                id: null
+                id: null,
+                onLoadNotifications: []
             }
         })
         .state('editProxy', {
