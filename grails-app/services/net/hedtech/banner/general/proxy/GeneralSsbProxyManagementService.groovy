@@ -208,10 +208,10 @@ class GeneralSsbProxyManagementService {
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
 
-        def sqlText = ProxyManagementApi.UPDARE_PROXY
+        def sqlText = ProxyManagementApi.UPDATE_PROXY
 
         try {
-            sql.call(sqlText, [params.pidm, params.gidm, params.p_retp_code.code, params.p_desc,
+            sql.call(sqlText, [params.pidm, params.gidm, params.p_retp_code, params.p_desc,
                                params.p_start_date, params.p_stop_date, params.p_passphrase,
                                Sql.VARCHAR, Sql.VARCHAR
             ]){ errorMsg, errorStatus ->

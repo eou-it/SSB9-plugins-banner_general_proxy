@@ -669,7 +669,7 @@ END F_Delete_Relationship;
    END;
 """
 
-    public final static String UPDARE_PROXY = """
+    public final static String UPDATE_PROXY = """
 DECLARE
    lv_hold_rowid  gb_common.internal_record_id_type;
    lv_GPRXREF_rec gp_gprxref.gprxref_rec;
