@@ -1,9 +1,9 @@
 /********************************************************************************
   Copyright 2019 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootScope', '$location', '$stateParams', '$timeout',
-    '$filter', 'notificationCenterService', 'proxyMgmtAppService',
-    function ($scope, $rootScope, $location, $stateParams, $timeout, $filter, notificationCenterService, proxyMgmtAppService) {
+proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootScope', '$location', '$state', '$stateParams',
+    '$timeout', '$filter', 'notificationCenterService', 'proxyMgmtAppService',
+    function ($scope, $rootScope, $location, $state, $stateParams, $timeout, $filter, notificationCenterService, proxyMgmtAppService) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -66,6 +66,10 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
             ];
             
             notificationCenterService.addNotification('proxyManagement.confirm.proxy.delete.text', 'warning', false, prompts);
+        };
+
+        $scope.goToEditProxyState = function() {
+            $state.go('editProxy');
         };
 
 

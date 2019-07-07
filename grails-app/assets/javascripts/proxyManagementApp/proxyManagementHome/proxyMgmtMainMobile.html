@@ -18,6 +18,6 @@
         <ng-include src="'proxyManagementApp/proxyManagementHome/proxyList.html'|webAppResourcePath"></ng-include>
     </div>
 </div>
-<proxy-mgmt-mobile-footer-button click-function="sectionDetails.clickFunction" ng-if="proxies.length > 0">
+<proxy-mgmt-mobile-footer-button click-function="goToEditProxyState" ng-if="proxies.length > 0">
     {{'proxyManagement.label.addProxy'|i18n}}
 </proxy-mgmt-mobile-footer-button>
