@@ -165,13 +165,13 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         };
 
         $scope.placeholder = {
-            first_name:   $filter('i18n')('proxy.management.placeholder.first_name'),
-            last_name:    $filter('i18n')('proxy.management.placeholder.last_name'),
-            email:        $filter('i18n')('proxy.management.placeholder.email'),
-            verify_email: $filter('i18n')('proxy.management.placeholder.verifyEmail'),
-            relationship: $filter('i18n')('proxy.management.placeholder.relationship'),
-            desc:         $filter('i18n')('proxy.management.label.description'),
-            passphrase:   $filter('i18n')('proxy.management.label.passphrase')
+            first_name:   $filter('i18n')('proxyManagement.placeholder.first_name'),
+            last_name:    $filter('i18n')('proxyManagement.placeholder.last_name'),
+            email:        $filter('i18n')('proxyManagement.placeholder.email'),
+            verify_email: $filter('i18n')('proxyManagement.placeholder.verifyEmail'),
+            relationship: $filter('i18n')('proxyManagement.placeholder.relationship'),
+            desc:         $filter('i18n')('proxyManagement.label.description'),
+            passphrase:   $filter('i18n')('proxyManagement.label.passphrase')
         };
         $scope.isRelationshipSelected = false;
         $scope.relationshipChoices = [];

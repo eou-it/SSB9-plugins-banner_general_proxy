@@ -82,6 +82,7 @@ h2 {
 }
 
 .proxy-base-info-summary {
+    float: left;
     font-size: 28px;
     margin: 10px 0 20px;
 }
@@ -93,6 +94,12 @@ h2 {
 .proxy-mgmt-email-passphrase {
     float: left;
     margin-top: 10px;
+}
+
+.proxy-mgmt-reset-pw {
+    float: left;
+    font-size: 16px;
+    margin: 18px 0 0 30px;
 }
 
 .proxy-mgmt-select-all-pages {

@@ -5,13 +5,13 @@
     <div ng-if="proxies.length < 1" class="center-contents">
         <div class="proxy-mgmt-no-proxy-top"></div>
         <div class="proxy-mgmt-msg-primary">
-            {{'proxy.management.message.noProxyYet'|i18n}}
+            {{'proxyManagement.message.noProxyYet'|i18n}}
         </div>
         <div class="proxy-mgmt-msg-secondary">
-            {{'proxy.management.message.addProxyUsingButton'|i18n}}
+            {{'proxyManagement.message.addProxyUsingButton'|i18n}}
         </div>
         <div class="proxy-mgmt-button-container center">
-            <button ng-click="PLACEHOLDER()" class="primary">{{'proxy.management.label.addProxy'|i18n}}</button>
+            <button ng-click="PLACEHOLDER()" class="primary">{{'proxyManagement.label.addProxy'|i18n}}</button>
         </div>
     </div>
     <div ng-if="proxies.length > 0">
@@ -19,5 +19,5 @@
     </div>
 </div>
 <proxy-mgmt-mobile-footer-button click-function="sectionDetails.clickFunction" ng-if="proxies.length > 0">
-    {{'proxy.management.label.addProxy'|i18n}}
+    {{'proxyManagement.label.addProxy'|i18n}}
 </proxy-mgmt-mobile-footer-button>

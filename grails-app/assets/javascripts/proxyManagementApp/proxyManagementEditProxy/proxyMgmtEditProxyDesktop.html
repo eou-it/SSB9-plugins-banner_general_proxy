@@ -5,11 +5,11 @@
     <div class="proxy-mgmt-main-container">
         <div ng-if="isCreateNew">
             <div class="proxy-info-main-heading">
-                <h2>{{'proxy.management.title.proxyInformation'|i18n}}</h2>
+                <h2>{{'proxyManagement.title.proxyInformation'|i18n}}</h2>
             </div>
             <div class="proxy-info-subheading page-top">
-                <span class="bold">{{'proxy.management.title.profile'|i18n}}</span>
-                <span class="italic">{{'proxy.management.label.hint.required'|i18n}}</span>
+                <span class="bold">{{'proxyManagement.title.profile'|i18n}}</span>
+                <span class="italic">{{'proxyManagement.label.hint.required'|i18n}}</span>
             </div>
             <div class="row">
                 <div class="col-xs-12 col-md-6 col-lg-4">
@@ -29,7 +29,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 col-md-6 col-lg-4">
-                    <label class="input-field-label" for="email">{{'proxy.management.label.email'|i18n}}</label><br>
+                    <label class="input-field-label" for="email">{{'proxyManagement.label.email'|i18n}}</label><br>
                     <input ng-model="proxy.p_email"
                            class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                            type="text" placeholder="{{placeholder.email}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="email">
@@ -37,7 +37,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 col-md-6 col-lg-4">
-                    <label class="input-field-label" for="verify-email">{{'proxy.management.label.verifyEmail'|i18n}}</label><br>
+                    <label class="input-field-label" for="verify-email">{{'proxyManagement.label.verifyEmail'|i18n}}</label><br>
                     <input ng-model="proxy.p_email_verify"
                            class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                            type="text" placeholder="{{placeholder.verify_email}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="verify-email">
@@ -45,18 +45,25 @@
             </div>
         </div>
         <div ng-if="!isCreateNew">
-            <div class="proxy-base-info-summary">
-                <span>{{proxyAuxData.firstName}}</span> <span>{{proxyAuxData.lastName}}</span> ({{proxyAuxData.email}})
+            <div class="clearfix">
+                <div class="proxy-base-info-summary">
+                    <span>{{proxyAuxData.firstName}}</span> <span>{{proxyAuxData.lastName}}</span> ({{proxyAuxData.email}})
+                </div>
+                <div class="proxy-mgmt-reset-pw">
+                    <a ng-click="resetPassword()" class="add-item-link" tabindex="0">
+                        <span class="icon-refresh-CO"></span> <span>{{'proxyManagement.label.reset.password'|i18n}}</span>
+                    </a>
+                </div>
             </div>
             <div class="proxy-info-main-heading">
-                <h2>{{'proxy.management.title.proxyInformation'|i18n}}</h2>
+                <h2>{{'proxyManagement.title.proxyInformation'|i18n}}</h2>
             </div>
         </div>
         <div class="row">
             <div class="col-xs-12 col-md-6 col-lg-4">
-                <label class="input-field-label" for="relationship">{{'proxy.management.label.relationship'|i18n}}</label><br>
+                <label class="input-field-label" for="relationship">{{'proxyManagement.label.relationship'|i18n}}</label><br>
                 <xe-ui-select ng-model="proxyAuxData.selectedRelationship" theme="select2" search-enabled="false" ng-change="handleRelationshipChange()" id="relationship">
-                    <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxy.management.label.relationship'|i18n)" placeholder="{{placeholder.relationship}}">
+                    <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.relationship'|i18n)" placeholder="{{placeholder.relationship}}">
                         {{$select.selected.description ? $select.selected.description : placeholder.relationship}}
                     </xe-ui-select-match>
                     <xe-ui-select-choices repeat="choice in relationshipChoices">
@@ -67,24 +74,24 @@
         </div>
         <div class="row">
             <div class="col-xs-12 col-md-3 col-lg-3">
-                <label for="start-date" class="input-field-label">{{'proxy.management.label.startDate'|i18n}}</label>
+                <label for="start-date" class="input-field-label">{{'proxyManagement.label.startDate'|i18n}}</label>
                 <input date-picker ng-model="proxy.p_start_date" pi-input-watcher on-select="setStartDate"
-                       class="pi-date-input input-colors" placeholder="{{'proxy.management.label.startDate'|i18n}}" id="start-date"
-                       aria-label="{{'proxy.management.label.startDate'|i18n}}"/>
+                       class="pi-date-input input-colors" placeholder="{{'proxyManagement.label.startDate'|i18n}}" id="start-date"
+                       aria-label="{{'proxyManagement.label.startDate'|i18n}}"/>
             </div>
             <div class="col-xs-12 col-md-3 col-lg-3">
-                <label for="stop-date" class="input-field-label">{{'proxy.management.label.stopDate'|i18n}}</label>
+                <label for="stop-date" class="input-field-label">{{'proxyManagement.label.stopDate'|i18n}}</label>
                 <input date-picker ng-model="proxy.p_stop_date" pi-input-watcher on-select="setStopDate"
-                       class="pi-date-input input-colors" placeholder="{{'proxy.management.label.stopDate'|i18n}}" id="stop-date"
-                       aria-label="{{'proxy.management.label.stopDate'|i18n}}"/>
+                       class="pi-date-input input-colors" placeholder="{{'proxyManagement.label.stopDate'|i18n}}" id="stop-date"
+                       aria-label="{{'proxyManagement.label.stopDate'|i18n}}"/>
             </div>
         </div>
         <div class="proxy-info-subheading">
-            <span class="bold">{{'proxy.management.title.additionalInformation'|i18n}}</span>
+            <span class="bold">{{'proxyManagement.title.additionalInformation'|i18n}}</span>
         </div>
         <div class="row">
             <div class="col-xs-12 col-md-6 col-lg-4">
-                <label class="input-field-label" for="desc">{{'proxy.management.label.description'|i18n}}</label><br>
+                <label class="input-field-label" for="desc">{{'proxyManagement.label.description'|i18n}}</label><br>
                 <input ng-model="proxy.p_desc"
                        class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                        type="text" placeholder="{{placeholder.desc}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="desc">
@@ -92,7 +99,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12 col-md-6 col-lg-4">
-                <label class="input-field-label" for="passphrase">{{'proxy.management.label.passphrase'|i18n}}</label><br>
+                <label class="input-field-label" for="passphrase">{{'proxyManagement.label.passphrase'|i18n}}</label><br>
                 <input ng-model="proxy.p_passphrase"
                        class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                        type="text" placeholder="{{placeholder.passphrase}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="passphrase">
@@ -110,27 +117,16 @@
             </div>
         </div>
 
-        <div ng-if="!isCreateNew" class="row">
-            <div class="col-xs-12 col-md-6 col-lg-4">
-                <div class="proxy-mgmt-email-passphrase">
-                    <a ng-click="resetPassword()" class="add-item-link" tabindex="0">
-                        <span class="icon-refresh-CO"></span> <span>{{'proxyManagement.label.reset.password'|i18n}}</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-
-
         <div class="proxy-info-subheading">
-            <span class="bold">{{'proxy.management.title.authorizations'|i18n}}</span>
-            <span class="italic">{{'proxy.management.label.hint.required'|i18n}}</span>
+            <span class="bold">{{'proxyManagement.title.authorizations'|i18n}}</span>
+            <span class="italic">{{'proxyManagement.label.hint.required'|i18n}}</span>
         </div>
 
 
         <div ng-if="isRelationshipSelected" class="row">
             <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-select-all-pages">
                 <input  class="dir-profile-nav-check" type="checkbox" ng-click="toggleSelect()"/>
-                <span class="lbl">{{'proxyManagement.label.selecttAll'|i18n}}</span>
+                <span class="lbl">{{'proxyManagement.label.selectAll'|i18n}}</span>
             </div>
 
         </div>

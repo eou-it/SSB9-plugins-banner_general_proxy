@@ -140,7 +140,7 @@ proxyManagementApp.config(function ($stateProvider, $urlRouterProvider, webAppRe
             resolve: {
             },
             data: {
-                breadcrumbs: [{label: 'proxy.management.title.proxyInformation'}]
+                breadcrumbs: [{label: 'proxyManagement.title.proxyInformation'}]
             },
             params: {
                 id: null
