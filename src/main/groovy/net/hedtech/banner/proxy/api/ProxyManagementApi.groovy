@@ -1026,6 +1026,70 @@ END;
      lv_pinhash    gpbprxy.gpbprxy_pin%TYPE;
      lv_salt       gpbprxy.gpbprxy_salt%TYPE;
      reset_status  VARCHAR2(10);
+     
+   
+   -- to apply mep code to Banner9 url for proxy e-mail communication
+   FUNCTION F_ApplyMepCodeToProxyURL (endpoint IN VARCHAR2) RETURN VARCHAR2 IS
+   BEGIN
+    IF g\$_vpdi_security.G\$_IS_MIF_ENABLED THEN
+           IF INSTR(endpoint,'?') != 0 THEN
+         RETURN REPLACE(endpoint,'?','?mepCode='|| g\$_vpdi_security.G\$_VPDI_GET_INST_CODE_FNC || '&');
+    ELSE
+         RETURN (endpoint || '?mepCode=' || g\$_vpdi_security.G\$_VPDI_GET_INST_CODE_FNC);
+    END IF;
+    ELSE
+        RETURN endpoint;
+    END IF;
+   END F_ApplyMepCodeToProxyURL;
+   
+   
+   -- Get the URL for accessing Banner 9 Proxy
+   FUNCTION F_getProxyURL(
+      p_action          VARCHAR2 DEFAULT NULL)
+      RETURN VARCHAR2
+   IS
+      CURSOR gurocfg_c (
+         p_appid_in gurocfg.gurocfg_gubappl_app_id%TYPE,
+         p_config_in gurocfg.gurocfg_name%TYPE)
+      IS
+       SELECT gurocfg_value
+         FROM gurocfg
+        WHERE gurocfg_gubappl_app_id = p_appid_in
+          AND gurocfg_name      =  p_config_in
+          AND gurocfg_type      =  'string';
+
+      lv_use_ban9 VARCHAR2(1);
+      lv_key VARCHAR2(1000);
+      lv_endpoint VARCHAR2(60);
+      lv_proxy_url VARCHAR2(1000);
+   BEGIN
+--
+         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         FETCH gurocfg_c INTO lv_proxy_url;
+         
+         IF gurocfg_c%NOTFOUND
+         THEN
+            raise_application_error(-20103, 'Could not build URL for proxy e-mail communication');
+         END IF;
+         CLOSE gurocfg_c;
+
+         lv_key := 'proxyAccessURL.' || p_action;
+         OPEN gurocfg_c('BAN9_PROXY', lv_key);
+         FETCH gurocfg_c INTO lv_endpoint;
+
+         -- process mep context
+         -- it adds the mepCode parameter if system is under mep context
+         lv_endpoint := F_ApplyMepCodeToProxyURL(lv_endpoint);
+         IF gurocfg_c%NOTFOUND
+         THEN
+            raise_application_error(-20103, 'Could not build URL for proxy e-mail communication');
+         END IF;
+         CLOSE gurocfg_c;
+      
+      RETURN lv_proxy_url || lv_endpoint;
+   END F_getProxyURL;
+
+--------------------------------MAIN CODE----------------------------
 
   BEGIN
      p_proxyIDM  := ?;
@@ -1071,7 +1135,7 @@ END;
         );
 
         gp_gpbeltr.P_Update (
-           p_ctyp_url => bwgkprxy.F_getProxyURL('PIN_RESET') || twbkbssf.F_Encode (lv_hold_rowid),
+           p_ctyp_url => F_getProxyURL('PIN_RESET') || twbkbssf.F_Encode (lv_hold_rowid),
            p_user_id  => goksels.f_get_ssb_id_context,
            p_rowid    => lv_hold_rowid
         );
