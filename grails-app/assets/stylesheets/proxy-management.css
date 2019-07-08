@@ -237,6 +237,19 @@ h2 {
     .proxy-mgmt-button-container.center {
         text-align: center;
     }
+
+    .proxy-mgmt-pages {
+        margin-left: 20px;
+    }
+
+    .proxy-mgmt-select-all-pages {
+        margin-left: 0;
+    }
+
+    .proxy-mgmt-reset-pw {
+        float: none;
+        margin: 0;
+    }
 }
 
 
