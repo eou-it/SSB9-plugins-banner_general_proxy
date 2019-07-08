@@ -123,22 +123,21 @@
         </div>
 
 
-        <div ng-if="isRelationshipSelected" class="row">
-            <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-select-all-pages">
-                <input  class="dir-profile-nav-check" type="checkbox" ng-click="toggleSelect()"/>
-                <span class="lbl">{{'proxyManagement.label.selectAll'|i18n}}</span>
-            </div>
-
-        </div>
-
-        <div ng-if="isRelationshipSelected" class="row">
-            <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-pages">
-                <div ng-repeat="authItem in proxy.pages">
-                    <input ng-model="authItem.auth" class="dir-profile-nav-check" type="checkbox" aria-labelledby="dir-item{{$index}}"/>
-                    <span class="lbl">{{authItem.desc}}</span>
+        <div ng-if="isRelationshipSelected">
+            <div class="row">
+                <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-select-all-pages">
+                    <input  class="dir-profile-nav-check" type="checkbox" ng-click="toggleSelect()"/>
+                    <span class="lbl">{{'proxyManagement.label.selectAll'|i18n}}</span>
                 </div>
             </div>
-
+            <div class="row">
+                <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-pages">
+                    <div ng-repeat="authItem in proxy.pages">
+                        <input ng-model="authItem.auth" class="dir-profile-nav-check" type="checkbox" aria-labelledby="dir-item{{$index}}"/>
+                        <span class="lbl">{{authItem.desc}}</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div ng-if="!isCreateNew" class="row">
