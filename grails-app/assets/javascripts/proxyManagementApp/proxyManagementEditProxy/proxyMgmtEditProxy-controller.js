@@ -22,7 +22,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         },
 
         setSelectedRelationship = function(code) {
-            $scope.proxyAuxData.selectedRelationship = $scope.relationshipChoices.find(function (rel) {
+            $scope.proxyAuxData.selectedRelationship = _.find($scope.relationshipChoices, function (rel) {
                 return rel.code == code;
             });
 

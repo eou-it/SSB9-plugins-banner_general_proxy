@@ -48,7 +48,7 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
     }
 
 
-    //@Test
+    @Test
     void createProxy() {
         def id = 'A00017091'
 
@@ -75,6 +75,100 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
             fail("Could not generate IDM. " + e)
         } finally {
             deleteDBEntry(gidm);
+        }
+    }
+
+
+    @Test
+    void testUpdateProxyProfile() {
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "a@aol.com"
+        params."p_email_verify" = "a@aol.com"
+        params."p_last" = "Abc"
+        params."p_first" = "ABX"
+        params."pidm" = pidm
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+
+            params."gidm" = gidm
+            params."p_desc" = "Test"
+            params.p_passphrase = "Cool"
+
+            params.p_retp_code = 'PARENT'
+
+            generalSsbProxyManagementService.updateProxyProfile(params)
+
+            def profile = generalSsbProxyManagementService.getProxyProfile(gidm, pidm)
+
+            assertEquals "Test", profile.proxyProfile?.p_desc
+            assertEquals "Cool", profile.proxyProfile?.p_passphrase
+            assertEquals "PARENT", profile.proxyProfile?.p_retp_code
+
+        } catch (Exception e) {
+            fail("Could not Update Proxy. " + e)
+        } finally {
+            deleteDBEntry(gidm);
+        }
+    }
+
+
+    @Test
+    void testGetClonedList() {
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm1, gidm2
+        def params1 = [:]
+        def params2 = [:]
+        params1."pidm" = pidm
+        params2."pidm" = pidm
+
+        try {
+            // 1st Proxy
+            params1."p_email" = "a1@aol.com"
+            params1."p_email_verify" = "a1@aol.com"
+            params1."p_last" = "L1"
+            params1."p_first" = "F1"
+            gidm1 = generalSsbProxyManagementService.createProxyProfile(params1)
+
+            params1."gidm" = gidm1
+            params1."p_desc" = "Test"
+            params1.p_passphrase = "Cool"
+
+            params1.p_retp_code = 'PARENT'
+
+            generalSsbProxyManagementService.updateProxyProfile(params1)
+
+            //2nd Proxy
+            params2."p_email" = "a2@aol.com"
+            params2."p_email_verify" = "a2@aol.com"
+            params2."p_last" = "L2"
+            params2."p_first" = "F2"
+            gidm2 = generalSsbProxyManagementService.createProxyProfile(params2)
+
+            params2."gidm" = gidm2
+            params2."p_desc" = "Test"
+            params2.p_passphrase = "Cool"
+
+            params2.p_retp_code = 'PARENT'
+
+            generalSsbProxyManagementService.updateProxyProfile(params2)
+
+            //test cloned list
+            def clonedList = generalSsbProxyManagementService.getProxyClonedList(params1)
+
+            assert clonedList?.size() > 0
+
+        } catch (Exception e) {
+            fail("Could not Update Proxy. " + e)
+        } finally {
+            deleteDBEntry(gidm1);
+            deleteDBEntry(gidm2);
         }
     }
 
