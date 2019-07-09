@@ -48,7 +48,7 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
     }
 
 
-    //@Test
+    @Test
     void createProxy() {
         def id = 'A00017091'
 
@@ -70,6 +70,74 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
             assertTrue result.proxies.findAll { it.email == "a@aol.com" }.size() > 0
 
             assertTrue checkUrl(gidm)
+
+        } catch (Exception e) {
+            fail("Could not generate IDM. " + e)
+        } finally {
+            deleteDBEntry(gidm);
+        }
+    }
+
+
+    @Test
+    void testUpdateProxyProfile() {
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "a@aol.com"
+        params."p_email_verify" = "a@aol.com"
+        params."p_last" = "Abc"
+        params."p_first" = "ABX"
+        params."pidm" = pidm
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+
+            params."gidm" = gidm
+            params."p_desc" = "Test"
+            params.p_passphrase = "Cool"
+
+            params.p_retp_code = 'PARENT'
+
+            generalSsbProxyManagementService.updateProxyProfile(params)
+
+            def profile = generalSsbProxyManagementService.getProxyProfile(gidm, pidm)
+
+            assertEquals "Test", profile.proxyProfile?.p_desc
+            assertEquals "Cool", profile.proxyProfile?.p_passphrase
+            assertEquals "PARENT", profile.proxyProfile?.p_retp_code
+
+        } catch (Exception e) {
+            fail("Could not Update Proxy. " + e)
+        } finally {
+            deleteDBEntry(gidm);
+        }
+    }
+
+
+    //@Test
+    void testGetClonedList() {
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "a@aol.com"
+        params."p_email_verify" = "a@aol.com"
+        params."p_last" = "Abc"
+        params."p_first" = "ABX"
+        params."pidm" = pidm
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+            assertNotNull gidm
+
+            params.gidm = gidm
+
+            def result = generalSsbProxyManagementService.getProxyClonedList(params)
+
 
         } catch (Exception e) {
             fail("Could not generate IDM. " + e)

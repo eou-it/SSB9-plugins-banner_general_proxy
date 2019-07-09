@@ -1151,4 +1151,56 @@ END;
   END;
 """
 
+    public final static String PROXY_CLONE_LIST = """
+    DECLARE
+--    
+    p_proxyIDM   gpbprxy.gpbprxy_proxy_idm%TYPE;
+    p_personPIDM spriden.spriden_pidm%TYPE;
+    p_RETP       gtvretp.gtvretp_code%TYPE;
+--
+    proxies varchar2(3000);
+    student varchar2(3000);
+    listOfProxies varchar2(3000);
+--
+   CURSOR C_CloneList
+      RETURN GPBPRXY%ROWTYPE
+   IS
+      SELECT *
+        FROM gpbprxy
+       WHERE gpbprxy_proxy_idm IN (SELECT gprxref_proxy_idm
+                                     FROM gprxref
+                                    WHERE gprxref_retp_code = p_RETP
+                                      AND gprxref_proxy_idm <> p_proxyIDM
+                                      AND gprxref_person_pidm = p_personPIDM)
+       ORDER BY gpbprxy_last_name, gpbprxy_first_name;
+--       
+    BEGIN
+--    
+    p_proxyIDM  := ?;
+    p_personPIDM := ?;
+    p_RETP       := ?;
+
+    proxies := '"cloneList":[';
+
+      FOR prxy_rec IN C_CloneList
+   LOOP
+--
+    student := '{' ||
+    '"code" ' || ':' || '"' || prxy_rec.GPBPRXY_PROXY_IDM || '"' ||
+    ',"description" ' || ':' || '"' || prxy_rec.GPBPRXY_FIRST_NAME || ' ' || prxy_rec.GPBPRXY_FIRST_NAME || '"' ||
+    '},';
+--
+    proxies := proxies || student;
+--
+    END LOOP;
+--
+    proxies := TRIM(TRAILING ',' FROM proxies );
+    proxies := proxies || ']';
+
+    listOfProxies := '{' || proxies || '}';
+
+    ? := listOfProxies;
+
+    END;
+"""
 }

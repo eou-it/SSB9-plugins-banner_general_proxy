@@ -306,4 +306,29 @@ class GeneralSsbProxyManagementService {
         status
     }
 
+     /*
+      Gets the list of Proxies for the Student to clone from.
+     */
+    def getProxyClonedList(def params) {
+
+        def proxyClonedList
+        def sqlText = ProxyManagementApi.PROXY_CLONE_LIST
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+
+        try {
+            sql.call(sqlText, [params.gidm, params.pidm, params.p_retp_code,  Sql.VARCHAR
+            ]) { proxyListJson ->
+                proxyClonedList = proxyListJson
+            }
+        }catch (e) {
+            log.error("ERROR: Could not get the List of Cloned Proxies. $e")
+            throw e
+        }
+
+        def studentsListMap = new JsonSlurper().parseText(proxyClonedList)
+
+        return studentsListMap
+    }
+
 }
