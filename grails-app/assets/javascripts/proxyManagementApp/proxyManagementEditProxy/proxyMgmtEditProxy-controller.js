@@ -63,6 +63,19 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                     $scope.proxy = response.proxyProfile;
 
                     setSelectedRelationship($scope.proxy.p_retp_code);
+
+                    proxyMgmtAppService.getClonedProxiesList({gidm: gidm, p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function(response) {
+                        if (response.failure) {
+                            $scope.flashMessage = response.message.clonedProxiesList;
+
+                            notificationCenterService.clearNotifications();
+                            notificationCenterService.addNotification(response.message, "error", true);
+
+                        } else {
+                            $scope.clonedProxiesList = response.cloneList;
+                        }
+                    });
+
                 });
             } else {
                 // Create "new proxy" object
@@ -103,6 +116,16 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
             });
         };
+
+
+        $scope.handleClonedListChange = function(){
+            //console.log($scope.proxyAuxData.clonedProxy.code);
+            proxyMgmtAppService.getClonedAuthorizationsList({gidm: $scope.proxyAuxData.clonedProxy.code,p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function (response) {
+                $scope.proxy.pages = response.pages;
+            });
+
+        };
+
 
         $scope.emailPassphrase = function() {
 
@@ -161,7 +184,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             selectedRelationship: {code: null, description: null},
             firstName: null,
             lastName: null,
-            email: null
+            email: null,
+            clonedProxy: {code: null, description: null}
         };
 
         $scope.placeholder = {
@@ -171,10 +195,12 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             verify_email: $filter('i18n')('proxyManagement.placeholder.verifyEmail'),
             relationship: $filter('i18n')('proxyManagement.placeholder.relationship'),
             desc:         $filter('i18n')('proxyManagement.label.description'),
-            passphrase:   $filter('i18n')('proxyManagement.label.passphrase')
+            passphrase:   $filter('i18n')('proxyManagement.label.passphrase'),
+            clonedLList:  $filter('i18n')('proxyManagement.placeholder.clonedList')
         };
         $scope.isRelationshipSelected = false;
         $scope.relationshipChoices = [];
+        $scope.clonedProxiesList = [];
 
         $scope.setStartDate = function(data){
             $scope.proxy.p_start_date = data;
