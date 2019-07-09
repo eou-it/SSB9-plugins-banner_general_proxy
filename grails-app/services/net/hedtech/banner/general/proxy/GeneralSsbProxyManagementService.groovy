@@ -306,9 +306,9 @@ class GeneralSsbProxyManagementService {
         status
     }
 
-     /*
+    /*
       Gets the list of Proxies for the Student to clone from.
-     */
+    */
     def getProxyClonedList(def params) {
 
         def proxyClonedList
@@ -331,4 +331,13 @@ class GeneralSsbProxyManagementService {
         return studentsListMap
     }
 
+
+    /*
+     Gets the List of Authorization Pages for the Cloned Proxy Identity.
+     */
+    def getDataModelOnAuthorizationChange(params) {
+        def data = [:]
+        data.pages = getProxyPages(params)
+        data
+    }
 }

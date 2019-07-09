@@ -67,9 +67,23 @@
 
 <div ng-if="isRelationshipSelected">
     <div class="row">
-        <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-select-all-pages">
+        <div class="col-xs-12 col-md-3 col-lg-3 proxy-mgmt-select-all-pages">
             <input  class="dir-profile-nav-check" type="checkbox" ng-click="toggleSelect()"/>
             <span class="lbl">{{'proxyManagement.label.selectAll'|i18n}}</span>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-3 col-lg-3">
+                <label class="input-field-label" for="authorization">{{'proxyManagement.label.authorization'|i18n}}</label><br>
+                <xe-ui-select ng-model="proxyAuxData.clonedProxy" theme="select2" search-enabled="false" ng-change="handleClonedListChange()" id="authorization">
+                    <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.authorization'|i18n)" placeholder="{{placeholder.clonedLList}}">
+                        {{$select.selected.description ? $select.selected.description : placeholder.clonedLList}}
+                    </xe-ui-select-match>
+                    <xe-ui-select-choices repeat="choice in clonedProxiesList">
+                        <div ng-bind-html="choice.description"></div>
+                    </xe-ui-select-choices>
+                </xe-ui-select>
+            </div>
         </div>
     </div>
     <div class="row">

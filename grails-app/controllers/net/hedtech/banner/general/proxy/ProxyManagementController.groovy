@@ -224,4 +224,36 @@ class ProxyManagementController {
             render response as JSON
         }
     }
+
+
+    /*
+     Returns the list of Cloned Proxies.
+    */
+    def getClonedProxiesList() {
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        params.pidm = pidm
+
+        def proxies = generalSsbProxyManagementService.getProxyClonedList(params)
+
+        render proxies as JSON
+    }
+
+
+    /*
+     Get proxy start/stop dates
+    */
+    def getDataModelOnAuthorizationChange() {
+        def params = request?.JSON ?: params
+        try {
+            def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+            params.pidm = pidm
+            def authorizations = generalSsbProxyManagementService.getProxyPages(params)
+
+            render authorizations as JSON
+
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
 }
