@@ -1,0 +1,100 @@
+<!--*******************************************************************************
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-4">
+        <label class="input-field-label" for="relationship">{{'proxyManagement.label.relationship'|i18n}}</label><br>
+        <xe-ui-select ng-model="proxyAuxData.selectedRelationship" theme="select2" search-enabled="false" ng-change="handleRelationshipChange()" id="relationship">
+            <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.relationship'|i18n)" placeholder="{{placeholder.relationship}}">
+                {{$select.selected.description ? $select.selected.description : placeholder.relationship}}
+            </xe-ui-select-match>
+            <xe-ui-select-choices repeat="choice in relationshipChoices">
+                <div ng-bind-html="choice.description"></div>
+            </xe-ui-select-choices>
+        </xe-ui-select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-md-3 col-lg-3">
+        <label for="start-date" class="input-field-label">{{'proxyManagement.label.startDate'|i18n}}</label>
+        <input date-picker ng-model="proxy.p_start_date" pi-input-watcher on-select="setStartDate"
+               class="pi-date-input input-colors" placeholder="{{'proxyManagement.label.startDate'|i18n}}" id="start-date"
+               aria-label="{{'proxyManagement.label.startDate'|i18n}}"/>
+    </div>
+    <div class="col-xs-12 col-md-3 col-lg-3">
+        <label for="stop-date" class="input-field-label">{{'proxyManagement.label.stopDate'|i18n}}</label>
+        <input date-picker ng-model="proxy.p_stop_date" pi-input-watcher on-select="setStopDate"
+               class="pi-date-input input-colors" placeholder="{{'proxyManagement.label.stopDate'|i18n}}" id="stop-date"
+               aria-label="{{'proxyManagement.label.stopDate'|i18n}}"/>
+    </div>
+</div>
+<div class="proxy-info-subheading">
+    <span class="bold">{{'proxyManagement.title.additionalInformation'|i18n}}</span>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-4">
+        <label class="input-field-label" for="desc">{{'proxyManagement.label.description'|i18n}}</label><br>
+        <input ng-model="proxy.p_desc"
+               class="text-input-field gssb-eds-text-field semi-bold form-spacing"
+               type="text" placeholder="{{placeholder.desc}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="desc">
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-4">
+        <label class="input-field-label" for="passphrase">{{'proxyManagement.label.passphrase'|i18n}}</label><br>
+        <input ng-model="proxy.p_passphrase"
+               class="text-input-field gssb-eds-text-field semi-bold form-spacing"
+               type="text" placeholder="{{placeholder.passphrase}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="passphrase">
+
+    </div>
+</div>
+
+<div ng-if="!isCreateNew" class="row">
+    <div class="col-xs-12 col-md-6 col-lg-4">
+        <div class="proxy-mgmt-email-passphrase">
+            <a ng-click="emailPassphrase()" class="add-item-link" tabindex="0">
+                <span class="icon-email-CO"></span> <span>{{'proxyManagement.label.email.passphrase'|i18n}}</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="proxy-info-subheading">
+    <span class="bold">{{'proxyManagement.title.authorizations'|i18n}}</span>
+    <span class="italic">{{'proxyManagement.label.hint.required'|i18n}}</span>
+</div>
+
+
+<div ng-if="isRelationshipSelected">
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-select-all-pages">
+            <input  class="dir-profile-nav-check" type="checkbox" ng-click="toggleSelect()"/>
+            <span class="lbl">{{'proxyManagement.label.selectAll'|i18n}}</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-pages">
+            <div ng-repeat="authItem in proxy.pages">
+                <input ng-model="authItem.auth" class="dir-profile-nav-check" type="checkbox" aria-labelledby="dir-item{{$index}}"/>
+                <span class="lbl">{{authItem.desc}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-if="!isCreateNew" class="row">
+    <div class="col-xs-12 col-md-6 col-lg-4">
+        <div class="proxy-mgmt-email-passphrase">
+            <a ng-click="emailAuthentications()" class="add-item-link" tabindex="0">
+                <span class="icon-email-CO"></span> <span>{{'proxyManagement.label.email.authorizations'|i18n}}</span>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="proxy-bottom-buttons mgmt">
+    <div class="proxy-desktop-visible">
+        <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
+        <input ng-class="profileRequired ? 'only-submit' : null" ng-click="save()" type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
+    </div>
+</div>
+
