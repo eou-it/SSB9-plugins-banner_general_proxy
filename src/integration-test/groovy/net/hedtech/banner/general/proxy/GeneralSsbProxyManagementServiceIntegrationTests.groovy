@@ -117,32 +117,58 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
     }
 
 
-    //@Test
+    @Test
     void testGetClonedList() {
         def id = 'A00017091'
 
         def pidm = PersonUtility.getPerson(id)?.pidm
-        def gidm
-        def params = [:]
-        params."p_email" = "a@aol.com"
-        params."p_email_verify" = "a@aol.com"
-        params."p_last" = "Abc"
-        params."p_first" = "ABX"
-        params."pidm" = pidm
+        def gidm1, gidm2
+        def params1 = [:]
+        def params2 = [:]
+        params1."pidm" = pidm
+        params2."pidm" = pidm
 
         try {
-            gidm = generalSsbProxyManagementService.createProxyProfile(params)
-            assertNotNull gidm
+            // 1st Proxy
+            params1."p_email" = "a1@aol.com"
+            params1."p_email_verify" = "a1@aol.com"
+            params1."p_last" = "L1"
+            params1."p_first" = "F1"
+            gidm1 = generalSsbProxyManagementService.createProxyProfile(params1)
 
-            params.gidm = gidm
+            params1."gidm" = gidm1
+            params1."p_desc" = "Test"
+            params1.p_passphrase = "Cool"
 
-            def result = generalSsbProxyManagementService.getProxyClonedList(params)
+            params1.p_retp_code = 'PARENT'
 
+            generalSsbProxyManagementService.updateProxyProfile(params1)
+
+            //2nd Proxy
+            params2."p_email" = "a2@aol.com"
+            params2."p_email_verify" = "a2@aol.com"
+            params2."p_last" = "L2"
+            params2."p_first" = "F2"
+            gidm2 = generalSsbProxyManagementService.createProxyProfile(params2)
+
+            params2."gidm" = gidm2
+            params2."p_desc" = "Test"
+            params2.p_passphrase = "Cool"
+
+            params2.p_retp_code = 'PARENT'
+
+            generalSsbProxyManagementService.updateProxyProfile(params2)
+
+            //test cloned list
+            def clonedList = generalSsbProxyManagementService.getProxyClonedList(params1)
+
+            assert clonedList?.size() > 0
 
         } catch (Exception e) {
-            fail("Could not generate IDM. " + e)
+            fail("Could not Update Proxy. " + e)
         } finally {
-            deleteDBEntry(gidm);
+            deleteDBEntry(gidm1);
+            deleteDBEntry(gidm2);
         }
     }
 

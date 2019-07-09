@@ -1187,7 +1187,7 @@ END;
 --
     student := '{' ||
     '"code" ' || ':' || '"' || prxy_rec.GPBPRXY_PROXY_IDM || '"' ||
-    ',"description" ' || ':' || '"' || prxy_rec.GPBPRXY_FIRST_NAME || ' ' || prxy_rec.GPBPRXY_FIRST_NAME || '"' ||
+    ',"description" ' || ':' || '"' || prxy_rec.GPBPRXY_FIRST_NAME || ' ' || prxy_rec.GPBPRXY_LAST_NAME || '"' ||
     '},';
 --
     proxies := proxies || student;
