@@ -340,4 +340,30 @@ class GeneralSsbProxyManagementService {
         data.pages = getProxyPages(params)
         data
     }
+
+
+    /*
+     Gets the list of Proxies for the Student to add.
+   */
+    def getProxyAddList(def params) {
+
+        def proxyAddList
+        def sqlText = ProxyManagementApi.BWGKPXYM_PROXYMGMT_ADD_LIST
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+
+        try {
+            sql.call(sqlText, [params.pidm, Sql.VARCHAR
+            ]) { proxyAddListJson ->
+                proxyAddList = proxyAddListJson
+            }
+        }catch (e) {
+            log.error("ERROR: Could not get the List of Cloned Proxies. $e")
+            throw e
+        }
+
+        def studentsAddListMap = new JsonSlurper().parseText(proxyAddList)
+
+        return studentsAddListMap
+    }
 }

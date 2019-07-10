@@ -1203,4 +1203,93 @@ END;
 
     END;
 """
+
+    public final static String BWGKPXYM_PROXYMGMT_ADD_LIST = """
+   DECLARE
+--
+   lv_attr_nt           BANINST1.G_ATTRIBUTE_NT;
+   lv_pidm              spriden.spriden_pidm%TYPE;
+   global_pidm          spriden.spriden_pidm%TYPE;
+   lv_email             goremal.goremal_email_address%TYPE;
+   proxies              varchar2(3000);
+   student              varchar2(3000);
+   listOfProxies        varchar2(3000);
+--
+   BEGIN
+--   
+   global_pidm := ?;
+--   
+   -- Execute the GORRSQL rules for PROXY_ACCESS process PROXYMGMT_ADD_LIST rule
+   -- Results are list (pidm1, email1, pidm2, email2, etc...)
+   -- Each query should be written to not return persons with existing relationship
+   -- Don't display anything if process rules have been disabled or if all relationships already exist
+   
+   lv_attr_nt := gp_gorrsql.f_execute_rule ('PROXY_ACCESS','PROXYMGMT_ADD_LIST', global_pidm);
+   
+   IF lv_attr_nt IS NOT NULL AND lv_attr_nt.COUNT > 0 THEN
+      FOR i IN lv_attr_nt.FIRST .. lv_attr_nt.LAST
+      LOOP
+         IF lv_attr_nt(i)."name" = 'PIDM'
+         THEN
+            lv_pidm := lv_attr_nt(i)."value";
+            lv_email := lv_attr_nt(i+1)."value";
+--                                         );
+            student := '{' ||
+                            '"code" ' || ':' || '"' || lv_pidm || '"' ||
+                            ',"description" ' || ':' || '"' || f_format_name(lv_pidm, 'FML') || '"' ||
+                        '},';
+--
+    proxies := proxies || student;
+         
+        END IF;
+      END LOOP;
+--      
+    proxies := TRIM(TRAILING ',' FROM proxies );
+    proxies := proxies || ']';
+--
+    listOfProxies := '{' || proxies || '}';
+ 
+   END IF;
+--   
+   ? := listOfProxies;
+--   
+   END;
+"""
+
+    public final static String BWGKPXYM_P_MP_AddPIDM = """
+DECLARE
+   p_pidm spriden.spriden_pidm%TYPE;
+   lv_email    goremal.goremal_email_address%TYPE;
+   lv_last     spriden.spriden_last_name%TYPE;
+   lv_first    spriden.spriden_first_name %TYPE;
+   lv_proxyIDM gpbprxy.gpbprxy_proxy_idm%TYPE;
+
+   CURSOR C_GetInfo
+   IS
+      SELECT TRIM(LOWER(goremal_email_address)), spriden_last_name, NVL(spriden_first_name, ' ')
+        FROM spriden, goremal
+       WHERE spriden_change_ind IS NULL
+         AND goremal_status_ind    = 'A'
+         AND goremal_preferred_ind = 'Y'
+         AND goremal_pidm          = spriden_pidm
+         AND spriden_pidm          = p_pidm;
+
+BEGIN
+--
+   p_pidm := ?;
+--
+   OPEN C_GetInfo;
+   FETCH C_GetInfo INTO lv_email, lv_last, lv_first;
+--
+   -- After you get the general person record then try to retrieve the proxy IDM
+   -- If the proxy doesn't exist then it will be created with the PIDM stored in proxy record
+   -- Add the relationship record (it will refresh the list/add display)
+   IF C_GetInfo%FOUND
+   THEN
+      lv_proxyIDM := bwgkpxym.F_GetProxyIDM (lv_email, lv_last, lv_first, p_pidm);
+      bwgkpxym.P_MP_AddXREF(lv_email, lv_last, lv_first, lv_email);
+   END IF;
+   CLOSE C_GetInfo;
+  END;
+"""
 }
