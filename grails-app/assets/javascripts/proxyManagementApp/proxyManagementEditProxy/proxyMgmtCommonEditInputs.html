@@ -12,6 +12,8 @@
                 <div ng-bind-html="choice.description"></div>
             </xe-ui-select-choices>
         </xe-ui-select>
+        <p class="input-field-label mobile-errors" ng-class="[(!!relationshipErrMsg ? 'field-error error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{relationshipErrMsg|i18n}}</p>
     </div>
 </div>
 <div class="row">
@@ -63,6 +65,8 @@
     <span class="bold">{{'proxyManagement.title.authorizations'|i18n}}</span>
     <span class="italic">{{'proxyManagement.label.hint.required'|i18n}}</span>
 </div>
+<p class="input-field-label mobile-errors" ng-class="[(!!authorizationsErrMsg ? 'field-error error-font-size' : 'no-display')]"
+   role="alert" aria-live="assertive">{{authorizationsErrMsg|i18n}}</p>
 
 
 <div ng-if="isRelationshipSelected">
@@ -89,7 +93,7 @@
     <div class="row">
         <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-pages">
             <div ng-repeat="authItem in proxy.pages">
-                <input ng-model="authItem.auth" class="dir-profile-nav-check" type="checkbox" aria-labelledby="dir-item{{$index}}"/>
+                <input ng-model="authItem.auth" class="dir-profile-nav-check" type="checkbox" ng-change="removeProxyProfileFieldErrors()" aria-labelledby="dir-item{{$index}}"/>
                 <span class="lbl">{{authItem.desc}}</span>
             </div>
         </div>
