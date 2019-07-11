@@ -1,9 +1,10 @@
 /********************************************************************************
   Copyright 2019 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$rootScope', '$state','$location', '$stateParams', '$timeout',
-    '$filter', 'notificationCenterService', 'proxyMgmtAppService',
-    function ($scope, $rootScope, $state,$location, $stateParams, $timeout, $filter, notificationCenterService, proxyMgmtAppService) {
+proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$rootScope', '$state','$location', '$stateParams',
+    '$timeout', '$filter', 'notificationCenterService', 'proxyMgmtAppService', 'proxyMgmtErrorService',
+    function ($scope, $rootScope, $state,$location, $stateParams, $timeout, $filter, notificationCenterService,
+              proxyMgmtAppService, proxyMgmtErrorService) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -31,6 +32,27 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             }
 
             $scope.isRelationshipSelected = !!code;
+        },
+
+        isValidProxyData = function (proxy, isUpdate) {
+            if (isUpdate) {
+                // The corresponding fields for these errors are always empty for an update, so shim the error messages.
+                $scope.firstNameErrMsg = false;
+                $scope.lastNameErrMsg = false;
+                $scope.emailErrMsg = false;
+                $scope.verifyEmailErrMsg = false;
+            } else {
+                $scope.firstNameErrMsg = proxyMgmtErrorService.getErrorFirstName(proxy);
+                $scope.lastNameErrMsg = proxyMgmtErrorService.getErrorLastName(proxy);
+                $scope.emailErrMsg = proxyMgmtErrorService.getErrorEmail(proxy);
+                $scope.verifyEmailErrMsg = proxyMgmtErrorService.getErrorVerifyEmail(proxy);
+            }
+
+            $scope.relationshipErrMsg =   proxyMgmtErrorService.getErrorRelationship(proxy);
+            $scope.authorizationsErrMsg = proxyMgmtErrorService.getErrorAuthorizations(proxy);
+
+            return !($scope.firstNameErrMsg || $scope.lastNameErrMsg || $scope.emailErrMsg || $scope.verifyEmailErrMsg ||
+                     $scope.relationshipErrMsg || $scope.authorizationsErrMsg);
         },
 
         init = function() {
@@ -114,6 +136,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 $scope.proxy.p_retp_code = $scope.proxyAuxData.selectedRelationship.code;
 
                 $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
+
+                $scope.removeProxyProfileFieldErrors();
             });
         };
 
@@ -173,6 +197,28 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                     page.auth = event.target.checked;
                 });
 
+            $scope.removeProxyProfileFieldErrors();
+        };
+
+        $scope.removeProxyProfileFieldErrors = function() {
+            if($scope.firstNameErrMsg) {
+                $scope.firstNameErrMsg = proxyMgmtErrorService.getErrorFirstName($scope.proxy);
+            }
+            if($scope.lastNameErrMsg) {
+                $scope.lastNameErrMsg = proxyMgmtErrorService.getErrorLastName($scope.proxy);
+            }
+            if($scope.emailErrMsg) {
+                $scope.emailErrMsg = proxyMgmtErrorService.getErrorEmail($scope.proxy);
+            }
+            if($scope.verifyEmailErrMsg) {
+                $scope.verifyEmailErrMsg = proxyMgmtErrorService.getErrorVerifyEmail($scope.proxy);
+            }
+            if($scope.relationshipErrMsg) {
+                $scope.relationshipErrMsg = proxyMgmtErrorService.getErrorRelationship($scope.proxy);
+            }
+            if($scope.authorizationsErrMsg) {
+                $scope.authorizationsErrMsg = proxyMgmtErrorService.getErrorAuthorizations($scope.proxy);
+            }
         };
 
 
@@ -201,6 +247,13 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.isRelationshipSelected = false;
         $scope.relationshipChoices = [];
         $scope.clonedProxiesList = [];
+        $scope.firstNameErrMsg = '';
+        $scope.lastNameErrMsg = '';
+        $scope.emailErrMsg = '';
+        $scope.verifyEmailErrMsg = '';
+        $scope.relationshipErrMsg = '';
+        $scope.authorizationsErrMsg = '';
+
 
         $scope.setStartDate = function(data){
             $scope.proxy.p_start_date = data;
@@ -211,61 +264,70 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         };
 
         $scope.save = function() {
-            notificationCenterService.addNotification('proxy.personalinformation.onSave.waitMessage', 'success', true);
+            if ($scope.isCreateNew) { // CREATE PROXY
+                if (isValidProxyData($scope.proxy)) {
+                    notificationCenterService.addNotification('proxy.personalinformation.onSave.waitMessage', 'success', true);
 
-            if ($scope.isCreateNew) {
-                proxyMgmtAppService.createProxy($scope.proxy).$promise.then(function (response) {
-                    var notifications = [],
-                        doStateGoSuccess = function (messageOnSave) {
-                            notifications.push({
-                                message: messageOnSave ? messageOnSave : 'proxyManagement.label.createSuccess',
-                                messageType: $scope.notificationSuccessType,
-                                flashType: $scope.flashNotification
-                            });
+                    proxyMgmtAppService.createProxy($scope.proxy).$promise.then(function (response) {
+                        var notifications = [],
+                            doStateGoSuccess = function (messageOnSave) {
+                                notifications.push({
+                                    message: messageOnSave ? messageOnSave : 'proxyManagement.label.createSuccess',
+                                    messageType: $scope.notificationSuccessType,
+                                    flashType: $scope.flashNotification
+                                });
 
-                            $state.go('home',
-                                {onLoadNotifications: notifications},
-                                {reload: true, inherit: false, notify: true}
-                            );
-                        };
+                                $state.go('home',
+                                    {onLoadNotifications: notifications},
+                                    {reload: true, inherit: false, notify: true}
+                                );
+                            };
 
-                    if (response.failure) {
-                        $scope.flashMessage = response.message;
+                        if (response.failure) {
+                            $scope.flashMessage = response.message;
 
-                        notificationCenterService.clearNotifications();
-                        notificationCenterService.addNotification(response.message, "error", true);
+                            notificationCenterService.clearNotifications();
+                            notificationCenterService.addNotification(response.message, "error", true);
 
-                    } else {
-                        doStateGoSuccess(response.message);
-                    }
-                });
-            }else{
+                        } else {
+                            doStateGoSuccess(response.message);
+                        }
+                    });
+                } else {
+                    proxyMgmtErrorService.displayMessages();
+                }
+            }else{ // UPDATE PROXY
+                if (isValidProxyData($scope.proxy, true)) {
+                    notificationCenterService.addNotification('proxy.personalinformation.onSave.waitMessage', 'success', true);
 
-                proxyMgmtAppService.updateProxy($scope.proxy).$promise.then(function (response) {
-                    var notifications = [],
-                        doStateGoSuccess = function (messageOnSave) {
-                            notifications.push({
-                                message: messageOnSave ? messageOnSave : 'proxyManagement.label.updateSuccess',
-                                messageType: $scope.notificationSuccessType,
-                                flashType: $scope.flashNotification
-                            });
+                    proxyMgmtAppService.updateProxy($scope.proxy).$promise.then(function (response) {
+                        var notifications = [],
+                            doStateGoSuccess = function (messageOnSave) {
+                                notifications.push({
+                                    message: messageOnSave ? messageOnSave : 'proxyManagement.label.updateSuccess',
+                                    messageType: $scope.notificationSuccessType,
+                                    flashType: $scope.flashNotification
+                                });
 
-                            $state.go('home',
-                                {onLoadNotifications: notifications},
-                                {reload: true, inherit: false, notify: true}
-                            );
-                        };
+                                $state.go('home',
+                                    {onLoadNotifications: notifications},
+                                    {reload: true, inherit: false, notify: true}
+                                );
+                            };
 
-                    if (response.failure) {
-                        $scope.flashMessage = response.message;
+                        if (response.failure) {
+                            $scope.flashMessage = response.message;
 
-                        notificationCenterService.clearNotifications();
-                        notificationCenterService.addNotification(response.message, "error", true);
+                            notificationCenterService.clearNotifications();
+                            notificationCenterService.addNotification(response.message, "error", true);
 
-                    } else {
-                        doStateGoSuccess(response.message);
-                    }
-                });
+                        } else {
+                            doStateGoSuccess(response.message);
+                        }
+                    });
+                } else {
+                    proxyMgmtErrorService.displayMessages();
+                }
 
             }
         };
