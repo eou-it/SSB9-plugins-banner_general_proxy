@@ -2,7 +2,9 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
     function (notificationCenterService, $filter) {
 
         var messages = [],
-            proxyProfileMessageCenter = "#proxyProfileErrorMsgCenter";
+            proxyProfileMessageCenter = "#proxyProfileErrorMsgCenter",
+            invalidCharRegEx = /[ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]/i,
+            validEmailRegEx = /[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+@[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+\.[A-Z]{2,}/i;
 
         this.getErrorFirstName = function(proxy) {
             var msg = 'proxyManagement.message.firstNameRequired';
@@ -34,6 +36,34 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
             var msg = 'proxyManagement.message.emailRequired';
 
             if (!proxy.p_email) {
+                messages.push({msg: msg, type: 'error'});
+
+                return msg;
+            }
+            else {
+                notificationCenterService.removeNotification(msg);
+            }
+
+            return this.getErrorEmailAddressFormat(proxy);
+        };
+
+        this.getErrorEmailAddressFormat = function (proxy) {
+            var msg = 'personInfo.email.error.emailAddressFormat';
+            if (invalidCharRegEx.test(proxy.p_email)) {
+                messages.push({msg: msg, type: 'error'});
+
+                return msg;
+            }
+            else {
+                notificationCenterService.removeNotification(msg);
+            }
+
+            return this.getErrorEmailAddressValid(proxy);
+        };
+
+        this.getErrorEmailAddressValid = function (proxy) {
+            var msg = 'personInfo.email.error.emailAddressValid';
+            if (!validEmailRegEx.test(proxy.p_email)) {
                 messages.push({msg: msg, type: 'error'});
 
                 return msg;
