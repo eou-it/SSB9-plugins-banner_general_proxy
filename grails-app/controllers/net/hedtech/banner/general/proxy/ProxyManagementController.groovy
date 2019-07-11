@@ -5,7 +5,7 @@ package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
-import net.hedtech.banner.general.person.PersonUtility
+import net.hedtech.banner.i18n.MessageHelper
 import net.hedtech.banner.security.XssSanitizer
 import org.springframework.security.core.context.SecurityContextHolder
 
@@ -101,6 +101,10 @@ class ProxyManagementController {
         map.pidm = pidm
 
         try {
+            if (!(map?.p_retp_code && isAtLeastOnePageAuthorized(map?.pages))) {
+                throw new ApplicationException("", MessageHelper.message("proxyManagement.onSave.REQUIRED"))
+            }
+
             def gidm = generalSsbProxyManagementService.createProxyProfile(map)
             map.gidm = gidm
 
@@ -255,5 +259,15 @@ class ProxyManagementController {
         } catch (ApplicationException e) {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
+    }
+
+    private isAtLeastOnePageAuthorized(pages) {
+        if (!pages) {
+            return false;
+        }
+
+        def found = pages.find {it?.auth}
+
+        found ? true : false
     }
 }
