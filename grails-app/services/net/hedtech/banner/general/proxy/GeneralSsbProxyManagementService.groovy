@@ -99,7 +99,9 @@ class GeneralSsbProxyManagementService {
 
         def proxyProfile = [:]
 
-        sql.call(sqlText, [CURSOR_PARAMETER, gidm, pidm]) { profile ->
+        def messagesOut
+
+        sql.call(sqlText, [gidm, pidm, CURSOR_PARAMETER, Sql.VARCHAR]) { profile, messages ->
             profile.eachRow() { data ->
                 proxyProfile.gidm = data.GPRXREF_PROXY_IDM
                 proxyProfile.pidm = data.GPRXREF_PERSON_PIDM
@@ -109,7 +111,11 @@ class GeneralSsbProxyManagementService {
                 proxyProfile.p_stop_date = data.GPRXREF_STOP_DATE
                 proxyProfile.p_desc = data.GPRXREF_PROXY_DESC
             }
+
+            messagesOut = messages
         }
+
+        messagesOut = new JsonSlurper().parseText(messagesOut)
 
         def  proxyPages = ""
 
@@ -145,7 +151,7 @@ class GeneralSsbProxyManagementService {
                     }
                 }
 
-        return [proxyProfile : proxyProfile, proxyUiRules : proxyUiRules]
+        return [proxyProfile : proxyProfile, proxyUiRules : proxyUiRules, messages : messagesOut]
     }
 
     def deleteProxyProfile(def params) {

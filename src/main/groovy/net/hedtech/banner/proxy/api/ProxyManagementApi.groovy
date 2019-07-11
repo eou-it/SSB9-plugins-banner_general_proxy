@@ -439,14 +439,100 @@ END IF;
 
     public final static String PROXY_PROFILE  = """
        DECLARE
+         p_proxyIDM gpbprxy.gpbprxy_proxy_idm%TYPE;
+         pidm spriden.spriden_pidm%TYPE;
+         
          lv_GPRXREF_rec gp_gprxref.gprxref_rec;
          lv_GPRXREF_ref gp_gprxref.gprxref_ref;
+         
+         lv_GPBPRXY_rec gp_gpbprxy.gpbprxy_rec;
+         lv_GPBPRXY_ref gp_gpbprxy.gpbprxy_ref;
+         
+         messages VARCHAR2(3000);
+         message VARCHAR2(1000);
 --
        BEGIN
---        
+       
+--       
+       p_proxyIDM := ?;
+       pidm := ?;
+       
+       messages:= '{ "messages":[';
+       
+       --
+       -- Get the proxy record
+   lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One (p_proxyIDM);
+   
+   FETCH lv_GPBPRXY_ref INTO lv_GPBPRXY_rec;
+   IF lv_GPBPRXY_ref%FOUND THEN
+        IF lv_GPBPRXY_rec.R_PIN_EXP_DATE IS NOT NULL THEN
+      
+                message := '{' ||
+                '"code" ' || ':' || '"' || 'PIN_EXPIRATION_DATE' || '"' ||
+                ',"value" ' || ':' || '"' || lv_GPBPRXY_rec.R_PIN_EXP_DATE || '"' ||
+                '},';
+--
+            messages := messages || message;
+        END IF;
+--      
+      IF lv_GPBPRXY_rec.R_EMAIL_VER_DATE IS NOT NULL THEN
+                message := '{' ||
+                '"code" ' || ':' || '"' || 'EMAIL_VERIFIED' || '"' ||
+                ',"value" ' || ':' || '"' || lv_GPBPRXY_rec.R_EMAIL_VER_DATE || '"' ||
+                '},'; 
+                
+                messages := messages || message;  
+      ELSE     
+          message := '{' ||
+          '"code" ' || ':' || '"' || 'UNVERIFIED' || '"' ||
+          ',"value" ' || ':' || '"' || lv_GPBPRXY_rec.R_EMAIL_VER_DATE || '"' ||
+          '},';
+          
+          messages := messages || message;
+      END IF;
+     IF lv_GPBPRXY_rec.R_OPT_OUT_ADV_DATE IS NOT NULL THEN     
+          message := '{' ||
+          '"code" ' || ':' || '"' || 'OPTOUT' || '"' ||
+          ',"value" ' || ':' || '"' || lv_GPBPRXY_rec.R_OPT_OUT_ADV_DATE ||'"' ||
+          '},';
+          messages := messages || message;
+     END IF;
+     IF lv_GPBPRXY_rec.R_PIN_DISABLED_IND = 'R' THEN      
+          message := '{' ||
+          '"code" ' || ':' || '"' || 'PINRESET' || '"' ||
+          ',"value" ' || ':' || '"' || '"' ||
+          '},';
+          
+          messages := messages || message;
+     END IF;
+     IF lv_GPBPRXY_rec.R_PIN_DISABLED_IND IN ('C', 'Y') THEN     
+          message := '{' ||
+          '"code" ' || ':' || '"' || 'PINDISABLED' || '"' ||
+          ',"value" ' || ':' || '"' || '"' ||
+          '},';
+          
+          messages := messages || message;
+     END IF;
+     IF lv_GPBPRXY_rec.R_PIN_DISABLED_IND = 'E' THEN    
+          message := '{' ||
+          '"code" ' || ':' || '"' || 'NEWEMAIL' || '"' ||
+          ',"value" ' || ':' || '"' || '"' ||
+          '},';
+          
+          messages := messages || message;
+      END IF;
+   END IF;
+   CLOSE lv_GPBPRXY_ref;
+--   
+         messages := TRIM(TRAILING ',' FROM messages);
+--
+         messages := messages || ']}';
+              
         dbms_session.set_nls('NLS_DATE_FORMAT',''''||'DD-MON-RRRR'||'''');
         dbms_session.set_nls('NLS_CALENDAR',''''||'GREGORIAN'||'''');
-        ? := gp_gprxref.F_Query_One (?,?);
+        
+        ? := gp_gprxref.F_Query_One (p_proxyIDM, pidm);        
+        ? := messages;
 --
         END;
     """

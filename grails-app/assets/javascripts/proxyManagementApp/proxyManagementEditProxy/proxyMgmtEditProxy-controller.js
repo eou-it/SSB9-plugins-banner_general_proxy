@@ -84,6 +84,10 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 proxyMgmtAppService.getProxy({gidm: gidm}).$promise.then(function (response) {
                     $scope.proxy = response.proxyProfile;
 
+                    _.each(response.messages.messages, function(message) {
+                        notificationCenterService.addNotification($filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]), $rootScope.notificationErrorType, true);
+                    });
+
                     setSelectedRelationship($scope.proxy.p_retp_code);
 
                     proxyMgmtAppService.getClonedProxiesList({gidm: gidm, p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function(response) {
