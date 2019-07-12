@@ -1290,6 +1290,58 @@ END;
     END;
 """
 
+
+    public final static String PROXY_CLONE_LIST_ON_CREATE = """
+    DECLARE
+--    
+    p_proxyIDM   gpbprxy.gpbprxy_proxy_idm%TYPE;
+    p_personPIDM spriden.spriden_pidm%TYPE;
+--
+    proxies varchar2(3000);
+    student varchar2(3000);
+    listOfProxies varchar2(3000);
+--
+   CURSOR C_CloneList
+   IS
+       SELECT GPBPRXY_PROXY_IDM idm, GPBPRXY_FIRST_NAME fn, GPBPRXY_LAST_NAME ln, GPRXREF_RETP_CODE retp
+         FROM gpbprxy,gprxref
+         WHERE gpbprxy_proxy_idm IN (SELECT gprxref_proxy_idm
+                                     FROM gprxref
+                                     WHERE gprxref_person_pidm = p_personPIDM)
+                                     AND  gprxref_proxy_idm = gpbprxy_proxy_idm
+                                     AND gprxref_person_pidm = p_personPIDM
+       ORDER BY gpbprxy_last_name, gpbprxy_first_name;
+--       
+    BEGIN
+--    
+    p_proxyIDM  := ?;
+    p_personPIDM := ?;
+
+    proxies := '"cloneList":[';
+
+      FOR prxy_rec IN C_CloneList
+   LOOP
+--
+    student := '{' ||
+    '"code" ' || ':' || '"' || prxy_rec.idm || '"' ||
+    ',"description" ' || ':' || '"' || prxy_rec.fn || ' ' || prxy_rec.ln || '"' ||
+    ',"retp" ' || ':' || '"' || prxy_rec.retp || '"' ||
+    '},';
+--
+    proxies := proxies || student;
+--
+    END LOOP;
+--
+    proxies := TRIM(TRAILING ',' FROM proxies );
+    proxies := proxies || ']';
+
+    listOfProxies := '{' || proxies || '}';
+
+    ? := listOfProxies;
+
+    END;
+"""
+
     public final static String BWGKPXYM_PROXYMGMT_ADD_LIST = """
    DECLARE
 --

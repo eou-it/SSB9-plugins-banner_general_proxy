@@ -122,6 +122,19 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 };
 
                 setSelectedRelationship($scope.proxy.p_retp_code);
+
+
+                proxyMgmtAppService.getClonedProxiesListOnCreate({gidm: gidm}).$promise.then(function(response) {
+                    if (response.failure) {
+                        $scope.flashMessage = response.message.clonedProxiesList;
+
+                        notificationCenterService.clearNotifications();
+                        notificationCenterService.addNotification(response.message, "error", true);
+
+                    } else {
+                        $scope.clonedProxiesList = response.cloneList;
+                    }
+                });
             }
 
             displayNotificationsOnStateLoad();
@@ -147,8 +160,13 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
 
         $scope.handleClonedListChange = function(){
-            //console.log($scope.proxyAuxData.clonedProxy.code);
-            proxyMgmtAppService.getClonedAuthorizationsList({gidm: $scope.proxyAuxData.clonedProxy.code,p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function (response) {
+
+            if ($scope.isCreateNew) {
+                $scope.proxy.p_retp_code = $scope.proxyAuxData.clonedProxy.retp;
+                setSelectedRelationship($scope.proxy.p_retp_code);
+            }
+
+            proxyMgmtAppService.getClonedAuthorizationsList({gidm: $scope.proxyAuxData.clonedProxy.code, p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function (response) {
                 $scope.proxy.pages = response.pages;
             });
 
@@ -235,7 +253,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             firstName: null,
             lastName: null,
             email: null,
-            clonedProxy: {code: null, description: null}
+            clonedProxy: {code: null, description: null, retp : null}
         };
 
         $scope.placeholder = {

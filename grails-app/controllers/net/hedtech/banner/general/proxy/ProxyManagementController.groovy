@@ -245,6 +245,20 @@ class ProxyManagementController {
 
 
     /*
+     Returns the list of Cloned Proxies on Create Action.
+    */
+    def getClonedProxiesListOnCreate() {
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        params.pidm = pidm
+
+        def proxies = generalSsbProxyManagementService.getProxyClonedListOnCreate(params)
+
+        render proxies as JSON
+    }
+
+
+    /*
      Get proxy start/stop dates
     */
     def getDataModelOnAuthorizationChange() {

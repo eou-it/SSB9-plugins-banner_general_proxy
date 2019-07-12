@@ -53,6 +53,11 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
             {controller: 'ProxyManagement', action: 'getClonedProxiesList'}).get(params);
     };
 
+    this.getClonedProxiesListOnCreate = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'getClonedProxiesListOnCreate'}).get(params);
+    };
+
     this.getClonedAuthorizationsList = function (params) {
         return $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'getDataModelOnAuthorizationChange'}).get(params);

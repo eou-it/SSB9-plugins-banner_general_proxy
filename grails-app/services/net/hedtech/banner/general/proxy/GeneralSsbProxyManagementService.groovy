@@ -339,6 +339,32 @@ class GeneralSsbProxyManagementService {
 
 
     /*
+     Gets the list of Proxies for the Student to clone from on Create Action.
+    */
+    def getProxyClonedListOnCreate(def params) {
+
+        def proxyClonedList
+        def sqlText = ProxyManagementApi.PROXY_CLONE_LIST_ON_CREATE
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+
+        try {
+            sql.call(sqlText, [params.gidm, params.pidm, Sql.VARCHAR
+            ]) { proxyListJson ->
+                proxyClonedList = proxyListJson
+            }
+        }catch (e) {
+            log.error("ERROR: Could not get the List of Cloned Proxies on Create Action. $e")
+            throw e
+        }
+
+        def studentsListMap = new JsonSlurper().parseText(proxyClonedList)
+
+        return studentsListMap
+    }
+
+
+    /*
      Gets the List of Authorization Pages for the Cloned Proxy Identity.
      */
     def getDataModelOnAuthorizationChange(params) {
