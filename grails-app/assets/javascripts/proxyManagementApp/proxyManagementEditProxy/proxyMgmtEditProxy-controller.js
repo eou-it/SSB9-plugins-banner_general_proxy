@@ -2,8 +2,8 @@
   Copyright 2019 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$rootScope', '$state','$location', '$stateParams',
-    '$timeout', '$filter', 'notificationCenterService', 'proxyMgmtAppService', 'proxyMgmtErrorService',
-    function ($scope, $rootScope, $state,$location, $stateParams, $timeout, $filter, notificationCenterService,
+    '$timeout', '$filter', '$q', 'notificationCenterService', 'proxyMgmtAppService', 'proxyMgmtErrorService',
+    function ($scope, $rootScope, $state,$location, $stateParams, $timeout, $filter, $q, notificationCenterService,
               proxyMgmtAppService, proxyMgmtErrorService) {
 
         // LOCAL FUNCTIONS
@@ -141,6 +141,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         };
 
 
+        // CONTROLLER FUNCTIONS
+        // --------------------
         $scope.setupSelectCtrlFocusser = function($selectCtrl, text) {
             $selectCtrl.focusserTitle = text;
         };
@@ -243,40 +245,6 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             }
         };
 
-
-        // CONTROLLER VARIABLES
-        // --------------------
-        $scope.isCreateNew = true;
-        $scope.proxy;
-        $scope.proxyAuxData = {
-            selectedRelationship: {code: null, description: null},
-            firstName: null,
-            lastName: null,
-            email: null,
-            clonedProxy: {code: null, description: null, retp : null}
-        };
-
-        $scope.placeholder = {
-            first_name:   $filter('i18n')('proxyManagement.placeholder.first_name'),
-            last_name:    $filter('i18n')('proxyManagement.placeholder.last_name'),
-            email:        $filter('i18n')('proxyManagement.placeholder.email'),
-            verify_email: $filter('i18n')('proxyManagement.placeholder.verifyEmail'),
-            relationship: $filter('i18n')('proxyManagement.placeholder.relationship'),
-            desc:         $filter('i18n')('proxyManagement.label.description'),
-            passphrase:   $filter('i18n')('proxyManagement.label.passphrase'),
-            clonedLList:  $filter('i18n')('proxyManagement.placeholder.clonedList')
-        };
-        $scope.isRelationshipSelected = false;
-        $scope.relationshipChoices = [];
-        $scope.clonedProxiesList = [];
-        $scope.firstNameErrMsg = '';
-        $scope.lastNameErrMsg = '';
-        $scope.emailErrMsg = '';
-        $scope.verifyEmailErrMsg = '';
-        $scope.relationshipErrMsg = '';
-        $scope.authorizationsErrMsg = '';
-
-
         $scope.setStartDate = function(data){
             $scope.proxy.p_start_date = data;
         };
@@ -355,10 +323,121 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         };
 
         $scope.cancel = function() {
-                $state.go('home',
-                    {reload: true, inherit: false, notify: true}
-                );
+            $state.go('home',
+                {reload: true, inherit: false, notify: true}
+            );
         };
+
+
+        // CONTROLLER VARIABLES
+        // --------------------
+        $scope.isCreateNew = true;
+        $scope.proxy;
+        $scope.proxyAuxData = {
+            selectedRelationship: {code: null, description: null},
+            firstName: null,
+            lastName: null,
+            email: null,
+            clonedProxy: {code: null, description: null, retp : null}
+        };
+
+        $scope.placeholder = {
+            first_name:   $filter('i18n')('proxyManagement.placeholder.first_name'),
+            last_name:    $filter('i18n')('proxyManagement.placeholder.last_name'),
+            email:        $filter('i18n')('proxyManagement.placeholder.email'),
+            verify_email: $filter('i18n')('proxyManagement.placeholder.verifyEmail'),
+            relationship: $filter('i18n')('proxyManagement.placeholder.relationship'),
+            desc:         $filter('i18n')('proxyManagement.label.description'),
+            passphrase:   $filter('i18n')('proxyManagement.label.passphrase'),
+            clonedLList:  $filter('i18n')('proxyManagement.placeholder.clonedList')
+        };
+
+        $scope.isRelationshipSelected = false;
+        $scope.relationshipChoices = [];
+        $scope.clonedProxiesList = [];
+        $scope.firstNameErrMsg = '';
+        $scope.lastNameErrMsg = '';
+        $scope.emailErrMsg = '';
+        $scope.verifyEmailErrMsg = '';
+        $scope.relationshipErrMsg = '';
+        $scope.authorizationsErrMsg = '';
+
+
+        // COMMUNICATION DATA TABLE
+        // ------------------------
+        //TODO: Internationalize code in this "COMMUNICATION DATA TABLE" section and refactor function names, etc. as needed (e.g. "onDoubleClick" is rather generic)
+        $scope.records = 1;
+        $scope.rows = [];
+        $scope.communicationColumns = [
+            {position: {desktop: 1, mobile: 1}, name: 'transmitDate', title: $filter('i18n')('proxyManagement.title.transmitDate'), options: {visible: true, sortable:true}},
+            {position: {desktop: 2, mobile: 2}, name: 'subject', title: $filter('i18n')('proxyManagement.title.subject'), options: {visible: true, sortable:true}},
+            {position: {desktop: 3, mobile: 3}, name: 'actionDate', title: $filter('i18n')('proxyManagement.title.actionDate'), options: {visible: true, sortable:true}},
+            {position: {desktop: 4, mobile: 4}, name: 'expirationDate', title: $filter('i18n')('proxyManagement.title.expirationDate'), options: {visible: true, sortable:true}},
+            {position: {desktop: 5, mobile: 5}, name: 'resend', title: $filter('i18n')('proxyManagement.title.resend'), options: {visible: true, sortable:true}}
+        ];
+
+        $scope.getCommunicationData = function(query) {
+            // TODO: When implementing actual Communication data, "promise" in the next line may need to be replaced by "$promise"
+            return proxyMgmtAppService.getCommunicationLog(query).promise;
+        };
+
+        $scope.onDoubleClick = function(data,index) {
+
+        };
+
+        $scope.onBtnClick = function(data, index) {
+
+        };
+
+        $scope.model = {allRowsSelected: false};
+
+        $scope.selectAll = function() {
+
+        };
+
+        $scope.refreshData = function() {
+
+            $scope.refreshGrid(true);
+        };
+
+        $scope.postFetch = function(response, oldResult) {
+
+        };
+
+        // $scope.emptyTableMsg = 'There is no data available for this table';
+
+        $scope.draggableColumnNames = ['transmitDate', 'subject', 'actionDate', 'expirationDate', 'resend'];
+
+        $scope.mobileConfig = {
+            transmitDate: 2,
+            subject: 2,
+            actionDate: 2,
+            expirationDate: 2,
+            resend: 2
+        };
+
+        $scope.paginationConfig = {
+            pageLengths : [ 5, 10, 25, 50, 100],
+            offset : 7,
+            recordsFoundLabel : "Results found",
+            pageTitle: "Go To Page (End)",
+            pageLabel: "Page",
+            pageAriaLabel: "Go To Page. Short cut is End",
+            ofLabel: "of"
+            //    perPageLabel: 'pagination.per.page.label'
+        };
+
+        $scope.searchConfig = {
+            id: 'dataTableSearch',
+            title: 'Search (Alt+Y)',
+            ariaLabel: 'Search for any CRN',
+            delay: 300,
+            searchString : '',
+            placeholder : 'Search',
+            maxlength: 200,
+            minimumCharacters : 2
+        };
+
 
         // INITIALIZE
         // ----------

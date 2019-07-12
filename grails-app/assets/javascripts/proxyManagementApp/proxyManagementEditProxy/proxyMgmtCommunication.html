@@ -1,0 +1,18 @@
+<!--*******************************************************************************
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<xe-table-grid table-id="communicationDataTable" caption="" header="communicationColumns" end-point="" fetch="getCommunicationData(query)"
+               post-fetch="postFetch(response, oldResult)" content="rows" toolbar="true" paginate="true" continuous-scrolling="false"
+               on-row-double-click="onDoubleClick(data,index)" no-data-msg="No Results Found" empty-table-msg="emptyTableMsg"
+               search-config="searchConfig" pagination-config="paginationConfig" draggable-column-names="draggableColumnNames"
+               mobile-layout="mobileConfig" height="16em" refresh-grid="refreshGrid" xe-section="readonlyDataTable">
+
+    <xe-cell-markup column-name="resend">
+<!--        <xe-status-label colun-name="status" xe-label="{{row.status.label}}" xe-type="{{row.status.type}}"></xe-status-label>-->
+        <!--<xe-button xe-type= "secondary" xe-label="Delete" xe-btn-click="onBtnClick(row,index)" xe-disabled="false"></xe-button><br></br>-->
+<!--        <xe-button xe-type= "primary" xe-label="Resend" xe-btn-click="onBtnClick(row,index)" xe-disabled="false" class="proxy-mgmt-grid-btn"></xe-button>-->
+        <a ng-click="PLACEHOLDER()" class="add-item-link resend-link" tabindex="0">
+            <span class="icon-email-CO"></span>
+        </a>
+    </xe-cell-markup>
+</xe-table-grid>
