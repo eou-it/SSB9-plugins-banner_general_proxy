@@ -74,7 +74,6 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 }
             });
 
-
             if (gidm) {
                 // Set up for "edit proxy"
                 $scope.isCreateNew = false;
@@ -388,50 +387,23 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
         // COMMUNICATION DATA TABLE
         // ------------------------
-        //TODO: Internationalize code in this "COMMUNICATION DATA TABLE" section and refactor function names, etc. as needed (e.g. "onDoubleClick" is rather generic)
-        $scope.records = 1;
-        $scope.rows = [];
-        $scope.communicationColumns = [
-            {position: {desktop: 1, mobile: 1}, name: 'transmitDate', title: $filter('i18n')('proxyManagement.title.transmitDate'), options: {visible: true, sortable:true}},
-            {position: {desktop: 2, mobile: 2}, name: 'subject', title: $filter('i18n')('proxyManagement.title.subject'), options: {visible: true, sortable:true}},
-            {position: {desktop: 3, mobile: 3}, name: 'actionDate', title: $filter('i18n')('proxyManagement.title.actionDate'), options: {visible: true, sortable:true}},
-            {position: {desktop: 4, mobile: 4}, name: 'expirationDate', title: $filter('i18n')('proxyManagement.title.expirationDate'), options: {visible: true, sortable:true}},
-            {position: {desktop: 5, mobile: 5}, name: 'resend', title: $filter('i18n')('proxyManagement.title.resend'), options: {visible: true, sortable:true}}
+        $scope.commRecords = 0;
+        $scope.commRows = [];
+        $scope.commColumns = [
+            {position: {desktop: 1, mobile: 1}, name: 'transmitDate', title: $filter('i18n')('proxyManagement.title.transmitDate'), options: {visible: true, sortable:false}, width:'60px'},
+            {position: {desktop: 2, mobile: 2}, name: 'subject', title: $filter('i18n')('proxyManagement.title.subject'), options: {visible: true, sortable:false}, width:'100px'},
+            {position: {desktop: 3, mobile: 3}, name: 'actionDate', title: $filter('i18n')('proxyManagement.title.actionDate'), options: {visible: true, sortable:false}, width:'60px'},
+            {position: {desktop: 4, mobile: 4}, name: 'expirationDate', title: $filter('i18n')('proxyManagement.title.expirationDate'), options: {visible: true, sortable:false}, width:'60px'},
+            {position: {desktop: 5, mobile: 5}, name: 'resend', title: $filter('i18n')('proxyManagement.title.resend'), options: {visible: true, sortable:false}, width:'25px'}
         ];
 
+        $scope.draggableCommColumnNames = [];
+
         $scope.getCommunicationData = function(query) {
-            // TODO: When implementing actual Communication data, "promise" in the next line may need to be replaced by "$promise"
             return proxyMgmtAppService.getCommunicationLog(query).promise;
         };
 
-        $scope.onDoubleClick = function(data,index) {
-
-        };
-
-        $scope.onBtnClick = function(data, index) {
-
-        };
-
-        $scope.model = {allRowsSelected: false};
-
-        $scope.selectAll = function() {
-
-        };
-
-        $scope.refreshData = function() {
-
-            $scope.refreshGrid(true);
-        };
-
-        $scope.postFetch = function(response, oldResult) {
-
-        };
-
-        // $scope.emptyTableMsg = 'There is no data available for this table';
-
-        $scope.draggableColumnNames = ['transmitDate', 'subject', 'actionDate', 'expirationDate', 'resend'];
-
-        $scope.mobileConfig = {
+        $scope.commMobileConfig = {
             transmitDate: 2,
             subject: 2,
             actionDate: 2,
@@ -439,27 +411,11 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             resend: 2
         };
 
-        $scope.paginationConfig = {
-            pageLengths : [ 5, 10, 25, 50, 100],
-            offset : 7,
-            recordsFoundLabel : "Results found",
-            pageTitle: "Go To Page (End)",
-            pageLabel: "Page",
-            pageAriaLabel: "Go To Page. Short cut is End",
-            ofLabel: "of"
-            //    perPageLabel: 'pagination.per.page.label'
-        };
+        $scope.commPaginationConfig = {
 
-        $scope.searchConfig = {
-            id: 'dataTableSearch',
-            title: 'Search (Alt+Y)',
-            ariaLabel: 'Search for any CRN',
-            delay: 300,
-            searchString : '',
-            placeholder : 'Search',
-            maxlength: 200,
-            minimumCharacters : 2
         };
+        // ------------------------------
+        // END - COMMUNICATION DATA TABLE
 
 
         // INITIALIZE
