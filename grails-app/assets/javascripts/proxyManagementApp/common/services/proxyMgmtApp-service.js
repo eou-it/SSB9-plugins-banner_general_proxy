@@ -65,6 +65,11 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
             {controller: 'ProxyManagement', action: 'getDataModelOnAuthorizationChange'}).get(params);
     };
 
+    this.getAddProxiesList = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'getClonedProxyAddList'}).get(params);
+    };
+
     this.getCommunicationLog = function (params) {
         var deferred = $q.defer(),
             logEntries = fetchCommunicationLog.query(),

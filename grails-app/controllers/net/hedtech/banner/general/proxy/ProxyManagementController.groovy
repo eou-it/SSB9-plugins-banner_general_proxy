@@ -275,6 +275,20 @@ class ProxyManagementController {
         }
     }
 
+    /*
+     Returns the list of Add Proxies.
+    */
+    def getClonedProxyAddList() {
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        params.pidm = pidm
+
+        def proxies = generalSsbProxyManagementService.getProxyAddList(params)
+
+        render proxies as JSON
+    }
+
+
     def getCommunicationLog() {
         // TODO: call Grails service to get the below data.  Some of the fields will need to change, I'm sure, especially
         // those in the "resend" map below.  Then corresponding changes will need to made in the Angular service, etc.

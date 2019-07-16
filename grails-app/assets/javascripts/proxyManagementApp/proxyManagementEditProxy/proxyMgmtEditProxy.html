@@ -7,10 +7,39 @@
             <div class="proxy-info-main-heading">
                 <h2>{{'proxyManagement.title.proxyInformation'|i18n}}</h2>
             </div>
+            <div class="proxy-notification-row">
+                <div class="proxy-notification-cell">
+                    <div class="proxy-notification-content">
+                        <div class="proxy-notification-icon blue">
+                            <span class="icon-info-CO"></span>
+                        </div>
+                        <div class="proxy-notification-text blue">
+                            <div>
+                                {{'proxyManagement.message.profile'|i18n}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="proxy-info-subheading page-top">
                 <span class="bold">{{'proxyManagement.title.profile'|i18n}}</span>
                 <span class="italic">{{'proxyManagement.label.hint.required'|i18n}}</span>
             </div>
+
+            <div ng-if="addProxiesList.length > 0" class="row">
+                <div class="col-xs-12 col-md-3 col-lg-3">
+                    <label class="input-field-label" for="authorization">{{'proxyManagement.label.authorization'|i18n}}</label><br>
+                    <xe-ui-select ng-model="proxyAuxData.addProxy" theme="select2" search-enabled="false" ng-change="handleAddListChange()" id="authorization">
+                        <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.authorization'|i18n)" placeholder="{{placeholder.clonedLList}}">
+                            {{$select.selected.description ? $select.selected.description : placeholder.clonedLList}}
+                        </xe-ui-select-match>
+                        <xe-ui-select-choices repeat="choice in addProxiesList">
+                            <div ng-bind-html="choice.description"></div>
+                        </xe-ui-select-choices>
+                    </xe-ui-select>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-xs-12 col-md-6 col-lg-4">
                     <label class="input-field-label" for="first-name">{{'proxy.personalinformation.label.p_first_name'|i18n}}</label><br>
