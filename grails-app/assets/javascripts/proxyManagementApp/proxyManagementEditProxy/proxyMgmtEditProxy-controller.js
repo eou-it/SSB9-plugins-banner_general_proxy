@@ -115,10 +115,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                     p_retp_code: null,
                     p_start_date: null,
                     p_stop_date: null,
-                    pages: [
-                        {url:"/ssb/proxy/holds", desc: "Student Holds", auth: false},
-                        {url:"/ssb/proxy/grades", desc: "Midterm and Final Grades", auth: false}
-                    ]
+                    pages: []
                 };
 
                 setSelectedRelationship($scope.proxy.p_retp_code);
@@ -133,6 +130,19 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
                     } else {
                         $scope.clonedProxiesList = response.cloneList;
+                    }
+                });
+
+
+                proxyMgmtAppService.getAddProxiesList({gidm: gidm}).$promise.then(function(response) {
+                    if (response.failure) {
+                        $scope.flashMessage = response.message.clonedProxiesList;
+
+                        notificationCenterService.clearNotifications();
+                        notificationCenterService.addNotification(response.message, "error", true);
+
+                    } else {
+                        $scope.addProxiesList = response.addList;
                     }
                 });
             }
@@ -171,6 +181,17 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             proxyMgmtAppService.getClonedAuthorizationsList({gidm: $scope.proxyAuxData.clonedProxy.code, p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function (response) {
                 $scope.proxy.pages = response.pages;
             });
+
+        };
+
+
+        $scope.handleAddListChange = function(){
+
+            console.log(JSON.stringify($scope.proxyAuxData.addProxy));;
+
+            $scope.proxy.p_email = $scope.proxyAuxData.addProxy.email;
+            $scope.proxy.p_last = $scope.proxyAuxData.addProxy.lastName;
+            $scope.proxy.p_first = $scope.proxyAuxData.addProxy.firstName;
 
         };
 
@@ -338,7 +359,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             firstName: null,
             lastName: null,
             email: null,
-            clonedProxy: {code: null, description: null, retp : null}
+            clonedProxy: {code: null, description: null, retp : null},
+            addProxy: {code: null, description: null, email : null, firstName :null, lastName : null}
         };
 
         $scope.placeholder = {
@@ -355,6 +377,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.isRelationshipSelected = false;
         $scope.relationshipChoices = [];
         $scope.clonedProxiesList = [];
+        $scope.addProxiesList = [];
         $scope.firstNameErrMsg = '';
         $scope.lastNameErrMsg = '';
         $scope.emailErrMsg = '';
