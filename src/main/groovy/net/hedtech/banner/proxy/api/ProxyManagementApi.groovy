@@ -1352,10 +1352,26 @@ END;
    proxies              varchar2(3000);
    student              varchar2(3000);
    listOfProxies        varchar2(3000);
+   
+      CURSOR C_GetInfo(p_pidm spriden.spriden_pidm%TYPE)
+   IS
+      SELECT TRIM(LOWER(goremal_email_address)), spriden_last_name, NVL(spriden_first_name, ' ')
+        FROM spriden, goremal
+       WHERE spriden_change_ind IS NULL
+         AND goremal_status_ind    = 'A'
+         AND goremal_preferred_ind = 'Y'
+         AND goremal_pidm          = spriden_pidm
+         AND spriden_pidm          = p_pidm;
+
+   lv_last     spriden.spriden_last_name%TYPE;
+   lv_first    spriden.spriden_first_name %TYPE;
+
 --
    BEGIN
 --   
    global_pidm := ?;
+   
+   proxies := '"addList":[';
 --   
    -- Execute the GORRSQL rules for PROXY_ACCESS process PROXYMGMT_ADD_LIST rule
    -- Results are list (pidm1, email1, pidm2, email2, etc...)
@@ -1371,13 +1387,20 @@ END;
          THEN
             lv_pidm := lv_attr_nt(i)."value";
             lv_email := lv_attr_nt(i+1)."value";
---                                         );
+            
+               OPEN C_GetInfo(lv_pidm);
+               FETCH C_GetInfo INTO lv_email, lv_last, lv_first;
+               CLOSE C_GetInfo;
+--                                         
             student := '{' ||
                             '"code" ' || ':' || '"' || lv_pidm || '"' ||
-                            ',"description" ' || ':' || '"' || f_format_name(lv_pidm, 'FML') || '"' ||
+                            ',"description" ' || ':' || '"' || f_format_name(lv_pidm, 'FML') || ' ' || lv_email || '"' ||
+                            ',"email" ' || ':' || '"' || lv_email || '"' ||
+                            ',"firstName" ' || ':' || '"' || lv_first || '"' ||
+                            ',"lastName" ' || ':' || '"' || lv_last || '"' ||
                         '},';
 --
-    proxies := proxies || student;
+         proxies := proxies || student;
          
         END IF;
       END LOOP;
@@ -1386,8 +1409,11 @@ END;
     proxies := proxies || ']';
 --
     listOfProxies := '{' || proxies || '}';
- 
+
+   ELSE
+      listOfProxies := '{' || proxies || ']}';
    END IF;
+   
 --   
    ? := listOfProxies;
 --   
