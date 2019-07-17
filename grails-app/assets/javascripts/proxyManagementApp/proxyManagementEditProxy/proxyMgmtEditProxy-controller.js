@@ -50,9 +50,10 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
             $scope.relationshipErrMsg =   proxyMgmtErrorService.getErrorRelationship(proxy);
             $scope.authorizationsErrMsg = proxyMgmtErrorService.getErrorAuthorizations(proxy);
+            $scope.checkDatesErrMsg = proxyMgmtErrorService.getErrorDates(proxy);
 
             return !($scope.firstNameErrMsg || $scope.lastNameErrMsg || $scope.emailErrMsg || $scope.verifyEmailErrMsg ||
-                     $scope.relationshipErrMsg || $scope.authorizationsErrMsg);
+                     $scope.relationshipErrMsg || $scope.authorizationsErrMsg || $scope.checkDatesErrMsg);
         },
 
         init = function() {
@@ -185,8 +186,6 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
 
         $scope.handleAddListChange = function(){
-
-            console.log(JSON.stringify($scope.proxyAuxData.addProxy));;
 
             $scope.proxy.p_email = $scope.proxyAuxData.addProxy.email;
             $scope.proxy.p_last = $scope.proxyAuxData.addProxy.lastName;
@@ -383,6 +382,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.verifyEmailErrMsg = '';
         $scope.relationshipErrMsg = '';
         $scope.authorizationsErrMsg = '';
+        $scope.checkDatesErrMsg = '';
 
 
         // COMMUNICATION DATA TABLE
