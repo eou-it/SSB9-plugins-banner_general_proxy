@@ -289,6 +289,35 @@ class ProxyManagementController {
     }
 
 
+    def getCommunicationLog() {
+        // TODO: call Grails service to get the below data.  Some of the fields will need to change, I'm sure, especially
+        // those in the "resend" map below.  Then corresponding changes will need to made in the Angular service, etc.
+        def mockCommunicationLogData = [
+                [
+                    transmitDate: '01/11/2019',
+                    subject: 'New proxy confirmation 1',
+                    actionDate: '04/18/2019',
+                    expirationDate: '02/08/2020',
+                    resend: [
+                            emailAddress: 'blah1@ellucian.com',
+                            message: 'This is the message sent to the proxy.'
+                    ]
+                ],
+                [
+                    transmitDate: '02/11/2019',
+                    subject: 'New proxy confirmation 2',
+                    actionDate: '04/18/2019',
+                    expirationDate: '02/08/2020',
+                    resend: [
+                            emailAddress: 'blah2@ellucian.com',
+                            message: 'This is the other message sent to the proxy.'
+                    ]
+                ]
+            ]
+
+        render mockCommunicationLogData as JSON
+    }
+
     private isAtLeastOnePageAuthorized(pages) {
         if (!pages) {
             return false;

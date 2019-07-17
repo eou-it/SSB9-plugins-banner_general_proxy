@@ -22,6 +22,8 @@
         <input date-picker ng-model="proxy.p_start_date" pi-input-watcher on-select="setStartDate"
                class="pi-date-input input-colors" placeholder="{{'proxyManagement.label.startDate'|i18n}}" id="start-date"
                aria-label="{{'proxyManagement.label.startDate'|i18n}}"/>
+        <p class="input-field-label mobile-errors" ng-class="[(!!checkDatesErrMsg ? 'field-error error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{checkDatesErrMsg}}</p>
     </div>
     <div class="col-xs-12 col-md-3 col-lg-3">
         <label for="stop-date" class="input-field-label">{{'proxyManagement.label.stopDate'|i18n}}</label>

@@ -1,10 +1,35 @@
 proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService', '$filter',
     function (notificationCenterService, $filter) {
 
+        var dateFmt,
+            calendar = (function(){
+                var locale = $('meta[name=locale]').attr("content");
+                if(locale.split('-')[0] === 'ar') {
+                    dateFmt = $filter('i18n')('default.date.format');
+                    return $.calendars.instance('islamic');
+                }
+                else {
+                    dateFmt = $filter('i18n')('default.date.format').toLowerCase();
+                    return $.calendars.instance();
+                }
+            }());
+
         var messages = [],
             proxyProfileMessageCenter = "#proxyProfileErrorMsgCenter",
             invalidCharRegEx = /[ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]/i,
             validEmailRegEx = /[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+@[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+\.[A-Z]{2,}/i;
+
+
+        stringToDate = function (date) {
+            var result;
+            try {
+                result = calendar.parseDate(dateFmt, date).toJSDate();
+                return result;
+            }
+            catch (exception) {
+                return null;
+            }
+        };
 
         this.getErrorFirstName = function(proxy) {
             var msg = 'proxyManagement.message.firstNameRequired';
@@ -121,6 +146,24 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
                 notificationCenterService.removeNotification(msg);
             }
         };
+
+
+        this.getErrorDates = function(proxy) {
+            if (proxy.p_start_date && proxy.p_stop_date) {
+                var msg = 'proxyManagement.message.checkDates',
+                    MAX_DATE = 8640000000000000,
+                    fromDate = stringToDate(proxy.p_start_date),
+                    toDate = proxy.p_stop_date ? stringToDate(proxy.p_stop_date) : new Date(MAX_DATE)
+                if (fromDate > toDate) {
+                    messages.push({msg: $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]), type: 'error'});
+                    return $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]);
+                } else {
+                    notificationCenterService.removeNotification(msg);
+                }
+            }
+
+        };
+
 
         this.displayMessages = function() {
             notificationCenterService.setLocalMessageCenter(proxyProfileMessageCenter);
