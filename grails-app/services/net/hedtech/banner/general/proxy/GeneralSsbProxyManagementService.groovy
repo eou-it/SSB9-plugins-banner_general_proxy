@@ -398,4 +398,20 @@ class GeneralSsbProxyManagementService {
 
         return studentsAddListMap
     }
+
+
+    def getProxyCommunications(def params) {
+
+        def  communications = ""
+
+        def sqlText = ProxyManagementApi.LIST_OF_COMMUNICATIONS
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [params.gidm, params.pidm, Sql.CLOB
+        ]){ proxyCommunicationsJson ->
+            communications= proxyCommunicationsJson.asciiStream.text
+        }
+
+        return new JsonSlurper().parseText(communications)
+    }
 }

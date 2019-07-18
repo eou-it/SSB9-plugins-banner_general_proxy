@@ -72,7 +72,7 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
 
     this.getCommunicationLog = function (params) {
         var deferred = $q.defer(),
-            logEntries = fetchCommunicationLog.query(),
+            logEntries = fetchCommunicationLog.query(params),
             result;
 
         logEntries.$promise.then(function (response) {
@@ -81,7 +81,7 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
                     var self = this;
 
                     // TODO: replace this next line with real logic to send the email, using the properties that live on "self"
-                    alert('Sending to ' + self.emailAddress + ': ' + self.message)
+                    alert('Sending to ' + self.rowid);
                 }
             });
 

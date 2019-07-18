@@ -1456,4 +1456,62 @@ BEGIN
    CLOSE C_GetInfo;
   END;
 """
+
+    public final static String LIST_OF_COMMUNICATIONS ="""
+DECLARE
+   lv_GTVCTYP_rec  gp_gtvctyp.gtvctyp_rec;
+   lv_GTVCTYP_ref  gp_gtvctyp.gtvctyp_ref;
+   lv_RETP         gtvretp.gtvretp_code%TYPE;
+   p_proxyIDM      gpbprxy.gpbprxy_proxy_idm%TYPE;
+   global_pidm     spriden.spriden_pidm%TYPE;
+   communications  CLOB DEFAULT NULL;
+   communication   CLOB DEFAULT NULL;
+   listOfCommunications  CLOB DEFAULT NULL;
+   
+   CURSOR C_CommList
+   IS
+      SELECT ROWID, GPBELTR_PROXY_IDM, GPBELTR_SYST_CODE, GPBELTR_CTYP_CODE, GPBELTR_ACTIVITY_DATE, GPBELTR_CTYP_EXE_DATE, GPBELTR_CTYP_EXP_DATE, GPBELTR_TRANSMIT_DATE
+        FROM GPBELTR
+       WHERE GPBELTR_PROXY_IDM   = p_proxyIDM
+         AND GPBELTR_PERSON_PIDM = global_pidm
+         AND GPBELTR_TRANSMIT_DATE IS NOT NULL
+    ORDER BY GPBELTR_ACTIVITY_DATE DESC, GPBELTR_CTYP_CODE;
+
+BEGIN
+   p_proxyIDM := ?;
+   global_pidm := ?;
+   
+   communications := '"communicationsList":[';
+   FOR comm_rec IN C_CommList
+   LOOP
+      lv_GTVCTYP_ref := gp_gtvctyp.F_Query_One (comm_rec.GPBELTR_CTYP_CODE);
+      FETCH lv_GTVCTYP_ref INTO lv_GTVCTYP_rec;
+      IF lv_GTVCTYP_ref%FOUND THEN
+
+    communication := '{' ||
+    '"transmitDate" ' || ':' || '"' || comm_rec.GPBELTR_TRANSMIT_DATE  || '"' ||
+    ',"subject" ' || ':' || '"' || lv_GTVCTYP_rec.R_DESC || '"' ||
+    ',"actionDate" ' || ':' || '"' || comm_rec.GPBELTR_CTYP_EXE_DATE || '"' ||
+    ',"expirationDate" ' || ':' || '"' || comm_rec.GPBELTR_CTYP_EXP_DATE || '"' ||
+    ',"resend" ' || ':' || '{"rowid": ' || '"' || comm_rec.ROWID  || '"}' ||
+    '},';
+ 
+
+      END IF;
+      CLOSE lv_GTVCTYP_ref;
+--
+   communications := communications || communication;
+--   
+   END LOOP;
+--
+    communications := TRIM(TRAILING ',' FROM communications );
+    communications := communications || ']';
+
+    listOfCommunications := '{' || communications || '}';
+    
+    --dbms_output.put_line(listOfCommunications);
+
+    ? := listOfCommunications;
+END;
+"""
 }

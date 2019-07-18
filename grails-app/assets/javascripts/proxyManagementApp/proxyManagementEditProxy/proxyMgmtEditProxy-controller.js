@@ -76,6 +76,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             });
 
             if (gidm) {
+
+                window.gidm = gidm;
                 // Set up for "edit proxy"
                 $scope.isCreateNew = false;
 
@@ -400,7 +402,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.draggableCommColumnNames = [];
 
         $scope.getCommunicationData = function(query) {
-            return proxyMgmtAppService.getCommunicationLog(query).promise;
+            return proxyMgmtAppService.getCommunicationLog({gidm: window.gidm}).promise;
         };
 
         $scope.commMobileConfig = {
