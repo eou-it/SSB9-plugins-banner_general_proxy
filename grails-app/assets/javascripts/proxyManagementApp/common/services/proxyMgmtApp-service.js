@@ -70,11 +70,6 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
             {controller: 'ProxyManagement', action: 'getClonedProxyAddList'}).get(params);
     };
 
-    this.getAddProxiesList = function (params) {
-        return $resource('../ssb/:controller/:action',
-            {controller: 'ProxyManagement', action: 'getClonedProxyAddList'}).get(params);
-    };
-
     var sendCommunicationLog = function (params) {
         return $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'sendCommunicationLog'}).get(params);
