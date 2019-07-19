@@ -10,6 +10,10 @@ Copyright 2019 Ellucian Company L.P. and its affiliates.
             <div>
                 <span class="email-text" dir="ltr">{{proxy.email}}</span>
             </div>
+            <div class="proxy-item-name">
+                <span ng-show="proxy.activeInd=='Y'"><span>&nbsp;</span></span>
+                <span ng-show="proxy.activeInd=='N'"><span>{{'proxy.status.I' | i18n }}</span></span>
+            </div>
         </div>
         <div class="button-block">
             <a ui-sref="editProxy({gidm: proxy.gidm, firstName: proxy.firstName, lastName: proxy.lastName, email: proxy.email})" class="proxy-edit-item-link proxy-icon-link"
