@@ -302,6 +302,16 @@ class ProxyManagementController {
 
     }
 
+
+    def sendCommunicationLog() {
+        def params = request?.JSON ?: params
+        def data = [:]
+        //TODO add a service call
+        data.meesage = "OK"
+        render data as JSON
+
+    }
+
     private isAtLeastOnePageAuthorized(pages) {
         if (!pages) {
             return false;

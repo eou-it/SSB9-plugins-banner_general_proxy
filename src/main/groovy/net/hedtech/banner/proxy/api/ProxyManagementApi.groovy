@@ -8,6 +8,9 @@ class ProxyManagementApi {
 
     public final static String PROXY_LIST = """
     DECLARE
+    
+    TYPE T_desc_table IS TABLE OF TWGBWMNU.TWGBWMNU_DESC%TYPE
+                           INDEX BY TWGBWMNU.TWGBWMNU_DESC%TYPE;
 
     proxies varchar2(3000);
     student varchar2(3000);
@@ -1459,6 +1462,10 @@ BEGIN
 
     public final static String LIST_OF_COMMUNICATIONS ="""
 DECLARE
+    TYPE T_desc_table IS TABLE OF TWGBWMNU.TWGBWMNU_DESC%TYPE
+                           INDEX BY TWGBWMNU.TWGBWMNU_DESC%TYPE;
+                           
+   lv_used_ctyp   T_desc_table;
    lv_GTVCTYP_rec  gp_gtvctyp.gtvctyp_rec;
    lv_GTVCTYP_ref  gp_gtvctyp.gtvctyp_ref;
    lv_RETP         gtvretp.gtvretp_code%TYPE;
@@ -1467,6 +1474,7 @@ DECLARE
    communications  CLOB DEFAULT NULL;
    communication   CLOB DEFAULT NULL;
    listOfCommunications  CLOB DEFAULT NULL;
+   show            VARCHAR2(1);
    
    CURSOR C_CommList
    IS
@@ -1476,10 +1484,57 @@ DECLARE
          AND GPBELTR_PERSON_PIDM = global_pidm
          AND GPBELTR_TRANSMIT_DATE IS NOT NULL
     ORDER BY GPBELTR_ACTIVITY_DATE DESC, GPBELTR_CTYP_CODE;
+    
+    FUNCTION F_Check_Email (p_syst VARCHAR2, p_ctyp VARCHAR2, p_retp VARCHAR2 DEFAULT NULL)
+  RETURN VARCHAR2
+IS
+   lv_GEBCOMM_rec    gp_gebcomm.gebcomm_rec;
+   lv_GEBCOMM_ref    gp_gebcomm.gebcomm_ref;
+   lv_GERCOMM_rec    gp_gercomm.gercomm_rec;
+   lv_GERCOMM_ref    gp_gercomm.gercomm_ref;
+   lv_send_email     VARCHAR2(01);
+BEGIN
+
+   lv_send_email  := 'N';
+   -- get global communication rules per CTYP
+   lv_GEBCOMM_ref := gp_gebcomm.F_Query_One (p_syst, p_ctyp);
+
+   FETCH lv_GEBCOMM_ref INTO lv_GEBCOMM_rec;
+
+   IF lv_GEBCOMM_ref%FOUND THEN -- Check global settings
+     IF lv_GEBCOMM_rec.R_PER_NOTIFY_IND   = 'Y' OR
+        lv_GEBCOMM_rec.R_ADMIN_NOTIFY_IND = 'Y' OR
+        lv_GEBCOMM_rec.R_PROXY_NOTIFY_IND = 'Y' OR
+        lv_GEBCOMM_rec.R_BCC_PER_IND      = 'Y' OR
+        lv_GEBCOMM_rec.R_BCC_PXY_IND      = 'Y' THEN
+          lv_send_email  := 'Y';
+     END IF;
+   END IF;
+   CLOSE lv_GEBCOMM_ref;
+
+   if lv_send_email = 'N' then -- Check overrides
+     lv_GERCOMM_ref := gp_gercomm.F_Query_One (p_SYST, p_CTYP, p_RETP);
+     FETCH lv_GERCOMM_ref INTO lv_GERCOMM_rec;
+     IF lv_GERCOMM_ref%FOUND THEN
+       IF lv_GERCOMM_rec.R_NOTIFY_IND       = 'Y' OR
+          lv_GERCOMM_rec.R_LETR_NOTIFY_CODE = 'Y' OR
+          lv_GERCOMM_rec.R_BCC_PXY_IND      = 'Y' THEN
+            lv_send_email := 'Y';
+       END IF;
+     END IF;
+     CLOSE lv_GERCOMM_ref;
+   end if;
+
+   RETURN lv_send_email;
+
+END F_Check_Email;
 
 BEGIN
    p_proxyIDM := ?;
    global_pidm := ?;
+   
+      -- Get the relationship type
+   lv_RETP := gp_gprxref.F_GetXREF_RETP(p_proxyIDM, global_pidm);
    
    communications := '"communicationsList":[';
    FOR comm_rec IN C_CommList
@@ -1487,13 +1542,24 @@ BEGIN
       lv_GTVCTYP_ref := gp_gtvctyp.F_Query_One (comm_rec.GPBELTR_CTYP_CODE);
       FETCH lv_GTVCTYP_ref INTO lv_GTVCTYP_rec;
       IF lv_GTVCTYP_ref%FOUND THEN
+      
+       IF lv_used_ctyp.EXISTS(comm_rec.GPBELTR_CTYP_CODE) THEN
+         show := 'N';
+       ELSE
+        lv_used_ctyp(comm_rec.GPBELTR_CTYP_CODE) := comm_rec.GPBELTR_CTYP_CODE;
+         IF f_check_email(comm_rec.GPBELTR_SYST_CODE, comm_rec.GPBELTR_CTYP_CODE, lv_RETP) = 'Y' THEN
+           show := 'Y';
+          ELSE
+           show := 'N';
+         END IF;
+       END IF;
 
     communication := '{' ||
-    '"transmitDate" ' || ':' || '"' || comm_rec.GPBELTR_TRANSMIT_DATE  || '"' ||
+    '"transmitDate" ' || ':' || '"' || TO_CHAR(comm_rec.GPBELTR_TRANSMIT_DATE,'DD-MM-YYYY HH:MI AM')  || '"' ||
     ',"subject" ' || ':' || '"' || lv_GTVCTYP_rec.R_DESC || '"' ||
     ',"actionDate" ' || ':' || '"' || comm_rec.GPBELTR_CTYP_EXE_DATE || '"' ||
     ',"expirationDate" ' || ':' || '"' || comm_rec.GPBELTR_CTYP_EXP_DATE || '"' ||
-    ',"resend" ' || ':' || '{"rowid": ' || '"' || comm_rec.ROWID  || '"}' ||
+    ',"resend" ' || ':' || '{"rowid": ' || '"' || comm_rec.ROWID || '"'  || ' , "enabled":"' || show || '"}' ||
     '},';
  
 

@@ -412,6 +412,11 @@ class GeneralSsbProxyManagementService {
             communications= proxyCommunicationsJson.asciiStream.text
         }
 
-        return new JsonSlurper().parseText(communications)
+
+        def data = new JsonSlurper().parseText(communications)
+        data?.communicationsList?.each{
+            it?.resend?.enabled = (it?.resend?.enabled == "Y")? true : false
+        }
+        return data
     }
 }

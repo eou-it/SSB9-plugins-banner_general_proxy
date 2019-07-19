@@ -9,7 +9,7 @@
                    mobile-layout="commMobileConfig" height="16em">
 
         <xe-cell-markup column-name="resend">
-            <a ng-click="row.resend.resendEmail()" class="add-item-link resend-link" tabindex="0">
+            <a ng-if="row.resend.enabled" ng-click="row.resend.resendEmail()" class="add-item-link resend-link" tabindex="0">
                 <span class="icon-email-CO"></span>
             </a>
         </xe-cell-markup>

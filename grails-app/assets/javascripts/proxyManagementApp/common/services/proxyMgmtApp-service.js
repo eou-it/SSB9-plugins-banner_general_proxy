@@ -70,6 +70,17 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
             {controller: 'ProxyManagement', action: 'getClonedProxyAddList'}).get(params);
     };
 
+    this.getAddProxiesList = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'getClonedProxyAddList'}).get(params);
+    };
+
+    var sendCommunicationLog = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'sendCommunicationLog'}).get(params);
+    };
+
+
     this.getCommunicationLog = function (params) {
         var deferred = $q.defer(),
             logEntries = fetchCommunicationLog.query(params),
@@ -81,7 +92,8 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
                     var self = this;
 
                     // TODO: replace this next line with real logic to send the email, using the properties that live on "self"
-                    alert('Sending to ' + self.rowid);
+                    //alert('Sending to ' + self.rowid);
+                    return sendCommunicationLog({id: self.rowid}).promise;
                 }
             });
 
