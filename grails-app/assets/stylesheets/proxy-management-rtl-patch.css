@@ -1,0 +1,6 @@
+.notification-center-flyout ul li.notification-center-message-info  {
+    color: #2874BB ;
+    border: solid 1px #2874BB;
+    border-top: solid 4px #2874BB;
+    background: #EFF7FF url(icons/info.png) no-repeat 98% 50%;
+}
