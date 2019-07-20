@@ -87,7 +87,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                     $scope.proxy = response.proxyProfile;
 
                     _.each(response.messages.messages, function(message) {
-                        notificationCenterService.addNotification($filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]), $rootScope.notificationErrorType, true);
+                        notificationCenterService.addNotification($filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]), $rootScope.notificationWarningType, true);
                     });
 
                     setSelectedRelationship($scope.proxy.p_retp_code);

@@ -21,6 +21,7 @@ var proxyManagementApp = angular.module('proxyManagementApp', [
                 $rootScope.notificationErrorType = "error";
                 $rootScope.notificationSuccessType = "success";
                 $rootScope.notificationWarningType = "warning";
+                $rootScope.notificationInfoType = "info";
                 $rootScope.flashNotification = true;
 
                 $rootScope.$on('$stateChangeStart',
