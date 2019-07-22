@@ -422,7 +422,7 @@ class GeneralSsbProxyManagementService {
 
 
     def resendProxyCommunicationLog(params) {
-        
+
         def status
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         def sqlText = ProxyManagementApi.SEND_EMAIL_COMMUNICATION_LOG

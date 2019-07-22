@@ -313,7 +313,6 @@ class ProxyManagementController {
 
         try {
 
-            println "params: " + params
             def status = generalSsbProxyManagementService.resendProxyCommunicationLog(params)
 
             def response = [resendStatus: status, failure: false]
