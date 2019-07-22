@@ -1593,4 +1593,175 @@ BEGIN
     ? := listOfCommunications;
 END;
 """
+
+    public final static String SEND_EMAIL_COMMUNICATION_LOG=   """
+  DECLARE
+--
+   p_rowid gb_common.internal_record_id_type;
+   global_pidm spriden.spriden_pidm%TYPE;
+   lv_GPBELTR_rec gp_gpbeltr.gpbeltr_rec;
+   lv_GPBELTR_ref gp_gpbeltr.gpbeltr_ref;
+   lv_hold_rowid  gb_common.internal_record_id_type;
+   lv_exp_date    GPBELTR.GPBELTR_CTYP_EXP_DATE%TYPE := NULL;
+   resend_status  VARCHAR2(10);
+   
+--
+PROCEDURE P_MP_EmailPassphrase (p_proxyIDM gpbprxy.gpbprxy_proxy_idm%TYPE, global_pidm spriden.spriden_pidm%TYPE)
+IS
+
+   lv_hold_rowid  gb_common.internal_record_id_type;
+   lv_GPRXREF_rec gp_gprxref.gprxref_rec;
+   lv_GPRXREF_ref gp_gprxref.gprxref_ref;
+
+BEGIN
+
+   lv_GPRXREF_ref := gp_gprxref.F_Query_One (p_proxyIDM, global_pidm);
+   FETCH lv_GPRXREF_ref INTO lv_GPRXREF_rec;
+   IF lv_GPRXREF_ref%NOTFOUND THEN
+ 
+      gp_gpbeltr.P_Create (
+         p_syst_code      => 'PROXY',
+         p_ctyp_code      => 'PASSPHRASE',
+         p_ctyp_url       => bwgkprxy.F_getProxyURL('PASSPHRASE'),
+         p_ctyp_exp_date  => NULL,
+         p_ctyp_exe_date  => NULL,
+         p_transmit_date  => NULL,
+         p_proxy_idm      => p_proxyIDM,
+         p_proxy_old_data => NULL,
+         p_proxy_new_data => '"' || lv_GPRXREF_rec.R_PASSPHRASE || '"',
+         p_person_pidm    => global_pidm,
+         p_user_id        => goksels.f_get_ssb_id_context,
+         p_create_date    => SYSDATE,
+         p_create_user    => goksels.f_get_ssb_id_context,
+         p_rowid_out      => lv_hold_rowid
+         );
+
+      gb_common.P_Commit;
+      bwgkprxy.P_SendEmail(lv_hold_rowid);
+
+   END IF;
+   CLOSE lv_GPRXREF_ref;
+   
+END P_MP_EmailPassphrase;
+--
+PROCEDURE P_MP_ResetPin (p_proxyIDM gpbprxy.gpbprxy_proxy_idm%TYPE, global_pidm spriden.spriden_pidm%TYPE)
+IS
+
+   lv_hold_rowid gb_common.internal_record_id_type;
+   lv_RETP       gtvretp.gtvretp_code%TYPE;
+   lv_pinhash    gpbprxy.gpbprxy_pin%TYPE;
+   lv_salt       gpbprxy.gpbprxy_salt%TYPE;
+
+BEGIN
+
+   -- Get relationship type
+   lv_RETP := gp_gprxref.F_GetXREF_RETP(p_proxyIDM, global_pidm);
+
+   -- Reset PIN only if active relationship record found
+   IF lv_RETP != 'AAA' OR bwgkprxy.F_GetAuthCount(p_proxyIDM, global_pidm) > 0 then
+ 
+      -- get a new salt as well
+      lv_salt := gspcrpt.f_get_salt(26);
+      gspcrpt.p_saltedhash( lv_salt, lv_salt, lv_pinhash);
+
+      gp_gpbprxy.P_Update (
+         p_proxy_idm        => p_proxyIDM,
+         p_pin              => lv_pinhash,
+         p_salt             => lv_salt,
+         p_pin_disabled_ind => 'R',
+         p_pin_exp_date     => SYSDATE - 1,
+         p_inv_login_cnt    => 0,
+         p_user_id          => goksels.f_get_ssb_id_context
+         );
+
+      gp_gpbeltr.P_Create (
+         p_syst_code      => 'PROXY',
+         p_ctyp_code      => 'PIN_RESET',
+         p_ctyp_url       => NULL,
+         p_ctyp_exp_date  => SYSDATE + bwgkprxy.F_GetOption ('ACTION_VALID_DAYS', lv_RETP),
+         p_ctyp_exe_date  => NULL,
+         p_transmit_date  => NULL,
+         p_proxy_idm      => p_proxyIDM,
+         p_proxy_old_data => NULL,
+         p_proxy_new_data => NULL,
+         p_person_pidm    => global_pidm,
+         p_user_id        => goksels.f_get_ssb_id_context,
+         p_create_date    => SYSDATE,
+         p_create_user    => goksels.f_get_ssb_id_context,
+         p_rowid_out      => lv_hold_rowid
+         );
+
+      gp_gpbeltr.P_Update (
+         p_ctyp_url => bwgkprxy.F_getProxyURL('PIN_RESET') || twbkbssf.F_Encode (lv_hold_rowid),
+         p_user_id  => goksels.f_get_ssb_id_context,
+         p_rowid    => lv_hold_rowid
+         );
+
+      gb_common.P_Commit;
+
+
+   END IF;
+
+END P_MP_ResetPin;
+--
+  BEGIN
+--
+   p_rowid := ?;
+   global_pidm := ?;
+--  
+   BEGIN
+   -- open original GPBELTR record to get core data
+   lv_GPBELTR_ref := gp_gpbeltr.F_Query_By_Rowid (p_rowid);
+   FETCH lv_GPBELTR_ref INTO lv_GPBELTR_rec;
+   IF lv_GPBELTR_ref%FOUND THEN
+--
+         CASE lv_GPBELTR_rec.R_CTYP_CODE
+            --WHEN 'ONE_TIME_ONLY'          THEN P_MP_GrantOne(lv_GPBELTR_rec.R_PROXY_IDM);
+            --WHEN 'CURRENT_AUTHORIZATIONS' THEN P_MP_SendAuthEmail(lv_GPBELTR_rec.R_PROXY_IDM);
+            WHEN 'PASSPHRASE'             THEN P_MP_EmailPassphrase(lv_GPBELTR_rec.R_PROXY_IDM, global_pidm);
+            WHEN 'PIN_RESET'              THEN P_MP_ResetPin(lv_GPBELTR_rec.R_PROXY_IDM, global_pidm);
+            ELSE
+
+            -- Activate the URL using the same window of time (in days) as the original message
+            IF lv_GPBELTR_rec.R_CTYP_EXP_DATE IS NOT NULL
+            THEN
+               lv_exp_date := SYSDATE + (TRUNC(lv_GPBELTR_rec.R_CTYP_EXP_DATE) - TRUNC(lv_GPBELTR_rec.R_CREATE_DATE));
+            END IF;
+            gp_gpbeltr.P_Create (
+               p_syst_code      => lv_GPBELTR_rec.R_SYST_CODE,
+               p_ctyp_code      => lv_GPBELTR_rec.R_CTYP_CODE,
+               p_ctyp_url       => NULL,
+               p_ctyp_exp_date  => lv_exp_date,
+               p_ctyp_exe_date  => NULL,
+               p_transmit_date  => NULL,
+               p_proxy_idm      => lv_GPBELTR_rec.R_PROXY_IDM,
+               p_proxy_old_data => NULL,
+               p_proxy_new_data => NULL,
+               p_person_pidm    => global_pidm,
+               p_user_id        => goksels.f_get_ssb_id_context,
+               p_create_date    => SYSDATE,
+               p_create_user    => goksels.f_get_ssb_id_context,
+               p_rowid_out      => lv_hold_rowid
+               );
+
+            gp_gpbeltr.P_Update (
+               p_ctyp_url => REPLACE(lv_GPBELTR_rec.R_CTYP_URL, twbkbssf.F_Encode (lv_GPBELTR_rec.R_INTERNAL_RECORD_ID), twbkbssf.F_Encode (lv_hold_rowid)),
+               p_user_id  => goksels.f_get_ssb_id_context,
+               p_rowid    => lv_hold_rowid
+               );
+
+            gb_common.P_Commit;
+            bwgkprxy.P_SendEmail(lv_hold_rowid);
+            resend_status := 'SUCCESS';
+         END CASE;
+      END IF;
+   CLOSE lv_GPBELTR_ref;
+--
+   EXCEPTION
+     WHEN OTHERS THEN
+     resend_status := 'ERROR';
+   END;
+     ? := resend_status;
+   END;
+"""
 }
