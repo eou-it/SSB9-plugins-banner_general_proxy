@@ -857,7 +857,7 @@ BEGIN
 --
 --    UPDATE PASSPHRASE 
 --
-     IF NVL(lv_GPRXREF_rec.R_PASSPHRASE,'X') != p_phrase THEN
+     IF NVL(lv_GPRXREF_rec.R_PASSPHRASE,'X') != NVL(p_phrase,'X') THEN
       gp_gprxref.P_Update (
       p_proxy_idm   => p_proxyIDM,
       p_person_pidm => global_pidm,
@@ -869,7 +869,7 @@ BEGIN
      END IF;
 -- 
 --    UPDATE DESCRIPTION    
-    IF NVL(lv_GPRXREF_rec.R_PROXY_DESC,'X')  != p_desc THEN
+    IF NVL(lv_GPRXREF_rec.R_PROXY_DESC,'X')  != NVL(p_desc,'X') THEN
      
       gp_gprxref.P_Update (
       p_proxy_idm   => p_proxyIDM,
