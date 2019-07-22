@@ -14,6 +14,7 @@ class ProxyManagementApi {
 
     proxies varchar2(3000);
     student varchar2(3000);
+    activeInd varchar2(1);
 
     listOfProxies varchar2(3000);
 
@@ -36,15 +37,27 @@ class ProxyManagementApi {
 
     FOR proxy IN C_ProxyList LOOP
 
+    activeInd := 'N';
     lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One (proxy.GPRXREF_PROXY_IDM);
 
     FETCH lv_GPBPRXY_ref INTO lv_GPBPRXY_rec;
-
+    
+    IF proxy.GPRXREF_STOP_DATE >= SYSDATE THEN
+        IF NVL(lv_GPBPRXY_rec.R_PIN_DISABLED_IND,'N') <> 'C' THEN
+            IF lv_GPBPRXY_rec.R_PIN_EXP_DATE >= SYSDATE THEN
+                IF lv_GPBPRXY_rec.R_EMAIL_VER_DATE IS NOT NULL OR lv_GPBPRXY_rec.R_EMAIL_VER_DATE >= SYSDATE THEN
+                    activeInd := 'Y';
+                END IF;
+            END IF;
+        END IF;
+    END IF;
+    
     student := '{' ||
     '"gidm" ' || ':' || '"' || lv_GPBPRXY_rec.R_PROXY_IDM || '"' ||
     ',"firstName" ' || ':' || '"' || lv_GPBPRXY_rec.R_FIRST_NAME || '"' ||
     ',"lastName" ' || ':' || '"' || lv_GPBPRXY_rec.R_LAST_NAME || '"' ||
     ',"email" ' || ':' || '"' || lv_GPBPRXY_rec.R_EMAIL_ADDRESS || '"' ||
+    ',"activeInd" ' || ':' || '"' || activeInd || '"' ||
     '},';
 
     proxies := proxies || student;

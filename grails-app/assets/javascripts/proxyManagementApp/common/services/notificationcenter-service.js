@@ -79,6 +79,10 @@ proxyManagementApp.service('notificationCenterService', ['$filter', function ($f
             notificationCenter.openNotificationFlyout();
         }
 
+        if ( messageType === "info") {
+            angular.element(".notification-center-flyout li.notification-item").addClass("notification-center-message-info");
+        }
+
         this.focusNotificationCenter(messageType);
         return notification;
     };

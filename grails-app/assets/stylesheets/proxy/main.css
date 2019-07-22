@@ -1491,6 +1491,10 @@ table {
     background: #ffffff;
 }
 
+.acct-summ table th, .table>thead>tr>th {
+    background: none !important;
+}
+
 table th, .table>thead>tr>th {
     background: #ffffff url('../../images/table-separator.png') center right no-repeat;
     border: none;
