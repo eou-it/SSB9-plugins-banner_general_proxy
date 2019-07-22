@@ -2,7 +2,7 @@
  Copyright 2019 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
-proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$resource', '$q', function ($rootScope, $filter, $resource, $q) {
+proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$resource', '$q', 'notificationCenterService', function ($rootScope, $filter, $resource, $q, notificationCenterService) {
 
     var fetchProxies = $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'getProxies'}, {query: {method:'GET', isArray:false}}),
@@ -86,10 +86,26 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
                 logEntry.resend.resendEmail = function () {
                     var self = this;
 
-                    // TODO: replace this next line with real logic to send the email, using the properties that live on "self"
-                    //alert('Sending to ' + self.rowid);
-                    return sendCommunicationLog({id: self.rowid}).promise;
-                }
+                    sendCommunicationLog({id: self.rowid}).$promise.then(function (response) {
+                        var messageType, message;
+
+                        if (response.failure) {
+                            messageType = 'error';
+                            message = response.message;
+                        } else {
+                            if (response.resendStatus == 'ERROR') {
+                                messageType = 'error';
+                                message = 'proxyManagement.message.resendCommunicationLogFailure';
+                            } else {
+                                messageType = 'success';
+                                message = 'proxyManagement.message.resendCommunicationLogSuccess';
+                            }
+                        }
+                        notificationCenterService.clearNotifications();
+                        notificationCenterService.addNotification(message, messageType, true);
+                    });
+                };
+
             });
 
             result = {result: response, length: response.length};

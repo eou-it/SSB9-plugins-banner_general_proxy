@@ -304,12 +304,29 @@ class ProxyManagementController {
 
 
     def sendCommunicationLog() {
-        def params = request?.JSON ?: params
         def data = [:]
-        //TODO add a service call
-        data.meesage = "OK"
-        render data as JSON
 
+        def params = request?.JSON ?: params
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        params.pidm = pidm
+
+        try {
+
+            println "params: " + params
+            def status = generalSsbProxyManagementService.resendProxyCommunicationLog(params)
+
+            def response = [resendStatus: status, failure: false]
+            render response as JSON
+        }
+        catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+        catch (Exception e) {
+            log.error(e.toString())
+            def response = [message: e.message, failure: true]
+            render response as JSON
+        }
     }
 
     private isAtLeastOnePageAuthorized(pages) {
