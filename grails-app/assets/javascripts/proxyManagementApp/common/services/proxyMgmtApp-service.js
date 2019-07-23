@@ -75,6 +75,10 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
             {controller: 'ProxyManagement', action: 'sendCommunicationLog'}).get(params);
     };
 
+    this.getFromPersonalInfo = function (entityName, params) {
+        return $resource('../:controller/:action',
+            {controller: 'ProxyManagement', action: 'get'+entityName}).get(params);
+    };
 
     this.getCommunicationLog = function (params) {
         var deferred = $q.defer(),

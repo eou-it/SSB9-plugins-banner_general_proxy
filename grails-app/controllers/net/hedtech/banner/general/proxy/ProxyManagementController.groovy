@@ -5,6 +5,7 @@ package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
+import net.hedtech.banner.general.system.ProxyAccessSystemOptionType
 import net.hedtech.banner.i18n.MessageHelper
 import net.hedtech.banner.security.XssSanitizer
 import org.springframework.security.core.context.SecurityContextHolder
@@ -325,6 +326,44 @@ class ProxyManagementController {
             log.error(e.toString())
             def response = [message: e.message, failure: true]
             render response as JSON
+        }
+    }
+
+    def getProxyConfig() {
+        def model = [:]
+
+        List<ProxyAccessSystemOptionType>  proxyAccessSystemOptionTypes = ProxyAccessSystemOptionType.fetchBySystemCode("PROXY");
+        try {
+            proxyAccessSystemOptionTypes.each { proxyAccessSystemOptionType ->
+                switch(proxyAccessSystemOptionType.code) {
+                    case 'ENABLE_DELETE_RELATIONSHIP' : model.enableDeleteRelationship =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                                                        break;
+                    case 'ENABLE_DELETE_AFTER_DAYS' : model.enableDeleteAfterDays =  proxyAccessSystemOptionType.proxyOptdefault.toInteger()
+                                                        break;
+                    case 'ENABLE_PASSPHRASE' : model.enablePassphrase =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                                                        break;
+                    case 'ENABLE_RESET_PIN' : model.enableResetPin =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                                                        break;
+                    case 'ENABLE_TAB_COMMUNICATION' : model.enableTabCommunication =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                                                        break;
+                    case 'AUTHORIZATION_IN_HISTORY' : model.viewAuthorizationInHistory =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                                                        break;
+                    case 'PAGE_DISPLAY_IN_HISTORY' : model.viewPageDisplayInHistory =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                                                        break;
+                    case 'ENABLE_TAB_HISTORY' : model.enableTabHistory =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                                                        break;
+                    case 'PAGE_LEVEL_AUTHORIZATION' : model.enablePageLevelAuthorization =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                                                        break;
+                    case 'PROXY_GIDM_PREFIX' : model.proxyGidmPrefix =  proxyAccessSystemOptionType.proxyOptdefault
+                                                        break;
+                    default : break;
+                }
+            }
+
+            render model as JSON
+        }
+        catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
     }
 

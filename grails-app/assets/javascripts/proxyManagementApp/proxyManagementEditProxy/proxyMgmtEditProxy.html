@@ -74,7 +74,7 @@
                 <div class="proxy-base-info-summary">
                     <span>{{proxyAuxData.firstName}}</span> <span>{{proxyAuxData.lastName}}</span> ({{proxyAuxData.email}})
                 </div>
-                <div class="proxy-mgmt-reset-pw">
+                <div class="proxy-mgmt-reset-pw" ng-if="enableResetPin">
                     <a ng-click="resetPassword()" class="add-item-link" tabindex="0">
                         <span class="icon-refresh-CO"></span> <span>{{'proxyManagement.label.reset.password'|i18n}}</span>
                     </a>
@@ -89,7 +89,7 @@
                 <ng-include src="'../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtCommonEditInputs.html'"></ng-include>
                 &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
             </xe-tab-panel>
-            <xe-tab-panel heading="{{'proxyManagement.title.communication'|i18n}}" state="editProxy">
+            <xe-tab-panel heading="{{'proxyManagement.title.communication'|i18n}}" state="editProxy" ng-if="enableTabCommunication">
                 <ng-include src="'../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtCommunication.html'"></ng-include>
                 &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
             </xe-tab-panel>

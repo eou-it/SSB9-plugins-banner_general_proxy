@@ -2,9 +2,9 @@
   Copyright 2019 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$rootScope', '$state','$location', '$stateParams',
-    '$timeout', '$filter', '$q', 'notificationCenterService', 'proxyMgmtAppService', 'proxyMgmtErrorService',
+    '$timeout', '$filter', '$q', 'notificationCenterService', 'proxyMgmtAppService', 'proxyMgmtErrorService', 'proxyConfigResolve',
     function ($scope, $rootScope, $state,$location, $stateParams, $timeout, $filter, $q, notificationCenterService,
-              proxyMgmtAppService, proxyMgmtErrorService) {
+              proxyMgmtAppService, proxyMgmtErrorService, proxyConfigResolve) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -416,6 +416,11 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.commPaginationConfig = {
 
         };
+
+        $scope.enableResetPin = proxyConfigResolve.enableResetPin;
+        $scope.enablePassphrase = proxyConfigResolve.enablePassphrase;
+        $scope.enablePageLevelAuthorization = proxyConfigResolve.enablePageLevelAuthorization;
+        $scope.enableTabCommunication = proxyConfigResolve.enableTabCommunication;
         // ------------------------------
         // END - COMMUNICATION DATA TABLE
 

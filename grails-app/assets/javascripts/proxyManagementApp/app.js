@@ -125,6 +125,9 @@ proxyManagementApp.config(function ($stateProvider, $urlRouterProvider, webAppRe
             templateUrl: '../assets/proxyManagementApp/proxyManagementHome/proxyMgmtMain.html',
             controller: 'proxyMgmtMainController',
             resolve: {
+                proxyConfigResolve: function (proxyMgmtAppService) {
+                    return proxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
+                }
             },
             data: {
                 breadcrumbs: []
@@ -139,6 +142,9 @@ proxyManagementApp.config(function ($stateProvider, $urlRouterProvider, webAppRe
             templateUrl: '../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtEditProxy.html',
             controller: 'proxyMgmtEditProxyController',
             resolve: {
+                proxyConfigResolve: function (proxyMgmtAppService) {
+                    return proxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
+                }
             },
             data: {
                 breadcrumbs: [{label: 'proxyManagement.title.proxyInformation'}]

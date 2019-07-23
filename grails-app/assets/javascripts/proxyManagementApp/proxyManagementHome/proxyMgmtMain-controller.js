@@ -2,8 +2,8 @@
   Copyright 2019 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootScope', '$location', '$state', '$stateParams',
-    '$timeout', '$filter', 'notificationCenterService', 'proxyMgmtAppService',
-    function ($scope, $rootScope, $location, $state, $stateParams, $timeout, $filter, notificationCenterService, proxyMgmtAppService) {
+    '$timeout', '$filter', 'notificationCenterService', 'proxyMgmtAppService', 'proxyConfigResolve',
+    function ($scope, $rootScope, $location, $state, $stateParams, $timeout, $filter, notificationCenterService, proxyMgmtAppService, proxyConfigResolve) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -72,7 +72,8 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
             $state.go('editProxy');
         };
 
-
+        $scope.enableDeleteRelationship = proxyConfigResolve.enableDeleteRelationship;
+        $scope.enableDeleteAfterDays = proxyConfigResolve.enableDeleteAfterDays;
 
         // INITIALIZE
         // ----------
