@@ -73,7 +73,6 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
         };
 
         $scope.enableDeleteRelationship = proxyConfigResolve.enableDeleteRelationship;
-        $scope.enableDeleteAfterDays = proxyConfigResolve.enableDeleteAfterDays;
 
         // INITIALIZE
         // ----------

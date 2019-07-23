@@ -15,7 +15,7 @@ class ProxyManagementApi {
     proxies varchar2(3000);
     student varchar2(3000);
     activeInd varchar2(1);
-    daysFromLastView NUMBER;
+
     listOfProxies varchar2(3000);
 
     lv_GPBPRXY_rec gp_gpbprxy.gpbprxy_rec;
@@ -52,16 +52,12 @@ class ProxyManagementApi {
         END IF;
     END IF;
     
-    select trunc(SYSDATE) - trunc(max(GPRHIST_ACTIVITY_DATE)) into daysFromLastView from GPRHIST where GPRHIST_OLD_AUTH_IND = 'V'
-    and GPRHIST_PERSON_PIDM = proxy.GPRXREF_PERSON_PIDM and GPRHIST_PROXY_IDM = proxy.GPRXREF_PROXY_IDM;   
-    
     student := '{' ||
     '"gidm" ' || ':' || '"' || lv_GPBPRXY_rec.R_PROXY_IDM || '"' ||
     ',"firstName" ' || ':' || '"' || lv_GPBPRXY_rec.R_FIRST_NAME || '"' ||
     ',"lastName" ' || ':' || '"' || lv_GPBPRXY_rec.R_LAST_NAME || '"' ||
     ',"email" ' || ':' || '"' || lv_GPBPRXY_rec.R_EMAIL_ADDRESS || '"' ||
     ',"activeInd" ' || ':' || '"' || activeInd || '"' ||
-    ',"daysFromLastView" ' || ':' || '"' || daysFromLastView || '"' ||
     '},';
 
     proxies := proxies || student;
