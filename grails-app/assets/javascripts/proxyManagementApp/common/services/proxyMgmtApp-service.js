@@ -50,6 +50,16 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
             {controller: 'ProxyManagement', action: 'resetProxyPassword'}).get(params);
     };
 
+    this.emailAuthentications = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'emailAuthentications'}).get(params);
+    };
+
+    this.emailPassphrase = function (params) {
+        return $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'emailPassphrase'}).get(params);
+    };
+
     this.getClonedProxiesList = function (params) {
         return $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'getClonedProxiesList'}).get(params);

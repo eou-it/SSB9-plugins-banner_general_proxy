@@ -203,7 +203,27 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             notificationCenterService.addNotification('proxyManagement.profile.error.passphrase', "error", true);
 
             }else{
-                //TO DO
+
+                proxyMgmtAppService.emailPassphrase({gidm: $scope.proxy.gidm}).$promise.then(function (response) {
+                    var messageType, message;
+
+                    if (response.failure) {
+                        messageType = 'error';
+                        message = response.message;
+                    } else {
+                        if (response.resetStatus != 'SUCCESS') {
+                            messageType = 'error';
+                            message = 'proxyManagement.message.emailPassphraseFailure';
+                        } else {
+                            messageType = 'success';
+                            message = 'proxyManagement.message.emailPassphraseSuccess';
+                        }
+                    }
+
+                    notificationCenterService.clearNotifications();
+                    notificationCenterService.addNotification(message, messageType, true);
+                });
+
             }
             };
 
@@ -230,9 +250,26 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             });
         };
 
-
         $scope.emailAuthentications = function() {
-            //TO DO
+            proxyMgmtAppService.emailAuthentications({gidm: $scope.proxy.gidm}).$promise.then(function (response) {
+                var messageType, message;
+
+                if (response.failure) {
+                    messageType = 'error';
+                    message = response.message;
+                } else {
+                    if (response.resetStatus != 'SUCCESS') {
+                        messageType = 'error';
+                        message = 'proxyManagement.message.resendAuthorizationsFailure';
+                    } else {
+                        messageType = 'success';
+                        message = 'proxyManagement.message.resendAuthorizationsSuccess';
+                    }
+                }
+
+                notificationCenterService.clearNotifications();
+                notificationCenterService.addNotification(message, messageType, true);
+            });
         };
 
         //toggle all checkboxes
