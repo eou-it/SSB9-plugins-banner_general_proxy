@@ -332,31 +332,31 @@ class ProxyManagementController {
     def getProxyConfig() {
         def model = [:]
 
-        List<ProxyAccessSystemOptionType>  proxyAccessSystemOptionTypes = ProxyAccessSystemOptionType.fetchBySystemCode("PROXY");
+        List<ProxyAccessSystemOptionType> proxyAccessSystemOptionTypes = ProxyAccessSystemOptionType.fetchBySystemCode("PROXY");
         try {
             proxyAccessSystemOptionTypes.each { proxyAccessSystemOptionType ->
-                switch(proxyAccessSystemOptionType.code) {
-                    case 'ENABLE_DELETE_RELATIONSHIP' : model.enableDeleteRelationship =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
-                                                        break;
-                    case 'ENABLE_DELETE_AFTER_DAYS' : model.enableDeleteAfterDays =  proxyAccessSystemOptionType.proxyOptdefault.toInteger()
-                                                        break;
-                    case 'ENABLE_PASSPHRASE' : model.enablePassphrase =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
-                                                        break;
-                    case 'ENABLE_RESET_PIN' : model.enableResetPin =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
-                                                        break;
-                    case 'ENABLE_TAB_COMMUNICATION' : model.enableTabCommunication =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
-                                                        break;
-                    case 'AUTHORIZATION_IN_HISTORY' : model.viewAuthorizationInHistory =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
-                                                        break;
-                    case 'PAGE_DISPLAY_IN_HISTORY' : model.viewPageDisplayInHistory =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
-                                                        break;
-                    case 'ENABLE_TAB_HISTORY' : model.enableTabHistory =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
-                                                        break;
-                    case 'PAGE_LEVEL_AUTHORIZATION' : model.enablePageLevelAuthorization =  proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
-                                                        break;
-                    case 'PROXY_GIDM_PREFIX' : model.proxyGidmPrefix =  proxyAccessSystemOptionType.proxyOptdefault
-                                                        break;
-                    default : break;
+                switch (proxyAccessSystemOptionType.code) {
+                    case 'ENABLE_DELETE_RELATIONSHIP': model.enableDeleteRelationship = proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                        break;
+                    case 'ENABLE_DELETE_AFTER_DAYS': model.enableDeleteAfterDays = proxyAccessSystemOptionType.proxyOptdefault.toInteger()
+                        break;
+                    case 'ENABLE_PASSPHRASE': model.enablePassphrase = proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                        break;
+                    case 'ENABLE_RESET_PIN': model.enableResetPin = proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                        break;
+                    case 'ENABLE_TAB_COMMUNICATION': model.enableTabCommunication = proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                        break;
+                    case 'AUTHORIZATION_IN_HISTORY': model.viewAuthorizationInHistory = proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                        break;
+                    case 'PAGE_DISPLAY_IN_HISTORY': model.viewPageDisplayInHistory = proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                        break;
+                    case 'ENABLE_TAB_HISTORY': model.enableTabHistory = proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                        break;
+                    case 'PAGE_LEVEL_AUTHORIZATION': model.enablePageLevelAuthorization = proxyAccessSystemOptionType.proxyOptdefault == 'Y' ? true : false
+                        break;
+                    case 'PROXY_GIDM_PREFIX': model.proxyGidmPrefix = proxyAccessSystemOptionType.proxyOptdefault
+                        break;
+                    default: break;
                 }
             }
 
@@ -364,6 +364,28 @@ class ProxyManagementController {
         }
         catch (ApplicationException e) {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+
+    def emailAuthentications() {
+
+        def params = request?.JSON ?: params
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+
+        try {
+            def status = generalSsbProxyManagementService.emailAuthentications(params.gidm, pidm)
+
+            def response = [resetStatus: status, failure: false]
+            render response as JSON
+        }
+        catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage( e ) as JSON
+        }
+        catch(Exception e){
+            log.error(e.toString())
+            def response = [message: e.message, failure: true]
+            render response as JSON
         }
     }
 
