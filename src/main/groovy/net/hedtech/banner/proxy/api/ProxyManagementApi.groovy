@@ -1892,4 +1892,141 @@ END P_MP_SendAuthEmail;
      ? := resend_status;
    END;
 """
+
+    public final static P_MP_SendAuthEmail  =  """
+DECLARE
+--
+    p_proxyIDM gpbprxy.gpbprxy_proxy_idm%TYPE; 
+    global_pidm spriden.spriden_pidm%TYPE;
+--
+    TYPE T_desc_table IS TABLE OF TWGBWMNU.TWGBWMNU_DESC%TYPE
+                           INDEX BY TWGBWMNU.TWGBWMNU_DESC%TYPE;
+--
+   TYPE T_name_table IS TABLE OF TWGRMENU.TWGRMENU_NAME%TYPE
+                           INDEX BY TWGRMENU.TWGRMENU_NAME%TYPE;
+--
+   TYPE T_url_table IS TABLE OF TWGRMENU.TWGRMENU_URL%TYPE
+                          INDEX BY TWGRMENU.TWGRMENU_URL%TYPE;
+--
+   lv_used_desc T_desc_table;
+   lv_used_name T_name_table;
+   lv_used_url  T_url_table;
+   lv_message   VARCHAR2(30000) := '';
+   lv_hold_rowid gb_common.internal_record_id_type;
+--   
+      CURSOR C_ApprovedList (
+      p_proxyIDM      gpbprxy.gpbprxy_proxy_idm%TYPE,
+      p_personPIDM    spriden.spriden_pidm%TYPE,
+      p_RETP          gprxref.gprxref_retp_code%TYPE)
+   IS
+        SELECT m.twgbwmnu_name     AS menu_name,
+               m.twgbwmnu_desc     AS menu_desc,
+               o.twgrmenu_url_text AS menu_text,
+               o.twgrmenu_url      AS menu_url,
+               o.twgrmenu_sequence AS menu_seq
+          FROM TWGRMENU o, TWGBWMNU m, GPRAUTH
+         WHERE o.twgrmenu_name = m.twgbwmnu_name
+         AND  o.twgrmenu_url like '%/proxy/%'
+           AND m.twgbwmnu_source_ind =
+               (SELECT NVL (MAX (n.twgbwmnu_source_ind), 'B')
+                  FROM twgbwmnu n
+                 WHERE n.twgbwmnu_name = m.twgbwmnu_name
+                   AND n.twgbwmnu_source_ind = 'L')
+           AND o.twgrmenu_source_ind =
+               (SELECT NVL (MAX (p.twgrmenu_source_ind), 'B')
+                  FROM twgrmenu p
+                 WHERE p.twgrmenu_name = o.twgrmenu_name
+                   AND p.twgrmenu_source_ind = 'L')
+           AND EXISTS
+             (SELECT 1
+                FROM twgbwmnu t2
+               WHERE t2.twgbwmnu_source_ind  =
+                           (SELECT NVL (MAX (n.twgbwmnu_source_ind), 'B')
+                              FROM twgbwmnu n
+                             WHERE n.twgbwmnu_name = t2.twgbwmnu_name
+                               AND n.twgbwmnu_source_ind = 'L')
+                 AND t2.twgbwmnu_enabled_ind = 'Y'
+                 AND t2.twgbwmnu_name        = o.twgrmenu_url)
+           AND o.twgrmenu_name LIKE 'PROXY_ACCESS_' || p_RETP || '%'
+           AND NVL (o.twgrmenu_enabled, 'N')       = 'Y'
+           AND NVL (m.twgbwmnu_enabled_ind,'N')    = 'Y'
+           AND NVL (m.twgbwmnu_adm_access_ind,'N') = 'N'
+           AND gprauth_page_name             = o.twgrmenu_url
+           AND gprauth_proxy_idm             = p_proxyIDM
+           AND gprauth_person_pidm           = p_personPIDM
+           AND GPRAUTH_AUTH_IND              = 'Y'
+      ORDER BY menu_desc, menu_name, menu_seq;
+      
+      row_count    NUMBER := 0;
+      resend_status  VARCHAR2(10);
+
+BEGIN
+   p_proxyIDM := ?;
+   global_pidm := ?;
+    
+   row_count := 0;
+   FOR auth_rec IN C_ApprovedList (p_proxyIDM, global_pidm, gp_gprxref.F_GetXREF_RETP(p_proxyIDM, global_pidm))
+   LOOP
+      -- Only show page link if valid for current user
+      -- Use uppercase tags for future replacement
+      IF twbkwbis.F_ValidLink(auth_rec.menu_url)
+      THEN
+         row_count := row_count + 1;
+         IF lv_used_desc.EXISTS(auth_rec.menu_desc)
+         THEN
+            NULL;
+         ELSE
+            lv_used_desc(auth_rec.menu_desc) := auth_rec.menu_desc;
+            lv_used_name(auth_rec.menu_name) := auth_rec.menu_name;
+            lv_message := lv_message || '<P>' || auth_rec.menu_desc || '</P>';
+         END IF;
+         IF lv_used_name.EXISTS(auth_rec.menu_name)
+         THEN
+            NULL;
+         ELSE
+            lv_used_name(auth_rec.menu_name) := auth_rec.menu_name;
+         END IF;
+         IF lv_used_url.EXISTS(auth_rec.menu_url)
+         THEN
+            NULL;
+         ELSE
+            lv_used_url(auth_rec.menu_url) := auth_rec.menu_url;
+            lv_message := lv_message || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' || auth_rec.menu_text || '<BR>';
+         END IF;
+      END IF;
+   END LOOP;
+
+   -- If no approved authorization records listed then display empty list message
+   -- Use uppercase tags for future replacement
+   IF row_count = 0
+   THEN
+      lv_message := lv_message || 'No pages have been authorized, <P>, </P>';
+   END IF;
+
+   -- Send message with generic login URL since no action is required
+   gp_gpbeltr.P_Create (
+      p_syst_code      => 'PROXY',
+      p_ctyp_code      => 'CURRENT_AUTHORIZATIONS',
+      p_ctyp_url       => bwgkprxy.F_getProxyURL('CURRENT_AUTHORIZATIONS'),
+      p_ctyp_exp_date  => NULL,
+      p_ctyp_exe_date  => NULL,
+      p_transmit_date  => NULL,
+      p_proxy_idm      => p_proxyIDM,
+      p_proxy_old_data => NULL,
+      p_proxy_new_data => NULL,
+      p_person_pidm    => global_pidm,
+      p_user_id        => goksels.f_get_ssb_id_context,
+      p_create_date    => SYSDATE,
+      p_create_user    => goksels.f_get_ssb_id_context,
+      p_rowid_out      => lv_hold_rowid
+      );
+--
+   gb_common.P_Commit;
+   bwgkprxy.P_SendEmail(lv_hold_rowid, lv_message);
+   resend_status := 'SUCCESS';
+--
+ ? := resend_status;
+--
+END;
+"""
 }

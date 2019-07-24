@@ -230,9 +230,26 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             });
         };
 
-
         $scope.emailAuthentications = function() {
-            //TO DO
+            proxyMgmtAppService.emailAuthentications({gidm: $scope.proxy.gidm}).$promise.then(function (response) {
+                var messageType, message;
+
+                if (response.failure) {
+                    messageType = 'error';
+                    message = response.message;
+                } else {
+                    if (response.resetStatus != 'SUCCESS') {
+                        messageType = 'error';
+                        message = 'proxyManagement.message.resendAuthorizationsFailure';
+                    } else {
+                        messageType = 'success';
+                        message = 'proxyManagement.message.resendAuthorizationsSuccess';
+                    }
+                }
+
+                notificationCenterService.clearNotifications();
+                notificationCenterService.addNotification(message, messageType, true);
+            });
         };
 
         //toggle all checkboxes
