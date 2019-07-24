@@ -327,6 +327,21 @@ class GeneralSsbProxyManagementService {
         status
     }
 
+
+    def emailPassphrase(gidm, pidm) {
+
+        def status
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        def sqlText = ProxyManagementApi.P_MP_EmailPassphrase
+
+        sql.call(sqlText, [gidm, pidm, Sql.VARCHAR])
+                { resendStatus ->
+                    status = resendStatus
+                }
+
+        status
+    }
+
     /*
       Gets the list of Proxies for the Student to clone from.
     */

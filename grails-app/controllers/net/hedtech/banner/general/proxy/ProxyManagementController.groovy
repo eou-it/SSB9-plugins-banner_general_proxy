@@ -389,6 +389,28 @@ class ProxyManagementController {
         }
     }
 
+
+    def emailPassphrase() {
+
+        def params = request?.JSON ?: params
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+
+        try {
+            def status = generalSsbProxyManagementService.emailPassphrase(params.gidm, pidm)
+
+            def response = [resetStatus: status, failure: false]
+            render response as JSON
+        }
+        catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage( e ) as JSON
+        }
+        catch(Exception e){
+            log.error(e.toString())
+            def response = [message: e.message, failure: true]
+            render response as JSON
+        }
+    }
+
     private isAtLeastOnePageAuthorized(pages) {
         if (!pages) {
             return false;

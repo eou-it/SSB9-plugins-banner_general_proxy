@@ -2033,4 +2033,54 @@ BEGIN
 --
 END;
 """
+
+    public final static P_MP_EmailPassphrase =  """
+DECLARE
+--
+    p_proxyIDM gpbprxy.gpbprxy_proxy_idm%TYPE;
+    global_pidm spriden.spriden_pidm%TYPE;
+--
+   lv_hold_rowid  gb_common.internal_record_id_type;
+   lv_GPRXREF_rec gp_gprxref.gprxref_rec;
+   lv_GPRXREF_ref gp_gprxref.gprxref_ref;
+   resend_status  VARCHAR2(10);
+--
+BEGIN
+
+   p_proxyIDM := ?;
+   global_pidm := ?;
+
+   lv_GPRXREF_ref := gp_gprxref.F_Query_One (p_proxyIDM, global_pidm);
+   FETCH lv_GPRXREF_ref INTO lv_GPRXREF_rec;
+   IF lv_GPRXREF_ref%FOUND and lv_GPRXREF_rec.R_RETP_CODE != 'AAA'
+   THEN
+
+      gp_gpbeltr.P_Create (
+         p_syst_code      => 'PROXY',
+         p_ctyp_code      => 'PASSPHRASE',
+         p_ctyp_url       => bwgkprxy.F_getProxyURL('PASSPHRASE'),
+         p_ctyp_exp_date  => NULL,
+         p_ctyp_exe_date  => NULL,
+         p_transmit_date  => NULL,
+         p_proxy_idm      => p_proxyIDM,
+         p_proxy_old_data => NULL,
+         p_proxy_new_data => '"' || lv_GPRXREF_rec.R_PASSPHRASE || '"',
+         p_person_pidm    => global_pidm,
+         p_user_id        => goksels.f_get_ssb_id_context,
+         p_create_date    => SYSDATE,
+         p_create_user    => goksels.f_get_ssb_id_context,
+         p_rowid_out      => lv_hold_rowid
+         );
+
+      gb_common.P_Commit;
+      bwgkprxy.P_SendEmail(lv_hold_rowid);
+   END IF;
+   CLOSE lv_GPRXREF_ref;
+   
+  resend_status := 'SUCCESS';
+--
+ ? := resend_status;
+
+END;
+"""
 }
