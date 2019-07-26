@@ -4,7 +4,8 @@
 <div class="row">
     <div class="col-xs-12 col-md-6 col-lg-4">
         <label class="input-field-label" for="relationship">{{'proxyManagement.label.relationship'|i18n}}</label>
-        <img src="../assets/icons/info.png" title="{{'proxyManagement.message.profile'|i18n}}" alt="{{'proxyManagement.message.profile'|i18n}}" />
+        <span class="icon-info-CO blue" title="{{'proxyManagement.message.profile'|i18n}}"></span>
+
         <xe-ui-select ng-model="proxyAuxData.selectedRelationship" theme="select2" search-enabled="false" ng-change="handleRelationshipChange()" id="relationship">
             <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.relationship'|i18n)" placeholder="{{placeholder.relationship}}">
                 {{$select.selected.description ? $select.selected.description : placeholder.relationship}}
