@@ -4,3 +4,8 @@
     border-top: solid 4px #2874BB;
     background: #EFF7FF url(icons/info.png) no-repeat 98% 50%;
 }
+
+.proxy-bottom-buttons.mgmt  {
+    margin-bottom:20px;
+    float: left;
+}

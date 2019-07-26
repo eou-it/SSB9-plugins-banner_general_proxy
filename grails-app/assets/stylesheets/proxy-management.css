@@ -290,5 +290,5 @@ h2 {
     color: #2874BB ;
     border: solid 1px #2874BB;
     border-top: solid 4px #2874BB;
-    background: #EFF7FF url(icons/info.png) no-repeat 2% 50%;
+    background: #EFF7FF url("icons/info.png") no-repeat 2% 50%;
 }
