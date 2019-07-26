@@ -1572,13 +1572,12 @@ BEGIN
        END IF;
 
     communication := '{' ||
-    '"transmitDate" ' || ':' || '"' || TO_CHAR(comm_rec.GPBELTR_TRANSMIT_DATE,'DD-MM-YYYY HH:MI AM')  || '"' ||
+    '"transmitDate" ' || ':' || '"' || TO_CHAR(comm_rec.GPBELTR_TRANSMIT_DATE,'MM/DD/YYYY HH:MI')  || '"' ||
     ',"subject" ' || ':' || '"' || lv_GTVCTYP_rec.R_DESC || '"' ||
-    ',"actionDate" ' || ':' || '"' || comm_rec.GPBELTR_CTYP_EXE_DATE || '"' ||
-    ',"expirationDate" ' || ':' || '"' || comm_rec.GPBELTR_CTYP_EXP_DATE || '"' ||
+    ',"actionDate" ' || ':' || '"' || TO_CHAR(comm_rec.GPBELTR_CTYP_EXE_DATE,'MM/DD/YYYY') || '"' ||
+    ',"expirationDate" ' || ':' || '"' || TO_CHAR(comm_rec.GPBELTR_CTYP_EXP_DATE,'MM/DD/YYYY') || '"' ||
     ',"resend" ' || ':' || '{"rowid": ' || '"' || comm_rec.ROWID || '"'  || ' , "enabled":"' || show || '"}' ||
     '},';
- 
 
       END IF;
       CLOSE lv_GTVCTYP_ref;
