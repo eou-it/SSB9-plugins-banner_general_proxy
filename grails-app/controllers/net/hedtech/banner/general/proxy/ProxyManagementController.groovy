@@ -10,6 +10,9 @@ import net.hedtech.banner.i18n.MessageHelper
 import net.hedtech.banner.security.XssSanitizer
 import org.springframework.security.core.context.SecurityContextHolder
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 /**
  * Controller for Proxy Management
  */
@@ -298,6 +301,13 @@ class ProxyManagementController {
         params.pidm = pidm
 
         def communications = generalSsbProxyManagementService.getProxyCommunications(params).communicationsList
+
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy")
+
+        communications?.each{
+            it.actionDate = it.actionDate ? df.parse(it.actionDate) : it.actionDate
+            it.expirationDate = it.expirationDate ? df.parse(it.expirationDate) : it.expirationDate
+        }
 
         render communications as JSON
 
