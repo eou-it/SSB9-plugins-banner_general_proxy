@@ -19,8 +19,14 @@ Copyright 2019 Ellucian Company L.P. and its affiliates.
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+        <g:if test="${message(code: 'default.language.direction')  == 'rtl'}">
+            <asset:stylesheet src="modules/proxyMgmt-applicationRTL-mf.css"/>
+        </g:if>
+        <g:else>
+            <asset:stylesheet src="modules/proxyMgmt-applicationLTR-mf.css"/>
+        </g:else>
+
         <asset:javascript src="modules/proxyMgmt-application-mf.js"/>
-        <asset:stylesheet src="modules/proxyMgmt-applicationLTR-mf.css"/>
 
     </g:applyLayout>
 
