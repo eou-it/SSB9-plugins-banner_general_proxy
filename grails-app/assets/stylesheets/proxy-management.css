@@ -199,6 +199,14 @@ h2 {
     margin-left: 32px;
 }
 
+.proxy-delete-button-disabled-parent {
+    pointer-events: none;
+ }
+
+.proxy-delete-button-disabled {
+    color:#A0A3A4;
+}
+
 
 /***********************/
 /* Media Query Section */
