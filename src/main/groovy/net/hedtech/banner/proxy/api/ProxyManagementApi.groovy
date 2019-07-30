@@ -489,7 +489,7 @@ END IF;
       
                 message := '{' ||
                 '"code" ' || ':' || '"' || 'PIN_EXPIRATION_DATE' || '"' ||
-                ',"value" ' || ':' || '"' || lv_GPBPRXY_rec.R_PIN_EXP_DATE || '"' ||
+                ',"value" ' || ':' || '"' || TO_CHAR(lv_GPBPRXY_rec.R_PIN_EXP_DATE,'MM/DD/YYYY') || '"' ||
                 '},';
 --
             messages := messages || message;
@@ -498,14 +498,14 @@ END IF;
       IF lv_GPBPRXY_rec.R_EMAIL_VER_DATE IS NOT NULL THEN
                 message := '{' ||
                 '"code" ' || ':' || '"' || 'EMAIL_VERIFIED' || '"' ||
-                ',"value" ' || ':' || '"' || lv_GPBPRXY_rec.R_EMAIL_VER_DATE || '"' ||
+                ',"value" ' || ':' || '"' || TO_CHAR(lv_GPBPRXY_rec.R_EMAIL_VER_DATE,'MM/DD/YYYY') || '"' ||
                 '},'; 
                 
                 messages := messages || message;  
       ELSE     
           message := '{' ||
           '"code" ' || ':' || '"' || 'UNVERIFIED' || '"' ||
-          ',"value" ' || ':' || '"' || lv_GPBPRXY_rec.R_EMAIL_VER_DATE || '"' ||
+          ',"value" ' || ':' || '"' || TO_CHAR(lv_GPBPRXY_rec.R_EMAIL_VER_DATE,'MM/DD/YYYY') || '"' ||
           '},';
           
           messages := messages || message;
@@ -513,7 +513,7 @@ END IF;
      IF lv_GPBPRXY_rec.R_OPT_OUT_ADV_DATE IS NOT NULL THEN     
           message := '{' ||
           '"code" ' || ':' || '"' || 'OPTOUT' || '"' ||
-          ',"value" ' || ':' || '"' || lv_GPBPRXY_rec.R_OPT_OUT_ADV_DATE ||'"' ||
+          ',"value" ' || ':' || '"' || TO_CHAR(lv_GPBPRXY_rec.R_OPT_OUT_ADV_DATE,'MM/DD/YYYY') ||'"' ||
           '},';
           messages := messages || message;
      END IF;
