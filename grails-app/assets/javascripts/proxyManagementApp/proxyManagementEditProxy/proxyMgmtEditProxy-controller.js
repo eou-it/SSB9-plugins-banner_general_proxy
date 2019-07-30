@@ -169,6 +169,13 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
 
                 $scope.removeProxyProfileFieldErrors();
+
+
+                if ($scope.proxy.pages.length == 0){
+                    console.log($scope.proxy.pages.length);
+                    notificationCenterService.clearNotifications();
+                    notificationCenterService.addNotification('proxyManagement.message.noAuthorizationsAvailable', "error", true);
+                }
             });
         };
 
