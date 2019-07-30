@@ -50,6 +50,15 @@ class ProxyManagementController {
 
         proxy = generalSsbProxyManagementService.getProxyProfile(gidm, pidm)
 
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy")
+        //converts the Date display for I18N
+        proxy?.messages?.messages?.each {
+            if (it.code == "PIN_EXPIRATION_DATE" || it.code == "EMAIL_VERIFIED" || it.code == "OPTOUT") {
+
+                it.value = it.value ? df.parse(it.value) : it.value
+            }
+        }
+
         render proxy as JSON
     }
 
