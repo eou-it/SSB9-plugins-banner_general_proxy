@@ -64,8 +64,10 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
                     action: deleteProxy
                 }
             ];
-            
-            notificationCenterService.addNotification('proxyManagement.confirm.proxy.delete.text', 'warning', false, prompts);
+
+            if ($scope.proxyCanBeDeleted(proxy)) {
+                notificationCenterService.addNotification('proxyManagement.confirm.proxy.delete.text', 'warning', false, prompts);
+            }
         };
 
         $scope.goToEditProxyState = function() {
@@ -76,7 +78,8 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
         $scope.enableDeleteAfterDays = proxyConfigResolve.enableDeleteAfterDays;
 
         $scope.proxyCanBeDeleted = function(proxy){
-            return ($scope.enableDeleteRelationship && ($scope.enableDeleteAfterDays === 0 || $scope.enableDeleteAfterDays < proxy.daysFromLastView));
+            var enableDeleteAfterDaysIsDisabled = $scope.enableDeleteAfterDays === 0 || $scope.enableDeleteAfterDays === null;
+            return ($scope.enableDeleteRelationship && (enableDeleteAfterDaysIsDisabled || $scope.enableDeleteAfterDays < proxy.daysFromLastView));
         };
 
         // INITIALIZE
