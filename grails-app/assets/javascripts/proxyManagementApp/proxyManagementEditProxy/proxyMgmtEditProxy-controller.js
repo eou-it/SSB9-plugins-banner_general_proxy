@@ -87,6 +87,17 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                     $scope.proxy = response.proxyProfile;
 
                     _.each(response.messages.messages, function(message) {
+                        if (message.code === 'PIN_EXPIRATION_DATE'){
+                            $scope.passwordExpDateMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
+                        }
+
+                        if (message.code === 'EMAIL_VERIFIED'){
+                            $scope.emailVerifiedDateMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
+                        }
+
+                        if (message.code === 'OPTOUT'){
+                            $scope.optOutMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
+                        }
                         notificationCenterService.addNotification($filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]), $rootScope.notificationInfoType, true);
                     });
 
@@ -429,6 +440,9 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.relationshipErrMsg = '';
         $scope.authorizationsErrMsg = '';
         $scope.checkDatesErrMsg = '';
+        $scope.passwordExpDateMsg = '';
+        $scope.emailVerifiedDateMsg = '';
+        $scope.optOutMsg  = '';
 
 
         // COMMUNICATION DATA TABLE
