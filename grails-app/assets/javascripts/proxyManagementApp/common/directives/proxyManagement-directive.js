@@ -24,3 +24,16 @@ proxyMgmtAppDirectives.directive('proxyMgmtMobileFooterButton', ['$filter', func
         templateUrl: $filter('webAppResourcePath')('proxyManagementApp/proxyManagementHome/proxyMgmtMobileFooterButton.html')
     };
 }]);
+
+proxyMgmtAppDirectives.directive('proxyMgmtPopoverTooltip', ['$filter', function ($filter) {
+    return {
+        restrict: 'E',
+        scope: {
+            popoverContents: '@'
+        },
+        templateUrl: $filter('webAppResourcePath')('proxyManagementApp/proxyManagementHome/proxyMgmtPopoverTooltip.html')
+    };
+}]);
+
+
+

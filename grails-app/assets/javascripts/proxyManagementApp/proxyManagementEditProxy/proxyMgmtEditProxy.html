@@ -6,7 +6,7 @@
         <div ng-if="isCreateNew">
             <div class="proxy-info-main-heading">
                 <span class="bold">{{'proxyManagement.title.proxyInformation'|i18n}}</span>
-                <span class="icon-info-CO blue" title="{{'proxyManagement.message.addProxyUsingForm'|i18n}}"></span>
+                <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.addProxyUsingForm'|i18n}}"></proxy-mgmt-popover-tooltip>
             </div>
 
             <div class="proxy-info-subheading page-top">
@@ -16,7 +16,8 @@
 
             <div ng-if="addProxiesList.length > 0" class="row">
                 <div class="col-xs-12 col-md-3 col-lg-3">
-                    <label class="input-field-label" for="authorization">{{'proxyManagement.label.authorization'|i18n}}</label><br>
+                    <label class="input-field-label" for="authorization">{{'proxyManagement.label.authorization'|i18n}}</label>
+                    <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.authorization'|i18n}}"></proxy-mgmt-popover-tooltip><br>
                     <xe-ui-select ng-model="proxyAuxData.addProxy" theme="select2" search-enabled="false" ng-change="handleAddListChange()" id="authorization">
                         <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.authorization'|i18n)" placeholder="{{placeholder.clonedLList}}">
                             {{$select.selected.description ? $select.selected.description : placeholder.clonedLList}}
@@ -81,7 +82,8 @@
                 </div>
             </div>
             <div class="proxy-info-main-heading">
-                <h2>{{'proxyManagement.title.proxyInformation'|i18n}}</h2>
+                <span class="bold">{{'proxyManagement.title.proxyInformation'|i18n}}</span>
+                <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.addProxyUsingForm'|i18n}}"></proxy-mgmt-popover-tooltip>
             </div>
         </div>
         <xe-tab-nav ng-if="!isCreateNew">

@@ -4,10 +4,14 @@
 package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
+import grails.util.Holders
+import groovy.json.JsonSlurper
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.system.ProxyAccessSystemOptionType
 import net.hedtech.banner.i18n.MessageHelper
 import net.hedtech.banner.security.XssSanitizer
+import org.springframework.context.MessageSource
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.core.context.SecurityContextHolder
 
 import java.text.DateFormat
@@ -312,10 +316,14 @@ class ProxyManagementController {
         def communications = generalSsbProxyManagementService.getProxyCommunications(params).communicationsList
 
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy")
+        DateFormat df1 = new SimpleDateFormat("MM/dd/yyyy HH:mm")
 
+        SimpleDateFormat transDateformat =
+                new SimpleDateFormat(getDateFormat(),  Locale.forLanguageTag(LocaleContextHolder.getLocale().toString()));
         communications?.each{
             it.actionDate = it.actionDate ? df.parse(it.actionDate) : it.actionDate
             it.expirationDate = it.expirationDate ? df.parse(it.expirationDate) : it.expirationDate
+            it.transmitDate = transDateformat.format(it.transmitDate ? df1.parse(it.transmitDate) : it.transmitDate)
         }
 
         render communications as JSON
@@ -438,5 +446,21 @@ class ProxyManagementController {
         def found = pages.find {it?.auth}
 
         found ? true : false
+    }
+
+    def static getDateFormat() {
+        message("default.dateshorttime.format", null, LocaleContextHolder.getLocale())
+    }
+
+    private static String message(key, args = null, locale = null) {
+        // copied from banner-general:net.hedtech.banner.MessageUtility rather than introducing new plugin-plugin dependency
+
+        String value = "";
+        if (key) {
+            if (!locale) locale = Locale.getDefault()
+            MessageSource messageSource = Holders.grailsApplication.mainContext.getBean("messageSource")
+            value = messageSource.getMessage(key, args, locale)
+        }
+        return value
     }
 }

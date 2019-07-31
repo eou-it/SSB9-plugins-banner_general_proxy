@@ -1572,7 +1572,7 @@ BEGIN
        END IF;
 
     communication := '{' ||
-    '"transmitDate" ' || ':' || '"' || TO_CHAR(comm_rec.GPBELTR_TRANSMIT_DATE,'MM/DD/YYYY HH:MI')  || '"' ||
+    '"transmitDate" ' || ':' || '"' || TO_CHAR(comm_rec.GPBELTR_TRANSMIT_DATE,'MM/DD/YYYY HH24:MI')  || '"' ||
     ',"subject" ' || ':' || '"' || lv_GTVCTYP_rec.R_DESC || '"' ||
     ',"actionDate" ' || ':' || '"' || TO_CHAR(comm_rec.GPBELTR_CTYP_EXE_DATE,'MM/DD/YYYY') || '"' ||
     ',"expirationDate" ' || ':' || '"' || TO_CHAR(comm_rec.GPBELTR_CTYP_EXP_DATE,'MM/DD/YYYY') || '"' ||

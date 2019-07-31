@@ -4,8 +4,7 @@
 <div class="row">
     <div class="col-xs-12 col-md-6 col-lg-4">
         <label class="input-field-label" for="relationship">{{'proxyManagement.label.relationship'|i18n}}</label>
-        <span class="icon-info-CO blue" title="{{'proxyManagement.message.profile'|i18n}}"></span>
-
+        <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.profile'|i18n}}"></proxy-mgmt-popover-tooltip><br>
         <xe-ui-select ng-model="proxyAuxData.selectedRelationship" theme="select2" search-enabled="false" ng-change="handleRelationshipChange()" id="relationship">
             <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.relationship'|i18n)" placeholder="{{placeholder.relationship}}">
                 {{$select.selected.description ? $select.selected.description : placeholder.relationship}}
@@ -51,7 +50,12 @@
         <input ng-model="proxy.p_passphrase"
                class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                type="text" placeholder="{{placeholder.passphrase}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="passphrase">
-
+        <p class="input-field-label mobile-errors" ng-class="[(!!passwordExpDateMsg ? 'error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{passwordExpDateMsg}}</p>
+        <p class="input-field-label mobile-errors" ng-class="[(!!emailVerifiedDateMsg ? 'error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{emailVerifiedDateMsg}}</p>
+        <p class="input-field-label mobile-errors" ng-class="[(!!optOutMsg ? 'error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{optOutMsg}}</p>
     </div>
 </div>
 
@@ -67,7 +71,8 @@
 
 <div class="proxy-info-subheading">
     <span class="bold">{{'proxyManagement.title.authorizations'|i18n}}</span>
-    <span class="italic">{{'proxyManagement.label.hint.required'|i18n}}</span>
+    <span class="italic">{{'proxyManagement.label.hint.required'|i18n}}&nbsp;</span>
+    <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.authorizations'|i18n}}"></proxy-mgmt-popover-tooltip>
 </div>
 <p class="input-field-label mobile-errors" ng-class="[(!!authorizationsErrMsg ? 'field-error error-font-size' : 'no-display')]"
    role="alert" aria-live="assertive">{{authorizationsErrMsg|i18n}}</p>
@@ -82,7 +87,8 @@
 
         <div class="row">
             <div class="col-xs-12 col-md-3 col-lg-3">
-                <label class="input-field-label" for="authorization">{{'proxyManagement.label.authorization'|i18n}}</label><br>
+                <label class="input-field-label" for="authorization">{{'proxyManagement.label.authorization'|i18n}}</label>
+                <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.authorization'|i18n}}"></proxy-mgmt-popover-tooltip><br>
                 <xe-ui-select ng-model="proxyAuxData.clonedProxy" theme="select2" search-enabled="false" ng-change="handleClonedListChange()" id="authorization">
                     <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.authorization'|i18n)" placeholder="{{placeholder.clonedLList}}">
                         {{$select.selected.description ? $select.selected.description : placeholder.clonedLList}}
