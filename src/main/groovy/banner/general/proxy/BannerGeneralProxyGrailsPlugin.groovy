@@ -12,6 +12,8 @@ import grails.plugins.*
  **/
 class BannerGeneralProxyGrailsPlugin extends Plugin {
 
+	//Comment
+
     // Note: the groupId 'should' be used when deploying this plugin via the 'grails maven-deploy --repository=snapshots' command,
     // however it is not being picked up.  Consequently, a pom.xml file is added to the root directory with the correct groupId
     // and will be removed when the maven-publisher plugin correctly sets the groupId based on the following field.
