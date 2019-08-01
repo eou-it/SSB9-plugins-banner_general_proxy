@@ -15,6 +15,9 @@ import java.sql.SQLException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 @Transactional
 class GeneralSsbProxyManagementService {
     def sessionFactory                     // injected by Spring
@@ -216,9 +219,12 @@ class GeneralSsbProxyManagementService {
 
         def sqlText = ProxyManagementApi.UPDATE_PROXY
 
+        def startDateString = formatDate(params.p_start_date)
+        def stopDateString = formatDate(params.p_stop_date)
+
         try {
-            sql.call(sqlText, [params.pidm, params.gidm, params.p_retp_code, params.p_desc,
-                               params.p_start_date, params.p_stop_date, params.p_passphrase,
+            sql.call(sqlText, [params.pidm, params.gidm, params.p_retp_code, params.p_desc, startDateString,
+                               stopDateString, params.p_passphrase,
                                Sql.VARCHAR, Sql.VARCHAR
             ]){ errorMsg, errorStatus ->
                 errorMsgOut = errorMsg
@@ -463,5 +469,27 @@ class GeneralSsbProxyManagementService {
                 }
 
         status
+    }
+
+
+    /*
+      Private method to convert Date.
+    */
+    private String formatDate(String dateIn) {
+        if(dateIn) {
+            DateFormat javascriptFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date date = javascriptFormat.parse(dateIn)
+            String dateString = null
+            Calendar tooOldDate = new Date().toCalendar()
+            tooOldDate.add(Calendar.YEAR, -150)
+            if(tooOldDate.before(date.toCalendar())) {
+                SimpleDateFormat usFormat = new SimpleDateFormat("MM/dd/yyyy")
+                dateString = usFormat.format(date)
+            }
+            return dateString
+        }
+        else {
+            return dateIn
+        }
     }
 }

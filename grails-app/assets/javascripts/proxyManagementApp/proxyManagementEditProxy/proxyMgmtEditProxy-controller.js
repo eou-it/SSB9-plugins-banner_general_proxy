@@ -183,7 +183,6 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
 
                 if ($scope.proxy.pages.length == 0){
-                    console.log($scope.proxy.pages.length);
                     notificationCenterService.clearNotifications();
                     notificationCenterService.addNotification('proxyManagement.message.noAuthorizationsAvailable', "error", true);
                 }
@@ -366,7 +365,18 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 if (isValidProxyData($scope.proxy, true)) {
                     notificationCenterService.addNotification('proxy.personalinformation.onSave.waitMessage', 'success', true);
 
-                    proxyMgmtAppService.updateProxy($scope.proxy).$promise.then(function (response) {
+                    var profile = {}
+
+                    //Add to Profile to manage dates
+                    _.each(Object.keys($scope.proxy), function(it) {
+                        profile[it] = $scope.proxy[it];
+                    });
+
+
+                    profile.p_start_date = proxyMgmtAppService.stringToDate($scope.proxy.p_start_date);
+                    profile.p_stop_date = proxyMgmtAppService.stringToDate($scope.proxy.p_stop_date);
+
+                    proxyMgmtAppService.updateProxy(profile).$promise.then(function (response) {
                         var notifications = [],
                             doStateGoSuccess = function (messageOnSave) {
                                 notifications.push({

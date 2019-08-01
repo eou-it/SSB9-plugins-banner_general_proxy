@@ -195,216 +195,216 @@ class GeneralSsbProxyService {
 
 
                     proxyUiRules."p_name_prefix" = [fieldLength: 20]
-                    if (show_p_name_prefix.equals("V")){
+                    if (show_p_name_prefix.equalsIgnoreCase("V")){
                         proxyUiRules."p_name_prefix".putAll([visible: true, required : false])
-                    }else if(show_p_name_prefix.equals("N")){
+                    }else if(show_p_name_prefix.equalsIgnoreCase("N")){
                         proxyUiRules."p_name_prefix".putAll([visible: false, required : false])
-                    }else if(show_p_name_prefix.equals("Y")){
+                    }else if(show_p_name_prefix.equalsIgnoreCase("Y")){
                         proxyUiRules."p_name_prefix".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_first_name" = [fieldLength: 60, visible: true, required : true]
 
                     proxyUiRules."p_mi" = [fieldLength: 60]
-                    if (show_p_mi.equals("V")){
+                    if (show_p_mi.equalsIgnoreCase("V")){
                         proxyUiRules."p_mi".putAll([visible: true, required : false])
-                    }else if(show_p_mi.equals("N")){
+                    }else if(show_p_mi.equalsIgnoreCase("N")){
                         proxyUiRules."p_mi".putAll([visible: false, required : false])
-                    }else if(show_p_mi.equals("Y")){
+                    }else if(show_p_mi.equalsIgnoreCase("Y")){
                         proxyUiRules."p_mi".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_last_name" = [fieldLength: 60, visible: true, required : true]
 
                     proxyUiRules."p_surname_prefix" = [fieldLength: 60]
-                    if (show_p_surname_prefix.equals("V")){
+                    if (show_p_surname_prefix.equalsIgnoreCase("V")){
                         proxyUiRules."p_surname_prefix".putAll([visible: true, required : false])
-                    }else if(show_p_surname_prefix.equals("N")){
+                    }else if(show_p_surname_prefix.equalsIgnoreCase("N")){
                         proxyUiRules."p_surname_prefix".putAll([visible: false, required : false])
-                    }else if(show_p_surname_prefix.equals("Y")){
+                    }else if(show_p_surname_prefix.equalsIgnoreCase("Y")){
                         proxyUiRules."p_surname_prefix".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_name_suffix" = [fieldLength: 20]
-                    if (show_p_name_suffix.equals("V")){
+                    if (show_p_name_suffix.equalsIgnoreCase("V")){
                         proxyUiRules."p_name_suffix".putAll([visible: true, required : false])
-                    }else if(show_p_name_suffix.equals("N")){
+                    }else if(show_p_name_suffix.equalsIgnoreCase("N")){
                         proxyUiRules."p_name_suffix".putAll([visible: false, required : false])
-                    }else if(show_p_name_suffix.equals("Y")){
+                    }else if(show_p_name_suffix.equalsIgnoreCase("Y")){
                         proxyUiRules."p_name_suffix".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_pref_first_name" = [fieldLength: 60]
-                    if (show_p_pref_first_name.equals("V")){
+                    if (show_p_pref_first_name.equalsIgnoreCase("V")){
                         proxyUiRules."p_pref_first_name".putAll([visible: true, required : false])
-                    }else if(show_p_pref_first_name.equals("N")){
+                    }else if(show_p_pref_first_name.equalsIgnoreCase("N")){
                         proxyUiRules."p_pref_first_name".putAll([visible: false, required : false])
-                    }else if(show_p_pref_first_name.equals("Y")){
+                    }else if(show_p_pref_first_name.equalsIgnoreCase("Y")){
                         proxyUiRules."p_pref_first_name".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_email_address" = [fieldLength: 75, visible: true, required : true]
 
                     proxyUiRules."p_phone_area" = [fieldLength: 6]
-                    if (show_p_phone_area.equals("V")){
+                    if (show_p_phone_area.equalsIgnoreCase("V")){
                         proxyUiRules."p_phone_area".putAll([visible: true, required : false])
-                    }else if(show_p_phone_area.equals("N")){
+                    }else if(show_p_phone_area.equalsIgnoreCase("N")){
                         proxyUiRules."p_phone_area".putAll([visible: false, required : false])
-                    }else if(show_p_phone_area.equals("Y")){
+                    }else if(show_p_phone_area.equalsIgnoreCase("Y")){
                         proxyUiRules."p_phone_area".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_phone_number" = [fieldLength: 12]
-                    if (show_p_phone_number.equals("V")){
+                    if (show_p_phone_number.equalsIgnoreCase("V")){
                         proxyUiRules."p_phone_number".putAll([visible: true, required : false])
-                    }else if(show_p_phone_number.equals("N")){
+                    }else if(show_p_phone_number.equalsIgnoreCase("N")){
                         proxyUiRules."p_phone_number".putAll([visible: false, required : false])
-                    }else if(show_p_phone_number.equals("Y")){
+                    }else if(show_p_phone_number.equalsIgnoreCase("Y")){
                         proxyUiRules."p_phone_number".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_phone_ext" = [fieldLength: 10]
-                    if (show_p_phone_ext.equals("V")){
+                    if (show_p_phone_ext.equalsIgnoreCase("V")){
                         proxyUiRules."p_phone_ext".putAll([visible: true, required : false])
-                    }else if(show_p_phone_ext.equals("N")){
+                    }else if(show_p_phone_ext.equalsIgnoreCase("N")){
                         proxyUiRules."p_phone_ext".putAll([visible: false, required : false])
-                    }else if(show_p_phone_ext.equals("Y")){
+                    }else if(show_p_phone_ext.equalsIgnoreCase("Y")){
                         proxyUiRules."p_phone_ext".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_ctry_code_phone" = [fieldLength: 4]
-                    if (show_p_ctry_code_phone.equals("V")){
+                    if (show_p_ctry_code_phone.equalsIgnoreCase("V")){
                         proxyUiRules."p_ctry_code_phone".putAll([visible: true, required : false])
-                    }else if(show_p_ctry_code_phone.equals("N")){
+                    }else if(show_p_ctry_code_phone.equalsIgnoreCase("N")){
                         proxyUiRules."p_ctry_code_phone".putAll([visible: false, required : false])
-                    }else if(show_p_ctry_code_phone.equals("Y")){
+                    }else if(show_p_ctry_code_phone.equalsIgnoreCase("Y")){
                         proxyUiRules."p_ctry_code_phone".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_house_number" = [fieldLength: 10]
-                    if (show_p_house_number.equals("V")){
+                    if (show_p_house_number.equalsIgnoreCase("V")){
                         proxyUiRules."p_house_number".putAll([visible: true, required : false])
-                    }else if(show_p_house_number.equals("N")){
+                    }else if(show_p_house_number.equalsIgnoreCase("N")){
                         proxyUiRules."p_house_number".putAll([visible: false, required : false])
-                    }else if(show_p_house_number.equals("Y")){
+                    }else if(show_p_house_number.equalsIgnoreCase("Y")){
                         proxyUiRules."p_house_number".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_street_line1" = [fieldLength: 75]
-                    if (show_p_street_line1.equals("V")){
+                    if (show_p_street_line1.equalsIgnoreCase("V")){
                         proxyUiRules."p_street_line1".putAll([visible: true, required : false])
-                    }else if(show_p_street_line1.equals("N")){
+                    }else if(show_p_street_line1.equalsIgnoreCase("N")){
                         proxyUiRules."p_street_line1".putAll([visible: false, required : false])
-                    }else if(show_p_street_line1.equals("Y")){
+                    }else if(show_p_street_line1.equalsIgnoreCase("Y")){
                         proxyUiRules."p_street_line1".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_street_line2" = [fieldLength: 75]
-                    if (show_p_street_line2.equals("V")){
+                    if (show_p_street_line2.equalsIgnoreCase("V")){
                         proxyUiRules."p_street_line2".putAll([visible: true, required : false])
-                    }else if(show_p_street_line2.equals("N")){
+                    }else if(show_p_street_line2.equalsIgnoreCase("N")){
                         proxyUiRules."p_street_line2".putAll([visible: false, required : false])
-                    }else if(show_p_street_line2.equals("Y")){
+                    }else if(show_p_street_line2.equalsIgnoreCase("Y")){
                         proxyUiRules."p_street_line2".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_street_line3" = [fieldLength: 75]
-                    if (show_p_street_line3.equals("V")){
+                    if (show_p_street_line3.equalsIgnoreCase("V")){
                         proxyUiRules."p_street_line3".putAll([visible: true, required : false])
-                    }else if(show_p_street_line3.equals("N")){
+                    }else if(show_p_street_line3.equalsIgnoreCase("N")){
                         proxyUiRules."p_street_line3".putAll([visible: false, required : false])
-                    }else if(show_p_street_line3.equals("Y")){
+                    }else if(show_p_street_line3.equalsIgnoreCase("Y")){
                         proxyUiRules."p_street_line3".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_street_line4" = [fieldLength: 75]
-                    if (show_p_street_line4.equals("V")){
+                    if (show_p_street_line4.equalsIgnoreCase("V")){
                         proxyUiRules."p_street_line4".putAll([visible: true, required : false])
-                    }else if(show_p_street_line4.equals("N")){
+                    }else if(show_p_street_line4.equalsIgnoreCase("N")){
                         proxyUiRules."p_street_line4".putAll([visible: false, required : false])
-                    }else if(show_p_street_line4.equals("Y")){
+                    }else if(show_p_street_line4.equalsIgnoreCase("Y")){
                         proxyUiRules."p_street_line4".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_city" = [fieldLength: 50]
-                    if (show_p_city.equals("V")){
+                    if (show_p_city.equalsIgnoreCase("V")){
                         proxyUiRules."p_city".putAll([visible: true, required : false])
-                    }else if(show_p_city.equals("N")){
+                    }else if(show_p_city.equalsIgnoreCase("N")){
                         proxyUiRules."p_city".putAll([visible: false, required : false])
-                    }else if(show_p_city.equals("Y")){
+                    }else if(show_p_city.equalsIgnoreCase("Y")){
                         proxyUiRules."p_city".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_stat_code" = [fieldLength: 3]
-                    if (show_p_stat_code.equals("V")){
+                    if (show_p_stat_code.equalsIgnoreCase("V")){
                         proxyUiRules."p_stat_code".putAll([visible: true, required : false])
-                    }else if(show_p_stat_code.equals("N")){
+                    }else if(show_p_stat_code.equalsIgnoreCase("N")){
                         proxyUiRules."p_stat_code".putAll([visible: false, required : false])
-                    }else if(show_p_stat_code.equals("Y")){
+                    }else if(show_p_stat_code.equalsIgnoreCase("Y")){
                         proxyUiRules."p_stat_code".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_zip" = [fieldLength: 30]
-                    if (show_p_zip.equals("V")){
+                    if (show_p_zip.equalsIgnoreCase("V")){
                         proxyUiRules."p_zip".putAll([visible: true, required : false])
-                    }else if(show_p_zip.equals("N")){
+                    }else if(show_p_zip.equalsIgnoreCase("N")){
                         proxyUiRules."p_zip".putAll([visible: false, required : false])
-                    }else if(show_p_zip.equals("Y")){
+                    }else if(show_p_zip.equalsIgnoreCase("Y")){
                         proxyUiRules."p_zip".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_cnty_code" = [fieldLength: 5]
-                    if (show_p_cnty_code.equals("V")){
+                    if (show_p_cnty_code.equalsIgnoreCase("V")){
                         proxyUiRules."p_cnty_code".putAll([visible: true, required : false])
-                    }else if(show_p_cnty_code.equals("N")){
+                    }else if(show_p_cnty_code.equalsIgnoreCase("N")){
                         proxyUiRules."p_cnty_code".putAll([visible: false, required : false])
-                    }else if(show_p_cnty_code.equals("Y")){
+                    }else if(show_p_cnty_code.equalsIgnoreCase("Y")){
                         proxyUiRules."p_cnty_code".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_natn_code" = [fieldLength: 5]
-                    if (show_p_natn_code.equals("V")){
+                    if (show_p_natn_code.equalsIgnoreCase("V")){
                         proxyUiRules."p_natn_code".putAll([visible: true, required : false])
-                    }else if(show_p_natn_code.equals("N")){
+                    }else if(show_p_natn_code.equalsIgnoreCase("N")){
                         proxyUiRules."p_natn_code".putAll([visible: false, required : false])
-                    }else if(show_p_natn_code.equals("Y")){
+                    }else if(show_p_natn_code.equalsIgnoreCase("Y")){
                         proxyUiRules."p_natn_code".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_sex" = [fieldLength: 1]
-                    if (show_p_sex.equals("V")){
+                    if (show_p_sex.equalsIgnoreCase("V")){
                         proxyUiRules."p_sex".putAll([visible: true, required : false])
-                    }else if(show_p_sex.equals("N")){
+                    }else if(show_p_sex.equalsIgnoreCase("N")){
                         proxyUiRules."p_sex".putAll([visible: false, required : false])
-                    }else if(show_p_sex.equals("Y")){
+                    }else if(show_p_sex.equalsIgnoreCase("Y")){
                         proxyUiRules."p_sex".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_ssn" = [fieldLength: 9]
-                    if (show_p_ssn.equals("V")){
+                    if (show_p_ssn.equalsIgnoreCase("V")){
                         proxyUiRules."p_ssn".putAll([visible: true, required : false])
-                    }else if(show_p_ssn.equals("N")){
+                    }else if(show_p_ssn.equalsIgnoreCase("N")){
                         proxyUiRules."p_ssn".putAll([visible: false, required : false])
-                    }else if(show_p_ssn.equals("Y")){
+                    }else if(show_p_ssn.equalsIgnoreCase("Y")){
                         proxyUiRules."p_ssn".putAll([visible: true, required : true])
                     }
 
                     proxyUiRules."p_birth_date" = [fieldLength: 20]
-                    if (show_p_birth_date.equals("V")){
+                    if (show_p_birth_date.equalsIgnoreCase("V")){
                         proxyUiRules."p_birth_date".putAll([visible: true, required : false])
-                    }else if(show_p_birth_date.equals("N")){
+                    }else if(show_p_birth_date.equalsIgnoreCase("N")){
                         proxyUiRules."p_birth_date".putAll([visible: false, required : false])
-                    }else if(show_p_birth_date.equals("Y")){
+                    }else if(show_p_birth_date.equalsIgnoreCase("Y")){
                         proxyUiRules."p_birth_date".putAll([visible: true, required : true])
                     }
 
 
                     proxyUiRules."p_opt_out_adv_date" = [fieldLength: 1]
-                    if (show_p_opt_out_adv_date.equals("V")){
+                    if (show_p_opt_out_adv_date.equalsIgnoreCase("V")){
                         proxyUiRules."p_opt_out_adv_date".putAll([visible: true, required : false])
-                    }else if(show_p_opt_out_adv_date.equals("N")){
+                    }else if(show_p_opt_out_adv_date.equalsIgnoreCase("N")){
                         proxyUiRules."p_opt_out_adv_date".putAll([visible: false, required : false])
-                    }else if(show_p_opt_out_adv_date.equals("Y")){
+                    }else if(show_p_opt_out_adv_date.equalsIgnoreCase("Y")){
                         proxyUiRules."p_opt_out_adv_date".putAll([visible: true, required : true])
                     }
 
