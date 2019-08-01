@@ -13,7 +13,8 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
 
     var dateFmt,
         calendar = (function(){
-            var locale = $('meta[name=locale]').attr("content");
+            // This will be loaded in GeneralSSBTagLib
+            var locale = window.i18n.locale;
 
             if(locale.split('-')[0] === 'ar') {
                 dateFmt = $filter('i18n')('default.date.format');
