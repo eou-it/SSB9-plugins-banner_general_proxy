@@ -8,7 +8,8 @@ proxyMgmtAppDirectives.directive('proxyMgmtDeleteButton', ['$filter', function (
         scope: {
             clickFunction: '=',
             item: '=',
-            buttonTitle: '@'
+            buttonTitle: '@',
+            enabled: '='
         },
         templateUrl: $filter('webAppResourcePath')('proxyManagementApp/proxyManagementHome/proxyMgmtDeleteButton.html')
     };
