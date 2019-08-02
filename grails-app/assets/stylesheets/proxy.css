@@ -58,7 +58,7 @@ h2 {
 }
 
 .tile-wrapper {
-    display: inline-block;
+    display: inline-table;
     text-align: center;
     width: 100%;
     height: 100%;
