@@ -16,8 +16,10 @@ class ProxyManagementApi {
     student varchar2(3000);
     activeInd varchar2(1);
     daysFromLastView NUMBER;
+    deleteAllowedPerLastView varchar2(1);
     listOfProxies varchar2(3000);
-
+    lv_days NUMBER;
+    
     lv_GPBPRXY_rec gp_gpbprxy.gpbprxy_rec;
     lv_GPBPRXY_ref gp_gpbprxy.gpbprxy_ref;
     lv_GPRXREF_rec gp_gprxref.gprxref_rec;
@@ -32,6 +34,9 @@ class ProxyManagementApi {
     AND GPRXREF_PERSON_PIDM = ?
     ORDER BY GPBPRXY_LAST_NAME, GPBPRXY_FIRST_NAME;
     BEGIN
+
+    -- get the number of days that must be past since the last view
+   lv_days := NVL(gorsrin.f_getoption('ENABLE_DELETE_AFTER_DAYS', NULL, 'PROXY'),999999);
 
     proxies := '"proxies":[';
 
@@ -52,9 +57,20 @@ class ProxyManagementApi {
         END IF;
     END IF;
     
-    select trunc(SYSDATE) - trunc(max(GPRHIST_ACTIVITY_DATE)) into daysFromLastView from GPRHIST where GPRHIST_NEW_AUTH_IND = 'V'
+    --Adding a -1 to a person who does not have a history record or never viewed the profile
+    select NVL(trunc(SYSDATE) - trunc(max(GPRHIST_ACTIVITY_DATE)), -1) into daysFromLastView from GPRHIST where GPRHIST_NEW_AUTH_IND = 'V'
     and GPRHIST_PERSON_PIDM = proxy.GPRXREF_PERSON_PIDM and GPRHIST_PROXY_IDM = proxy.GPRXREF_PROXY_IDM;   
-    
+
+    IF daysFromLastView = -1 THEN
+        deleteAllowedPerLastView := 'Y';
+    ELSIF lv_days = 0 THEN
+        deleteAllowedPerLastView := 'Y';        
+    ELSIF daysFromLastView > lv_days THEN
+        deleteAllowedPerLastView := 'Y';
+    ELSE 
+        deleteAllowedPerLastView := 'N';
+    END IF;
+
     student := '{' ||
     '"gidm" ' || ':' || '"' || lv_GPBPRXY_rec.R_PROXY_IDM || '"' ||
     ',"firstName" ' || ':' || '"' || lv_GPBPRXY_rec.R_FIRST_NAME || '"' ||
@@ -62,6 +78,7 @@ class ProxyManagementApi {
     ',"email" ' || ':' || '"' || lv_GPBPRXY_rec.R_EMAIL_ADDRESS || '"' ||
     ',"activeInd" ' || ':' || '"' || activeInd || '"' ||
     ',"daysFromLastView" ' || ':' || '"' || daysFromLastView || '"' ||
+    ',"deleteAllowedPerLastView" ' || ':' || '"' || deleteAllowedPerLastView || '"' ||
     '},';
 
     proxies := proxies || student;

@@ -75,11 +75,12 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
         };
 
         $scope.enableDeleteRelationship = proxyConfigResolve.enableDeleteRelationship;
-        $scope.enableDeleteAfterDays = proxyConfigResolve.enableDeleteAfterDays;
+        // $scope.enableDeleteAfterDays = proxyConfigResolve.enableDeleteAfterDays;
 
         $scope.proxyCanBeDeleted = function(proxy){
-            var enableDeleteAfterDaysIsDisabled = $scope.enableDeleteAfterDays === 0 || $scope.enableDeleteAfterDays === null;
-            return ($scope.enableDeleteRelationship && (enableDeleteAfterDaysIsDisabled || $scope.enableDeleteAfterDays < proxy.daysFromLastView));
+            // var enableDeleteAfterDaysIsDisabled = $scope.enableDeleteAfterDays === 0 || $scope.enableDeleteAfterDays === null;
+            // return ($scope.enableDeleteRelationship && (enableDeleteAfterDaysIsDisabled || $scope.enableDeleteAfterDays < proxy.daysFromLastView));
+            return ($scope.enableDeleteRelationship && (proxy.deleteAllowedPerLastView === 'Y'));
         };
 
         // INITIALIZE
