@@ -21,14 +21,7 @@ Copyright 2019 Ellucian Company L.P. and its affiliates.
                 <span class="icon-edit-CO"></span>
                 <div class="hidden-link-text-for-reader">{{'proxyManagement.button.title.editProxy'|i18n}}</div>
             </a>
-<!--            <proxy-mgmt-delete-button item="proxy" ng-click="confirmDeleteProxy(proxy)"-->
-<!--                                      ng-if="enableDeleteRelationship && (enableDeleteAfterDays == 0 || enableDeleteAfterDays < proxy.daysFromLastView)"-->
-<!--                                      button-title="{{'proxyManagement.button.title.deleteProxy'|i18n}}"/>-->
-            <a ng-class="proxyCanBeDeleted(proxy) ? 'proxy-edit-item-link proxy-icon-link' : 'proxy-delete-button-disabled-parent proxy-edit-item-link proxy-icon-link'" title="{{'proxyManagement.button.title.deleteProxy'|i18n}}" tabindex="0">
-                <span ng-class="proxyCanBeDeleted(proxy) ? 'icon-delete-CO' : 'icon-delete-CO proxy-delete-button-disabled'" ng-click="confirmDeleteProxy(proxy)"></span>
-                <div class="hidden-link-text-for-reader">{{'proxyManagement.button.title.deleteProxy'|i18n}}</div>
-            </a>
-
+                <proxy-mgmt-delete-button item="proxy" ng-click="confirmDeleteProxy(proxy)" enabled="proxyCanBeDeleted(proxy)" button-title="{{'proxyManagement.button.title.deleteProxy'|i18n}}"/>
         </div>
     </div>
 </div>

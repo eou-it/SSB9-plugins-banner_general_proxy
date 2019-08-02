@@ -188,7 +188,16 @@ h2 {
 }
 
 .proxy-mgmt-comm-grid {
-    padding-top: 20px;
+    padding-top: 10px;
+}
+
+.proxy-communication-log-header {
+    padding-top: 35px;
+}
+
+.proxy-communication-log-title {
+    font-weight: bold;
+    font-size: 18px;
 }
 
 .proxy-bottom-buttons.mgmt {
@@ -202,10 +211,6 @@ h2 {
 .proxy-delete-button-disabled-parent {
     pointer-events: none;
  }
-
-.proxy-delete-button-disabled {
-    color:#A0A3A4;
-}
 
 .proxy-popover {
     color: #026bc8;
