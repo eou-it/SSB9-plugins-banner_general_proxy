@@ -1,19 +1,9 @@
 <!--*******************************************************************************
   Copyright 2019 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
-<div class="proxy-notification-row">
-    <div class="proxy-notification-cell">
-        <div class="proxy-notification-content">
-            <div class="proxy-notification-icon blue">
-                <span class="icon-info-CO"></span>
-            </div>
-            <div class="proxy-notification-text blue">
-                <div>
-                    {{'proxyManagement.message.communicationLog'|i18n}}
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="proxy-communication-log-header">
+    <span class="proxy-communication-log-title">{{'proxyManagement.title.communicationLog'|i18n}}</span>
+    <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.communicationLog'|i18n}}"></proxy-mgmt-popover-tooltip>
 </div>
 <div class="proxy-mgmt-comm-grid">
     <xe-table-grid table-id="communicationDataTable" caption="" header="commColumns" fetch="getCommunicationData(query)"
