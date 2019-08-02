@@ -1132,6 +1132,8 @@ END;
      lv_pinhash    gpbprxy.gpbprxy_pin%TYPE;
      lv_salt       gpbprxy.gpbprxy_salt%TYPE;
      reset_status  VARCHAR2(10);
+     lv_sql           VARCHAR2(65);
+     lv_action_valid_days NUMBER;
      
    
    -- to apply mep code to Banner9 url for proxy e-mail communication
@@ -1222,6 +1224,10 @@ END;
            p_inv_login_cnt    => 0,
            p_user_id          => goksels.f_get_ssb_id_context
         );
+        
+      -- Create communication record
+      lv_sql := 'BEGIN :1 := bwgkprxy.F_GetOption (''ACTION_VALID_DAYS''); END;';
+      EXECUTE IMMEDIATE lv_sql USING OUT lv_action_valid_days;
 
         gp_gpbeltr.P_Create (
            p_syst_code      => global_syst,
@@ -1239,12 +1245,35 @@ END;
            p_create_user    => goksels.f_get_ssb_id_context,
            p_rowid_out      => lv_hold_rowid
         );
+        
+        
+       gp_gpbeltr.P_Update (
+        p_ctyp_code      => 'PIN_RESET_NOA',
+        p_ctyp_url => F_getProxyURL('PIN_RESET')  || twbkbssf.F_Encode (lv_hold_rowid),
+        p_user_id  => goksels.f_get_ssb_id_context,
+        p_rowid    => lv_hold_rowid
+      );
+      
+      
+        gb_common.P_Commit;
+        bwgkprxy.P_SendEmail(lv_hold_rowid);
 
-        gp_gpbeltr.P_Update (
-           p_ctyp_url => F_getProxyURL('PIN_RESET') || twbkbssf.F_Encode (lv_hold_rowid),
-           p_user_id  => goksels.f_get_ssb_id_context,
-           p_rowid    => lv_hold_rowid
-        );
+       gp_gpbeltr.P_Create (
+        p_syst_code      => global_syst,
+        p_ctyp_code      => 'PIN_RESET_ACCESS_CODE',
+        p_ctyp_url       => NULL,
+        p_ctyp_exp_date  => SYSDATE + lv_action_valid_days,
+        p_ctyp_exe_date  => NULL,
+        p_transmit_date  => NULL,
+        p_proxy_idm      => p_proxyIDM,
+        p_proxy_old_data => NULL,
+        p_proxy_new_data => NULL,
+        p_person_pidm    => NULL,
+        p_user_id        => goksels.f_get_ssb_id_context,
+        p_create_date    => SYSDATE,
+        p_create_user    => goksels.f_get_ssb_id_context,
+        p_rowid_out      => lv_hold_rowid
+      );
 
         gb_common.P_Commit;
         bwgkprxy.P_SendEmail(lv_hold_rowid);
