@@ -88,26 +88,6 @@ class ProxyManagementController {
     }
 
     /*
-      Create Proxy.
-    */
-    def createProxy() {
-
-        def map = request?.JSON ?: params
-
-        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
-        map.pidm = pidm
-
-        try {
-            def gidm = generalSsbProxyManagementService.createProxyProfile(map)
-            def data = [:]
-            data."gidm" = gidm
-            render data as JSON
-        }catch (ApplicationException e) {
-            render ProxyControllerUtility.returnFailureMessage(e) as JSON
-        }
-    }
-
-    /*
       Create Full Proxy Profile with the Authorization Pages .
     */
     def createUpdateProxy(){
