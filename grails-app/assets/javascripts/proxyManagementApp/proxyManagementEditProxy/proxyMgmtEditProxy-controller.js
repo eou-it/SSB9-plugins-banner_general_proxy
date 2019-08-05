@@ -437,7 +437,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             relationship: $filter('i18n')('proxyManagement.placeholder.relationship'),
             desc:         $filter('i18n')('proxyManagement.label.description'),
             passphrase:   $filter('i18n')('proxyManagement.label.passphrase'),
-            clonedLList:  $filter('i18n')('proxyManagement.placeholder.clonedList')
+            clonedLList:  $filter('i18n')('proxyManagement.placeholder.selectPerson')
         };
 
         $scope.isRelationshipSelected = false;
