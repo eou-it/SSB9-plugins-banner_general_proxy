@@ -334,7 +334,6 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
             def profile = generalSsbProxyManagementService.getProxyProfile(gidm, pidm)
 
             assertTrue gidm == profile?.proxyProfile?.gidm
-            assertTrue pidm == profile?.proxyProfile?.pidm
             assertEquals "AAA", profile?.proxyProfile?.p_retp_code
             assertNotNull profile?.proxyProfile?.p_start_date
             assertNotNull profile?.proxyProfile?.p_stop_date
