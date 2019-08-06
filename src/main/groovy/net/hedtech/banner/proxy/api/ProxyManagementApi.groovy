@@ -487,12 +487,23 @@ END IF;
          
          messages VARCHAR2(3000);
          message VARCHAR2(1000);
+         
+         ver gpbprxy.gpbprxy_version%TYPE;
+         
+         cursor getVersion is
+         select gpbprxy_version
+         from gpbprxy
+         where gpbprxy_proxy_idm = p_proxyIDM;
 --
        BEGIN
        
 --       
        p_proxyIDM := ?;
        pidm := ?;
+       
+       open getVersion;
+       fetch getVersion into ver;
+       close getVersion;
        
        messages:= '{ "messages":[';
        
@@ -570,6 +581,7 @@ END IF;
         
         ? := gp_gprxref.F_Query_One (p_proxyIDM, pidm);        
         ? := messages;
+        ? := ver;
 --
         END;
     """
@@ -937,6 +949,10 @@ BEGIN
    END IF;
        
 CLOSE lv_GPRXREF_ref;
+
+        update gpbprxy
+        set gpbprxy_data_origin = 'PROXY-MGMT'
+        where gpbprxy_proxy_idm = p_proxyIDM;
 
         --lv_info := 'UPDATED';
         --error_status := 'N';
@@ -2127,5 +2143,29 @@ BEGIN
  ? := resend_status;
 
 END;
+"""
+
+    public final static String GET_VERSION = """
+
+      DECLARE
+         p_proxyIDM gpbprxy.gpbprxy_proxy_idm%TYPE;
+         
+         ver gpbprxy.gpbprxy_version%TYPE;
+         
+         cursor getVersion is
+         select gpbprxy_version
+         from gpbprxy
+         where gpbprxy_proxy_idm = p_proxyIDM;
+     BEGIN       
+--       
+       p_proxyIDM := ?;
+       
+       open getVersion;
+       fetch getVersion into ver;
+       close getVersion;
+--
+       ? := ver;
+--
+        END;
 """
 }

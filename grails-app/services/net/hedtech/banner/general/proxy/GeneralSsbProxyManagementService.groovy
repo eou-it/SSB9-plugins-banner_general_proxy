@@ -104,14 +104,16 @@ class GeneralSsbProxyManagementService {
 
         def messagesOut
 
-        sql.call(sqlText, [gidm, pidm, CURSOR_PARAMETER, Sql.VARCHAR]) { profile, messages ->
+        sql.call(sqlText, [gidm, pidm, CURSOR_PARAMETER, Sql.VARCHAR, Sql.NUMERIC]) { profile, messages, version ->
             profile.eachRow() { data ->
                 proxyProfile.gidm = data.GPRXREF_PROXY_IDM
+                proxyProfile.pidm = data.GPRXREF_PERSON_PIDM
                 proxyProfile.p_retp_code = data.GPRXREF_RETP_CODE
                 proxyProfile.p_passphrase = data.GPRXREF_PASSPHRASE
                 proxyProfile.p_start_date = data.GPRXREF_START_DATE
                 proxyProfile.p_stop_date = data.GPRXREF_STOP_DATE
                 proxyProfile.p_desc = data.GPRXREF_PROXY_DESC
+                proxyProfile.version = version
             }
 
             messagesOut = messages
@@ -211,12 +213,22 @@ class GeneralSsbProxyManagementService {
         logger.debug('updateProxyProfile')
         logger.debug('Parameters: ' + params)
 
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+
+        def sqlText = ProxyManagementApi.GET_VERSION
+
+        sql.call(sqlText, [params.gidm, Sql.NUMERIC]) { version ->
+            if (version != params.version){
+                throw new ApplicationException("", MessageHelper.message("proxyManagement.message.update.optimisticLock"))
+            }
+        }
+
         def  errorMsgOut = ""
         def errorStatusOut = ""
 
-        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql = new Sql(sessionFactory.getCurrentSession().connection())
 
-        def sqlText = ProxyManagementApi.UPDATE_PROXY
+        sqlText = ProxyManagementApi.UPDATE_PROXY
 
         def startDateString = formatDate(params.p_start_date)
         def stopDateString = formatDate(params.p_stop_date)
