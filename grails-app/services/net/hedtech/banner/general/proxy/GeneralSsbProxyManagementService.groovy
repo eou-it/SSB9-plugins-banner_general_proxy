@@ -33,9 +33,9 @@ class GeneralSsbProxyManagementService {
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
 
         try {
-            sql.call(sqlText, [pidm, Sql.VARCHAR
+            sql.call(sqlText, [pidm, Sql.CLOB
             ]) { proxyListJson ->
-                proxyList = proxyListJson
+                proxyList = proxyListJson.asciiStream.text
             }
         }catch (e) {
             log.error("ERROR: Could not get the List of Proxies. $e")
@@ -218,7 +218,7 @@ class GeneralSsbProxyManagementService {
         def sqlText = ProxyManagementApi.GET_VERSION
 
         sql.call(sqlText, [params.gidm, Sql.NUMERIC]) { version ->
-            if (version != params.version){
+            if (params.version && version != params.version){
                 throw new ApplicationException("", MessageHelper.message("proxyManagement.message.update.optimisticLock"))
             }
         }

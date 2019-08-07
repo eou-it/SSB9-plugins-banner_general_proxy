@@ -12,12 +12,12 @@ class ProxyManagementApi {
     TYPE T_desc_table IS TABLE OF TWGBWMNU.TWGBWMNU_DESC%TYPE
                            INDEX BY TWGBWMNU.TWGBWMNU_DESC%TYPE;
 
-    proxies varchar2(3000);
-    student varchar2(3000);
+    proxies  CLOB DEFAULT NULL;
+    student  CLOB DEFAULT NULL;
     activeInd varchar2(1);
     daysFromLastView NUMBER;
     deleteAllowedPerLastView varchar2(1);
-    listOfProxies varchar2(3000);
+    listOfProxies  CLOB DEFAULT NULL;
     lv_days NUMBER;
     
     lv_GPBPRXY_rec gp_gpbprxy.gpbprxy_rec;
