@@ -4,3 +4,19 @@
     border-top: solid 4px #026BC8;
     background: #EFF7FF url(icons/info.png) no-repeat 98% 50%;
 }
+
+.ui-select-container.ng-not-empty .select2-choice
+{
+    border-color: #151618;
+    margin-left: 0;
+}
+
+.popover {
+    bottom:auto;
+    right:auto !important;
+    margin-top: 10px;
+}
+
+.popover .arrow {
+    visibility: hidden;
+}
