@@ -1910,7 +1910,7 @@ END P_MP_SendAuthEmail;
 --
          CASE lv_GPBELTR_rec.R_CTYP_CODE
             --WHEN 'ONE_TIME_ONLY'          THEN P_MP_GrantOne(lv_GPBELTR_rec.R_PROXY_IDM);
-            --WHEN 'CURRENT_AUTHORIZATIONS' THEN P_MP_SendAuthEmail(lv_GPBELTR_rec.R_PROXY_IDM);
+            WHEN 'CURRENT_AUTHORIZATIONS' THEN P_MP_SendAuthEmail(lv_GPBELTR_rec.R_PROXY_IDM, global_pidm);
             WHEN 'PASSPHRASE'             THEN P_MP_EmailPassphrase(lv_GPBELTR_rec.R_PROXY_IDM, global_pidm);
             WHEN 'PIN_RESET'              THEN P_MP_ResetPin(lv_GPBELTR_rec.R_PROXY_IDM, global_pidm);
             ELSE
