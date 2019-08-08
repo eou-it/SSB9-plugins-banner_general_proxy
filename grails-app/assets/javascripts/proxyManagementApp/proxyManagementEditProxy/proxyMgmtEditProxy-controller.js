@@ -76,8 +76,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             });
 
             if (alt) {
+                $scope.currentAlt = alt;
 
-                window.alt = alt;
                 // Set up for "edit proxy"
                 $scope.isCreateNew = false;
 
@@ -470,9 +470,12 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         ];
 
         $scope.draggableCommColumnNames = [];
+        $scope.currentAlt;
 
         $scope.getCommunicationData = function(query) {
-            return proxyMgmtAppService.getCommunicationLog({alt: window.alt}).promise;
+            var self = this;
+
+            return proxyMgmtAppService.getCommunicationLog({alt: self.currentAlt}).promise;
         };
 
         $scope.commMobileConfig = {
