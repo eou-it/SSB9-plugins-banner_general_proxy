@@ -24,7 +24,6 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
         init = function() {
             proxyMgmtAppService.getProxyList().$promise.then(function (response) {
                 $scope.proxies = response.proxies;
-
             });
 
             displayNotificationsOnStateLoad();

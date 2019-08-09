@@ -107,7 +107,6 @@ class GeneralSsbProxyManagementService {
         sql.call(sqlText, [gidm, pidm, CURSOR_PARAMETER, Sql.VARCHAR, Sql.NUMERIC]) { profile, messages, version ->
             profile.eachRow() { data ->
                 proxyProfile.gidm = data.GPRXREF_PROXY_IDM
-                proxyProfile.pidm = data.GPRXREF_PERSON_PIDM
                 proxyProfile.p_retp_code = data.GPRXREF_RETP_CODE
                 proxyProfile.p_passphrase = data.GPRXREF_PASSPHRASE
                 proxyProfile.p_start_date = data.GPRXREF_START_DATE
