@@ -113,7 +113,7 @@
 <div ng-if="!isCreateNew" class="row">
     <div class="col-xs-12 col-md-6 col-lg-4">
         <div class="proxy-mgmt-email-passphrase">
-            <a ng-click="emailAuthentications()" class="add-item-link" tabindex="0">
+            <a ng-click="authPages.length > 0 ? emailAuthentications() : '' " ng-class="[(authPages.length > 0 ? 'add-item-link' : 'add-item-link disabled')]" tabindex="0">
                 <span class="icon-email-CO"></span> <span>{{'proxyManagement.label.email.authorizations'|i18n}}</span>
             </a>
         </div>

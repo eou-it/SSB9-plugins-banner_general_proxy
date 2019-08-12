@@ -86,6 +86,10 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 proxyMgmtAppService.getProxy({alt: alt}).$promise.then(function (response) {
                     $scope.proxy = response.proxyProfile;
 
+                    $scope.authPages = $scope.proxy.pages.filter(function(item) {
+                        return item.auth == true;
+                    });
+
                     _.each(response.messages.messages, function(message) {
                         if (message.code === 'PIN_EXPIRATION_DATE'){
                             $scope.passwordExpDateMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
@@ -455,6 +459,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.passwordExpDateMsg = '';
         $scope.emailVerifiedDateMsg = '';
         $scope.optOutMsg  = '';
+        $scope.authPages = [];
 
 
         // COMMUNICATION DATA TABLE
