@@ -376,64 +376,65 @@ class ProxyController {
      */
     def getFinancialAidStatus() {
         try{
-        def id = XssSanitizer.sanitize(params.id)
+            def id = XssSanitizer.sanitize(params.id)
 
-        def pidm = id ? PersonUtility.getPerson(id)?.pidm : session["currentStudentPidm"]
+            def pidm = id ? PersonUtility.getPerson(id)?.pidm : session["currentStudentPidm"]
 
-        def result = proxyFinAidService.getFinancialAidStatus(pidm, XssSanitizer.sanitize(params.aidYear))
+            def result = proxyFinAidService.getFinancialAidStatus(pidm, XssSanitizer.sanitize(params.aidYear))
 
-        if (result.awardPackage) {
-            if(result.awardPackage.amount != null) {
-                result.awardPackage.textParams = [currencyFormatHelperService.formatCurrency(result.awardPackage.amount)]
+            if (result.awardPackage) {
+                if(result.awardPackage.amount != null) {
+                    result.awardPackage.textParams = [currencyFormatHelperService.formatCurrency(result.awardPackage.amount)]
+                }
+
+                result.awardPackage.remove('amount')
+
+                if (result.awardPackage.url) {
+                    result.awardPackage.hasAccess = checkPageForAccess(id, AWARD_PACKAGE_URL) != null
+
+                    if(result.awardPackage.hasAccess) {
+                        result.awardPackage.url = AWARD_PACKAGE_URL
+                    }
+                    else {
+                        result.awardPackage.remove('url')
+                    }
+                }
             }
 
-            result.awardPackage.remove('amount')
+            if (result.costOfAttendance) {
+                if(result.costOfAttendance.amount != null) {
+                    result.costOfAttendance.textParams = [currencyFormatHelperService.formatCurrency(result.costOfAttendance.amount)]
+                }
 
-            if (result.awardPackage.url) {
-                result.awardPackage.hasAccess = checkPageForAccess(id, AWARD_PACKAGE_URL) != null
+                result.costOfAttendance.remove('amount')
+            }
 
-                if(result.awardPackage.hasAccess) {
-                    result.awardPackage.url = AWARD_PACKAGE_URL
+            if(result.financialAidHistory?.url) {
+                result.financialAidHistory.hasAccess = checkPageForAccess(id, AWARD_HISTORY_URL) != null
+
+                if(result.financialAidHistory.hasAccess) {
+                    result.financialAidHistory.url = AWARD_HISTORY_URL
                 }
                 else {
-                    result.awardPackage.remove('url')
+                    result.financialAidHistory.remove('url')
                 }
             }
-        }
 
-        if (result.costOfAttendance) {
-            if(result.costOfAttendance.amount != null) {
-                result.costOfAttendance.textParams = [currencyFormatHelperService.formatCurrency(result.costOfAttendance.amount)]
+            if(result.accountSummary?.url) {
+                result.accountSummary.hasAccess = checkPageForAccess(id, ACCOUNT_SUMMARY_URL) != null
+
+                if(result.accountSummary.hasAccess) {
+                    result.accountSummary.url = ACCOUNT_SUMMARY_URL
+                }
+                else {
+                    result.accountSummary.remove('url')
+                }
             }
 
-            result.costOfAttendance.remove('amount')
-        }
-
-        if(result.financialAidHistory?.url) {
-            result.financialAidHistory.hasAccess = checkPageForAccess(id, AWARD_HISTORY_URL) != null
-
-            if(result.financialAidHistory.hasAccess) {
-                result.financialAidHistory.url = AWARD_HISTORY_URL
-            }
-            else {
-                result.financialAidHistory.remove('url')
-            }
-        }
-
-        if(result.accountSummary?.url) {
-            result.accountSummary.hasAccess = checkPageForAccess(id, ACCOUNT_SUMMARY_URL) != null
-
-            if(result.accountSummary.hasAccess) {
-                result.accountSummary.url = ACCOUNT_SUMMARY_URL
-            }
-            else {
-                result.accountSummary.remove('url')
-            }
-        }
-
-        render result as JSON
-
-        }catch (Exception e) {
+            render result as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        } catch (Exception e) {
             log.error(e)
             render([failure: true, authorized: false,  message: MessageHelper.message('proxy.error.dataError')] as JSON)
         }

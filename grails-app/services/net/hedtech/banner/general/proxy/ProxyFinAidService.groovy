@@ -5,11 +5,14 @@ package net.hedtech.banner.general.proxy
 
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
+import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.system.InstitutionalDescription
 import net.hedtech.banner.proxy.api.AwardHistoryApi
 import net.hedtech.banner.proxy.api.FinAidAwardPackageApi
 import net.hedtech.banner.proxy.api.FinancialAidStatusApi
 import org.springframework.web.context.request.RequestContextHolder
+
+import java.sql.SQLException
 
 class ProxyFinAidService {
 
@@ -166,9 +169,14 @@ class ProxyFinAidService {
             def sqlText = FinancialAidStatusApi.FINANCIAL_AID_SUMMARY
 
             def sql = new Sql(sessionFactory.getCurrentSession().connection())
-            sql.call(sqlText, [pidm, aidYear, Sql.VARCHAR
-            ]) { lv_finaid_json ->
-                finaidJson = lv_finaid_json
+
+            try {
+                sql.call(sqlText, [pidm, aidYear, Sql.VARCHAR
+                ]) { lv_finaid_json ->
+                    finaidJson = lv_finaid_json
+                }
+            } catch (SQLException e) {
+                throw new ApplicationException( ProxyFinAidService.class, e )
             }
 
             def resultMap = finaidJson ? new JsonSlurper().parseText(finaidJson) : [:]
