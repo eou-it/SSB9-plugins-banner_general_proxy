@@ -1240,7 +1240,7 @@ END;
      lv_RETP := gp_gprxref.F_GetXREF_RETP(p_proxyIDM, global_pidm);
 
      -- Reset PIN only if active relationship record found
-     IF lv_RETP = 'AAA' OR bwgkprxy.F_GetAuthCount(p_proxyIDM, global_pidm) = 0
+     IF lv_RETP = 'AAA'
      THEN
         reset_status := 'NOTACTIVE';
      ELSE
