@@ -87,7 +87,7 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
         };
 
         this.getErrorEmailAddressValid = function (proxy) {
-            var msg = 'personInfo.email.error.emailAddressValid';
+            var msg = 'proxyManagement.onSave.BADEMAIL';
             if (!validEmailRegEx.test(proxy.p_email)) {
                 messages.push({msg: msg, type: 'error'});
 
