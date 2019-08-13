@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.*
 
 /**
  * Controller for Proxy Management
@@ -308,7 +309,6 @@ class ProxyManagementController {
 
 
     def getCommunicationLog() {
-
         def params = request?.JSON ?: params
 
         def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
@@ -318,20 +318,41 @@ class ProxyManagementController {
         def communications = generalSsbProxyManagementService.getProxyCommunications(params).communicationsList
 
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy")
-        DateFormat df1 = new SimpleDateFormat("MM/dd/yyyy HH:mm")
 
-        SimpleDateFormat transDateformat =
-                new SimpleDateFormat(getDateFormat(),  Locale.forLanguageTag(LocaleContextHolder.getLocale().toString()));
         communications?.each{
             it.actionDate = it.actionDate ? df.parse(it.actionDate) : it.actionDate
             it.expirationDate = it.expirationDate ? df.parse(it.expirationDate) : it.expirationDate
-            it.transmitDate = transDateformat.format(it.transmitDate ? df1.parse(it.transmitDate) : it.transmitDate)
+            it.transmitDate = getFormattedTransmitDate(it.transmitDate) //A transmit date needs to be formatted differently because of its timestamp.
         }
 
         render communications as JSON
 
     }
 
+    def getFormattedTransmitDate (String transmitDate) {
+        if (userIsInArabicLocale()) {
+            def formattedTransmitDate
+            try {
+                formattedTransmitDate = HijrahCalendarUtils.getHijrahDateWithTimestampFromString(transmitDate)
+            }
+            catch (DateTimeException e) {
+                //A date that does not match the required pattern was provided.
+                println(e.message)
+                return transmitDate
+            }
+            return formattedTransmitDate
+            }
+        else {
+            SimpleDateFormat transDateFormat =
+                    new SimpleDateFormat(getDateFormat(),  Locale.forLanguageTag(LocaleContextHolder.getLocale().toString()));
+            DateFormat df1 = new SimpleDateFormat("MM/dd/yyy HH:mm")
+            return transDateFormat.format(transmitDate ? df1.parse(transmitDate) : transmitDate)
+        }
+    }
+
+    def userIsInArabicLocale () {
+        return LocaleContextHolder.getLocale().toString().contains('ar')
+    }
 
     def sendCommunicationLog() {
         def data = [:]
