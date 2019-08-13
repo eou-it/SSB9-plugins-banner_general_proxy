@@ -1,5 +1,5 @@
 /********************************************************************************
- Copyright 2018-2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2019 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
@@ -43,7 +43,7 @@ class HijrahCalendarUtils {
             return false
         }
         else {
-            if (requiredPattern == 'MM/dd/yyyy HH:mm') {
+            if (requiredPattern == DATE_STRING_WITH_TIMESTAMP) {
                 return dateString.matches('^([0]?[1-9]|1[012])/([1-9]|([12][0-9])|[0][1-9]|(3[01]))/\\d\\d\\d\\d (20|21|22|23|[0-1]?\\d):[0-5]?\\d')
             }
         }

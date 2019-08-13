@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.*
+import java.time.DateTimeException
 
 /**
  * Controller for Proxy Management
@@ -351,7 +351,7 @@ class ProxyManagementController {
     }
 
     def userIsInArabicLocale () {
-        return LocaleContextHolder.getLocale().toString().contains('ar')
+        return LocaleContextHolder.getLocale().toString().startsWith('ar')
     }
 
     def sendCommunicationLog() {
