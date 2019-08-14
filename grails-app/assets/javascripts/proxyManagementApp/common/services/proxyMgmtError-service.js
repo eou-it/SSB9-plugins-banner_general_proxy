@@ -3,7 +3,8 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
 
         var dateFmt,
             calendar = (function(){
-                var locale = $('meta[name=locale]').attr("content");
+                var locale = window.i18n.locale;
+
                 if(locale.split('-')[0] === 'ar') {
                     dateFmt = $filter('i18n')('default.date.format');
                     return $.calendars.instance('islamic');
