@@ -12,7 +12,7 @@ proxyApp.service('proxyEmailService', ['notificationCenterService',
         };
 
         this.getErrorEmailAddressFormat = function (email) {
-            return validEmailRegEx.test(email) ? null : 'proxy.personalinformation.error.invalidEmailFormat';
+            return validEmailRegEx.test(email) ? null : 'proxyManagement.onSave.BADEMAIL';
         };
     }
 ]);

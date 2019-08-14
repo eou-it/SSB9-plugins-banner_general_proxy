@@ -73,7 +73,7 @@
         <div ng-if="!isCreateNew">
             <div class="clearfix">
                 <div class="proxy-base-info-summary">
-                    <span>{{proxyAuxData.firstName}}</span> <span>{{proxyAuxData.lastName}}</span> ({{proxyAuxData.email}})
+                    <span>{{proxyAuxData.firstName}}</span> <span>{{proxyAuxData.lastName}}</span> <span>({{proxyAuxData.email}})&#x200E;</span>
                 </div>
                 <div class="proxy-mgmt-reset-pw" ng-if="enableResetPin">
                     <a ng-click="resetPassword()" class="add-item-link" tabindex="0">

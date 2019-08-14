@@ -57,7 +57,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         },
 
         init = function() {
-            var gidm = $stateParams.gidm;
+            var alt = $stateParams.alt;
 
             $scope.proxyAuxData.firstName = $stateParams.firstName;
             $scope.proxyAuxData.lastName = $stateParams.lastName;
@@ -75,16 +75,20 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 }
             });
 
-            if (gidm) {
+            if (alt) {
+                $scope.currentAlt = alt;
 
-                window.gidm = gidm;
                 // Set up for "edit proxy"
                 $scope.isCreateNew = false;
 
                 $scope.isRelationshipSelected = true;
 
-                proxyMgmtAppService.getProxy({gidm: gidm}).$promise.then(function (response) {
+                proxyMgmtAppService.getProxy({alt: alt}).$promise.then(function (response) {
                     $scope.proxy = response.proxyProfile;
+
+                    $scope.authPages = $scope.proxy.pages.filter(function(item) {
+                        return item.auth == true;
+                    });
 
                     _.each(response.messages.messages, function(message) {
                         if (message.code === 'PIN_EXPIRATION_DATE'){
@@ -103,7 +107,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
                     setSelectedRelationship($scope.proxy.p_retp_code);
 
-                    proxyMgmtAppService.getClonedProxiesList({gidm: gidm, p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function(response) {
+                    proxyMgmtAppService.getClonedProxiesList({alt: alt, p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function(response) {
                         if (response.failure) {
                             $scope.flashMessage = response.message.clonedProxiesList;
 
@@ -134,7 +138,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 setSelectedRelationship($scope.proxy.p_retp_code);
 
 
-                proxyMgmtAppService.getClonedProxiesListOnCreate({gidm: gidm}).$promise.then(function(response) {
+                proxyMgmtAppService.getClonedProxiesListOnCreate({alt: alt}).$promise.then(function(response) {
                     if (response.failure) {
                         $scope.flashMessage = response.message.clonedProxiesList;
 
@@ -147,7 +151,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 });
 
 
-                proxyMgmtAppService.getAddProxiesList({gidm: gidm}).$promise.then(function(response) {
+                proxyMgmtAppService.getAddProxiesList({alt: alt}).$promise.then(function(response) {
                     if (response.failure) {
                         $scope.flashMessage = response.message.clonedProxiesList;
 
@@ -171,7 +175,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         };
 
         $scope.handleRelationshipChange = function() {
-            proxyMgmtAppService.getDataModelOnRelationshipChange({gidm: $scope.proxy.gidm, p_retp_code: $scope.proxyAuxData.selectedRelationship.code}).$promise.then(function (response) {
+            proxyMgmtAppService.getDataModelOnRelationshipChange({alt: $scope.proxy.alt, p_retp_code: $scope.proxyAuxData.selectedRelationship.code}).$promise.then(function (response) {
                 $scope.proxy.p_start_date = response.dates.startDate;
                 $scope.proxy.p_stop_date = response.dates.stopDate;
                 $scope.proxy.pages = response.pages.pages;
@@ -197,7 +201,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 setSelectedRelationship($scope.proxy.p_retp_code);
             }
 
-            proxyMgmtAppService.getClonedAuthorizationsList({gidm: $scope.proxyAuxData.clonedProxy.code, p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function (response) {
+            proxyMgmtAppService.getClonedAuthorizationsList({alt: $scope.proxyAuxData.clonedProxy.code, p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function (response) {
                 $scope.proxy.pages = response.pages;
             });
 
@@ -221,7 +225,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
             }else{
 
-                proxyMgmtAppService.emailPassphrase({gidm: $scope.proxy.gidm}).$promise.then(function (response) {
+                proxyMgmtAppService.emailPassphrase({alt: $scope.proxy.alt}).$promise.then(function (response) {
                     var messageType, message;
 
                     if (response.failure) {
@@ -246,7 +250,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
 
         $scope.resetPassword = function() {
-            proxyMgmtAppService.resetProxyPassword({gidm: $scope.proxy.gidm}).$promise.then(function (response) {
+            proxyMgmtAppService.resetProxyPassword({alt: $scope.proxy.alt}).$promise.then(function (response) {
                 var messageType, message;
 
                 if (response.failure) {
@@ -268,7 +272,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         };
 
         $scope.emailAuthentications = function() {
-            proxyMgmtAppService.emailAuthentications({gidm: $scope.proxy.gidm}).$promise.then(function (response) {
+            proxyMgmtAppService.emailAuthentications({alt: $scope.proxy.alt}).$promise.then(function (response) {
                 var messageType, message;
 
                 if (response.failure) {
@@ -330,7 +334,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
         $scope.save = function() {
 
-            var profile = {}
+            var profile = {};
+
             //Add to Profile to manage dates
             _.each(Object.keys($scope.proxy), function(it) {
                 profile[it] = $scope.proxy[it];
@@ -454,6 +459,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.passwordExpDateMsg = '';
         $scope.emailVerifiedDateMsg = '';
         $scope.optOutMsg  = '';
+        $scope.authPages = [];
 
 
         // COMMUNICATION DATA TABLE
@@ -469,9 +475,12 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         ];
 
         $scope.draggableCommColumnNames = [];
+        $scope.currentAlt;
 
         $scope.getCommunicationData = function(query) {
-            return proxyMgmtAppService.getCommunicationLog({gidm: window.gidm}).promise;
+            var self = this;
+
+            return proxyMgmtAppService.getCommunicationLog({alt: self.currentAlt}).promise;
         };
 
         $scope.commMobileConfig = {

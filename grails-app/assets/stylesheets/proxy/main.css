@@ -1358,12 +1358,12 @@ li.listing .radio-txt-input {
 /*Custom Radio and check boxes*/
 
 input[type="checkbox"].main-nav-check,
-input[type="checkbox"].dir-profile-nav-check {
+input[type="checkbox"].proxy-auth-check {
     margin-top: 0.875em;
 }
 
 input[type="checkbox"].main-nav-check + .lbl,
-input[type="checkbox"].dir-profile-nav-check + .lbl {
+input[type="checkbox"].proxy-auth-check + .lbl {
     padding-top: 0.875em;
 }
 
@@ -1772,10 +1772,6 @@ div.dir-profile {
 
     .pi-phone-extn {
         width: 30%;
-    }
-
-    input[type="checkbox"].dir-profile-nav-check {
-        margin-top: 0;
     }
 
     button.closebtn {

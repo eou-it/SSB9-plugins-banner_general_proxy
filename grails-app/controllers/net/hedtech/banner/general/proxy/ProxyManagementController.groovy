@@ -5,7 +5,6 @@ package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
 import grails.util.Holders
-import groovy.json.JsonSlurper
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.system.ProxyAccessSystemOptionType
 import net.hedtech.banner.i18n.MessageHelper
@@ -16,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.DateTimeException
 
 /**
  * Controller for Proxy Management
@@ -41,6 +41,9 @@ class ProxyManagementController {
 
         def proxies = generalSsbProxyManagementService.getProxyList(pidm)
 
+        ProxyControllerUtility.clearAllProxyGidmMapsFromSessionCache()
+        ProxyControllerUtility.mapProxyGidms(proxies.proxies)
+
         render proxies as JSON
     }
 
@@ -50,9 +53,13 @@ class ProxyManagementController {
     def getProxy() {
         def proxy
         def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
-        def gidm = XssSanitizer.sanitize(params.gidm)
+        def gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(XssSanitizer.sanitize(params.alt))
 
         proxy = generalSsbProxyManagementService.getProxyProfile(gidm, pidm)
+
+        // Replace gidm with alternate ID
+        proxy.proxyProfile.remove("gidm")
+        proxy.proxyProfile.alt = params.alt
 
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy")
         //converts the Date display for I18N
@@ -75,10 +82,15 @@ class ProxyManagementController {
         def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
         proxy.pidm = pidm
 
+        proxy.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(XssSanitizer.sanitize(proxy.alt))
+
         try {
             generalSsbProxyManagementService.deleteProxyProfile(proxy)
 
             def proxies = generalSsbProxyManagementService.getProxyList(pidm)
+
+            ProxyControllerUtility.clearAllProxyGidmMapsFromSessionCache()
+            ProxyControllerUtility.mapProxyGidms(proxies.proxies)
 
             render proxies as JSON
 
@@ -102,8 +114,7 @@ class ProxyManagementController {
                 throw new ApplicationException("", MessageHelper.message("proxyManagement.onSave.REQUIRED"))
             }
 
-            def gidm = generalSsbProxyManagementService.createProxyProfile(map)
-            map.gidm = gidm
+            map.gidm = generalSsbProxyManagementService.createProxyProfile(map)
 
             generalSsbProxyManagementService.updateProxyProfile(map)
             map?.pages?.each{
@@ -115,7 +126,7 @@ class ProxyManagementController {
                 generalSsbProxyManagementService.manageProxyPagesAuthorization(authParams)
             }
 
-            Map response = [gidm: map.gidm, failure: false]
+            Map response = [failure: false]
             render response as JSON
         }
         catch (ApplicationException e) {
@@ -156,6 +167,8 @@ class ProxyManagementController {
         def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
         map.pidm = pidm
 
+        map.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(XssSanitizer.sanitize(map.alt))
+
         try {
 
             generalSsbProxyManagementService.updateProxyProfile(map)
@@ -168,7 +181,7 @@ class ProxyManagementController {
                 generalSsbProxyManagementService.manageProxyPagesAuthorization(authParams)
             }
 
-            Map response = [gidm: map.gidm, failure: false]
+            Map response = [failure: false]
             render response as JSON
         }
         catch (ApplicationException e) {
@@ -209,9 +222,10 @@ class ProxyManagementController {
 
         def params = request?.JSON ?: params
         def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        def gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(XssSanitizer.sanitize(params.alt))
 
         try {
-            def status = generalSsbProxyManagementService.resetProxyPassword(params.gidm, pidm)
+            def status = generalSsbProxyManagementService.resetProxyPassword(gidm, pidm)
 
             def response = [resetStatus: status, failure: false]
             render response as JSON
@@ -234,8 +248,11 @@ class ProxyManagementController {
 
         def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
         params.pidm = pidm
+        params.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(XssSanitizer.sanitize(params.alt))
 
         def proxies = generalSsbProxyManagementService.getProxyClonedList(params)
+        ProxyControllerUtility.clearAllClonedProxyCodeMapsFromSessionCache()
+        ProxyControllerUtility.mapClonedProxyCodes(proxies.cloneList)
 
         render proxies as JSON
     }
@@ -248,8 +265,11 @@ class ProxyManagementController {
 
         def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
         params.pidm = pidm
+        params.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(XssSanitizer.sanitize(params.alt))
 
         def proxies = generalSsbProxyManagementService.getProxyClonedListOnCreate(params)
+        ProxyControllerUtility.clearAllClonedProxyCodeMapsFromSessionCache()
+        ProxyControllerUtility.mapClonedProxyCodes(proxies.cloneList)
 
         render proxies as JSON
     }
@@ -263,6 +283,8 @@ class ProxyManagementController {
         try {
             def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
             params.pidm = pidm
+            params.gidm = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache(XssSanitizer.sanitize(params.alt))
+
             def authorizations = generalSsbProxyManagementService.getProxyPages(params)
 
             render authorizations as JSON
@@ -287,29 +309,50 @@ class ProxyManagementController {
 
 
     def getCommunicationLog() {
-
         def params = request?.JSON ?: params
 
         def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
         params.pidm = pidm
+        params.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(XssSanitizer.sanitize(params.alt))
 
         def communications = generalSsbProxyManagementService.getProxyCommunications(params).communicationsList
 
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy")
-        DateFormat df1 = new SimpleDateFormat("MM/dd/yyyy HH:mm")
 
-        SimpleDateFormat transDateformat =
-                new SimpleDateFormat(getDateFormat(),  Locale.forLanguageTag(LocaleContextHolder.getLocale().toString()));
         communications?.each{
             it.actionDate = it.actionDate ? df.parse(it.actionDate) : it.actionDate
             it.expirationDate = it.expirationDate ? df.parse(it.expirationDate) : it.expirationDate
-            it.transmitDate = transDateformat.format(it.transmitDate ? df1.parse(it.transmitDate) : it.transmitDate)
+            it.transmitDate = getFormattedTransmitDate(it.transmitDate) //A transmit date needs to be formatted differently because of its timestamp.
         }
 
         render communications as JSON
 
     }
 
+    def getFormattedTransmitDate (String transmitDate) {
+        if (userIsInArabicLocale()) {
+            def formattedTransmitDate
+            try {
+                formattedTransmitDate = HijrahCalendarUtils.getHijrahDateWithTimestampFromString(transmitDate)
+            }
+            catch (DateTimeException e) {
+                //A date that does not match the required pattern was provided.
+                println(e.message)
+                return transmitDate
+            }
+            return formattedTransmitDate
+            }
+        else {
+            SimpleDateFormat transDateFormat =
+                    new SimpleDateFormat(getDateFormat(),  Locale.forLanguageTag(LocaleContextHolder.getLocale().toString()));
+            DateFormat df1 = new SimpleDateFormat("MM/dd/yyy HH:mm")
+            return transDateFormat.format(transmitDate ? df1.parse(transmitDate) : transmitDate)
+        }
+    }
+
+    def userIsInArabicLocale () {
+        return LocaleContextHolder.getLocale().toString().startsWith('ar')
+    }
 
     def sendCommunicationLog() {
         def data = [:]
@@ -379,9 +422,10 @@ class ProxyManagementController {
 
         def params = request?.JSON ?: params
         def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        def gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(XssSanitizer.sanitize(params.alt))
 
         try {
-            def status = generalSsbProxyManagementService.emailAuthentications(params.gidm, pidm)
+            def status = generalSsbProxyManagementService.emailAuthentications(gidm, pidm)
 
             def response = [resetStatus: status, failure: false]
             render response as JSON
@@ -401,9 +445,10 @@ class ProxyManagementController {
 
         def params = request?.JSON ?: params
         def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        def gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(XssSanitizer.sanitize(params.alt))
 
         try {
-            def status = generalSsbProxyManagementService.emailPassphrase(params.gidm, pidm)
+            def status = generalSsbProxyManagementService.emailPassphrase(gidm, pidm)
 
             def response = [resetStatus: status, failure: false]
             render response as JSON
