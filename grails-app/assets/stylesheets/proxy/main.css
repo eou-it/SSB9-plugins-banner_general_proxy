@@ -1953,6 +1953,14 @@ div.dir-profile {
     .pi-modal .modal-dialog {
         width: 97%;
     }
+
+    .xe-tab-container .xe-tab-nav>li {
+        max-width: 100% !important;
+    }
+
+    #start-date-wrapper, #stop-date-wrapper{
+        max-width: 50%;
+    }
 }
 
 /* Mobile devices up through iPad landscape */
@@ -1962,6 +1970,10 @@ div.dir-profile {
         overflow: hidden;
         position:fixed;
         width: 100%;
+    }
+
+    .xe-tab-container .xe-tab-nav>li {
+        max-width: 100% !important;
     }
 }
 
