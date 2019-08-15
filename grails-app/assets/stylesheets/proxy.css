@@ -636,6 +636,10 @@ p.notification-msg {
 #calendar table tr:hover {
     background: transparent !important;
 }
+
+#calendar table th {
+    background: none;
+}
 /* IE11 */
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     .proxy .fc-toolbar {
