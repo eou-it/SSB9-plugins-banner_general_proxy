@@ -1,3 +1,19 @@
 .button-block {
     float: right;
 }
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .xe-tab-container .xe-tab-nav>li {
+        max-width: 100%;
+    }
+
+    #start-date-wrapper, #stop-date-wrapper{
+        max-width: 50%;
+    }
+}
+
+@media screen and (max-width:1024px) {
+    .xe-tab-container .xe-tab-nav>li {
+        max-width: 100%;
+    }
+}
