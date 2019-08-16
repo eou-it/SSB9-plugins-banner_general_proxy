@@ -119,6 +119,15 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                         }
                     });
 
+                    // watch changes on passphrase
+                    $scope.$watch('proxy.p_passphrase', function(newVal, oldVal){
+                        $scope.dirty = (newVal != oldVal)
+                    });
+                    // watch changes on pages
+                    $scope.$watch('proxy.pages | json', function(newVal, oldVal){
+                        $scope.dirty = !_.isEqual(newVal, oldVal);
+                    });
+
                 });
             } else {
                 // Create "new proxy" object
@@ -220,9 +229,9 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.emailPassphrase = function() {
 
             if  (!$scope.proxy.p_passphrase){
-
-            notificationCenterService.addNotification('proxyManagement.profile.error.passphrase', "error", true);
-
+                notificationCenterService.addNotification('proxyManagement.profile.error.passphrase', "error", true);
+            }else if ($scope.dirty) {
+                notificationCenterService.addNotification('proxyManagement.message.checkDirtyOnEmail', 'error', true);
             }else{
 
                 proxyMgmtAppService.emailPassphrase({alt: $scope.proxy.alt}).$promise.then(function (response) {
@@ -272,6 +281,12 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         };
 
         $scope.emailAuthentications = function() {
+
+            if ($scope.dirty) {
+                notificationCenterService.addNotification('proxyManagement.message.checkDirtyOnEmail', 'error', true);
+                return;
+            }
+
             proxyMgmtAppService.emailAuthentications({alt: $scope.proxy.alt}).$promise.then(function (response) {
                 var messageType, message;
 
@@ -423,6 +438,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
         // CONTROLLER VARIABLES
         // --------------------
+        $scope.dirty = false;
         $scope.isCreateNew = true;
         $scope.proxy;
         $scope.proxyAuxData = {
