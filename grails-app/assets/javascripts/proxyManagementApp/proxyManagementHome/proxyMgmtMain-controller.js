@@ -7,6 +7,12 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
 
         // LOCAL FUNCTIONS
         // ---------------
+
+        var refreshProxies = function (response) {
+            $scope.proxies = response.proxies;
+            $scope.proxiesLoaded = true;
+        };
+
         /**
          * Show any notifications slated to be shown on state load.
          * (The timeout is needed in cases where the common platform control bar needs time to load. It
@@ -23,7 +29,7 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
 
         init = function() {
             proxyMgmtAppService.getProxyList().$promise.then(function (response) {
-                $scope.proxies = response.proxies;
+                refreshProxies(response)
             });
 
             displayNotificationsOnStateLoad();
@@ -33,6 +39,7 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
         // CONTROLLER VARIABLES
         // --------------------
         $scope.proxies = [];
+        $scope.proxiesLoaded = false;
 
         $scope.cancelNotification = function () {
             notificationCenterService.clearNotifications();
@@ -47,8 +54,7 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
                     if (response.failure) {
                         notificationCenterService.displayNotification(response.message, $scope.notificationErrorType);
                     } else {
-                        // Refresh proxy list
-                        $scope.proxies = response.proxies;
+                        refreshProxies(response);
                     }
                 });
             };
