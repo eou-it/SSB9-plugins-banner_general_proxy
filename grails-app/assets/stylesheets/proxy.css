@@ -651,7 +651,6 @@ p.notification-msg {
     .proxy .fc-right {
         padding-left: 70em;
     }
-
 }
 
 .fc-toolbar.fc-header-toolbar .fc-right {
@@ -776,7 +775,7 @@ p.notification-msg {
     border-radius: 4px;
     font-family: Open Sans !important;
 
-    background-image: none; 
+    background-image: none;
 }
 
 .fc-button.secondary:hover:not([disabled]) {
@@ -1284,7 +1283,7 @@ a.breadcrumbButton.leaf-breadcrumb {
         flex-direction: row-reverse;
         flex-wrap: wrap;
     }
-    
+
     .proxy-pin-mgmt.splashBg .ellucianName {
         height: 1.8em;
         width: 9em;
@@ -1697,6 +1696,66 @@ a.breadcrumbButton.leaf-breadcrumb {
         right: 2.5em;
         position: relative;
     }
+}
+
+/* IE11 */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    /*The css below is different for IE11 because of issues caused by the unset property not being compatible
+    with IE11 and IE11's differences in regards to using the flex property.*/
+    
+    .proxy-pin-mgmt.splashBg .copyright {
+        top: inherit;
+        bottom: inherit;
+        left: inherit;
+        right: inherit;
+    }
+
+    .proxy-pin-mgmt.splashBg {
+        top: inherit;
+        left: inherit;
+        height: auto;
+        width: auto;
+    }
+
+    .proxy-pin-mgmt.splashBg .ellucianName {
+        position: inherit;
+        left: inherit;
+        top: inherit;
+    }
+
+    .proxy-pin-mgmt.splashBg .appName {
+        position: inherit;
+        top: inherit;
+        right: inherit;
+    }
+
+    .proxy-pin-mgmt.splashBg .loginMsg {
+        top: inherit;
+        right: auto;
+        position: relative;
+        flex-grow: 1;
+        flex-shrink: 0;
+        flex-basis: 50%;
+    }
+
+    .splashBg .loginMsg {
+        margin: auto;
+    }
+
+    .actionPW-text {
+        flex-grow: 1;
+        flex-shrink: 0;
+        flex-basis: 50%;
+    }
+
+    .reset-pin.proxy-pin-mgmt.splashBg {
+        height: auto;
+    }
+
+    .tile-wrapper {
+        text-align: inherit;
+    }
+
 }
 
 /* Mobile device */
