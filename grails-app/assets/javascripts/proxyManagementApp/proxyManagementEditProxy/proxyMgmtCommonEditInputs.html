@@ -41,7 +41,7 @@
         <label class="input-field-label" for="desc">{{'proxyManagement.label.description'|i18n}}</label><br>
         <input ng-model="proxy.p_desc"
                class="text-input-field gssb-eds-text-field semi-bold form-spacing"
-               type="text" placeholder="{{placeholder.desc}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="desc">
+               type="text" placeholder="{{placeholder.desc}}" size="{{(maxFieldLength + 2)}}" maxlength="{{maxFieldLength}}" title="{{proxy.p_desc}}" id="desc">
     </div>
 </div>
 <div  ng-if="enablePassphrase" class="row">
@@ -49,7 +49,7 @@
         <label class="input-field-label" for="passphrase">{{'proxyManagement.label.passphrase'|i18n}}</label><br>
         <input ng-model="proxy.p_passphrase"
                class="text-input-field gssb-eds-text-field semi-bold form-spacing"
-               type="text" placeholder="{{placeholder.passphrase}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="passphrase">
+               type="text" placeholder="{{placeholder.passphrase}}" size="{{(maxFieldLength + 2)}}" maxlength="{{maxFieldLength}}" title="{{proxy.p_passphrase}}" id="passphrase">
         <p class="input-field-label mobile-errors" ng-class="[(!!passwordExpDateMsg ? 'error-font-size' : 'no-display')]"
            role="alert" aria-live="assertive">{{passwordExpDateMsg}}</p>
         <p class="input-field-label mobile-errors" ng-class="[(!!emailVerifiedDateMsg ? 'error-font-size' : 'no-display')]"

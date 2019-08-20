@@ -476,6 +476,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.emailVerifiedDateMsg = '';
         $scope.optOutMsg  = '';
         $scope.authPages = [];
+        $scope.maxFieldLength = 60;
 
 
         // COMMUNICATION DATA TABLE
