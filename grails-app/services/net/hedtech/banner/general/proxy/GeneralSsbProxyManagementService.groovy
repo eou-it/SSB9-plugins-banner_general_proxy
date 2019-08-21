@@ -35,7 +35,7 @@ class GeneralSsbProxyManagementService {
         try {
             sql.call(sqlText, [pidm, Sql.CLOB
             ]) { proxyListJson ->
-                proxyList = proxyListJson.asciiStream.text
+                proxyList = proxyListJson.characterStream.text
             }
         }catch (e) {
             log.error("ERROR: Could not get the List of Proxies. $e")
@@ -455,7 +455,7 @@ class GeneralSsbProxyManagementService {
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText, [params.gidm, params.pidm, Sql.CLOB
         ]){ proxyCommunicationsJson ->
-            communications= proxyCommunicationsJson.asciiStream.text
+            communications= proxyCommunicationsJson.characterStream.text
         }
 
 

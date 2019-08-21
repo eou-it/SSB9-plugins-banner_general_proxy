@@ -33,7 +33,7 @@ class ProxyStudentService {
             def sql = new Sql(sessionFactory.getCurrentSession().connection())
             sql.call(sqlText, [pidm, Sql.CLOB
             ]) { lv_accSumm_json ->
-                accSummJson = lv_accSumm_json.asciiStream.text
+                accSummJson = lv_accSumm_json.characterStream.text
             }
 
             def resultMap = new JsonSlurper().parseText(accSummJson)
