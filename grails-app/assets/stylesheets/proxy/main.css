@@ -1690,8 +1690,8 @@ table tr td {
     width: 1px;
     height: 1px;
     position: absolute;
-    left: -999px;
-    top: -999px;
+    left: -9999px;
+    top: -9999px;
 }
 
 
