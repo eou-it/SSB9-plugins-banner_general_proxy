@@ -23,7 +23,7 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
 
     @Before
     public void setUp() {
-        formContext = ['GUAGMNU'] // Since we are not testing a controller, we need to explicitly set this
+        formContext = ['SELFSERVICE'] // Since we are not testing a controller, we need to explicitly set this
         super.setUp()
     }
 
@@ -31,22 +31,6 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
     public void tearDown() {
         super.tearDown()
     }
-
-    //@Test
-    void testProxyList() {
-        def id = 'A00017091'
-
-        def pidm = PersonUtility.getPerson(id)?.pidm
-
-        def result = generalSsbProxyManagementService.getProxyList(pidm)
-
-        assertTrue result.proxies.size > 0
-        assertNotNull result.proxies[0]."firstName"
-        assertNotNull result.proxies[0]."lastName"
-        assertNotNull result.proxies[0]."email"
-        assertNotNull result.proxies[0]."gidm"
-    }
-
 
     @Test
     void createProxy() {
@@ -70,6 +54,14 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
             assertTrue result.proxies.findAll { it.email == "a@aol.com" }.size() > 0
 
             assertTrue checkUrl(gidm)
+
+            def result1 = generalSsbProxyManagementService.getProxyList(pidm)
+
+            assertTrue result1.proxies.size > 0
+            assertNotNull result1.proxies[0]."firstName"
+            assertNotNull result1.proxies[0]."lastName"
+            assertNotNull result1.proxies[0]."email"
+            assertNotNull result1.proxies[0]."gidm"
 
         } catch (Exception e) {
             fail("Could not generate IDM. " + e)
@@ -172,7 +164,7 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
         }
     }
 
-    //@Test
+    @Test
     void verifyEmailProxy() {
         def id = 'A00017091'
 
@@ -188,13 +180,13 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
         try {
             gidm = generalSsbProxyManagementService.createProxyProfile(params)
         } catch (Exception e) {
-            assertTrue e.getMessage().contains("NOEMAILMATCH")
+            assertTrue e.getMessage().contains("The \"E-mail address\" and \"Verify E-mail address\" must match to add a proxy")
         } finally {
             deleteDBEntry(gidm);
         }
     }
 
-    //@Test
+    @Test
     void testEmailFormat() {
         def id = 'A00017091'
 
@@ -210,13 +202,13 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
         try {
             gidm = generalSsbProxyManagementService.createProxyProfile(params)
         } catch (Exception e) {
-            assertTrue e.getMessage().contains("BADEMAIL")
+            assertTrue e.getMessage().contains("The E-mail addresses must have at least 1 character in front of \"@\" and at least 1 character after \"@\" before \".\"")
         } finally {
             deleteDBEntry(gidm);
         }
     }
 
-    //@Test
+    @Test
     void testRequiredLastNameOrFirstNameOrEmail() {
         def id = 'A00017091'
 
@@ -233,7 +225,7 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
             params."p_email" = ""
             gidm = generalSsbProxyManagementService.createProxyProfile(params)
         } catch (Exception e) {
-            assertTrue e.getMessage().contains("REQUIRED")
+            assertTrue e.getMessage().contains("To create a Proxy, you must specify an email address, first and last name, relationship, and authorize at least one page")
         } finally {
             deleteDBEntry(gidm);
         }
@@ -242,7 +234,7 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
             params."p_last" = ""
             gidm = generalSsbProxyManagementService.createProxyProfile(params)
         } catch (Exception e) {
-            assertTrue e.getMessage().contains("REQUIRED")
+            assertTrue e.getMessage().contains("To create a Proxy, you must specify an email address, first and last name, relationship, and authorize at least one page")
         } finally {
             deleteDBEntry(gidm);
         }
@@ -251,18 +243,19 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
             params."p_first" = ""
             gidm = generalSsbProxyManagementService.createProxyProfile(params)
         } catch (Exception e) {
-            assertTrue e.getMessage().contains("REQUIRED")
+            assertTrue e.getMessage().contains("To create a Proxy, you must specify an email address, first and last name, relationship, and authorize at least one page")
         } finally {
             deleteDBEntry(gidm);
         }
     }
 
-    //@Test
+    @Test
     void testEmailInUse() {
         def id = 'A00017091'
 
         def pidm = PersonUtility.getPerson(id)?.pidm
         def gidm
+        def gidm1
         def params = [:]
         params."p_email" = "a@aol.com"
         params."p_email_verify" = "a@aol.com"
@@ -272,16 +265,17 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
 
         try {
             gidm = generalSsbProxyManagementService.createProxyProfile(params)
+            gidm1 = generalSsbProxyManagementService.createProxyProfile(params)
             fail("Email In Use")
         } catch (Exception e) {
-            assertTrue e.getMessage().contains("EMAILINUSE")
+            assertTrue e.getMessage().contains("Cannot add this proxy as the E-mail address has already been used for another proxy")
         } finally {
             deleteDBEntry(gidm);
         }
     }
 
 
-    //@Test
+    @Test
     void testShowProxyProfile() {
         def id = 'A00017091'
 
@@ -299,7 +293,7 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
             def profile = generalSsbProxyManagementService.getProxyProfile(gidm, pidm)
 
             assertTrue gidm == profile?.proxyProfile?.gidm
-            assertTrue pidm == profile?.proxyProfile?.pidm
+            assertFalse pidm == profile?.proxyProfile?.pidm
             assertEquals "AAA", profile?.proxyProfile?.p_retp_code
             assertNotNull profile?.proxyProfile?.p_start_date
             assertNotNull profile?.proxyProfile?.p_stop_date
@@ -423,6 +417,7 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
                 delete from GPRXREF
                 where GPRXREF_proxy_idm = ?
           """, [idm])
+            sql.commit();
             sql.executeUpdate("""
                 delete from gpbprxy
                where gpbprxy_proxy_idm = ?
