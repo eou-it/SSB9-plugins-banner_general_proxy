@@ -18,12 +18,7 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
         var messages = [],
             proxyProfileMessageCenter = "#proxyProfileErrorMsgCenter",
             invalidCharRegEx = /[ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]/i,
-            validEmailRegEx = /[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+@[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+\.[A-Z]{2,}/i;
-
-        this.refreshMessages = function() {
-            messages = [];
-        };
-
+            validEmailRegEx = /[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+@[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+\.[A-Z]{2,}/i,
 
         stringToDate = function (date) {
             var result;
@@ -34,6 +29,10 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
             catch (exception) {
                 return null;
             }
+        };
+
+        this.refreshMessages = function() {
+            messages = [];
         };
 
         this.getErrorFirstName = function(proxy) {
@@ -161,20 +160,20 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
             else {
                 return true;
             }
-        };
+        },
 
-        var datesFormatsAreInvalid = function (proxy) {
+        datesFormatsAreInvalid = function (proxy) {
             if(proxy.p_start_date && proxy.p_stop_date){
                 return !stringToDate(proxy.p_start_date) || !stringToDate(proxy.p_stop_date);
             }
             else {
                 return true;
             }
-        };
+        },
 
-        var currentErrorDateNotification;
+        currentErrorDateNotification,
 
-        var removeDateErrors = function (msg) {
+        removeDateErrors = function (msg) {
             if (msg) {
                 notificationCenterService.removeNotification(msg);
             }
