@@ -72,8 +72,7 @@ class GeneralSsbProxyManagementService {
             logger.debug('finished createProxyProfile')
         } catch (SQLException e) {
             logger.error('createProxyProfile() - '+ e)
-            def ae = new ApplicationException( GeneralSsbProxyManagementService.class, e )
-            throw ae
+            throw new ApplicationException("", MessageHelper.message("proxy.error.dataError"))
         } finally {
             //sql?.close()
         }
@@ -243,8 +242,7 @@ class GeneralSsbProxyManagementService {
             logger.debug('finished updateProxyProfile')
         } catch (SQLException e) {
             logger.error('updateProxyProfile() - '+ e)
-            def ae = new ApplicationException(GeneralSsbProxyManagementService.class, e )
-            throw ae
+            throw new ApplicationException("", MessageHelper.message("proxy.error.dataError"))
         } finally {
             //sql?.close()
         }
