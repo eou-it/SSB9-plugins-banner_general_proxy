@@ -21,9 +21,14 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
             }, 200);
         },
 
+        refreshProxies = function (response) {
+            $scope.proxies = response.proxies;
+            $scope.proxiesLoaded = true;
+        },
+
         init = function() {
             proxyMgmtAppService.getProxyList().$promise.then(function (response) {
-                $scope.proxies = response.proxies;
+                refreshProxies(response)
             });
 
             displayNotificationsOnStateLoad();
@@ -33,6 +38,7 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
         // CONTROLLER VARIABLES
         // --------------------
         $scope.proxies = [];
+        $scope.proxiesLoaded = false;
 
         $scope.cancelNotification = function () {
             notificationCenterService.clearNotifications();
@@ -47,8 +53,7 @@ proxyMgmtAppControllers.controller('proxyMgmtMainController',['$scope', '$rootSc
                     if (response.failure) {
                         notificationCenterService.displayNotification(response.message, $scope.notificationErrorType);
                     } else {
-                        // Refresh proxy list
-                        $scope.proxies = response.proxies;
+                        refreshProxies(response);
                     }
                 });
             };

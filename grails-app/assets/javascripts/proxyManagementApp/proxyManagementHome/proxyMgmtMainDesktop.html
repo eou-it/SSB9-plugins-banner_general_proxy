@@ -13,7 +13,7 @@
                 </a>
             </div>
         </div>
-        <div ng-if="proxies.length < 1" class="proxy-notification-box">
+        <div ng-if="proxiesLoaded && proxies.length < 1" class="proxy-notification-box">
             <div class="proxy-notification-row">
                 <div class="proxy-notification-cell">
                     <div class="proxy-notification-content">

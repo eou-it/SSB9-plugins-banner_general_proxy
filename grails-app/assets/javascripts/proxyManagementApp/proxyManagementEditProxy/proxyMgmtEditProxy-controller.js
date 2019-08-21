@@ -35,6 +35,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         },
 
         isValidProxyData = function (proxy, isUpdate) {
+            proxyMgmtErrorService.refreshMessages();
+
             if (isUpdate) {
                 // The corresponding fields for these errors are always empty for an update, so shim the error messages.
                 $scope.firstNameErrMsg = false;
