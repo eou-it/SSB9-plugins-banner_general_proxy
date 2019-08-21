@@ -20,6 +20,10 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
             invalidCharRegEx = /[ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]/i,
             validEmailRegEx = /[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+@[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+\.[A-Z]{2,}/i;
 
+        this.refreshMessages = function() {
+            messages = [];
+        };
+
 
         stringToDate = function (date) {
             var result;
