@@ -129,15 +129,7 @@ class ProxyControllerUtility {
             session.setAttribute(CLONED_PROXY_CODE_CACHE, cache)
         }
 
-        def cacheVersion = session.getAttribute(CLONED_PROXY_CODE_CACHE_VERSION)
-
-        if (cacheVersion == null) {
-            cacheVersion = 0
-        } else {
-            cacheVersion++ // Increment version of alternate codess for codes stored in cache
-        }
-
-        session.setAttribute(CLONED_PROXY_CODE_CACHE_VERSION, cacheVersion)
+        def cacheVersion = incrementClonedProxyCodeMapCacheVersion()
 
         cloneList.each {
             def altCode = ""+cache.size() //Type of key in cache is String
@@ -168,6 +160,26 @@ class ProxyControllerUtility {
     static clearAllClonedProxyCodeMapsFromSessionCache() {
         def session = RequestContextHolder.currentRequestAttributes().request.session
         session.removeAttribute(CLONED_PROXY_CODE_CACHE)
+    }
+
+    static incrementClonedProxyCodeMapCacheVersion() {
+        def session = RequestContextHolder.currentRequestAttributes().request.session
+        def cacheVersion = session.getAttribute(CLONED_PROXY_CODE_CACHE_VERSION)
+
+        if (cacheVersion == null) {
+            cacheVersion = 0
+        } else {
+            cacheVersion++ // Increment version of alternate codess for codes stored in cache
+        }
+
+        session.setAttribute(CLONED_PROXY_CODE_CACHE_VERSION, cacheVersion)
+
+        cacheVersion
+    }
+
+    static invalidateClonedProxyCodeMapCache() {
+        clearAllClonedProxyCodeMapsFromSessionCache()
+        incrementClonedProxyCodeMapCacheVersion()
     }
 
     static boolean isCollectionOrArray(object) {

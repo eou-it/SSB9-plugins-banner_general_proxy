@@ -98,6 +98,7 @@ class ProxyManagementController {
 
             ProxyControllerUtility.clearAllProxyGidmMapsFromSessionCache()
             ProxyControllerUtility.mapProxyGidms(proxies.proxies)
+            ProxyControllerUtility.invalidateClonedProxyCodeMapCache() // These mappings are also now invalid
 
             render proxies as JSON
 
