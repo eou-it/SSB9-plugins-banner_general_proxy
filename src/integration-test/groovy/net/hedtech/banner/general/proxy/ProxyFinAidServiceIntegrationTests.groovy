@@ -41,7 +41,7 @@ class ProxyFinAidServiceIntegrationTests extends BaseIntegrationTestCase {
         assertTrue result.code.contains('1819')
         assertTrue result.description.contains('2018 - 2019 Aid Year')
         assertTrue result.code.contains('1314')
-        assertTrue result.description.contains('1314 aid year (2014)')
+        assertTrue result.description.contains('Aid Year for 2013 - 2014')
         assertTrue result.code.contains('1920')
         assertTrue result.description.contains('2019-2020 Award Year')
     }
@@ -52,7 +52,7 @@ class ProxyFinAidServiceIntegrationTests extends BaseIntegrationTestCase {
 
         assertTrue result.size() > 0 && result.size() < 3
         assertTrue result.code.contains('1314')
-        assertTrue result.description.contains('1314 aid year (2014)')
+        assertTrue result.description.contains('Aid Year for 2013 - 2014')
         assertTrue result.code.contains('1920')
         assertTrue result.description.contains('2019-2020 Award Year')
     }

@@ -34,7 +34,7 @@
                     <label class="input-field-label" for="first-name">{{'proxy.personalinformation.label.p_first_name'|i18n}}</label><br>
                     <input ng-model="proxy.p_first" ng-blur="firstNameFocused=false; removeProxyProfileFieldErrors()" ng-focus="firstNameFocused=true"
                            ng-class="[(!!firstNameErrMsg && !firstNameFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
-                           type="text" placeholder="{{placeholder.first_name}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="first-name">
+                           type="text" placeholder="{{placeholder.first_name}}" size="{{(maxNameLength + 2)}}" maxlength="{{maxNameLength}}" title="{{proxy.p_first}}" id="first-name">
                     <p class="input-field-label mobile-errors" ng-class="[(!!firstNameErrMsg ? 'field-error error-font-size' : 'no-display')]"
                        role="alert" aria-live="assertive">{{firstNameErrMsg|i18n}}</p>
                 </div>
@@ -44,7 +44,7 @@
                     <label class="input-field-label" for="last-name">{{'proxy.personalinformation.label.p_last_name'|i18n}}</label><br>
                     <input ng-model="proxy.p_last" ng-blur="lastNameFocused=false; removeProxyProfileFieldErrors()" ng-focus="lastNameFocused=true"
                            ng-class="[(!!lastNameErrMsg && !lastNameFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
-                           type="text" placeholder="{{placeholder.last_name}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="last-name">
+                           type="text" placeholder="{{placeholder.last_name}}" size="{{(maxNameLength + 2)}}" maxlength="{{maxNameLength}}" title="{{proxy.p_last}}" id="last-name">
                     <p class="input-field-label mobile-errors" ng-class="[(!!lastNameErrMsg ? 'field-error error-font-size' : 'no-display')]"
                        role="alert" aria-live="assertive">{{lastNameErrMsg|i18n}}</p>
                 </div>
@@ -54,7 +54,7 @@
                     <label class="input-field-label" for="email">{{'proxyManagement.label.email'|i18n}}</label><br>
                     <input ng-model="proxy.p_email" ng-blur="emailFocused=false; removeProxyProfileFieldErrors()" ng-focus="emailFocused=true"
                            ng-class="[(!!emailErrMsg && !emailFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
-                           type="text" placeholder="{{placeholder.email}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="email">
+                           type="text" placeholder="{{placeholder.email}}" size="{{(maxEmailLength + 2)}}" maxlength="{{maxEmailLength}}" title="{{proxy.p_email}}" id="email">
                     <p class="input-field-label mobile-errors" ng-class="[(!!emailErrMsg ? 'field-error error-font-size' : 'no-display')]"
                        role="alert" aria-live="assertive">{{emailErrMsg|i18n}}</p>
                 </div>
@@ -64,7 +64,7 @@
                     <label class="input-field-label" for="verify-email">{{'proxyManagement.label.verifyEmail'|i18n}}</label><br>
                     <input ng-model="proxy.p_email_verify" ng-blur="verifyEmailFocused=false; removeProxyProfileFieldErrors()" ng-focus="verifyEmailFocused=true"
                            ng-class="[(!!verifyEmailErrMsg && !verifyEmailFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
-                           type="text" placeholder="{{placeholder.verify_email}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="verify-email">
+                           type="text" placeholder="{{placeholder.verify_email}}" size="{{(maxEmailLength + 2)}}" maxlength="{{maxEmailLength}}" title="{{proxy.p_email_verify}}" id="verify-email">
                     <p class="input-field-label mobile-errors" ng-class="[(!!verifyEmailErrMsg ? 'field-error error-font-size' : 'no-display')]"
                        role="alert" aria-live="assertive">{{verifyEmailErrMsg|i18n}}</p>
                 </div>

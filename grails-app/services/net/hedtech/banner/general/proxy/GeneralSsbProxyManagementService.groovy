@@ -35,7 +35,7 @@ class GeneralSsbProxyManagementService {
         try {
             sql.call(sqlText, [pidm, Sql.CLOB
             ]) { proxyListJson ->
-                proxyList = proxyListJson.asciiStream.text
+                proxyList = proxyListJson.characterStream.text
             }
         }catch (e) {
             log.error("ERROR: Could not get the List of Proxies. $e")
@@ -72,8 +72,7 @@ class GeneralSsbProxyManagementService {
             logger.debug('finished createProxyProfile')
         } catch (SQLException e) {
             logger.error('createProxyProfile() - '+ e)
-            def ae = new ApplicationException( GeneralSsbProxyManagementService.class, e )
-            throw ae
+            throw new ApplicationException("", MessageHelper.message("proxy.error.dataError"))
         } finally {
             //sql?.close()
         }
@@ -243,8 +242,7 @@ class GeneralSsbProxyManagementService {
             logger.debug('finished updateProxyProfile')
         } catch (SQLException e) {
             logger.error('updateProxyProfile() - '+ e)
-            def ae = new ApplicationException(GeneralSsbProxyManagementService.class, e )
-            throw ae
+            throw new ApplicationException("", MessageHelper.message("proxy.error.dataError"))
         } finally {
             //sql?.close()
         }
@@ -455,7 +453,7 @@ class GeneralSsbProxyManagementService {
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText, [params.gidm, params.pidm, Sql.CLOB
         ]){ proxyCommunicationsJson ->
-            communications= proxyCommunicationsJson.asciiStream.text
+            communications= proxyCommunicationsJson.characterStream.text
         }
 
 

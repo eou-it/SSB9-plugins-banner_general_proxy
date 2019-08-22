@@ -29,7 +29,7 @@ class ProxyFinAidService {
             def sql = new Sql(sessionFactory.getCurrentSession().connection())
             sql.call(sqlText, [pidm, Sql.CLOB
             ]) { lv_awardHistory_json ->
-                awardHistoryJson = lv_awardHistory_json ? lv_awardHistory_json.asciiStream.text : ""
+                awardHistoryJson = lv_awardHistory_json ? lv_awardHistory_json.characterStream.text : ""
             }
 
             def resultMap = new JsonSlurper().parseText(awardHistoryJson)
