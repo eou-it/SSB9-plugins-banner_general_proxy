@@ -177,19 +177,6 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                         $scope.clonedProxiesList = response.cloneList;
                     }
                 });
-
-
-                proxyMgmtAppService.getAddProxiesList({alt: alt}).$promise.then(function(response) {
-                    if (response.failure) {
-                        $scope.flashMessage = response.message.clonedProxiesList;
-
-                        notificationCenterService.clearNotifications();
-                        notificationCenterService.addNotification(response.message, "error", true);
-
-                    } else {
-                        $scope.addProxiesList = response.addList;
-                    }
-                });
             }
 
             displayNotificationsOnStateLoad();
@@ -243,15 +230,6 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                     $scope.proxy.pages = response.pages;
                 }
             });
-
-        };
-
-
-        $scope.handleAddListChange = function(){
-
-            $scope.proxy.p_email = $scope.proxyAuxData.addProxy.email;
-            $scope.proxy.p_last = $scope.proxyAuxData.addProxy.lastName;
-            $scope.proxy.p_first = $scope.proxyAuxData.addProxy.firstName;
 
         };
 
@@ -494,7 +472,6 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.isRelationshipSelected = false;
         $scope.relationshipChoices = [];
         $scope.clonedProxiesList = [];
-        $scope.addProxiesList = [];
         $scope.firstNameErrMsg = '';
         $scope.lastNameErrMsg = '';
         $scope.emailErrMsg = '';
