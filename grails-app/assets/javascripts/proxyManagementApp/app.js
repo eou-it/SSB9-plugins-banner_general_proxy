@@ -138,7 +138,7 @@ proxyManagementApp.config(function ($stateProvider, $urlRouterProvider, webAppRe
             }
         })
         .state('editProxy', {
-            url: '/editProxy/?alt&firstName&lastName&email',
+            url: '/editProxy/?alt&cver&firstName&lastName&email',
             templateUrl: '../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtEditProxy.html',
             controller: 'proxyMgmtEditProxyController',
             resolve: {

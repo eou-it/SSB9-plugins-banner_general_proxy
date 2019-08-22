@@ -57,7 +57,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         },
 
         init = function() {
-            var alt = $stateParams.alt;
+            var alt = $stateParams.alt,
+                cver;
 
             $scope.proxyAuxData.firstName = $stateParams.firstName;
             $scope.proxyAuxData.lastName = $stateParams.lastName;
@@ -77,57 +78,73 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
             if (alt) {
                 $scope.currentAlt = alt;
+                cver = $stateParams.cver;
+                $scope.currentCver = cver;
 
                 // Set up for "edit proxy"
                 $scope.isCreateNew = false;
 
                 $scope.isRelationshipSelected = true;
 
-                proxyMgmtAppService.getProxy({alt: alt}).$promise.then(function (response) {
-                    $scope.proxy = response.proxyProfile;
+                proxyMgmtAppService.getProxy({alt: alt, cver: cver}).$promise.then(function (response) {
+                    var setupEditDialog = function() {
+                        $scope.proxy = response.proxyProfile;
 
-                    $scope.authPages = $scope.proxy.pages.filter(function(item) {
-                        return item.auth == true;
-                    });
+                        $scope.authPages = $scope.proxy.pages.filter(function (item) {
+                            return item.auth == true;
+                        });
 
-                    _.each(response.messages.messages, function(message) {
-                        if (message.code === 'PIN_EXPIRATION_DATE'){
-                            $scope.passwordExpDateMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
-                        }
+                        _.each(response.messages.messages, function (message) {
+                            if (message.code === 'PIN_EXPIRATION_DATE') {
+                                $scope.passwordExpDateMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
+                            }
 
-                        if (message.code === 'EMAIL_VERIFIED'){
-                            $scope.emailVerifiedDateMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
-                        }
+                            if (message.code === 'EMAIL_VERIFIED') {
+                                $scope.emailVerifiedDateMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
+                            }
 
-                        if (message.code === 'OPTOUT'){
-                            $scope.optOutMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
-                        }
-                        notificationCenterService.addNotification($filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]), $rootScope.notificationInfoType, true);
-                    });
+                            if (message.code === 'OPTOUT') {
+                                $scope.optOutMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
+                            }
+                            notificationCenterService.addNotification($filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]), $rootScope.notificationInfoType, true);
+                        });
 
-                    setSelectedRelationship($scope.proxy.p_retp_code);
+                        setSelectedRelationship($scope.proxy.p_retp_code);
 
-                    proxyMgmtAppService.getClonedProxiesList({alt: alt, p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function(response) {
-                        if (response.failure) {
-                            $scope.flashMessage = response.message.clonedProxiesList;
+                        proxyMgmtAppService.getClonedProxiesList({
+                            alt: alt,
+                            cver: cver,
+                            p_retp_code: $scope.proxy.p_retp_code
+                        }).$promise.then(function (response) {
+                            if (response.failure) {
+                                $scope.flashMessage = response.message.clonedProxiesList;
 
-                            notificationCenterService.clearNotifications();
-                            notificationCenterService.addNotification(response.message, "error", true);
+                                notificationCenterService.clearNotifications();
+                                notificationCenterService.addNotification(response.message, "error", true);
 
-                        } else {
-                            $scope.clonedProxiesList = response.cloneList;
-                        }
-                    });
+                            } else {
+                                $scope.clonedProxiesList = response.cloneList;
+                            }
+                        });
 
-                    // watch changes on passphrase
-                    $scope.$watch('proxy.p_passphrase', function(newVal, oldVal){
-                        $scope.dirty = (newVal != oldVal)
-                    });
-                    // watch changes on pages
-                    $scope.$watch('proxy.pages | json', function(newVal, oldVal){
-                        $scope.dirty = !_.isEqual(newVal, oldVal);
-                    });
+                        // watch changes on passphrase
+                        $scope.$watch('proxy.p_passphrase', function (newVal, oldVal) {
+                            $scope.dirty = (newVal != oldVal)
+                        });
+                        // watch changes on pages
+                        $scope.$watch('proxy.pages | json', function (newVal, oldVal) {
+                            $scope.dirty = !_.isEqual(newVal, oldVal);
+                        });
+                    };
 
+                    if (response.failure) {
+                        $scope.flashMessage = response.message;
+
+                        notificationCenterService.clearNotifications();
+                        notificationCenterService.addNotification(response.message, "error", true);
+                    } else {
+                        setupEditDialog();
+                    }
                 });
             } else {
                 // Create "new proxy" object
@@ -211,7 +228,14 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             }
 
             proxyMgmtAppService.getClonedAuthorizationsList({alt: $scope.proxyAuxData.clonedProxy.code, p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function (response) {
-                $scope.proxy.pages = response.pages;
+                if (response.failure) {
+                    $scope.flashMessage = response.message;
+
+                    notificationCenterService.clearNotifications();
+                    notificationCenterService.addNotification(response.message, "error", true);
+                } else {
+                    $scope.proxy.pages = response.pages;
+                }
             });
 
         };
@@ -492,11 +516,12 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
         $scope.draggableCommColumnNames = [];
         $scope.currentAlt;
+        $scope.currentCver;
 
         $scope.getCommunicationData = function(query) {
             var self = this;
 
-            return proxyMgmtAppService.getCommunicationLog({alt: self.currentAlt}).promise;
+            return proxyMgmtAppService.getCommunicationLog({alt: self.currentAlt, cver: self.currentCver}).promise;
         };
 
         $scope.commMobileConfig = {
