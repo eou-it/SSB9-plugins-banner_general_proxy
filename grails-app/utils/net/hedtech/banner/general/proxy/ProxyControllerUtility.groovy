@@ -12,7 +12,9 @@ import org.springframework.web.context.request.RequestContextHolder
 class ProxyControllerUtility {
 
     private static final PROXY_GIDM_CACHE = "PROXY_GIDM_CACHE"
+    private static final PROXY_GIDM_CACHE_VERSION = "PROXY_GIDM_CACHE_VERSION"
     private static final CLONED_PROXY_CODE_CACHE = "CLONED_PROXY_CODE_CACHE"
+    private static final CLONED_PROXY_CODE_CACHE_VERSION = "CLONED_PROXY_CODE_CACHE_VERSION"
 
     public static getFetchListParams(params) {
         def maxItems = params.max as int
@@ -67,21 +69,39 @@ class ProxyControllerUtility {
             session.setAttribute(PROXY_GIDM_CACHE, cache)
         }
 
+        def cacheVersion = session.getAttribute(PROXY_GIDM_CACHE_VERSION)
+
+        if (cacheVersion == null) {
+            cacheVersion = 0
+        } else {
+            cacheVersion++ // Increment version of alternate IDs for GIDMs stored in cache
+        }
+
+        session.setAttribute(PROXY_GIDM_CACHE_VERSION, cacheVersion)
+
         proxyList.each {
             def altId = ""+cache.size() //Type of key in cache is String
             cache[altId] = it.gidm
 
-            it.alt = altId
+            it.alt = altId // Alternate ID, aka ID used to mask actual GIDM
+            it.cver = cacheVersion // Version of alternate ID stored in cache
             it.remove("gidm")
         }
 
         return proxies
     }
 
-    static getProxyGidmMapFromSessionCache(id) {
+    static getProxyGidmMapFromSessionCache(map) {
         def session = RequestContextHolder.currentRequestAttributes().request.session
+        def curCacheVersion = session.getAttribute(PROXY_GIDM_CACHE_VERSION)
+
+        // Verify that version is not out-of-date
+        if ((map.cver as Integer) != curCacheVersion) {
+            throw new ApplicationException(ProxyControllerUtility, 'proxyManagement.message.update.optimisticLock')
+        }
+
         def cache = session.getAttribute(PROXY_GIDM_CACHE)
-        def altId = ""+id //Type of key in cache is String
+        def altId = ""+map.alt //Type of key in cache is String
 
         cache?."$altId"
     }
@@ -109,20 +129,38 @@ class ProxyControllerUtility {
             session.setAttribute(CLONED_PROXY_CODE_CACHE, cache)
         }
 
+        def cacheVersion = session.getAttribute(CLONED_PROXY_CODE_CACHE_VERSION)
+
+        if (cacheVersion == null) {
+            cacheVersion = 0
+        } else {
+            cacheVersion++ // Increment version of alternate codess for codes stored in cache
+        }
+
+        session.setAttribute(CLONED_PROXY_CODE_CACHE_VERSION, cacheVersion)
+
         cloneList.each {
             def altCode = ""+cache.size() //Type of key in cache is String
             cache[altCode] = it.code
 
             it.code = altCode
+            it.cver = cacheVersion // Version of alternate ID stored in cache
         }
 
         return clones
     }
 
-    static getClonedProxyCodeMapFromSessionCache(id) {
+    static getClonedProxyCodeMapFromSessionCache(map) {
         def session = RequestContextHolder.currentRequestAttributes().request.session
+        def curCacheVersion = session.getAttribute(CLONED_PROXY_CODE_CACHE_VERSION)
+
+        // Verify that version is not out-of-date
+        if ((map.cver as Integer) != curCacheVersion) {
+            throw new ApplicationException(ProxyControllerUtility, 'proxyManagement.message.update.optimisticLock')
+        }
+
         def cache = session.getAttribute(CLONED_PROXY_CODE_CACHE)
-        def altCode = ""+id //Type of key in cache is String
+        def altCode = ""+map.alt //Type of key in cache is String
 
         cache?."$altCode"
     }
