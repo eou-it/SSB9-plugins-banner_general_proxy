@@ -150,47 +150,42 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
             }
         };
 
-        var stopDateIsBeforeStartDate = function (proxy) {
-            if (proxy.p_start_date && proxy.p_stop_date) {
+        var dateFieldsAreEmpty = function (proxy) {
+                return (!proxy.p_start_date || !proxy.p_stop_date);
+            },
+            stopDateIsBeforeStartDate = function (proxy) {
                 var MAX_DATE = 8640000000000000,
-                fromDate = stringToDate(proxy.p_start_date),
-                toDate = proxy.p_stop_date ? stringToDate(proxy.p_stop_date) : new Date(MAX_DATE);
+                    fromDate = stringToDate( proxy.p_start_date ),
+                    toDate = proxy.p_stop_date ? stringToDate(proxy.p_stop_date) : new Date(MAX_DATE);
                 return fromDate > toDate;
-            }
-            else {
-                return true;
-            }
-        },
-
-        datesFormatsAreInvalid = function (proxy) {
-            if(proxy.p_start_date && proxy.p_stop_date){
+            },
+            datesFormatsAreInvalid = function (proxy) {
                 return !stringToDate(proxy.p_start_date) || !stringToDate(proxy.p_stop_date);
-            }
-            else {
-                return true;
-            }
-        },
+            },
 
-        currentErrorDateNotification,
+            currentErrorDateNotification,
 
-        removeDateErrors = function (msg) {
-            if (msg) {
-                notificationCenterService.removeNotification(msg);
-            }
-            if (currentErrorDateNotification) {
+            removeDateErrors = function () {
+                notificationCenterService.removeNotification('personInfo.address.error.dateFormat');
+                notificationCenterService.removeNotification('proxy.personalinformation.onSave.required_data_missing');
                 notificationCenterService.removeNotification(currentErrorDateNotification);
-            }
-        };
+            };
 
-        /*Checks if the start date or stop date fields have invalid dates and also
-        * checks to see if the stop date is before the start date.*/
+        /*1) Checks if BOTH date fields have data.
+        * 2) Checks if the dates are correctly formatted
+        * 3) Checks if the stop date is before the start date*/
         this.getErrorDates = function(proxy) {
             var msg = 'personInfo.address.error.dateFormat';
 
             //Removes any existing errors so errors that are no longer true do not stay showing.
-            removeDateErrors(msg);
+            removeDateErrors();
 
-            if (datesFormatsAreInvalid(proxy)) {
+            if (dateFieldsAreEmpty(proxy)) {
+                msg = 'proxy.personalinformation.onSave.required_data_missing';
+                messages.push({msg: $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]), type: 'error'});
+                return $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]);
+            }
+            else if (datesFormatsAreInvalid(proxy)) {
                 messages.push({msg: $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]), type: 'error'});
                 return $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]);
             }
