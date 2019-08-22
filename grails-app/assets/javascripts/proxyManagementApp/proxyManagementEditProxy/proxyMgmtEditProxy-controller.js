@@ -229,7 +229,11 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 setSelectedRelationship($scope.proxy.p_retp_code);
             }
 
-            proxyMgmtAppService.getClonedAuthorizationsList({alt: $scope.proxyAuxData.clonedProxy.code, p_retp_code: $scope.proxy.p_retp_code}).$promise.then(function (response) {
+            proxyMgmtAppService.getClonedAuthorizationsList({
+                alt: $scope.proxyAuxData.clonedProxy.code,
+                cver: $scope.proxyAuxData.clonedProxy.cver,
+                p_retp_code: $scope.proxy.p_retp_code
+            }).$promise.then(function (response) {
                 if (response.failure) {
                     $scope.flashMessage = response.message;
 

@@ -278,8 +278,6 @@ class ProxyManagementController {
         params.pidm = pidm
 
         try {
-            params.gidm = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache(params)
-
             def proxies = generalSsbProxyManagementService.getProxyClonedListOnCreate(params)
             ProxyControllerUtility.clearAllClonedProxyCodeMapsFromSessionCache()
             ProxyControllerUtility.mapClonedProxyCodes(proxies.cloneList)
