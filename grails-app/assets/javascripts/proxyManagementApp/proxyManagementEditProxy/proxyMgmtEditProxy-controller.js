@@ -165,7 +165,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
                 setSelectedRelationship($scope.proxy.p_retp_code);
 
-                proxyMgmtAppService.getClonedProxiesListOnCreate({alt: alt}).$promise.then(function(response) {
+                proxyMgmtAppService.getClonedProxiesListOnCreate().$promise.then(function(response) {
                     if (response.failure) {
                         $scope.flashMessage = response.message.clonedProxiesList;
 
@@ -177,7 +177,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                     }
                 });
 
-                proxyMgmtAppService.getAddProxiesList({alt: alt}).$promise.then(function(response) {
+                proxyMgmtAppService.getAddProxiesList().$promise.then(function(response) {
                     if (response.failure) {
                         $scope.flashMessage = response.message.clonedProxiesList;
 
@@ -201,20 +201,32 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         };
 
         $scope.handleRelationshipChange = function() {
-            proxyMgmtAppService.getDataModelOnRelationshipChange({alt: $scope.proxy.alt, p_retp_code: $scope.proxyAuxData.selectedRelationship.code}).$promise.then(function (response) {
-                $scope.proxy.p_start_date = response.dates.startDate;
-                $scope.proxy.p_stop_date = response.dates.stopDate;
-                $scope.proxy.pages = response.pages.pages;
-                $scope.proxy.p_retp_code = $scope.proxyAuxData.selectedRelationship.code;
+            proxyMgmtAppService.getDataModelOnRelationshipChange({
+                alt: $scope.proxy.alt,
+                cver: $scope.proxy.cver,
+                p_retp_code: $scope.proxyAuxData.selectedRelationship.code
+            }).$promise.then(function (response) {
+                if (response.failure) {
+                    $scope.flashMessage = response.message.clonedProxiesList;
 
-                $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
-
-                $scope.removeProxyProfileFieldErrors();
-
-
-                if ($scope.proxy.pages.length == 0){
                     notificationCenterService.clearNotifications();
-                    notificationCenterService.addNotification('proxyManagement.message.noAuthorizationsAvailable', "error", true);
+                    notificationCenterService.addNotification(response.message, "error", true);
+
+                } else {
+                    $scope.proxy.p_start_date = response.dates.startDate;
+                    $scope.proxy.p_stop_date = response.dates.stopDate;
+                    $scope.proxy.pages = response.pages.pages;
+                    $scope.proxy.p_retp_code = $scope.proxyAuxData.selectedRelationship.code;
+
+                    $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
+
+                    $scope.removeProxyProfileFieldErrors();
+
+
+                    if ($scope.proxy.pages.length == 0) {
+                        notificationCenterService.clearNotifications();
+                        notificationCenterService.addNotification('proxyManagement.message.noAuthorizationsAvailable', "error", true);
+                    }
                 }
             });
         };
@@ -261,7 +273,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 notificationCenterService.addNotification('proxyManagement.message.checkDirtyOnEmail', 'error', true);
             }else{
 
-                proxyMgmtAppService.emailPassphrase({alt: $scope.proxy.alt}).$promise.then(function (response) {
+                proxyMgmtAppService.emailPassphrase({alt: $scope.proxy.alt, cver: $scope.proxy.cver}).$promise.then(function (response) {
                     var messageType, message;
 
                     if (response.failure) {
@@ -286,7 +298,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
 
         $scope.resetPassword = function() {
-            proxyMgmtAppService.resetProxyPassword({alt: $scope.proxy.alt}).$promise.then(function (response) {
+            proxyMgmtAppService.resetProxyPassword({alt: $scope.proxy.alt, cver: $scope.proxy.cver}).$promise.then(function (response) {
                 var messageType, message;
 
                 if (response.failure) {
@@ -314,7 +326,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 return;
             }
 
-            proxyMgmtAppService.emailAuthentications({alt: $scope.proxy.alt}).$promise.then(function (response) {
+            proxyMgmtAppService.emailAuthentications({alt: $scope.proxy.alt, cver: $scope.proxy.cver}).$promise.then(function (response) {
                 var messageType, message;
 
                 if (response.failure) {
