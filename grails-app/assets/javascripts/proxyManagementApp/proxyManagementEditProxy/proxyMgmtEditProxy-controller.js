@@ -165,7 +165,6 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
                 setSelectedRelationship($scope.proxy.p_retp_code);
 
-
                 proxyMgmtAppService.getClonedProxiesListOnCreate({alt: alt}).$promise.then(function(response) {
                     if (response.failure) {
                         $scope.flashMessage = response.message.clonedProxiesList;
@@ -175,6 +174,18 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
                     } else {
                         $scope.clonedProxiesList = response.cloneList;
+                    }
+                });
+
+                proxyMgmtAppService.getAddProxiesList({alt: alt}).$promise.then(function(response) {
+                    if (response.failure) {
+                        $scope.flashMessage = response.message.clonedProxiesList;
+
+                        notificationCenterService.clearNotifications();
+                        notificationCenterService.addNotification(response.message, "error", true);
+
+                    } else {
+                        $scope.addProxiesList = response.addList;
                     }
                 });
             }
@@ -231,6 +242,13 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 }
             });
 
+        };
+
+
+        $scope.handleAddListChange = function(){
+            $scope.proxy.p_email = $scope.proxyAuxData.addProxy.email;
+            $scope.proxy.p_last = $scope.proxyAuxData.addProxy.lastName;
+            $scope.proxy.p_first = $scope.proxyAuxData.addProxy.firstName;
         };
 
 
@@ -472,6 +490,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
         $scope.isRelationshipSelected = false;
         $scope.relationshipChoices = [];
         $scope.clonedProxiesList = [];
+        $scope.addProxiesList = [];
         $scope.firstNameErrMsg = '';
         $scope.lastNameErrMsg = '';
         $scope.emailErrMsg = '';
