@@ -307,6 +307,20 @@ class ProxyManagementController {
     }
 
 
+    /*
+     Returns the list of Add Proxies.
+    */
+    def getClonedProxyAddList() {
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        params.pidm = pidm
+
+        def proxies = generalSsbProxyManagementService.getProxyAddList(params)
+
+        render proxies as JSON
+    }
+
+
     def getCommunicationLog() {
         def params = request?.JSON ?: params
 
