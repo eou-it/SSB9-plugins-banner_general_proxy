@@ -228,6 +228,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                     notificationCenterService.addNotification(response.message, "error", true);
                 } else {
                     $scope.proxy.pages = response.pages;
+                    $scope.removeProxyProfileFieldErrors();
                 }
             });
 
