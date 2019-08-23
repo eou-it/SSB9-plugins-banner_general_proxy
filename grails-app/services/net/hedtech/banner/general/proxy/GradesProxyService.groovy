@@ -168,6 +168,7 @@ class GradesProxyService {
             Map courseDetailMap = courseDetail.properties
 
             Map formattedMap = fetchFormattedGpaDetails(courseDetailMap, gpaRuleMap?.institutionGpaRule, gpaRuleMap?.qualityPointsFormat, '0.00')
+            courseDetailMap.remove('studentPidm') // Not to be displayed
             courseDetailMap.putAll(formattedMap)
             courseDetailsMap.add(courseDetailMap)
         }
