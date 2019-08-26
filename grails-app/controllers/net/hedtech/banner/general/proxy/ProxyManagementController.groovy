@@ -155,7 +155,11 @@ class ProxyManagementController {
         try {
             def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
             params.pidm = pidm
-            params.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(params)
+
+            if (params.alt) {
+                params.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(params)
+            }
+
             def startStopDates = generalSsbProxyManagementService.getDataModelOnRelationshipChange(params)
 
             render startStopDates as JSON
