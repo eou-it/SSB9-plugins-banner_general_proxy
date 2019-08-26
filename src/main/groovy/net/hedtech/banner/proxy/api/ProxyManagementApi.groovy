@@ -1243,19 +1243,6 @@ END;
     END IF;
    END F_ApplyMepCodeToProxyURL;
    
-      -- to apply mep code to Banner9 url for proxy e-mail communication
-   FUNCTION F_ApplyMepCodeToProxyURL (endpoint IN VARCHAR2) RETURN VARCHAR2 IS
-   BEGIN
-    IF g\$_vpdi_security.G\$_IS_MIF_ENABLED THEN
-           IF INSTR(endpoint,'?') != 0 THEN
-         RETURN REPLACE(endpoint,'?','?mepCode='|| g\$_vpdi_security.G\$_VPDI_GET_INST_CODE_FNC || '&');
-    ELSE
-         RETURN (endpoint || '?mepCode=' || g\$_vpdi_security.G\$_VPDI_GET_INST_CODE_FNC);
-    END IF;
-    ELSE
-        RETURN endpoint;
-    END IF;
-   END F_ApplyMepCodeToProxyURL;
    -- Get the URL for accessing Banner 9 Proxy
    FUNCTION F_getProxyURL(
       p_action          VARCHAR2 DEFAULT NULL)
