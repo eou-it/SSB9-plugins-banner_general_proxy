@@ -179,14 +179,13 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
 
             //Removes any existing errors so errors that are no longer true do not stay showing.
             removeDateErrors();
-
             if (dateFieldsAreEmpty(proxy)) {
                 msg = 'proxy.personalinformation.onSave.required_data_missing';
-                messages.push({msg: $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]), type: 'error'});
+                notificationCenterService.addNotification($filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]), 'error');
                 return $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]);
             }
             else if (datesFormatsAreInvalid(proxy)) {
-                messages.push({msg: $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]), type: 'error'});
+                notificationCenterService.addNotification($filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]), 'error');
                 return $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]);
             }
             else if (stopDateIsBeforeStartDate(proxy)) {
@@ -195,7 +194,7 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
                 * an error based on the current dates in the date fields.*/
                 msg = 'proxyManagement.message.checkDates';
                 if (currentErrorDateNotification) {
-                    removeDateErrors(msg)
+                    removeDateErrors()
                 }
                 currentErrorDateNotification = notificationCenterService.addNotification($filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]), 'error');
                 return $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]);

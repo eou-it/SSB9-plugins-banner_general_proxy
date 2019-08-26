@@ -346,6 +346,9 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             if($scope.authorizationsErrMsg) {
                 $scope.authorizationsErrMsg = proxyMgmtErrorService.getErrorAuthorizations($scope.proxy);
             }
+            if ($scope.checkDatesErrMsg) {
+                $scope.checkDatesErrMsg = proxyMgmtErrorService.getErrorDates($scope.proxy);
+            }
         };
 
         $scope.setStartDate = function(data){
