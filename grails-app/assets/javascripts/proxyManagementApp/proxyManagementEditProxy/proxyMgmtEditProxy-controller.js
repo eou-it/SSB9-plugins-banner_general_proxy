@@ -52,7 +52,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
 
             $scope.relationshipErrMsg =   proxyMgmtErrorService.getErrorRelationship(proxy);
             $scope.authorizationsErrMsg = proxyMgmtErrorService.getErrorAuthorizations(proxy);
-            $scope.checkDatesErrMsg = proxyMgmtErrorService.getErrorDates(proxy);
+            $scope.checkDatesErrMsg = proxyMgmtErrorService.getErrorDates(proxy, true);
 
             return !($scope.firstNameErrMsg || $scope.lastNameErrMsg || $scope.emailErrMsg || $scope.verifyEmailErrMsg ||
                      $scope.relationshipErrMsg || $scope.authorizationsErrMsg || $scope.checkDatesErrMsg);
@@ -376,17 +376,25 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
             if($scope.authorizationsErrMsg) {
                 $scope.authorizationsErrMsg = proxyMgmtErrorService.getErrorAuthorizations($scope.proxy);
             }
-            if ($scope.checkDatesErrMsg) {
-                $scope.checkDatesErrMsg = proxyMgmtErrorService.getErrorDates($scope.proxy);
-            }
+
+            $scope.checkDatesErrMsg = proxyMgmtErrorService.getErrorDates($scope.proxy, false);
+
         };
 
         $scope.setStartDate = function(data){
             $scope.proxy.p_start_date = data;
+            //$apply used to get binding to update when date chosen through datepicker.
+            $scope.$apply(function () {
+                $scope.checkDatesErrMsg = proxyMgmtErrorService.getErrorDates($scope.proxy, false);
+            })
         };
 
         $scope.setStopDate = function(data){
             $scope.proxy.p_stop_date = data;
+            //$apply used to get binding to update when date chosen through datepicker.
+            $scope.$apply(function () {
+                $scope.checkDatesErrMsg = proxyMgmtErrorService.getErrorDates($scope.proxy, false);
+            })
         };
 
         $scope.save = function() {

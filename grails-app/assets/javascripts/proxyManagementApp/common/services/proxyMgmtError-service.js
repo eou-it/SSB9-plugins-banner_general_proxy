@@ -160,7 +160,7 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
                 return fromDate > toDate;
             },
             datesFormatsAreInvalid = function (proxy) {
-                return !stringToDate(proxy.p_start_date) || !stringToDate(proxy.p_stop_date);
+                return (proxy.p_start_date && !stringToDate(proxy.p_start_date)) || (proxy.p_stop_date && !stringToDate(proxy.p_stop_date));
             },
 
             currentErrorDateNotification,
@@ -174,12 +174,12 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
         /*1) Checks if BOTH date fields have data.
         * 2) Checks if the dates are correctly formatted
         * 3) Checks if the stop date is before the start date*/
-        this.getErrorDates = function(proxy) {
+        this.getErrorDates = function(proxy, isSubmit) {
             var msg = 'personInfo.address.error.dateFormat';
 
             //Removes any existing errors so errors that are no longer true do not stay showing.
             removeDateErrors();
-            if (dateFieldsAreEmpty(proxy)) {
+            if (dateFieldsAreEmpty(proxy) && isSubmit) {
                 msg = 'proxy.personalinformation.onSave.required_data_missing';
                 notificationCenterService.addNotification($filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]), 'error');
                 return $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]);
