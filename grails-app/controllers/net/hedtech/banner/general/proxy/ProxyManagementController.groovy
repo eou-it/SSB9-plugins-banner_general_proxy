@@ -98,6 +98,7 @@ class ProxyManagementController {
 
             ProxyControllerUtility.clearAllProxyGidmMapsFromSessionCache()
             ProxyControllerUtility.mapProxyGidms(proxies.proxies)
+            ProxyControllerUtility.invalidateClonedProxyCodeMapCache() // These mappings are also now invalid
 
             render proxies as JSON
 
@@ -154,6 +155,11 @@ class ProxyManagementController {
         try {
             def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
             params.pidm = pidm
+
+            if (params.alt) {
+                params.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(params)
+            }
+
             def startStopDates = generalSsbProxyManagementService.getDataModelOnRelationshipChange(params)
 
             render startStopDates as JSON
@@ -278,8 +284,6 @@ class ProxyManagementController {
         params.pidm = pidm
 
         try {
-            params.gidm = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache(params)
-
             def proxies = generalSsbProxyManagementService.getProxyClonedListOnCreate(params)
             ProxyControllerUtility.clearAllClonedProxyCodeMapsFromSessionCache()
             ProxyControllerUtility.mapClonedProxyCodes(proxies.cloneList)
@@ -306,6 +310,7 @@ class ProxyManagementController {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
     }
+
 
     /*
      Returns the list of Add Proxies.

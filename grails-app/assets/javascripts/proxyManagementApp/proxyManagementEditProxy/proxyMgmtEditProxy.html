@@ -16,10 +16,10 @@
 
             <div ng-if="addProxiesList.length > 0" class="row">
                 <div class="col-xs-12 col-md-3 col-lg-3">
-                    <label class="input-field-label" for="authorization">{{'proxyManagement.label.authorization'|i18n}}</label>
+                    <label class="input-field-label" for="authorization">{{'proxyManagement.placeholder.selectPerson'|i18n}}</label>
                     <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.authorization'|i18n}}"></proxy-mgmt-popover-tooltip><br>
                     <xe-ui-select ng-model="proxyAuxData.addProxy" theme="select2" search-enabled="false" ng-change="handleAddListChange()" id="authorization">
-                        <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.authorization'|i18n)" placeholder="{{placeholder.clonedLList}}">
+                        <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.placeholder.selectPerson'|i18n)" placeholder="{{placeholder.clonedLList}}">
                             {{$select.selected.description ? $select.selected.description : placeholder.clonedLList}}
                         </xe-ui-select-match>
                         <xe-ui-select-choices repeat="choice in addProxiesList">
