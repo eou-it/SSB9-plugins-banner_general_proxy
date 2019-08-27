@@ -36,82 +36,82 @@ class ProxyControllerUtilityTests extends BaseIntegrationTestCase {
 
     @Test
     void testMapAndGetAndClearProxyGidmMappingsInSessionCache() {
-        def proxies = [[gidm: -111],[gidm: -222],[gidm: -333]]
+        def proxies = [[gidm: -111,cver:0],[gidm: -222,cver:0],[gidm: -333,cver:0]]
         ProxyControllerUtility.mapProxyGidms(proxies)
-        def cachedInfo = ProxyControllerUtility.getProxyGidmMapFromSessionCache(2)
+        def cachedInfo = ProxyControllerUtility.getProxyGidmMapFromSessionCache([alt:2,cver:0])
 
         assertNotNull cachedInfo
         assertEquals new Integer(-333), cachedInfo
 
         ProxyControllerUtility.clearAllProxyGidmMapsFromSessionCache()
-        cachedInfo = ProxyControllerUtility.getProxyGidmMapFromSessionCache(2)
+        cachedInfo = ProxyControllerUtility.getProxyGidmMapFromSessionCache([alt:2,cver:0])
 
         assertNull cachedInfo
     }
 
     @Test
     void testMapProxyGidmsWithArray() {
-        def proxyArr = [[gidm: -111],[gidm: -222],[gidm: -333]] as Object[]
+        def proxyArr = [[gidm: -111,cver:0],[gidm: -222,cver:0],[gidm: -333,cver:0]] as Object[]
 
         ProxyControllerUtility.mapProxyGidms(proxyArr)
 
-        def cachedInfo = ProxyControllerUtility.getProxyGidmMapFromSessionCache(0)
+        def cachedInfo = ProxyControllerUtility.getProxyGidmMapFromSessionCache([alt:0,cver:0])
         assertNotNull cachedInfo
         assertEquals new Integer(-111), cachedInfo
 
-        cachedInfo = ProxyControllerUtility.getProxyGidmMapFromSessionCache(1)
+        cachedInfo = ProxyControllerUtility.getProxyGidmMapFromSessionCache([alt:1,cver:0])
         assertNotNull cachedInfo
         assertEquals new Integer(-222), cachedInfo
     }
 
     @Test
     void testMapProxyGidmWithSingleObject() {
-        def proxy = [gidm: -222]
+        def proxy = [gidm: -222,cver:0]
 
         ProxyControllerUtility.mapProxyGidms(proxy)
 
-        def cachedInfo = ProxyControllerUtility.getProxyGidmMapFromSessionCache(0)
+        def cachedInfo = ProxyControllerUtility.getProxyGidmMapFromSessionCache([alt:0,cver:0])
         assertNotNull cachedInfo
         assertEquals new Integer(-222), cachedInfo
     }
 
     @Test
     void testMapAndGetAndClearClonedProxyCodeMappingsInSessionCache() {
-        def proxies = [[code: -111],[code: -222],[code: -333]]
+        def proxies = [[code: -111,cver:0],[code: -222,cver:0],[code: -333,cver:0]]
         ProxyControllerUtility.mapClonedProxyCodes(proxies)
-        def cachedInfo = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache(2)
+        def cachedInfo = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache([alt:2,cver:0])
 
         assertNotNull cachedInfo
         assertEquals new Integer(-333), cachedInfo
 
         ProxyControllerUtility.clearAllClonedProxyCodeMapsFromSessionCache()
-        cachedInfo = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache(2)
+        cachedInfo = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache([alt:2,cver:0])
 
         assertNull cachedInfo
     }
 
     @Test
     void testMapClonedProxyCodeWithArray() {
-        def proxyArr = [[code: -111],[code: -222],[code: -333]] as Object[]
+        def proxyArr = [[code: -111,cver:0],[code: -222,cver:0],[code: -333,cver:0]] as Object[]
 
         ProxyControllerUtility.mapClonedProxyCodes(proxyArr)
 
-        def cachedInfo = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache(0)
+        def cachedInfo = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache([alt:0,cver:0])
         assertNotNull cachedInfo
         assertEquals new Integer(-111), cachedInfo
 
-        cachedInfo = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache(1)
+        cachedInfo = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache([alt:1,cver:0])
         assertNotNull cachedInfo
         assertEquals new Integer(-222), cachedInfo
     }
 
     @Test
     void testMapClonedProxyCodeWithSingleObject() {
-        def proxy = [code: -222]
+        def proxy = [code: -222,cver:0]
 
         ProxyControllerUtility.mapClonedProxyCodes(proxy)
 
-        def cachedInfo = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache(0)
+        def cachedInfo = ProxyControllerUtility.getClonedProxyCodeMapFromSessionCache([alt:0,cver:0])
         assertNotNull cachedInfo
         assertEquals new Integer(-222), cachedInfo
     }
