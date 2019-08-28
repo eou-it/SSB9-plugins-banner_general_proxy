@@ -11,21 +11,6 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
         fetchStudentListForProxy = $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'getStudentListForProxy'}, {query: {method:'GET', isArray:false}});
 
-    var dateFmt,
-        calendar = (function(){
-            var locale = $('meta[name=locale]').attr("content");
-
-            if(locale.split('-')[0] === 'ar') {
-                dateFmt = $filter('i18n')('default.date.format');
-                return $.calendars.instance('islamic');
-            }
-            else {
-                dateFmt = $filter('i18n')('default.date.format').toLowerCase();
-                dateFmt = dateFmt.replace(/mmm/i, 'M'); // short month format is M, not MMM, for jQuery calendar
-                return $.calendars.instance();
-            }
-        }());
-
 
     var updateProxyHistoryOnPageAccess = function(label) {
         jQuery.ajax({
@@ -38,19 +23,6 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
     //Logs the History for the Proxy Page Access
     this.updateProxyHistoryOnPageAccess = function(label){
         updateProxyHistoryOnPageAccess(label);
-    }
-
-
-
-    this.stringToDate = function (date) {
-        var result;
-        try {
-            result = calendar.parseDate(dateFmt, date).toJSDate();
-            return result;
-        }
-        catch (exception) {
-            return null;
-        }
     };
 
 

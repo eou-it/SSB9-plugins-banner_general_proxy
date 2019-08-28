@@ -8,6 +8,7 @@
 //= require proxyApp/common/services/proxyApp-service.js
 //= require proxyApp/common/services/notificationcenter-service.js
 //= require proxyApp/common/services/proxyEmail-service.js
+//= require proxyApp/common/services/proxyAppDate-service.js
 //= require proxyApp/finaid/proxyAwardHistory-controller.js
 //= require proxyApp/finaid/proxyViewAwardPackage-controller.js
 //= require proxyApp/finaid/proxyViewFinaidStatus-controller.js
