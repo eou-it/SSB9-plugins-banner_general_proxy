@@ -1,35 +1,9 @@
-proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService', '$filter',
-    function (notificationCenterService, $filter) {
-
-        var dateFmt,
-            calendar = (function(){
-                var locale = window.i18n.locale;
-
-                if(locale.split('-')[0] === 'ar') {
-                    dateFmt = $filter('i18n')('default.date.format');
-                    return $.calendars.instance('islamic');
-                }
-                else {
-                    dateFmt = $filter('i18n')('default.date.format').toLowerCase();
-                    return $.calendars.instance();
-                }
-            }());
-
+proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService', 'proxyMgmtDateService', '$filter',
+    function (notificationCenterService, proxyMgmtDateService, $filter) {
         var messages = [],
             proxyProfileMessageCenter = "#proxyProfileErrorMsgCenter",
             invalidCharRegEx = /[ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]/i,
-            validEmailRegEx = /[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+@[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+\.[A-Z]{2,}/i,
-
-        stringToDate = function (date) {
-            var result;
-            try {
-                result = calendar.parseDate(dateFmt, date).toJSDate();
-                return result;
-            }
-            catch (exception) {
-                return null;
-            }
-        };
+            validEmailRegEx = /[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+@[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+\.[A-Z]{2,}/i;
 
         this.refreshMessages = function() {
             messages = [];
@@ -155,12 +129,12 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
             },
             stopDateIsBeforeStartDate = function (proxy) {
                 var MAX_DATE = 8640000000000000,
-                    fromDate = stringToDate( proxy.p_start_date ),
-                    toDate = proxy.p_stop_date ? stringToDate(proxy.p_stop_date) : new Date(MAX_DATE);
+                    fromDate = proxyMgmtDateService.stringToDate( proxy.p_start_date ),
+                    toDate = proxy.p_stop_date ? proxyMgmtDateService.stringToDate(proxy.p_stop_date) : new Date(MAX_DATE);
                 return fromDate > toDate;
             },
             datesFormatsAreInvalid = function (proxy) {
-                return (proxy.p_start_date && !stringToDate(proxy.p_start_date)) || (proxy.p_stop_date && !stringToDate(proxy.p_stop_date));
+                return (proxy.p_start_date && !proxyMgmtDateService.stringToDate(proxy.p_start_date)) || (proxy.p_stop_date && !proxyMgmtDateService.stringToDate(proxy.p_stop_date));
             },
 
             currentErrorDateNotification,

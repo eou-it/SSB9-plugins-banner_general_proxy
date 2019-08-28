@@ -2,8 +2,8 @@
  Copyright 2019 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$rootScope','$state','$filter','$location',
-    'proxyAppService','notificationCenterService', 'proxyEmailService',
-    function ($scope, $rootScope, $state, $filter, $location, proxyAppService, notificationCenterService, proxyEmailService) {
+    'proxyAppService','notificationCenterService', 'proxyEmailService', 'proxyAppDateService',
+    function ($scope, $rootScope, $state, $filter, $location, proxyAppService, notificationCenterService, proxyEmailService, proxyAppDateService) {
 
         var init = function () {
             getPersonalInfo();
@@ -175,7 +175,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
             });
 
             if ($scope.profileElements["p_birth_date"].model) {
-                $scope.proxyProfile.p_birth_date = proxyAppService.stringToDate($scope.profileElements["p_birth_date"].model);
+                $scope.proxyProfile.p_birth_date = proxyAppDateService.stringToDate($scope.profileElements["p_birth_date"].model);
 
                 profile.p_birth_date = $scope.proxyProfile.p_birth_date;
             }

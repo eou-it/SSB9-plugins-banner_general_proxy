@@ -2,9 +2,9 @@
   Copyright 2019 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$rootScope', '$state','$location', '$stateParams',
-    '$timeout', '$filter', '$q', 'notificationCenterService', 'proxyMgmtAppService', 'proxyMgmtErrorService', 'proxyConfigResolve',
+    '$timeout', '$filter', '$q', 'notificationCenterService', 'proxyMgmtAppService', 'proxyMgmtErrorService', 'proxyConfigResolve', 'proxyMgmtDateService',
     function ($scope, $rootScope, $state,$location, $stateParams, $timeout, $filter, $q, notificationCenterService,
-              proxyMgmtAppService, proxyMgmtErrorService, proxyConfigResolve) {
+              proxyMgmtAppService, proxyMgmtErrorService, proxyConfigResolve, proxyMgmtDateService) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -406,8 +406,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController',['$scope', '$r
                 profile[it] = $scope.proxy[it];
             });
 
-            profile.p_start_date = proxyMgmtAppService.stringToDate($scope.proxy.p_start_date);
-            profile.p_stop_date = proxyMgmtAppService.stringToDate($scope.proxy.p_stop_date);
+            profile.p_start_date = proxyMgmtDateService.stringToDate($scope.proxy.p_start_date);
+            profile.p_stop_date = proxyMgmtDateService.stringToDate($scope.proxy.p_stop_date);
             //End Profile Clone
 
             if ($scope.isCreateNew) { // CREATE PROXY
