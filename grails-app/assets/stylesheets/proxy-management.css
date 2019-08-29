@@ -230,6 +230,10 @@ h2 {
     color: #026bc8;
 }
 
+#authorization .select2-choice > .select2-chosen {
+    padding-top: 0.5em;
+    display: block;
+}
 
 /***********************/
 /* Media Query Section */
