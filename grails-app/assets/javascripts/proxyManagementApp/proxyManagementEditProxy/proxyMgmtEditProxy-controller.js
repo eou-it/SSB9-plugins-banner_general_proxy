@@ -316,10 +316,10 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
                 } else {
                     if (response.resetStatus != 'SUCCESS') {
                         messageType = 'error';
-                        message = 'proxyManagement.message.resendAuthorizationsFailure';
+                        message = 'proxyManagement.message.emailAuthorizationsFailure';
                     } else {
                         messageType = 'success';
-                        message = 'proxyManagement.message.resendAuthorizationsSuccess';
+                        message = 'proxyManagement.message.emailAuthorizationsSuccess';
                     }
                 }
 
