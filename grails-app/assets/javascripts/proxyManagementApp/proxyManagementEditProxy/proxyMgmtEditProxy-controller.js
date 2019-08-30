@@ -33,7 +33,6 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
 
                 $scope.isRelationshipSelected = !!code;
             },
-
             isValidProxyData = function (proxy, isUpdate) {
                 proxyMgmtErrorService.refreshMessages();
 
@@ -52,10 +51,10 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
 
                 $scope.relationshipErrMsg = proxyMgmtErrorService.getErrorRelationship(proxy);
                 $scope.authorizationsErrMsg = proxyMgmtErrorService.getErrorAuthorizations(proxy);
-                $scope.checkDatesErrMsg = proxyMgmtErrorService.getErrorDates(proxy, true);
+                $scope.setStartAndStopDateErrors(proxy, true);
 
                 return !($scope.firstNameErrMsg || $scope.lastNameErrMsg || $scope.emailErrMsg || $scope.verifyEmailErrMsg ||
-                    $scope.relationshipErrMsg || $scope.authorizationsErrMsg || $scope.checkDatesErrMsg);
+                    $scope.relationshipErrMsg || $scope.authorizationsErrMsg || $scope.startDateErrMsg || $scope.stopDateErrMsg);
             },
 
             displayResponseMessages = function (messages) {
@@ -111,6 +110,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
                         $scope.relationshipChoices = response.relationships;
                     }
                 });
+
+                proxyMgmtErrorService.refreshProxyManagementDateErrorManager();
 
                 if (alt) {
                     $scope.currentAlt = alt;
@@ -357,16 +358,45 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
             if ($scope.authorizationsErrMsg) {
                 $scope.authorizationsErrMsg = proxyMgmtErrorService.getErrorAuthorizations($scope.proxy);
             }
-
-            $scope.checkDatesErrMsg = proxyMgmtErrorService.getErrorDates($scope.proxy, false);
-
+            if ($scope.startDateErrMsg) {
+                $scope.startDateErrMsg = proxyMgmtErrorService.getErrorDates($scope.proxy)[0];
+            }
+            if ($scope.stopDateErrMsg) {
+                $scope.stopDateErrMsg = proxyMgmtErrorService.getErrorDates($scope.proxy)[1];
+            }
         };
+
+        $scope.setStartAndStopDateErrors = function (proxy, isSubmit) {
+            var errors = proxyMgmtErrorService.getErrorDates(proxy, isSubmit);
+            $scope.startDateErrMsg = errors[0];
+            $scope.stopDateErrMsg = errors[1];
+        };
+
+        $scope.setStartFocused = function (focused) {
+            $scope.startFocused = focused;
+        };
+
+        $scope.setStopFocused = function (focused) {
+            $scope.stopFocused = focused;
+        };
+
+        $scope.$watch('proxy.p_start_date', function (newVal, oldVal) {
+            if (newVal !== oldVal && !$scope.startFocused) {
+                $scope.setStartAndStopDateErrors($scope.proxy);
+            }
+        });
+
+        $scope.$watch('proxy.p_stop_date', function (newVal, oldVal) {
+            if (newVal !== oldVal && !$scope.stopFocused) {
+                $scope.setStartAndStopDateErrors($scope.proxy);
+            }
+        });
 
         $scope.setStartDate = function (data) {
             $scope.proxy.p_start_date = data;
             //$apply used to get binding to update when date chosen through datepicker.
             $scope.$apply(function () {
-                $scope.checkDatesErrMsg = proxyMgmtErrorService.getErrorDates($scope.proxy, false);
+                $scope.setStartAndStopDateErrors($scope.proxy);
             })
         };
 
@@ -374,7 +404,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
             $scope.proxy.p_stop_date = data;
             //$apply used to get binding to update when date chosen through datepicker.
             $scope.$apply(function () {
-                $scope.checkDatesErrMsg = proxyMgmtErrorService.getErrorDates($scope.proxy, false);
+                $scope.setStartAndStopDateErrors($scope.proxy);
             })
         };
 
@@ -492,11 +522,14 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
         $scope.verifyEmailErrMsg = '';
         $scope.relationshipErrMsg = '';
         $scope.authorizationsErrMsg = '';
-        $scope.checkDatesErrMsg = '';
         $scope.passwordExpDateMsg = '';
         $scope.emailVerifiedDateMsg = '';
         $scope.optOutMsg = '';
         $scope.authPages = [];
+        $scope.startDateErrMsg = '';
+        $scope.stopDateErrMsg = '';
+        $scope.startFocused = false;
+        $scope.stopFocused = false;
 
         $scope.maxNameLength = 60;
         $scope.maxEmailLength = 128;

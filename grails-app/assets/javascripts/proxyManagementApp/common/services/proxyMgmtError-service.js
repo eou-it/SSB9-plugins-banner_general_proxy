@@ -1,12 +1,17 @@
-proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService', 'proxyMgmtDateService', '$filter',
-    function (notificationCenterService, proxyMgmtDateService, $filter) {
+proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService', 'proxyMgmtDateService', 'ProxyManagementDateErrorManager', '$filter',
+    function (notificationCenterService, proxyMgmtDateService, ProxyManagementDateErrorManager, $filter) {
         var messages = [],
             proxyProfileMessageCenter = "#proxyProfileErrorMsgCenter",
             invalidCharRegEx = /[ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]/i,
-            validEmailRegEx = /[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+@[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+\.[A-Z]{2,}/i;
+            validEmailRegEx = /[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+@[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+\.[A-Z]{2,}/i,
+            proxyManagementDateErrorManager = new ProxyManagementDateErrorManager();
 
         this.refreshMessages = function() {
             messages = [];
+        };
+
+        this.refreshProxyManagementDateErrorManager = function () {
+            proxyManagementDateErrorManager = new ProxyManagementDateErrorManager();
         };
 
         this.getErrorFirstName = function(proxy) {
@@ -124,57 +129,13 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
             }
         };
 
-        var dateFieldsAreEmpty = function (proxy) {
-                return (!proxy.p_start_date || !proxy.p_stop_date);
-            },
-            stopDateIsBeforeStartDate = function (proxy) {
-                var MAX_DATE = 8640000000000000,
-                    fromDate = proxyMgmtDateService.stringToDate( proxy.p_start_date ),
-                    toDate = proxy.p_stop_date ? proxyMgmtDateService.stringToDate(proxy.p_stop_date) : new Date(MAX_DATE);
-                return fromDate > toDate;
-            },
-            datesFormatsAreInvalid = function (proxy) {
-                return (proxy.p_start_date && !proxyMgmtDateService.stringToDate(proxy.p_start_date)) || (proxy.p_stop_date && !proxyMgmtDateService.stringToDate(proxy.p_stop_date));
-            },
-
-            currentErrorDateNotification,
-
-            removeDateErrors = function () {
-                notificationCenterService.removeNotification('personInfo.address.error.dateFormat');
-                notificationCenterService.removeNotification('proxy.personalinformation.onSave.required_data_missing');
-                notificationCenterService.removeNotification(currentErrorDateNotification);
-            };
-
-        /*1) Checks if BOTH date fields have data.
-        * 2) Checks if the dates are correctly formatted
-        * 3) Checks if the stop date is before the start date*/
-        this.getErrorDates = function(proxy, isSubmit) {
-            var msg = 'personInfo.address.error.dateFormat';
-
-            //Removes any existing errors so errors that are no longer true do not stay showing.
-            removeDateErrors();
-            if (dateFieldsAreEmpty(proxy) && isSubmit) {
-                msg = 'proxy.personalinformation.onSave.required_data_missing';
-                notificationCenterService.addNotification($filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]), 'error');
-                return $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]);
-            }
-            else if (datesFormatsAreInvalid(proxy)) {
-                notificationCenterService.addNotification($filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]), 'error');
-                return $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]);
-            }
-            else if (stopDateIsBeforeStartDate(proxy)) {
-                /*Because the stop date before start date error is dynamically generated for each occurrence of the error,
-                * we need to store the previous notification so that the notificationCenterService is not trying to remove
-                * an error based on the current dates in the date fields.*/
-                msg = 'proxyManagement.message.checkDates';
-                if (currentErrorDateNotification) {
-                    removeDateErrors()
-                }
-                currentErrorDateNotification = notificationCenterService.addNotification($filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]), 'error');
-                return $filter('i18n')(msg,[proxy.p_start_date, proxy.p_stop_date]);
-            }
+        //Returns an array where the first element is the start date error and the second element is the stop date error.
+        this.getErrorDates = function (proxy, isSubmit) {
+            proxyManagementDateErrorManager.setDates(proxy.p_start_date, proxy.p_stop_date);
+            proxyManagementDateErrorManager.setErrorMessages(isSubmit);
+            proxyManagementDateErrorManager.displayNotifications();
+            return [proxyManagementDateErrorManager.getStartDateErrorMessage(), proxyManagementDateErrorManager.getStopDateErrorMessage()];
         };
-
 
         this.displayMessages = function() {
             notificationCenterService.setLocalMessageCenter(proxyProfileMessageCenter);
@@ -185,12 +146,6 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
 
             messages = [];
 
-            notificationCenterService.setLocalMessageCenter(null);
-        };
-
-        this.displayErrorMessage = function(message) {
-            notificationCenterService.setLocalMessageCenter(proxyProfileMessageCenter);
-            notificationCenterService.displayNotification(message, "error");
             notificationCenterService.setLocalMessageCenter(null);
         };
     }
