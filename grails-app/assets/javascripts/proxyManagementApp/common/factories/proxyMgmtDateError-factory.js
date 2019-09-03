@@ -58,7 +58,8 @@ proxyManagementApp.factory('ProxyManagementDateErrorManager', ['proxyMgmtDateSer
             },
             getNotificationsFromErrors = function (errors) {
                 var notifications = [];
-                for (var i = 0; i < errors.length; i++) {
+                var errorsLength = errors.length;
+                for (var i = 0; i < errorsLength; i++) {
                     notifications.push(getMessageKeyFromError(errors[i]))
                 }
                 return notifications;
@@ -95,8 +96,8 @@ proxyManagementApp.factory('ProxyManagementDateErrorManager', ['proxyMgmtDateSer
                 },
                 displayNotifications: function () {
                     var notifications = getNotificationsFromErrors(this.currentErrors);
-
-                    for (var i = 0; i < notifications.length; i++) {
+                    var notificationsLength = notifications.length;
+                    for (var i = 0; i < notificationsLength; i++) {
                         this.currentNotification = notificationCenterService.addNotification($filter('i18n')(notifications[i], [this.startDate, this.stopDate]), 'error');
                     }
                 },
