@@ -2,9 +2,10 @@
  Copyright 2019 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$rootScope', '$state', '$location', '$stateParams',
-    '$timeout', '$filter', '$q', 'notificationCenterService', 'proxyMgmtAppService', 'proxyMgmtErrorService', 'proxyConfigResolve', 'proxyMgmtDateService', 'ProxyManagementProxy',
+    '$timeout', '$filter', '$q', 'notificationCenterService', 'proxyMgmtAppService', 'proxyMgmtErrorService', 'proxyConfigResolve',
+    'proxyMgmtDateService', 'ProxyManagementProxy', 'ProxyManagementDataValidator',
     function ($scope, $rootScope, $state, $location, $stateParams, $timeout, $filter, $q, notificationCenterService,
-              proxyMgmtAppService, proxyMgmtErrorService, proxyConfigResolve, proxyMgmtDateService, ProxyManagementProxy) {
+              proxyMgmtAppService, proxyMgmtErrorService, proxyConfigResolve, proxyMgmtDateService, ProxyManagementProxy, ProxyManagementDataValidator) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -21,7 +22,6 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
                     });
                 }, 200);
             },
-
             setSelectedRelationship = function (code) {
                 $scope.proxyAuxData.selectedRelationship = _.find($scope.relationshipChoices, function (rel) {
                     return rel.code == code;
@@ -33,30 +33,6 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
 
                 $scope.isRelationshipSelected = !!code;
             },
-            isValidProxyData = function (proxy, isUpdate) {
-                proxyMgmtErrorService.refreshMessages();
-
-                if (isUpdate) {
-                    // The corresponding fields for these errors are always empty for an update, so shim the error messages.
-                    $scope.firstNameErrMsg = false;
-                    $scope.lastNameErrMsg = false;
-                    $scope.emailErrMsg = false;
-                    $scope.verifyEmailErrMsg = false;
-                } else {
-                    $scope.firstNameErrMsg = proxyMgmtErrorService.getErrorFirstName(proxy);
-                    $scope.lastNameErrMsg = proxyMgmtErrorService.getErrorLastName(proxy);
-                    $scope.emailErrMsg = proxyMgmtErrorService.getErrorEmail(proxy);
-                    $scope.verifyEmailErrMsg = proxyMgmtErrorService.getErrorVerifyEmail(proxy);
-                }
-
-                $scope.relationshipErrMsg = proxyMgmtErrorService.getErrorRelationship(proxy);
-                $scope.authorizationsErrMsg = proxyMgmtErrorService.getErrorAuthorizations(proxy);
-                $scope.setStartAndStopDateErrors(proxy, true);
-
-                return !($scope.firstNameErrMsg || $scope.lastNameErrMsg || $scope.emailErrMsg || $scope.verifyEmailErrMsg ||
-                    $scope.relationshipErrMsg || $scope.authorizationsErrMsg || $scope.startDateErrMsg || $scope.stopDateErrMsg);
-            },
-
             displayResponseMessages = function (messages) {
                 _.each(messages, function (message) {
                     if (message.code === 'PIN_EXPIRATION_DATE') {
@@ -73,13 +49,11 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
                     notificationCenterService.addNotification($filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]), $rootScope.notificationInfoType, true);
                 });
             },
-
             displayResponseFailureMessages = function (flashMessage, notificationMessage) {
                 $scope.flashMessage = flashMessage;
                 notificationCenterService.clearNotifications();
                 notificationCenterService.addNotification(notificationMessage, "error", true);
             },
-
             init = function () {
                 var alt = $stateParams.alt,
                     cver;
@@ -87,6 +61,8 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
                 $scope.proxyAuxData.firstName = $stateParams.firstName;
                 $scope.proxyAuxData.lastName = $stateParams.lastName;
                 $scope.proxyAuxData.email = $stateParams.email;
+
+                $scope.proxyManagementDataValidator = new ProxyManagementDataValidator();
 
                 proxyMgmtAppService.getRelationshipOptions().$promise.then(function (response) {
                     if (response.failure) {
@@ -185,7 +161,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
                 } else {
                     $scope.proxy.handleRelationshipChange(response, $scope.proxyAuxData);
                     $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
-                    $scope.removeProxyProfileFieldErrors();
+                    $scope.proxyManagementDataValidator.removeProxyProfileFieldErrors($scope.proxy);
 
                     if ($scope.proxy.pages.length == 0) {
                         notificationCenterService.clearNotifications();
@@ -211,7 +187,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
                     displayResponseFailureMessages(response.message, response.message);
                 } else {
                     $scope.proxy.pages = response.pages;
-                    $scope.removeProxyProfileFieldErrors();
+                    $scope.proxyManagementDataValidator.removeProxyProfileFieldErrors($scope.proxy);
                 }
             });
 
@@ -305,40 +281,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
         //toggle all checkboxes
         $scope.toggleSelect = function () {
             $scope.proxy.toggleCheckboxes();
-            $scope.removeProxyProfileFieldErrors();
-        };
-
-        $scope.removeProxyProfileFieldErrors = function () {
-            if ($scope.firstNameErrMsg) {
-                $scope.firstNameErrMsg = proxyMgmtErrorService.getErrorFirstName($scope.proxy);
-            }
-            if ($scope.lastNameErrMsg) {
-                $scope.lastNameErrMsg = proxyMgmtErrorService.getErrorLastName($scope.proxy);
-            }
-            if ($scope.emailErrMsg) {
-                $scope.emailErrMsg = proxyMgmtErrorService.getErrorEmail($scope.proxy);
-            }
-            if ($scope.verifyEmailErrMsg) {
-                $scope.verifyEmailErrMsg = proxyMgmtErrorService.getErrorVerifyEmail($scope.proxy);
-            }
-            if ($scope.relationshipErrMsg) {
-                $scope.relationshipErrMsg = proxyMgmtErrorService.getErrorRelationship($scope.proxy);
-            }
-            if ($scope.authorizationsErrMsg) {
-                $scope.authorizationsErrMsg = proxyMgmtErrorService.getErrorAuthorizations($scope.proxy);
-            }
-            if ($scope.startDateErrMsg) {
-                $scope.startDateErrMsg = proxyMgmtErrorService.getErrorDates($scope.proxy)[0];
-            }
-            if ($scope.stopDateErrMsg) {
-                $scope.stopDateErrMsg = proxyMgmtErrorService.getErrorDates($scope.proxy)[1];
-            }
-        };
-
-        $scope.setStartAndStopDateErrors = function (proxy, isSubmit) {
-            var errors = proxyMgmtErrorService.getErrorDates(proxy, isSubmit);
-            $scope.startDateErrMsg = errors[0];
-            $scope.stopDateErrMsg = errors[1];
+            $scope.proxyManagementDataValidator.removeProxyProfileFieldErrors($scope.proxy);
         };
 
         $scope.setStartFocused = function (focused) {
@@ -351,13 +294,13 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
 
         $scope.$watch('proxy.p_start_date', function (newVal, oldVal) {
             if (newVal !== oldVal && !$scope.startFocused) {
-                $scope.setStartAndStopDateErrors($scope.proxy);
+                $scope.proxyManagementDataValidator.setStartAndStopDateErrors($scope.proxy);
             }
         });
 
         $scope.$watch('proxy.p_stop_date', function (newVal, oldVal) {
             if (newVal !== oldVal && !$scope.stopFocused) {
-                $scope.setStartAndStopDateErrors($scope.proxy);
+                $scope.proxyManagementDataValidator.setStartAndStopDateErrors($scope.proxy);
             }
         });
 
@@ -365,7 +308,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
             $scope.proxy.p_start_date = data;
             //$apply used to get binding to update when date chosen through datepicker.
             $scope.$apply(function () {
-                $scope.setStartAndStopDateErrors($scope.proxy);
+                $scope.proxyManagementDataValidator.setStartAndStopDateErrors($scope.proxy);
             })
         };
 
@@ -373,7 +316,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
             $scope.proxy.p_stop_date = data;
             //$apply used to get binding to update when date chosen through datepicker.
             $scope.$apply(function () {
-                $scope.setStartAndStopDateErrors($scope.proxy);
+                $scope.proxyManagementDataValidator.setStartAndStopDateErrors($scope.proxy);
             })
         };
 
@@ -391,7 +334,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
             //End Profile Clone
 
             if ($scope.isCreateNew) { // CREATE PROXY
-                if (isValidProxyData($scope.proxy)) {
+                if ($scope.proxyManagementDataValidator.isValidProxyData($scope.proxy)) {
                     notificationCenterService.addNotification('proxy.personalinformation.onSave.waitMessage', 'success', true);
 
                     proxyMgmtAppService.createProxy(profile).$promise.then(function (response) {
@@ -419,7 +362,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
                     proxyMgmtErrorService.displayMessages();
                 }
             } else { // UPDATE PROXY
-                if (isValidProxyData($scope.proxy, true)) {
+                if ($scope.proxyManagementDataValidator.isValidProxyData($scope.proxy, true)) {
                     notificationCenterService.addNotification('proxy.personalinformation.onSave.waitMessage', 'success', true);
 
                     proxyMgmtAppService.updateProxy(profile).$promise.then(function (response) {
@@ -485,20 +428,13 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
         $scope.relationshipChoices = [];
         $scope.clonedProxiesList = [];
         $scope.addProxiesList = [];
-        $scope.firstNameErrMsg = '';
-        $scope.lastNameErrMsg = '';
-        $scope.emailErrMsg = '';
-        $scope.verifyEmailErrMsg = '';
-        $scope.relationshipErrMsg = '';
-        $scope.authorizationsErrMsg = '';
         $scope.passwordExpDateMsg = '';
         $scope.emailVerifiedDateMsg = '';
         $scope.optOutMsg = '';
         $scope.authPages = [];
-        $scope.startDateErrMsg = '';
-        $scope.stopDateErrMsg = '';
         $scope.startFocused = false;
         $scope.stopFocused = false;
+        $scope.proxyManagementDataValidator = {};
 
         $scope.maxNameLength = 60;
         $scope.maxEmailLength = 128;

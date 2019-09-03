@@ -13,28 +13,28 @@
                 <div ng-bind-html="choice.description"></div>
             </xe-ui-select-choices>
         </xe-ui-select>
-        <p class="input-field-label mobile-errors" ng-class="[(!!relationshipErrMsg ? 'field-error error-font-size' : 'no-display')]"
-           role="alert" aria-live="assertive">{{relationshipErrMsg|i18n}}</p>
+        <p class="input-field-label mobile-errors" ng-class="[(!!proxyManagementDataValidator.relationshipErrMsg ? 'field-error error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{proxyManagementDataValidator.relationshipErrMsg|i18n}}</p>
     </div>
 </div>
 <div class="row">
     <div id="start-date-wrapper" class="col-xs-12 col-md-3 col-lg-3">
         <label for="start-date" class="input-field-label">{{'proxyManagement.label.startDate'|i18n}}</label>
-        <input date-picker ng-model="proxy.p_start_date" pi-input-watcher on-select="setStartDate" ng-focus="setStartFocused(true)" ng-blur="setStartFocused(false); setStartAndStopDateErrors(proxy)"
-               ng-class="[((startDateErrMsg) ? 'input-error pi-date-input input-colors' : 'pi-date-input input-colors')]"
+        <input date-picker ng-model="proxy.p_start_date" pi-input-watcher on-select="setStartDate" ng-focus="setStartFocused(true)" ng-blur="setStartFocused(false); proxyManagementDataValidator.setStartAndStopDateErrors(proxy)"
+               ng-class="[((proxyManagementDataValidator.startDateErrMsg) ? 'input-error pi-date-input input-colors' : 'pi-date-input input-colors')]"
                placeholder="{{'proxyManagement.label.startDate'|i18n}}" id="start-date"
                aria-label="{{'proxyManagement.label.startDate'|i18n}}"/>
-        <p class="input-field-label mobile-errors" ng-class="[(!!startDateErrMsg ? 'field-error error-font-size' : 'no-display')]"
-           role="alert" aria-live="assertive">{{startDateErrMsg}}</p>
+        <p class="input-field-label mobile-errors" ng-class="[(!!proxyManagementDataValidator.startDateErrMsg ? 'field-error error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{proxyManagementDataValidator.startDateErrMsg}}</p>
     </div>
     <div id="stop-date-wrapper" class="col-xs-12 col-md-3 col-lg-3">
         <label for="stop-date" class="input-field-label">{{'proxyManagement.label.stopDate'|i18n}}</label>
-        <input date-picker ng-model="proxy.p_stop_date" pi-input-watcher on-select="setStopDate" ng-focus="setStopFocused(true)" ng-blur="setStopFocused(false); setStartAndStopDateErrors(proxy)"
-               ng-class="[((stopDateErrMsg) ? 'input-error pi-date-input input-colors' : 'pi-date-input input-colors')]"
+        <input date-picker ng-model="proxy.p_stop_date" pi-input-watcher on-select="setStopDate" ng-focus="setStopFocused(true)" ng-blur="setStopFocused(false); proxyManagementDataValidator.setStartAndStopDateErrors(proxy)"
+               ng-class="[((proxyManagementDataValidator.stopDateErrMsg) ? 'input-error pi-date-input input-colors' : 'pi-date-input input-colors')]"
                placeholder="{{'proxyManagement.label.stopDate'|i18n}}" id="stop-date"
                aria-label="{{'proxyManagement.label.stopDate'|i18n}}"/>
-        <p class="input-field-label mobile-errors" ng-class="[(!!stopDateErrMsg ? 'field-error error-font-size' : 'no-display')]"
-           role="alert" aria-live="assertive">{{stopDateErrMsg}}</p>
+        <p class="input-field-label mobile-errors" ng-class="[(!!proxyManagementDataValidator.stopDateErrMsg ? 'field-error error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{proxyManagementDataValidator.stopDateErrMsg}}</p>
     </div>
 </div>
 <div class="proxy-info-subheading">
@@ -78,8 +78,8 @@
     <span class="italic">{{'proxyManagement.label.hint.required'|i18n}}&nbsp;</span>
     <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.authorizations'|i18n}}"></proxy-mgmt-popover-tooltip>
 </div>
-<p class="input-field-label mobile-errors" ng-class="[(!!authorizationsErrMsg ? 'field-error error-font-size' : 'no-display')]"
-   role="alert" aria-live="assertive">{{authorizationsErrMsg|i18n}}</p>
+<p class="input-field-label mobile-errors" ng-class="[(!!proxyManagementDataValidator.authorizationsErrMsg ? 'field-error error-font-size' : 'no-display')]"
+   role="alert" aria-live="assertive">{{proxyManagementDataValidator.authorizationsErrMsg|i18n}}</p>
 
 
 <div>
@@ -107,7 +107,7 @@
     <div class="row">
         <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-pages">
             <div ng-repeat="authItem in proxy.pages">
-                <input ng-model="authItem.auth" class="proxy-auth-check" type="checkbox" ng-disabled="!enablePageLevelAuthorization"  ng-change="removeProxyProfileFieldErrors()" aria-labelledby="dir-item{{$index}}"/>
+                <input ng-model="authItem.auth" class="proxy-auth-check" type="checkbox" ng-disabled="!enablePageLevelAuthorization"  ng-change="proxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" aria-labelledby="dir-item{{$index}}"/>
                 <span class="lbl">{{authItem.desc}}</span>
             </div>
         </div>
