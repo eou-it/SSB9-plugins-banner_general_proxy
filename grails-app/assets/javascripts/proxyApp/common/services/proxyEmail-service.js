@@ -8,7 +8,14 @@ proxyApp.service('proxyEmailService', ['notificationCenterService',
             validEmailRegEx = /[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+@[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+\.[A-Z]{2,}/i;
 
         this.getErrorEmailAddress = function (email) {
-            return invalidCharRegEx.test(email) ? 'proxy.personalinformation.error.invalidEmailChars' : this.getErrorEmailAddressFormat(email);
+
+            if (email) {
+                return invalidCharRegEx.test(email) ? 'proxy.personalinformation.error.invalidEmailChars' : this.getErrorEmailAddressFormat(email);
+            }
+            else {
+                return '';
+            }
+
         };
 
         this.getErrorEmailAddressFormat = function (email) {
