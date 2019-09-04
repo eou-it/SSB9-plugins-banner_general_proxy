@@ -2,10 +2,10 @@
 Copyright 2019 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="row">
-    <div ng-repeat="proxy in proxies" class="item-wrapper col-xs-12 col-md-6 col-lg-4">
+    <div ng-repeat="proxy in proxies" class="item-wrapper col-xs-12 col-md-6 col-lg-4" >
         <div class="proxy-item-detail">
-            <div class="proxy-item-name">
-                {{proxy.firstName}} {{proxy.lastName}}
+            <div class="proxy-item-name" title="{{proxy.firstName + ' ' + proxy.lastName}}">
+                <span>{{proxy.firstName}}</span> <span>{{proxy.lastName}}</span>
             </div>
             <div>
                 <span class="email-text" dir="ltr">{{proxy.email}}</span>

@@ -161,6 +161,15 @@ h2 {
 
 .proxy-item-name {
     font-family: OpenSans-semibold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.long-name-limiter {
+    max-width: 100%;
+    overflow: auto;
 }
 
 .proxy-mgmt-footer-container {
