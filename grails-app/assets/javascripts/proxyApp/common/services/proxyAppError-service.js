@@ -26,7 +26,6 @@ proxyApp.service('proxyAppErrorService', ['proxyAppDateService',
             validEmailRegEx = /[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+@[^ !#\$%\^&*\(\)\+=\{}\[\]\|"<>\?\\`;]+\.[A-Z]{2,}/i;
 
         this.getErrorEmailAddress = function (email) {
-            debugger;
             return !email ? '' : (invalidCharRegEx.test(email) ? 'proxy.personalinformation.error.invalidEmailChars' : this.getErrorEmailAddressFormat(email));
         };
 
