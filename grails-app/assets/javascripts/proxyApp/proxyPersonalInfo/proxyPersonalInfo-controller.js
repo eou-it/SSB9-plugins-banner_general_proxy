@@ -2,8 +2,8 @@
  Copyright 2019 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$rootScope','$state','$filter','$location',
-    'proxyAppService','notificationCenterService', 'proxyEmailService', 'proxyAppDateService', 'proxyAppBirthDateService',
-    function ($scope, $rootScope, $state, $filter, $location, proxyAppService, notificationCenterService, proxyEmailService, proxyAppDateService, proxyAppBirthDateService) {
+    'proxyAppService','notificationCenterService', 'proxyAppDateService', 'proxyAppErrorService',
+    function ($scope, $rootScope, $state, $filter, $location, proxyAppService, notificationCenterService, proxyAppDateService, proxyAppErrorService) {
 
         var init = function () {
             getPersonalInfo();
@@ -186,7 +186,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 birthDateErrorMessage,
                 errors = [];
 
-            emailErrorMessage = proxyEmailService.getErrorEmailAddress($scope.profile.p_email_address);
+            emailErrorMessage = proxyAppErrorService.getErrorEmailAddress($scope.profile.p_email_address);
 
             if (emailErrorMessage) {
                 $scope.emailErrMsg = emailErrorMessage;
@@ -194,7 +194,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
             } else {
                 $scope.emailErrMsg = '';
             }
-            birthDateErrorMessage = proxyAppBirthDateService.getErrorBirthDate(birthDate);
+            birthDateErrorMessage = proxyAppErrorService.getErrorBirthDate(birthDate);
             if (birthDateErrorMessage) {
                 $scope.birthDateErrMsg = birthDateErrorMessage;
                 errors.push(birthDateErrorMessage);
