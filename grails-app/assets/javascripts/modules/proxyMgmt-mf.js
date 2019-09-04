@@ -4,6 +4,7 @@
 //= require proxyManagementApp/common/filters/webAppResourcePath-filter.js
 //= require proxyManagementApp/common/factories/proxyMgmtDateError-factory.js
 //= require proxyManagementApp/common/factories/proxyMgmtProxy-factory.js
+//= require proxyManagementApp/common/factories/proxyMgmtDataValidator-factory.js
 //= require proxyManagementApp/common/services/breadcrumb-service.js
 //= require proxyManagementApp/common/services/notificationcenter-service.js
 //= require proxyManagementApp/common/services/proxyMgmtApp-service.js
