@@ -30,10 +30,12 @@
             <div ng-if="profileElement.visible && !profileElement.isWidget">
                 <label class="input-field-label" for="{{profileElement.elemId}}" ng-bind-html= "profileElement.label"> </label><br>
                 <input ng-model="profileElement.model" ng-blur="cityFocused=false;" ng-focus="cityFocused=true"
-                       ng-class="[(!!cityErrMsg && !cityFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
+                       ng-class="[((!!cityErrMsg && profileElement.elemId === 'p_city') || (!!emailErrMsg && profileElement.elemId === 'p_email_address') && !cityFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                        type="text" placeholder="{{profileElement.placeholder}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="{{profileElement.elemId}}">
-                <p class="input-field-label mobile-errors" ng-class="[(!!cityErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                <p ng-if="profileElement.elemId === 'p_city'" class="input-field-label mobile-errors" ng-class="[(!!cityErrMsg ? 'field-error error-font-size' : 'no-display')]"
                    role="alert" aria-live="assertive">{{cityErrMsg|i18n}}</p>
+                <p ng-if="profileElement.elemId === 'p_email_address'" class="input-field-label mobile-errors" ng-class="[(!!emailErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                   role="alert" aria-live="assertive">{{emailErrMsg|i18n}}</p>
             </div>
 
             <div ng-if="profileElement.visible && profileElement.isDropdown" class="profile-dropdown">
@@ -47,9 +49,11 @@
             <div ng-if="profileElement.visible && profileElement.elemId === 'p_birth_date'">
                 <label for="birthDate" ng-bind-html="profileElement.label" class="input-field-label">
                 </label>
-                <input date-picker ng-model="profileElement.model" pi-input-watcher on-select="setBirthDate"
-                       class="pi-date-input input-colors" placeholder="{{profileElement.placeholder}}" id="birthDate"
-                       aria-label="{{profileElement.placeholder}}"/>
+                <input ng-class="[((!!birthDateErrMsg) ? 'input-error pi-date-input input-colors' : 'pi-date-input input-colors')]" date-picker
+                       ng-model="profileElement.model" pi-input-watcher on-select="setBirthDate" placeholder="{{profileElement.placeholder}}" id="birthDate"
+                       aria-label="{{profileElement.placeholder}}" ng-focus="setBirthDateFocused(true)" ng-blur="setBirthDateFocused(false); setDataValidationErrors(profileElements['p_birth_date'].model)"/>
+                <p class="input-field-label mobile-errors" ng-class="[(!!birthDateErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                   role="alert" aria-live="assertive">{{birthDateErrMsg|i18n}}</p>
             </div>
 
             <div ng-if="profileElement.visible && profileElement.elemId === 'p_sex'" class="profile-dropdown">

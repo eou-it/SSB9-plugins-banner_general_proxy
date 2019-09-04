@@ -27,5 +27,10 @@ proxyApp.service('proxyAppDateService', ['$filter',
             }
         };
 
+        this.dateIsInPast = function (date) {
+            var now = new Date();
+            return this.stringToDate(date) < now;
+        }
+
     }
 ]);
