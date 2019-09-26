@@ -25,10 +25,22 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
     public void setUp() {
         formContext = ['SELFSERVICE'] // Since we are not testing a controller, we need to explicitly set this
         super.setUp()
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.executeUpdate("""
+                UPDATE GEBCOMM SET GEBCOMM_PER_NOTIFY_IND = 'N', GEBCOMM_ADMIN_NOTIFY_IND = 'N',
+                GEBCOMM_PROXY_NOTIFY_IND = 'N'
+                WHERE GEBCOMM_SYST_CODE= 'PROXY'
+          """)
     }
 
     @After
     public void tearDown() {
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.executeUpdate("""
+                UPDATE GEBCOMM SET GEBCOMM_PER_NOTIFY_IND = 'Y', GEBCOMM_ADMIN_NOTIFY_IND = 'Y',
+                GEBCOMM_PROXY_NOTIFY_IND = 'Y'
+                WHERE GEBCOMM_SYST_CODE= 'PROXY'
+          """)
         super.tearDown()
     }
 
