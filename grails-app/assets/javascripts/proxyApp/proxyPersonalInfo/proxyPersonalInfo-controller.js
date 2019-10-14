@@ -180,6 +180,20 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 for (var i = 0; i < numberOfErrors; i++) {
                     notificationCenterService.addNotification(errors[i], "error", true);
                 }
+            },
+            getErrorsForMissingData = function (errors) {
+                var errorList = errors.split(":");
+                errorList.splice(0, 2); //Removes messages which we are not going to display as notifications.
+                errorList.forEach(function (error) {
+                    var errorToDisplay = (($filter('i18n')('proxy.personalinformation.onSave.required_data_missing')) + ': ' + error);
+                    notificationCenterService.addNotification(errorToDisplay, "error", true);
+                });
+
+                $scope.flashMessage = $scope.flashMessage.replace('ERR_MISSING_DATA:', ""); //The flash message is displayed at the top of the personal information page and
+                                                                                            //needs to have 'ERR_MISSING_DATA' removed from that message.
+            },
+            errorsAreForMissingRequiredData = function (error) {
+                return error.message.indexOf('ERR_MISSING_DATA') > -1
             };
         $scope.setDataValidationErrors = function (birthDate) {
             var emailErrorMessage,
@@ -247,8 +261,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     $scope.flashMessage = response.message;
 
                     notificationCenterService.clearNotifications();
-                    notificationCenterService.addNotification(response.message, "error", true);
-
+                    errorsAreForMissingRequiredData(response) ? getErrorsForMissingData(response.message) : notificationCenterService.addNotification(response.message, "error", true);
                     if ($rootScope.profileRequired && $('#breadcrumb-panel').is(":visible")) {
                         $("#breadcrumb-panel").hide();
                     }

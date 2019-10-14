@@ -549,7 +549,8 @@ class GeneralSsbProxyService {
                            params.p_sex, birthdateString, params.p_ssn, Sql.VARCHAR
         ]){ errorMsg ->
 
-            errorMsgOut = errorMsg
+            errorMsgOut = errorMsg ? "ERR_MISSING_DATA:" + errorMsg : errorMsg //The front end will use 'ERR_MISSING_DATA:' to know these are missing data error messages.
+
             //process i18 error messages proxy.personalinformation.onSave[parameter]
             errorMsg?.split(':')?.each {
                 def newMessage = MessageHelper.message('proxy.personalinformation.onSave.' + it.replaceAll("\\s", ""))
