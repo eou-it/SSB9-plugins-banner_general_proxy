@@ -185,12 +185,11 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 var errorList = errors.split(":");
                 errorList.splice(0, 2); //Removes messages which we are not going to display as notifications.
                 errorList.forEach(function (error) {
-                    var errorToDisplay = (($filter('i18n')('proxy.personalinformation.onSave.required_data_missing')) + ': ' + error);
+                    var errorToDisplay = (($filter('i18n')('proxy.personalinformation.onSave.required_field', [error])));
                     notificationCenterService.addNotification(errorToDisplay, "error", true);
                 });
 
-                $scope.flashMessage = $scope.flashMessage.replace('ERR_MISSING_DATA:', ""); //The flash message is displayed at the top of the personal information page and
-                                                                                            //needs to have 'ERR_MISSING_DATA' removed from that message.
+                $scope.flashMessage = null; //Do not display flash message at top of screen for missing data errors - only display these in notifications.
             },
             errorsAreForMissingRequiredData = function (error) {
                 return error.message.indexOf('ERR_MISSING_DATA') > -1
