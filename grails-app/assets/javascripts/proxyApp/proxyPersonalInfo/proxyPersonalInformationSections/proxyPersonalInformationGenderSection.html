@@ -1,0 +1,16 @@
+<!--
+  ~ /*******************************************************************************
+  ~  Copyright 2019 Ellucian Company L.P. and its affiliates.
+  ~  *******************************************************************************/
+  -->
+<div ng-if="profileElement.visible && profileElement.elemId === 'p_sex'" class="profile-dropdown">
+    <label class="input-field-label" ng-bind-html="profileElement.label" for="sexSelector"></label><br>
+    <xe-ui-select ng-model="profileElement.model" theme="select2" search-enabled="false" id="sexSelector">
+        <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, profileElement.placeholder)" placeholder="{{profileElement.placeholder}}">
+            {{$select.selected.description ? $select.selected.description : profileElement.placeholder}}
+        </xe-ui-select-match>
+        <xe-ui-select-choices repeat="choice in legalSexChoices">
+            <div ng-bind-html="choice.description"></div>
+        </xe-ui-select-choices>
+    </xe-ui-select>
+</div>
