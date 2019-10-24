@@ -29,6 +29,7 @@ class ProxyController {
     def proxyConfigurationService
     def currencyFormatHelperService
     def messageSource
+    def springSecurityService
 
     def beforeInterceptor = [action:this.&studentIdCheck]
 
@@ -342,6 +343,7 @@ class ProxyController {
      */
     def setId(params){
         def pidm =PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm
+        springSecurityService.getAuthentication()?.user.pidm = pidm
         session["currentStudentPidm"] = pidm
         render "PIDM context set"
     }

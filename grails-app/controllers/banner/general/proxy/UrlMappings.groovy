@@ -122,6 +122,11 @@ class UrlMappings {
 			action = "landingPage"
 		}
 
+		"/ssb/proxy/setId?" {
+			controller = "proxy"
+			action = "setId"
+		}
+
 		"/resetPassword/resetpin" {
 			controller = "resetPassword"
 			action = "resetPin"

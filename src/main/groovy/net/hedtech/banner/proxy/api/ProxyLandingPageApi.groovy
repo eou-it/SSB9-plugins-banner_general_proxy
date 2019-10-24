@@ -106,7 +106,8 @@ DECLARE
                o.twgrmenu_sequence AS menu_seq
           FROM TWGRMENU o, TWGBWMNU m
          WHERE o.twgrmenu_name = m.twgbwmnu_name
-         AND  o.twgrmenu_url like '%/proxy/%'
+         AND  (o.twgrmenu_url like '%/proxy/%'
+               OR o.twgrmenu_url like '%/ssb/%')
            AND m.twgbwmnu_source_ind =
               (SELECT NVL (MAX (n.twgbwmnu_source_ind), 'B')
                  FROM twgbwmnu n

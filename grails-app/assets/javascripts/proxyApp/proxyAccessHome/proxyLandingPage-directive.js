@@ -31,7 +31,7 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
                 var proxyData = scope.proxyData;
                 var setId = function() {
                         jQuery.ajax({
-                            url: "proxy/setId",
+                            url: "setId",
                             data: {"id": proxyData.id},
                             async: false
                         });
@@ -61,7 +61,8 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
                         sessionStorage.setItem("name", proxyData.desc);
 
                         $rootScope.studentName = proxyData.desc;
-                        $state.go(url, {id: proxyData.id});
+                        //$state.go(url, {id: proxyData.id});
+                        window.location.href = $rootScope.applicationContextRoot + url;
                     };
 
                 setId();
