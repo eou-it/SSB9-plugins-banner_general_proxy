@@ -117,6 +117,10 @@ class UrlMappings {
 			action = "validateAnswer"
 		}
 
+		"/ssb/proxy/landingPage" {
+			controller = "proxy"
+			action = "landingPage"
+		}
 
 		"/resetPassword/resetpin" {
 			controller = "resetPassword"
