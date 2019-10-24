@@ -13,7 +13,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
 
         $scope.proxyProfile;
         $scope.proxyUiRules;
-
+        $scope.sectionCollapsed = [true, true, true, true]; //Used for accessibility so screen readers know the state of a collapsible section.
         $scope.profileElements;
         $scope.detailsElements;
         $scope.contactElements;
@@ -65,7 +65,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     var required = $scope.proxyUiRules[it] ? $scope.proxyUiRules[it].required : false;
 
                     $scope.profileElements[it] = {
-                        label: required ? ($filter('i18n')('proxy.personalinformation.label.' + it) + '<font color="#CD3B3E">*</font>') : $filter('i18n')('proxy.personalinformation.label.' + it),
+                        label: required ? ($filter('i18n')('proxy.personalinformation.label.' + it) + '<span class="required-field"></span>') : $filter('i18n')('proxy.personalinformation.label.' + it),
                         model: $scope.proxyProfile[it],
                         fieldLength: $scope.proxyUiRules[it].fieldLength,
                         elemId: it,
@@ -170,7 +170,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 $scope.profileElements['p_cnty_code'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_cnty_code');
                 $scope.profileElements['p_sex'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_sex');
                 $scope.profileElements['p_birth_date'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_birth_date');
-                $scope.profileElements['p_ssn'].placeholder = $filter('i18n')('proxy.personalinformation.p_ssn');
+                $scope.profileElements['p_ssn'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_ssn');
 
             });
         },
