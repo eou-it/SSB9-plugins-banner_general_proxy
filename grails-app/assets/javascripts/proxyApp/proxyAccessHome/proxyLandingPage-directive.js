@@ -62,7 +62,13 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
 
                         $rootScope.studentName = proxyData.desc;
                         //$state.go(url, {id: proxyData.id});
-                        window.location.href = $rootScope.applicationContextRoot + url;
+                        //window.location.href = $rootScope.applicationContextRoot + url;
+
+                        window.open(
+                            $rootScope.applicationContextRoot + url,
+                            'proxy'
+                        );
+
                     };
 
                 setId();
