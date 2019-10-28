@@ -31,7 +31,7 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
                 var proxyData = scope.proxyData;
                 var setId = function() {
                         jQuery.ajax({
-                            url: "setId",
+                            url: "proxy/setId",
                             data: {"id": proxyData.id},
                             async: false
                         });
