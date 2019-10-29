@@ -519,7 +519,7 @@ p.notification-msg {
 /* Reset PIN page - END */
 
 .profile-dropdown .select2-container {
-    height: 46px;
+    height: 49px;
     width: 100%;
 }
 
@@ -1781,6 +1781,7 @@ a.breadcrumbButton.leaf-breadcrumb {
     .proxy-pi-right-message {
         margin-bottom: 10px;
         margin-top: 14.5px;
+        text-align: right;
     }
 
     .proxy-personal-info-field-label-mobile {
@@ -1796,6 +1797,10 @@ a.breadcrumbButton.leaf-breadcrumb {
 
     .proxy-pi-section-overflow {
         overflow: auto;
+    }
+
+    .pi-section .col-xs-12 {
+        height: auto;
     }
 
 }
