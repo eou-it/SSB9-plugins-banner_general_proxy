@@ -33,7 +33,7 @@ class ProxyConfigurationService extends ServiceBase {
      * @return Map of a Proxy Payment Gateway Configuration Parameters
      */
     def getProxyGatewayParamsForPayment () {
-        def enabled = Holders.config?.proxy.payment.gateway.PAYVEND_ENABLED
+        def enabled = Holders.config?.proxy.payment.gateway.PAYVEND_PROCESS_CENTER_ENABLED
         def authToken = enabled ? generalSsbProxyService.getPaymentCenterToken() : ""
 
         return [PAYVEND_URL : grails.util.Holders.getConfig()?.proxy?.payment?.gateway?.PAYVEND_URL,
