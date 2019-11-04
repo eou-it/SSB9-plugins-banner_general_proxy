@@ -65,10 +65,18 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
                         if (url.indexOf("proxy") > -1) {
                                 $state.go(url, {id: proxyData.id});
                         } else{
+
+                            if (url.indexOf("financialAid") > -1) {
                             window.open(
-                                $rootScope.applicationContextRoot + url,
+                                $rootScope.applicationContextRoot + url + "/1920" ,
                                  'proxy'
                             );
+                            }else{
+                                window.open(
+                                    $rootScope.applicationContextRoot + url,
+                                    'proxy'
+                                );
+                            }
                         }
                 };
 
