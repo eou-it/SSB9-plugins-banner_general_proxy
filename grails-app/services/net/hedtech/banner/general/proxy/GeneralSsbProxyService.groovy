@@ -513,9 +513,7 @@ class GeneralSsbProxyService {
 
                 logger.debug('sqlText: ' + sqlText)
 
-                sql.call(sqlText,
-                        [p_proxyIDM, pidm, p_proxyIDM, pidm, pageName
-                        ])
+                sql.call(sqlText, [pidm, p_proxyIDM, p_proxyIDM, pageName])
 
                 logger.debug('finished updateProxyHistoryOnPageAccess')
 
