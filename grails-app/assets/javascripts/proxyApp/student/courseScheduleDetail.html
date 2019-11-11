@@ -25,7 +25,7 @@
             </p>
         </div>
 
-        <div ng-show="termHolder.term.code" class="total-credits">
+        <div ng-show="termHolder.term.code && totalCredits != null" class="total-credits">
                 {{'proxy.scheduleDetails.totalCredits'|i18n}} {{totalCredits}}
         </div>
     </div>
