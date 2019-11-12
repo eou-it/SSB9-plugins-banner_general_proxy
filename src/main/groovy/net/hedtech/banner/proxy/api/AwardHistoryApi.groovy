@@ -299,6 +299,7 @@ DECLARE
 --
     pidm  := ?; 
     hist_exist := 'N';
+    lv_response_json := '';
     --
     <<outer_loop>>
     OPEN getactiveaidyearc(pidm);
@@ -342,77 +343,80 @@ DECLARE
       OPEN GetAwdDtlC(pidm, aidy);
       FETCH GetAwdDtlC
         INTO award_dtl_rec;
+        
       IF GetAwdDtlC%FOUND THEN
 
           lv_award_json := '"rows": [';
 
-     WHILE GetAwdDtlC%FOUND LOOP
+          WHILE GetAwdDtlC%FOUND LOOP
         
-                 lv_award_json := lv_award_json || '{' ||
-                      '"fund_title" ' || ':' || '"' || award_dtl_rec.rfrbase_fund_title || '"' ||
-                      ',"offer_amt" ' || ':' || NVL(award_dtl_rec.rprawrd_offer_amt,0) ||
-                      ',"accept_amt" ' || ':'  || NVL(award_dtl_rec.rprawrd_accept_amt,0) ||
-                      ',"decline_amt" ' || ':'  || NVL(award_dtl_rec.rprawrd_decline_amt,0) ||
-                      ',"cancel_amt" ' || ':'  || NVL(award_dtl_rec.rprawrd_cancel_amt,0);
-                      
-                      total_offer_amt := total_offer_amt + NVL(award_dtl_rec.rprawrd_offer_amt,0); 
-                      total_accept_amt := total_accept_amt + NVL(award_dtl_rec.rprawrd_accept_amt,0); 
-                      total_decline_amt := total_decline_amt + NVL(award_dtl_rec.rprawrd_decline_amt,0);
-                      total_cancel_amt := total_cancel_amt + NVL(award_dtl_rec.rprawrd_cancel_amt,0); 
-                                   
-                    IF award_dtl_rec.rprawrd_offer_amt IS NOT NULL THEN   
-                      lv_award_json := lv_award_json || ',"total_amt" ' || ':'  || award_dtl_rec.rprawrd_offer_amt;
-                        
-                        total_total_amt := total_total_amt + award_dtl_rec.rprawrd_offer_amt;
-                    ELSE
-                       lv_award_json := lv_award_json || ',"total_amt" ' || ':'  || 0;
-                    END IF;
-                    
-                    
-                    IF award_dtl_rec.rprawrd_paid_amt IS NOT NULL THEN   
-                      lv_award_json := lv_award_json || ',"paid_amt" ' || ':'  || award_dtl_rec.rprawrd_paid_amt;
-                        
-                        total_paid_amt := total_paid_amt + award_dtl_rec.rprawrd_paid_amt;
-                    ELSE
-                       lv_award_json := lv_award_json || ',"paid_amt" ' || ':'  || 0;
-                    END IF;
-                                      
-                    lv_award_json := lv_award_json || '},';
---    
-           FETCH GetAwdDtlC
-            INTO award_dtl_rec;
-        END LOOP;
---        
-        lv_award_json := TRIM(TRAILING ',' FROM lv_award_json );
---
-        -- calculate total ammout to display
-        
-        lv_award_total_json := ', {';
-        
-        lv_award_total_json := lv_award_total_json || ',"fund_title" ' || ':'  || '"AWARD_TOTAL"';
-        
-        lv_award_total_json := lv_award_total_json || ',"offer_amt" ' || ':'  || total_offer_amt;
+              lv_award_json := lv_award_json || '{' ||
+                  '"fund_title" ' || ':' || '"' || award_dtl_rec.rfrbase_fund_title || '"' ||
+                  ',"offer_amt" ' || ':' || NVL(award_dtl_rec.rprawrd_offer_amt,0) ||
+                  ',"accept_amt" ' || ':'  || NVL(award_dtl_rec.rprawrd_accept_amt,0) ||
+                  ',"decline_amt" ' || ':'  || NVL(award_dtl_rec.rprawrd_decline_amt,0) ||
+                  ',"cancel_amt" ' || ':'  || NVL(award_dtl_rec.rprawrd_cancel_amt,0);
+                  
+              total_offer_amt := total_offer_amt + NVL(award_dtl_rec.rprawrd_offer_amt,0); 
+              total_accept_amt := total_accept_amt + NVL(award_dtl_rec.rprawrd_accept_amt,0); 
+              total_decline_amt := total_decline_amt + NVL(award_dtl_rec.rprawrd_decline_amt,0);
+              total_cancel_amt := total_cancel_amt + NVL(award_dtl_rec.rprawrd_cancel_amt,0); 
+                               
+              IF award_dtl_rec.rprawrd_offer_amt IS NOT NULL THEN   
+                  lv_award_json := lv_award_json || ',"total_amt" ' || ':'  || award_dtl_rec.rprawrd_offer_amt;
+                  total_total_amt := total_total_amt + award_dtl_rec.rprawrd_offer_amt;
+              ELSE
+                  lv_award_json := lv_award_json || ',"total_amt" ' || ':'  || 0;
+              END IF;
+                
+              IF award_dtl_rec.rprawrd_paid_amt IS NOT NULL THEN   
+                  lv_award_json := lv_award_json || ',"paid_amt" ' || ':'  || award_dtl_rec.rprawrd_paid_amt;
+                  total_paid_amt := total_paid_amt + award_dtl_rec.rprawrd_paid_amt;
+              ELSE
+                  lv_award_json := lv_award_json || ',"paid_amt" ' || ':'  || 0;
+              END IF;
+                                  
+              lv_award_json := lv_award_json || '},';
 
-        lv_award_total_json := lv_award_total_json || ',"accept_amt" ' || ':'  || total_accept_amt;
-
-        lv_award_total_json := lv_award_total_json || ',"decline_amt" ' || ':'  || total_decline_amt;
-
-        lv_award_total_json := lv_award_total_json || ',"cancel_amt" ' || ':' || total_cancel_amt;
-
-        lv_award_total_json := lv_award_total_json || ',"total_amt" ' || ':'  || total_total_amt;
-
-        lv_award_total_json := lv_award_total_json || ',"paid_amt" ' || ':'  || total_paid_amt;
-        
-        lv_award_total_json :=  lv_award_total_json || '}';
-        
-        lv_award_json  := lv_award_json || lv_award_total_json;
-        -- end calculate total ammout to display
-        
-        lv_award_json := lv_award_json || ']';
+              FETCH GetAwdDtlC
+                INTO award_dtl_rec;
               
+          END LOOP;
+        
+          lv_award_json := TRIM(TRAILING ',' FROM lv_award_json );
+
+          -- calculate total ammout to display
+          
+          lv_award_total_json := ', {';
+          
+          lv_award_total_json := lv_award_total_json || ',"fund_title" ' || ':'  || '"AWARD_TOTAL"';
+          
+          lv_award_total_json := lv_award_total_json || ',"offer_amt" ' || ':'  || total_offer_amt;
+          
+          lv_award_total_json := lv_award_total_json || ',"accept_amt" ' || ':'  || total_accept_amt;
+          
+          lv_award_total_json := lv_award_total_json || ',"decline_amt" ' || ':'  || total_decline_amt;
+          
+          lv_award_total_json := lv_award_total_json || ',"cancel_amt" ' || ':' || total_cancel_amt;
+          
+          lv_award_total_json := lv_award_total_json || ',"total_amt" ' || ':'  || total_total_amt;
+          
+          lv_award_total_json := lv_award_total_json || ',"paid_amt" ' || ':'  || total_paid_amt;
+          
+          lv_award_total_json :=  lv_award_total_json || '}';
+          
+          lv_award_json  := lv_award_json || lv_award_total_json;
+          -- end calculate total ammout to display
+          
+          lv_award_json := lv_award_json || ']';
+          
       END IF;
       CLOSE GetAwdDtlC;
-      -- 
+      
+      lv_aid_year_json  := '{"aidYear":' || '"' || robinst_rec.robinst_aidy_desc ||'"' || ',';
+      lv_response_json := lv_response_json || lv_aid_year_json || '"data": {';
+      lv_response_json := lv_response_json  || nvl(lv_award_json,'"rows": []') || '}' || GET_RESOURCES(pidm, aidy) || '},';
+       
       <<end_inner_loop>>
       FETCH getactiveaidyearc
         INTO robinst_rec.robinst_aidy_desc,
@@ -420,15 +424,11 @@ DECLARE
              aidy;
       --
       CLOSE GetPackGroupC;
-      -- add data
-      
-       lv_aid_year_json  := '{"aidYear":' || '"' || robinst_rec.robinst_aidy_desc ||'"' || ',';
-       lv_response_json := lv_aid_year_json || '"data": {';
-       lv_response_json := lv_response_json  || nvl(lv_award_json,'"rows": []') || '}' || GET_RESOURCES(pidm, aidy) || '}';
-       
-      -- end data
     END LOOP;
+    
     CLOSE getactiveaidyearc;
+    
+    lv_response_json := TRIM(TRAILING ',' FROM lv_response_json ) ;
     
     <<end_outer_loop>>
     --
