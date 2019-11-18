@@ -84,6 +84,36 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
 
 
     @Test
+    void createProxyUsingExistingBannerUser() {
+        def id = 'A00017091'
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "b@aol.com"
+        params."p_email_verify" = "b@aol.com"
+        params."p_last" = "Efg"
+        params."p_first" = "KLM"
+        params."p_code" = "123456"
+        params."pidm" = pidm
+        def result
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+
+            def sql = new Sql(sessionFactory.getCurrentSession().connection())
+            def query = """SELECT GPBPRXY_PROXY_PIDM FROM gpbprxy WHERE GPBPRXY_EMAIL_ADDRESS = :email """
+            result = sql?.firstRow(query,[email: params.p_email])
+        } catch (Exception e) {
+            fail("Could not generate IDM. " + e)
+        } finally {
+            deleteDBEntry(gidm);
+        }
+
+        assertEquals 123456, result.GPBPRXY_PROXY_PIDM as Integer
+    }
+
+
+    @Test
     void testUpdateProxyProfile() {
         def id = 'A00017091'
 

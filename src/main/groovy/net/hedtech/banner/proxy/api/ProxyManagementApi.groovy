@@ -111,6 +111,7 @@ DECLARE
    p_email_verify goremal.goremal_email_address%TYPE;
    p_last          spriden.spriden_last_name%TYPE;
    p_first         spriden.spriden_first_name%TYPE;
+   p_proxy_pidm   gpbprxy.gpbprxy_proxy_pidm%TYPE;
    lv_at_loc      INTEGER := 0;
    lv_dot_loc     INTEGER := 0;
    lv_double      INTEGER := 0;
@@ -381,6 +382,7 @@ begin
  p_email_verify := ?;
  p_last := ?;
  p_first := ?;
+ p_proxy_pidm := ?;
 --
    -- Insure that the e-mail and verify e-mail address are the same
    IF NVL(p_email,chr(01)) <> NVL(p_email_verify,chr(02)) THEN
@@ -408,9 +410,10 @@ begin
      END IF;
 --
 IF error_status != 'Y' THEN
- lv_proxyIDM := F_GetProxyIDM (goksels.f_clean_text(p_email), /*p_email*/
-                              goksels.f_clean_text(p_last), /*p_last*/
-                              goksels.f_clean_text(p_first) /*p_first*/
+ lv_proxyIDM := F_GetProxyIDM (goksels.f_clean_text(p_email),    /*p_email*/
+                              goksels.f_clean_text(p_last),      /*p_last*/
+                              goksels.f_clean_text(p_first),     /*p_first*/
+                              goksels.f_clean_text(p_proxy_pidm) /*p_proxy_pidm*/
                               );
 --
    lv_GPRXREF_ref := gp_gprxref.F_Query_One (lv_proxyIDM, global_pidm);
