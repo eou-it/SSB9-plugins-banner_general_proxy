@@ -7,6 +7,7 @@ proxyManagementApp.factory('ProxyManagementProxy',
             return {
                 alt: proxyProfile ? proxyProfile.alt : null,
                 cver : proxyProfile ? proxyProfile.cver : null,
+                p_code: null,
                 p_email: null,
                 p_email_verify: null,
                 p_last: null,
@@ -25,6 +26,7 @@ proxyManagementApp.factory('ProxyManagementProxy',
                 },
 
                 handleAddListChange: function (proxyAuxData) {
+                    this.p_code = proxyAuxData.addProxy.code;
                     this.p_email = proxyAuxData.addProxy.email;
                     this.p_last = proxyAuxData.addProxy.lastName;
                     this.p_first = proxyAuxData.addProxy.firstName;
