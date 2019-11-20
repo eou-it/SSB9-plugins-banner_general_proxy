@@ -451,6 +451,44 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
     }
 
 
+    @Test
+    void testGetProxyHistoryLog() {
+
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "a@aol.com"
+        params."p_email_verify" = "a@aol.com"
+        params."p_last" = "Abc"
+        params."p_first" = "ABX"
+        params."pidm" = pidm
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+            assertNotNull gidm
+
+            params.gidm = gidm
+
+            createProxyHistory(pidm, gidm,'HISTORY');
+
+            def result = generalSsbProxyManagementService.getProxyHistoryLog(params)
+
+            assertNotNull result?.historiesList[0]?.action
+            assertEquals "HISTORY", result?.historiesList[0]?.page
+            assertEquals "Enable", result?.historiesList[0]?.action
+            assertNotNull result?.historiesList[0]?.activityDate
+
+
+        } catch (Exception e) {
+            fail("Could not generate IDM. " + e)
+        } finally {
+            deleteProxyHistory(pidm,gidm)
+            deleteDBEntry(gidm)
+        }
+    }
+
 
     void deleteDBEntry(def idm) {
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
@@ -485,4 +523,33 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
 
         url.contains("BannerGeneralSsb/ssb/proxy/proxyAction?p_token")
     }
+
+
+    void createProxyHistory(def pidm, def idm, def page) {
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        try {
+            sql.executeUpdate("""
+               insert into GPRHIST (GPRHIST_PERSON_PIDM, GPRHIST_PROXY_IDM,GPRHIST_PAGE_NAME,GPRHIST_ACTIVITY_DATE,GPRHIST_OLD_AUTH_IND, GPRHIST_NEW_AUTH_IND ) 
+               values(?,?,?, sysdate, 'N', 'Y')
+          """, [pidm, idm,page])
+            sql.commit();
+        } finally {
+            //sql?.close()
+        }
+    }
+
+    void deleteProxyHistory(def pidm, def idm) {
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        try {
+            sql.executeUpdate("""
+              delete from GPRHIST
+                 where GPRHIST_person_pidm = ?
+                 and GPRHIST_PROXY_IDM = ?
+          """, [pidm, idm])
+            sql.commit();
+        } finally {
+            //sql?.close()
+        }
+    }
+
 }

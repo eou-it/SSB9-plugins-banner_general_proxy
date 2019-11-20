@@ -351,6 +351,25 @@ class ProxyManagementController {
         }
     }
 
+
+    def getHistoryLog() {
+        def params = request?.JSON ?: params
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        params.pidm = pidm
+
+        try {
+            params.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(params)
+
+            def historyLog = generalSsbProxyManagementService.getProxyHistoryLog(params)
+
+            render historyLog as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage( e ) as JSON
+        }
+    }
+
+
     def getFormattedTransmitDate (String transmitDate) {
         if (userIsInArabicLocale()) {
             def formattedTransmitDate
