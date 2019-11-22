@@ -11,7 +11,7 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
         fetchCommunicationLog = $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'getCommunicationLog'}, {query: {method:'GET', isArray:true}}),
         fetchAuthLog = $resource('../ssb/:controller/:action',
-            {controller: 'ProxyManagement', action: 'getAuthorizationLog'}, {query: {method:'GET', isArray:false}});
+            {controller: 'ProxyManagement', action: 'getHistoryLog'}, {query: {method:'GET', isArray:false}});
 
     this.getProxyList = function () {
         return fetchProxies.query();
@@ -132,7 +132,7 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
     };
 
     this.getAuthLog = function (params) {
-        return fetchAuthLog.query();
+        return fetchAuthLog.query(params);
     };
 
 }]);

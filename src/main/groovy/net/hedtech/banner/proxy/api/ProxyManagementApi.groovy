@@ -2491,7 +2491,7 @@ BEGIN
    p_proxyIDM := ?;
    global_pidm := ?;
       
-   histories := '"historiesList":[';
+   histories := '"result":[';
   FOR hist_rec IN C_HistoryList
    LOOP
       
