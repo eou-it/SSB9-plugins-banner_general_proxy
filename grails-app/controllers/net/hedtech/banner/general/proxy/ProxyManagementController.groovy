@@ -352,6 +352,24 @@ class ProxyManagementController {
     }
 
 
+    def getHistoryLog() {
+        def params = request?.JSON ?: params
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        params.pidm = pidm
+
+        try {
+            params.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(params)
+
+            def historyLog = generalSsbProxyManagementService.getProxyHistoryLog(params)
+
+            render historyLog as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage( e ) as JSON
+        }
+    }
+
+
     def getAuthorizationLog() {
         try {
             // NOTE:  to work properly with xe-table-grid on the frontend, this object needs "result" and "length" properties,

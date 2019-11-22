@@ -480,6 +480,25 @@ class GeneralSsbProxyManagementService {
     }
 
 
+    def getProxyHistoryLog(def params) {
+
+        def  historyList = ""
+
+        def sqlText = ProxyManagementApi.HISTORY_LOG
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [params.gidm, params.pidm, Sql.CLOB
+        ]){ proxyHistoryJson ->
+            historyList= proxyHistoryJson.characterStream.text
+        }
+
+
+        def data = new JsonSlurper().parseText(historyList)
+
+        return data
+    }
+
+
     /*
       Private method to convert Date.
     */

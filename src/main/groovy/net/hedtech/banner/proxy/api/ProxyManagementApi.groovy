@@ -2467,4 +2467,68 @@ END;
 --
         END;
 """
+
+    public final static String HISTORY_LOG ="""
+DECLARE
+   p_proxyIDM       gpbprxy.gpbprxy_proxy_idm%TYPE;
+   global_pidm      spriden.spriden_pidm%TYPE;
+   histories      CLOB DEFAULT NULL;
+   history          CLOB DEFAULT NULL;
+   listOfHistories  CLOB DEFAULT NULL;
+   action           VARCHAR2(200);
+
+   CURSOR C_HistoryList
+      RETURN GPRHIST%ROWTYPE
+   IS
+      SELECT *
+        FROM GPRHIST
+       WHERE GPRHIST_PROXY_IDM = p_proxyIDM
+             AND GPRHIST_PERSON_PIDM = global_pidm
+    ORDER BY GPRHIST_ACTIVITY_DATE DESC, GPRHIST_PAGE_NAME;
+
+BEGIN
+
+   p_proxyIDM := ?;
+   global_pidm := ?;
+      
+   histories := '"historiesList":[';
+  FOR hist_rec IN C_HistoryList
+   LOOP
+      
+      IF hist_rec.GPRHIST_OLD_AUTH_IND = 'N' AND hist_rec.GPRHIST_NEW_AUTH_IND = 'Y'
+      THEN
+         action := 'Enable';
+      ELSIF hist_rec.GPRHIST_OLD_AUTH_IND = 'Y' AND hist_rec.GPRHIST_NEW_AUTH_IND = 'N'
+      THEN
+         action := 'Disable';
+      ELSIF hist_rec.GPRHIST_OLD_AUTH_IND = 'L' AND hist_rec.GPRHIST_NEW_AUTH_IND = 'L'
+      THEN
+         action := 'Login';
+      ELSIF hist_rec.GPRHIST_OLD_AUTH_IND = 'V' AND hist_rec.GPRHIST_NEW_AUTH_IND = 'V'
+      THEN
+         action := 'View';
+      END IF;
+      
+    history := '{' ||
+    '"activityDate" ' || ':' || '"' || TO_CHAR(hist_rec.GPRHIST_ACTIVITY_DATE,'MM/DD/YYYY HH24:MI')  || '"' ||
+    ',"action" ' || ':' || '"' || action || '"' ||
+    ',"page" ' || ':' || '"' || hist_rec.GPRHIST_PAGE_NAME || '"' ||
+    '},';
+
+--
+   histories := histories || history;
+--   
+   END LOOP;
+--
+    histories := TRIM(TRAILING ',' FROM histories );
+    histories := histories || ']';
+
+    listOfHistories := '{' || histories || '}';
+    
+    --dbms_output.put_line(listOfHistories);
+    
+    ? := listOfHistories;
+    
+END;
+"""
 }
