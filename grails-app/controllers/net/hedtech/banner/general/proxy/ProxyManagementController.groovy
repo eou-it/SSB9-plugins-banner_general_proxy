@@ -351,6 +351,594 @@ class ProxyManagementController {
         }
     }
 
+
+    def getAuthorizationLog() {
+        try {
+            // NOTE:  to work properly with xe-table-grid on the frontend, this object needs "result" and "length" properties,
+            // whether it's done here or in the Angular service that calls this.
+            def authLog = '{\n' +
+                    '  "result":\n' +
+                    '  [\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/15/2019 15:33",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/15/2019 15:21",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/14/2019 10:31",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Financial Aid Status"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/14/2019 09:58",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '   },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/14/2019 09:55",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/14/2019 09:55",\n' +
+                    '      "action": "Login",\n' +
+                    '      "page": "Display authorization menu"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/14/2019 09:46",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/14/2019 09:38",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/14/2019 09:28",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/13/2019 16:47",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/13/2019 16:41",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/13/2019 16:40",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/13/2019 16:40",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/13/2019 16:36",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/13/2019 16:36",\n' +
+                    '      "action": "Login",\n' +
+                    '      "page": "Display authorization menu"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 17:02",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Student Detail Schedule"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 17:02",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Week at a Glance"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 17:02",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Financial Aid Status"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 17:01",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 17:01",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Financial Aid Status"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 13:46",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 13:20",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 13:07",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 13:07",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 13:03",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Student Detail Schedule"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 12:50",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Student Detail Schedule"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 12:42",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 12:38",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 12:20",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 12:19",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 12:19",\n' +
+                    '      "action": "Login",\n' +
+                    '      "page": "Display authorization menu"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 12:18",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 11:45",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/12/2019 11:45",\n' +
+                    '      "action": "Login",\n' +
+                    '      "page": "Display authorization menu"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/11/2019 16:16",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/11/2019 16:16",\n' +
+                    '      "action": "Login",\n' +
+                    '      "page": "Display authorization menu"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/11/2019 16:13",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/11/2019 16:13",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Student Detail Schedule"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/11/2019 16:12",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/11/2019 16:11",\n' +
+                    '      "action": "Login",\n' +
+                    '      "page": "Display authorization menu"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 16:56",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 16:51",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 16:50",\n' +
+                    '      "action": "Login",\n' +
+                    '      "page": "Display authorization menu"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 14:19",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 14:12",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 14:01",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 14:00",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 14:00",\n' +
+                    '      "action": "Login",\n' +
+                    '      "page": "Display authorization menu"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 13:58",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:18",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:17",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:16",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:14",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:14",\n' +
+                    '      "action": "Login",\n' +
+                    '      "page": "Display authorization menu"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:06",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:06",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:06",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Course Schedule"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Login",\n' +
+                    '      "page": "Display authorization menu"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Academic Holds"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Academic Holds"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Account Detail for Term"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Account Detail for Term"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Cost of Attendance"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Cost of Attendance"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Course Schedule"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Course Schedule"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Federal Shopping List"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Federal Shopping List"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Final Grades"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Final Grades"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Financial Aid Requirements"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Financial Aid Requirements"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Financial Aid Status"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Financial Aid Status"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Midterm Grades"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Midterm Grades"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Schedule with Course Detail"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Schedule with Course Detail"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Tax Notification"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Tax Notification"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "View Address"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "View Address"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "View Email Addresses"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "View Email Addresses"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "View Emergency Contacts"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "View Emergency Contacts"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "View Transcript"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:05",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "View Transcript"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:00",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:00",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 10:00",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "View",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Account Summary"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Account Summary"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Award History"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Award Package"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Course Schedule"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Course Schedule"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Financial Aid Application Summary Status "\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Financial Aid Application Summary Status "\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Midterm and Final Grades"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Midterm and Final Grades"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Page Text Undefined"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Page Text Undefined"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Student Holds"\n' +
+                    '    },\n' +
+                    '    {\n' +
+                    '      "activityDate": "11/08/2019 09:59",\n' +
+                    '      "action": "Enable",\n' +
+                    '      "page": "Student Holds"\n' +
+                    '    }\n' +
+                    '  ],\n' +
+                    '  "length": 114\n' +
+                    '}'
+
+            render authLog
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage( e ) as JSON
+        }
+    }
+
     def getFormattedTransmitDate (String transmitDate) {
         if (userIsInArabicLocale()) {
             def formattedTransmitDate
