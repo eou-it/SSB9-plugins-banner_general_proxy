@@ -2491,22 +2491,22 @@ BEGIN
    p_proxyIDM := ?;
    global_pidm := ?;
       
-   histories := '"historiesList":[';
+   histories := '"result":[';
   FOR hist_rec IN C_HistoryList
    LOOP
       
       IF hist_rec.GPRHIST_OLD_AUTH_IND = 'N' AND hist_rec.GPRHIST_NEW_AUTH_IND = 'Y'
       THEN
-         action := 'Enable';
+         action := 'enable';
       ELSIF hist_rec.GPRHIST_OLD_AUTH_IND = 'Y' AND hist_rec.GPRHIST_NEW_AUTH_IND = 'N'
       THEN
-         action := 'Disable';
+         action := 'disable';
       ELSIF hist_rec.GPRHIST_OLD_AUTH_IND = 'L' AND hist_rec.GPRHIST_NEW_AUTH_IND = 'L'
       THEN
-         action := 'Login';
+         action := 'login';
       ELSIF hist_rec.GPRHIST_OLD_AUTH_IND = 'V' AND hist_rec.GPRHIST_NEW_AUTH_IND = 'V'
       THEN
-         action := 'View';
+         action := 'view';
       END IF;
       
     history := '{' ||

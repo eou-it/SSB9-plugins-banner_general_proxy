@@ -452,8 +452,17 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
             {position: {desktop: 4, mobile: 4}, name: 'expirationDate', title: $filter('i18n')('proxyManagement.title.expirationDate'), options: {visible: true, sortable: false}, width: '60px'},
             {position: {desktop: 5, mobile: 5}, name: 'resend', title: $filter('i18n')('proxyManagement.title.resend'), options: {visible: true, sortable: false}, width: '25px'}
         ];
-
         $scope.draggableCommColumnNames = [];
+
+        $scope.authLogRecords = 0;
+        $scope.authLogRows = [];
+        $scope.authLogColumns = [
+            {position: {desktop: 1, mobile: 1}, name: 'activityDate', title: $filter('i18n')('proxyManagement.title.date'), options: {visible: true, sortable: false}, width: '100px'},
+            {position: {desktop: 2, mobile: 2}, name: 'action', title: $filter('i18n')('proxyManagement.title.action'), options: {visible: true, sortable: false}, width: '60px'},
+            {position: {desktop: 3, mobile: 3}, name: 'page', title: $filter('i18n')('proxyManagement.title.page'), options: {visible: true, sortable: false}, width: '100px'}
+        ];
+        $scope.draggableAuthLogColumnNames = [];
+
         $scope.currentAlt;
         $scope.currentCver;
 
@@ -461,6 +470,12 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
             var self = this;
 
             return proxyMgmtAppService.getCommunicationLog({alt: self.currentAlt, cver: self.currentCver}).promise;
+        };
+
+        $scope.getAuthLogData = function (query) {
+            var self = this;
+
+            return proxyMgmtAppService.getAuthLog({alt: self.currentAlt, cver: self.currentCver}).$promise;
         };
 
         $scope.commMobileConfig = {
@@ -472,6 +487,14 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
         };
 
         $scope.commPaginationConfig = {};
+
+        $scope.authLogMobileConfig = {
+            activityDate: 2,
+            action: 2,
+            page: 2
+        };
+
+        $scope.authLogPaginationConfig = {};
 
         $scope.enableResetPin = proxyConfigResolve.enableResetPin;
         $scope.enablePassphrase = proxyConfigResolve.enablePassphrase;

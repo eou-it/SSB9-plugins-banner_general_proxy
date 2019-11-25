@@ -196,15 +196,18 @@ h2 {
     padding-right: 10px;
 }
 
-.proxy-mgmt-comm-grid {
+.proxy-mgmt-comm-grid,
+.proxy-mgmt-auth-grid {
     padding-top: 10px;
 }
 
-.proxy-communication-log-header {
+.proxy-communication-log-header,
+.proxy-auth-log-header {
     padding-top: 35px;
 }
 
-.proxy-communication-log-title {
+.proxy-communication-log-title,
+.proxy-auth-log-title {
     font-weight: bold;
     font-size: 18px;
 }
