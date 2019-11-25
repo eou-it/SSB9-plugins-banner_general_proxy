@@ -362,6 +362,13 @@ class ProxyManagementController {
             params.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(params)
 
             def historyLog = generalSsbProxyManagementService.getProxyHistoryLog(params)
+
+            // Internationalize "action" value
+            historyLog.result.collect {
+                it.action = MessageHelper.getMessage("proxyManagement.label.${it.action}")
+            }
+
+            // "length" property needed for xe-table-grid frontend component
             historyLog.length = historyLog.result.size();
 
             render historyLog as JSON
