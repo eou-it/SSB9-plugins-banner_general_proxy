@@ -364,7 +364,7 @@ class ProxyManagementController {
             def historyLog = generalSsbProxyManagementService.getProxyHistoryLog(params)
 
             // Internationalize "action" value
-            historyLog.result.collect {
+            historyLog?.result?.collect {
                 it.action = MessageHelper.getMessage("proxyManagement.label.${it.action}")
             }
 
