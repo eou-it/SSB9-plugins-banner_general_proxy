@@ -500,6 +500,7 @@ proxyMgmtAppControllers.controller('proxyMgmtEditProxyController', ['$scope', '$
         $scope.enablePassphrase = proxyConfigResolve.enablePassphrase;
         $scope.enablePageLevelAuthorization = proxyConfigResolve.enablePageLevelAuthorization;
         $scope.enableTabCommunication = proxyConfigResolve.enableTabCommunication;
+        $scope.enableTabHistory = proxyConfigResolve.enableTabHistory;
         // ------------------------------
         // END - COMMUNICATION DATA TABLE
 
