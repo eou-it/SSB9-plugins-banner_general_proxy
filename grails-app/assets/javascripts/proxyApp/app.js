@@ -31,7 +31,11 @@ var proxyApp = angular.module('proxyApp', [
 
                         //Logs the History for the Proxy Page Access
                         if ( typeof toState.data.breadcrumbs[0] !== "undefined") {
-                            proxyAppService.updateProxyHistoryOnPageAccess((toState.data.breadcrumbs[0].label));
+                            proxyAppService.getProxyConfig().$promise.then(function (config) {
+                                if (config.pageDisplayInHistory) {
+                                    proxyAppService.updateProxyHistoryOnPageAccess((toState.data.breadcrumbs[0].label));
+                                }
+                            });
                         }
 
                         if(toState.url !== '/home' && toState.url !== '/proxypersonalinformation') {

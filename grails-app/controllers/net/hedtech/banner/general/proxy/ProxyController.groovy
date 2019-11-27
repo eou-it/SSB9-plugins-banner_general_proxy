@@ -5,6 +5,7 @@ package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
+import net.hedtech.banner.general.system.ProxyAccessSystemOptionType
 import net.hedtech.banner.i18n.MessageHelper
 import org.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
@@ -604,6 +605,20 @@ class ProxyController {
     def getConfig() {
         try {
             render proxyConfigurationService.getProxyGatewayParamsForPayment() as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+    def getProxyConfig() {
+        try {
+            def pageDisplayInHistoryConfig = ProxyAccessSystemOptionType.fetchByCodeAndSystemCode('PAGE_DISPLAY_IN_HISTORY', 'PROXY')
+            def config = [
+                    pageDisplayInHistory: pageDisplayInHistoryConfig.proxyOptdefault.equalsIgnoreCase('Y') ? true : false
+            ]
+
+
+            render config as JSON
         } catch (ApplicationException e) {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
