@@ -15,6 +15,8 @@ class ProxyControllerUtility {
     private static final PROXY_GIDM_CACHE_VERSION = "PROXY_GIDM_CACHE_VERSION"
     private static final CLONED_PROXY_CODE_CACHE = "CLONED_PROXY_CODE_CACHE"
     private static final CLONED_PROXY_CODE_CACHE_VERSION = "CLONED_PROXY_CODE_CACHE_VERSION"
+    private static final PROXY_ADD_LIST_PIDM_CACHE = "PROXY_ADD_LIST_PIDM_CACHE"
+    private static final PROXY_ADD_LIST_PIDM_CACHE_VERSION = "PROXY_ADD_LIST_PIDM_CACHE_VERSION"
 
     public static getFetchListParams(params) {
         def maxItems = params.max as int
@@ -169,7 +171,7 @@ class ProxyControllerUtility {
         if (cacheVersion == null) {
             cacheVersion = 0
         } else {
-            cacheVersion++ // Increment version of alternate codess for codes stored in cache
+            cacheVersion++ // Increment version of alternate codes for codes stored in cache
         }
 
         session.setAttribute(CLONED_PROXY_CODE_CACHE_VERSION, cacheVersion)
@@ -180,6 +182,72 @@ class ProxyControllerUtility {
     static invalidateClonedProxyCodeMapCache() {
         clearAllClonedProxyCodeMapsFromSessionCache()
         incrementClonedProxyCodeMapCacheVersion()
+    }
+
+    /**
+     * Map "proxy add list" proxy PIDMs to alternative IDs in place (i.e. the object passed in is mutated),
+     * returning the object passed in.  Handles collections, arrays, and single objects.
+     * @param proxyAddList
+     * @return Proxy add list, having proxy PIDMs replaced with alternate IDs
+     */
+    static mapProxyAddListPidms(proxyAddList) {
+        if (!proxyAddList) return proxyAddList
+
+        def proxyList = isCollectionOrArray(proxyAddList) ? proxyAddList : [proxyAddList]
+        def session = RequestContextHolder.currentRequestAttributes().request.session
+        def cache = session.getAttribute(PROXY_ADD_LIST_PIDM_CACHE)
+
+        if (!cache) {
+            cache = [:]
+            session.setAttribute(PROXY_ADD_LIST_PIDM_CACHE, cache)
+        }
+
+        def cacheVersion = incrementProxyAddListPidmMapCacheVersion()
+
+        proxyList.each {
+            def altCode = ""+cache.size() //Type of key in cache is String
+            cache[altCode] = it.code
+
+            it.code = altCode
+            it.cver = cacheVersion // Version of alternate PIDM stored in cache
+        }
+
+        return proxyAddList
+    }
+
+    static getProxyAddListPidmMapFromSessionCache(map) {
+        def session = RequestContextHolder.currentRequestAttributes().request.session
+        def curCacheVersion = session.getAttribute(PROXY_ADD_LIST_PIDM_CACHE_VERSION)
+
+        // Verify that version is not out-of-date
+        if ((map.cver as Integer) != curCacheVersion) {
+            throw new ApplicationException(ProxyControllerUtility, 'proxyManagement.message.update.optimisticLock')
+        }
+
+        def cache = session.getAttribute(PROXY_ADD_LIST_PIDM_CACHE)
+        def altCode = map.code //Type of key in cache is String
+
+        cache?."$altCode"
+    }
+
+    static clearAllProxyAddListPidmMapsFromSessionCache() {
+        def session = RequestContextHolder.currentRequestAttributes().request.session
+        session.removeAttribute(PROXY_ADD_LIST_PIDM_CACHE)
+    }
+
+    static incrementProxyAddListPidmMapCacheVersion() {
+        def session = RequestContextHolder.currentRequestAttributes().request.session
+        def cacheVersion = session.getAttribute(PROXY_ADD_LIST_PIDM_CACHE_VERSION)
+
+        if (cacheVersion == null) {
+            cacheVersion = 0
+        } else {
+            cacheVersion++ // Increment version of alternate GIDMs for GIDMs stored in cache
+        }
+
+        session.setAttribute(PROXY_ADD_LIST_PIDM_CACHE_VERSION, cacheVersion)
+
+        cacheVersion
     }
 
     static boolean isCollectionOrArray(object) {
