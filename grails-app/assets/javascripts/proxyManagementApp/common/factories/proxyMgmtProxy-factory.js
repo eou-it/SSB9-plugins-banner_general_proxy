@@ -27,6 +27,7 @@ proxyManagementApp.factory('ProxyManagementProxy',
 
                 handleAddListChange: function (proxyAuxData) {
                     this.p_code = proxyAuxData.addProxy.code;
+                    this.cver = proxyAuxData.addProxy.cver;
                     this.p_email = proxyAuxData.addProxy.email;
                     this.p_last = proxyAuxData.addProxy.lastName;
                     this.p_first = proxyAuxData.addProxy.firstName;
