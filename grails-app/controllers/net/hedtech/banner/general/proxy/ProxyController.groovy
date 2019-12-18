@@ -30,6 +30,9 @@ class ProxyController {
     def proxyConfigurationService
     def currencyFormatHelperService
     def messageSource
+    def countyService
+    def stateService
+    def nationService
 
     def beforeInterceptor = [action:this.&studentIdCheck]
 
@@ -624,6 +627,36 @@ class ProxyController {
         }
     }
 
+    def getCountyList() {
+        def map = ProxyControllerUtility.getFetchListParams(params)
+
+        try {
+            render countyService.fetchCountyList(map.max, map.offset, map.searchString) as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+    def getStateList() {
+        def map = ProxyControllerUtility.getFetchListParams(params)
+
+        try {
+            render stateService.fetchStateList(map.max, map.offset, map.searchString) as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+    def getNationList() {
+        def map = ProxyControllerUtility.getFetchListParams(params)
+
+        try {
+            render nationService.fetchNationList(map.max, map.offset, map.searchString) as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
     private def fixJSONObjectForCast(JSONObject json) {
         json.each {entry ->
             // Make JSONObject.NULL a real Java null
@@ -643,7 +676,7 @@ class ProxyController {
         if (!id) {
             id = PersonUtility.getPerson(session["currentStudentPidm"])?.bannerId
         }
-        
+
         def students = session["students"]?.students.active
         def student = students?.find { it.id == id }
         def result = student?.pages?.find { it.url == page }

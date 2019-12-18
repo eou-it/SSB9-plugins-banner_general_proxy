@@ -15,7 +15,7 @@ proxyAppDirectives.directive('selectBox',['$filter', function($filter) {
             return item.description;
         }
     },
-    notApplicableText = $filter('i18n')('personInfo.label.notApplicable');
+    notApplicableText = $filter('i18n')('proxy.label.notApplicable');
 
     return {
         scope: true,
@@ -142,7 +142,7 @@ proxyAppDirectives.directive('genssbXeDropdown', ['$parse', '$filter', function(
                 return item.description;
             }
         },
-        notApplicableText = $filter('i18n')('personInfo.label.notApplicable');
+        notApplicableText = $filter('i18n')('proxy.label.notApplicable');
 
     return {
         restrict: 'EA',

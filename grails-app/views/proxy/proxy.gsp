@@ -8,7 +8,7 @@ Copyright 2018 Ellucian Company L.P. and its affiliates.
 <html xmlns:ng="http://angularjs.org" id="ng-app">
 <head>
     <g:applyLayout name="bannerSelfServicePage">
-        <title><g:message code="banner.general.common.title"/></title>
+        <title><g:message code="banner.proxy.access.title"/></title>
 
         <meta name="menuEndPoint" content="${request.contextPath}/ssb/menu"/>
         <meta name="menuBaseURL" content="${request.contextPath}/ssb"/>
