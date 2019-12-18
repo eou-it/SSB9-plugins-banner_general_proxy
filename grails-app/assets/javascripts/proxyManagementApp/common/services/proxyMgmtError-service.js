@@ -56,7 +56,7 @@ proxyManagementApp.service('proxyMgmtErrorService', ['notificationCenterService'
         };
 
         this.getErrorEmailAddressFormat = function (proxy) {
-            var msg = 'personInfo.email.error.emailAddressFormat';
+            var msg = 'proxy.personalinformation.error.invalidEmailChars';
             if (invalidCharRegEx.test(proxy.p_email)) {
                 messages.push({msg: msg, type: 'error'});
 

@@ -21,7 +21,7 @@ proxyManagementApp.factory('ProxyManagementDateErrorManager', ['proxyMgmtDateSer
                 ERRORS[4]
             ],
             removeDateErrors = function (currentErrorDateNotification) {
-                notificationCenterService.removeNotification('personInfo.address.error.dateFormat');
+                notificationCenterService.removeNotification('proxy.address.error.dateFormat');
                 notificationCenterService.removeNotification('proxy.personalinformation.onSave.required_data_missing');
                 notificationCenterService.removeNotification(currentErrorDateNotification);
             },
@@ -49,7 +49,7 @@ proxyManagementApp.factory('ProxyManagementDateErrorManager', ['proxyMgmtDateSer
                 if (error === ERRORS[0] || error === ERRORS[1]) {
                     return 'proxy.personalinformation.onSave.required_data_missing';
                 } else if (error === ERRORS[2] || error === ERRORS[3]) {
-                    return 'personInfo.address.error.dateFormat';
+                    return 'proxy.address.error.dateFormat';
                 } else if (error === ERRORS[4]) {
                     return 'proxyManagement.message.checkDates';
                 } else {
