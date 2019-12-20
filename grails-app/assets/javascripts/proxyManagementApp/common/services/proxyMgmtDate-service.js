@@ -5,7 +5,7 @@ proxyManagementApp.service('proxyMgmtDateService', ['$filter',
     function ($filter) {
         var dateFmt,
             calendar = (function () {
-                var locale = window.i18n.locale;
+                var locale = $('meta[name=locale]').attr("content");
 
                 if (locale.split('-')[0] === 'ar') {
                     dateFmt = $filter('i18n')('default.date.format');
