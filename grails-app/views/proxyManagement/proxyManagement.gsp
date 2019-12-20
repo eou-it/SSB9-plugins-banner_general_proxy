@@ -1,3 +1,4 @@
+<%@ page import="org.springframework.context.i18n.LocaleContextHolder" %>
 <!DOCTYPE html>
 <%--
 /*******************************************************************************
@@ -13,7 +14,7 @@ Copyright 2019 Ellucian Company L.P. and its affiliates.
         <meta name="menuEndPoint" content="${request.contextPath}/ssb/menu"/>
         <meta name="menuBaseURL" content="${request.contextPath}/ssb"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="locale" content="${request.locale.toLanguageTag()}" >
+        <meta name="locale" content="${LocaleContextHolder.getLocale()}" >
         <g:set var="applicationContextRoot" value= "${application.contextPath}"/>
         <meta name="applicationContextRoot" content="${applicationContextRoot}">
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0"/>
@@ -30,9 +31,7 @@ Copyright 2019 Ellucian Company L.P. and its affiliates.
 
     </g:applyLayout>
 
-    <script type="text/javascript">
-        <g:i18n_setup/>
-    </script>
+    <g:bannerMessages/>
 
     <script>
         document.createElement('ng-include');
