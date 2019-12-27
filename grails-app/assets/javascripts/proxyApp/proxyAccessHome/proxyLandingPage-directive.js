@@ -39,20 +39,20 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
                     goProxyApp = function(url) {
 
                         //clear storage for Term Selector
-                        if (sessionStorage.getItem("termCode")){
+                        if (sessionStorage.getItem("termCode")) {
                             sessionStorage.removeItem("termCode");
                         }
 
-                        if (sessionStorage.getItem("termDesc")){
+                        if (sessionStorage.getItem("termDesc")) {
                             sessionStorage.removeItem("termDesc");
                         }
 
                         //clear storage for AidYear Selector
-                        if (sessionStorage.getItem("aidYearCode")){
+                        if (sessionStorage.getItem("aidYearCode")) {
                             sessionStorage.removeItem("aidYearCode");
                         }
 
-                        if (sessionStorage.getItem("aidYearDesc")){
+                        if (sessionStorage.getItem("aidYearDesc")) {
                             sessionStorage.removeItem("aidYearDesc");
                         }
 
@@ -61,8 +61,15 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
                         sessionStorage.setItem("name", proxyData.desc);
 
                         $rootScope.studentName = proxyData.desc;
-                        $state.go(url, {id: proxyData.id});
-                    };
+
+                        if (url.indexOf("proxy") > -1) {
+                                $state.go(url, {id: proxyData.id});
+                        } else{
+                                window.open(
+                                    $rootScope.applicationContextRoot + url,"_self"
+                                );
+                        }
+                };
 
                 setId();
                 goProxyApp(pageUrl);
