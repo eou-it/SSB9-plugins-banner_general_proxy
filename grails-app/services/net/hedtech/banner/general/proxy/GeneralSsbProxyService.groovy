@@ -651,7 +651,7 @@ class GeneralSsbProxyService {
 
             def pages = getProxyPages(gidm, pidm)?.pages
             it.pages = pages
-            it.name = preferredNameService.getPreferredName(pidm,sql)
+            it.name = PersonUtility.getPreferredNameForProxyDisplay(pidm)
         }
 
         return studentsListMap
