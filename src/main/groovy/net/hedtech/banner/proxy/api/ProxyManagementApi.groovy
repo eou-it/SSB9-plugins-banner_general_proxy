@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 package net.hedtech.banner.proxy.api
@@ -153,7 +153,7 @@ DECLARE
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -660,7 +660,7 @@ END IF;
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -862,7 +862,7 @@ DECLARE
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -1267,7 +1267,7 @@ END;
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -1826,7 +1826,7 @@ END;
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -2240,7 +2240,7 @@ DECLARE
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -2381,7 +2381,7 @@ DECLARE
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
