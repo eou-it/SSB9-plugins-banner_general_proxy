@@ -122,7 +122,10 @@ class ProxyConfigurationService extends ServiceBase {
     */
 
     def getProxyPaymentConfigurations() {
-        final def SQL_GET_CONFIGURATION_FROM_GUROCFG = """SELECT GENERAL.GUROCFG.GUROCFG_NAME, GENERAL.GUROCFG.GUROCFG_VALUE FROM GENERAL.GUROCFG WHERE GENERAL.GUROCFG.GUROCFG_NAME LIKE 'proxy.payment.gateway.PAYVEND_%'"""
+        final def SQL_GET_CONFIGURATION_FROM_GUROCFG = """SELECT GENERAL.GUROCFG.GUROCFG_NAME, GENERAL.GUROCFG.GUROCFG_VALUE
+        FROM GENERAL.GUROCFG
+        WHERE GENERAL.GUROCFG.GUROCFG_GUBAPPL_APP_ID = 'GENERAL_SS'
+        AND GENERAL.GUROCFG.GUROCFG_NAME            IN ('proxy.payment.gateway.PAYVEND_ENABLED','proxy.payment.gateway.PAYVEND_URL','proxy.payment.gateway.PAYVEND_VENDOR')"""
         Sql sql = new Sql(sessionFactory.getCurrentSession().connection())
         def results = sql.rows(SQL_GET_CONFIGURATION_FROM_GUROCFG)
 
