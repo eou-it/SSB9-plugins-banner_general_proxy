@@ -629,6 +629,36 @@ class GeneralSsbProxyService {
 
     }
 
+    def getToken(def id){
+
+        def studentToken
+
+        def sqlText = ProxyLandingPageApi.STUDENT_TOKEN
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [id, Sql.VARCHAR
+        ]){ token ->
+            studentToken = token
+        }
+
+        return studentToken
+    }
+
+    def getStudentIdFromToken(def token){
+
+        def studentId
+
+        def sqlText = ProxyLandingPageApi.GET_STUDENT_ID_FROM_TOKEN
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [token, Sql.VARCHAR
+        ]){ id ->
+            studentId = id
+        }
+
+        return studentId
+    }
+
 
     def getStudentListForProxy(def gidm) {
 
@@ -648,7 +678,7 @@ class GeneralSsbProxyService {
 
         studentsListMap.students.active.each { it ->
             def pidm = PersonUtility.getPerson(it.id).pidm
-
+            it.id = getToken(it.id)
             def pages = getProxyPages(gidm, pidm)?.pages
             it.pages = pages
             it.name = PersonUtility.getPreferredNameForProxyDisplay(pidm)
