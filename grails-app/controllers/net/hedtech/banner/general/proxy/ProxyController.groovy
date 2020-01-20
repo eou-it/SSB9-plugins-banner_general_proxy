@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.general.proxy
 
@@ -229,7 +229,7 @@ class ProxyController {
      *
      */
     def getHolds() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result = personRelatedHoldService.getWebDisplayableHolds(pidm);
         result.rows?.each {
@@ -249,7 +249,7 @@ class ProxyController {
      *
      */
     def getViewGradesHolds() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result = gradesProxyService.getViewGradesHolds(pidm);
 
@@ -258,7 +258,7 @@ class ProxyController {
 
 
     def getCourseSchedule() {
-        def id = XssSanitizer.sanitize(params.id)
+        def id = XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id))
         def pidm = PersonUtility.getPerson(id)?.pidm
 
         def result = proxyStudentService.getCourseSchedule(pidm, XssSanitizer.sanitize(params.date));
@@ -268,7 +268,7 @@ class ProxyController {
     }
 
     def getCourseScheduleDetail() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result = proxyStudentService.getCourseScheduleDetail(
                 pidm,
@@ -346,7 +346,7 @@ class ProxyController {
      *
      */
     def setId(params){
-        def pidm =PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm
+        def pidm =PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id))).pidm
         springSecurityService.getAuthentication()?.user.pidm = pidm
         session["currentStudentPidm"] = pidm
         render "PIDM context set"
@@ -384,7 +384,7 @@ class ProxyController {
         try{
             def id = XssSanitizer.sanitize(params.id)
 
-            def pidm = id ? PersonUtility.getPerson(id)?.pidm : session["currentStudentPidm"]
+            def pidm = id ? PersonUtility.getPerson(generalSsbProxyService.getStudentIdFromToken(id))?.pidm : session["currentStudentPidm"]
 
             def result = proxyFinAidService.getFinancialAidStatus(pidm, XssSanitizer.sanitize(params.aidYear))
 
@@ -447,7 +447,7 @@ class ProxyController {
     }
 
     def getAwardPackage() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result
         try {
@@ -532,7 +532,7 @@ class ProxyController {
      *
      */
     def getAwardHistory() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result = proxyFinAidService.getAwardHistory(pidm);
         result.awards?.each {
@@ -562,7 +562,8 @@ class ProxyController {
     }
 
     def getAccountSummary() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result = proxyStudentService.getAccountSummary(pidm);
         result.accountBalTxt = currencyFormatHelperService.formatCurrency(result.accountBal)
@@ -680,6 +681,7 @@ class ProxyController {
         }
 
         def students = session["students"]?.students.active
+
         def student = students?.find { it.id == id }
         def result = student?.pages?.find { it.url == page }
 
