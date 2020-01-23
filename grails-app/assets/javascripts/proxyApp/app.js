@@ -138,146 +138,148 @@ var proxyApp = angular.module('proxyApp', [
 proxyApp.constant('webAppResourcePathString', '../assets');
 
 
-proxyApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePathString) {
-    // For any unmatched url, send to landing page
-    var url = url ? url : 'home';
+proxyApp.config(['$stateProvider', '$urlRouterProvider',
+    function ($stateProvider, $urlRouterProvider) {
+        // For any unmatched url, send to landing page
+        var url = url ? url : 'home';
 
-    $urlRouterProvider.otherwise(url);
+        $urlRouterProvider.otherwise(url);
 
-    /*************************************************************************
-     * Defining all the different states of the proxyApp landing pages. *
-     *************************************************************************/
-    $stateProvider
-        .state('home', {
-            url: "/home",
-            templateUrl: '../assets/proxyApp/proxyAccessHome/proxyLandingPage.html',
-            controller: 'proxyLandingPageController',
-            resolve: {
-            },
-            data: {
-                breadcrumbs: []
-            },
-            params: {
-                onLoadNotifications: []
-            }
-        })
-        .state('proxyPersonalInfo', {
-            url: "/proxypersonalinformation",
-            templateUrl: '../assets/proxyApp/proxyPersonalInfo/proxyPersonalInformation.html',
-            controller: 'proxyPersonalInformationController',
-            resolve: {
-            },
-            data: {
-                breadcrumbs: [{label: 'proxy.profile.heading'}]
-            }
-        })
-        .state('/ssb/proxy/holds', {
-            url: "/viewHolds",
-            templateUrl: '../assets/proxyApp/student/holds.html',
-            controller: 'proxyViewHoldsController',
-            resolve: {
-            },
-            data: {
-                breadcrumbs: [{label: 'proxy.holds.heading'}]
-            },
-            params: {
-                id: null
-            }
+        /*************************************************************************
+         * Defining all the different states of the proxyApp landing pages. *
+         *************************************************************************/
+        $stateProvider
+            .state('home', {
+                url: "/home",
+                templateUrl: '../assets/proxyApp/proxyAccessHome/proxyLandingPage.html',
+                controller: 'proxyLandingPageController',
+                resolve: {
+                },
+                data: {
+                    breadcrumbs: []
+                },
+                params: {
+                    onLoadNotifications: []
+                }
+            })
+            .state('proxyPersonalInfo', {
+                url: "/proxypersonalinformation",
+                templateUrl: '../assets/proxyApp/proxyPersonalInfo/proxyPersonalInformation.html',
+                controller: 'proxyPersonalInformationController',
+                resolve: {
+                },
+                data: {
+                    breadcrumbs: [{label: 'proxy.profile.heading'}]
+                }
+            })
+            .state('/ssb/proxy/holds', {
+                url: "/viewHolds",
+                templateUrl: '../assets/proxyApp/student/holds.html',
+                controller: 'proxyViewHoldsController',
+                resolve: {
+                },
+                data: {
+                    breadcrumbs: [{label: 'proxy.holds.heading'}]
+                },
+                params: {
+                    id: null
+                }
 
-        })
-        .state('/ssb/proxy/grades', {
-            url: "/viewGrades",
-            templateUrl: '../assets/proxyApp/student/grades.html',
-            controller: 'proxyViewGradesController',
-            resolve: {
-            },
-            data: {
-                breadcrumbs: [{label: 'proxy.grades.heading'}]
-            }
+            })
+            .state('/ssb/proxy/grades', {
+                url: "/viewGrades",
+                templateUrl: '../assets/proxyApp/student/grades.html',
+                controller: 'proxyViewGradesController',
+                resolve: {
+                },
+                data: {
+                    breadcrumbs: [{label: 'proxy.grades.heading'}]
+                }
 
-        })
-        .state('/ssb/proxy/finaidappsumm', {
-            url: "/financialaidstatus",
-            templateUrl: '../assets/proxyApp/finaid/finaidStatus.html',
-            controller: 'proxyViewFinaidStatusController',
-            resolve: {
-            },
-            data: {
-                breadcrumbs: [{label: 'proxy.finaid.status.heading'}]
-            },
-            params: {
-                id: null
-            }
-        })
-        .state('/ssb/proxy/crsesched', {
-            url: "/courseSchedule",
-            templateUrl: '../assets/proxyApp/student/courseSchedule.html',
-            controller: 'proxyViewCourseSchedController',
-            resolve: {
-            },
-            data: {
-                breadcrumbs: [{label: 'proxy.schedule.heading'}]
-            },
-            params: {
-                id: null
-            }
-        })
-        .state('/ssb/proxy/courseScheduleDetail',{
-            url: "/courseScheduleDetail",
-            templateUrl: '../assets/proxyApp/student/courseScheduleDetail.html',
-            controller: 'proxyCourseSchedDetails',
-            resolve: {
-            },
-            data: {
-                breadcrumbs: [{label: 'proxy.scheduleDetails.heading'}]
-            },
-            params: {
-                id: null,
-                crn: null,
-                termCode: null,
-                termDesc: null
-            }
-        })
-        .state('/ssb/proxy/awardPackage',{
-            url: "/awardPackage",
-            templateUrl: '../assets/proxyApp/finaid/awardPackage.html',
-            controller: 'proxyAwardPackage',
-            resolve: {
-            },
-            data: {
-                breadcrumbs: [{label: 'proxy.awardPackage.heading'}]
-            },
-            params: {
-                id: null
-            }
-        })
-        .state('/ssb/proxy/awardhist', {
-            url: "/awardHistory",
-            templateUrl: '../assets/proxyApp/finaid/awardHistory.html',
-            controller: 'proxyAwardHistoryController',
-            resolve: {
-            },
-            data: {
-                breadcrumbs: [{label: 'proxy.awardHistory.heading'}]
-            },
-            params: {
-                id: null
-            }
-        })
-        .state('/ssb/proxy/acctsumm', {
-            url: "/accountSummary",
-            templateUrl: '../assets/proxyApp/student/accountSummary.html',
-            controller: 'proxyAccountSummaryController',
-            resolve: {
-            },
-            data: {
-                breadcrumbs: [{label: 'proxy.acctSummary.heading'}]
-            },
-            params: {
-                id: null
-            }
-        });
-});
+            })
+            .state('/ssb/proxy/finaidappsumm', {
+                url: "/financialaidstatus",
+                templateUrl: '../assets/proxyApp/finaid/finaidStatus.html',
+                controller: 'proxyViewFinaidStatusController',
+                resolve: {
+                },
+                data: {
+                    breadcrumbs: [{label: 'proxy.finaid.status.heading'}]
+                },
+                params: {
+                    id: null
+                }
+            })
+            .state('/ssb/proxy/crsesched', {
+                url: "/courseSchedule",
+                templateUrl: '../assets/proxyApp/student/courseSchedule.html',
+                controller: 'proxyViewCourseSchedController',
+                resolve: {
+                },
+                data: {
+                    breadcrumbs: [{label: 'proxy.schedule.heading'}]
+                },
+                params: {
+                    id: null
+                }
+            })
+            .state('/ssb/proxy/courseScheduleDetail',{
+                url: "/courseScheduleDetail",
+                templateUrl: '../assets/proxyApp/student/courseScheduleDetail.html',
+                controller: 'proxyCourseSchedDetails',
+                resolve: {
+                },
+                data: {
+                    breadcrumbs: [{label: 'proxy.scheduleDetails.heading'}]
+                },
+                params: {
+                    id: null,
+                    crn: null,
+                    termCode: null,
+                    termDesc: null
+                }
+            })
+            .state('/ssb/proxy/awardPackage',{
+                url: "/awardPackage",
+                templateUrl: '../assets/proxyApp/finaid/awardPackage.html',
+                controller: 'proxyAwardPackage',
+                resolve: {
+                },
+                data: {
+                    breadcrumbs: [{label: 'proxy.awardPackage.heading'}]
+                },
+                params: {
+                    id: null
+                }
+            })
+            .state('/ssb/proxy/awardhist', {
+                url: "/awardHistory",
+                templateUrl: '../assets/proxyApp/finaid/awardHistory.html',
+                controller: 'proxyAwardHistoryController',
+                resolve: {
+                },
+                data: {
+                    breadcrumbs: [{label: 'proxy.awardHistory.heading'}]
+                },
+                params: {
+                    id: null
+                }
+            })
+            .state('/ssb/proxy/acctsumm', {
+                url: "/accountSummary",
+                templateUrl: '../assets/proxyApp/student/accountSummary.html',
+                controller: 'proxyAccountSummaryController',
+                resolve: {
+                },
+                data: {
+                    breadcrumbs: [{label: 'proxy.acctSummary.heading'}]
+                },
+                params: {
+                    id: null
+                }
+            });
+    }
+]);
 
 proxyApp.config(['$locationProvider',
     function ($locationProvider) {
