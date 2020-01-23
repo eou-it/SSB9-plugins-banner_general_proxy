@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 var proxyAppControllers = angular.module('proxyAppControllers', []);
 var proxyAppDirectives = angular.module('proxyAppDirectives', []);
