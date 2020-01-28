@@ -143,7 +143,7 @@ proxyManagementApp.config(['$httpProvider',
         $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
         $httpProvider.defaults.cache = false;
         $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
-        $httpProvider.interceptors.push(function ($q, $window, $rootScope) {
+        $httpProvider.interceptors.push(['$q', '$window','$rootScope', function ($q, $window, $rootScope) {
             $rootScope.ActiveAjaxConectionsWithouthNotifications = 0;
             var checker = function (parameters, status) {
                 //YOU CAN USE parameters.url TO IGNORE SOME URL
@@ -183,6 +183,6 @@ proxyManagementApp.config(['$httpProvider',
                     return $q.reject(rejection);
                 }
             };
-        });
+        }]);
     }
 ]);

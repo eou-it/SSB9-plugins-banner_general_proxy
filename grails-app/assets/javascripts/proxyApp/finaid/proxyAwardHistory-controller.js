@@ -1,8 +1,8 @@
 /********************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2018-2020 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
-proxyAppControllers.controller('proxyAwardHistoryController',['$scope', '$rootScope', '$stateParams', 'proxyAppService', '$filter','$sce', '$state','notificationCenterService',
-    function ($scope, $rootScope, $stateParams, proxyAppService, $filter, $sce, $state, notificationCenterService) {
+proxyAppControllers.controller('proxyAwardHistoryController',['$scope', '$rootScope', '$stateParams', 'proxyAppService', '$filter','$sce',
+    function ($scope, $rootScope, $stateParams, proxyAppService, $filter, $sce) {
 
         $scope.awards = {};
         $scope.messages = [];

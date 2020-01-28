@@ -1,7 +1,7 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-proxyAppDirectives.directive('landingPageAppTile', [ '$state', '$rootScope', 'webAppResourcePathString', function ($state, $rootScope, webAppResourcePathString) {
+proxyAppDirectives.directive('landingPageAppTile', ['$state', '$rootScope', function ($state, $rootScope) {
     return{
         restrict: 'E',
         templateUrl: '../assets/proxyApp/proxyAccessHome/proxyUserTile.html',
@@ -18,8 +18,8 @@ proxyAppDirectives.directive('landingPageAppTile', [ '$state', '$rootScope', 'we
     };
 }]);
 
-proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','webAppResourcePathString', '$filter',
-    function ($state,$rootScope, webAppResourcePathString, $filter) {
+proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope', '$filter',
+    function ($state, $rootScope, $filter) {
     return{
         restrict: 'E',
         templateUrl: '../assets/proxyApp/proxyAccessHome/proxyStudentTile.html',

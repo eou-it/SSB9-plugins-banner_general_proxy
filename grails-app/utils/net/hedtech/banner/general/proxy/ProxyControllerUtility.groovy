@@ -1,5 +1,5 @@
 /********************************************************************************
-  Copyright 2018-2019 Ellucian Company L.P. and its affiliates.
+  Copyright 2018-2020 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
@@ -220,9 +220,9 @@ class ProxyControllerUtility {
         def curCacheVersion = session.getAttribute(PROXY_ADD_LIST_PIDM_CACHE_VERSION)
 
         // Verify that version is not out-of-date
-        if ((map.cver as Integer) != curCacheVersion) {
-            throw new ApplicationException(ProxyControllerUtility, 'proxyManagement.message.update.optimisticLock')
-        }
+       if (map.cver && ((map.cver as Integer) != curCacheVersion)) {
+           throw new ApplicationException(ProxyControllerUtility, 'proxyManagement.message.update.optimisticLock')
+       }
 
         def cache = session.getAttribute(PROXY_ADD_LIST_PIDM_CACHE)
         def altCode = map.code //Type of key in cache is String
