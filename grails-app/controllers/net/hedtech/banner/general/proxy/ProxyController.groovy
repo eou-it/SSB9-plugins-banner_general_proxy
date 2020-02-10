@@ -258,8 +258,8 @@ class ProxyController {
 
 
     def getCourseSchedule() {
-        def id = XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id))
-        def pidm = PersonUtility.getPerson(id)?.pidm
+        def id = XssSanitizer.sanitize(params.id)
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result = proxyStudentService.getCourseSchedule(pidm, XssSanitizer.sanitize(params.date));
         result.hasDetailAccess = checkPageForAccess(id, '/ssb/proxy/courseScheduleDetail') != null
@@ -384,7 +384,7 @@ class ProxyController {
         try{
             def id = XssSanitizer.sanitize(params.id)
 
-            def pidm = id ? PersonUtility.getPerson(generalSsbProxyService.getStudentIdFromToken(id))?.pidm : session["currentStudentPidm"]
+            def pidm = id ? PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm : session["currentStudentPidm"]
 
             def result = proxyFinAidService.getFinancialAidStatus(pidm, XssSanitizer.sanitize(params.aidYear))
 
@@ -674,17 +674,12 @@ class ProxyController {
         }
     }
 
-    private String checkPageForAccess(def id, def page) {
+    private String checkPageForAccess(def tokenizedId, def page) {
+        def id = tokenizedId ? generalSsbProxyService.getStudentIdFromToken(tokenizedId) : PersonUtility.getPerson(session["currentStudentPidm"])?.bannerId
+        def students = session["students"]?.students?.active
+        def student = students?.find { generalSsbProxyService.getStudentIdFromToken(it.id) == id }
 
-        if (!id) {
-            id = PersonUtility.getPerson(session["currentStudentPidm"])?.bannerId
-        }
-
-        def students = session["students"]?.students.active
-
-        def student = students?.find { it.id == id }
         def result = student?.pages?.find { it.url == page }
-
         return result
     }
 }
