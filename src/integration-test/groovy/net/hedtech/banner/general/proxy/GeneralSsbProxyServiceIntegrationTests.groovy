@@ -55,6 +55,11 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
         def result = generalSsbProxyService.getStudentListForProxy(gidm)
 
         assertNotNull result.students
+
+        result.students?.active?.collect {
+            it.id = generalSsbProxyService.getStudentIdFromToken(it.id)
+        }
+
         assertTrue result.students.active.id.contains('HOSP0002')
         assertTrue result.students.active.id.contains('HOS00001')
     }
