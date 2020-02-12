@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 package net.hedtech.banner.general.proxy
 
@@ -473,12 +473,12 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
 
             createProxyHistory(pidm, gidm,'HISTORY');
 
-            def result = generalSsbProxyManagementService.getProxyHistoryLog(params)
+            def historyLog = generalSsbProxyManagementService.getProxyHistoryLog(params)
 
-            assertNotNull result?.historiesList[0]?.action
-            assertEquals "HISTORY", result?.historiesList[0]?.page
-            assertEquals "Enable", result?.historiesList[0]?.action
-            assertNotNull result?.historiesList[0]?.activityDate
+            assertNotNull historyLog?.result?.action[0]
+            assertEquals "HISTORY", historyLog?.result?.page[0]
+            assertEquals "enable", historyLog?.result?.action[0]
+            assertNotNull historyLog?.result?.activityDate[0]
 
 
         } catch (Exception e) {
@@ -513,15 +513,13 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
         def url
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        try {
-            def query = """SELECT gpbeltr_ctyp_url url FROM gpbeltr WHERE gpbeltr_proxy_idm = :idm
+        def query = """SELECT gpbeltr_ctyp_url url FROM gpbeltr WHERE gpbeltr_proxy_idm = :idm
                            and gpbeltr_ctyp_code = 'NEW_PROXY_NOA' """
-            url = sql?.firstRow(query,[idm: idm])?.url
-        } finally {
-            //sql?.close()
-        }
+        url = sql?.firstRow(query, [idm: idm])?.url
 
-        url.contains("BannerGeneralSsb/ssb/proxy/proxyAction?p_token")
+
+        //The proxy URL could be located in either Banner General Self-Service or in Student Self-Service
+        return (url.contains("BannerGeneralSsb/ssb/proxy/proxyAction?p_token") || url.contains("StudentSelfService/ssb/proxy/proxyAction?p_token"))
     }
 
 
