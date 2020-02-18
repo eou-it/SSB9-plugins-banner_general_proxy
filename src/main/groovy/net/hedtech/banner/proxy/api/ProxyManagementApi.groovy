@@ -1865,7 +1865,7 @@ BEGIN
 
    lv_GPRXREF_ref := gp_gprxref.F_Query_One (p_proxyIDM, global_pidm);
    FETCH lv_GPRXREF_ref INTO lv_GPRXREF_rec;
-   IF lv_GPRXREF_ref%NOTFOUND THEN
+   IF lv_GPRXREF_ref%FOUND THEN
  
       gp_gpbeltr.P_Create (
          p_syst_code      => 'PROXY',
