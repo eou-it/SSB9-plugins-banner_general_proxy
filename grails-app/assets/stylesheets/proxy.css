@@ -1,5 +1,5 @@
 /********************************************************************************
-  Copyright 2019 Ellucian Company L.P. and its affiliates.
+  Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 /* General Styles */
 body {
@@ -85,7 +85,7 @@ h2 {
     font-weight: bold;
 }
 
-.tile-title .student-name {
+.tile-title .student-name-proxy-home{
     font-family: OpenSans-semibold;
     margin-left: .3em;
 }
@@ -369,7 +369,6 @@ p.notification-msg {
 }
 
 .pi-section .col-xs-12 {
-    height: 89px;
     padding-left: 5px;
     padding-right: 5px;
 }
