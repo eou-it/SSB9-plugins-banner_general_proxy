@@ -657,6 +657,11 @@ input.hasMultiCalendarPicker.pi-date-input::-ms-clear {
     width: 100%;
 }
 
+
+.pi-section .text-input-field {
+    height: 49px;
+}
+
 input.hasMultiCalendarPicker.pi-date-input {
     font-weight: bold;
     border-radius: 4px;
