@@ -1,5 +1,5 @@
 /********************************************************************************
-  Copyright 2016-2019 Ellucian Company L.P. and its affiliates.
+  Copyright 2016-2020 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 /* General Styles */
 body {
@@ -403,8 +403,8 @@ a.proxy-icon-link:focus {
 
 
 /* Overrides for xe-ui-components.css/_select.scss */
-.select2-results .select2-highlighted {
-    background: #3875d7 !important;
+.select2-results .select2-highlighted .select2-result-label {
+    color: inherit !important;
 }
 
 .select2-dropdown-open .select2-choice {
