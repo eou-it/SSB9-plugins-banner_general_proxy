@@ -13,7 +13,7 @@
     <div class="col-xs-12 col-md-4 col-lg-4" ng-repeat="profileElement in piSection.elements" ng-if="profileElement.visible">
         <div ng-if="profileElement.visible && !profileElement.isWidget">
             <label class="input-field-label" for="{{profileElement.elemId}}" ng-bind-html="profileElement.label"></label><br>
-            <input ng-model="profileElement.model" ng-blur="cityFocused=false" ng-focus="cityFocused=true"
+            <input ng-model="profileElement.model" ng-blur="cityFocused=false; setDataValidationErrors(profileElements['p_birth_date'].model)" ng-focus="cityFocused=true"
                    ng-class="[((!!cityErrMsg && profileElement.elemId === 'p_city') || (!!emailErrMsg && profileElement.elemId === 'p_email_address') && !cityFocused ? 'input-field-error' : null)]"
                    class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                    type="text" placeholder="{{profileElement.placeholder}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="{{profileElement.elemId}}">
