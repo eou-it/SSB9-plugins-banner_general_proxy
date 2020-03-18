@@ -66,6 +66,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
 
                     $scope.profileElements[it] = {
                         label: required ? ($filter('i18n')('proxy.personalinformation.label.' + it) + '<span class="required-field"></span>') : $filter('i18n')('proxy.personalinformation.label.' + it),
+                        requiredField: required,
                         model: $scope.proxyProfile[it],
                         fieldLength: $scope.proxyUiRules[it].fieldLength,
                         elemId: it,
@@ -181,7 +182,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     notificationCenterService.addNotification(errors[i], "error", true);
                 }
             },
-            getErrorsForMissingData = function (errors) {
+            getErrorsForMissingDataFromBackEndCheck = function (errors) {
                 var errorList = errors.split(":");
                 errorList.splice(0, 2); //Removes messages which we are not going to display as notifications.
                 errorList.forEach(function (error) {
@@ -193,13 +194,30 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
             },
             errorsAreForMissingRequiredData = function (error) {
                 return error.message.indexOf('ERR_MISSING_DATA') > -1
+            },
+            profileElementIsANonBooleanRequiredFieldWhichIsMissingData = function (profileElement) {
+                return profileElement.requiredField === true &&
+                    (!$scope.profile[profileElement.elemId] &&
+                        typeof $scope.profile[profileElement.elemId] !== "boolean")
+            },
+            getErrorsForMissingDataFromFrontEndCheck = function () {
+                var errors = [];
+                _.each(($scope.profileElements), function (it) {
+                    /*We do not want to throw an error for boolean fields such as
+                    * opt out of advancement mailings, as they are allowed to be checked or unchecked.*/
+                    if (profileElementIsANonBooleanRequiredFieldWhichIsMissingData(it)) {
+                        errors.push((($filter('i18n')('proxy.personalinformation.onSave.required_field',
+                            [$filter('i18n')('proxy.personalinformation.onSave.' + it.elemId)]))))
+                    }
+                });
+                return errors;
             };
         $scope.setDataValidationErrors = function (birthDate) {
             var emailErrorMessage,
                 birthDateErrorMessage,
                 errors = [];
 
-            emailErrorMessage = proxyAppErrorService.getErrorEmailAddress($scope.profile.p_email_address);
+            emailErrorMessage = proxyAppErrorService.getErrorEmailAddress($scope.profileElements.p_email_address.model);
 
             if (emailErrorMessage) {
                 $scope.emailErrMsg = emailErrorMessage;
@@ -219,20 +237,21 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     $scope.profile.p_birth_date = $scope.proxyProfile.p_birth_date;
                 }
             }
-            displayErrors(errors);
             return errors;
 
         };
 
         $scope.save = function() {
             $scope.profile = {};
-
             _.each(Object.keys($scope.profileElements), function(it) {
                 $scope.profile[it] = $scope.profileElements[it].model;
             });
 
             var errors = $scope.setDataValidationErrors($scope.profile.p_birth_date);
+            errors = errors.concat(getErrorsForMissingDataFromFrontEndCheck());
+
             if (errors.length !== 0) {
+                displayErrors(errors);
                 return; //Do not update.
             }
 
@@ -260,7 +279,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     $scope.flashMessage = response.message;
 
                     notificationCenterService.clearNotifications();
-                    errorsAreForMissingRequiredData(response) ? getErrorsForMissingData(response.message) : notificationCenterService.addNotification(response.message, "error", true);
+                    errorsAreForMissingRequiredData(response) ? getErrorsForMissingDataFromBackEndCheck(response.message) : notificationCenterService.addNotification(response.message, "error", true);
                     if ($rootScope.profileRequired && $('#breadcrumb-panel').is(":visible")) {
                         $("#breadcrumb-panel").hide();
                     }
