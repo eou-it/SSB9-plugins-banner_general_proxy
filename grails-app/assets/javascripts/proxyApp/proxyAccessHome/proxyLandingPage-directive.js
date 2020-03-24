@@ -65,9 +65,9 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope', '$
                         if (url.indexOf("proxy") > -1) {
                                 $state.go(url, {id: proxyData.id});
                         } else{
-                                window.open(
-                                    $rootScope.applicationContextRoot + url,"_self"
-                                );
+                            window.open(
+                                encodeURI($rootScope.applicationContextRoot + "/proxy/navigate?url=" + url),"_self"
+                            );
                         }
                 };
 
