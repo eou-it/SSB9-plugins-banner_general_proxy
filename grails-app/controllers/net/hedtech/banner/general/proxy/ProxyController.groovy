@@ -66,9 +66,8 @@ class ProxyController {
 
     // Main Proxy Page Navigator
     def navigate (){
-        def logHistoryMessage = "TO DO"
-        //messageSource.getMessage(XssSanitizer.sanitize(params?.label), null, Locale.ENGLISH)
-        generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], params.url)
+        def logHistoryMessage = messageSource.getMessage(XssSanitizer.sanitize("proxy.page.heading" + params?.url?.replaceAll("/",".")), null, Locale.ENGLISH)
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], logHistoryMessage)
 
         redirect(url: params.url,  params: params)
 
