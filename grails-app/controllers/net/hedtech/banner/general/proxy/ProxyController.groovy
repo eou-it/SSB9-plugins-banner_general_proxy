@@ -64,6 +64,28 @@ class ProxyController {
         }
     }
 
+    // This will cut off the aid year part from url
+    private filterFinAidUrl(def url){
+        def finAidUrl
+        if (url.indexOf("financialAid") > 0){
+            finAidUrl = url.subSequence(0, url.length() - 5)
+        }else {
+            finAidUrl = url
+        }
+
+        return finAidUrl
+    }
+
+
+    // Main Proxy Page Navigator
+    def navigate (){
+        def logHistoryMessage = messageSource.getMessage(XssSanitizer.sanitize("proxy.page.heading" + filterFinAidUrl(params?.url)?.replaceAll("/",".").replaceAll("#!","")), null, Locale.ENGLISH)
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], logHistoryMessage)
+
+        redirect(url: params.url,  params: params)
+
+    }
+
     def landingPage() {
         try {
 
