@@ -99,9 +99,9 @@ proxyManagementApp.config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: '../assets/proxyManagementApp/proxyManagementHome/proxyMgmtMain.html',
                 controller: 'proxyMgmtMainController',
                 resolve: {
-                    proxyConfigResolve: function (proxyMgmtAppService) {
+                    proxyConfigResolve: ['proxyMgmtAppService', function (proxyMgmtAppService) {
                         return proxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
-                    }
+                    }]
                 },
                 data: {
                     breadcrumbs: []
@@ -116,9 +116,9 @@ proxyManagementApp.config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: '../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtEditProxy.html',
                 controller: 'proxyMgmtEditProxyController',
                 resolve: {
-                    proxyConfigResolve: function (proxyMgmtAppService) {
+                    proxyConfigResolve: ['proxyMgmtAppService', function (proxyMgmtAppService) {
                         return proxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
-                    }
+                    }]
                 },
                 data: {
                     breadcrumbs: [{label: 'proxyManagement.title.proxyInformation'}]
