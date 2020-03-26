@@ -21,6 +21,8 @@
         <asset:stylesheet href="eds.css"/>
     </g:else>
 
+    <g:theme/>
+
     <asset:link rel="apple-touch-icon" sizes="57x57" href="eds/apple-touch-icon-57x57.png"/>
     <asset:link rel="apple-touch-icon" sizes="60x60" href="eds/apple-touch-icon-60x60.png"/>
     <asset:link rel="apple-touch-icon" sizes="72x72" href="eds/apple-touch-icon-72x72.png"/>
@@ -35,7 +37,7 @@
     <asset:link rel="shortcut icon" type="image/png" href="eds/favicon-96x96.png" sizes="96x96"/>
     <asset:link rel="shortcut icon" type="image/png" href="eds/favicon-16x16.png" sizes="16x16"/>
     <asset:link rel="shortcut icon"  sizes="57x57" href="eds/favicon.ico" type="image/x-icon"/>
-    
+
 </head>
 <body class="pageBg proxy-pin-mgmt">
 <div class="splashBg proxy-pin-mgmt reset-pin">
