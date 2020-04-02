@@ -172,6 +172,11 @@ FOR auth_rec IN C_AuthorizationList (lv_RETP)
                                    auth_rec.menu_url) = 'Y'
             --AND twbkwbis.F_ValidLink (auth_rec.menu_url)
          THEN
+           -- TO DO Add AidYear Calculation
+            IF (INSTR(auth_rec.menu_url,'financialAid') > 0) THEN
+              auth_rec.menu_url := REPLACE(auth_rec.menu_url,'#!','');
+              auth_rec.menu_url := auth_rec.menu_url || '/0708';
+            END IF;
             pages := pages || '{' ||
                       '"url" ' || ':' || '"' || auth_rec.menu_url || '"' ||
                       ',"desc" ' || ':'  || '"' || auth_rec.menu_text || '"' || '},';

@@ -79,12 +79,18 @@ class ProxyController {
 
     // Main Proxy Page Navigator
     def navigate (){
-        def logHistoryMessage = messageSource.getMessage(XssSanitizer.sanitize("proxy.page.heading" + filterFinAidUrl(params?.url)?.replaceAll("/",".").replaceAll("#!","")), null, Locale.ENGLISH)
+
+        def logHistoryMessage = messageSource.getMessage(XssSanitizer.sanitize("proxy.page.heading" + filterFinAidUrl(params?.url)?.replaceAll("/",".")), null, Locale.ENGLISH)
         generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], logHistoryMessage)
 
-        redirect(url: params.url,  params: params)
-
+        redirect(url:  params?.url.indexOf("financialAid") > 0 ? addFinaidMarker(params?.url) : params?.url ,  params: params)
     }
+
+    private String addFinaidMarker(String url) {
+        def position = url?.indexOf("financialAid")
+        return url?.substring(0, url?.indexOf("financialAid") + 12) + "#!" + url?.substring(position + 12);
+    }
+
 
     def landingPage() {
         try {
