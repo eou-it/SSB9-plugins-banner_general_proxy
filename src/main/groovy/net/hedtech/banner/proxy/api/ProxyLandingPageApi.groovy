@@ -125,6 +125,7 @@ END;
 
     public final static String PROXY_PAGES = """
 DECLARE
+  --
   CURSOR C_AuthorizationList (
       p_RETP gprxref.gprxref_retp_code%TYPE)
    IS
@@ -156,7 +157,22 @@ DECLARE
 
 lv_RETP        gtvretp.gtvretp_code%TYPE;
 pages          VARCHAR2(32000);
-
+--
+  FUNCTION GET_AID_YEAR(pidmIn NUMBER) RETURN VARCHAR IS
+   CURSOR GET_DEFAULT_AID_YEAR(pidmIn SPRIDEN.SPRIDEN_PIDM%TYPE) IS
+    SELECT MAX(aidy_code) 
+     from RVQ_ACTIVE_AID_YEARS
+     where pidm = pidmIn;
+--    
+     defaultAidYear VARCHAR2(4);
+  BEGIN
+    OPEN GET_DEFAULT_AID_YEAR(pidmIn);
+    FETCH GET_DEFAULT_AID_YEAR into defaultAidYear;
+    CLOSE GET_DEFAULT_AID_YEAR;
+    
+      RETURN defaultAidYear;
+  END GET_AID_YEAR;
+--
 BEGIN
 --
 pages:= '{ "pages":[';
@@ -175,7 +191,7 @@ FOR auth_rec IN C_AuthorizationList (lv_RETP)
            -- TO DO Add AidYear Calculation
             IF (INSTR(auth_rec.menu_url,'financialAid') > 0) THEN
               auth_rec.menu_url := REPLACE(auth_rec.menu_url,'#!','');
-              auth_rec.menu_url := auth_rec.menu_url || '/0708';
+              auth_rec.menu_url := auth_rec.menu_url || '/' || GET_AID_YEAR(?);
             END IF;
             pages := pages || '{' ||
                       '"url" ' || ':' || '"' || auth_rec.menu_url || '"' ||
