@@ -3,8 +3,10 @@
  ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
+import grails.util.Holders
 import groovy.sql.Sql
 import net.hedtech.banner.exceptions.ApplicationException
+import net.hedtech.banner.general.configuration.ConfigProperties
 import net.hedtech.banner.service.ServiceBase
 import grails.gorm.transactions.Transactional
 
@@ -134,5 +136,12 @@ class ProxyConfigurationService extends ServiceBase {
             configurationMap.put(it.GUROCFG_NAME, it.GUROCFG_VALUE?.characterStream?.text)
         }
         configurationMap
+    }
+
+    public static void injectHoldersWithProxyConfigurations() {
+        def proxyConfigurations = ConfigProperties.fetchByAppId('BAN9_PROXY')
+        proxyConfigurations.each { configuration ->
+            Holders.config.setAt(configuration.configName, configuration.configValue)
+        }
     }
 }

@@ -83,6 +83,9 @@ class ProxyController {
             def logHistoryMessage = messageSource.getMessage(XssSanitizer?.sanitize("proxy.page.heading" +
                     filterFinAidUrl(params?.url)?.replaceAll("/", ".")), null, LocaleContextHolder.getLocale())
             generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], logHistoryMessage)
+
+            ProxyConfigurationService.injectHoldersWithProxyConfigurations()
+
             redirect(url: params?.url?.indexOf("financialAid") > 0 ? addFinaidMarker(params?.url) : params?.url, params: params)
         }
         catch (NoSuchMessageException e) {
