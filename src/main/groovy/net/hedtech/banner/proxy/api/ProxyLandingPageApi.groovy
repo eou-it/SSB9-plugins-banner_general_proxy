@@ -136,8 +136,7 @@ DECLARE
                o.twgrmenu_sequence AS menu_seq
           FROM TWGRMENU o, TWGBWMNU m
          WHERE o.twgrmenu_name = m.twgbwmnu_name
-         AND  (o.twgrmenu_url like '%/proxy/%'
-               OR o.twgrmenu_url like '%/ssb/%')
+         AND  (o.twgrmenu_url like '%/proxy/%')
            AND m.twgbwmnu_source_ind =
               (SELECT NVL (MAX (n.twgbwmnu_source_ind), 'B')
                  FROM twgbwmnu n
@@ -148,11 +147,46 @@ DECLARE
                  FROM twgrmenu p
                 WHERE p.twgrmenu_name = o.twgrmenu_name
                   AND p.twgrmenu_source_ind = 'L')
-           AND o.twgrmenu_name LIKE 'PROXY_ACCESS_' || p_RETP || '%'
+           AND o.twgrmenu_name LIKE 'PROXY_ACCESS_' || p_retp || '%'
+           AND NVL(o.twgrmenu_enabled, 'N')       = 'Y'
+           AND NVL(m.twgbwmnu_enabled_ind,'N')    = 'Y'
+           AND NVL(m.twgbwmnu_adm_access_ind,'N') = 'N'
+        UNION
+        SELECT m.twgbwmnu_name     AS menu_name,
+               m.twgbwmnu_desc     AS menu_desc,
+               o.twgrmenu_url_text AS menu_text,
+               o.twgrmenu_url      AS menu_url,
+               o.twgrmenu_sequence AS menu_seq
+          FROM TWGRMENU o, TWGBWMNU m
+         WHERE o.twgrmenu_name = m.twgbwmnu_name
+         AND  (o.twgrmenu_url like '%%/ssb/%%')
+           AND m.twgbwmnu_source_ind =
+              (SELECT NVL (MAX (n.twgbwmnu_source_ind), 'B')
+                 FROM twgbwmnu n
+                WHERE n.twgbwmnu_name = m.twgbwmnu_name
+                  AND n.twgbwmnu_source_ind = 'L')
+           AND o.twgrmenu_source_ind =
+              (SELECT NVL (MAX (p.twgrmenu_source_ind), 'B')
+                 FROM twgrmenu p
+                WHERE p.twgrmenu_name = o.twgrmenu_name
+                  AND p.twgrmenu_source_ind = 'L')
+           AND o.twgrmenu_name LIKE 'PROXY_ACCESS_' || p_retp || '%'
            AND NVL(o.twgrmenu_enabled, 'N')       = 'Y'
            AND NVL(m.twgbwmnu_enabled_ind,'N')    = 'Y'
            AND NVL(m.twgbwmnu_adm_access_ind,'N') = 'N'
            AND NVL(o.twgrmenu_enabled,'N')        = 'Y'
+           AND EXISTS (SELECT 'X'
+           from GVQ_PAGE_ROLE_MAPPING
+                   where application_id = 'SSS'
+                   and (page_url = o.twgrmenu_url
+                        and role_code = 'ROLE_SELFSERVICE-GUEST_BAN_DEFAULT_M'
+                        OR (page_url = '/ssb/financialAid/**'
+                        and role_code = 'ROLE_SELFSERVICE-GUEST_BAN_DEFAULT_M'
+                        and INSTR(o.twgrmenu_url,'financialAid') > 0
+                        )
+                        )
+                OR (o.twgrmenu_url IN ('/ssb/studentProfile','/ssb/studentGrades'))
+            )
       ORDER BY menu_desc, menu_name, menu_seq;
 
 lv_RETP        gtvretp.gtvretp_code%TYPE;
