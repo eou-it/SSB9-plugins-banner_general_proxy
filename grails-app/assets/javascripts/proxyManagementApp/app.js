@@ -82,51 +82,53 @@ var proxyManagementApp = angular.module('proxyManagementApp', [
 proxyManagementApp.constant('webAppResourcePathString', '../assets');
 
 
-proxyManagementApp.config(function ($stateProvider, $urlRouterProvider, webAppResourcePathString) {
-    // For any unmatched url, send to landing page
-    var url = url ? url : 'home';
+proxyManagementApp.config(['$stateProvider', '$urlRouterProvider',
+    function ($stateProvider, $urlRouterProvider) {
+        // For any unmatched url, send to landing page
+        var url = url ? url : 'home';
 
-    $urlRouterProvider.otherwise(url);
+        $urlRouterProvider.otherwise(url);
 
-    /*************************************************************************
-     * Defining all the different states of the proxyManagementApp landing pages. *
-     * proxyMgmtEditProxyDesktop.html
-     *************************************************************************/
-    $stateProvider
-        .state('home', {
-            url: "/home",
-            templateUrl: '../assets/proxyManagementApp/proxyManagementHome/proxyMgmtMain.html',
-            controller: 'proxyMgmtMainController',
-            resolve: {
-                proxyConfigResolve: function (proxyMgmtAppService) {
-                    return proxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
+        /*************************************************************************
+         * Defining all the different states of the proxyManagementApp landing pages. *
+         * proxyMgmtEditProxyDesktop.html
+         *************************************************************************/
+        $stateProvider
+            .state('home', {
+                url: "/home",
+                templateUrl: '../assets/proxyManagementApp/proxyManagementHome/proxyMgmtMain.html',
+                controller: 'proxyMgmtMainController',
+                resolve: {
+                    proxyConfigResolve: ['proxyMgmtAppService', function (proxyMgmtAppService) {
+                        return proxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
+                    }]
+                },
+                data: {
+                    breadcrumbs: []
+                },
+                params: {
+                    id: null,
+                    onLoadNotifications: []
                 }
-            },
-            data: {
-                breadcrumbs: []
-            },
-            params: {
-                id: null,
-                onLoadNotifications: []
-            }
-        })
-        .state('editProxy', {
-            url: '/editProxy/?alt&cver&firstName&lastName&email',
-            templateUrl: '../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtEditProxy.html',
-            controller: 'proxyMgmtEditProxyController',
-            resolve: {
-                proxyConfigResolve: function (proxyMgmtAppService) {
-                    return proxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
+            })
+            .state('editProxy', {
+                url: '/editProxy/?alt&cver&firstName&lastName&email',
+                templateUrl: '../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtEditProxy.html',
+                controller: 'proxyMgmtEditProxyController',
+                resolve: {
+                    proxyConfigResolve: ['proxyMgmtAppService', function (proxyMgmtAppService) {
+                        return proxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
+                    }]
+                },
+                data: {
+                    breadcrumbs: [{label: 'proxyManagement.title.proxyInformation'}]
+                },
+                params: {
+                    id: null
                 }
-            },
-            data: {
-                breadcrumbs: [{label: 'proxyManagement.title.proxyInformation'}]
-            },
-            params: {
-                id: null
-            }
-        });
-});
+            });
+    }
+]);
 
 proxyManagementApp.config(['$locationProvider',
     function ($locationProvider) {
