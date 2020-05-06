@@ -84,7 +84,9 @@ class ProxyController {
                     filterFinAidUrl(params?.url)?.replaceAll("/", ".")), null, LocaleContextHolder.getLocale())
             generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], logHistoryMessage)
 
-            ProxyConfigurationService.injectHoldersWithProxyConfigurations()
+            proxyConfigurationService.injectHoldersWithProxyConfigurations()
+
+            session['proxyWebRules'] = proxyConfigurationService.getFinaidConfigurationsBasedOnRole()
 
             redirect(url: params?.url?.indexOf("financialAid") > 0 ? addFinaidMarker(params?.url) : params?.url, params: params)
         }

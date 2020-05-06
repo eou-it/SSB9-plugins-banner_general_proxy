@@ -4,11 +4,13 @@
 package net.hedtech.banner.general.proxy
 
 import grails.util.Holders
+import groovy.json.JsonSlurper
 import groovy.sql.Sql
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.configuration.ConfigProperties
 import net.hedtech.banner.service.ServiceBase
 import grails.gorm.transactions.Transactional
+import org.springframework.security.core.context.SecurityContextHolder
 
 @Transactional
 class ProxyConfigurationService extends ServiceBase {
@@ -142,6 +144,56 @@ class ProxyConfigurationService extends ServiceBase {
         def proxyConfigurations = ConfigProperties.fetchByAppId('BAN9_PROXY')
         proxyConfigurations.each { configuration ->
             Holders.config.setAt(configuration.configName, configuration.configValue)
+        }
+    }
+
+    def getFinaidConfigurationsBasedOnRole(){
+        def finaidConfigurations = [:]
+        def proxyConfigurations = ConfigProperties.fetchByAppId('BAN9_PROXY')
+
+        /*These configurations are retrieved from the database as strings.
+        The JsonSlurper will convert them to Arraylists.*/
+        def jsonSlurper = new JsonSlurper()
+
+        def roles = getRoles()
+
+        proxyConfigurations.each { configuration ->
+            if (configuration.configName.contains("financialAid")){
+                def value = finaidConfigContainsUserRole(roles, jsonSlurper.parseText(configuration.configValue)) ? "Y" : "N"
+                finaidConfigurations << [(configuration.configName.substring(13)) : value]
+            }
+        }
+        finaidConfigurations
+    }
+
+    private finaidConfigContainsUserRole(roles, finaidConfig) {
+        def found = false
+        finaidConfig.each {
+            if (roles."${it}") {
+                found = true
+                return found
+            }
+        }
+        return found
+    }
+
+    private getRoles() {
+        [
+                STUDENT : hasUserRole("STUDENT"),
+                EMPLOYEE: hasUserRole("EMPLOYEE"),
+                FACULTY : hasUserRole("FACULTY"),
+                PROXY   : SecurityContextHolder?.context?.authentication?.principal?.gidm ? true : false
+        ]
+    }
+
+    private hasUserRole(String role) {
+        try {
+            def authorities = SecurityContextHolder?.context?.authentication?.principal?.authorities
+            return authorities.any { it.getAssignedSelfServiceRole().contains(role) }
+        } catch (MissingPropertyException it) {
+            log.error("principal lacks authorities - may be unauthenticated or session expired. Principal: ${SecurityContextHolder?.context?.authentication?.principal}")
+            log.error(it)
+            throw new ApplicationException('UserRoleService', it)
         }
     }
 }
