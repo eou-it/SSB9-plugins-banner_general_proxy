@@ -140,13 +140,6 @@ class ProxyConfigurationService extends ServiceBase {
         configurationMap
     }
 
-    public static void injectHoldersWithProxyConfigurations() {
-        def proxyConfigurations = ConfigProperties.fetchByAppId('BAN9_PROXY')
-        proxyConfigurations.each { configuration ->
-            Holders.config.setAt(configuration.configName, configuration.configValue)
-        }
-    }
-
     def getFinaidConfigurationsBasedOnRole(){
         def finaidConfigurations = [:]
         def proxyConfigurations = ConfigProperties.fetchByAppId('BAN9_PROXY')
