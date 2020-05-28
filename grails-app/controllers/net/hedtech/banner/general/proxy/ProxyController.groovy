@@ -66,6 +66,12 @@ class ProxyController {
         }
     }
 
+    private void logProxyNavigationToAccessHistory() {
+        def logHistoryMessage = messageSource.getMessage(XssSanitizer?.sanitize("proxy.page.heading" +
+                filterFinAidUrl(params?.url)?.replaceAll("/", ".")), null, LocaleContextHolder.getLocale())
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], logHistoryMessage)
+    }
+
     // This will cut off the aid year part from url
     private filterFinAidUrl(def url) {
         return (url.contains("financialAid")) ? (url.subSequence(0, url.length() - 5)) : url
@@ -77,18 +83,23 @@ class ProxyController {
         return url?.substring(0, url?.indexOf("financialAid") + 12) + "#!" + url?.substring(position + 12)
     }
 
+    private void addProxyFinancialAidConfigurationsToSession() {
+        session['proxyWebRules'] = proxyConfigurationService.getFinaidConfigurationsBasedOnRole()
+    }
+
+    private addFinaidMarkerToUrlIfUrlIsForFinaidPage(paramsUrl) {
+        def url
+        url = paramsUrl?.indexOf("financialAid") > 0 ? addFinaidMarker(paramsUrl) : paramsUrl
+        url
+    }
+
     // Main Proxy Page Navigator
     def navigate() {
         try {
-            def logHistoryMessage = messageSource.getMessage(XssSanitizer?.sanitize("proxy.page.heading" +
-                    filterFinAidUrl(params?.url)?.replaceAll("/", ".")), null, LocaleContextHolder.getLocale())
-            generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], logHistoryMessage)
-
-            proxyConfigurationService.injectHoldersWithProxyConfigurations()
-
-            session['proxyWebRules'] = proxyConfigurationService.getFinaidConfigurationsBasedOnRole()
-
-            redirect(url: params?.url?.indexOf("financialAid") > 0 ? addFinaidMarker(params?.url) : params?.url, params: params)
+            logProxyNavigationToAccessHistory()
+            addProxyFinancialAidConfigurationsToSession()
+            def url = addFinaidMarkerToUrlIfUrlIsForFinaidPage(params?.url)
+            redirect(url: url, params: params)
         }
         catch (NoSuchMessageException e) {
             log.error(e.toString())
