@@ -77,6 +77,12 @@ class ProxyController {
         return (url.contains("financialAid")) ? (url.subSequence(0, url.length() - 5)) : url
     }
 
+    private addFinaidMarkerToUrlIfUrlIsForFinaidPage(paramsUrl) {
+        def url
+        url = paramsUrl?.indexOf("financialAid") > 0 ? addFinaidMarker(paramsUrl) : paramsUrl
+        url
+    }
+
     //Appends characters to URL needed for Financial Aid pages.
     private String addFinaidMarker(String url) {
         def position = url?.indexOf("financialAid")
@@ -85,12 +91,6 @@ class ProxyController {
 
     private void addProxyFinancialAidConfigurationsToSession() {
         session['proxyWebRules'] = proxyConfigurationService.getFinaidConfigurationsBasedOnRole()
-    }
-
-    private addFinaidMarkerToUrlIfUrlIsForFinaidPage(paramsUrl) {
-        def url
-        url = paramsUrl?.indexOf("financialAid") > 0 ? addFinaidMarker(paramsUrl) : paramsUrl
-        url
     }
 
     // Main Proxy Page Navigator
