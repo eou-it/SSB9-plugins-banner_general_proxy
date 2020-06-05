@@ -1,0 +1,21 @@
+<!--*******************************************************************************
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="proxy-communication-log-header">
+    <span class="proxy-communication-log-title">{{'proxyManagement.title.communicationLog'|i18n}}</span>
+    <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.communicationLog'|i18n}}"></proxy-mgmt-popover-tooltip>
+</div>
+<div class="proxy-mgmt-comm-grid">
+    <xe-table-grid table-id="communicationDataTable" caption="" header="commColumns" fetch="getCommunicationData(query)"
+                   content="commRows" results-found="commRecords" toolbar="false" paginate="true" continuous-scrolling="true"
+                   no-data-msg="{{'proxyManagement.message.noResultsFound'|i18n}}" empty-table-msg="" on-row-click="onRowClick()"
+                   pagination-config="commPaginationConfig" draggable-column-names="draggableCommColumnNames"
+                   mobile-layout="commMobileConfig" height="16em">
+
+        <xe-cell-markup column-name="resend">
+            <a ng-if="row.resend.enabled" ng-click="row.resend.resendEmail()" class="add-item-link resend-link" tabindex="0">
+                <span class="icon-email-CO"></span>
+            </a>
+        </xe-cell-markup>
+    </xe-table-grid>
+</div>

@@ -1,0 +1,132 @@
+<!--*******************************************************************************
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-4">
+        <label class="input-field-label" for="relationship">{{'proxyManagement.label.relationship'|i18n}}</label>
+        <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.profile'|i18n}}"></proxy-mgmt-popover-tooltip><br>
+        <xe-ui-select ng-model="proxyAuxData.selectedRelationship" theme="select2" search-enabled="false" ng-change="handleRelationshipChange()" id="relationship">
+            <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.relationship'|i18n)" placeholder="{{placeholder.relationship}}">
+                {{$select.selected.description ? $select.selected.description : placeholder.relationship}}
+            </xe-ui-select-match>
+            <xe-ui-select-choices repeat="choice in relationshipChoices">
+                <div ng-bind-html="choice.description"></div>
+            </xe-ui-select-choices>
+        </xe-ui-select>
+        <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.relationshipErrMsg ? 'field-error error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.relationshipErrMsg|i18n}}</p>
+    </div>
+</div>
+<div class="row">
+    <div id="start-date-wrapper" class="col-xs-12 col-md-3 col-lg-3">
+        <label for="start-date" class="input-field-label">{{'proxyManagement.label.startDate'|i18n}}</label>
+        <input date-picker ng-model="proxy.p_start_date" pi-input-watcher on-select="setStartDate" ng-focus="setStartFocused(true)" ng-blur="setStartFocused(false); globalProxyManagementDataValidator.setStartAndStopDateErrors(proxy)"
+               ng-class="[((globalProxyManagementDataValidator.startDateErrMsg) ? 'input-error pi-date-input input-colors' : 'pi-date-input input-colors')]"
+               placeholder="{{'proxyManagement.label.startDate'|i18n}}" id="start-date"
+               aria-label="{{'proxyManagement.label.startDate'|i18n}}"/>
+        <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.startDateErrMsg ? 'field-error error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.startDateErrMsg}}</p>
+    </div>
+    <div id="stop-date-wrapper" class="col-xs-12 col-md-3 col-lg-3">
+        <label for="stop-date" class="input-field-label">{{'proxyManagement.label.stopDate'|i18n}}</label>
+        <input date-picker ng-model="proxy.p_stop_date" pi-input-watcher on-select="setStopDate" ng-focus="setStopFocused(true)" ng-blur="setStopFocused(false); globalProxyManagementDataValidator.setStartAndStopDateErrors(proxy)"
+               ng-class="[((globalProxyManagementDataValidator.stopDateErrMsg) ? 'input-error pi-date-input input-colors' : 'pi-date-input input-colors')]"
+               placeholder="{{'proxyManagement.label.stopDate'|i18n}}" id="stop-date"
+               aria-label="{{'proxyManagement.label.stopDate'|i18n}}"/>
+        <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.stopDateErrMsg ? 'field-error error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.stopDateErrMsg}}</p>
+    </div>
+</div>
+<div class="proxy-info-subheading">
+    <span class="bold">{{'proxyManagement.title.additionalInformation'|i18n}}</span>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-4">
+        <label class="input-field-label" for="desc">{{'proxyManagement.label.description'|i18n}}</label><br>
+        <input ng-model="proxy.p_desc"
+               class="text-input-field gssb-eds-text-field semi-bold form-spacing"
+               type="text" placeholder="{{placeholder.desc}}" size="{{(maxDescriptionLength + 2)}}" maxlength="{{maxDescriptionLength}}" title="{{proxy.p_desc}}" id="desc">
+    </div>
+</div>
+<div  ng-if="enablePassphrase" class="row">
+    <div class="col-xs-12 col-md-6 col-lg-4">
+        <label class="input-field-label" for="passphrase">{{'proxyManagement.label.passphrase'|i18n}}</label><br>
+        <input ng-model="proxy.p_passphrase"
+               class="text-input-field gssb-eds-text-field semi-bold form-spacing"
+               type="text" placeholder="{{placeholder.passphrase}}" size="{{(maxPassphraseLength + 2)}}" maxlength="{{maxPassphraseLength}}" title="{{proxy.p_passphrase}}" id="passphrase">
+        <p class="input-field-label mobile-errors" ng-class="[(!!passwordExpDateMsg ? 'error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{passwordExpDateMsg}}</p>
+        <p class="input-field-label mobile-errors" ng-class="[(!!emailVerifiedDateMsg ? 'error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{emailVerifiedDateMsg}}</p>
+        <p class="input-field-label mobile-errors" ng-class="[(!!optOutMsg ? 'error-font-size' : 'no-display')]"
+           role="alert" aria-live="assertive">{{optOutMsg}}</p>
+    </div>
+</div>
+
+<div ng-if="!isCreateNew && enablePassphrase" class="row">
+    <div class="col-xs-12 col-md-6 col-lg-4">
+        <div class="proxy-mgmt-email-passphrase">
+            <a ng-click="emailPassphrase()" class="add-item-link" tabindex="0">
+                <span class="icon-email-CO"></span> <span>{{'proxyManagement.label.email.passphrase'|i18n}}</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="proxy-info-subheading">
+    <span class="bold">{{'proxyManagement.title.authorizations'|i18n}}</span>
+    <span class="italic">{{'proxyManagement.label.hint.required'|i18n}}&nbsp;</span>
+    <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.authorizations'|i18n}}"></proxy-mgmt-popover-tooltip>
+</div>
+<p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.authorizationsErrMsg ? 'field-error error-font-size' : 'no-display')]"
+   role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.authorizationsErrMsg|i18n}}</p>
+
+
+<div>
+    <div  ng-if="isRelationshipSelected || clonedProxiesList.length > 0" class="row">
+        <div class="col-xs-12 col-md-3 col-lg-3 proxy-mgmt-select-all-pages">
+            <input  class="proxy-auth-check" type="checkbox" ng-click="toggleSelect()"/>
+            <span class="lbl">{{'proxyManagement.label.selectAll'|i18n}}</span>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-3 col-lg-3">
+                <label class="input-field-label" for="authorization">{{'proxyManagement.label.authorization'|i18n}}</label>
+                <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.authorization'|i18n}}"></proxy-mgmt-popover-tooltip><br>
+                <xe-ui-select ng-model="proxyAuxData.clonedProxy" theme="select2" search-enabled="false" ng-change="handleClonedListChange()" id="authorization">
+                    <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.authorization'|i18n)" placeholder="{{placeholder.clonedLList}}">
+                        {{$select.selected.description ? $select.selected.description : placeholder.clonedLList}}
+                    </xe-ui-select-match>
+                    <xe-ui-select-choices repeat="choice in clonedProxiesList">
+                        <div ng-bind-html="choice.description"></div>
+                    </xe-ui-select-choices>
+                </xe-ui-select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-lg-4 proxy-mgmt-pages">
+            <div ng-repeat="authItem in proxy.pages">
+                <input ng-model="authItem.auth" class="proxy-auth-check" type="checkbox" ng-disabled="!enablePageLevelAuthorization"  ng-change="globalProxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" aria-labelledby="dir-item{{$index}}"/>
+                <span class="lbl">{{authItem.desc}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-if="!isCreateNew" class="row">
+    <div class="col-xs-12 col-md-6 col-lg-4">
+        <div class="proxy-mgmt-email-passphrase">
+            <a ng-click="authPages.length > 0 ? emailAuthentications() : '' " ng-class="[(authPages.length > 0 ? 'add-item-link' : 'add-item-link disabled')]" tabindex="0">
+                <span class="icon-email-CO"></span> <span>{{'proxyManagement.label.email.authorizations'|i18n}}</span>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="proxy-bottom-buttons mgmt">
+    <div class="proxy-desktop-visible">
+        <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
+        <input ng-class="profileRequired ? 'only-submit' : null" ng-click="save()" type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
+    </div>
+</div>
+
