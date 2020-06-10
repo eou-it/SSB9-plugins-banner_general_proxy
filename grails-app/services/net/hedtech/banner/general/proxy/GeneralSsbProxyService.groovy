@@ -695,7 +695,7 @@ class GeneralSsbProxyService {
         def sqlText = ProxyLandingPageApi.PROXY_PAGES
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        sql.call(sqlText, [gidm,pidm,gidm,pidm, Sql.VARCHAR
+        sql.call(sqlText, [gidm,pidm,gidm,pidm,pidm,Sql.VARCHAR
         ]){ proxyPagesJson ->
             proxyPages = proxyPagesJson
         }
