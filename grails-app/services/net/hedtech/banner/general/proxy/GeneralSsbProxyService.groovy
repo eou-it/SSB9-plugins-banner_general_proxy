@@ -3,6 +3,7 @@
 ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
+import grails.converters.JSON
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
 import net.hedtech.banner.proxy.api.ProxyLandingPageApi
@@ -39,6 +40,7 @@ class GeneralSsbProxyService {
     def dataSource                         // injected by Spring
     def grailsApplication                  // injected by Spring
     def preferredNameService
+    def springSecurityService
 
 
     /**
@@ -720,6 +722,23 @@ class GeneralSsbProxyService {
         }
 
         return tokenOut
+    }
+
+    def checkFinaidAccesProxyPages(def page){
+
+        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+
+        if (p_proxyIDM) {
+
+            def pages = getProxyPages(p_proxyIDM, springSecurityService?.getAuthentication()?.user?.pidm)?.pages
+
+            def foundPage = pages?.find {it.url =~ page}
+
+            if (!foundPage){
+                String exceptionMsg = MessageHelper.message("net.hedtech.banner.access.denied.message")
+                throw new ApplicationException(this, exceptionMsg);
+            }
+        }
     }
 
 
