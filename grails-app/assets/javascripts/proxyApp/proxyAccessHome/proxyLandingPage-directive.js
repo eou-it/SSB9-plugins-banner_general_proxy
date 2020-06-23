@@ -1,7 +1,7 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-proxyAppDirectives.directive('landingPageAppTile', [ '$state', '$rootScope', 'webAppResourcePathString', function ($state, $rootScope, webAppResourcePathString) {
+proxyAppDirectives.directive('landingPageAppTile', ['$state', '$rootScope', function ($state, $rootScope) {
     return{
         restrict: 'E',
         templateUrl: '../assets/proxyApp/proxyAccessHome/proxyUserTile.html',
@@ -18,8 +18,8 @@ proxyAppDirectives.directive('landingPageAppTile', [ '$state', '$rootScope', 'we
     };
 }]);
 
-proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','webAppResourcePathString', '$filter',
-    function ($state,$rootScope, webAppResourcePathString, $filter) {
+proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope', '$filter',
+    function ($state, $rootScope, $filter) {
     return{
         restrict: 'E',
         templateUrl: '../assets/proxyApp/proxyAccessHome/proxyStudentTile.html',
@@ -39,20 +39,20 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
                     goProxyApp = function(url) {
 
                         //clear storage for Term Selector
-                        if (sessionStorage.getItem("termCode")){
+                        if (sessionStorage.getItem("termCode")) {
                             sessionStorage.removeItem("termCode");
                         }
 
-                        if (sessionStorage.getItem("termDesc")){
+                        if (sessionStorage.getItem("termDesc")) {
                             sessionStorage.removeItem("termDesc");
                         }
 
                         //clear storage for AidYear Selector
-                        if (sessionStorage.getItem("aidYearCode")){
+                        if (sessionStorage.getItem("aidYearCode")) {
                             sessionStorage.removeItem("aidYearCode");
                         }
 
-                        if (sessionStorage.getItem("aidYearDesc")){
+                        if (sessionStorage.getItem("aidYearDesc")) {
                             sessionStorage.removeItem("aidYearDesc");
                         }
 
@@ -61,8 +61,15 @@ proxyAppDirectives.directive('landingPageProxyTile', ['$state', '$rootScope','we
                         sessionStorage.setItem("name", proxyData.desc);
 
                         $rootScope.studentName = proxyData.desc;
-                        $state.go(url, {id: proxyData.id});
-                    };
+
+                        if (url.indexOf("proxy") > -1) {
+                                $state.go(url, {id: proxyData.id});
+                        } else{
+                                window.open(
+                                    $rootScope.applicationContextRoot + url,"_self"
+                                );
+                        }
+                };
 
                 setId();
                 goProxyApp(pageUrl);

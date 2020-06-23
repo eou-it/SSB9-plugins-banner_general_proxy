@@ -9,36 +9,9 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
         fetchRelationshipOptions = $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'getRelationshipOptions'}, {query: {method:'GET', isArray:false}}),
         fetchCommunicationLog = $resource('../ssb/:controller/:action',
-            {controller: 'ProxyManagement', action: 'getCommunicationLog'}, {query: {method:'GET', isArray:true}});
-
-    var dateFmt,
-        calendar = (function(){
-            // This will be loaded in GeneralSSBTagLib
-            var locale = window.i18n.locale;
-
-            if(locale.split('-')[0] === 'ar') {
-                dateFmt = $filter('i18n')('default.date.format');
-                return $.calendars.instance('islamic');
-            }
-            else {
-                dateFmt = $filter('i18n')('default.date.format').toLowerCase();
-                dateFmt = dateFmt.replace(/mmm/i, 'M'); // short month format is M, not MMM, for jQuery calendar
-                return $.calendars.instance();
-            }
-        }());
-
-
-    this.stringToDate = function (date) {
-        var result;
-        try {
-            result = calendar.parseDate(dateFmt, date).toJSDate();
-            return result;
-        }
-        catch (exception) {
-            return null;
-        }
-    };
-
+            {controller: 'ProxyManagement', action: 'getCommunicationLog'}, {query: {method:'GET', isArray:true}}),
+        fetchAuthLog = $resource('../ssb/:controller/:action',
+            {controller: 'ProxyManagement', action: 'getHistoryLog'}, {query: {method:'GET', isArray:false}});
 
     this.getProxyList = function () {
         return fetchProxies.query();
@@ -156,6 +129,10 @@ proxyManagementApp.service('proxyMgmtAppService', ['$rootScope', '$filter', '$re
         });
 
         return deferred;
+    };
+
+    this.getAuthLog = function (params) {
+        return fetchAuthLog.query(params);
     };
 
 }]);

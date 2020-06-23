@@ -116,4 +116,45 @@ class ProxyControllerUtilityTests extends BaseIntegrationTestCase {
         assertEquals new Integer(-222), cachedInfo
     }
 
+    @Test
+    void testMapAndGetAndClearProxyAddListPidmsMappingsInSessionCache() {
+        def proxies = [[code: 111,cver:0],[code: 222,cver:0],[code: 333,cver:0]]
+        ProxyControllerUtility.mapProxyAddListPidms(proxies)
+        def cachedInfo = ProxyControllerUtility.getProxyAddListPidmMapFromSessionCache([code:2,cver:0])
+
+        assertNotNull cachedInfo
+        assertEquals new Integer(333), cachedInfo
+
+        ProxyControllerUtility.clearAllProxyAddListPidmMapsFromSessionCache()
+        cachedInfo = ProxyControllerUtility.getProxyAddListPidmMapFromSessionCache([code:2,cver:0])
+
+        assertNull cachedInfo
+    }
+
+    @Test
+    void testMapProxyAddListPidmsWithArray() {
+        def proxyArr = [[code: 111,cver:0],[code: 222,cver:0],[code: 333,cver:0]] as Object[]
+
+        ProxyControllerUtility.mapProxyAddListPidms(proxyArr)
+
+        def cachedInfo = ProxyControllerUtility.getProxyAddListPidmMapFromSessionCache([code:0,cver:0])
+        assertNotNull cachedInfo
+        assertEquals new Integer(111), cachedInfo
+
+        cachedInfo = ProxyControllerUtility.getProxyAddListPidmMapFromSessionCache([code:1,cver:0])
+        assertNotNull cachedInfo
+        assertEquals new Integer(222), cachedInfo
+    }
+
+    @Test
+    void testMapProxyAddListPidmsWithSingleObject() {
+        def proxy = [code: 222,cver:0]
+
+        ProxyControllerUtility.mapProxyAddListPidms(proxy)
+
+        def cachedInfo = ProxyControllerUtility.getProxyAddListPidmMapFromSessionCache([code:0,cver:0])
+        assertNotNull cachedInfo
+        assertEquals new Integer(222), cachedInfo
+    }
+
 }

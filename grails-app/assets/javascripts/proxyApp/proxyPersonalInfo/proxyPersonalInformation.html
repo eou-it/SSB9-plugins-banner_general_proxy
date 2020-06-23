@@ -4,7 +4,7 @@
 <div class="clearfix">
     <h1 class="proxy-page-heading pi left">{{'proxy.profile.heading'|i18n}}</h1>
     <div class="proxy-pi-top-link">
-        <a ng-href="/BannerGeneralSsb/login/resetPassword?username={{guestUserName}}">{{'proxy.personalinformation.clickToChangePassword'|i18n}}</a>
+        <a ng-href="{{applicationContextRoot}}/login/resetPassword?username={{guestUserName}}">{{'proxy.personalinformation.clickToChangePassword'|i18n}}</a>
     </div>
 </div>
 <div class="proxy-profile-form">
@@ -16,55 +16,12 @@
             {{'proxy.personalinformation.topMessage'|i18n}}
         </div>
     </div>
-    <span ng-if="flashMessage" class="error-text">
-        <span class="icon-error ellucian-font"></span>{{flashMessage}}
-    </span>
-    <div class="row pi-section" ng-repeat="piSection in personalInfoSections">
-        <div class="clearfix">
-            <h2 class="proxy-section-heading pi">{{piSection.heading}}</h2>
-            <div class="proxy-pi-right-message required-field">
-                {{'proxy.label.indicatesRequiredField'|i18n}}
-            </div>
+    <div>
+        <div class="proxy-mobile-visible">
+            <ng-include src="'proxyApp/proxyPersonalInfo/proxyPersonalInformationSections/proxyPersonalInformationSectionsMobile.html'|webAppResourcePath"></ng-include>
         </div>
-        <div class="col-xs-12 col-md-4 col-lg-4" ng-repeat="profileElement in piSection.elements" ng-if="profileElement.visible">
-            <div ng-if="profileElement.visible && !profileElement.isWidget">
-                <label class="input-field-label" for="{{profileElement.elemId}}" ng-bind-html= "profileElement.label"> </label><br>
-                <input ng-model="profileElement.model" ng-blur="cityFocused=false;" ng-focus="cityFocused=true"
-                       ng-class="[(!!cityErrMsg && !cityFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
-                       type="text" placeholder="{{profileElement.placeholder}}" size="{{(profileElement.fieldLength + 2)}}" maxlength="{{profileElement.fieldLength}}" id="{{profileElement.elemId}}">
-                <p class="input-field-label mobile-errors" ng-class="[(!!cityErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                   role="alert" aria-live="assertive">{{cityErrMsg|i18n}}</p>
-            </div>
-
-            <div ng-if="profileElement.visible && profileElement.isDropdown" class="profile-dropdown">
-                <label class="input-field-label" ng-bind-html= "profileElement.label"></label><br>
-                <genssb-xe-dropdown fetch-function="profileElement.fetch" model-holder="profileElement" model-name="model"
-                                    show-na="true" dropdown-placeholder="{{profileElement.placeholder}}"
-                                    focus-text="{{profileElement.placeholder}}">
-                </genssb-xe-dropdown>
-            </div>
-
-            <div ng-if="profileElement.visible && profileElement.elemId === 'p_birth_date'">
-                <label for="birthDate" ng-bind-html="profileElement.label" class="input-field-label">
-                </label>
-                <input date-picker ng-model="profileElement.model" pi-input-watcher on-select="setBirthDate"
-                       class="pi-date-input input-colors" placeholder="{{profileElement.placeholder}}" id="birthDate"
-                       aria-label="{{profileElement.placeholder}}"/>
-            </div>
-
-            <div ng-if="profileElement.visible && profileElement.elemId === 'p_sex'" class="profile-dropdown">
-                <label class="input-field-label" ng-bind-html="profileElement.label" for="sexSelector"></label><br>
-                <xe-ui-select ng-model="profileElement.model" theme="select2" search-enabled="false" id="sexSelector">
-                    <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, profileElement.label)" placeholder="{{profileElement.placeholder}}">
-                        {{$select.selected.description ? $select.selected.description : profileElement.placeholder}}
-                    </xe-ui-select-match>
-                    <xe-ui-select-choices repeat="choice in legalSexChoices">
-                        <div ng-bind-html="choice.description"></div>
-                    </xe-ui-select-choices>
-                </xe-ui-select>
-            </div>
-
-
+        <div class="proxy-desktop-visible proxy-tablet-visible proxy-pi-section-overflow">
+            <ng-include src="'proxyApp/proxyPersonalInfo/proxyPersonalInformationSections/proxyPersonalInformationSectionsDesktop.html'|webAppResourcePath"></ng-include>
         </div>
     </div>
     <div class="proxy-pi-bottom-spacer"></div>
@@ -72,7 +29,6 @@
         <input ng-model="optOutAdvDate.model" class="main-nav-check" id="opt_out_adv_date" type="checkbox" aria-describedby="opt-out-adv-date-txt"/>
         <p class="lbl" id="opt-out-adv-date-txt"><label for="opt_out_adv_date">{{'proxy.personalinformation.label.p_opt_out_adv_date'|i18n}}</label></p>
     </div>
-
     <div ng-if = "personalInfoSections.length > 0" class="proxy-bottom-buttons">
         <div class="proxy-mobile-visible">
             <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
@@ -88,3 +44,4 @@
         </div>
     </div>
 </div>
+

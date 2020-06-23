@@ -62,7 +62,7 @@ class GeneralSsbProxyManagementService {
         def sqlText = ProxyManagementApi.CREATE_PROXY
 
         try {
-            sql.call(sqlText, [params.pidm, params.p_email, params.p_email_verify, params.p_last, params.p_first,
+            sql.call(sqlText, [params.pidm, params.p_email, params.p_email_verify, params.p_last, params.p_first, params.p_code,
                                Sql.VARCHAR, Sql.VARCHAR, Sql.NUMERIC
             ]){ errorMsg, errorStatus, gidm ->
                 errorMsgOut = errorMsg
@@ -477,6 +477,25 @@ class GeneralSsbProxyManagementService {
                 }
 
         status
+    }
+
+
+    def getProxyHistoryLog(def params) {
+
+        def  historyList = ""
+
+        def sqlText = ProxyManagementApi.HISTORY_LOG
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [params.gidm, params.pidm, Sql.CLOB
+        ]){ proxyHistoryJson ->
+            historyList= proxyHistoryJson.characterStream.text
+        }
+
+
+        def data = new JsonSlurper().parseText(historyList)
+
+        return data
     }
 
 

@@ -2,8 +2,8 @@
  Copyright 2019 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$rootScope','$state','$filter','$location',
-    'proxyAppService','notificationCenterService', 'proxyEmailService',
-    function ($scope, $rootScope, $state, $filter, $location, proxyAppService, notificationCenterService, proxyEmailService) {
+    'proxyAppService','notificationCenterService', 'proxyAppDateService', 'proxyAppErrorService',
+    function ($scope, $rootScope, $state, $filter, $location, proxyAppService, notificationCenterService, proxyAppDateService, proxyAppErrorService) {
 
         var init = function () {
             getPersonalInfo();
@@ -13,13 +13,17 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
 
         $scope.proxyProfile;
         $scope.proxyUiRules;
-
+        $scope.sectionCollapsed = [true, true, true, true]; //Used for accessibility so screen readers know the state of a collapsible section.
         $scope.profileElements;
         $scope.detailsElements;
         $scope.contactElements;
         $scope.addressElements;
         $scope.otherElements;
         $scope.optOutAdvDate;
+        $scope.birthDateFocused;
+        $scope.profile = {};
+        $scope.emailErrMsg = '';
+        $scope.birthDateErrMsg = '';
         $scope.personalInfoSections = [];
         $scope.legalSexChoices = [
             {code: 'M', description: $filter('i18n')('proxy.personalinformation.label.male')},
@@ -32,7 +36,12 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
         };
 
         $scope.setBirthDate = function(data){
-            $scope.profileElements["p_birth_date"].model = data;
+            $scope.$apply(function () {
+                var errors = $scope.setDataValidationErrors(data);
+                if (!errors) {
+                    $scope.profileElements["p_birth_date"].model = data;
+                }
+            })
         };
 
         var getPersonalInfo = function() {
@@ -56,7 +65,8 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     var required = $scope.proxyUiRules[it] ? $scope.proxyUiRules[it].required : false;
 
                     $scope.profileElements[it] = {
-                        label: required ? ($filter('i18n')('proxy.personalinformation.label.' + it) + '<font color="#CD3B3E">*</font>') : $filter('i18n')('proxy.personalinformation.label.' + it),
+                        label: required ? ($filter('i18n')('proxy.personalinformation.label.' + it) + '<span class="required-field"></span>') : $filter('i18n')('proxy.personalinformation.label.' + it),
+                        requiredField: required,
                         model: $scope.proxyProfile[it],
                         fieldLength: $scope.proxyUiRules[it].fieldLength,
                         elemId: it,
@@ -161,44 +171,98 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                 $scope.profileElements['p_cnty_code'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_cnty_code');
                 $scope.profileElements['p_sex'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_sex');
                 $scope.profileElements['p_birth_date'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_birth_date');
-                $scope.profileElements['p_ssn'].placeholder = $filter('i18n')('proxy.personalinformation.p_ssn');
+                $scope.profileElements['p_ssn'].placeholder = $filter('i18n')('proxy.personalinformation.label.p_ssn');
 
             });
+        },
+            displayErrors = function(errors) {
+                var numberOfErrors = errors.length;
+                notificationCenterService.clearNotifications();
+                for (var i = 0; i < numberOfErrors; i++) {
+                    notificationCenterService.addNotification(errors[i], "error", true);
+                }
+            },
+            getErrorsForMissingDataFromBackEndCheck = function (errors) {
+                var errorList = errors.split(":");
+                errorList.splice(0, 2); //Removes messages which we are not going to display as notifications.
+                errorList.forEach(function (error) {
+                    var errorToDisplay = (($filter('i18n')('proxy.personalinformation.onSave.required_field', [error])));
+                    notificationCenterService.addNotification(errorToDisplay, "error", true);
+                });
+
+                $scope.flashMessage = null; //Do not display flash message at top of screen for missing data errors - only display these in notifications.
+            },
+            errorsAreForMissingRequiredData = function (error) {
+                return error.message.indexOf('ERR_MISSING_DATA') > -1
+            },
+            profileElementIsANonBooleanRequiredFieldWhichIsMissingData = function (profileElement) {
+                return profileElement.requiredField === true &&
+                    (!$scope.profile[profileElement.elemId] &&
+                        typeof $scope.profile[profileElement.elemId] !== "boolean")
+            },
+            getErrorsForMissingDataFromFrontEndCheck = function () {
+                var errors = [];
+                _.each(($scope.profileElements), function (it) {
+                    /*We do not want to throw an error for boolean fields such as
+                    * opt out of advancement mailings, as they are allowed to be checked or unchecked.*/
+                    if (profileElementIsANonBooleanRequiredFieldWhichIsMissingData(it)) {
+                        errors.push((($filter('i18n')('proxy.personalinformation.onSave.required_field',
+                            [$filter('i18n')('proxy.personalinformation.onSave.' + it.elemId)]))))
+                    }
+                });
+                return errors;
+            };
+        $scope.setDataValidationErrors = function (birthDate) {
+            var emailErrorMessage,
+                birthDateErrorMessage,
+                errors = [];
+
+            emailErrorMessage = proxyAppErrorService.getErrorEmailAddress($scope.profileElements.p_email_address.model);
+
+            if (emailErrorMessage) {
+                $scope.emailErrMsg = emailErrorMessage;
+                errors.push(emailErrorMessage);
+            } else {
+                $scope.emailErrMsg = '';
+            }
+            birthDateErrorMessage = proxyAppErrorService.getErrorBirthDate(birthDate);
+            if (birthDateErrorMessage) {
+                $scope.birthDateErrMsg = birthDateErrorMessage;
+                errors.push(birthDateErrorMessage);
+
+            } else {
+                $scope.birthDateErrMsg = '';
+                if ($scope.profileElements["p_birth_date"].model) {
+                    $scope.proxyProfile.p_birth_date = proxyAppDateService.stringToDate($scope.profileElements["p_birth_date"].model);
+                    $scope.profile.p_birth_date = $scope.proxyProfile.p_birth_date;
+                }
+            }
+            return errors;
+
         };
 
         $scope.save = function() {
-            var profile = {},
-                errorMsg;
-
+            $scope.profile = {};
             _.each(Object.keys($scope.profileElements), function(it) {
-                profile[it] = $scope.profileElements[it].model;
+                $scope.profile[it] = $scope.profileElements[it].model;
             });
 
-            if ($scope.profileElements["p_birth_date"].model) {
-                $scope.proxyProfile.p_birth_date = proxyAppService.stringToDate($scope.profileElements["p_birth_date"].model);
+            var errors = $scope.setDataValidationErrors($scope.profile.p_birth_date);
+            errors = errors.concat(getErrorsForMissingDataFromFrontEndCheck());
 
-                profile.p_birth_date = $scope.proxyProfile.p_birth_date;
+            if (errors.length !== 0) {
+                displayErrors(errors);
+                return; //Do not update.
             }
 
-            if (profile.p_email_address) {
-                errorMsg = proxyEmailService.getErrorEmailAddress(profile.p_email_address);
-
-                if (errorMsg) {
-                    notificationCenterService.clearNotifications();
-                    notificationCenterService.addNotification(errorMsg, "error", true);
-
-                    return; // DO NOT UPDATE
-                }
-            }
-
-            if (profile.p_sex) {
-                profile.p_sex = profile.p_sex.code;
+            if ($scope.profile.p_sex) {
+                $scope.profile.p_sex = $scope.profile.p_sex.code;
             }
 
             //Show a Wait Message. It will be replaced by Success message after response is processed.
             notificationCenterService.addNotification('proxy.personalinformation.onSave.waitMessage', 'success', true);
 
-            proxyAppService.updateProxyPersonalInfo(profile).$promise.then(function(response) {
+            proxyAppService.updateProxyPersonalInfo($scope.profile).$promise.then(function(response) {
                 var notifications = [],
                     doStateGoSuccess = function(messageOnSave) {
                         notifications.push({message:  messageOnSave ? messageOnSave : 'proxy.personalinformation.label.saveSuccess',
@@ -215,8 +279,7 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
                     $scope.flashMessage = response.message;
 
                     notificationCenterService.clearNotifications();
-                    notificationCenterService.addNotification(response.message, "error", true);
-
+                    errorsAreForMissingRequiredData(response) ? getErrorsForMissingDataFromBackEndCheck(response.message) : notificationCenterService.addNotification(response.message, "error", true);
                     if ($rootScope.profileRequired && $('#breadcrumb-panel').is(":visible")) {
                         $("#breadcrumb-panel").hide();
                     }
@@ -232,6 +295,16 @@ proxyAppControllers.controller('proxyPersonalInformationController',['$scope','$
 
             });
         };
+
+        $scope.setBirthDateFocused = function (focused) {
+            $scope.birthDateFocused = focused;
+        };
+
+        $scope.$watch('profileElements["p_birth_date"].model', function (newVal, oldVal) {
+            if (newVal !== oldVal && !$scope.birthDateFocused) {
+                    $scope.setDataValidationErrors(newVal)
+            }
+        });
 
         $scope.cancel = function() {
             // If proxy personal info has never been filled out successfully, Cancel just returns the form to its

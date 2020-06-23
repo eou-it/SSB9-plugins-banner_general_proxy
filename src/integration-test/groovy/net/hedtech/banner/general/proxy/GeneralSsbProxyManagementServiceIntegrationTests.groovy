@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 package net.hedtech.banner.general.proxy
 
@@ -25,10 +25,22 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
     public void setUp() {
         formContext = ['SELFSERVICE'] // Since we are not testing a controller, we need to explicitly set this
         super.setUp()
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.executeUpdate("""
+                UPDATE GEBCOMM SET GEBCOMM_PER_NOTIFY_IND = 'N', GEBCOMM_ADMIN_NOTIFY_IND = 'N',
+                GEBCOMM_PROXY_NOTIFY_IND = 'N'
+                WHERE GEBCOMM_SYST_CODE= 'PROXY'
+          """)
     }
 
     @After
     public void tearDown() {
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.executeUpdate("""
+                UPDATE GEBCOMM SET GEBCOMM_PER_NOTIFY_IND = 'Y', GEBCOMM_ADMIN_NOTIFY_IND = 'Y',
+                GEBCOMM_PROXY_NOTIFY_IND = 'Y'
+                WHERE GEBCOMM_SYST_CODE= 'PROXY'
+          """)
         super.tearDown()
     }
 
@@ -68,6 +80,36 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
         } finally {
             deleteDBEntry(gidm);
         }
+    }
+
+
+    @Test
+    void createProxyUsingExistingBannerUser() {
+        def id = 'A00017091'
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "b@aol.com"
+        params."p_email_verify" = "b@aol.com"
+        params."p_last" = "Efg"
+        params."p_first" = "KLM"
+        params."p_code" = "123456"
+        params."pidm" = pidm
+        def result
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+
+            def sql = new Sql(sessionFactory.getCurrentSession().connection())
+            def query = """SELECT GPBPRXY_PROXY_PIDM FROM gpbprxy WHERE GPBPRXY_EMAIL_ADDRESS = :email """
+            result = sql?.firstRow(query,[email: params.p_email])
+        } catch (Exception e) {
+            fail("Could not generate IDM. " + e)
+        } finally {
+            deleteDBEntry(gidm);
+        }
+
+        assertEquals 123456, result.GPBPRXY_PROXY_PIDM as Integer
     }
 
 
@@ -409,6 +451,44 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
     }
 
 
+    @Test
+    void testGetProxyHistoryLog() {
+
+        def id = 'A00017091'
+
+        def pidm = PersonUtility.getPerson(id)?.pidm
+        def gidm
+        def params = [:]
+        params."p_email" = "a@aol.com"
+        params."p_email_verify" = "a@aol.com"
+        params."p_last" = "Abc"
+        params."p_first" = "ABX"
+        params."pidm" = pidm
+
+        try {
+            gidm = generalSsbProxyManagementService.createProxyProfile(params)
+            assertNotNull gidm
+
+            params.gidm = gidm
+
+            createProxyHistory(pidm, gidm,'HISTORY');
+
+            def historyLog = generalSsbProxyManagementService.getProxyHistoryLog(params)
+
+            assertNotNull historyLog?.result?.action[0]
+            assertEquals "HISTORY", historyLog?.result?.page[0]
+            assertEquals "enable", historyLog?.result?.action[0]
+            assertNotNull historyLog?.result?.activityDate[0]
+
+
+        } catch (Exception e) {
+            fail("Could not generate IDM. " + e)
+        } finally {
+            deleteProxyHistory(pidm,gidm)
+            deleteDBEntry(gidm)
+        }
+    }
+
 
     void deleteDBEntry(def idm) {
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
@@ -433,14 +513,41 @@ class GeneralSsbProxyManagementServiceIntegrationTests extends BaseIntegrationTe
         def url
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        try {
-            def query = """SELECT gpbeltr_ctyp_url url FROM gpbeltr WHERE gpbeltr_proxy_idm = :idm
+        def query = """SELECT gpbeltr_ctyp_url url FROM gpbeltr WHERE gpbeltr_proxy_idm = :idm
                            and gpbeltr_ctyp_code = 'NEW_PROXY_NOA' """
-            url = sql?.firstRow(query,[idm: idm])?.url
+        url = sql?.firstRow(query, [idm: idm])?.url
+
+
+        //The proxy URL could be located in either Banner General Self-Service or in Student Self-Service
+        return (url.contains("BannerGeneralSsb/ssb/proxy/proxyAction?p_token") || url.contains("StudentSelfService/ssb/proxy/proxyAction?p_token"))
+    }
+
+
+    void createProxyHistory(def pidm, def idm, def page) {
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        try {
+            sql.executeUpdate("""
+               insert into GPRHIST (GPRHIST_PERSON_PIDM, GPRHIST_PROXY_IDM,GPRHIST_PAGE_NAME,GPRHIST_ACTIVITY_DATE,GPRHIST_OLD_AUTH_IND, GPRHIST_NEW_AUTH_IND ) 
+               values(?,?,?, sysdate, 'N', 'Y')
+          """, [pidm, idm,page])
+            sql.commit();
         } finally {
             //sql?.close()
         }
-
-        url.contains("BannerGeneralSsb/ssb/proxy/proxyAction?p_token")
     }
+
+    void deleteProxyHistory(def pidm, def idm) {
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        try {
+            sql.executeUpdate("""
+              delete from GPRHIST
+                 where GPRHIST_person_pidm = ?
+                 and GPRHIST_PROXY_IDM = ?
+          """, [pidm, idm])
+            sql.commit();
+        } finally {
+            //sql?.close()
+        }
+    }
+
 }

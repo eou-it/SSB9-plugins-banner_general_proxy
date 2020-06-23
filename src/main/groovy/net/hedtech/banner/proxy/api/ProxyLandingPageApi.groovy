@@ -5,6 +5,35 @@ package net.hedtech.banner.proxy.api
 
 class ProxyLandingPageApi {
 
+    public final static String GET_STUDENT_ID_FROM_TOKEN ="""
+  DECLARE
+     token varchar2(2000);
+     proxyId varchar2(2000);
+   BEGIN
+   token := ?;
+   --
+   gspcrpu.p_unapply (token,proxyId);
+   proxyId := substr(proxyId,instr(proxyId,'::', 1, 2) + 2);
+--   
+   ? := proxyId;
+--
+  END;
+"""
+
+    public final static String STUDENT_TOKEN = """
+    DECLARE
+      lv_value varchar2(2000);
+      id SPRIDEN.SPRIDEN_ID%TYPE;
+    BEGIN
+    --
+    id := ?;
+    gspcrpt.p_apply(dbms_random.string('P',12) || '::'  || to_char(sysdate,'DDMMYYYYHH24MISS') || '::' || id, lv_value);
+    --
+    ? := lv_value;
+    --
+    END;
+    """
+
     public final static String STUDENT_LIST_FOR_PROXY = """
 
 DECLARE
@@ -106,7 +135,8 @@ DECLARE
                o.twgrmenu_sequence AS menu_seq
           FROM TWGRMENU o, TWGBWMNU m
          WHERE o.twgrmenu_name = m.twgbwmnu_name
-         AND  o.twgrmenu_url like '%/proxy/%'
+         AND  (o.twgrmenu_url like '%/proxy/%'
+               OR o.twgrmenu_url like '%/ssb/%')
            AND m.twgbwmnu_source_ind =
               (SELECT NVL (MAX (n.twgbwmnu_source_ind), 'B')
                  FROM twgbwmnu n

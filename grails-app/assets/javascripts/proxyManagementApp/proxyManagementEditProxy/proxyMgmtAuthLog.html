@@ -1,0 +1,15 @@
+<!--*******************************************************************************
+  Copyright 2019 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="proxy-auth-log-header">
+    <span class="proxy-auth-log-title">{{'proxyManagement.title.authorizationLog'|i18n}}</span>
+    <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.authorizationLog'|i18n}}"></proxy-mgmt-popover-tooltip>
+</div>
+<div class="proxy-mgmt-auth-grid">
+    <xe-table-grid table-id="authLogDataTable" caption="" header="authLogColumns" fetch="getAuthLogData(query)"
+                   content="authLogRows" results-found="authLogRecords" toolbar="false" paginate="true" continuous-scrolling="true"
+                   no-data-msg="{{'proxyManagement.message.noResultsFound'|i18n}}" empty-table-msg="" on-row-click="onRowClick()"
+                   pagination-config="authLogPaginationConfig" draggable-column-names="draggableAuthLogColumnNames"
+                   mobile-layout="authLogMobileConfig" height="16em">
+    </xe-table-grid>
+</div>

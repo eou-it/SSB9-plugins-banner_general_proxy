@@ -6,25 +6,12 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
 
     var fetchConfig = $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'getConfig'}),
+        fetchProxyConfig = $resource('../ssb/:controller/:action',
+            {controller: 'Proxy', action: 'getProxyConfig'}),
         fetchProxyPersonalInfo = $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'getProxypersonalinformation'}, {query: {method:'GET', isArray:false}}),
         fetchStudentListForProxy = $resource('../ssb/:controller/:action',
             {controller: 'Proxy', action: 'getStudentListForProxy'}, {query: {method:'GET', isArray:false}});
-
-    var dateFmt,
-        calendar = (function(){
-            var locale = $('meta[name=locale]').attr("content");
-
-            if(locale.split('-')[0] === 'ar') {
-                dateFmt = $filter('i18n')('default.date.format');
-                return $.calendars.instance('islamic');
-            }
-            else {
-                dateFmt = $filter('i18n')('default.date.format').toLowerCase();
-                dateFmt = dateFmt.replace(/mmm/i, 'M'); // short month format is M, not MMM, for jQuery calendar
-                return $.calendars.instance();
-            }
-        }());
 
 
     var updateProxyHistoryOnPageAccess = function(label) {
@@ -38,23 +25,11 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
     //Logs the History for the Proxy Page Access
     this.updateProxyHistoryOnPageAccess = function(label){
         updateProxyHistoryOnPageAccess(label);
-    }
-
-
-
-    this.stringToDate = function (date) {
-        var result;
-        try {
-            result = calendar.parseDate(dateFmt, date).toJSDate();
-            return result;
-        }
-        catch (exception) {
-            return null;
-        }
     };
 
 
     this.config = null;
+    this.proxyConfig = null;
 
     this.getConfiguration = function () {
         // Retrieve configuration just once; don't make a round trip each time it's requested.
@@ -65,9 +40,13 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
         return this.config;
     };
 
-    this.getFromPersonalInfo = function (entityName, params) {
-        return $resource('../:controller/:action',
-            {controller: 'PersonalInformationDetails', action: 'get'+entityName}).get(params);
+    this.getProxyConfig = function () {
+        // Retrieve configuration just once; don't make a round trip each time it's requested.
+        if (!this.proxyConfig) {
+            this.proxyConfig = fetchProxyConfig.get();
+        }
+
+        return this.proxyConfig;
     };
 
     this.getProxyPersonalInfo = function () {
@@ -192,17 +171,17 @@ proxyApp.service('proxyAppService', ['$rootScope', '$filter', '$resource', funct
 
     this.getCountyList = function (params) {
         return $resource('../ssb/:controller/:action',
-            {controller: 'PersonalInformationDetails', action: 'getCountyList'}).query(params);
+            {controller: 'Proxy', action: 'getCountyList'}).query(params);
     };
 
     this.getStateList = function (params) {
         return $resource('../ssb/:controller/:action',
-            {controller: 'PersonalInformationDetails', action: 'getStateList'}).query(params);
+            {controller: 'Proxy', action: 'getStateList'}).query(params);
     };
 
     this.getNationList = function (params) {
         return $resource('../ssb/:controller/:action',
-            {controller: 'PersonalInformationDetails', action: 'getNationList'}).query(params);
+            {controller: 'Proxy', action: 'getNationList'}).query(params);
     };
 
 }]);

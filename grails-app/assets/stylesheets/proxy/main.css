@@ -181,6 +181,10 @@ button.dropdown-btn.ng-not-empty {
     color: grey;
 }
 
+.proxy-pi-top-link > a {
+    text-decoration: underline;
+}
+
 .panel-accordion .panel-body {
     background-color: #ffffff;
     position: relative;
@@ -651,6 +655,11 @@ input.hasMultiCalendarPicker.pi-date-input::-ms-clear {
 .text-input-field {
     border-radius: 4px;
     width: 100%;
+}
+
+
+.pi-section .text-input-field {
+    height: 49px;
 }
 
 input.hasMultiCalendarPicker.pi-date-input {

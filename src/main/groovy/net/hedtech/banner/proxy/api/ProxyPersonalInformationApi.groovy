@@ -383,10 +383,13 @@ class ProxyPersonalInformationApi {
     FETCH refProxy INTO pidm;
     CLOSE refProxy;
     --
+    
+   IF pidm IS NOT NULL THEN
     lv_RETP := gp_gprxref.F_GetXREF_RETP (?, pidm);
 
     IF bwgkprxy.F_GetOption ('LOGIN_IN_HISTORY', lv_RETP) = 'Y'
       THEN
+
          gp_gprhist.P_Create (
             p_proxy_idm    => to_number(?),
             p_person_pidm  => pidm,
@@ -401,6 +404,7 @@ class ProxyPersonalInformationApi {
       --
             gb_common.P_Commit;
       END IF;
+    END IF;
     END;
     """
 
@@ -414,13 +418,17 @@ class ProxyPersonalInformationApi {
        
   BEGIN
   
-   lv_RETP := gp_gprxref.F_GetXREF_RETP (?, ?);
+   pidm := ?;
    
-   IF bwgkprxy.F_GetOption ('PAGE_DISPLAY_IN_HISTORY', lv_RETP) = 'Y'
+   IF pidm IS NOT NULL THEN
+  
+   lv_RETP := gp_gprxref.F_GetXREF_RETP (pidm, ?);
+   
+     IF bwgkprxy.F_GetOption ('PAGE_DISPLAY_IN_HISTORY', lv_RETP) = 'Y'
       THEN
          gp_gprhist.P_Create (
             p_proxy_idm    => ?,
-            p_person_pidm  => ?,
+            p_person_pidm  => pidm,
             p_page_name    => ?,
             p_old_auth_ind => 'V',
             p_new_auth_ind => 'V',
@@ -433,6 +441,7 @@ class ProxyPersonalInformationApi {
             gb_common.P_Commit;
       END IF;
     --
+     END IF;
     END;
     """
 

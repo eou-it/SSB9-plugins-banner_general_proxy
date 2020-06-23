@@ -161,6 +161,15 @@ h2 {
 
 .proxy-item-name {
     font-family: OpenSans-semibold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.long-name-limiter {
+    max-width: 100%;
+    overflow: auto;
 }
 
 .proxy-mgmt-footer-container {
@@ -187,15 +196,18 @@ h2 {
     padding-right: 10px;
 }
 
-.proxy-mgmt-comm-grid {
+.proxy-mgmt-comm-grid,
+.proxy-mgmt-auth-grid {
     padding-top: 10px;
 }
 
-.proxy-communication-log-header {
+.proxy-communication-log-header,
+.proxy-auth-log-header {
     padding-top: 35px;
 }
 
-.proxy-communication-log-title {
+.proxy-communication-log-title,
+.proxy-auth-log-title {
     font-weight: bold;
     font-size: 18px;
 }
@@ -230,6 +242,10 @@ h2 {
     color: #026bc8;
 }
 
+#authorization .select2-choice > .select2-chosen {
+    padding-top: 0.5em;
+    display: block;
+}
 
 /***********************/
 /* Media Query Section */

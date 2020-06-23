@@ -32,47 +32,47 @@
             <div class="row">
                 <div class="col-xs-12 col-md-6 col-lg-4">
                     <label class="input-field-label" for="first-name">{{'proxy.personalinformation.label.p_first_name'|i18n}}</label><br>
-                    <input ng-model="proxy.p_first" ng-blur="firstNameFocused=false; removeProxyProfileFieldErrors()" ng-focus="firstNameFocused=true"
-                           ng-class="[(!!firstNameErrMsg && !firstNameFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
+                    <input ng-model="proxy.p_first" ng-blur="firstNameFocused=false; proxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="firstNameFocused=true"
+                           ng-class="[(!!proxyManagementDataValidator.firstNameErrMsg && !firstNameFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                            type="text" placeholder="{{placeholder.first_name}}" size="{{(maxNameLength + 2)}}" maxlength="{{maxNameLength}}" title="{{proxy.p_first}}" id="first-name">
-                    <p class="input-field-label mobile-errors" ng-class="[(!!firstNameErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                       role="alert" aria-live="assertive">{{firstNameErrMsg|i18n}}</p>
+                    <p class="input-field-label mobile-errors" ng-class="[(!!proxyManagementDataValidator.firstNameErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                       role="alert" aria-live="assertive">{{proxyManagementDataValidator.firstNameErrMsg|i18n}}</p>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-12 col-md-6 col-lg-4">
                     <label class="input-field-label" for="last-name">{{'proxy.personalinformation.label.p_last_name'|i18n}}</label><br>
-                    <input ng-model="proxy.p_last" ng-blur="lastNameFocused=false; removeProxyProfileFieldErrors()" ng-focus="lastNameFocused=true"
-                           ng-class="[(!!lastNameErrMsg && !lastNameFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
+                    <input ng-model="proxy.p_last" ng-blur="lastNameFocused=false; proxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="lastNameFocused=true"
+                           ng-class="[(!!proxyManagementDataValidator.lastNameErrMsg && !lastNameFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                            type="text" placeholder="{{placeholder.last_name}}" size="{{(maxNameLength + 2)}}" maxlength="{{maxNameLength}}" title="{{proxy.p_last}}" id="last-name">
-                    <p class="input-field-label mobile-errors" ng-class="[(!!lastNameErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                       role="alert" aria-live="assertive">{{lastNameErrMsg|i18n}}</p>
+                    <p class="input-field-label mobile-errors" ng-class="[(!!proxyManagementDataValidator.lastNameErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                       role="alert" aria-live="assertive">{{proxyManagementDataValidator.lastNameErrMsg|i18n}}</p>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-12 col-md-6 col-lg-4">
                     <label class="input-field-label" for="email">{{'proxyManagement.label.email'|i18n}}</label><br>
-                    <input ng-model="proxy.p_email" ng-blur="emailFocused=false; removeProxyProfileFieldErrors()" ng-focus="emailFocused=true"
-                           ng-class="[(!!emailErrMsg && !emailFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
+                    <input ng-model="proxy.p_email" ng-blur="emailFocused=false; proxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="emailFocused=true"
+                           ng-class="[(!!proxyManagementDataValidator.emailErrMsg && !emailFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                            type="text" placeholder="{{placeholder.email}}" size="{{(maxEmailLength + 2)}}" maxlength="{{maxEmailLength}}" title="{{proxy.p_email}}" id="email">
-                    <p class="input-field-label mobile-errors" ng-class="[(!!emailErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                       role="alert" aria-live="assertive">{{emailErrMsg|i18n}}</p>
+                    <p class="input-field-label mobile-errors" ng-class="[(!!proxyManagementDataValidator.emailErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                       role="alert" aria-live="assertive">{{proxyManagementDataValidator.emailErrMsg|i18n}}</p>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-12 col-md-6 col-lg-4">
                     <label class="input-field-label" for="verify-email">{{'proxyManagement.label.verifyEmail'|i18n}}</label><br>
-                    <input ng-model="proxy.p_email_verify" ng-blur="verifyEmailFocused=false; removeProxyProfileFieldErrors()" ng-focus="verifyEmailFocused=true"
-                           ng-class="[(!!verifyEmailErrMsg && !verifyEmailFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
+                    <input ng-model="proxy.p_email_verify" ng-blur="verifyEmailFocused=false; proxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="verifyEmailFocused=true"
+                           ng-class="[(!!proxyManagementDataValidator.verifyEmailErrMsg && !verifyEmailFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                            type="text" placeholder="{{placeholder.verify_email}}" size="{{(maxEmailLength + 2)}}" maxlength="{{maxEmailLength}}" title="{{proxy.p_email_verify}}" id="verify-email">
-                    <p class="input-field-label mobile-errors" ng-class="[(!!verifyEmailErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                       role="alert" aria-live="assertive">{{verifyEmailErrMsg|i18n}}</p>
+                    <p class="input-field-label mobile-errors" ng-class="[(!!proxyManagementDataValidator.verifyEmailErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                       role="alert" aria-live="assertive">{{proxyManagementDataValidator.verifyEmailErrMsg|i18n}}</p>
                 </div>
             </div>
         </div>
         <div ng-if="!isCreateNew">
             <div class="clearfix">
-                <div class="proxy-base-info-summary">
+                <div class="proxy-base-info-summary long-name-limiter">
                     <span>{{proxyAuxData.firstName}}</span> <span>{{proxyAuxData.lastName}}</span> <span>({{proxyAuxData.email}})&#x200E;</span>
                 </div>
                 <div class="proxy-mgmt-reset-pw" ng-if="enableResetPin">
@@ -87,6 +87,10 @@
                 <ng-include src="'../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtCommonEditInputs.html'"></ng-include>
                 &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
             </xe-tab-panel>
+            <xe-tab-panel heading="{{'proxyManagement.title.history'|i18n}}" state="editProxy" ng-if="enableTabHistory">
+                <ng-include src="'../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtAuthLog.html'"></ng-include>
+                &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
+            </xe-tab-panel>
             <xe-tab-panel heading="{{'proxyManagement.title.communication'|i18n}}" state="editProxy" ng-if="enableTabCommunication">
                 <ng-include src="'../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtCommunication.html'"></ng-include>
                 &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
@@ -94,12 +98,12 @@
         </xe-tab-nav>
         <ng-include ng-if="isCreateNew" src="'../assets/proxyManagementApp/proxyManagementEditProxy/proxyMgmtCommonEditInputs.html'"></ng-include>
         <div id="proxyProfileErrorMsgCenter" class="visuallyhidden" tabindex="-1">
-            <span>{{firstNameErrMsg|i18n}}</span>
-            <span>{{lastNameErrMsg|i18n}}</span>
-            <span>{{emailErrMsg|i18n}}</span>
-            <span>{{verifyEmailErrMsg|i18n}}</span>
-            <span>{{relationshipErrMsg|i18n}}</span>
-            <span>{{authorizationsErrMsg|i18n}}</span>
+            <span>{{proxyManagementDataValidator.firstNameErrMsg|i18n}}</span>
+            <span>{{proxyManagementDataValidator.lastNameErrMsg|i18n}}</span>
+            <span>{{proxyManagementDataValidator.emailErrMsg|i18n}}</span>
+            <span>{{proxyManagementDataValidator.verifyEmailErrMsg|i18n}}</span>
+            <span>{{proxyManagementDataValidator.relationshipErrMsg|i18n}}</span>
+            <span>{{proxyManagementDataValidator.authorizationsErrMsg|i18n}}</span>
         </div>
     </div>
 </div>

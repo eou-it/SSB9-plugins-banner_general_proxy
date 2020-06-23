@@ -1,9 +1,8 @@
 /********************************************************************************
-  Copyright 2018 Ellucian Company L.P. and its affiliates.
+  Copyright 2018-2020 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
-import grails.util.Holders
 import groovy.sql.Sql
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.service.ServiceBase
@@ -33,11 +32,12 @@ class ProxyConfigurationService extends ServiceBase {
      * @return Map of a Proxy Payment Gateway Configuration Parameters
      */
     def getProxyGatewayParamsForPayment () {
-        def enabled = Holders.config?.proxy.payment.gateway.PAYVEND_ENABLED
+        def proxyPaymentConfigurations = getProxyPaymentConfigurations()
+        def enabled = proxyPaymentConfigurations?.get('proxy.payment.gateway.PAYVEND_PROCESS_CENTER_ENABLED')?.toBoolean()
         def authToken = enabled ? generalSsbProxyService.getPaymentCenterToken() : ""
 
-        return [PAYVEND_URL : grails.util.Holders.getConfig()?.proxy?.payment?.gateway?.PAYVEND_URL,
-                PAYVEND_VENDOR : grails.util.Holders.getConfig()?.proxy?.payment?.gateway?.PAYVEND_VENDOR,
+        return [PAYVEND_URL : proxyPaymentConfigurations?.get('proxy.payment.gateway.PAYVEND_URL'),
+                PAYVEND_VENDOR : proxyPaymentConfigurations?.get('proxy.payment.gateway.PAYVEND_VENDOR'),
                 PAYVEND_PROCESS_CENTER_ENABLED : enabled,
                 authToken : authToken
                 ]
@@ -115,5 +115,24 @@ class ProxyConfigurationService extends ServiceBase {
         retMap.value = val
 
         retMap
+    }
+
+    /*
+        Used instead of Holders as Holders in Student Self-Service does not load General_SS configurations.
+    */
+
+    def getProxyPaymentConfigurations() {
+        final def SQL_GET_CONFIGURATION_FROM_GUROCFG = """SELECT GENERAL.GUROCFG.GUROCFG_NAME, GENERAL.GUROCFG.GUROCFG_VALUE
+        FROM GENERAL.GUROCFG
+        WHERE GENERAL.GUROCFG.GUROCFG_GUBAPPL_APP_ID = 'GENERAL_SS'
+        AND GENERAL.GUROCFG.GUROCFG_NAME            IN ('proxy.payment.gateway.PAYVEND_PROCESS_CENTER_ENABLED','proxy.payment.gateway.PAYVEND_URL','proxy.payment.gateway.PAYVEND_VENDOR')"""
+        Sql sql = new Sql(sessionFactory.getCurrentSession().connection())
+        def results = sql.rows(SQL_GET_CONFIGURATION_FROM_GUROCFG)
+
+        def configurationMap = [:]
+        results.each {
+            configurationMap.put(it.GUROCFG_NAME, it.GUROCFG_VALUE?.characterStream?.text)
+        }
+        configurationMap
     }
 }

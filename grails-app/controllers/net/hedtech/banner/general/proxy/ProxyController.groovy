@@ -1,10 +1,11 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
+import net.hedtech.banner.general.system.ProxyAccessSystemOptionType
 import net.hedtech.banner.i18n.MessageHelper
 import org.grails.web.json.JSONObject
 import org.springframework.security.core.context.SecurityContextHolder
@@ -29,6 +30,10 @@ class ProxyController {
     def proxyConfigurationService
     def currencyFormatHelperService
     def messageSource
+    def countyService
+    def stateService
+    def nationService
+    def springSecurityService
 
     def beforeInterceptor = [action:this.&studentIdCheck]
 
@@ -224,7 +229,7 @@ class ProxyController {
      *
      */
     def getHolds() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result = personRelatedHoldService.getWebDisplayableHolds(pidm);
         result.rows?.each {
@@ -244,7 +249,7 @@ class ProxyController {
      *
      */
     def getViewGradesHolds() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result = gradesProxyService.getViewGradesHolds(pidm);
 
@@ -254,7 +259,7 @@ class ProxyController {
 
     def getCourseSchedule() {
         def id = XssSanitizer.sanitize(params.id)
-        def pidm = PersonUtility.getPerson(id)?.pidm
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result = proxyStudentService.getCourseSchedule(pidm, XssSanitizer.sanitize(params.date));
         result.hasDetailAccess = checkPageForAccess(id, '/ssb/proxy/courseScheduleDetail') != null
@@ -263,7 +268,7 @@ class ProxyController {
     }
 
     def getCourseScheduleDetail() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result = proxyStudentService.getCourseScheduleDetail(
                 pidm,
@@ -341,7 +346,8 @@ class ProxyController {
      *
      */
     def setId(params){
-        def pidm =PersonUtility.getPerson(XssSanitizer.sanitize(params.id)).pidm
+        def pidm =PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id))).pidm
+        springSecurityService.getAuthentication()?.user.pidm = pidm
         session["currentStudentPidm"] = pidm
         render "PIDM context set"
     }
@@ -378,7 +384,7 @@ class ProxyController {
         try{
             def id = XssSanitizer.sanitize(params.id)
 
-            def pidm = id ? PersonUtility.getPerson(id)?.pidm : session["currentStudentPidm"]
+            def pidm = id ? PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm : session["currentStudentPidm"]
 
             def result = proxyFinAidService.getFinancialAidStatus(pidm, XssSanitizer.sanitize(params.aidYear))
 
@@ -441,7 +447,7 @@ class ProxyController {
     }
 
     def getAwardPackage() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result
         try {
@@ -526,7 +532,7 @@ class ProxyController {
      *
      */
     def getAwardHistory() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result = proxyFinAidService.getAwardHistory(pidm);
         result.awards?.each {
@@ -556,7 +562,8 @@ class ProxyController {
     }
 
     def getAccountSummary() {
-        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(params.id))?.pidm
+
+        def pidm = PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id)))?.pidm
 
         def result = proxyStudentService.getAccountSummary(pidm);
         result.accountBalTxt = currencyFormatHelperService.formatCurrency(result.accountBal)
@@ -609,6 +616,50 @@ class ProxyController {
         }
     }
 
+    def getProxyConfig() {
+        try {
+            def pageDisplayInHistoryConfig = ProxyAccessSystemOptionType.fetchByCodeAndSystemCode('PAGE_DISPLAY_IN_HISTORY', 'PROXY')
+            def config = [
+                    pageDisplayInHistory: pageDisplayInHistoryConfig.proxyOptdefault.equalsIgnoreCase('Y') ? true : false
+            ]
+
+
+            render config as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+    def getCountyList() {
+        def map = ProxyControllerUtility.getFetchListParams(params)
+
+        try {
+            render countyService.fetchCountyList(map.max, map.offset, map.searchString) as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+    def getStateList() {
+        def map = ProxyControllerUtility.getFetchListParams(params)
+
+        try {
+            render stateService.fetchStateList(map.max, map.offset, map.searchString) as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+    def getNationList() {
+        def map = ProxyControllerUtility.getFetchListParams(params)
+
+        try {
+            render nationService.fetchNationList(map.max, map.offset, map.searchString) as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
     private def fixJSONObjectForCast(JSONObject json) {
         json.each {entry ->
             // Make JSONObject.NULL a real Java null
@@ -623,16 +674,12 @@ class ProxyController {
         }
     }
 
-    private String checkPageForAccess(def id, def page) {
+    private String checkPageForAccess(def tokenizedId, def page) {
+        def id = tokenizedId ? generalSsbProxyService.getStudentIdFromToken(tokenizedId) : PersonUtility.getPerson(session["currentStudentPidm"])?.bannerId
+        def students = session["students"]?.students?.active
+        def student = students?.find { generalSsbProxyService.getStudentIdFromToken(it.id) == id }
 
-        if (!id) {
-            id = PersonUtility.getPerson(session["currentStudentPidm"])?.bannerId
-        }
-        
-        def students = session["students"]?.students.active
-        def student = students?.find { it.id == id }
         def result = student?.pages?.find { it.url == page }
-
         return result
     }
 }

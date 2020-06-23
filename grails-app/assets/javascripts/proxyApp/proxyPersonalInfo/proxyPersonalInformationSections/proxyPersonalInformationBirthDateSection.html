@@ -1,0 +1,15 @@
+<!--
+  ~ /*******************************************************************************
+  ~  Copyright 2019 Ellucian Company L.P. and its affiliates.
+  ~  *******************************************************************************/
+  -->
+<div ng-if="profileElement.visible && profileElement.elemId === 'p_birth_date'">
+    <label for="birthDate" ng-bind-html="profileElement.label" class="input-field-label">
+    </label>
+    <input ng-class="[((!!birthDateErrMsg) ? 'input-error pi-date-input input-colors' : 'pi-date-input input-colors')]" date-picker
+           ng-model="profileElement.model" pi-input-watcher on-select="setBirthDate" placeholder="{{profileElement.placeholder}}" id="birthDate"
+           aria-label="{{profileElement.placeholder}}" ng-focus="setBirthDateFocused(true)"
+           ng-blur="setBirthDateFocused(false); setDataValidationErrors(profileElements['p_birth_date'].model)" />
+    <p class="input-field-label mobile-errors" ng-class="[(!!birthDateErrMsg ? 'field-error error-font-size' : 'no-display')]"
+       role="alert" aria-live="assertive">{{birthDateErrMsg|i18n}}</p>
+</div>

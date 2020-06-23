@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 package net.hedtech.banner.proxy.api
@@ -111,6 +111,7 @@ DECLARE
    p_email_verify goremal.goremal_email_address%TYPE;
    p_last          spriden.spriden_last_name%TYPE;
    p_first         spriden.spriden_first_name%TYPE;
+   p_proxy_pidm   gpbprxy.gpbprxy_proxy_pidm%TYPE;
    lv_at_loc      INTEGER := 0;
    lv_dot_loc     INTEGER := 0;
    lv_double      INTEGER := 0;
@@ -152,7 +153,7 @@ DECLARE
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -381,6 +382,7 @@ begin
  p_email_verify := ?;
  p_last := ?;
  p_first := ?;
+ p_proxy_pidm := ?;
 --
    -- Insure that the e-mail and verify e-mail address are the same
    IF NVL(p_email,chr(01)) <> NVL(p_email_verify,chr(02)) THEN
@@ -408,9 +410,10 @@ begin
      END IF;
 --
 IF error_status != 'Y' THEN
- lv_proxyIDM := F_GetProxyIDM (goksels.f_clean_text(p_email), /*p_email*/
-                              goksels.f_clean_text(p_last), /*p_last*/
-                              goksels.f_clean_text(p_first) /*p_first*/
+ lv_proxyIDM := F_GetProxyIDM (goksels.f_clean_text(p_email),    /*p_email*/
+                              goksels.f_clean_text(p_last),      /*p_last*/
+                              goksels.f_clean_text(p_first),     /*p_first*/
+                              goksels.f_clean_text(p_proxy_pidm) /*p_proxy_pidm*/
                               );
 --
    lv_GPRXREF_ref := gp_gprxref.F_Query_One (lv_proxyIDM, global_pidm);
@@ -657,7 +660,7 @@ END IF;
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -859,7 +862,7 @@ DECLARE
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -1034,7 +1037,8 @@ DECLARE
                o.twgrmenu_sequence AS menu_seq
           FROM TWGRMENU o, TWGBWMNU m
          WHERE o.twgrmenu_name = m.twgbwmnu_name
-         AND  o.twgrmenu_url like '%/proxy/%'
+         AND  (o.twgrmenu_url like '%/proxy/%'
+               OR o.twgrmenu_url like '%/ssb/%')
            AND m.twgbwmnu_source_ind =
               (SELECT NVL (MAX (n.twgbwmnu_source_ind), 'B')
                  FROM twgbwmnu n
@@ -1264,7 +1268,7 @@ END;
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -1626,7 +1630,8 @@ DECLARE
                o.twgrmenu_sequence AS menu_seq
           FROM TWGRMENU o, TWGBWMNU m, GPRAUTH
          WHERE o.twgrmenu_name = m.twgbwmnu_name
-         AND  o.twgrmenu_url like '%/proxy/%'
+         AND  (o.twgrmenu_url like '%/proxy/%'
+               OR o.twgrmenu_url like '%/ssb/%')
            AND m.twgbwmnu_source_ind =
                (SELECT NVL (MAX (n.twgbwmnu_source_ind), 'B')
                   FROM twgbwmnu n
@@ -1823,7 +1828,7 @@ END;
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -1860,7 +1865,7 @@ BEGIN
 
    lv_GPRXREF_ref := gp_gprxref.F_Query_One (p_proxyIDM, global_pidm);
    FETCH lv_GPRXREF_ref INTO lv_GPRXREF_rec;
-   IF lv_GPRXREF_ref%NOTFOUND THEN
+   IF lv_GPRXREF_ref%FOUND THEN
  
       gp_gpbeltr.P_Create (
          p_syst_code      => 'PROXY',
@@ -1978,7 +1983,8 @@ IS
                o.twgrmenu_sequence AS menu_seq
           FROM TWGRMENU o, TWGBWMNU m, GPRAUTH
          WHERE o.twgrmenu_name = m.twgbwmnu_name
-         AND  o.twgrmenu_url like '%/proxy/%'
+         AND  (o.twgrmenu_url like '%/proxy/%'
+               OR o.twgrmenu_url like '%/ssb/%')
            AND m.twgbwmnu_source_ind =
                (SELECT NVL (MAX (n.twgbwmnu_source_ind), 'B')
                   FROM twgbwmnu n
@@ -2169,7 +2175,8 @@ DECLARE
                o.twgrmenu_sequence AS menu_seq
           FROM TWGRMENU o, TWGBWMNU m, GPRAUTH
          WHERE o.twgrmenu_name = m.twgbwmnu_name
-         AND  o.twgrmenu_url like '%/proxy/%'
+         AND  (o.twgrmenu_url like '%/proxy/%'
+               OR o.twgrmenu_url like '%/ssb/%')
            AND m.twgbwmnu_source_ind =
                (SELECT NVL (MAX (n.twgbwmnu_source_ind), 'B')
                   FROM twgbwmnu n
@@ -2237,7 +2244,7 @@ DECLARE
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -2378,7 +2385,7 @@ DECLARE
       lv_proxy_url VARCHAR2(1000);
    BEGIN
 --
-         OPEN gurocfg_c('GENERAL_SS', 'GENERALLOCATION');
+         OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
          FETCH gurocfg_c INTO lv_proxy_url;
          
          IF gurocfg_c%NOTFOUND
@@ -2463,5 +2470,69 @@ END;
        ? := ver;
 --
         END;
+"""
+
+    public final static String HISTORY_LOG ="""
+DECLARE
+   p_proxyIDM       gpbprxy.gpbprxy_proxy_idm%TYPE;
+   global_pidm      spriden.spriden_pidm%TYPE;
+   histories      CLOB DEFAULT NULL;
+   history          CLOB DEFAULT NULL;
+   listOfHistories  CLOB DEFAULT NULL;
+   action           VARCHAR2(200);
+
+   CURSOR C_HistoryList
+      RETURN GPRHIST%ROWTYPE
+   IS
+      SELECT *
+        FROM GPRHIST
+       WHERE GPRHIST_PROXY_IDM = p_proxyIDM
+             AND GPRHIST_PERSON_PIDM = global_pidm
+    ORDER BY GPRHIST_ACTIVITY_DATE DESC, GPRHIST_PAGE_NAME;
+
+BEGIN
+
+   p_proxyIDM := ?;
+   global_pidm := ?;
+      
+   histories := '"result":[';
+  FOR hist_rec IN C_HistoryList
+   LOOP
+      
+      IF hist_rec.GPRHIST_OLD_AUTH_IND = 'N' AND hist_rec.GPRHIST_NEW_AUTH_IND = 'Y'
+      THEN
+         action := 'enable';
+      ELSIF hist_rec.GPRHIST_OLD_AUTH_IND = 'Y' AND hist_rec.GPRHIST_NEW_AUTH_IND = 'N'
+      THEN
+         action := 'disable';
+      ELSIF hist_rec.GPRHIST_OLD_AUTH_IND = 'L' AND hist_rec.GPRHIST_NEW_AUTH_IND = 'L'
+      THEN
+         action := 'login';
+      ELSIF hist_rec.GPRHIST_OLD_AUTH_IND = 'V' AND hist_rec.GPRHIST_NEW_AUTH_IND = 'V'
+      THEN
+         action := 'view';
+      END IF;
+      
+    history := '{' ||
+    '"activityDate" ' || ':' || '"' || TO_CHAR(hist_rec.GPRHIST_ACTIVITY_DATE,'MM/DD/YYYY HH24:MI')  || '"' ||
+    ',"action" ' || ':' || '"' || action || '"' ||
+    ',"page" ' || ':' || '"' || hist_rec.GPRHIST_PAGE_NAME || '"' ||
+    '},';
+
+--
+   histories := histories || history;
+--   
+   END LOOP;
+--
+    histories := TRIM(TRAILING ',' FROM histories );
+    histories := histories || ']';
+
+    listOfHistories := '{' || histories || '}';
+    
+    --dbms_output.put_line(listOfHistories);
+    
+    ? := listOfHistories;
+    
+END;
 """
 }
