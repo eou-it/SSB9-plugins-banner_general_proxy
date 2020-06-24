@@ -3,7 +3,7 @@
 ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
-import net.hedtech.banner.student.history.HistoryTermForStudentGrades
+import net.hedtech.banner.proxy.student.history.HistoryTermForStudentGrades
 
 class TermProxyService {
 

@@ -34,7 +34,7 @@
         <property name="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.EhCacheRegionFactory</property>
         <property name="hibernate.cache.use_structured_entries=">true</property>
 
-        <mapping class="net.hedtech.banner.student.history.HistoryTermForStudentGrades"/>
-        <mapping class="net.hedtech.banner.student.history.HistoryStudentCourseDetail"/>
+        <mapping class="net.hedtech.banner.proxy.student.history.HistoryTermForStudentGrades"/>
+        <mapping class="net.hedtech.banner.proxy.student.history.HistoryStudentCourseDetail"/>
     </session-factory>
 </hibernate-configuration>

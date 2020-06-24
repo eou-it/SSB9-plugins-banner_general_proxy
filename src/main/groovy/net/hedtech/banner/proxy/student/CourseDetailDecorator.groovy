@@ -1,9 +1,9 @@
 /*********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
-package net.hedtech.banner.student
+package net.hedtech.banner.proxy.student
 
-import net.hedtech.banner.student.history.HistoryStudentCourseDetail
+import net.hedtech.banner.proxy.student.history.HistoryStudentCourseDetail
 
 /**
  * Decorator to display the course Work of the student
