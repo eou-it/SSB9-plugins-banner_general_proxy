@@ -6,15 +6,11 @@ package net.hedtech.banner.general.proxy
 import grails.gorm.transactions.Transactional
 import groovy.sql.Sql
 import net.hedtech.banner.proxy.api.ViewGradesApi
-import net.hedtech.banner.student.history.HistoryTermForStudentGrades
-
 import grails.converters.JSON
 import groovy.json.StringEscapeUtils
-import net.hedtech.banner.i18n.MessageHelper
 import org.apache.commons.lang.StringUtils
-import org.grails.web.json.JSONObject
 import org.springframework.context.i18n.LocaleContextHolder
-import org.springframework.security.core.context.SecurityContextHolder
+
 //import net.hedtech.banner.general.system.Term
 import org.springframework.web.context.request.RequestContextHolder
 
@@ -22,9 +18,9 @@ import java.sql.SQLException
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
-import net.hedtech.banner.student.history.HistoryUtility
-import net.hedtech.banner.student.CourseDetailDecorator
-import net.hedtech.banner.student.history.HistoryStudentCourseDetail
+import net.hedtech.banner.proxy.student.history.HistoryUtility
+import net.hedtech.banner.proxy.student.CourseDetailDecorator
+import net.hedtech.banner.proxy.student.history.HistoryStudentCourseDetail
 
 import net.hedtech.banner.exceptions.ApplicationException
 

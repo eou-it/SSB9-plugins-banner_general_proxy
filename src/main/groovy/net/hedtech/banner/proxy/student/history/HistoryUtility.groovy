@@ -1,7 +1,7 @@
 /** *****************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ***************************************************************************** */
-package net.hedtech.banner.student.history
+package net.hedtech.banner.proxy.student.history
 
 import grails.util.Holders
 import groovy.util.logging.Slf4j
