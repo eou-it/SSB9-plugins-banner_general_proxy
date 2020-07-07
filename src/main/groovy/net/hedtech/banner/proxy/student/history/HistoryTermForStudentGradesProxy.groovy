@@ -17,16 +17,16 @@ import javax.persistence.*
 @Entity
 @Table(name = "SVQ_TERM_STUDENT_GRADES")
 @NamedQueries(value = [
-        @NamedQuery(name = "HistoryTermForStudentGrades.fetchAllTermsByStudentPidmAndTerm",
+        @NamedQuery(name = "HistoryTermForStudentGradesProxy.fetchAllTermsByStudentPidmAndTerm",
                 query = """SELECT a.code,a.description
-                            FROM HistoryTermForStudentGrades a
+                            FROM HistoryTermForStudentGradesProxy a
                             WHERE a.studentPidm = :studentPidm
                             AND (UPPER(a.code) LIKE  UPPER(:filter) OR UPPER(a.searchDescription) LIKE UPPER(:filter))
                             GROUP BY a.code,a.description
                             ORDER BY a.code desc, a.description"""),
-        @NamedQuery(name = "HistoryTermForStudentGrades.fetchAllTermsForFacultyByStudentPidmAndTerm",
+        @NamedQuery(name = "HistoryTermForStudentGradesProxy.fetchAllTermsForFacultyByStudentPidmAndTerm",
                 query = """SELECT a.code,a.descriptionForFaculty
-                            FROM HistoryTermForStudentGrades a
+                            FROM HistoryTermForStudentGradesProxy a
                             WHERE a.studentPidm = :studentPidm
                             AND (UPPER(a.code) LIKE  UPPER(:filter) OR UPPER(a.searchDescription) LIKE UPPER(:filter))
                             GROUP BY a.code,a.descriptionForFaculty
@@ -34,7 +34,7 @@ import javax.persistence.*
 ])
 @ToString(includeNames = true, ignoreNulls = true)
 @EqualsAndHashCode(includeFields = true)
-class HistoryTermForStudentGrades {
+class HistoryTermForStudentGradesProxy {
 
     @Id
     @Column(name = "STVTERM_SURROGATE_ID")
@@ -66,8 +66,8 @@ class HistoryTermForStudentGrades {
     static List fetchAllTermsByStudentPidmAndTerm(Integer studentPidm, String termFilter, Integer max = 0, Integer offset = 0) {
         List result = []
         if (null != studentPidm) {
-            HistoryTermForStudentGrades.withSession { session ->
-                def query = session.getNamedQuery('HistoryTermForStudentGrades.fetchAllTermsByStudentPidmAndTerm')
+            HistoryTermForStudentGradesProxy.withSession { session ->
+                def query = session.getNamedQuery('HistoryTermForStudentGradesProxy.fetchAllTermsByStudentPidmAndTerm')
                 query.setInteger('studentPidm', studentPidm)
                 query.setString('filter', prepareParams(termFilter))
                 if (max) {
@@ -88,8 +88,8 @@ class HistoryTermForStudentGrades {
     static List fetchAllTermsForFacultyByStudentPidmAndTerm(Integer studentPidm, String termFilter, Integer max = 0, Integer offset = 0) {
         List result = []
         if (null != studentPidm) {
-            HistoryTermForStudentGrades.withSession { session ->
-                def query = session.getNamedQuery('HistoryTermForStudentGrades.fetchAllTermsForFacultyByStudentPidmAndTerm')
+            HistoryTermForStudentGradesProxy.withSession { session ->
+                def query = session.getNamedQuery('HistoryTermForStudentGradesProxy.fetchAllTermsForFacultyByStudentPidmAndTerm')
                 query.setInteger('studentPidm', studentPidm)
                 query.setString('filter', prepareParams(termFilter))
                 if (max) {

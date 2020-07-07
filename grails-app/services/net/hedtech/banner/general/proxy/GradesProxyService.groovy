@@ -18,9 +18,9 @@ import java.sql.SQLException
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
-import net.hedtech.banner.proxy.student.history.HistoryUtility
-import net.hedtech.banner.proxy.student.CourseDetailDecorator
-import net.hedtech.banner.proxy.student.history.HistoryStudentCourseDetail
+import net.hedtech.banner.proxy.student.history.HistoryUtilityProxy
+import net.hedtech.banner.proxy.student.CourseDetailDecoratorProxy
+import net.hedtech.banner.proxy.student.history.HistoryStudentCourseDetailProxy
 
 import net.hedtech.banner.exceptions.ApplicationException
 
@@ -89,7 +89,7 @@ class GradesProxyService {
             def courses = HistoryStudentCourseDetail.fetchSearchByPidmTermLevelAndStudyPath(filterData, pagingAndSortParams)
             def courseDetails = new ArrayList(courses.size())
             courses.each { it ->
-                CourseDetailDecorator courseDetail = new CourseDetailDecorator(it)
+                CourseDetailDecoratorProxy courseDetail = new CourseDetailDecoratorProxy(it)
                 courseDetail.campusDescription = getCampusDescription(courseDetail.campusCode)
                 courseDetails.add(courseDetail)
             }
@@ -113,9 +113,9 @@ class GradesProxyService {
         DecimalFormat hoursFormatter = new DecimalFormat(HOURS_FORMAT, symbolFormatter)
         DecimalFormat qualityPointsFormatter = new DecimalFormat(qualityPointsFormat, symbolFormatter)
         DecimalFormat gpaFormatter = new DecimalFormat(gpaFormat, symbolFormatter)
-        BigDecimal qualityPoints = HistoryUtility.calculateTruncatedOrRoundedValue(institutionGpaRule?.qualityPointsDisplayNumber as Integer,
+        BigDecimal qualityPoints = HistoryUtilityProxy.calculateTruncatedOrRoundedValue(institutionGpaRule?.qualityPointsDisplayNumber as Integer,
                 institutionGpaRule?.qualityPointsRoundTruncateIndicator as String, gpaDetails?.qualityPoints as BigDecimal)
-        BigDecimal gpa = HistoryUtility.calculateTruncatedOrRoundedValue(institutionGpaRule?.gpaDisplayNumber as Integer,
+        BigDecimal gpa = HistoryUtilityProxy.calculateTruncatedOrRoundedValue(institutionGpaRule?.gpaDisplayNumber as Integer,
                 institutionGpaRule?.gpaRoundTruncateIndicator as String, gpaDetails?.gpa  as BigDecimal)
         return [
                 hoursAttempted: gpaDetails?.hoursAttempted != null ? hoursFormatter.format(gpaDetails?.hoursAttempted) : null,
@@ -132,9 +132,9 @@ class GradesProxyService {
     }
 
     private void setGPARuleMap(Integer studentPidm, String termCode, String levelCode, String campusCode) {
-        Map institutionGpaRule = HistoryUtility.fetchGpaRuleForStudent(studentPidm, levelCode, campusCode, termCode)
-        String qualityPointsFormat = HistoryUtility.calculateGpaQualityPointsWebFormat(18, institutionGpaRule?.qualityPointsDisplayNumber)
-        String gpaFormat = HistoryUtility.calculateGpaQualityPointsWebFormat(25, institutionGpaRule?.gpaDisplayNumber)
+        Map institutionGpaRule = HistoryUtilityProxy.fetchGpaRuleForStudent(studentPidm, levelCode, campusCode, termCode)
+        String qualityPointsFormat = HistoryUtilityProxy.calculateGpaQualityPointsWebFormat(18, institutionGpaRule?.qualityPointsDisplayNumber)
+        String gpaFormat = HistoryUtilityProxy.calculateGpaQualityPointsWebFormat(25, institutionGpaRule?.gpaDisplayNumber)
         String key = getGPARuleMapKey(studentPidm, termCode, levelCode, campusCode)
         Map gpaRuleMapCache = session.getAttribute(INSTITUTIONAL_GPA_RULE_MAP) ?: new HashMap<String, Object>()
         gpaRuleMapCache[key] = [institutionGpaRule: institutionGpaRule, qualityPointsFormat: qualityPointsFormat, gpaFormat: gpaFormat]
