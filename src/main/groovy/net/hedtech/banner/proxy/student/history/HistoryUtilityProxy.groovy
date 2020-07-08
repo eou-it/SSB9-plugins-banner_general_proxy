@@ -1,7 +1,7 @@
 /** *****************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  ***************************************************************************** */
-package net.hedtech.banner.student.history
+package net.hedtech.banner.proxy.student.history
 
 import grails.util.Holders
 import groovy.util.logging.Slf4j
@@ -23,7 +23,7 @@ import org.hibernate.SessionFactory
  */
 
 @Slf4j
-class HistoryUtility {
+class HistoryUtilityProxy {
 
 
     public static String DEFAULT_ROUND_CODE = "R"
@@ -57,7 +57,7 @@ class HistoryUtility {
             result = sql.firstRow(selectSql)
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -102,7 +102,7 @@ class HistoryUtility {
             result = sql.firstRow(selSql, [name: gradeScaleName, term: term, courseReferenceNumber: courseReferenceNumber])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -138,7 +138,7 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -175,7 +175,7 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -225,7 +225,7 @@ class HistoryUtility {
             }
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -255,7 +255,7 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -292,7 +292,7 @@ class HistoryUtility {
             result = sql.firstRow(selectSql, [gradeCode, termCode, levelCode])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -347,7 +347,7 @@ class HistoryUtility {
             result = sql.firstRow(selectSql, [gradeIncompleteFinal, levelCode, effectiveTerm])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -382,7 +382,7 @@ class HistoryUtility {
             incompleteFinalError = sqlCall.getString(6)
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -411,7 +411,7 @@ class HistoryUtility {
             callableStatement.executeQuery()
             courseTermRestrictionExists = callableStatement.getString(1)
         } catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -441,7 +441,7 @@ class HistoryUtility {
             result = sql.rows(selectSql, [pidm: pidm, term: term, level: level, studyPath: studyPath])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -471,7 +471,7 @@ class HistoryUtility {
             result = sql.firstRow(selectSql, [pidm: pidm, level: level, studyPath: studyPath, gpaType: gpaType])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -504,7 +504,7 @@ class HistoryUtility {
             result = sql.firstRow(selectSql, [level, gradeCode, term, level, gradeCode, term])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -539,7 +539,7 @@ class HistoryUtility {
             encryptedPassword = cs.getString(1)
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -599,7 +599,7 @@ class HistoryUtility {
             ]
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -697,7 +697,7 @@ class HistoryUtility {
             result = sql.rows(selectSql, [pidm: pidm, level: level])
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -771,7 +771,7 @@ class HistoryUtility {
             ]
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -799,7 +799,7 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy: ", e)
             throw e
         }
         finally {
@@ -837,7 +837,7 @@ class HistoryUtility {
         GPA_TYPE_INDICATOR_O_DESC = MessageHelper.message("default.gpa.overall")
 
         def map = [:]
-        map.gpa = HistoryUtility.formatByRules(gpa.gpa, displayNumber, roundCode)
+        map.gpa = HistoryUtilityProxy.formatByRules(gpa.gpa, displayNumber, roundCode)
         map.hours = gpa.hoursEarned
         map.hoursAttempted = gpa.hoursAttempted
         if (gpa?.level) map.levelDesc = gpa.level?.description
@@ -861,8 +861,8 @@ class HistoryUtility {
         GPA_TYPE_INDICATOR_O_DESC = MessageHelper.message("default.gpa.overall")
 
         def map = [:]
-        map.gpa = HistoryUtility.formatByRules(gpa.gpa, gpaDisplayNumber, gpaRoundCode)
-        map.qualityPoints = HistoryUtility.formatByRules(gpa.qualityPoints, qpDisplayNumber, qpRoundCode)
+        map.gpa = HistoryUtilityProxy.formatByRules(gpa.gpa, gpaDisplayNumber, gpaRoundCode)
+        map.qualityPoints = HistoryUtilityProxy.formatByRules(gpa.qualityPoints, qpDisplayNumber, qpRoundCode)
         if (gpa.gpaTypeIndicator == GPA_TYPE_INDICATOR_I) {
             map.gpaTypeIndicatorDesc = GPA_TYPE_INDICATOR_I_DESC
         } else if (gpa.gpaTypeIndicator == GPA_TYPE_INDICATOR_T) {
@@ -883,7 +883,7 @@ class HistoryUtility {
      * @return The HistoryInstitutionGradePointAverageRule that matches the selection rules or null if there is no match
      */
     public static def getGpaFormatter(Integer pidm, Map termInformation) {
-        def formatter = HistoryUtility.fetchGpaRuleForStudent(pidm, termInformation?.level, termInformation?.campus, termInformation?.term)
+        def formatter = HistoryUtilityProxy.fetchGpaRuleForStudent(pidm, termInformation?.level, termInformation?.campus, termInformation?.term)
 
         // if formatter is not filled in, then we didn't get one back
         if (!formatter?.gpaRoundTruncateIndicator) {
@@ -913,7 +913,7 @@ class HistoryUtility {
      */
     public static void rollGradeForStudent(Map paramMap) {
         if (!paramMap.pidm || !paramMap.termCode || !paramMap.crn || !paramMap.userId || !paramMap.reportMode) {
-            throw new ApplicationException('HistoryUtility', new BusinessLogicValidationException("rollGradeForStudent.required.parameter.missing", null))
+            throw new ApplicationException('HistoryUtilityProxy', new BusinessLogicValidationException("rollGradeForStudent.required.parameter.missing", null))
         }
         SessionFactory sessionFactory = Holders.getGrailsApplication().getMainContext().sessionFactory
         CallableStatement sqlCall
@@ -935,7 +935,7 @@ class HistoryUtility {
             sqlCall.executeUpdate()
         }
         catch (e) {
-            log.error("Error executing sql in HistoryUtility.rollingGradeForEachStudent: ", e)
+            log.error("Error executing sql in HistoryUtilityProxy.rollingGradeForEachStudent: ", e)
             throw e
         }
         finally {
