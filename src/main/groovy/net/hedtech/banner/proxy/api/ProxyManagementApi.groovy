@@ -1060,6 +1060,77 @@ lv_RETP        gtvretp.gtvretp_code%TYPE;
 pages          VARCHAR2(32000);
 auth           VARCHAR2(1);
 
+--
+  FUNCTION checkRole(pidm number,url varchar2) RETURN BOOLEAN IS
+holdRole varchar2(1);
+
+cursor chckRole is
+select 'Y' from twgrwmrl
+where twgrwmrl_name = url
+and exists (  select * FROM (
+               select 
+               CASE govrole_student_ind
+               WHEN 'Y' THEN 'STUDENT'
+               ELSE null
+               END AS "ROLE"
+               FROM GOVROLE
+               WHERE govrole_pidm = pidm
+               UNION
+               select 
+               CASE govrole_alumni_ind
+               WHEN 'Y' THEN 'ALUMNI'
+               ELSE null
+               END AS "ROLE"
+               FROM GOVROLE
+               WHERE govrole_pidm = pidm
+               UNION
+               select 
+               CASE govrole_employee_ind
+               WHEN 'Y' THEN 'EMPLOYEE'
+               ELSE null
+               END AS "ROLE"
+               FROM GOVROLE
+               WHERE govrole_pidm = pidm
+               UNION
+               select 
+               CASE govrole_faculty_ind
+               WHEN 'Y' THEN 'FACULTY'
+               ELSE null
+               END AS "ROLE"
+               FROM GOVROLE
+               WHERE govrole_pidm = pidm
+               UNION
+               select 
+               CASE govrole_finance_ind
+               WHEN 'Y' THEN 'FINANCE'
+               ELSE null
+               END AS "ROLE"
+               FROM GOVROLE
+               WHERE govrole_pidm = pidm
+               UNION
+               select 
+               CASE govrole_finaid_ind
+               WHEN 'Y' THEN 'FINAID'
+               ELSE null
+               END AS "ROLE"
+               FROM GOVROLE
+               WHERE govrole_pidm = pidm
+               ) where role is not null
+               and role = twgrwmrl_role
+               );
+
+
+begin
+ open chckRole;
+ fetch chckRole into holdRole;
+ if chckRole%FOUND then
+    return true;
+    else
+    return false;
+ end if;
+END checkRole;
+--
+
 BEGIN
 lv_RETP := ?;
 --
@@ -1073,12 +1144,14 @@ FOR auth_rec IN C_AuthorizationList (lv_RETP)
       ELSE
          auth := 'N';
       END IF;
-                                                                      
+                
+          IF checkRole (?, auth_rec.menu_url) THEN                                                      
             pages := pages || '{' ||
                       '"url" ' || ':' || '"' || auth_rec.menu_url || '"' ||
                       ',"desc" ' || ':'  || '"' || auth_rec.menu_text || '"' || 
                       ',"auth" ' || ':'  || '"' || auth || '"' ||
                       '},';
+          END IF;
       END LOOP;
 --
      pages := TRIM(TRAILING ',' FROM pages );
