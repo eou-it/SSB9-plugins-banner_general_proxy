@@ -204,8 +204,77 @@ pages          VARCHAR2(32000);
     FETCH GET_DEFAULT_AID_YEAR into defaultAidYear;
     CLOSE GET_DEFAULT_AID_YEAR;
     
-      RETURN defaultAidYear;
+      RETURN NVL(defaultAidYear,'0000');
   END GET_AID_YEAR;
+  
+  FUNCTION checkRole(pidm number,url varchar2) RETURN BOOLEAN IS
+holdRole varchar2(1);
+
+cursor chckRole is
+select 'Y' from twgrwmrl
+where twgrwmrl_name = url
+and exists (  select * FROM (
+               select 
+               CASE govrole_student_ind
+               WHEN 'Y' THEN 'STUDENT'
+               ELSE null
+               END AS "ROLE"
+               FROM GOVROLE
+               WHERE govrole_pidm = pidm
+               UNION
+               select 
+               CASE govrole_alumni_ind
+               WHEN 'Y' THEN 'ALUMNI'
+               ELSE null
+               END AS "ROLE"
+               FROM GOVROLE
+               WHERE govrole_pidm = pidm
+               UNION
+               select 
+               CASE govrole_employee_ind
+               WHEN 'Y' THEN 'EMPLOYEE'
+               ELSE null
+               END AS "ROLE"
+               FROM GOVROLE
+               WHERE govrole_pidm = pidm
+               UNION
+               select 
+               CASE govrole_faculty_ind
+               WHEN 'Y' THEN 'FACULTY'
+               ELSE null
+               END AS "ROLE"
+               FROM GOVROLE
+               WHERE govrole_pidm = pidm
+               UNION
+               select 
+               CASE govrole_finance_ind
+               WHEN 'Y' THEN 'FINANCE'
+               ELSE null
+               END AS "ROLE"
+               FROM GOVROLE
+               WHERE govrole_pidm = pidm
+               UNION
+               select 
+               CASE govrole_finaid_ind
+               WHEN 'Y' THEN 'FINAID'
+               ELSE null
+               END AS "ROLE"
+               FROM GOVROLE
+               WHERE govrole_pidm = pidm
+               ) where role is not null
+               and role = twgrwmrl_role
+               );
+
+
+begin
+ open chckRole;
+ fetch chckRole into holdRole;
+ if chckRole%FOUND then
+    return true;
+    else
+    return false;
+ end if;
+END checkRole;
 --
 BEGIN
 --
@@ -220,7 +289,7 @@ FOR auth_rec IN C_AuthorizationList (lv_RETP)
          IF bwgkprxy.F_GetAuthInd (?,
                                    ?,
                                    auth_rec.menu_url) = 'Y'
-            --AND twbkwbis.F_ValidLink (auth_rec.menu_url)
+            AND checkRole (?, auth_rec.menu_url)
          THEN
            -- TO DO Add AidYear Calculation
             IF (INSTR(auth_rec.menu_url,'financialAid') > 0) THEN
