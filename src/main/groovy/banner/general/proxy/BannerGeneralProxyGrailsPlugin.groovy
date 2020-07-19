@@ -29,7 +29,7 @@ class BannerGeneralProxyGrailsPlugin extends Plugin {
     String version = "0.1"
 
     // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "3.3.2 > *"
+    def grailsVersion = "3.3.11 > *"
 
 
     // resources that are excluded from plugin packaging

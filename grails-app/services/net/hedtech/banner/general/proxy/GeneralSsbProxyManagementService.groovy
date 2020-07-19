@@ -124,7 +124,7 @@ class GeneralSsbProxyManagementService {
         sqlText = ProxyManagementApi.PROXY_PAGES
 
         sql = new Sql(sessionFactory.getCurrentSession().connection())
-        sql.call(sqlText, [proxyProfile.p_retp_code, gidm, pidm, Sql.VARCHAR
+        sql.call(sqlText, [proxyProfile.p_retp_code, gidm, pidm,pidm, Sql.VARCHAR
         ]){ proxyPagesJson ->
             proxyPages = proxyPagesJson
         }
@@ -274,7 +274,7 @@ class GeneralSsbProxyManagementService {
         def sqlText = ProxyManagementApi.PROXY_PAGES
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        sql.call(sqlText, [params.p_retp_code, params.gidm, params.pidm, Sql.VARCHAR
+        sql.call(sqlText, [params.p_retp_code, params.gidm, params.pidm,params.pidm, Sql.VARCHAR
         ]){ proxyPagesJson ->
             proxyPages = proxyPagesJson
         }
