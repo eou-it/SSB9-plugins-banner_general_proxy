@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 globalProxyManagementApp.service( 'breadcrumbService', ['$filter', '$rootScope', function ($filter, $rootScope) {
@@ -16,7 +16,7 @@ globalProxyManagementApp.service( 'breadcrumbService', ['$filter', '$rootScope',
 
         constantBreadCrumb = [
             {
-                label: 'general.breadcrumb.proxyManagement',
+                label: 'general.breadcrumb.globalProxyManagement',
                 url: '/home'
             }
         ];

@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 globalProxyMgmtAppDirectives.directive('globalProxyMgmtDeleteButton', ['$filter', function ($filter) {
@@ -11,7 +11,7 @@ globalProxyMgmtAppDirectives.directive('globalProxyMgmtDeleteButton', ['$filter'
             buttonTitle: '@',
             enabled: '='
         },
-        templateUrl: $filter('webAppResourcePath')('globalProxyManagementApp/proxyManagementHome/globalProxyMgmtDeleteButton.html')
+        templateUrl: $filter('webAppResourcePath')('globalProxyManagementApp/globalProxyManagementHome/globalProxyMgmtDeleteButton.html')
     };
 }]);
 
@@ -22,7 +22,7 @@ globalProxyMgmtAppDirectives.directive('globalProxyMgmtMobileFooterButton', ['$f
             clickFunction: '='
         },
         transclude: true,
-        templateUrl: $filter('webAppResourcePath')('globalProxyManagementApp/proxyManagementHome/globalProxyMgmtMobileFooterButton.html')
+        templateUrl: $filter('webAppResourcePath')('globalProxyManagementApp/globalProxyManagementHome/globalProxyMgmtMobileFooterButton.html')
     };
 }]);
 
@@ -32,7 +32,7 @@ globalProxyMgmtAppDirectives.directive('globalProxyMgmtPopoverTooltip', ['$filte
         scope: {
             popoverContents: '@'
         },
-        templateUrl: $filter('webAppResourcePath')('globalProxyManagementApp/proxyManagementHome/globalProxyMgmtPopoverTooltip.html')
+        templateUrl: $filter('webAppResourcePath')('globalProxyManagementApp/globalProxyManagementHome/globalProxyMgmtPopoverTooltip.html')
     };
 }]);
 

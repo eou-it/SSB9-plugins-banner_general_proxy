@@ -1,5 +1,5 @@
 <!--*******************************************************************************
-Copyright 2019 Ellucian Company L.P. and its affiliates.
+Copyright 2020 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="row">
     <div ng-repeat="proxy in proxies" class="item-wrapper col-xs-12 col-md-6 col-lg-4" >
@@ -21,7 +21,7 @@ Copyright 2019 Ellucian Company L.P. and its affiliates.
                 <span class="icon-edit-CO"></span>
                 <div class="hidden-link-text-for-reader">{{'proxyManagement.button.title.editProxy'|i18n}}</div>
             </a>
-                <proxy-mgmt-delete-button item="proxy" ng-click="confirmDeleteProxy(proxy)" enabled="proxyCanBeDeleted(proxy)" button-title="{{'proxyManagement.button.title.deleteProxy'|i18n}}"/>
+                <global-proxy-mgmt-delete-button item="proxy" ng-click="confirmDeleteProxy(proxy)" enabled="proxyCanBeDeleted(proxy)" button-title="{{'proxyManagement.button.title.deleteProxy'|i18n}}"/>
         </div>
     </div>
 </div>

@@ -29,4 +29,15 @@ class GlobalProxyController {
         render view: "globalProxy"
     }
 
+    def getGlobalProxies() {
+        def testMap =
+                [result:
+                         [
+                                [personName: "Bob Smith", personAge: "25"],
+                                [personName: "George Jones", personAge: "55"]
+                         ]
+                ]
+        render testMap as JSON
+    }
+
 }

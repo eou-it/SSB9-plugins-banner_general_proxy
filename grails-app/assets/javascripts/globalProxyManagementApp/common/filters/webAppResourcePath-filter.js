@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2018 Ellucian Company L.P. and its affiliates.
+ Copyright 2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 globalProxyManagementApp.filter('webAppResourcePath', ['webAppResourcePathString', function (webAppResourcePathString) {
     return function(input){

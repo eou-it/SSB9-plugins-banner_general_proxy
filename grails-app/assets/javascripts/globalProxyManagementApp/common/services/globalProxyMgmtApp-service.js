@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$filter', '$resource', '$q', 'notificationCenterService', function ($rootScope, $filter, $resource, $q, notificationCenterService) {
@@ -11,7 +11,9 @@ globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$f
         fetchCommunicationLog = $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'getCommunicationLog'}, {query: {method:'GET', isArray:true}}),
         fetchAuthLog = $resource('../ssb/:controller/:action',
-            {controller: 'ProxyManagement', action: 'getHistoryLog'}, {query: {method:'GET', isArray:false}});
+            {controller: 'ProxyManagement', action: 'getHistoryLog'}, {query: {method:'GET', isArray:false}}),
+        fetchGlobalProxiesByQuery = $resource('../ssb/:controller/:action',
+            {controller: 'GlobalProxy', action: 'getGlobalProxies'}, {query: {method:'GET', isArray:false}});
 
     this.getProxyList = function () {
         return fetchProxies.query();
@@ -134,5 +136,9 @@ globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$f
     this.getAuthLog = function (params) {
         return fetchAuthLog.query(params);
     };
+
+    this.fetchGlobalProxiesByQuery = function (params){
+        return fetchGlobalProxiesByQuery.query(params)
+    }
 
 }]);

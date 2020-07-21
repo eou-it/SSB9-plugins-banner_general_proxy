@@ -1,3 +1,6 @@
+/*******************************************************************************
+ Copyright 2020 Ellucian Company L.P. and its affiliates.
+ *******************************************************************************/
 globalProxyManagementApp.service('globalProxyMgmtErrorService', ['notificationCenterService', 'globalProxyMgmtDateService', 'ProxyManagementDateErrorManager', '$filter',
     function (notificationCenterService, globalProxyMgmtDateService, ProxyManagementDateErrorManager, $filter) {
         var messages = [],

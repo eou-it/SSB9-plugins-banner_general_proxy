@@ -1,5 +1,5 @@
 <!--*******************************************************************************
-  Copyright 2019 Ellucian Company L.P. and its affiliates.
+  Copyright 2020 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="proxy-mgmt-home-content">
     <div class="proxy-mgmt-main-container">
@@ -13,60 +13,25 @@
                 <span class="bold">{{'proxyManagement.title.profile'|i18n}}</span>
                 <span class="italic">{{'proxyManagement.label.hint.required'|i18n}}</span>
             </div>
-
-            <div ng-if="addProxiesList.length > 0" class="row">
-                <div class="col-xs-12 col-md-3 col-lg-3">
-                    <label class="input-field-label" for="authorization">{{'proxyManagement.placeholder.selectPerson'|i18n}}</label>
-                    <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.authorization'|i18n}}"></proxy-mgmt-popover-tooltip><br>
-                    <xe-ui-select ng-model="proxyAuxData.addProxy" theme="select2" search-enabled="false" ng-change="handleAddListChange()" id="authorization">
-                        <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.placeholder.selectPerson'|i18n)" placeholder="{{placeholder.clonedLList}}">
-                            {{$select.selected.description ? $select.selected.description : placeholder.clonedLList}}
-                        </xe-ui-select-match>
-                        <xe-ui-select-choices repeat="choice in addProxiesList">
-                            <div ng-bind-html="choice.description"></div>
-                        </xe-ui-select-choices>
-                    </xe-ui-select>
-                </div>
-            </div>
+            <div class="row">
+                            <div class="col-xs-12 col-md-6 col-lg-4">
+                                <label class="input-field-label" for="first-name">{{'proxy.personalinformation.label.p_first_name'|i18n}}</label><br>
+                                <input ng-model="proxy.p_first" ng-blur="firstNameFocused=false; globalProxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="firstNameFocused=true"
+                                       ng-class="[(!!globalProxyManagementDataValidator.firstNameErrMsg && !firstNameFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
+                                       type="text" placeholder="{{placeholder.first_name}}" size="{{(maxNameLength + 2)}}" maxlength="{{maxNameLength}}" title="{{proxy.p_first}}" id="first-name">
+                                <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.firstNameErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                                   role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.firstNameErrMsg|i18n}}</p>
+                            </div>
+                        </div>
 
             <div class="row">
-                <div class="col-xs-12 col-md-6 col-lg-4">
-                    <label class="input-field-label" for="first-name">{{'proxy.personalinformation.label.p_first_name'|i18n}}</label><br>
-                    <input ng-model="proxy.p_first" ng-blur="firstNameFocused=false; globalProxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="firstNameFocused=true"
-                           ng-class="[(!!globalProxyManagementDataValidator.firstNameErrMsg && !firstNameFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
-                           type="text" placeholder="{{placeholder.first_name}}" size="{{(maxNameLength + 2)}}" maxlength="{{maxNameLength}}" title="{{proxy.p_first}}" id="first-name">
-                    <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.firstNameErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                       role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.firstNameErrMsg|i18n}}</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12 col-md-6 col-lg-4">
-                    <label class="input-field-label" for="last-name">{{'proxy.personalinformation.label.p_last_name'|i18n}}</label><br>
-                    <input ng-model="proxy.p_last" ng-blur="lastNameFocused=false; globalProxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="lastNameFocused=true"
-                           ng-class="[(!!globalProxyManagementDataValidator.lastNameErrMsg && !lastNameFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
-                           type="text" placeholder="{{placeholder.last_name}}" size="{{(maxNameLength + 2)}}" maxlength="{{maxNameLength}}" title="{{proxy.p_last}}" id="last-name">
-                    <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.lastNameErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                       role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.lastNameErrMsg|i18n}}</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12 col-md-6 col-lg-4">
-                    <label class="input-field-label" for="email">{{'proxyManagement.label.email'|i18n}}</label><br>
-                    <input ng-model="proxy.p_email" ng-blur="emailFocused=false; globalProxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="emailFocused=true"
-                           ng-class="[(!!globalProxyManagementDataValidator.emailErrMsg && !emailFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
-                           type="text" placeholder="{{placeholder.email}}" size="{{(maxEmailLength + 2)}}" maxlength="{{maxEmailLength}}" title="{{proxy.p_email}}" id="email">
-                    <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.emailErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                       role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.emailErrMsg|i18n}}</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12 col-md-6 col-lg-4">
-                    <label class="input-field-label" for="verify-email">{{'proxyManagement.label.verifyEmail'|i18n}}</label><br>
-                    <input ng-model="proxy.p_email_verify" ng-blur="verifyEmailFocused=false; globalProxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="verifyEmailFocused=true"
-                           ng-class="[(!!globalProxyManagementDataValidator.verifyEmailErrMsg && !verifyEmailFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
-                           type="text" placeholder="{{placeholder.verify_email}}" size="{{(maxEmailLength + 2)}}" maxlength="{{maxEmailLength}}" title="{{proxy.p_email_verify}}" id="verify-email">
-                    <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.verifyEmailErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                       role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.verifyEmailErrMsg|i18n}}</p>
+                <div class="proxy-mgmt-comm-grid">
+                    <xe-table-grid table-id="communicationDataTable" caption="" header="globalProxySearchColumns" fetch="globalProxySearch(query)"
+                                   content="globalProxySearchRows" results-found="globalProxySearchRecords" toolbar="false" paginate="true" continuous-scrolling="true"
+                                   no-data-msg="{{'proxyManagement.message.noResultsFound'|i18n}}" empty-table-msg="" on-row-click=""
+                                   pagination-config="globalProxySearchPaginationConfig" draggable-column-names="draggableGlobalProxySearchColumnNames"
+                                   mobile-layout="globalProxySearchMobileConfig" height="16em">
+                    </xe-table-grid>
                 </div>
             </div>
         </div>
@@ -96,7 +61,6 @@
                 &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
             </xe-tab-panel>
         </xe-tab-nav>
-        <ng-include ng-if="isCreateNew" src="'../assets/globalProxyManagementApp/globalProxyManagementEditProxy/globalProxyMgmtCommonEditInputs.html'"></ng-include>
         <div id="proxyProfileErrorMsgCenter" class="visuallyhidden" tabindex="-1">
             <span>{{globalProxyManagementDataValidator.firstNameErrMsg|i18n}}</span>
             <span>{{globalProxyManagementDataValidator.lastNameErrMsg|i18n}}</span>

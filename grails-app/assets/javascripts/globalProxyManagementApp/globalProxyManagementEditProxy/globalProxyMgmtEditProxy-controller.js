@@ -1,5 +1,5 @@
 /********************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2020 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', ['$scope', '$rootScope', '$state', '$location', '$stateParams',
     '$timeout', '$filter', '$q', 'notificationCenterService', 'globalProxyMgmtAppService', 'globalProxyMgmtErrorService', 'proxyConfigResolve',
@@ -503,6 +503,43 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         $scope.enableTabHistory = proxyConfigResolve.enableTabHistory;
         // ------------------------------
         // END - COMMUNICATION DATA TABLE
+
+        // GLOBAL PROXY SEARCH
+        // ------------------------
+        $scope.globalProxySearchRecords = 0;
+        $scope.globalProxySearchRows = [];
+        $scope.globalProxySearchColumns = [
+            {position: {desktop: 1, mobile: 1}, name: 'personName', title: "Name", options: {visible: true, sortable: false}, width: '100px'},
+            {position: {desktop: 2, mobile: 2}, name: 'personAge', title: "Age", options: {visible: true, sortable: false}, width: '60px'}
+        ];
+        $scope.draggableGlobalProxySearchColumnNames = [];
+        $scope.globalProxySearchPaginationConfig = {
+        };
+
+        $scope.globalProxySearchConfig = {
+        };
+
+        $scope.onDoubleClick = function(data,index) {
+
+        };
+
+        $scope.onBtnClick = function(data, index) {
+
+        };
+
+        $scope.globalProxySearchMobileConfig = {
+            personName: 2,
+            personAge: 2
+        };
+
+        $scope.postFetch = function(response, oldResult) {
+
+        };
+
+        $scope.globalProxySearch = function (query) {
+              return globalProxyMgmtAppService.fetchGlobalProxiesByQuery().$promise
+          };
+        // END - GLOBAL PROXY SEARCH
 
         // INITIALIZE
         // ----------

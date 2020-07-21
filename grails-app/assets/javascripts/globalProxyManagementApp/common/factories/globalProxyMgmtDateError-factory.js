@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 globalProxyManagementApp.factory('ProxyManagementDateErrorManager', ['globalProxyMgmtDateService', 'notificationCenterService', '$filter',
     function (globalProxyMgmtDateService, notificationCenterService, $filter) {
