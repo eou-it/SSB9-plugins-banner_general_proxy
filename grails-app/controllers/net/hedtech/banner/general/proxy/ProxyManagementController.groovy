@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019 Ellucian Company L.P. and its affiliates.
+ Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.general.proxy
 
@@ -371,6 +371,7 @@ class ProxyManagementController {
             // Internationalize "action" value
             historyLog?.result?.collect {
                 it.action = MessageHelper.getMessage("proxyManagement.label.${it.action}")
+                it.activityDate = getFormattedTransmitDate(it.activityDate)
             }
 
             // "length" property needed for xe-table-grid frontend component
@@ -398,8 +399,8 @@ class ProxyManagementController {
             }
         else {
             SimpleDateFormat transDateFormat =
-                    new SimpleDateFormat(getDateFormat(),  Locale.forLanguageTag(LocaleContextHolder.getLocale().toString()));
-            DateFormat df1 = new SimpleDateFormat("MM/dd/yyy HH:mm")
+                    new SimpleDateFormat(getDateFormat(),  LocaleContextHolder.getLocale())
+            DateFormat df1 = new SimpleDateFormat("MM/dd/yyyy HH:mm")
             return transDateFormat.format(transmitDate ? df1.parse(transmitDate) : transmitDate)
         }
     }
