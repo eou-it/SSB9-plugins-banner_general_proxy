@@ -1,14 +1,14 @@
 /*********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
-package net.hedtech.banner.student
+package net.hedtech.banner.proxy.student
 
-import net.hedtech.banner.student.history.HistoryStudentCourseDetail
+import net.hedtech.banner.proxy.student.history.HistoryStudentCourseDetailProxy
 
 /**
  * Decorator to display the course Work of the student
  **/
-class CourseDetailDecorator {
+class CourseDetailDecoratorProxy {
 
     String id
     Integer studentPidm
@@ -38,7 +38,7 @@ class CourseDetailDecorator {
     String studyPath
     String studyPathName
 
-    CourseDetailDecorator(HistoryStudentCourseDetail record) {
+    CourseDetailDecoratorProxy(HistoryStudentCourseDetailProxy record) {
         id = record.id
         studentPidm = record.studentPidm
         termCode = record.termCode
@@ -70,7 +70,7 @@ class CourseDetailDecorator {
 
     @Override
     public String toString() {
-        return """CourseDetailDecorator[
+        return """CourseDetailDecoratorProxy[
                  id=$id,
                  studentPidm=$studentPidm,
                  termCode=$termCode,

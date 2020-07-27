@@ -1,7 +1,7 @@
 /*********************************************************************************
  Copyright 2018 Ellucian Company L.P. and its affiliates.
  **********************************************************************************/
-package net.hedtech.banner.student.history
+package net.hedtech.banner.proxy.student.history
 
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
@@ -16,17 +16,17 @@ import javax.persistence.*
 @Entity
 @Table(name = "SVQ_COURSE_DETAIL")
 @NamedQueries(value = [
-        @NamedQuery(name = "HistoryStudentCourseDetail.fetchAllLevelsByPidmTermLikeAndLevelLike",
+        @NamedQuery(name = "HistoryStudentCourseDetailProxy.fetchAllLevelsByPidmTermLikeAndLevelLike",
                 query = """SELECT a.levelCode,a.levelDescription
-           FROM  HistoryStudentCourseDetail a
+           FROM  HistoryStudentCourseDetailProxy a
 	  	   WHERE a.studentPidm = :pidm
 	  	   AND a.termCode like :termFilter
 	  	   AND (a.levelCode LIKE  :levelFilter OR a.upperCaseLevelDescription LIKE :levelFilter)
 	  	   GROUP BY a.levelCode,a.levelDescription
 	  	   ORDER BY a.levelCode,a.levelDescription"""),
-        @NamedQuery(name = "HistoryStudentCourseDetail.fetchAllStudyPathsByPidmTermLikeLevelLikeAndStudyPathLike",
+        @NamedQuery(name = "HistoryStudentCourseDetailProxy.fetchAllStudyPathsByPidmTermLikeLevelLikeAndStudyPathLike",
                 query = """SELECT a.studyPath,a.studyPathName
-           FROM  HistoryStudentCourseDetail a
+           FROM  HistoryStudentCourseDetailProxy a
 	  	   WHERE a.studentPidm = :pidm
 	  	   AND a.termCode like :termFilter
 	  	   AND a.levelCode like :levelFilter
@@ -37,7 +37,7 @@ import javax.persistence.*
 ])
 @ToString(includeNames = true, ignoreNulls = true)
 @EqualsAndHashCode(includeFields = true)
-class HistoryStudentCourseDetail {
+class HistoryStudentCourseDetailProxy {
 
     @Id
     @Column(name = "ROW_ID")
@@ -154,13 +154,13 @@ class HistoryStudentCourseDetail {
 
 
     def private static finderByPidmTermLevelAndStudyPath = {
-        def query = """FROM  HistoryStudentCourseDetail a
+        def query = """FROM  HistoryStudentCourseDetailProxy a
         WHERE  a.studentPidm = :studentPidm
         AND a.termCode like :termCode
         AND a.levelCode like :levelCode
         AND a.studyPath like :studyPath
         AND (a.upperCaseCourseTitle like :filterText OR a.subjectCode like :filterText)"""
-        return new DynamicFinder(HistoryStudentCourseDetail.class, query, "a")
+        return new DynamicFinder(HistoryStudentCourseDetailProxy.class, query, "a")
     }
 
 
@@ -173,22 +173,22 @@ class HistoryStudentCourseDetail {
     }
 
     def private static finderByPidmTermLevelStudyPathAndSubjectCourseFilter = {
-        def query = """FROM  HistoryStudentCourseDetail a
+        def query = """FROM  HistoryStudentCourseDetailProxy a
         WHERE  a.studentPidm = :studentPidm
         AND a.termCode like :termCode
         AND a.levelCode like :levelCode
         AND a.studyPath like :studyPath
         AND a.hasComponent = 'Y' AND gradeDetailDisplayInd = 'Y'
         AND (a.subjectCode like :filterText OR a.courseNumber like :filterText OR a.courseReferenceNumber like :filterText) """
-        return new DynamicFinder(HistoryStudentCourseDetail.class, query, "a")
+        return new DynamicFinder(HistoryStudentCourseDetailProxy.class, query, "a")
     }
 
 
     static List fetchAllLevelsByPidmTermLikeAndLevelLike(Integer pidm, String termFilter, String levelFilter) {
         List historyStudentCourseDetails = []
         if (null != pidm) {
-            HistoryStudentCourseDetail.withSession { session ->
-                historyStudentCourseDetails = session.getNamedQuery('HistoryStudentCourseDetail.fetchAllLevelsByPidmTermLikeAndLevelLike')
+            HistoryStudentCourseDetailProxy.withSession { session ->
+                historyStudentCourseDetails = session.getNamedQuery('HistoryStudentCourseDetailProxy.fetchAllLevelsByPidmTermLikeAndLevelLike')
                         .setInteger('pidm', pidm)
                         .setString('termFilter', prepareParams(termFilter))
                         .setString('levelFilter', prepareParams(levelFilter)?.toUpperCase()).list()
@@ -204,8 +204,8 @@ class HistoryStudentCourseDetail {
     static List fetchAllStudyPathsByPidmTermLikeLevelLikeAndStudyPathLike(Integer pidm, String termFilter, String levelFilter, String studyPathFilter) {
         List historyStudentStudypaths = []
         if (null != pidm) {
-            HistoryStudentCourseDetail.withSession { session ->
-                historyStudentStudypaths = session.getNamedQuery('HistoryStudentCourseDetail.fetchAllStudyPathsByPidmTermLikeLevelLikeAndStudyPathLike')
+            HistoryStudentCourseDetailProxy.withSession { session ->
+                historyStudentStudypaths = session.getNamedQuery('HistoryStudentCourseDetailProxy.fetchAllStudyPathsByPidmTermLikeLevelLikeAndStudyPathLike')
                         .setInteger('pidm', pidm)
                         .setString('termFilter', prepareParams(termFilter))
                         .setString('levelFilter', prepareParams(levelFilter))
