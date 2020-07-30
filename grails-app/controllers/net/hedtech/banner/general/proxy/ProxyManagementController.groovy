@@ -342,12 +342,17 @@ class ProxyManagementController {
 
             def communications = generalSsbProxyManagementService.getProxyCommunications(params).communicationsList
 
+            SimpleDateFormat dateFormatWithTimestamp =
+                    new SimpleDateFormat(getDateFormat(true),  LocaleContextHolder.getLocale())
+            SimpleDateFormat dateFormatWithoutTimestamp =
+                    new SimpleDateFormat(getDateFormat(false),  LocaleContextHolder.getLocale())
             DateFormat df = new SimpleDateFormat("MM/dd/yyyy")
+            DateFormat df1 = new SimpleDateFormat("MM/dd/yyy HH:mm")
 
             communications?.each{
-                it.actionDate = it.actionDate ? df.parse(it.actionDate) : it.actionDate
-                it.expirationDate = it.expirationDate ? df.parse(it.expirationDate) : it.expirationDate
-                it.transmitDate = getFormattedTransmitDate(it.transmitDate) //A transmit date needs to be formatted differently because of its timestamp.
+                it.actionDate = it.actionDate ? dateFormatWithoutTimestamp.format(df.parse(it.actionDate)) : it.actionDate
+                it.expirationDate = it.expirationDate ? dateFormatWithoutTimestamp.format(df.parse(it.expirationDate)) : it.expirationDate
+                it.transmitDate = it.transmitDate ? dateFormatWithTimestamp.format(df1.parse(it.transmitDate)) : it.transmitDate
             }
 
             render communications as JSON
@@ -367,10 +372,14 @@ class ProxyManagementController {
             params.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(params)
 
             def historyLog = generalSsbProxyManagementService.getProxyHistoryLog(params)
+            SimpleDateFormat dateFormatWithTimestamp =
+                    new SimpleDateFormat(getDateFormat(true),  LocaleContextHolder.getLocale())
+            DateFormat df1 = new SimpleDateFormat("MM/dd/yyy HH:mm")
 
             // Internationalize "action" value
             historyLog?.result?.collect {
                 it.action = MessageHelper.getMessage("proxyManagement.label.${it.action}")
+                it.activityDate = it.activityDate ? dateFormatWithTimestamp.format(df1.parse(it.activityDate)) : it.activityDate
             }
 
             // "length" property needed for xe-table-grid frontend component
@@ -527,8 +536,9 @@ class ProxyManagementController {
         found ? true : false
     }
 
-    def static getDateFormat() {
-        message("default.dateshorttime.format", null, LocaleContextHolder.getLocale())
+    def static getDateFormat(boolean withTimestamp) {
+        def key = withTimestamp ? "default.dateshorttime.format" : "default.date.format"
+        message(key, null, LocaleContextHolder.getLocale())
     }
 
     private static String message(key, args = null, locale = null) {
