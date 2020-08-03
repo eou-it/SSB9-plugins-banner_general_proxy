@@ -22,6 +22,8 @@ import java.time.DateTimeException
 class ProxyManagementController {
 
     def generalSsbProxyManagementService
+    private final String DATE_FORMAT_WITH_TIMESTAMP = "MM/dd/yyyy HH:mm"
+    private final String DATE_FORMAT_WITHOUT_TIMESTAMP = "MM/dd/yyyy"
 
     static defaultAction = 'landingPage'
 
@@ -63,7 +65,7 @@ class ProxyManagementController {
             proxy.proxyProfile.alt = params.alt
             proxy.proxyProfile.cver = params.cver
 
-            DateFormat df = new SimpleDateFormat("MM/dd/yyyy")
+            DateFormat df = new SimpleDateFormat(DATE_FORMAT_WITHOUT_TIMESTAMP)
             //converts the Date display for I18N
             proxy?.messages?.messages?.each {
                 if (it.code == "PIN_EXPIRATION_DATE" || it.code == "EMAIL_VERIFIED" || it.code == "OPTOUT") {
@@ -346,13 +348,22 @@ class ProxyManagementController {
                     new SimpleDateFormat(getDateFormat(true),  LocaleContextHolder.getLocale())
             SimpleDateFormat dateFormatWithoutTimestamp =
                     new SimpleDateFormat(getDateFormat(false),  LocaleContextHolder.getLocale())
-            DateFormat df = new SimpleDateFormat("MM/dd/yyyy")
-            DateFormat df1 = new SimpleDateFormat("MM/dd/yyy HH:mm")
+            DateFormat df = new SimpleDateFormat(DATE_FORMAT_WITHOUT_TIMESTAMP)
+            DateFormat df1 = new SimpleDateFormat(DATE_FORMAT_WITH_TIMESTAMP)
+
+            def userInArabicLocale = userIsInArabicLocale()
 
             communications?.each{
-                it.actionDate = it.actionDate ? dateFormatWithoutTimestamp.format(df.parse(it.actionDate)) : it.actionDate
-                it.expirationDate = it.expirationDate ? dateFormatWithoutTimestamp.format(df.parse(it.expirationDate)) : it.expirationDate
-                it.transmitDate = it.transmitDate ? dateFormatWithTimestamp.format(df1.parse(it.transmitDate)) : it.transmitDate
+                if (userInArabicLocale){
+                    it.actionDate =  HijrahCalendarUtils.getFormattedArabicDate(it.actionDate, DATE_FORMAT_WITHOUT_TIMESTAMP, false)
+                    it.expirationDate = HijrahCalendarUtils.getFormattedArabicDate(it.expirationDate, DATE_FORMAT_WITHOUT_TIMESTAMP, false)
+                    it.transmitDate = HijrahCalendarUtils.getFormattedArabicDate(it.transmitDate, DATE_FORMAT_WITH_TIMESTAMP, true)
+                }
+                else{
+                    it.actionDate = it.actionDate ? dateFormatWithoutTimestamp.format(df.parse(it.actionDate)) : it.actionDate
+                    it.expirationDate = it.expirationDate ? dateFormatWithoutTimestamp.format(df.parse(it.expirationDate)) : it.expirationDate
+                    it.transmitDate = it.transmitDate ? dateFormatWithTimestamp.format(df1.parse(it.transmitDate)) : it.transmitDate
+                }
             }
 
             render communications as JSON
@@ -374,12 +385,18 @@ class ProxyManagementController {
             def historyLog = generalSsbProxyManagementService.getProxyHistoryLog(params)
             SimpleDateFormat dateFormatWithTimestamp =
                     new SimpleDateFormat(getDateFormat(true),  LocaleContextHolder.getLocale())
-            DateFormat df1 = new SimpleDateFormat("MM/dd/yyy HH:mm")
+            DateFormat df1 = new SimpleDateFormat(DATE_FORMAT_WITH_TIMESTAMP)
+            def userInArabicLocale = userIsInArabicLocale()
 
             // Internationalize "action" value
             historyLog?.result?.collect {
+                if (userInArabicLocale){
+                    it.activityDate = HijrahCalendarUtils.getFormattedArabicDate(it.activityDate, DATE_FORMAT_WITH_TIMESTAMP, true)
+                }
+                else{
+                    it.activityDate = it.activityDate ? dateFormatWithTimestamp.format(df1.parse(it.activityDate)) : it.activityDate
+                }
                 it.action = MessageHelper.getMessage("proxyManagement.label.${it.action}")
-                it.activityDate = it.activityDate ? dateFormatWithTimestamp.format(df1.parse(it.activityDate)) : it.activityDate
             }
 
             // "length" property needed for xe-table-grid frontend component
@@ -407,8 +424,8 @@ class ProxyManagementController {
             }
         else {
             SimpleDateFormat transDateFormat =
-                    new SimpleDateFormat(getDateFormat(),  Locale.forLanguageTag(LocaleContextHolder.getLocale().toString()));
-            DateFormat df1 = new SimpleDateFormat("MM/dd/yyy HH:mm")
+                    new SimpleDateFormat(getDateFormat(true),  Locale.forLanguageTag(LocaleContextHolder.getLocale().toString()));
+            DateFormat df1 = new SimpleDateFormat(DATE_FORMAT_WITH_TIMESTAMP)
             return transDateFormat.format(transmitDate ? df1.parse(transmitDate) : transmitDate)
         }
     }
