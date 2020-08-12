@@ -393,6 +393,7 @@ class ProxyController {
         def pidm =PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id))).pidm
         springSecurityService?.getAuthentication()?.user?.pidm = pidm
         session["currentStudentPidm"] = pidm
+        session["globalGuestProxyBaseURL"] = "/"
         render "PIDM context set"
     }
 
