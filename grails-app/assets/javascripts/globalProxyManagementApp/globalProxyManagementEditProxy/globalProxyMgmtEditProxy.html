@@ -52,14 +52,6 @@
                 <ng-include src="'../assets/globalProxyManagementApp/globalProxyManagementEditProxy/globalProxyMgmtCommonEditInputs.html'"></ng-include>
                 &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
             </xe-tab-panel>
-            <xe-tab-panel heading="{{'proxyManagement.title.history'|i18n}}" state="editProxy" ng-if="enableTabHistory">
-                <ng-include src="'../assets/globalProxyManagementApp/globalProxyManagementEditProxy/globalProxyMgmtAuthLog.html'"></ng-include>
-                &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
-            </xe-tab-panel>
-            <xe-tab-panel heading="{{'proxyManagement.title.communication'|i18n}}" state="editProxy" ng-if="enableTabCommunication">
-                <ng-include src="'../assets/globalProxyManagementApp/globalProxyManagementEditProxy/globalProxyMgmtCommunication.html'"></ng-include>
-                &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
-            </xe-tab-panel>
         </xe-tab-nav>
         <div id="proxyProfileErrorMsgCenter" class="visuallyhidden" tabindex="-1">
             <span>{{globalProxyManagementDataValidator.firstNameErrMsg|i18n}}</span>
