@@ -12,11 +12,14 @@ class ProxyAccessInterceptor {
 
     boolean before() {
         studentIdCheck()
+        session["globalProxyAccess"] =  true
     }
 
     boolean after() { true }
 
     void afterView() {
+
+        session["globalProxyAccess"] =  false
         // no-op
     }
 

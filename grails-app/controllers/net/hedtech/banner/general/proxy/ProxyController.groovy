@@ -8,6 +8,8 @@ import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.system.ProxyAccessSystemOptionType
 import net.hedtech.banner.i18n.MessageHelper
 import org.grails.web.json.JSONObject
+import org.springframework.context.NoSuchMessageException
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.core.context.SecurityContextHolder
 import net.hedtech.banner.security.XssSanitizer
 import net.hedtech.banner.general.person.PersonUtility
@@ -53,7 +55,7 @@ class ProxyController {
     private studentIdCheck() {
         def id = XssSanitizer.sanitize(params.id)
         if (id) {
-            def students = session["students"]?.students.active
+            def students = session["students"]?.students?.active
             def student = students?.find { it.id == id }
             if (!student) {
                 log.error('Invalid attempt for Id: ' + id )
@@ -61,6 +63,48 @@ class ProxyController {
                 render response as JSON
             }
             return true
+        }
+    }
+
+    private void logProxyNavigationToAccessHistory() {
+        def logHistoryMessage = messageSource.getMessage(XssSanitizer?.sanitize("proxy.page.heading" +
+                filterFinAidUrl(params?.url)?.replaceAll("/", ".")), null, LocaleContextHolder.getLocale())
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], logHistoryMessage)
+    }
+
+    // This will cut off the aid year part from url
+    private filterFinAidUrl(def url) {
+        return (url.contains("financialAid")) ? (url.subSequence(0, url.length() - 5)) : url
+    }
+
+    private addFinaidMarkerToUrlIfUrlIsForFinaidPage(paramsUrl) {
+        def url
+        url = paramsUrl?.indexOf("financialAid") > 0 ? addFinaidMarker(paramsUrl) : paramsUrl
+        url
+    }
+
+    //Appends characters to URL needed for Financial Aid pages.
+    private String addFinaidMarker(String url) {
+        def position = url?.indexOf("financialAid")
+        return url?.substring(0, url?.indexOf("financialAid") + 12) + "#!" + url?.substring(position + 12)
+    }
+
+    private void addProxyFinancialAidConfigurationsToSession() {
+        session['proxyWebRules'] = proxyConfigurationService.getFinaidConfigurationsBasedOnRole()
+    }
+
+    // Main Proxy Page Navigator
+    def navigate() {
+        try {
+            logProxyNavigationToAccessHistory()
+            addProxyFinancialAidConfigurationsToSession()
+            def url = addFinaidMarkerToUrlIfUrlIsForFinaidPage(params?.url)
+            redirect(url: url, params: params)
+        }
+        catch (NoSuchMessageException e) {
+            log.error(e.toString())
+            throw new ApplicationException(ProxyController.class,
+                    messageSource.getMessage(XssSanitizer?.sanitize('proxy.error.dataError'), null, LocaleContextHolder.getLocale()))
         }
     }
 
@@ -347,8 +391,9 @@ class ProxyController {
      */
     def setId(params){
         def pidm =PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id))).pidm
-        springSecurityService.getAuthentication()?.user.pidm = pidm
+        springSecurityService?.getAuthentication()?.user?.pidm = pidm
         session["currentStudentPidm"] = pidm
+        session["globalGuestProxyBaseURL"] = "/"
         render "PIDM context set"
     }
 

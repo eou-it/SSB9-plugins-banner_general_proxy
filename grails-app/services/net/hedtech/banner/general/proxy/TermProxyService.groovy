@@ -3,7 +3,7 @@
 ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
-import net.hedtech.banner.student.history.HistoryTermForStudentGrades
+import net.hedtech.banner.proxy.student.history.HistoryTermForStudentGradesProxy
 
 class TermProxyService {
 
@@ -14,7 +14,7 @@ class TermProxyService {
             return []
         }
         else {
-            def terms = HistoryTermForStudentGrades.fetchAllTermsByStudentPidmAndTerm(pidm, searchString, max, offset)
+            def terms = HistoryTermForStudentGradesProxy.fetchAllTermsByStudentPidmAndTerm(pidm, searchString, max, offset)
             return terms
         }
     }
