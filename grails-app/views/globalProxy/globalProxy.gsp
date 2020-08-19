@@ -22,9 +22,11 @@ Copyright 2020 Ellucian Company L.P. and its affiliates.
 
         <g:if test="${message(code: 'default.language.direction') == 'rtl'}">
             <asset:stylesheet src="modules/proxyMgmt-applicationRTL-mf.css" />
+            <asset:stylesheet src="modules/globalProxyMgmt-applicationRTL-mf.css" />
         </g:if>
         <g:else>
             <asset:stylesheet src="modules/proxyMgmt-applicationLTR-mf.css" />
+            <asset:stylesheet src="modules/globalProxyMgmt-applicationLTR-mf.css" />
         </g:else>
 
         <asset:javascript src="modules/globalProxy-application-mf.js" />

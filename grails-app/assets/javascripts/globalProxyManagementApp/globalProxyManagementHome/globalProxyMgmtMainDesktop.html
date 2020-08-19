@@ -2,35 +2,12 @@
   Copyright 2020 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="proxy-mgmt-home-content">
-    <div class="proxy-mgmt-main-container">
-        <div class="clearfix">
-            <div class="proxy-mgmt-main-heading">
-                <h2>{{'globalProxyManagement.title.globalProxyManagement'|i18n}}</h2>
-            </div>
-            <div class="proxy-mgmt-add-new-proxy">
-                <a ui-sref="editProxy" class="add-item-link" tabindex="0">
-                    <span class="icon-add-CO"></span> <span>{{'proxyManagement.label.addNew'|i18n}}</span>
-                </a>
-            </div>
-        </div>
-        <div ng-if="proxiesLoaded && proxies.length < 1" class="proxy-notification-box">
-            <div class="proxy-notification-row">
-                <div class="proxy-notification-cell">
-                    <div class="proxy-notification-content">
-                        <div class="proxy-notification-icon blue">
-                            <span class="icon-info-CO"></span>
-                        </div>
-                        <div class="proxy-notification-text blue">
-                            <div>
-                                {{'proxyManagement.message.noProxiesAvailable'|i18n}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div ng-if="proxies.length > 0">
-            <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyList.html'|webAppResourcePath"></ng-include>
-        </div>
+    <div ng-if="proxiesLoaded && proxies.length < 1" class="center-contents">
+        <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyNoProxyAddedYetTemplate.html'|webAppResourcePath"></ng-include>
     </div>
+    <!--TODO uncomment when proxy list ready
+    <div ng-if="proxies.length > 0">
+        <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyList.html'|webAppResourcePath"></ng-include>
+    </div>
+    -->
 </div>

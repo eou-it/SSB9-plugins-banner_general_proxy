@@ -1,0 +1,28 @@
+<!--*******************************************************************************
+  Copyright 2020 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <img ng-src="{{'global_proxy_no_proxies_added_yet.svg'|webAppResourcePath}}" alt="{{'globalProxyManagement.image.alt.noProxiesAddedYet'|i18n}}"
+                 aria-label="{{'globalProxyManagement.image.alt.noProxiesAddedYet'|i18n}}" />
+        </div>
+    </div>
+    <div class="row global-proxy-no-proxies-yet-row-buffer">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <div class="global-proxy-heading">
+                {{'globalProxyManagement.message.noProxiesAvailable'|i18n}}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="proxy-mgmt-msg-secondary col-xs-12 col-md-12 col-lg-12 global-proxy-subheading">
+            {{'globalProxyManagement.message.addNewProxy'|i18n}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="proxy-mgmt-button-container center col-xs-12 col-md-12 col-lg-12">
+            <button ng-click="goToEditProxyState()" class="primary global-proxy-no-proxies-yet-add-new-button">{{'proxyManagement.label.addProxy'|i18n}}</button>
+        </div>
+    </div>
+</div>

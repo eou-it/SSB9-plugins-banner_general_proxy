@@ -75,7 +75,8 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
         };
 
         $scope.goToEditProxyState = function() {
-            $state.go('editProxy');
+            //TODO uncomment when edit proxy ready
+            //$state.go('editProxy');
         };
 
         $scope.enableDeleteRelationship = proxyConfigResolve.enableDeleteRelationship;

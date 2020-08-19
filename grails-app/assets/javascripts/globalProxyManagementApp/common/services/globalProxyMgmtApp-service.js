@@ -5,7 +5,7 @@
 globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$filter', '$resource', '$q', 'notificationCenterService', function ($rootScope, $filter, $resource, $q, notificationCenterService) {
 
     var fetchProxies = $resource('../ssb/:controller/:action',
-            {controller: 'ProxyManagement', action: 'getProxies'}, {query: {method:'GET', isArray:false}}),
+            {controller: 'GlobalProxy', action: 'getGlobalProxies'}, {query: {method:'GET', isArray:false}}),
         fetchRelationshipOptions = $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'getRelationshipOptions'}, {query: {method:'GET', isArray:false}}),
         fetchCommunicationLog = $resource('../ssb/:controller/:action',
