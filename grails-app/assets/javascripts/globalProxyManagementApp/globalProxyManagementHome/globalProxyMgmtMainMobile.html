@@ -1,0 +1,13 @@
+<!--******************************************************************************
+  Copyright 2020 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="proxy-mgmt-home-content">
+    <div ng-if="proxiesLoaded && proxies.length < 1" class="center-contents">
+        <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyNoProxyAddedYetTemplate.html'|webAppResourcePath"></ng-include>
+    </div>
+</div>
+<!---TODO Uncomment when proxy list ready
+<proxy-mgmt-mobile-footer-button click-function="goToEditProxyState" ng-if="proxies.length > 0">
+    {{'proxyManagement.label.addProxy'|i18n}}
+</proxy-mgmt-mobile-footer-button>
+-->

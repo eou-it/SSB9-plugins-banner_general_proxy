@@ -1,0 +1,109 @@
+/********************************************************************************
+  Copyright 2020 Ellucian Company L.P. and its affiliates.
+********************************************************************************/
+.global-proxy-desktop-visible{
+    visibility: visible;
+    position: relative;
+    height: auto;
+    width: auto;
+    margin: 0px;
+}
+
+.global-proxy-mobile-visible{
+    visibility: hidden;
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+}
+
+.center-contents {
+    padding-bottom: 30px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,30%);
+    position: relative;
+    text-align: center;
+}
+
+.global-proxy-heading {
+    font-family: OpenSans-semibold;
+    font-size: 18px;
+}
+
+.global-proxy-subheading {
+    font-family: OpenSans-regular;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.global-proxy-no-proxies-yet-row-buffer {
+    margin-top: 25px;
+}
+
+.global-proxy-no-proxies-yet-add-new-button {
+    margin-top: 25px;
+    font-size: 16px;
+}
+
+/*Tablet device*/
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .global-proxy-desktop-visible{
+        visibility: hidden;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+
+    }
+
+    .global-proxy-mobile-visible{
+        visibility: visible;
+        position: relative;
+        height: auto;
+        width: auto;
+        margin: 0px;
+    }
+}
+
+/* Mobile device */
+@media screen and (max-width: 767px) {
+    .center-contents {
+        transform: translate(-50%,10%);
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .global-proxy-no-proxies-yet-add-new-button {
+        margin-top: 5px;
+        font-size: 16px;
+    }
+
+    .global-proxy-desktop-visible{
+        visibility: hidden;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+    }
+
+    .global-proxy-mobile-visible{
+        visibility: visible;
+        position: relative;
+        height: auto;
+        width: auto;
+        margin: 0px;
+    }
+}

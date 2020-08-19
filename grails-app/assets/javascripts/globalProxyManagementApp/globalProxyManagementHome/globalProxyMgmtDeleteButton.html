@@ -1,0 +1,11 @@
+<!--*******************************************************************************
+Copyright 2020 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<button ng-class="enabled ? '' : 'proxy-delete-button-disabled-parent'" ng-click="PLACEHOLDER(item)" class="delete-btn" title="{{buttonTitle}}" aria-label="{{buttonTitle}}" enabled="{{enabled}}">
+    <div ng-if="enabled">
+        <ng-include src="'trash_4.svg'|webAppResourcePath" role="presentation"/>
+    </div>
+    <div ng-if="!enabled">
+        <ng-include src="'trash_disabled.svg'|webAppResourcePath" role="presentation"/>
+    </div>
+</button>

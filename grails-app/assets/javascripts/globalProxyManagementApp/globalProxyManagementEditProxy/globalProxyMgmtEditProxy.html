@@ -1,0 +1,65 @@
+<!--*******************************************************************************
+  Copyright 2020 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="proxy-mgmt-home-content">
+    <div class="proxy-mgmt-main-container">
+        <div ng-if="isCreateNew">
+            <div class="proxy-info-main-heading">
+                <span class="bold">{{'proxyManagement.title.proxyInformation'|i18n}}</span>
+                <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.addProxyUsingForm'|i18n}}"></proxy-mgmt-popover-tooltip>
+            </div>
+
+            <div class="proxy-info-subheading page-top">
+                <span class="bold">{{'proxyManagement.title.profile'|i18n}}</span>
+                <span class="italic">{{'proxyManagement.label.hint.required'|i18n}}</span>
+            </div>
+            <div class="row">
+                            <div class="col-xs-12 col-md-6 col-lg-4">
+                                <label class="input-field-label" for="first-name">{{'proxy.personalinformation.label.p_first_name'|i18n}}</label><br>
+                                <input ng-model="proxy.p_first" ng-blur="firstNameFocused=false; globalProxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="firstNameFocused=true"
+                                       ng-class="[(!!globalProxyManagementDataValidator.firstNameErrMsg && !firstNameFocused ? 'input-field-error' : null)]" class="text-input-field gssb-eds-text-field semi-bold form-spacing"
+                                       type="text" placeholder="{{placeholder.first_name}}" size="{{(maxNameLength + 2)}}" maxlength="{{maxNameLength}}" title="{{proxy.p_first}}" id="first-name">
+                                <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.firstNameErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                                   role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.firstNameErrMsg|i18n}}</p>
+                            </div>
+                        </div>
+
+            <div class="row">
+                <div class="proxy-mgmt-comm-grid">
+                    <xe-table-grid table-id="communicationDataTable" caption="" header="globalProxySearchColumns" fetch="globalProxySearch(query)"
+                                   content="globalProxySearchRows" results-found="globalProxySearchRecords" toolbar="false" paginate="true" continuous-scrolling="true"
+                                   no-data-msg="{{'proxyManagement.message.noResultsFound'|i18n}}" empty-table-msg="" on-row-click=""
+                                   pagination-config="globalProxySearchPaginationConfig" draggable-column-names="draggableGlobalProxySearchColumnNames"
+                                   mobile-layout="globalProxySearchMobileConfig" height="16em">
+                    </xe-table-grid>
+                </div>
+            </div>
+        </div>
+        <div ng-if="!isCreateNew">
+            <div class="clearfix">
+                <div class="proxy-base-info-summary long-name-limiter">
+                    <span>{{proxyAuxData.firstName}}</span> <span>{{proxyAuxData.lastName}}</span> <span>({{proxyAuxData.email}})&#x200E;</span>
+                </div>
+                <div class="proxy-mgmt-reset-pw" ng-if="enableResetPin">
+                    <a ng-click="resetPassword()" class="add-item-link" tabindex="0">
+                        <span class="icon-refresh-CO"></span> <span>{{'proxyManagement.label.reset.password'|i18n}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <xe-tab-nav ng-if="!isCreateNew">
+            <xe-tab-panel heading="{{'proxyManagement.title.proxyInformation'|i18n}}" state="editProxy">
+                <ng-include src="'../assets/globalProxyManagementApp/globalProxyManagementEditProxy/globalProxyMgmtCommonEditInputs.html'"></ng-include>
+                &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
+            </xe-tab-panel>
+        </xe-tab-nav>
+        <div id="proxyProfileErrorMsgCenter" class="visuallyhidden" tabindex="-1">
+            <span>{{globalProxyManagementDataValidator.firstNameErrMsg|i18n}}</span>
+            <span>{{globalProxyManagementDataValidator.lastNameErrMsg|i18n}}</span>
+            <span>{{globalProxyManagementDataValidator.emailErrMsg|i18n}}</span>
+            <span>{{globalProxyManagementDataValidator.verifyEmailErrMsg|i18n}}</span>
+            <span>{{globalProxyManagementDataValidator.relationshipErrMsg|i18n}}</span>
+            <span>{{globalProxyManagementDataValidator.authorizationsErrMsg|i18n}}</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<!--*******************************************************************************
+Copyright 2020 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="row">
+    <div ng-repeat="proxy in proxies" class="item-wrapper col-xs-12 col-md-6 col-lg-4" >
+        <div class="proxy-item-detail">
+            <div class="proxy-item-name" title="{{proxy.firstName + ' ' + proxy.lastName}}">
+                <span>{{proxy.firstName}}</span> <span>{{proxy.lastName}}</span>
+            </div>
+            <div>
+                <span class="email-text" dir="ltr">{{proxy.email}}</span>
+            </div>
+            <div class="proxy-item-name">
+                <span ng-show="proxy.activeInd=='Y'"><span>&nbsp;</span></span>
+                <span ng-show="proxy.activeInd=='N'"><span>{{'proxy.status.I' | i18n }}</span></span>
+            </div>
+        </div>
+        <div class="button-block">
+            <a ui-sref="editProxy({alt: proxy.alt, cver: proxy.cver, firstName: proxy.firstName, lastName: proxy.lastName, email: proxy.email})" class="proxy-edit-item-link proxy-icon-link"
+               title="{{'proxyManagement.button.title.editProxy'|i18n}}" tabindex="0">
+                <span class="icon-edit-CO"></span>
+                <div class="hidden-link-text-for-reader">{{'proxyManagement.button.title.editProxy'|i18n}}</div>
+            </a>
+                <global-proxy-mgmt-delete-button item="proxy" ng-click="confirmDeleteProxy(proxy)" enabled="proxyCanBeDeleted(proxy)" button-title="{{'proxyManagement.button.title.deleteProxy'|i18n}}"/>
+        </div>
+    </div>
+</div>

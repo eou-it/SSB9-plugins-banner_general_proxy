@@ -100,7 +100,7 @@ class ProxyManagementControllerTests extends BaseIntegrationTestCase {
         assertNotNull data
 
         def jsonData = JSON.parse( data )
-        
+
         //check data
         assertNotNull jsonData
         assertNotNull jsonData.dates
