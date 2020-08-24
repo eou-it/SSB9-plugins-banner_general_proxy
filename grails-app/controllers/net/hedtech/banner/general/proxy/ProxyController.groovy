@@ -99,6 +99,16 @@ class ProxyController {
             logProxyNavigationToAccessHistory()
             addProxyFinancialAidConfigurationsToSession()
             def url = addFinaidMarkerToUrlIfUrlIsForFinaidPage(params?.url)
+
+            //TO DO
+            //1. Change pidm to id
+            //2. Parser(token + random length + expiration)
+            //3. Check for roles and security on the following: params?.url, globalProxyPidm and studentPidm
+            if (params.pidm) {
+                session["globalProxyMode"] = true
+                springSecurityService?.getAuthentication()?.user?.pidm = new Integer(params.pidm)
+            }
+
             redirect(url: url, params: params)
         }
         catch (NoSuchMessageException e) {
@@ -107,6 +117,7 @@ class ProxyController {
                     messageSource.getMessage(XssSanitizer?.sanitize('proxy.error.dataError'), null, LocaleContextHolder.getLocale()))
         }
     }
+
 
     def landingPage() {
         try {
