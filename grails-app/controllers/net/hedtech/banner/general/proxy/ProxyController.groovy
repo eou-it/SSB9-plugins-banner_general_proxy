@@ -93,6 +93,12 @@ class ProxyController {
         session['proxyWebRules'] = proxyConfigurationService.getFinaidConfigurationsBasedOnRole()
     }
 
+    def returnMe(){
+        if (session["loggedUserPidm"])
+        springSecurityService?.getAuthentication()?.user?.pidm = session["loggedUserPidm"]
+        render "PIDM context set"
+    }
+
     // Main Proxy Page Navigator
     def navigate() {
         try {
@@ -105,6 +111,7 @@ class ProxyController {
             //2. Parser(token + random length + expiration)
             //3. Check for roles and security on the following: params?.url, globalProxyPidm and studentPidm
             if (params.pidm) {
+                session["loggedUserPidm"] = springSecurityService?.getAuthentication()?.user?.pidm
                 session["globalProxyMode"] = true
                 springSecurityService?.getAuthentication()?.user?.pidm = new Integer(params.pidm)
             }

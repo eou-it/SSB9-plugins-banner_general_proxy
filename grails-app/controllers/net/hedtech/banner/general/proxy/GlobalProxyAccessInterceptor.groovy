@@ -20,7 +20,7 @@ class GlobalProxyAccessInterceptor {
                                           "/ssb/accountSummary/getDefaultConfiguration","/ssb/login/auth",
                                           "/ssb/studentHold/getHoldCount",
                                           "/ssb/selfServiceMenu/data?type=Personal","/ssb/selfServiceMenu/data","/ssb/logout",
-                                          "/ssb/studentTaxNotification/getTaxNotificationAndConfiguration?taxYear"]
+                                          "/ssb/studentTaxNotification/getTaxNotificationAndConfiguration"]
                 ]
     }
 
