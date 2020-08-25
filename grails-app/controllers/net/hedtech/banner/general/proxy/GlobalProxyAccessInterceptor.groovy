@@ -32,7 +32,7 @@ class GlobalProxyAccessInterceptor {
         println "URL: " + theUrl
 
         if (session["globalProxyMode"]) {
-            if (!theUrl.contains("navigate")) {
+            if (!theUrl.contains("proxy") || !theUrl.contains("logout")) {
                 def x = getGlobalProxyConfig().collectMany { k, v -> (v.contains(theUrl)) ? [k] : [] }
                 println "x1->: " + x
                 if(x){
