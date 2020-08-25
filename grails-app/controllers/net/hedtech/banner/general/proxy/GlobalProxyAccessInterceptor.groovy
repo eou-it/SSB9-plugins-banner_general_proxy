@@ -16,11 +16,25 @@ class GlobalProxyAccessInterceptor {
 
 
     def getGlobalProxyConfig() {
-        ["/ssb/studentTaxNotification" : ["/ssb/studentTaxNotification","/ssb/studentTaxNotification/getTaxYears",
-                                          "/ssb/accountSummary/getDefaultConfiguration","/ssb/login/auth",
+        ["/ssb/studentTaxNotification" : ["/ssb/studentTaxNotification",
+                                          "/ssb/studentTaxNotification/getTaxYears",
+                                          "/ssb/accountSummary/getDefaultConfiguration",
+                                          "/ssb/login/auth",
                                           "/ssb/studentHold/getHoldCount",
-                                          "/ssb/selfServiceMenu/data?type=Personal","/ssb/selfServiceMenu/data","/ssb/logout",
-                                          "/ssb/studentTaxNotification/getTaxNotificationAndConfiguration"]
+                                          "/ssb/selfServiceMenu/data?type=Personal",
+                                          "/ssb/selfServiceMenu/data","/ssb/logout",
+                                          "/ssb/studentTaxNotification/getTaxNotificationAndConfiguration"
+        ],
+          "/ssb/studentProfile" :         ["/ssb/studentProfile",
+                                           "/ssb/studentPicture/picture",
+                                           "ssb/studentProfile/renderCurriculumTemplate",
+                                           "ssb/studentProfile/viewRegistrationNotices",
+                                           "/ssb/studentProfile/viewRegistrationNotices",
+                                           "/ssb/studentNotes/getConfiguration",
+                                           "/ssb/studentHolds/getHoldsCountCacheHolds",
+                                           "/ssb/studentProfile/viewRegisteredCourseList",
+                                           "/ssb/studentProfile/viewGPAHoursList"
+          ]
                 ]
     }
 
