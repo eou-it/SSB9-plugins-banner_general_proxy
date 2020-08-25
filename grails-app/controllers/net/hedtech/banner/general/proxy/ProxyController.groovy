@@ -94,9 +94,13 @@ class ProxyController {
     }
 
     def returnMe(){
-        if (session["loggedUserPidm"])
-        springSecurityService?.getAuthentication()?.user?.pidm = session["loggedUserPidm"]
-        render "PIDM context set"
+        if (session["loggedUserPidm"]) {
+            springSecurityService?.getAuthentication()?.user?.pidm = session["loggedUserPidm"]
+            render "PIDM context set"
+        }else{
+            response.sendError( 403 )
+            return
+        }
     }
 
     // Main Proxy Page Navigator
