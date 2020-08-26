@@ -2,10 +2,10 @@
  Copyright 2020 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', ['$scope', '$rootScope', '$state', '$location', '$stateParams',
-    '$timeout', '$filter', '$q', 'notificationCenterService', 'globalProxyMgmtAppService', 'globalProxyMgmtErrorService', 'proxyConfigResolve',
+    '$timeout', '$filter', '$q', 'notificationCenterService', 'globalProxyMgmtAppService', 'globalProxyMgmtErrorService',
     'globalProxyMgmtDateService', 'ProxyManagementProxy', 'GlobalProxyManagementDataValidator',
     function ($scope, $rootScope, $state, $location, $stateParams, $timeout, $filter, $q, notificationCenterService,
-              globalProxyMgmtAppService, globalProxyMgmtErrorService, proxyConfigResolve, globalProxyMgmtDateService, ProxyManagementProxy, GlobalProxyManagementDataValidator) {
+              globalProxyMgmtAppService, globalProxyMgmtErrorService, globalProxyMgmtDateService, ProxyManagementProxy, GlobalProxyManagementDataValidator) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -496,9 +496,9 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
 
         $scope.authLogPaginationConfig = {};
 
-        $scope.enableResetPin = proxyConfigResolve.enableResetPin;
-        $scope.enablePassphrase = proxyConfigResolve.enablePassphrase;
-        $scope.enablePageLevelAuthorization = proxyConfigResolve.enablePageLevelAuthorization;
+        //$scope.enableResetPin = proxyConfigResolve.enableResetPin;
+        //$scope.enablePassphrase = proxyConfigResolve.enablePassphrase;
+        //$scope.enablePageLevelAuthorization = proxyConfigResolve.enablePageLevelAuthorization;
         // ------------------------------
         // END - COMMUNICATION DATA TABLE
 

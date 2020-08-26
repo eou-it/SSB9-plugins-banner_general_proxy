@@ -98,11 +98,12 @@ globalProxyManagementApp.config(['$stateProvider', '$urlRouterProvider',
                 url: "/home",
                 templateUrl: '../assets/globalProxyManagementApp/globalProxyManagementHome/globalProxyMgmtMain.html',
                 controller: 'globalProxyMgmtMainController',
-                resolve: {
-                    proxyConfigResolve: ['globalProxyMgmtAppService', function (globalProxyMgmtAppService) {
-                        return globalProxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
-                    }]
-                },
+                //resolve: {
+                //TODO add resolve if needed
+                //    proxyConfigResolve: ['globalProxyMgmtAppService', function (globalProxyMgmtAppService) {
+                //        return globalProxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
+                //    }]
+                //},
                 data: {
                     breadcrumbs: []
                 },
@@ -115,11 +116,12 @@ globalProxyManagementApp.config(['$stateProvider', '$urlRouterProvider',
                 url: '/editProxy/?alt&cver&firstName&lastName&email',
                 templateUrl: '../assets/globalProxyManagementApp/globalProxyManagementEditProxy/globalProxyMgmtEditProxy.html',
                 controller: 'globalProxyMgmtEditProxyController',
-                resolve: {
-                    proxyConfigResolve: ['globalProxyMgmtAppService', function (globalProxyMgmtAppService) {
-                        return globalProxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
-                    }]
-                },
+                //resolve: {
+                //TODO Add resolve if needed
+                //    proxyConfigResolve: ['globalProxyMgmtAppService', function (globalProxyMgmtAppService) {
+                 //       return globalProxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
+                 //   }]
+                //},
                 data: {
                     breadcrumbs: [{label: 'proxyManagement.title.proxyInformation'}]
                 },
