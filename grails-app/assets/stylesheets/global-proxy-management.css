@@ -50,6 +50,14 @@
     font-size: 16px;
 }
 
+.global-proxy-landing-page-notification-box {
+    display: table;
+    margin-bottom: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
 /*Tablet device*/
 @media screen and (min-width: 768px) and (max-width: 1023px) {
     .global-proxy-desktop-visible{

@@ -6,6 +6,8 @@ globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$f
 
     var fetchProxies = $resource('../ssb/:controller/:action',
             {controller: 'GlobalProxy', action: 'getGlobalProxies'}, {query: {method:'GET', isArray:false}}),
+        fetchDoesUserHaveActivePreferredEmail = $resource('../ssb/:controller/:action',
+                    {controller: 'GlobalProxy', action: 'getLoggedInUserHasActivePreferredEmail'}, {query: {method:'GET', isArray:false}}),
         fetchRelationshipOptions = $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'getRelationshipOptions'}, {query: {method:'GET', isArray:false}}),
         fetchCommunicationLog = $resource('../ssb/:controller/:action',
@@ -139,6 +141,10 @@ globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$f
 
     this.fetchGlobalProxiesByQuery = function (params){
         return fetchGlobalProxiesByQuery.query(params)
-    }
+    };
+
+    this.getDoesUserHaveActivePreferredEmailAddress = function(params){
+        return fetchDoesUserHaveActivePreferredEmail.query(params)
+    };
 
 }]);

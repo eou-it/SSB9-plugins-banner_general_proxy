@@ -2,8 +2,8 @@
   Copyright 2020 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scope', '$rootScope', '$location', '$state', '$stateParams',
-    '$timeout', '$filter', 'notificationCenterService', 'globalProxyMgmtAppService', 'proxyConfigResolve',
-    function ($scope, $rootScope, $location, $state, $stateParams, $timeout, $filter, notificationCenterService, globalProxyMgmtAppService, proxyConfigResolve) {
+    '$timeout', '$filter', 'notificationCenterService', 'globalProxyMgmtAppService',
+    function ($scope, $rootScope, $location, $state, $stateParams, $timeout, $filter, notificationCenterService, globalProxyMgmtAppService) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -29,6 +29,10 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
         init = function() {
             globalProxyMgmtAppService.getProxyList().$promise.then(function (response) {
                 refreshProxies(response)
+            });
+
+            globalProxyMgmtAppService.getDoesUserHaveActivePreferredEmailAddress().$promise.then(function(response){
+                $scope.userHasActivePreferredEmailAddress = response.doesUserHaveActivePreferredEmailAddress;
             });
 
             displayNotificationsOnStateLoad();
@@ -79,7 +83,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
             //$state.go('editProxy');
         };
 
-        $scope.enableDeleteRelationship = proxyConfigResolve.enableDeleteRelationship;
+        //$scope.enableDeleteRelationship = proxyConfigResolve.enableDeleteRelationship;
 
         $scope.proxyCanBeDeleted = function(proxy){
             return ($scope.enableDeleteRelationship && (proxy.deleteAllowedPerLastView === 'Y'));

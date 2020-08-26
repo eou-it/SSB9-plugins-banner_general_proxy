@@ -2,7 +2,13 @@
   Copyright 2020 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="proxy-mgmt-home-content">
-    <div ng-if="proxiesLoaded && proxies.length < 1" class="center-contents">
+    <div ng-if="userHasActivePreferredEmailAddress != undefined
+    && userHasActivePreferredEmailAddress == false">
+        <global-proxy-mgmt-warning-notification display-message="{{'globalProxyManagement.message.noActivePreferredEmailAddress'|i18n}}"/>
+    </div>
+    <div ng-if="userHasActivePreferredEmailAddress != undefined &&
+    userHasActivePreferredEmailAddress == true &&
+    proxiesLoaded && proxies.length < 1" class="center-contents">
         <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyNoProxyAddedYetTemplate.html'|webAppResourcePath"></ng-include>
     </div>
     <!--TODO uncomment when proxy list ready
