@@ -5,6 +5,7 @@ package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
+import net.hedtech.banner.general.configuration.ConfigProperties
 import net.hedtech.banner.general.system.ProxyAccessSystemOptionType
 import net.hedtech.banner.i18n.MessageHelper
 import org.grails.web.json.JSONObject
@@ -13,7 +14,9 @@ import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.core.context.SecurityContextHolder
 import net.hedtech.banner.security.XssSanitizer
 import net.hedtech.banner.general.person.PersonUtility
+import org.springframework.web.context.request.RequestContextHolder
 
+import java.sql.SQLException
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -96,6 +99,8 @@ class ProxyController {
     def returnMe(){
         if (session["loggedUserPidm"]) {
             springSecurityService?.getAuthentication()?.user?.pidm = session["loggedUserPidm"]
+            session["globalProxyMode"] = false
+            RequestContextHolder.currentRequestAttributes()?.request?.session.setAttribute("guestUser", false)
             render "PIDM context set"
         }else{
             response.sendError( 403 )
@@ -118,6 +123,9 @@ class ProxyController {
                 session["loggedUserPidm"] = springSecurityService?.getAuthentication()?.user?.pidm
                 session["globalProxyMode"] = true
                 springSecurityService?.getAuthentication()?.user?.pidm = new Integer(params.pidm)
+                RequestContextHolder.currentRequestAttributes()?.request?.session.setAttribute("guestUser", true)
+
+                session["globalGuestProxyBaseURL"] =  getGSSUrl()
             }
 
             redirect(url: url, params: params)
@@ -126,6 +134,20 @@ class ProxyController {
             log.error(e.toString())
             throw new ApplicationException(ProxyController.class,
                     messageSource.getMessage(XssSanitizer?.sanitize('proxy.error.dataError'), null, LocaleContextHolder.getLocale()))
+        }
+    }
+
+    /**
+     * Returns the general location from gurocfg table
+     * @return String
+     * */
+    private def getGSSUrl() {
+        try{
+            ConfigProperties configProperties = ConfigProperties.fetchByConfigNameAndAppId('GENERALLOCATION','GENERAL_SS')
+            return configProperties? configProperties.configValue  : null
+        }catch (SQLException e){
+            log.warn("Unable to fetch the configuration GENERALLOCATION "+e.getMessage())
+            return ""
         }
     }
 
@@ -415,7 +437,7 @@ class ProxyController {
         def pidm =PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id))).pidm
         springSecurityService?.getAuthentication()?.user?.pidm = pidm
         session["currentStudentPidm"] = pidm
-        session["globalGuestProxyBaseURL"] = "/"
+        //session["globalGuestProxyBaseURL"] = "/"
         render "PIDM context set"
     }
 
