@@ -139,6 +139,16 @@ h2 {
     background-color: #eff7ff;
 }
 
+.proxy-notification-content.info {
+    border-top:2px solid #FDC228;
+    border-left: none;
+    border-bottom: none;
+    border-right: none;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #F5F2E7;
+}
+
 .proxy-notification-icon {
     font-size: 20px;
     padding-right: 15px;
@@ -150,6 +160,10 @@ h2 {
     color: #428bca;
 }
 
+.proxy-notification-icon.info {
+    color: #8A6A00;
+}
+
 .proxy-notification-text {
     display: table-cell;
     vertical-align: middle;
@@ -157,6 +171,11 @@ h2 {
 
 .proxy-notification-text.blue {
     color: #2874BB;
+}
+
+.proxy-notification-text.info {
+    color: #8A6A00;
+    font-size: 1.2em;
 }
 
 .proxy-item-name {

@@ -31,6 +31,10 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
                 refreshProxies(response)
             });
 
+            globalProxyMgmtAppService.getDoesUserHaveActivePreferredEmailAddress().$promise.then(function(response){
+                $scope.userHasActivePreferredEmailAddress = response.doesUserHaveActivePreferredEmailAddress;
+            });
+
             displayNotificationsOnStateLoad();
         };
 

@@ -61,5 +61,15 @@ globalProxyMgmtAppDirectives.directive('piInputWatcher', [function () {
     };
 }]);
 
+globalProxyMgmtAppDirectives.directive('globalProxyMgmtWarningNotification', ['$filter', function ($filter) {
+    return {
+        restrict: 'E',
+        scope: {
+            displayMessage: '@'
+        },
+        templateUrl: $filter('webAppResourcePath')('globalProxyManagementApp/globalProxyManagementHome/notificationWarningTemplate.html')
+    };
+}]);
+
 
 
