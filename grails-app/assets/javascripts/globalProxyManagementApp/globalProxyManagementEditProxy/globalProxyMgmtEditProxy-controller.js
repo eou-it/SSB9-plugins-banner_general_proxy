@@ -228,28 +228,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
             }
         };
 
-        $scope.resetPassword = function () {
-            globalProxyMgmtAppService.resetProxyPassword({alt: $scope.proxy.alt, cver: $scope.proxy.cver}).$promise.then(function (response) {
-                var messageType, message;
-
-                if (response.failure) {
-                    messageType = 'error';
-                    message = response.message;
-                } else {
-                    if (response.resetStatus == 'NOTACTIVE') {
-                        messageType = 'error';
-                        message = 'proxyManagement.message.resetPasswordFailure';
-                    } else {
-                        messageType = 'success';
-                        message = 'proxyManagement.message.resetPasswordSuccess';
-                    }
-                }
-
-                notificationCenterService.clearNotifications();
-                notificationCenterService.addNotification(message, messageType, true);
-            });
-        };
-
         $scope.emailAuthentications = function () {
 
             if ($scope.dirty) {
@@ -441,66 +419,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         $scope.maxPassphraseLength = 256;
         $scope.maxDescriptionLength = 120;
 
-        // COMMUNICATION DATA TABLE
-        // ------------------------
-        $scope.commRecords = 0;
-        $scope.commRows = [];
-        $scope.commColumns = [
-            {position: {desktop: 1, mobile: 1}, name: 'transmitDate', title: $filter('i18n')('proxyManagement.title.transmitDate'), options: {visible: true, sortable: false}, width: '60px'},
-            {position: {desktop: 2, mobile: 2}, name: 'subject', title: $filter('i18n')('proxyManagement.title.subject'), options: {visible: true, sortable: false}, width: '100px'},
-            {position: {desktop: 3, mobile: 3}, name: 'actionDate', title: $filter('i18n')('proxyManagement.title.actionDate'), options: {visible: true, sortable: false}, width: '60px'},
-            {position: {desktop: 4, mobile: 4}, name: 'expirationDate', title: $filter('i18n')('proxyManagement.title.expirationDate'), options: {visible: true, sortable: false}, width: '60px'},
-            {position: {desktop: 5, mobile: 5}, name: 'resend', title: $filter('i18n')('proxyManagement.title.resend'), options: {visible: true, sortable: false}, width: '25px'}
-        ];
-        $scope.draggableCommColumnNames = [];
-
-        $scope.authLogRecords = 0;
-        $scope.authLogRows = [];
-        $scope.authLogColumns = [
-            {position: {desktop: 1, mobile: 1}, name: 'activityDate', title: $filter('i18n')('proxyManagement.title.date'), options: {visible: true, sortable: false}, width: '100px'},
-            {position: {desktop: 2, mobile: 2}, name: 'action', title: $filter('i18n')('proxyManagement.title.action'), options: {visible: true, sortable: false}, width: '60px'},
-            {position: {desktop: 3, mobile: 3}, name: 'page', title: $filter('i18n')('proxyManagement.title.page'), options: {visible: true, sortable: false}, width: '100px'}
-        ];
-        $scope.draggableAuthLogColumnNames = [];
-
-        $scope.currentAlt;
-        $scope.currentCver;
-
-        $scope.getCommunicationData = function (query) {
-            var self = this;
-
-            return globalProxyMgmtAppService.getCommunicationLog({alt: self.currentAlt, cver: self.currentCver}).promise;
-        };
-
-        $scope.getAuthLogData = function (query) {
-            var self = this;
-
-            return globalProxyMgmtAppService.getAuthLog({alt: self.currentAlt, cver: self.currentCver}).$promise;
-        };
-
-        $scope.commMobileConfig = {
-            transmitDate: 2,
-            subject: 2,
-            actionDate: 2,
-            expirationDate: 2,
-            resend: 2
-        };
-
-        $scope.commPaginationConfig = {};
-
-        $scope.authLogMobileConfig = {
-            activityDate: 2,
-            action: 2,
-            page: 2
-        };
-
-        $scope.authLogPaginationConfig = {};
-
-        //$scope.enableResetPin = proxyConfigResolve.enableResetPin;
-        //$scope.enablePassphrase = proxyConfigResolve.enablePassphrase;
         //$scope.enablePageLevelAuthorization = proxyConfigResolve.enablePageLevelAuthorization;
-        // ------------------------------
-        // END - COMMUNICATION DATA TABLE
 
         // GLOBAL PROXY SEARCH
         // ------------------------

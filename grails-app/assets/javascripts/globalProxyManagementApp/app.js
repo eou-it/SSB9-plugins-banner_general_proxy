@@ -123,7 +123,7 @@ globalProxyManagementApp.config(['$stateProvider', '$urlRouterProvider',
                  //   }]
                 //},
                 data: {
-                    breadcrumbs: [{label: 'proxyManagement.title.proxyInformation'}]
+                    breadcrumbs: [{label: 'proxyManagement.label.addProxy'}]
                 },
                 params: {
                     id: null

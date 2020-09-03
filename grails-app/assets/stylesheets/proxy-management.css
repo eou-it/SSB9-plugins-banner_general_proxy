@@ -139,7 +139,7 @@ h2 {
     background-color: #eff7ff;
 }
 
-.proxy-notification-content.info {
+.proxy-notification-content.warning {
     border-top:2px solid #FDC228;
     border-left: none;
     border-bottom: none;
@@ -148,6 +148,17 @@ h2 {
     padding: 10px;
     background-color: #F5F2E7;
 }
+
+.proxy-notification-content.info {
+    border-top:2px solid #2874BB;
+    border-left: none;
+    border-bottom: none;
+    border-right: none;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #eff7ff;
+}
+
 
 .proxy-notification-icon {
     font-size: 20px;
@@ -160,8 +171,12 @@ h2 {
     color: #428bca;
 }
 
-.proxy-notification-icon.info {
+.proxy-notification-icon.warning {
     color: #8A6A00;
+}
+
+.proxy-notification-icon.info {
+    color:#2874BB;
 }
 
 .proxy-notification-text {
@@ -173,8 +188,13 @@ h2 {
     color: #2874BB;
 }
 
-.proxy-notification-text.info {
+.proxy-notification-text.warning {
     color: #8A6A00;
+    font-size: 1.2em;
+}
+
+.proxy-notification-text.info {
+    color: #2874BB;
     font-size: 1.2em;
 }
 
