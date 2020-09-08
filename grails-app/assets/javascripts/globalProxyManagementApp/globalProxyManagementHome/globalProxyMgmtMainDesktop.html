@@ -4,7 +4,7 @@
 <div class="proxy-mgmt-home-content">
     <div ng-if="userHasActivePreferredEmailAddress != undefined
     && userHasActivePreferredEmailAddress == false">
-        <global-proxy-mgmt-warning-notification display-message="{{'globalProxyManagement.message.noActivePreferredEmailAddress'|i18n}}"/>
+        <global-proxy-mgmt-notification display-message="{{'globalProxyManagement.message.noActivePreferredEmailAddress'|i18n}}" notification-type="warning"/>
     </div>
     <div ng-if="userHasActivePreferredEmailAddress != undefined &&
     userHasActivePreferredEmailAddress == true &&
