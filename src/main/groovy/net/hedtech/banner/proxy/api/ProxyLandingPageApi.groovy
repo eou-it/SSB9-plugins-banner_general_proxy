@@ -5,6 +5,28 @@ package net.hedtech.banner.proxy.api
 
 class ProxyLandingPageApi {
 
+    public final static String GET_GIDM_GLOBAL_ACCESS = """
+  DECLARE
+     pidm SPRIDEN.SPRIDEN_PIDM%TYPE;
+     gidm GPBPRXY.GPBPRXY_PROXY_IDM%TYPE;
+     
+--
+   cursor getGidm(pidm SPRIDEN.SPRIDEN_PIDM%TYPE) is
+   select gpbprxy_proxy_idm
+     from gpbprxy
+     where gpbprxy_proxy_pidm = pidm;
+   BEGIN
+   pidm := ?;
+   --  
+   open getGidm(pidm);
+   fetch getGidm into gidm;  
+--   
+   ? := gidm;
+   -- DBMS_OUTPUT.PUT_LINE('GIDM: ' || gidm);
+--
+  END;
+"""
+
     public final static String GET_STUDENT_ID_FROM_TOKEN ="""
   DECLARE
      token varchar2(2000);
