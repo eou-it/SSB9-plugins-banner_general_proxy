@@ -21,10 +21,6 @@ class GlobalProxyController {
     }
 
     def getGlobalProxies() {
-        def testMap = [proxies: []]
-        render testMap as JSON
-
-        /*
         def studentList
 
         log.debug("Get Student List for Proxy")
@@ -49,8 +45,6 @@ class GlobalProxyController {
         }
 
         render studentList as JSON
-      */
-
     }
 
     def getLoggedInUserHasActivePreferredEmail() {

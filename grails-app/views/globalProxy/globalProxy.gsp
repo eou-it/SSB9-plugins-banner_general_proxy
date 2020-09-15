@@ -21,10 +21,12 @@ Copyright 2020 Ellucian Company L.P. and its affiliates.
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
         <g:if test="${message(code: 'default.language.direction') == 'rtl'}">
+            <asset:stylesheet src="modules/proxy-applicationRTL-mf.css"/>
             <asset:stylesheet src="modules/proxyMgmt-applicationRTL-mf.css" />
             <asset:stylesheet src="modules/globalProxyMgmt-applicationRTL-mf.css" />
         </g:if>
         <g:else>
+            <asset:stylesheet src="modules/proxy-applicationLTR-mf.css"/>
             <asset:stylesheet src="modules/proxyMgmt-applicationLTR-mf.css" />
             <asset:stylesheet src="modules/globalProxyMgmt-applicationLTR-mf.css" />
         </g:else>
