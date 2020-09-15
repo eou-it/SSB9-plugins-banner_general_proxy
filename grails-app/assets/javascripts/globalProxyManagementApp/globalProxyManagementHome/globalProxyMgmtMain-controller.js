@@ -32,7 +32,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
 
                 refreshProxies(response)
 
-                console.log(JSON.stringify(response));
+                //console.log(JSON.stringify(response));
 
 
                 var addStudentProxyTile = function(student, isActive) {
