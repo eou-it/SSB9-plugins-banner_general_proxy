@@ -49,12 +49,12 @@ globalProxyManagementApp.directive('globalLandingPageProxyTile', ['$state', '$ro
                                 $state.go(url, {id: proxyData.id});
                         } else{
                             window.open(
-                                encodeURI($rootScope.applicationContextRoot + "/proxy/navigate?url=" + url),"_self"
+                                encodeURI($rootScope.studenSSB + "/proxy/navigate?url=" + url + "&pidm=819"),"_self"
                             );
                         }
                 };
 
-                setId();
+                //setId();
                 goProxyApp(pageUrl);
             };
             scope.setupSelectCtrlFocusser = function($selectCtrl) {
