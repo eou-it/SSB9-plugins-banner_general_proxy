@@ -3,7 +3,7 @@
  *******************************************************************************/
 package net.hedtech.banner.general.proxy
 
-
+import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.person.PersonUtility
 
 import grails.gorm.transactions.Rollback
@@ -25,6 +25,7 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
     def dataSource
     def conn
     def sessionFactory
+    def springSecurityService
 
     @Before
     public void setUp() {
@@ -123,6 +124,33 @@ class GeneralSsbProxyServiceIntegrationTests extends BaseIntegrationTestCase {
         }
 
         assertEquals idmOut.toString(), gidm
+    }
+
+    @Test
+    void testCheckFinaidAccesProxyPages() {
+        //Set current proxy
+        def gidm = getProxyIdm('mrbunny@gvalleyu.edu')
+        SecurityContextHolder?.context?.authentication?.principal?.gidm = new Integer(gidm)
+
+        //Set student ID
+        springSecurityService?.getAuthentication()?.user?.pidm = 50200
+
+        //An application exception will not be thrown if the proxy has access to this page.
+        try {
+            generalSsbProxyService.checkFinaidAccesProxyPages('/ssb/proxy/courseScheduleDetail')
+        }
+        catch (ApplicationException ae) {
+            fail("The proxy should have access to /ssb/proxy/courseScheduleDetail")
+        }
+
+        //An application exception should be thrown as the proxy does not have access to this page
+        try {
+            generalSsbProxyService.checkFinaidAccesProxyPages('/listAwardLetterDetails/')
+            fail("The proxy should not have access to /listAwardLetterDetails/")
+        }
+        catch (ApplicationException ae) {
+            assertApplicationException(ae, "You are not authorized to view this page.")
+        }
     }
 
 
