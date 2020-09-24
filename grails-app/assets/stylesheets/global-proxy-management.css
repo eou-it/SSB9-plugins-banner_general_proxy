@@ -73,6 +73,30 @@
     margin-right: -50px;
 }
 
+.global-proxy-dropdown-box {
+    background-color: #FFFFFF;
+}
+
+.global-proxy-dropdown-box a {
+    border-color: #B2B3B7 !important;
+}
+
+.global-proxy-edit-content .row {
+    margin-top: 15px;
+}
+
+.global-proxy-button-container {
+    margin-top: 52px !important;
+}
+
+.global-proxy-button-container .primary{
+    border: 1px solid #026BC8;
+}
+
+.global-proxy-button-container .primary:hover{
+    border: 1px solid #026BC8;
+}
+
 /*Tablet device*/
 @media screen and (min-width: 768px) and (max-width: 1023px) {
     .global-proxy-desktop-visible{
