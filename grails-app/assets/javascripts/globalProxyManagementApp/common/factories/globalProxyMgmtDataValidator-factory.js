@@ -13,34 +13,19 @@ globalProxyManagementApp.factory('GlobalProxyManagementDataValidator', ['globalP
                 authorizationsErrMsg: '',
                 startDateErrMsg: '',
                 stopDateErrMsg: '',
-
-                setStartAndStopDateErrors: function(proxy, isSubmit) {
-                    var errors = globalProxyMgmtErrorService.getErrorDates(proxy, isSubmit);
-                    this.startDateErrMsg = errors[0];
-                    this.stopDateErrMsg = errors[1];
-                },
-
                 isValidProxyData: function(proxy, isUpdate){
                     globalProxyMgmtErrorService.refreshMessages();
                     if (isUpdate) {
                         // The corresponding fields for these errors are always empty for an update, so shim the error messages.
-                        this.firstNameErrMsg = false;
-                        this.lastNameErrMsg = false;
-                        this.emailErrMsg = false;
-                        this.verifyEmailErrMsg = false;
+                        //this.firstNameErrMsg = false;
                     } else {
-                        this.firstNameErrMsg = globalProxyMgmtErrorService.getErrorFirstName(proxy);
-                        this.lastNameErrMsg = globalProxyMgmtErrorService.getErrorLastName(proxy);
-                        this.emailErrMsg = globalProxyMgmtErrorService.getErrorEmail(proxy);
-                        this.verifyEmailErrMsg = globalProxyMgmtErrorService.getErrorVerifyEmail(proxy);
+                        //this.firstNameErrMsg = globalProxyMgmtErrorService.getErrorFirstName(proxy);
                     }
 
-                    this.relationshipErrMsg = globalProxyMgmtErrorService.getErrorRelationship(proxy);
-                    this.authorizationsErrMsg = globalProxyMgmtErrorService.getErrorAuthorizations(proxy);
-                    this.setStartAndStopDateErrors(proxy, true);
-
-                    return !(this.firstNameErrMsg || this.lastNameErrMsg || this.emailErrMsg || this.verifyEmailErrMsg ||
-                        this.relationshipErrMsg || this.authorizationsErrMsg || this.startDateErrMsg || this.stopDateErrMsg);
+                    //this.relationshipErrMsg = globalProxyMgmtErrorService.getErrorRelationship(proxy);
+                    //this.authorizationsErrMsg = globalProxyMgmtErrorService.getErrorAuthorizations(proxy);
+                    return false;
+                    //return !(this.firstNameErrMsg);
                 },
 
                 removeProxyProfileFieldErrors: function (proxy) {

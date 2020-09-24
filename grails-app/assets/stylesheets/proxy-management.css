@@ -144,7 +144,7 @@ h2 {
     border-left: none;
     border-bottom: none;
     border-right: none;
-    border-radius: 5px;
+    border-radius: 0px;
     padding: 10px;
     background-color: #F5F2E7;
 }
@@ -154,7 +154,7 @@ h2 {
     border-left: none;
     border-bottom: none;
     border-right: none;
-    border-radius: 5px;
+    border-radius: 0px;
     padding: 10px;
     background-color: #eff7ff;
 }

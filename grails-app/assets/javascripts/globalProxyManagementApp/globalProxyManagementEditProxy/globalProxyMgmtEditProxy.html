@@ -10,12 +10,12 @@
         <hr />
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <global-proxy-mgmt-notification notification-type="info" display-message="{{'globalProxyManagement.message.bannerIdNameSearch'|i18n}}"/>
+                <global-proxy-mgmt-notification notification-type="info" display-message="{{'globalProxyManagement.message.bannerId'|i18n}}" />
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <label class="input-field-label" for="name-banner-id">{{'globalProxyManagement.label.firstNameBannerId'|i18n}}</label><br>
+            <div class="col-xs-12 col-md-6 col-lg-4">
+                <label class="input-field-label" for="name-banner-id">{{'globalProxyManagement.label.bannerId'|i18n}} <i>{{'proxyManagement.label.hint.required'|i18n}}</i></label><br>
                 <input ng-model="proxy.p_first" ng-blur="firstNameFocused=false; globalProxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="firstNameFocused=true"
                        ng-class="[(!!globalProxyManagementDataValidator.firstNameErrMsg && !firstNameFocused ? 'input-field-error' : null)]"
                        class="text-input-field gssb-eds-text-field semi-bold form-spacing"
@@ -24,40 +24,48 @@
                 <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.firstNameErrMsg ? 'field-error error-font-size' : 'no-display')]"
                    role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.firstNameErrMsg|i18n}}</p>
             </div>
-            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
-                <br />
-                <button ng-click="" class="primary global-proxy-search">{{'globalProxyManagement.label.search'|i18n}}</button>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-6 col-lg-4">
+                <label class="input-field-label" for="relationship">{{'proxyManagement.label.relationship'|i18n}}</label>
+                <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.profile'|i18n}}"></proxy-mgmt-popover-tooltip>
+                <br>
+                <xe-ui-select class="global-proxy-dropdown-box" ng-model="proxyAuxData.selectedRelationship" theme="select2" search-enabled="false" ng-change="handleRelationshipChange()"
+                              id="relationship">
+                    <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.relationship'|i18n)" placeholder="{{placeholder.relationship}}">
+                        {{$select.selected.description ? $select.selected.description : placeholder.relationship}}
+                    </xe-ui-select-match>
+                    <xe-ui-select-choices repeat="choice in relationshipChoices">
+                        <div ng-bind-html="choice.description"></div>
+                    </xe-ui-select-choices>
+                </xe-ui-select>
+                <p class="input-field-label mobile-errors" ng-class="[(!!proxyManagementDataValidator.relationshipErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                   role="alert" aria-live="assertive">{{proxyManagementDataValidator.relationshipErrMsg|i18n}}</p>
             </div>
         </div>
-        <hr />
-        <div ng-if="globalProxySearchRecords" class="row">
-            <div class="proxy-mgmt-comm-grid">
-                <xe-table-grid table-id="communicationDataTable" caption="" header="globalProxySearchColumns" fetch="globalProxySearch(query)"
-                               content="globalProxySearchRows" results-found="globalProxySearchRecords" toolbar="false" paginate="true" continuous-scrolling="true"
-                               no-data-msg="{{'proxyManagement.message.noResultsFound'|i18n}}" empty-table-msg="" on-row-click=""
-                               pagination-config="globalProxySearchPaginationConfig" draggable-column-names="draggableGlobalProxySearchColumnNames"
-                               mobile-layout="globalProxySearchMobileConfig" height="16em">
-                </xe-table-grid>
+        <div class="row global-proxy-button-container">
+            <div class="col-xs-12 col-md-6 col-lg-4">
+                <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
+                <input ng-class="profileRequired ? 'only-submit' : null" ng-click="save()" type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
             </div>
         </div>
-    </div>
-    <div ng-if="!isCreateNew">
-        <div class="clearfix">
-            <div class="proxy-base-info-summary long-name-limiter">
-                <span>{{proxyAuxData.firstName}}</span> <span>{{proxyAuxData.lastName}}</span>
+        <div ng-if="!isCreateNew">
+            <div class="clearfix">
+                <div class="proxy-base-info-summary long-name-limiter">
+                    <span>{{proxyAuxData.firstName}}</span> <span>{{proxyAuxData.lastName}}</span>
+                </div>
             </div>
         </div>
+        <xe-tab-nav ng-if="!isCreateNew">
+            <xe-tab-panel heading="{{'proxyManagement.label.addProxy'|i18n}}" state="editProxy">
+                <ng-include src="'../assets/globalProxyManagementApp/globalProxyManagementEditProxy/globalProxyMgmtCommonEditInputs.html'"></ng-include>
+                &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
+            </xe-tab-panel>
+        </xe-tab-nav>
+        <div id="proxyProfileErrorMsgCenter" class="visuallyhidden" tabindex="-1">
+            <span>{{globalProxyManagementDataValidator.firstNameErrMsg|i18n}}</span>
+            <span>{{globalProxyManagementDataValidator.lastNameErrMsg|i18n}}</span>
+            <span>{{globalProxyManagementDataValidator.relationshipErrMsg|i18n}}</span>
+            <span>{{globalProxyManagementDataValidator.authorizationsErrMsg|i18n}}</span>
+        </div>
     </div>
-    <xe-tab-nav ng-if="!isCreateNew">
-        <xe-tab-panel heading="{{'proxyManagement.label.addProxy'|i18n}}" state="editProxy">
-            <ng-include src="'../assets/globalProxyManagementApp/globalProxyManagementEditProxy/globalProxyMgmtCommonEditInputs.html'"></ng-include>
-            &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
-        </xe-tab-panel>
-    </xe-tab-nav>
-    <div id="proxyProfileErrorMsgCenter" class="visuallyhidden" tabindex="-1">
-        <span>{{globalProxyManagementDataValidator.firstNameErrMsg|i18n}}</span>
-        <span>{{globalProxyManagementDataValidator.lastNameErrMsg|i18n}}</span>
-        <span>{{globalProxyManagementDataValidator.relationshipErrMsg|i18n}}</span>
-        <span>{{globalProxyManagementDataValidator.authorizationsErrMsg|i18n}}</span>
-    </div>
-</div>

@@ -2,10 +2,9 @@
  Copyright 2020 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', ['$scope', '$rootScope', '$state', '$location', '$stateParams',
-    '$timeout', '$filter', '$q', 'notificationCenterService', 'globalProxyMgmtAppService', 'globalProxyMgmtErrorService',
-    'globalProxyMgmtDateService', 'ProxyManagementProxy', 'GlobalProxyManagementDataValidator',
+    '$timeout', '$filter', '$q', 'notificationCenterService', 'globalProxyMgmtAppService', 'globalProxyMgmtErrorService', 'ProxyManagementProxy', 'GlobalProxyManagementDataValidator',
     function ($scope, $rootScope, $state, $location, $stateParams, $timeout, $filter, $q, notificationCenterService,
-              globalProxyMgmtAppService, globalProxyMgmtErrorService, globalProxyMgmtDateService, ProxyManagementProxy, GlobalProxyManagementDataValidator) {
+              globalProxyMgmtAppService, globalProxyMgmtErrorService, ProxyManagementProxy, GlobalProxyManagementDataValidator) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -71,8 +70,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                         $scope.relationshipChoices = response.relationships;
                     }
                 });
-
-                globalProxyMgmtErrorService.refreshProxyManagementDateErrorManager();
 
                 if (alt) {
                     $scope.currentAlt = alt;
@@ -151,24 +148,24 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         };
 
         $scope.handleRelationshipChange = function () {
-            globalProxyMgmtAppService.getDataModelOnRelationshipChange({
-                alt: $scope.proxy.alt,
-                cver: $scope.proxy.cver,
-                p_retp_code: $scope.proxyAuxData.selectedRelationship.code
-            }).$promise.then(function (response) {
-                if (response.failure) {
-                    displayResponseFailureMessages(response.message.clonedProxiesList, response.message);
-                } else {
-                    $scope.proxy.handleRelationshipChange(response, $scope.proxyAuxData);
-                    $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
-                    $scope.globalProxyManagementDataValidator.removeProxyProfileFieldErrors($scope.proxy);
-
-                    if ($scope.proxy.pages.length == 0) {
-                        notificationCenterService.clearNotifications();
-                        notificationCenterService.addNotification('proxyManagement.message.noAuthorizationsAvailable', "error", true);
-                    }
-                }
-            });
+          //  globalProxyMgmtAppService.getDataModelOnRelationshipChange({
+          //      alt: $scope.proxy.alt,
+          //      cver: $scope.proxy.cver,
+          //      p_retp_code: $scope.proxyAuxData.selectedRelationship.code
+          //  }).$promise.then(function (response) {
+          //      if (response.failure) {
+          //          displayResponseFailureMessages(response.message.clonedProxiesList, response.message);
+          //      } else {
+          //          $scope.proxy.handleRelationshipChange(response, $scope.proxyAuxData);
+          //          $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
+          //          $scope.globalProxyManagementDataValidator.removeProxyProfileFieldErrors($scope.proxy);
+//
+          //          if ($scope.proxy.pages.length == 0) {
+          //              notificationCenterService.clearNotifications();
+          //              notificationCenterService.addNotification('proxyManagement.message.noAuthorizationsAvailable', "error", true);
+          //          }
+          //      }
+          //  });
         };
 
         $scope.handleClonedListChange = function () {
@@ -262,42 +259,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
             $scope.globalProxyManagementDataValidator.removeProxyProfileFieldErrors($scope.proxy);
         };
 
-        $scope.setStartFocused = function (focused) {
-            $scope.startFocused = focused;
-        };
-
-        $scope.setStopFocused = function (focused) {
-            $scope.stopFocused = focused;
-        };
-
-        $scope.$watch('proxy.p_start_date', function (newVal, oldVal) {
-            if (newVal !== oldVal && !$scope.startFocused) {
-                $scope.globalProxyManagementDataValidator.setStartAndStopDateErrors($scope.proxy);
-            }
-        });
-
-        $scope.$watch('proxy.p_stop_date', function (newVal, oldVal) {
-            if (newVal !== oldVal && !$scope.stopFocused) {
-                $scope.globalProxyManagementDataValidator.setStartAndStopDateErrors($scope.proxy);
-            }
-        });
-
-        $scope.setStartDate = function (data) {
-            $scope.proxy.p_start_date = data;
-            //$apply used to get binding to update when date chosen through datepicker.
-            $scope.$apply(function () {
-                $scope.globalProxyManagementDataValidator.setStartAndStopDateErrors($scope.proxy);
-            })
-        };
-
-        $scope.setStopDate = function (data) {
-            $scope.proxy.p_stop_date = data;
-            //$apply used to get binding to update when date chosen through datepicker.
-            $scope.$apply(function () {
-                $scope.globalProxyManagementDataValidator.setStartAndStopDateErrors($scope.proxy);
-            })
-        };
-
         $scope.save = function () {
 
             var profile = {};
@@ -306,9 +267,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
             _.each(Object.keys($scope.proxy), function (it) {
                 profile[it] = $scope.proxy[it];
             });
-
-            profile.p_start_date = globalProxyMgmtDateService.stringToDate($scope.proxy.p_start_date);
-            profile.p_stop_date = globalProxyMgmtDateService.stringToDate($scope.proxy.p_stop_date);
             //End Profile Clone
 
             if ($scope.isCreateNew) { // CREATE PROXY
