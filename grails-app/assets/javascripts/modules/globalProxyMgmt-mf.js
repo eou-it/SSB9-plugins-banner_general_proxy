@@ -12,3 +12,4 @@
 //= require globalProxyManagementApp/common/services/notificationcenter-service.js
 //= require globalProxyManagementApp/globalProxyManagementEditProxy/globalProxyMgmtEditProxy-controller.js
 //= require globalProxyManagementApp/globalProxyManagementHome/globalProxyMgmtMain-controller.js
+//= require globalProxyManagementApp/globalProxyManagementHome/globalProxyMgmtLandingPage-directive.js

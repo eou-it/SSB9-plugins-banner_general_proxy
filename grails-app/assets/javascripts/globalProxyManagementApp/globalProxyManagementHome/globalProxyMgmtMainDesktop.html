@@ -1,19 +1,20 @@
 <!--*******************************************************************************
   Copyright 2020 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
-<div class="proxy-mgmt-home-content">
-    <div ng-if="userHasActivePreferredEmailAddress != undefined
+<div ng-class="students.active.length > 0 && userHasActivePreferredEmailAddress != undefined &&
+    userHasActivePreferredEmailAddress == true ? '' : 'proxy-mgmt-home-content'">
+        <div ng-if="userHasActivePreferredEmailAddress != undefined
     && userHasActivePreferredEmailAddress == false">
-        <global-proxy-mgmt-notification display-message="{{'globalProxyManagement.message.noActivePreferredEmailAddress'|i18n}}" notification-type="warning"/>
-    </div>
-    <div ng-if="userHasActivePreferredEmailAddress != undefined &&
+            <global-proxy-mgmt-notification display-message="{{'globalProxyManagement.message.noActivePreferredEmailAddress'|i18n}}" notification-type="warning" />
+        </div>
+        <div ng-if="userHasActivePreferredEmailAddress != undefined &&
     userHasActivePreferredEmailAddress == true &&
-    proxiesLoaded && proxies.length < 1" class="center-contents">
-        <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyNoProxyAddedYetTemplate.html'|webAppResourcePath"></ng-include>
+    proxiesLoaded && students.active.length < 1" class="center-contents">
+            <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyNoProxyAddedYetTemplate.html'|webAppResourcePath"></ng-include>
+        </div>
+
+    <div ng-if="userHasActivePreferredEmailAddress != undefined &&
+        userHasActivePreferredEmailAddress == true && students.active.length > 0">
+        <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyMgmtLandingPage.html'|webAppResourcePath"></ng-include>
     </div>
-    <!--TODO uncomment when proxy list ready
-    <div ng-if="proxies.length > 0">
-        <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyList.html'|webAppResourcePath"></ng-include>
-    </div>
-    -->
 </div>

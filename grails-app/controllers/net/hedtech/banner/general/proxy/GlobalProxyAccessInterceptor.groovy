@@ -3,9 +3,12 @@
  ****************************************************************************** */
 package net.hedtech.banner.general.proxy
 import net.hedtech.banner.security.XssSanitizer
+import org.springframework.security.core.context.SecurityContextHolder
 
 class GlobalProxyAccessInterceptor {
 
+    def springSecurityService
+    def generalSsbProxyService
 
 
     int order = HIGHEST_PRECEDENCE + 300
@@ -44,6 +47,10 @@ class GlobalProxyAccessInterceptor {
         String theUrl = constructUrl(request, controllerName, actionName)
 
         println "URL: " + theUrl
+        println "CONTROLLER-NAME: " + controllerName
+        def requestParams = request.getParameterMap()
+        def pageUrl = requestParams.url
+        def studentPidm = requestParams.pidm
 
         if (session["globalProxyMode"]) {
             if (!theUrl.contains("proxy") || !theUrl.contains("logout")) {
@@ -51,6 +58,13 @@ class GlobalProxyAccessInterceptor {
                 println "x1->: " + x
                 if(x){
                     println "CHECK-ACCESS"
+
+                    println "LOGGED-USER-PIDM " + session["loggedUserPidm"]
+                    def userPidm = springSecurityService?.getAuthentication()?.user?.pidm
+                    def p_proxyIDM = generalSsbProxyService.getGIDMfromPidmGlobalAccess(session["loggedUserPidm"])
+                    println "USER-PIDM: " + userPidm
+                    println "USER-GIDM: " + p_proxyIDM
+                    println "URL-PAGE: " + theUrl
                 }else{
                     //403
                 }

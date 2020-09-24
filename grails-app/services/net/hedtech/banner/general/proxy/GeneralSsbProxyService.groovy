@@ -43,6 +43,21 @@ class GeneralSsbProxyService {
     def springSecurityService
 
 
+    def getGIDMfromPidmGlobalAccess(def pidm){
+
+        def gidm
+        def sqlText = ProxyLandingPageApi.GET_GIDM_GLOBAL_ACCESS
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [pidm, Sql.VARCHAR
+        ]){ gidmOut ->
+            gidm = gidmOut
+        }
+
+        return gidm
+    }
+
+
     /**
      * This methods defines the p_token authentication as passed to the proxy
      * 1. Valid Token - redirect to the new pin

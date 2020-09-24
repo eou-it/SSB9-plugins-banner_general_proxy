@@ -27,9 +27,37 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
         },
 
         init = function() {
+
             globalProxyMgmtAppService.getProxyList().$promise.then(function (response) {
+
                 refreshProxies(response)
+
+                //console.log(JSON.stringify(response));
+
+                $rootScope.studenSSB = "http://gvutrans02.greatvalleyu.com:8080/StudentSelfService";
+
+
+                var addStudentProxyTile = function(student, isActive) {
+                    $scope.proxyTiles.push(
+                        {
+                            desc: student.name,
+                            pages : student.pages,
+                            selectedPage: {code: null, description: null},
+                            id: student.id,
+                            active: isActive
+                        }
+                    );
+                };
+
+                $scope.students = response.students;
+
+                _.each($scope.students.active, function(student) {
+                    addStudentProxyTile(student, true);
+                });
+
+
             });
+
 
             globalProxyMgmtAppService.getDoesUserHaveActivePreferredEmailAddress().$promise.then(function(response){
                 $scope.userHasActivePreferredEmailAddress = response.doesUserHaveActivePreferredEmailAddress;
@@ -90,6 +118,14 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
 
         // INITIALIZE
         // ----------
+
+        // CONTROLLER VARIABLES
+        // --------------------
+        $scope.proxyTiles = [];
+        $scope.appTiles = [];
+        $scope.isSingleTile;
+        $scope.pages =[];
+
         init();
 
     }
