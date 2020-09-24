@@ -12,12 +12,10 @@
         proxiesLoaded && students.active.length < 1" class="center-contents">
             <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyNoProxyAddedYetTemplate.html'|webAppResourcePath"></ng-include>
         </div>
-    <!--
     <div ng-if="userHasActivePreferredEmailAddress != undefined &&
         userHasActivePreferredEmailAddress == true && students.active.length > 0">
         <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyMgmtLandingPage.html'|webAppResourcePath"></ng-include>
     </div>
-    -->
 </div>
 <!---TODO Uncomment when proxy list ready
 <proxy-mgmt-mobile-footer-button click-function="goToEditProxyState" ng-if="proxies.length > 0">
