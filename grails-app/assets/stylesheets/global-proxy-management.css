@@ -79,6 +79,7 @@
 
 .global-proxy-dropdown-box {
     background-color: #FFFFFF;
+    min-width: 100%;
 }
 
 .global-proxy-dropdown-box a {
