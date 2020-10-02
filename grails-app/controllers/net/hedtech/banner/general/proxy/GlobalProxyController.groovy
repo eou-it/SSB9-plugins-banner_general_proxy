@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 class GlobalProxyController {
     static defaultAction = 'landingPage'
     def globalProxyService
+    def generalSsbProxyManagementService
     def generalSsbProxyService
     def springSecurityService
 
@@ -62,4 +63,43 @@ class GlobalProxyController {
         }
     }
 
+    /**
+     * Get list of options for Relationship select input control.
+     */
+    def getRelationshipOptions() {
+
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+
+        try {
+            def result = globalProxyService.getRelationshipOptions(pidm)
+            render result as JSON
+        }
+        catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+        catch (Exception e) {
+            log.error(e.toString())
+            def response = [message: e.message, failure: true]
+            render response as JSON
+        }
+    }
+
+    def getDataModelOnRelationshipChange() {
+        def params = request?.JSON ?: params
+        try {
+            def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+            params.pidm = pidm
+
+            if (params.alt) {
+                params.gidm = ProxyControllerUtility.getProxyGidmMapFromSessionCache(params)
+            }
+
+            def pageData = globalProxyService.getDataModelOnRelationshipChange(params)
+
+            render pageData as JSON
+
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
 }

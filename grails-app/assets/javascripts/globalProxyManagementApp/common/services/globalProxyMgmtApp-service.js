@@ -9,7 +9,7 @@ globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$f
         fetchDoesUserHaveActivePreferredEmail = $resource('../ssb/:controller/:action',
                     {controller: 'GlobalProxy', action: 'getLoggedInUserHasActivePreferredEmail'}, {query: {method:'GET', isArray:false}}),
         fetchRelationshipOptions = $resource('../ssb/:controller/:action',
-            {controller: 'ProxyManagement', action: 'getRelationshipOptions'}, {query: {method:'GET', isArray:false}}),
+            {controller: 'GlobalProxy', action: 'getRelationshipOptions'}, {query: {method:'GET', isArray:false}}),
         fetchCommunicationLog = $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'getCommunicationLog'}, {query: {method:'GET', isArray:true}}),
         fetchAuthLog = $resource('../ssb/:controller/:action',
@@ -43,7 +43,7 @@ globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$f
 
     this.getDataModelOnRelationshipChange = function (params) {
         return $resource('../ssb/:controller/:action',
-            {controller: 'ProxyManagement', action: 'getDataModelOnRelationshipChange'}).get(params);
+            {controller: 'GlobalProxy', action: 'getDataModelOnRelationshipChange'}).get(params);
     };
 
     this.getRelationshipOptions = function () {

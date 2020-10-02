@@ -67,7 +67,14 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                     if (response.failure) {
                         displayResponseFailureMessages(response.message, response.message);
                     } else {
-                        $scope.relationshipChoices = response.relationships;
+                        if (response.relationships){
+                            if(response.relationships.length > 0) {
+                                $scope.relationshipChoices = response.relationships;
+                            }
+                            else{
+                                notificationCenterService.addNotification($filter('i18n')('globalProxyManagement.message.noRelationships'), "error", true);
+                            }
+                        }
                     }
                 });
 
@@ -148,24 +155,24 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         };
 
         $scope.handleRelationshipChange = function () {
-          //  globalProxyMgmtAppService.getDataModelOnRelationshipChange({
-          //      alt: $scope.proxy.alt,
-          //      cver: $scope.proxy.cver,
-          //      p_retp_code: $scope.proxyAuxData.selectedRelationship.code
-          //  }).$promise.then(function (response) {
-          //      if (response.failure) {
-          //          displayResponseFailureMessages(response.message.clonedProxiesList, response.message);
-          //      } else {
-          //          $scope.proxy.handleRelationshipChange(response, $scope.proxyAuxData);
-          //          $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
-          //          $scope.globalProxyManagementDataValidator.removeProxyProfileFieldErrors($scope.proxy);
-//
-          //          if ($scope.proxy.pages.length == 0) {
-          //              notificationCenterService.clearNotifications();
-          //              notificationCenterService.addNotification('proxyManagement.message.noAuthorizationsAvailable', "error", true);
-          //          }
-          //      }
-          //  });
+            globalProxyMgmtAppService.getDataModelOnRelationshipChange({
+                alt: $scope.proxy.alt,
+                cver: $scope.proxy.cver,
+                p_retp_code: $scope.proxyAuxData.selectedRelationship.code
+            }).$promise.then(function (response) {
+                if (response.failure) {
+                    displayResponseFailureMessages(response.message.clonedProxiesList, response.message);
+                } else {
+                    $scope.proxy.handleRelationshipChange(response, $scope.proxyAuxData);
+                    $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
+                    $scope.globalProxyManagementDataValidator.removeProxyProfileFieldErrors($scope.proxy);
+
+                    if ($scope.proxy.pages.length == 0) {
+                        notificationCenterService.clearNotifications();
+                        notificationCenterService.addNotification('proxyManagement.message.noAuthorizationsAvailable', "error", true);
+                    }
+                }
+            });
         };
 
         $scope.handleClonedListChange = function () {
@@ -378,43 +385,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         $scope.maxDescriptionLength = 120;
 
         //$scope.enablePageLevelAuthorization = proxyConfigResolve.enablePageLevelAuthorization;
-
-        // GLOBAL PROXY SEARCH
-        // ------------------------
-        $scope.globalProxySearchRecords = 0;
-        $scope.globalProxySearchRows = [];
-        $scope.globalProxySearchColumns = [
-            {position: {desktop: 1, mobile: 1}, name: 'personName', title: "Name", options: {visible: true, sortable: false}, width: '100px'},
-            {position: {desktop: 2, mobile: 2}, name: 'personAge', title: "Age", options: {visible: true, sortable: false}, width: '60px'}
-        ];
-        $scope.draggableGlobalProxySearchColumnNames = [];
-        $scope.globalProxySearchPaginationConfig = {
-        };
-
-        $scope.globalProxySearchConfig = {
-        };
-
-        $scope.onDoubleClick = function(data,index) {
-
-        };
-
-        $scope.onBtnClick = function(data, index) {
-
-        };
-
-        $scope.globalProxySearchMobileConfig = {
-            personName: 2,
-            personAge: 2
-        };
-
-        $scope.postFetch = function(response, oldResult) {
-
-        };
-
-        $scope.globalProxySearch = function (query) {
-              return globalProxyMgmtAppService.fetchGlobalProxiesByQuery().$promise
-          };
-        // END - GLOBAL PROXY SEARCH
 
         // INITIALIZE
         // ----------
