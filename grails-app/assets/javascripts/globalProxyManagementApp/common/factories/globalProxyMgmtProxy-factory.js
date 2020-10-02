@@ -34,8 +34,6 @@ globalProxyManagementApp.factory('ProxyManagementProxy',
                 },
 
                 handleRelationshipChange: function (response, proxyAuxData) {
-                    this.p_start_date = response.dates.startDate;
-                    this.p_stop_date = response.dates.stopDate;
                     this.pages = response.pages.pages;
                     this.p_retp_code = proxyAuxData.selectedRelationship.code;
                 },

@@ -43,7 +43,17 @@
                    role="alert" aria-live="assertive">{{proxyManagementDataValidator.relationshipErrMsg|i18n}}</p>
             </div>
         </div>
-        <div class="row global-proxy-button-container">
+        <div class="row global-proxy-top-padding">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <div ng-if="proxy.pages && proxy.pages.length > 0">
+                    <div><b>{{'globalProxyManagement.message.authorizations'|i18n}}</b></div>
+                    <div ng-repeat="authItem in proxy.pages">
+                        <div>{{authItem.desc}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row global-proxy-top-padding">
             <div class="col-xs-12 col-md-6 col-lg-4">
                 <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
                 <input ng-class="profileRequired ? 'only-submit' : null" ng-click="save()" type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
@@ -58,7 +68,6 @@
         </div>
         <xe-tab-nav ng-if="!isCreateNew">
             <xe-tab-panel heading="{{'proxyManagement.label.addProxy'|i18n}}" state="editProxy">
-                <ng-include src="'../assets/globalProxyManagementApp/globalProxyManagementEditProxy/globalProxyMgmtCommonEditInputs.html'"></ng-include>
                 &shy;<!-- THIS NON-VISIBLE CHARACTER NEEDED TO FORCE XE-TAB-PANEL DIRECTIVE TO TAKE THE NG-INCLUDE -->
             </xe-tab-panel>
         </xe-tab-nav>
