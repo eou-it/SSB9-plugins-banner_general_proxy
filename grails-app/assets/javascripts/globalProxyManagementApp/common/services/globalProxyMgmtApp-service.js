@@ -15,7 +15,9 @@ globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$f
         fetchAuthLog = $resource('../ssb/:controller/:action',
             {controller: 'ProxyManagement', action: 'getHistoryLog'}, {query: {method:'GET', isArray:false}}),
         fetchGlobalProxiesByQuery = $resource('../ssb/:controller/:action',
-            {controller: 'GlobalProxy', action: 'getGlobalProxies'}, {query: {method:'GET', isArray:false}});
+            {controller: 'GlobalProxy', action: 'getGlobalProxies'}, {query: {method:'GET', isArray:false}}),
+        checkIfGlobalProxyAccessTargetIsValid = $resource('../ssb/:controller/:action',
+            {controller: 'GlobalProxy', action: 'checkIfGlobalProxyAccessTargetIsValid'}, {query: {method:'GET', isArray:false}});
 
     this.getProxyList = function () {
         return fetchProxies.query();
@@ -48,11 +50,6 @@ globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$f
 
     this.getRelationshipOptions = function () {
         return fetchRelationshipOptions.query();
-    };
-
-    this.resetProxyPassword = function (params) {
-        return $resource('../ssb/:controller/:action',
-            {controller: 'ProxyManagement', action: 'resetProxyPassword'}).get(params);
     };
 
     this.emailAuthentications = function (params) {
@@ -95,50 +92,6 @@ globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$f
             {controller: 'ProxyManagement', action: 'get'+entityName}).get(params);
     };
 
-    this.getCommunicationLog = function (params) {
-        var deferred = $q.defer(),
-            logEntries = fetchCommunicationLog.query(params),
-            result;
-
-        logEntries.$promise.then(function (response) {
-            _.each(response, function (logEntry) {
-                logEntry.resend.resendEmail = function () {
-                    var self = this;
-
-                    sendCommunicationLog({id: self.rowid}).$promise.then(function (response) {
-                        var messageType, message;
-
-                        if (response.failure) {
-                            messageType = 'error';
-                            message = response.message;
-                        } else {
-                            if (response.resendStatus == 'ERROR') {
-                                messageType = 'error';
-                                message = 'proxyManagement.message.resendCommunicationLogFailure';
-                            } else {
-                                messageType = 'success';
-                                message = 'proxyManagement.message.resendCommunicationLogSuccess';
-                            }
-                        }
-                        notificationCenterService.clearNotifications();
-                        notificationCenterService.addNotification(message, messageType, true);
-                    });
-                };
-
-            });
-
-            result = {result: response, length: response.length};
-
-            deferred.resolve(result);
-        });
-
-        return deferred;
-    };
-
-    this.getAuthLog = function (params) {
-        return fetchAuthLog.query(params);
-    };
-
     this.fetchGlobalProxiesByQuery = function (params){
         return fetchGlobalProxiesByQuery.query(params)
     };
@@ -146,5 +99,9 @@ globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$f
     this.getDoesUserHaveActivePreferredEmailAddress = function(params){
         return fetchDoesUserHaveActivePreferredEmail.query(params)
     };
+
+    this.isGlobalProxyAccessTargetValid = function(params){
+        return checkIfGlobalProxyAccessTargetIsValid.query(params);
+    }
 
 }]);

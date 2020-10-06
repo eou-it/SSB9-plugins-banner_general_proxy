@@ -16,17 +16,17 @@
         <div class="row">
             <div class="col-xs-12 col-md-6 col-lg-4">
                 <label class="input-field-label" for="name-banner-id">{{'globalProxyManagement.label.bannerId'|i18n}} <i>{{'proxyManagement.label.hint.required'|i18n}}</i></label><br>
-                <input ng-model="proxy.p_first" ng-blur="firstNameFocused=false; globalProxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="firstNameFocused=true"
-                       ng-class="[(!!globalProxyManagementDataValidator.firstNameErrMsg && !firstNameFocused ? 'input-field-error' : null)]"
+                <input ng-model="proxy.targetId" ng-blur="isBannerIdFocused=false; globalProxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="firstNameFocused=true"
+                       ng-class="[(!!globalProxyManagementDataValidator.bannerIdErrMsg && !isBannerIdFocused ? 'input-field-error' : null)]"
                        class="text-input-field gssb-eds-text-field semi-bold form-spacing"
-                       type="text" placeholder="{{'globalProxyManagement.placeholder.enter'|i18n}}" size="{{(maxNameLength + 2)}}" maxlength="{{maxNameLength}}" title="{{proxy.p_first}}"
+                       type="text" placeholder="{{'globalProxyManagement.placeholder.enter'|i18n}}" size="{{(maxBannerIdLength + 2)}}" maxlength="{{maxBannerIdLength}}" title="{{proxy.targetId}}"
                        id="name-banner-id">
-                <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.firstNameErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                   role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.firstNameErrMsg|i18n}}</p>
+                <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.bannerIdErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                   role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.bannerIdErrMsg|i18n}}</p>
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12 col-md-6 col-lg-4">
+            <div class="col-xs-12 col-md-6 col-lg-4" ng-class="(!!globalProxyManagementDataValidator.relationshipErrMsg ? 'global-proxy-dropdown-error' : null)">
                 <label class="input-field-label" for="relationship">{{'proxyManagement.label.relationship'|i18n}}</label>
                 <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.profile'|i18n}}"></proxy-mgmt-popover-tooltip>
                 <br>
@@ -39,8 +39,8 @@
                         <div ng-bind-html="choice.description"></div>
                     </xe-ui-select-choices>
                 </xe-ui-select>
-                <p class="input-field-label mobile-errors" ng-class="[(!!proxyManagementDataValidator.relationshipErrMsg ? 'field-error error-font-size' : 'no-display')]"
-                   role="alert" aria-live="assertive">{{proxyManagementDataValidator.relationshipErrMsg|i18n}}</p>
+                <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.relationshipErrMsg ? 'field-error error-font-size' : 'no-display')]"
+                   role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.relationshipErrMsg|i18n}}</p>
             </div>
         </div>
         <div class="row global-proxy-top-padding">

@@ -60,4 +60,20 @@ class GlobalProxyService {
         return authPages
     }
 
+    def checkIfGlobalProxyTargetIsValid(params){
+        def returnJson = ''
+        def parsedJson
+
+        def sqlText = GlobalProxyManagementApi.CHECK_IF_GLOBAL_PROXY_ACCESS_TARGET_IS_VALID
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [params.targetId, Sql.VARCHAR]){
+            json ->
+            returnJson = json
+        }
+
+        parsedJson = new JsonSlurper()?.parseText(returnJson)
+        return parsedJson
+    }
+
 }

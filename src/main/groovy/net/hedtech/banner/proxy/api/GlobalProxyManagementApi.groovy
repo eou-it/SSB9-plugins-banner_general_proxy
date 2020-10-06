@@ -99,4 +99,31 @@ FOR auth_rec IN C_AuthorizationList (lv_RETP)
 --
 END;
     """
+
+    public final static String CHECK_IF_GLOBAL_PROXY_ACCESS_TARGET_IS_VALID = """
+DECLARE
+  is_valid_to_be_proxied  VARCHAR2 (5);
+  valid_banner_id_entered VARCHAR2 (5);
+  return_json             VARCHAR(4000);
+  lv_person_pidm spriden.spriden_pidm%TYPE;
+  lv_attr_nt G_ATTRIBUTE_NT;
+BEGIN
+  is_valid_to_be_proxied  := 'false';
+  valid_banner_id_entered := 'false';
+  --Check if ID gets valid PIDM
+  lv_person_pidm            := bwgkprxy.F_GetSpridenPIDM (?);
+  IF (lv_person_pidm)       IS NOT NULL THEN
+    valid_banner_id_entered := 'true';
+    -- Ensure that the person is eligible to be targeted by a Global Access User
+    lv_attr_nt                                := gp_gorrsql.F_Execute_Rule ('SSB_ROLES', 'SSB_ROLE_PROXYTARGET', lv_person_pidm);
+    IF lv_attr_nt                             IS NOT NULL AND lv_attr_nt.COUNT > 0 THEN
+      IF lv_attr_nt (lv_attr_nt.FIRST)."value" = 'TRUE' THEN
+        is_valid_to_be_proxied                := 'true'; --Pidm is valid to be targeted
+      END IF;
+    END IF;
+  END IF;
+  return_json := ('{"isValidToBeProxied": "' || is_valid_to_be_proxied || '", "isValidBannerId": "' || valid_banner_id_entered || '"}');
+  ?           := return_json;
+END;
+"""
 }
