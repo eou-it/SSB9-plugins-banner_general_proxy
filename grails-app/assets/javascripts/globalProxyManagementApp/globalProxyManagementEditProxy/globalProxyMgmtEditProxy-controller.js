@@ -57,10 +57,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                 var alt = $stateParams.alt,
                     cver;
 
-                $scope.proxyAuxData.firstName = $stateParams.firstName;
-                $scope.proxyAuxData.lastName = $stateParams.lastName;
-                $scope.proxyAuxData.email = $stateParams.email;
-
                 $scope.globalProxyManagementDataValidator = new GlobalProxyManagementDataValidator();
 
                 globalProxyMgmtAppService.getRelationshipOptions().$promise.then(function (response) {
@@ -267,73 +263,25 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         };
 
         $scope.save = function () {
+            notificationCenterService.clearNotifications();
 
-            var profile = {};
+            globalProxyMgmtAppService.isGlobalProxyAccessTargetValid({targetId: $scope.proxy.targetId}).$promise.then(function (response) {
+                if (response.failure) {
+                    displayResponseFailureMessages(response.message.clonedProxiesList, response.message);
+                } else {
+                    $scope.proxy.isValidBannerId = response.isValidBannerId;
+                    $scope.proxy.isValidTarget = response.isValidToBeProxied;
 
-            //Add to Profile to manage dates
-            _.each(Object.keys($scope.proxy), function (it) {
-                profile[it] = $scope.proxy[it];
+                    if ($scope.globalProxyManagementDataValidator.isValidProxyData($scope.proxy)){
+                        console.log ("SAVED");
+                    }
+                    else{
+                        globalProxyMgmtErrorService.displayMessages();
+                    }
+                }
             });
-            //End Profile Clone
 
-            if ($scope.isCreateNew) { // CREATE PROXY
-                if ($scope.globalProxyManagementDataValidator.isValidProxyData($scope.proxy)) {
-                    notificationCenterService.addNotification('proxy.personalinformation.onSave.waitMessage', 'success', true);
 
-                    globalProxyMgmtAppService.createProxy(profile).$promise.then(function (response) {
-                        var notifications = [],
-                            doStateGoSuccess = function (messageOnSave) {
-                                notifications.push({
-                                    message: messageOnSave ? messageOnSave : 'proxyManagement.label.createSuccess',
-                                    messageType: $scope.notificationSuccessType,
-                                    flashType: $scope.flashNotification
-                                });
-
-                                $state.go('home',
-                                    {onLoadNotifications: notifications},
-                                    {reload: true, inherit: false, notify: true}
-                                );
-                            };
-
-                        if (response.failure) {
-                            displayResponseFailureMessages(response.message, response.message);
-                        } else {
-                            doStateGoSuccess(response.message);
-                        }
-                    });
-                } else {
-                    globalProxyMgmtErrorService.displayMessages();
-                }
-            } else { // UPDATE PROXY
-                if ($scope.globalProxyManagementDataValidator.isValidProxyData($scope.proxy, true)) {
-                    notificationCenterService.addNotification('proxy.personalinformation.onSave.waitMessage', 'success', true);
-
-                    globalProxyMgmtAppService.updateProxy(profile).$promise.then(function (response) {
-                        var notifications = [],
-                            doStateGoSuccess = function (messageOnSave) {
-                                notifications.push({
-                                    message: messageOnSave ? messageOnSave : 'proxyManagement.label.updateSuccess',
-                                    messageType: $scope.notificationSuccessType,
-                                    flashType: $scope.flashNotification
-                                });
-
-                                $state.go('home',
-                                    {onLoadNotifications: notifications},
-                                    {reload: true, inherit: false, notify: true}
-                                );
-                            };
-
-                        if (response.failure) {
-                            displayResponseFailureMessages(response.message, response.message);
-                        } else {
-                            doStateGoSuccess(response.message);
-                        }
-                    });
-                } else {
-                    globalProxyMgmtErrorService.displayMessages();
-                }
-
-            }
         };
 
         $scope.cancel = function () {
@@ -347,27 +295,20 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         $scope.dirty = false;
         $scope.isCreateNew = true;
         $scope.proxy;
+        $scope.isTargetIdValid = false;
         $scope.proxyAuxData = {
-            selectedRelationship: {code: null, description: null},
-            firstName: null,
-            lastName: null,
-            email: null,
-            clonedProxy: {code: null, description: null, retp: null},
-            addProxy: {code: null, description: null, email: null, firstName: null, lastName: null}
+            selectedRelationship: {code: null},
+            clonedProxy: {code: null, retp: null},
+            addProxy: {code: null, description: null}
         };
 
         $scope.placeholder = {
-            first_name: $filter('i18n')('proxyManagement.placeholder.first_name'),
-            last_name: $filter('i18n')('proxyManagement.placeholder.last_name'),
-            email: $filter('i18n')('proxyManagement.placeholder.email'),
-            verify_email: $filter('i18n')('proxyManagement.placeholder.verifyEmail'),
             relationship: $filter('i18n')('proxyManagement.placeholder.relationship'),
-            desc: $filter('i18n')('proxyManagement.label.description'),
-            passphrase: $filter('i18n')('proxyManagement.label.passphrase'),
             clonedLList: $filter('i18n')('proxyManagement.placeholder.selectPerson')
         };
 
         $scope.isRelationshipSelected = false;
+        $scope.isBannerIdFocused = false;
         $scope.relationshipChoices = [];
         $scope.clonedProxiesList = [];
         $scope.addProxiesList = [];
@@ -375,16 +316,9 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         $scope.emailVerifiedDateMsg = '';
         $scope.optOutMsg = '';
         $scope.authPages = [];
-        $scope.startFocused = false;
-        $scope.stopFocused = false;
         $scope.globalProxyManagementDataValidator = {};
 
-        $scope.maxNameLength = 60;
-        $scope.maxEmailLength = 128;
-        $scope.maxPassphraseLength = 256;
-        $scope.maxDescriptionLength = 120;
-
-        //$scope.enablePageLevelAuthorization = proxyConfigResolve.enablePageLevelAuthorization;
+        $scope.maxBannerIdLength = 30;
 
         // INITIALIZE
         // ----------

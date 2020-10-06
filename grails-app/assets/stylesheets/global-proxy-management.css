@@ -82,8 +82,9 @@
     min-width: 100%;
 }
 
-.global-proxy-dropdown-box a {
-    border-color: #B2B3B7 !important;
+.global-proxy-dropdown-error a {
+    border-color:#CD3B3E !important;
+    color:#CD3B3E !important;
 }
 
 .global-proxy-edit-content .row {

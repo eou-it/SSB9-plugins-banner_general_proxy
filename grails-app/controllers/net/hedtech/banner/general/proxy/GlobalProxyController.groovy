@@ -5,6 +5,7 @@ package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
+import net.hedtech.banner.general.person.PersonIdentificationName
 import org.springframework.security.core.context.SecurityContextHolder
 /**
  * Controller for Global Proxy.
@@ -33,7 +34,9 @@ class GlobalProxyController {
             // get idm for the global access user
             if (pidm && !SecurityContextHolder?.context?.authentication?.principal?.gidm){
                 def gidm = generalSsbProxyService.getGIDMfromPidmGlobalAccess(pidm)
-                SecurityContextHolder?.context?.authentication?.principal?.gidm = Integer. valueOf(gidm)
+                if (gidm){
+                    SecurityContextHolder?.context?.authentication?.principal?.gidm = Integer.valueOf(gidm)
+                }
             }
 
             def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
@@ -101,5 +104,28 @@ class GlobalProxyController {
         } catch (ApplicationException e) {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
+    }
+
+    def checkIfGlobalProxyAccessTargetIsValid(){
+        def params = request?.JSON ?: params
+        try {
+            def returnData = [:]
+            if (isGlobalProxyUserTargetingTheirOwnId(params?.targetId)){
+                returnData.isValidBannerId = "true"
+                returnData.isValidToBeProxied = "false"
+            }
+            else{
+                returnData = globalProxyService.checkIfGlobalProxyTargetIsValid(params)
+            }
+            render returnData as JSON
+        } catch (ApplicationException e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+    private boolean isGlobalProxyUserTargetingTheirOwnId(targetId){
+        Integer globalProxyUserPidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        def globalProxyUser = PersonIdentificationName?.fetchBannerPerson(globalProxyUserPidm)
+        globalProxyUser?.bannerId == targetId?.trim()
     }
 }

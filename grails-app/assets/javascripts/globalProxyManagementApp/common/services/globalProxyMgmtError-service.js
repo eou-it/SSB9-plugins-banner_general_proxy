@@ -13,55 +13,35 @@ globalProxyManagementApp.service('globalProxyMgmtErrorService', ['notificationCe
         this.refreshProxyManagementDateErrorManager = function () {
         };
 
-        this.getErrorFirstName = function(proxy) {
-            //var msg = 'proxyManagement.message.firstNameRequired';
+        this.getErrorBannerId = function (proxy) {
+            var invalidTargetMsg = 'globalProxyManagement.message.targetNotValid';
+            var invalidBannerIdMsg = 'globalProxyManagement.message.bannerIdRequired';
 
-            //if (!proxy.p_first) {
-            //    messages.push({msg: msg, type: 'error'});
 
-            //    return msg;
-            //}
-            //else {
-            //    notificationCenterService.removeNotification(msg);
-            //}
+            if (proxy.isValidBannerId === "false"){
+                messages.push({msg: invalidBannerIdMsg, type: 'error'});
+                return invalidBannerIdMsg;
+            }
+            else if (proxy.isValidTarget === "false") {
+                messages.push({msg: invalidTargetMsg, type: 'error'});
+                return invalidTargetMsg;
+            }
+            else {
+                notificationCenterService.removeNotification(invalidTargetMsg);
+                notificationCenterService.removeNotification(invalidBannerIdMsg);
+            }
         };
 
+        this.getErrorRelationship = function (proxy) {
+            var invalidRelationshipMsg = 'globalProxyManagement.message.relationshipRequired';
 
-
-       // this.getErrorRelationship = function(proxy) {
-       //     var msg = 'proxyManagement.message.relationshipRequired';
-
-       //     if (!proxy.p_retp_code) {
-       //         messages.push({msg: msg, type: 'error'});
-
-       //         return msg;
-       //     }
-       //     else {
-       //         notificationCenterService.removeNotification(msg);
-       //     }
-       // };
-
-       //this.getErrorAuthorizations = function(proxy) {
-       //    var msg = 'proxyManagement.message.authorizedPageRequired',
-       //        found,
-       //        isAtLeastOnePageAuthorized = false;
-
-       //    if (proxy.pages) {
-       //        found = _.find(proxy.pages, function (page) {
-       //            return page.auth;
-       //        });
-
-       //        isAtLeastOnePageAuthorized = !!found;
-       //    }
-
-        //    if (!isAtLeastOnePageAuthorized) {
-        //        messages.push({msg: msg, type: 'error'});
-        //        return msg;
-        //    }
-        //    else {
-        //        notificationCenterService.removeNotification(msg);
-        //    }
-        //};
+            if (!proxy.p_retp_code) {
+                messages.push({msg: invalidRelationshipMsg, type: 'error'});
+                return invalidRelationshipMsg;
+            } else {
+                notificationCenterService.removeNotification(invalidRelationshipMsg);
+            }
+        };
 
 
         this.displayMessages = function() {
