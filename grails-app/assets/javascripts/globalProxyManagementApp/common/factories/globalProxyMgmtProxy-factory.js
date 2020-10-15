@@ -13,6 +13,7 @@ globalProxyManagementApp.factory('ProxyManagementProxy',
                 isValidTarget: 'false',
                 isValidBannerId: 'false',
                 targetId: '',
+                preferredName: '',
 
                 getAuthorizedPages: function () {
                     return this.pages.filter(function (item) {

@@ -6,6 +6,7 @@ package net.hedtech.banner.general.proxy
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.person.PersonIdentificationName
+import net.hedtech.banner.general.person.PersonUtility
 import org.springframework.security.core.context.SecurityContextHolder
 /**
  * Controller for Global Proxy.
@@ -116,6 +117,9 @@ class GlobalProxyController {
             }
             else{
                 returnData = globalProxyService.checkIfGlobalProxyTargetIsValid(params)
+                if (returnData?.isValidBannerId == "true" && returnData?.isValidToBeProxied == "true"){
+                    returnData.preferredName = getPreferredNameBasedOnProxyRule(params?.targetId)
+                }
             }
             render returnData as JSON
         } catch (ApplicationException e) {
@@ -127,5 +131,10 @@ class GlobalProxyController {
         Integer globalProxyUserPidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
         def globalProxyUser = PersonIdentificationName?.fetchBannerPerson(globalProxyUserPidm)
         globalProxyUser?.bannerId == targetId?.trim()
+    }
+
+    private String getPreferredNameBasedOnProxyRule(String bannerId){
+        def bannerPerson = PersonIdentificationName?.fetchBannerPerson(bannerId)
+        return PersonUtility?.getPreferredNameForProxyDisplay(bannerPerson?.pidm)
     }
 }
