@@ -142,7 +142,16 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                 }
 
                 displayNotificationsOnStateLoad();
-            };
+            },
+            setPreferredName = function (preferredName) {
+                if (preferredName){
+                    $scope.proxy.preferredName = preferredName;
+                }
+                else{
+                    $scope.proxy.preferredName = ''
+                }
+            }
+        ;
 
         // CONTROLLER FUNCTIONS
         // --------------------
@@ -159,13 +168,27 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                 if (response.failure) {
                     displayResponseFailureMessages(response.message.clonedProxiesList, response.message);
                 } else {
+                    notificationCenterService.clearNotifications();
                     $scope.proxy.handleRelationshipChange(response, $scope.proxyAuxData);
                     $scope.isRelationshipSelected = !!$scope.proxyAuxData.selectedRelationship.code;
                     $scope.globalProxyManagementDataValidator.removeProxyProfileFieldErrors($scope.proxy);
+                    $scope.globalProxyManagementDataValidator.isValidProxyData($scope.proxy, false);
+                    globalProxyMgmtErrorService.displayMessages();
+                }
+            });
+        };
 
-                    if ($scope.proxy.pages.length == 0) {
-                        notificationCenterService.clearNotifications();
-                        notificationCenterService.addNotification('proxyManagement.message.noAuthorizationsAvailable', "error", true);
+        $scope.handleBannerIdChange = function (proxy) {
+            notificationCenterService.clearNotifications();
+            globalProxyMgmtAppService.isGlobalProxyAccessTargetValid({targetId: proxy.targetId}).$promise.then(function (response) {
+                if (response.failure) {
+                    displayResponseFailureMessages(response.message.clonedProxiesList, response.message);
+                } else {
+                    $scope.proxy.isValidBannerId = response.isValidBannerId;
+                    $scope.proxy.isValidTarget = response.isValidToBeProxied;
+                    setPreferredName(response.preferredName);
+                    if (!$scope.globalProxyManagementDataValidator.isValidProxyData($scope.proxy, false)) {
+                        globalProxyMgmtErrorService.displayMessages();
                     }
                 }
             });
@@ -272,7 +295,9 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                     $scope.proxy.isValidBannerId = response.isValidBannerId;
                     $scope.proxy.isValidTarget = response.isValidToBeProxied;
 
-                    if ($scope.globalProxyManagementDataValidator.isValidProxyData($scope.proxy)){
+                    setPreferredName(response.preferredName);
+
+                    if ($scope.globalProxyManagementDataValidator.isValidProxyData($scope.proxy, true)){
                         console.log ("SAVED");
                     }
                     else{

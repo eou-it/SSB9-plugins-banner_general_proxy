@@ -34,12 +34,19 @@ globalProxyManagementApp.service('globalProxyMgmtErrorService', ['notificationCe
 
         this.getErrorRelationship = function (proxy) {
             var invalidRelationshipMsg = 'globalProxyManagement.message.relationshipRequired';
+            var noPagesAuthorizedMsg = 'proxyManagement.message.noAuthorizationsAvailable';
 
             if (!proxy.p_retp_code) {
                 messages.push({msg: invalidRelationshipMsg, type: 'error'});
                 return invalidRelationshipMsg;
-            } else {
+            }
+            else if(!proxy.pages.length > 0){
+                messages.push({msg: noPagesAuthorizedMsg, type: 'error'});
+                return noPagesAuthorizedMsg;
+            }
+            else {
                 notificationCenterService.removeNotification(invalidRelationshipMsg);
+                notificationCenterService.removeNotification(noPagesAuthorizedMsg);
             }
         };
 

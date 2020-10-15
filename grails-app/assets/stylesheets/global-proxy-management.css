@@ -73,6 +73,11 @@
     margin-right: -50px;
 }
 
+.global-proxy-name-display-add-page{
+    color: #333;
+    margin-top: 7px;
+}
+
 .global-proxy-edit-content input{
     height: 44px;
 }

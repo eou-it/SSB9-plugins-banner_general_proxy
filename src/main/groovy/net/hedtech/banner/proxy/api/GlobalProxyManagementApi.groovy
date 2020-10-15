@@ -2,43 +2,60 @@ package net.hedtech.banner.proxy.api
 
 class GlobalProxyManagementApi {
     public final static String RELATIONSHIP_OPTION_LIST = """
-  DECLARE
-     global_syst CONSTANT gtvsyst.gtvsyst_code%TYPE := 'PROXY_GLOBAL_ACCESS';
-     lv_access   VARCHAR2(01);
-     global_pidm spriden.spriden_pidm%TYPE;
-     rel_list    VARCHAR2(32000);
-     
-     CURSOR C_RETPlist
-         RETURN GTVRETP%ROWTYPE
-     IS
-         SELECT *
-            FROM GTVRETP
-         WHERE EXISTS (SELECT 1 FROM GEBSRTP WHERE GEBSRTP_SYST_CODE = global_syst AND GEBSRTP_RETP_CODE = GTVRETP_CODE)
-         ORDER BY GTVRETP_DESC;
-
-  BEGIN
-     global_pidm := ?;
-     rel_list:= '{ "relationships":[';
+DECLARE
+  global_syst CONSTANT gtvsyst.gtvsyst_code%TYPE := 'PROXY_GLOBAL_ACCESS';
+  lv_access   VARCHAR2(01);
+  global_pidm spriden.spriden_pidm%TYPE;
+  rel_list VARCHAR2(32000);
+  rel_enabled TWGBWMNU.TWGBWMNU_ENABLED_IND%TYPE;
+  
+  CURSOR C_RETPlist
+    RETURN GTVRETP%ROWTYPE
+  IS
+    SELECT *
+    FROM GTVRETP
+    WHERE EXISTS
+      (SELECT 1
+      FROM GEBSRTP
+      WHERE GEBSRTP_SYST_CODE = global_syst
+      AND GEBSRTP_RETP_CODE   = GTVRETP_CODE
+      )
+  ORDER BY GTVRETP_DESC;
+  
+  CURSOR C_MenuEnabledInd (reltype_in IN GTVRETP.GTVRETP_CODE%TYPE)
+  IS
+    SELECT TWGBWMNU_ENABLED_IND
+    FROM TWGBWMNU
+    WHERE TWGBWMNU_NAME = ('PROXY_ACCESS_'
+      || reltype_in);
       
-     FOR lv_GTVRETP_rec IN C_RETPlist
-     LOOP
-        -- Check to see if the user actually can access this relationship
-            lv_access := bwgkpxym.f_check_proxy_relationship_sql(global_syst
-                                                             ,lv_GTVRETP_rec.GTVRETP_CODE
-                                                             ,global_pidm
-                                                             );
-        IF lv_access = 'Y' THEN
-           rel_list := rel_list || '{"code": "' || lv_GTVRETP_rec.GTVRETP_CODE || '", ' ||
-                                    '"description": "' || lv_GTVRETP_rec.GTVRETP_DESC ||
-                                    '"},';
-        END IF;
-     END LOOP;
-
-     rel_list := TRIM(TRAILING ',' FROM rel_list);
-     rel_list := rel_list || ']}';
+BEGIN
+  global_pidm := ?;
+  rel_list    := '{ "relationships":[';
+  FOR lv_GTVRETP_rec IN C_RETPlist
+  LOOP
+    -- Check to see if the user actually can access this relationship
+    lv_access := bwgkpxym.f_check_proxy_relationship_sql(global_syst ,lv_GTVRETP_rec.GTVRETP_CODE ,global_pidm );
+    
+    -- Check to see if the relationship menu is enabled
+    OPEN C_MenuEnabledInd(lv_GTVRETP_rec.GTVRETP_CODE);
+    FETCH C_MenuEnabledInd INTO rel_enabled;
+    IF C_MenuEnabledInd%ROWCOUNT = 1 THEN
+      IF rel_enabled = 'N' THEN
+        lv_access   := 'N';
+      END IF;
+    END IF;
+    CLOSE C_MenuEnabledInd;
      
-     ? := rel_list;
-  END;
+    IF lv_access = 'Y' THEN
+      rel_list  := rel_list || '{"code": "' || lv_GTVRETP_rec.GTVRETP_CODE || '", ' || '"description": "' || lv_GTVRETP_rec.GTVRETP_DESC || '"},';
+    END IF;
+  END LOOP;
+  rel_list := TRIM(TRAILING ',' FROM rel_list);
+  rel_list := rel_list || ']}';
+  
+  ?        := rel_list;
+END;
 """;
 
     public final static String GLOBAL_PROXY_PAGES = """

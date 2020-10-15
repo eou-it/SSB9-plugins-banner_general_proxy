@@ -8,10 +8,10 @@ globalProxyManagementApp.factory('GlobalProxyManagementDataValidator', ['globalP
                 bannerIdErrMsg: '',
                 relationshipErrMsg: '',
                 authorizationsErrMsg: '',
-                isValidProxyData: function(proxy){
+                isValidProxyData: function(proxy, isSubmit){
                     globalProxyMgmtErrorService.refreshMessages();
-                    this.bannerIdErrMsg = globalProxyMgmtErrorService.getErrorBannerId(proxy);
-                    this.relationshipErrMsg = globalProxyMgmtErrorService.getErrorRelationship(proxy);
+                    this.bannerIdErrMsg = (!isSubmit && !proxy.targetId) ? '' : globalProxyMgmtErrorService.getErrorBannerId(proxy);
+                    this.relationshipErrMsg = (!isSubmit && !proxy.p_retp_code) ? '' : globalProxyMgmtErrorService.getErrorRelationship(proxy);
                     return !(this.bannerIdErrMsg || this.relationshipErrMsg);
                 },
 

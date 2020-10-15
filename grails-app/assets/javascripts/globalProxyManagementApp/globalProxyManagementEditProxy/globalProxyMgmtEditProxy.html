@@ -13,16 +13,20 @@
                 <global-proxy-mgmt-notification notification-type="info" display-message="{{'globalProxyManagement.message.bannerId'|i18n}}" />
             </div>
         </div>
-        <div class="row">
+        <div class="row global-proxy-banner-id-input-row">
             <div class="col-xs-12 col-md-6 col-lg-4">
                 <label class="input-field-label" for="name-banner-id">{{'globalProxyManagement.label.bannerId'|i18n}} <i>{{'proxyManagement.label.hint.required'|i18n}}</i></label><br>
-                <input ng-model="proxy.targetId" ng-blur="isBannerIdFocused=false; globalProxyManagementDataValidator.removeProxyProfileFieldErrors(proxy)" ng-focus="firstNameFocused=true"
+                <input ng-model="proxy.targetId" ng-blur="isBannerIdFocused=false; handleBannerIdChange(proxy)" ng-focus="isBannerIdFocused=true"
                        ng-class="[(!!globalProxyManagementDataValidator.bannerIdErrMsg && !isBannerIdFocused ? 'input-field-error' : null)]"
                        class="text-input-field gssb-eds-text-field semi-bold form-spacing"
                        type="text" placeholder="{{'globalProxyManagement.placeholder.enter'|i18n}}" size="{{(maxBannerIdLength + 2)}}" maxlength="{{maxBannerIdLength}}" title="{{proxy.targetId}}"
                        id="name-banner-id">
                 <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.bannerIdErrMsg ? 'field-error error-font-size' : 'no-display')]"
                    role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.bannerIdErrMsg|i18n}}</p>
+                <div ng-class="[(proxy.preferredName ? 'error-font-size' : 'no-display')]"
+                   role="alert" aria-live="assertive">
+                    <p class="global-proxy-name-display-add-page">{{proxy.preferredName}}</p>
+                </div>
             </div>
         </div>
         <div class="row">
