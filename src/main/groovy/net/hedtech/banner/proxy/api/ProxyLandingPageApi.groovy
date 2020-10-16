@@ -114,7 +114,8 @@ BEGIN
 
                       student := '{' ||
                       '"name" ' || ':' || '"' || f_format_name (person.GPRXREF_PERSON_PIDM, 'FML') || '"' ||
-                      ',"id" ' || ':'  || '"' || person.ID || '"' || '},';
+                      ',"id" ' || ':'  || '"' || person.ID || '"' || 
+                      ',"token" ' || ':'  || '"' || person.GPRXREF_PERSON_PIDM || '"' || '},';
                       
                       IF TRUNC(SYSDATE) BETWEEN TRUNC(person.GPRXREF_START_DATE) AND TRUNC (person.GPRXREF_STOP_DATE)
                       THEN

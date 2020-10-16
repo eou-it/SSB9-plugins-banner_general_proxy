@@ -119,14 +119,14 @@ class ProxyController {
             //1. Change pidm to id
             //2. Parser(token + random length + expiration)
             //3. Check for roles and security on the following: params?.url, globalProxyPidm and studentPidm
-            if (params.pidm) {
+            if (params.token) {
 
                 def gidm = generalSsbProxyService.getGIDMfromPidmGlobalAccess(springSecurityService?.getAuthentication()?.user?.pidm)
                 println "GIDM In Proxy Controller: " + gidm
 
                 session["loggedUserPidm"] = springSecurityService?.getAuthentication()?.user?.pidm
                 session["globalProxyMode"] = true
-                springSecurityService?.getAuthentication()?.user?.pidm = new Integer(params.pidm)
+                springSecurityService?.getAuthentication()?.user?.pidm = new Integer(params.token)
                 RequestContextHolder.currentRequestAttributes()?.request?.session.setAttribute("guestUser", true)
 
                 session["globalGuestProxyBaseURL"] =  getGSSUrl()

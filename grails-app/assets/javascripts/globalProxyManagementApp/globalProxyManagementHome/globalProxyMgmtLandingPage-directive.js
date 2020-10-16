@@ -49,7 +49,7 @@ globalProxyManagementApp.directive('globalLandingPageProxyTile', ['$state', '$ro
                                 $state.go(url, {id: proxyData.id});
                         } else{
                             window.open(
-                                encodeURI($rootScope.studenSSB + "/proxy/navigate?url=" + url + "&pidm=819"),"_self"
+                                encodeURI($rootScope.studenSSB + "/proxy/navigate?url=" + url + "&token=" + scope.proxyData.token),"_self"
                             );
                         }
                 };

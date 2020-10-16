@@ -44,7 +44,8 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
                             pages : student.pages,
                             selectedPage: {code: null, description: null},
                             id: student.id,
-                            active: isActive
+                            active: isActive,
+                            token: student.token
                         }
                     );
                 };
