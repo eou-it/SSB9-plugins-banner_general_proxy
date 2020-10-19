@@ -5,9 +5,13 @@ package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
+import net.hedtech.banner.general.configuration.ConfigProperties
 import net.hedtech.banner.general.person.PersonIdentificationName
 import net.hedtech.banner.general.person.PersonUtility
 import org.springframework.security.core.context.SecurityContextHolder
+
+import java.sql.SQLException
+
 /**
  * Controller for Global Proxy.
  */
@@ -19,6 +23,7 @@ class GlobalProxyController {
     def springSecurityService
 
     def landingPage() {
+        session["studentSsbBaseURL"] =  getSSSUrl()
 
         render view: "globalProxy"
     }
@@ -136,5 +141,15 @@ class GlobalProxyController {
     private String getPreferredNameBasedOnProxyRule(String bannerId){
         def bannerPerson = PersonIdentificationName?.fetchBannerPerson(bannerId)
         return PersonUtility?.getPreferredNameForProxyDisplay(bannerPerson?.pidm)
+    }
+
+    private def getSSSUrl() {
+        try{
+            ConfigProperties configProperties = ConfigProperties.fetchByConfigNameAndAppId('STUDENTLOCATION','GENERAL_SS')
+            return configProperties? configProperties.configValue  : null
+        }catch (SQLException e){
+            log.warn("Unable to fetch the configuration STUDENTLOCATION "+e.getMessage())
+            return ""
+        }
     }
 }

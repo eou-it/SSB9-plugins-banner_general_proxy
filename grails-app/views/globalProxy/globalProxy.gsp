@@ -19,6 +19,7 @@ Copyright 2020 Ellucian Company L.P. and its affiliates.
         <meta name="applicationContextRoot" content="${applicationContextRoot}">
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no, user-scalable=0" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="studentSsbBaseURL" content="${session.studentSsbBaseURL}"/>
 
         <g:if test="${message(code: 'default.language.direction') == 'rtl'}">
             <asset:stylesheet src="modules/proxy-applicationRTL-mf.css"/>

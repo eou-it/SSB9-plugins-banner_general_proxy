@@ -34,7 +34,9 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
 
                 //console.log(JSON.stringify(response));
 
-                $rootScope.studenSSB = "http://gvutrans02.greatvalleyu.com:8080/StudentSelfService";
+                if ($('meta[name=studentSsbBaseURL]').attr("content") != undefined && $('meta[name=studentSsbBaseURL]').attr("content") !== null) {
+                    $rootScope.studenSSB = $('meta[name=studentSsbBaseURL]').attr("content")
+                }
 
 
                 var addStudentProxyTile = function(student, isActive) {
