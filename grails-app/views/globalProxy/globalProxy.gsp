@@ -8,7 +8,7 @@ Copyright 2020 Ellucian Company L.P. and its affiliates.
 <!--[if IE 9 ]>    <html xmlns:ng="http://angularjs.org" ng-app="proxyApp" id="ng-app" class="ie9"> <![endif]-->
 <html xmlns:ng="http://angularjs.org" id="ng-app">
 <head>
-    <g:applyLayout name="bannerSelfServicePage">
+    <g:applyLayout name="bannerWebPage">
         <title><g:message code="banner.general.common.title" /></title>
 
         <meta name="menuEndPoint" content="${request.contextPath}/ssb/menu" />

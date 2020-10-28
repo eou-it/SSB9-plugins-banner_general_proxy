@@ -14,7 +14,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
          * may be that it's not a typical concern -- would only affect showing notifications on initial
          * page load -- but it's barely noticeable so doesn't hurt to leave it.)
          */
-        var displayNotificationsOnStateLoad = function () {
+        let displayNotificationsOnStateLoad = function () {
                 $timeout(function () {
                     _.each($stateParams.onLoadNotifications, function (notification) {
                         notificationCenterService.addNotification(notification.message, notification.messageType, notification.flashType);
@@ -53,8 +53,39 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                 notificationCenterService.clearNotifications();
                 notificationCenterService.addNotification(notificationMessage, "error", true);
             },
+            beforeUpdateProxy,
+            beforeUpdateProxyAuxData,
+            formDirty = false,
+            showSaveCancelMessage = function (toState) {
+                let prompt = [
+                    {
+                        label: $filter('i18n')('proxy.label.cancel'),
+                        action: function () {
+                            notificationCenterService.removeNotification('globalProxyManagement.message.saveCancel');
+                        }
+                    },
+                    {
+                        label: $filter('i18n')('globalProxyManagement.message.no'),
+                        action: function () {
+                            notificationCenterService.removeNotification('globalProxyManagement.message.saveCancel');
+                            formDirty = false;
+                            $state.go(toState)
+                        }
+                    },
+                    {
+                        label: $filter('i18n')('globalProxyManagement.message.yes'),
+                        action: function () {
+                            notificationCenterService.removeNotification('globalProxyManagement.message.saveCancel');
+
+                            //Attempt to save the target.
+                            $scope.save()
+                        }
+                    }
+                ];
+                notificationCenterService.displayNotification('globalProxyManagement.message.saveCancel', 'warning', false, prompt);
+            },
             init = function () {
-                var alt = $stateParams.alt,
+                let alt = $stateParams.alt,
                     cver;
 
                 $scope.globalProxyManagementDataValidator = new GlobalProxyManagementDataValidator();
@@ -63,11 +94,10 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                     if (response.failure) {
                         displayResponseFailureMessages(response.message, response.message);
                     } else {
-                        if (response.relationships){
-                            if(response.relationships.length > 0) {
+                        if (response.relationships) {
+                            if (response.relationships.length > 0) {
                                 $scope.relationshipChoices = response.relationships;
-                            }
-                            else{
+                            } else {
                                 notificationCenterService.addNotification($filter('i18n')('globalProxyManagement.message.noRelationships'), "error", true);
                             }
                         }
@@ -85,7 +115,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                     $scope.isRelationshipSelected = true;
 
                     globalProxyMgmtAppService.getProxy({alt: alt, cver: cver}).$promise.then(function (response) {
-                        var setupEditDialog = function () {
+                        let setupEditDialog = function () {
                             $scope.proxy = new ProxyManagementProxy(response.proxyProfile);
                             $scope.authPages = $scope.proxy.getAuthorizedPages();
                             displayResponseMessages(response.messages.messages);
@@ -141,13 +171,15 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                     });
                 }
 
+                beforeUpdateProxy = angular.copy($scope.proxy);
+                beforeUpdateProxyAuxData = angular.copy($scope.proxyAuxData);
+
                 displayNotificationsOnStateLoad();
             },
             setPreferredName = function (preferredName) {
-                if (preferredName){
+                if (preferredName) {
                     $scope.proxy.preferredName = preferredName;
-                }
-                else{
+                } else {
                     $scope.proxy.preferredName = ''
                 }
             }
@@ -229,7 +261,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
             } else {
 
                 globalProxyMgmtAppService.emailPassphrase({alt: $scope.proxy.alt, cver: $scope.proxy.cver}).$promise.then(function (response) {
-                    var messageType, message;
+                    let messageType, message;
 
                     if (response.failure) {
                         messageType = 'error';
@@ -259,7 +291,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
             }
 
             globalProxyMgmtAppService.emailAuthentications({alt: $scope.proxy.alt, cver: $scope.proxy.cver}).$promise.then(function (response) {
-                var messageType, message;
+                let messageType, message;
 
                 if (response.failure) {
                     messageType = 'error';
@@ -297,15 +329,13 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
 
                     setPreferredName(response.preferredName);
 
-                    if ($scope.globalProxyManagementDataValidator.isValidProxyData($scope.proxy, true)){
-                        console.log ("SAVED");
-                    }
-                    else{
+                    if ($scope.globalProxyManagementDataValidator.isValidProxyData($scope.proxy, true)) {
+                        console.log("SAVED");
+                    } else {
                         globalProxyMgmtErrorService.displayMessages();
                     }
                 }
             });
-
 
         };
 
@@ -345,9 +375,41 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
 
         $scope.maxBannerIdLength = 30;
 
+        let isOnIOS = navigator.userAgent.match(/iPad|iPhone|iPod/i);
+        let eventName = isOnIOS ? "pagehide" : "beforeunload";
+        $(window).on(eventName, function () {
+            if (formDirty) {
+                return $filter('i18n')('globalProxyManagement.message.saveCancel')
+            }
+        });
+
+        let $stateChangeStartUnbind = $scope.$on('$stateChangeStart', function (event, toState) {
+            if (formDirty) {
+                event.preventDefault();
+                showSaveCancelMessage(toState)
+            }
+        });
+
+        $scope.$watch('proxy', function (newVal) {
+            if (formDirty !== true) {
+                formDirty = !angular.equals(newVal, beforeUpdateProxy);
+            }
+        }, true);
+
+        $scope.$watch('proxyAuxData', function (newVal) {
+            if (formDirty !== true){
+                formDirty = !angular.equals(newVal, beforeUpdateProxyAuxData);
+            }
+        }, true);
+
         // INITIALIZE
         // ----------
         init();
+
+        $scope.$on('$destroy', function () {
+            $(window).off(eventName);
+            $stateChangeStartUnbind();
+        });
 
     }
 ]);

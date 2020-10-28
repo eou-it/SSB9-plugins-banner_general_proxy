@@ -6,6 +6,7 @@ var globalProxyMgmtAppDirectives = angular.module('globalProxyMgmtAppDirectives'
 
 
 var globalProxyManagementApp = angular.module('globalProxyManagementApp', [
+    'extensibility',
     'ngResource',
     'ui.router',
     'globalProxyMgmtAppControllers',
@@ -35,8 +36,12 @@ var globalProxyManagementApp = angular.module('globalProxyManagementApp', [
                 $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
                     $state.previous = fromState;
                     $state.previousParams = fromParams;
+                    if(toState.name === 'editProxy'){
+                        sessionStorage.setItem('globalProxyInfoCallingPage', true);
+                    }
                     breadcrumbService.setBreadcrumbs(toState.data.breadcrumbs);
                     breadcrumbService.refreshBreadcrumbs();
+                    sessionStorage.removeItem('globalProxyInfoCallingPage');
                 });
 
                 $(document.body).removeAttr("role");
@@ -105,7 +110,7 @@ globalProxyManagementApp.config(['$stateProvider', '$urlRouterProvider',
                 //    }]
                 //},
                 data: {
-                    breadcrumbs: []
+                    breadcrumbs: [{label: 'general.breadcrumb.globalProxyManagement'}]
                 },
                 params: {
                     id: null,
