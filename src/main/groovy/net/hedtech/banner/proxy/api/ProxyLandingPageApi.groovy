@@ -42,6 +42,24 @@ class ProxyLandingPageApi {
   END;
 """
 
+    public final static String GET_STUDENT_PIDM_FROM_TOKEN ="""
+  DECLARE
+     token varchar2(2000);
+     pidm  varchar2(2000);
+   BEGIN
+   token := ?;
+   --
+   gspcrpu.p_unapply (token,pidm);
+   pidm := substr(pidm,instr(pidm,'::', 1, 2) + 2);
+--   
+   ? := to_number(pidm);
+   EXCEPTION
+     WHEN others THEN 
+     null;
+--
+  END;
+"""
+
     public final static String STUDENT_TOKEN = """
     DECLARE
       lv_value varchar2(2000);
@@ -64,6 +82,7 @@ DECLARE
   TYPE T_desc_table IS TABLE OF TWGBWMNU.TWGBWMNU_DESC%TYPE
   index by binary_integer;
   lv_used_desc   T_desc_table;
+  lv_value varchar2(2000);
 
   CURSOR C_PersonList
       IS
@@ -112,10 +131,12 @@ BEGIN
                   lv_used_desc (person.GPRXREF_PERSON_PIDM) :=
                         person.GPRXREF_PERSON_PIDM;
 
+                   gspcrpt.p_apply(dbms_random.string('P',12) || '::'  || to_char(sysdate,'DDMMYYYYHH24MISS') || '::' || person.GPRXREF_PERSON_PIDM, lv_value);
+
                       student := '{' ||
                       '"name" ' || ':' || '"' || f_format_name (person.GPRXREF_PERSON_PIDM, 'FML') || '"' ||
                       ',"id" ' || ':'  || '"' || person.ID || '"' || 
-                      ',"token" ' || ':'  || '"' || person.GPRXREF_PERSON_PIDM || '"' || '},';
+                      ',"token" ' || ':'  || '"' || lv_value || '"' || '},';
                       
                       IF TRUNC(SYSDATE) BETWEEN TRUNC(person.GPRXREF_START_DATE) AND TRUNC (person.GPRXREF_STOP_DATE)
                       THEN

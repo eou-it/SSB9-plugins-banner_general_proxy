@@ -676,6 +676,22 @@ class GeneralSsbProxyService {
         return studentId
     }
 
+    def getStudentPidmFromToken(def token){
+
+        def studentPidm
+
+        def sqlText = ProxyLandingPageApi.GET_STUDENT_PIDM_FROM_TOKEN
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [token, Sql.VARCHAR
+        ]){ id ->
+            studentPidm = id
+        }
+
+        return studentPidm
+    }
+
+
 
     def getStudentListForProxy(def gidm) {
 
