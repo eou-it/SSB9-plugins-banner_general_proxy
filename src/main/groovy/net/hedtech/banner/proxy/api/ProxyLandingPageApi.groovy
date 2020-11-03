@@ -46,11 +46,21 @@ class ProxyLandingPageApi {
   DECLARE
      token varchar2(2000);
      pidm  varchar2(2000);
+     expDate date;
+     timeOut  EXCEPTION;
    BEGIN
    token := ?;
    --
    gspcrpu.p_unapply (token,pidm);
+   
+   expDate := to_date(substr(pidm, instr(pidm, '::', 1, 1) + 2, 14), 'DDMMYYYYHH24MISS') + 15/24/60/60;
+   
+   if expDate < SYSDATE then
+     RAISE timeOut;
+   end if;
+   
    pidm := substr(pidm,instr(pidm,'::', 1, 2) + 2);
+  
 --   
    ? := to_number(pidm);
    EXCEPTION
