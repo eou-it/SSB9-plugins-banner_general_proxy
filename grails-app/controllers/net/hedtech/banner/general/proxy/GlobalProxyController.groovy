@@ -22,6 +22,9 @@ class GlobalProxyController {
     def generalSsbProxyService
     def springSecurityService
 
+    private final String STUDENT_LOCATION_CONFIG_NAME = 'globalProxyAccessURL.STUDENTLOCATION'
+    private final String CONSTANT_BAN9_PROXY_APP_ID = 'BAN9_PROXY'
+
     def landingPage() {
         session["studentSsbBaseURL"] =  getSSSUrl()
 
@@ -145,7 +148,7 @@ class GlobalProxyController {
 
     private def getSSSUrl() {
         try{
-            ConfigProperties configProperties = ConfigProperties.fetchByConfigNameAndAppId('STUDENTLOCATION','GENERAL_SS')
+            ConfigProperties configProperties = ConfigProperties.fetchByConfigNameAndAppId(STUDENT_LOCATION_CONFIG_NAME, CONSTANT_BAN9_PROXY_APP_ID)
             return configProperties? configProperties.configValue  : null
         }catch (SQLException e){
             log.warn("Unable to fetch the configuration STUDENTLOCATION "+e.getMessage())
