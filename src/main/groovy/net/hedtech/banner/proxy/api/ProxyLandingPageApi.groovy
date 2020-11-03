@@ -53,7 +53,7 @@ class ProxyLandingPageApi {
    --
    gspcrpu.p_unapply (token,pidm);
    
-   expDate := to_date(substr(pidm, instr(pidm, '::', 1, 1) + 2, 14), 'DDMMYYYYHH24MISS') + 15/24/60/60;
+   expDate := to_date(substr(pidm, instr(pidm, '::', 1, 1) + 2, 14), 'DDMMYYYYHH24MISS') + 120/24/60/60;
    
    if expDate < SYSDATE then
      RAISE timeOut;
