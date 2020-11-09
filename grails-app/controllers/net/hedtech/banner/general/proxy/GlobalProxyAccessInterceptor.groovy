@@ -67,6 +67,7 @@ class GlobalProxyAccessInterceptor {
                     println "USER-GIDM: " + p_proxyIDM
                     println "URL-PAGE: " + theUrl
 
+                   /*
                     def pages = generalSsbProxyService.getProxyPages(p_proxyIDM,userPidm)
                     println "PAGES: " + pages
 
@@ -77,10 +78,11 @@ class GlobalProxyAccessInterceptor {
                         redirect(controller: "error", action: "accessForbidden")
                         return false
                     }
+                    */
                 }else{
                     //403
-                    redirect(controller: "error", action: "accessForbidden")
-                    return false
+                    //redirect(controller: "error", action: "accessForbidden")
+                    //return false
                 }
             }
         }
