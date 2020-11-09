@@ -4,6 +4,7 @@
 package net.hedtech.banner.general.proxy
 import net.hedtech.banner.security.XssSanitizer
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.context.request.RequestContextHolder
 
 class GlobalProxyAccessInterceptor {
 
@@ -55,7 +56,7 @@ class GlobalProxyAccessInterceptor {
         if (session["globalProxyMode"]) {
             if (!theUrl.contains("proxy") || !theUrl.contains("logout")) {
                 def x = getGlobalProxyConfig().collectMany { k, v -> (v.contains(theUrl)) ? [k] : [] }
-                println "x1->: " + x
+                println "x1->: " + x[0]
                 if(x){
                     println "CHECK-ACCESS"
 
@@ -65,8 +66,21 @@ class GlobalProxyAccessInterceptor {
                     println "USER-PIDM: " + userPidm
                     println "USER-GIDM: " + p_proxyIDM
                     println "URL-PAGE: " + theUrl
+
+                    def pages = generalSsbProxyService.getProxyPages(p_proxyIDM,userPidm)
+                    println "PAGES: " + pages
+
+                    if (!pages.pages.find{it.url == x[0]}){
+                        println "****ERROR*****"
+                        //log.error('Invalid attempt for Id: ' + id)
+                        //403
+                        redirect(controller: "error", action: "accessForbidden")
+                        return false
+                    }
                 }else{
                     //403
+                    redirect(controller: "error", action: "accessForbidden")
+                    return false
                 }
             }
         }
