@@ -4,7 +4,7 @@
 <div ng-class="proxyData.active ? null : 'disabled'" class="tile-wrapper">
     <div class="global-proxy-student-tile">
         <div class="global-proxy-mobile-visible">
-            <global-proxy-mgmt-delete-button item="proxyData" button-title="{{'proxyManagement.button.title.deleteProxy'|i18n}}" />
+            <global-proxy-mgmt-delete-button item="proxyData" delete-function="deleteFunction()" button-title="{{'proxyManagement.button.title.deleteProxy'|i18n}}" />
         </div>
         <div class="tile-icon">
                 <img ng-src="{{'icons/student.png'|webAppResourcePath}}"  alt="TODO"/>
