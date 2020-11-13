@@ -8,6 +8,7 @@ import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.configuration.ConfigProperties
 import net.hedtech.banner.general.person.PersonIdentificationName
 import net.hedtech.banner.general.person.PersonUtility
+import net.hedtech.banner.i18n.MessageHelper
 import org.springframework.security.core.context.SecurityContextHolder
 
 import java.sql.SQLException
@@ -18,7 +19,6 @@ import java.sql.SQLException
 class GlobalProxyController {
     static defaultAction = 'landingPage'
     def globalProxyService
-    def generalSsbProxyManagementService
     def generalSsbProxyService
     def springSecurityService
 
@@ -26,7 +26,7 @@ class GlobalProxyController {
     private final String CONSTANT_BAN9_PROXY_APP_ID = 'BAN9_PROXY'
 
     def landingPage() {
-        session["studentSsbBaseURL"] =  getSSSUrl()
+        session["studentSsbBaseURL"] = getSSSUrl()
 
         render view: "globalProxy"
     }
@@ -41,19 +41,15 @@ class GlobalProxyController {
         if (session["students"] == null) {
 
             // get idm for the global access user
-            if (pidm && !SecurityContextHolder?.context?.authentication?.principal?.gidm){
+            if (pidm && !SecurityContextHolder?.context?.authentication?.principal?.gidm) {
                 def gidm = generalSsbProxyService.getGIDMfromPidmGlobalAccess(pidm)
-                if (gidm){
+                if (gidm) {
                     SecurityContextHolder?.context?.authentication?.principal?.gidm = Integer.valueOf(gidm)
                 }
             }
-
-            def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
-            studentList = generalSsbProxyService.getStudentListForProxy(p_proxyIDM)
-
+            studentList = getStudentList()
             session["students"] = studentList
-        }
-        else {
+        } else {
             studentList = session["students"]
         }
 
@@ -70,7 +66,7 @@ class GlobalProxyController {
             def returnMap = [doesUserHaveActivePreferredEmailAddress: doesUserHaveActivePreferredEmail]
             render returnMap as JSON
         }
-        catch (ApplicationException e) {
+        catch (Exception e) {
             ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
     }
@@ -110,49 +106,86 @@ class GlobalProxyController {
 
             render pageData as JSON
 
-        } catch (ApplicationException e) {
+        } catch (Exception e) {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
     }
 
-    def checkIfGlobalProxyAccessTargetIsValid(){
+    def checkIfGlobalProxyAccessTargetIsValid() {
         def params = request?.JSON ?: params
         try {
             def returnData = [:]
-            if (isGlobalProxyUserTargetingTheirOwnId(params?.targetId)){
+            if (isGlobalProxyUserTargetingTheirOwnId(params?.targetId)) {
                 returnData.isValidBannerId = "true"
                 returnData.isValidToBeProxied = "false"
-            }
-            else{
+            } else {
                 returnData = globalProxyService.checkIfGlobalProxyTargetIsValid(params)
-                if (returnData?.isValidBannerId == "true" && returnData?.isValidToBeProxied == "true"){
+                if (returnData?.isValidBannerId == "true" && returnData?.isValidToBeProxied == "true") {
                     returnData.preferredName = getPreferredNameBasedOnProxyRule(params?.targetId)
                 }
             }
             render returnData as JSON
-        } catch (ApplicationException e) {
+        } catch (Exception e) {
             render ProxyControllerUtility.returnFailureMessage(e) as JSON
         }
     }
 
-    private boolean isGlobalProxyUserTargetingTheirOwnId(targetId){
+    /*
+     Delete Proxy.
+     */
+    def deleteProxy() {
+        def proxy = request?.JSON ?: params
+        def globalPidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+
+        try {
+            proxy.personPidm = generalSsbProxyService?.getStudentPidmFromToken(proxy?.token)
+            proxy.globalPidm = globalPidm
+            proxy.gidm = generalSsbProxyService?.getGIDMfromPidmGlobalAccess(globalPidm)
+
+            def errorStatus = globalProxyService.deleteProxy(proxy)
+            if (errorStatus == 'Y'){
+                throw new ApplicationException(GlobalProxyController.class, MessageHelper.message("globalProxyManagement.delete.failure"))
+            }
+
+            def studentList = getStudentList()
+            session["students"] = studentList
+            render studentList as JSON
+
+        } catch (Exception e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
+    private static boolean isGlobalProxyUserTargetingTheirOwnId(targetId) {
         Integer globalProxyUserPidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
         def globalProxyUser = PersonIdentificationName?.fetchBannerPerson(globalProxyUserPidm)
         globalProxyUser?.bannerId == targetId?.trim()
     }
 
-    private String getPreferredNameBasedOnProxyRule(String bannerId){
+    private static String getPreferredNameBasedOnProxyRule(String bannerId) {
         def bannerPerson = PersonIdentificationName?.fetchBannerPerson(bannerId)
         return PersonUtility?.getPreferredNameForProxyDisplay(bannerPerson?.pidm)
     }
 
     private def getSSSUrl() {
-        try{
+        try {
             ConfigProperties configProperties = ConfigProperties.fetchByConfigNameAndAppId(STUDENT_LOCATION_CONFIG_NAME, CONSTANT_BAN9_PROXY_APP_ID)
-            return configProperties? configProperties.configValue  : null
-        }catch (SQLException e){
-            log.warn("Unable to fetch the configuration STUDENTLOCATION "+e.getMessage())
+            return configProperties ? configProperties.configValue : null
+        } catch (SQLException e) {
+            log.warn("Unable to fetch the configuration STUDENTLOCATION " + e.getMessage())
             return ""
         }
+    }
+
+    private def getStudentList() {
+        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+        def studentList = generalSsbProxyService.getStudentListForProxy(p_proxyIDM)
+
+        //Add Banner ID to map for the Global Proxy to view
+        studentList.students.active.each { it ->
+            it.bannerId = generalSsbProxyService.getStudentIdFromToken(it.id)
+        }
+
+        return studentList
     }
 }

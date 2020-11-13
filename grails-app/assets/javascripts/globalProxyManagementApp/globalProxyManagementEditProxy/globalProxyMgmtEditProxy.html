@@ -7,7 +7,7 @@
             <span class="bold">{{'proxyManagement.label.addProxy'|i18n}}</span>
             <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.addProxyUsingForm'|i18n}}"></proxy-mgmt-popover-tooltip>
         </div>
-        <hr />
+        <hr class="global-proxy-new-proxy-hr"/>
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <global-proxy-mgmt-notification notification-type="info" display-message="{{'globalProxyManagement.message.bannerId'|i18n}}" />
@@ -24,7 +24,7 @@
                 <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.bannerIdErrMsg ? 'field-error error-font-size' : 'no-display')]"
                    role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.bannerIdErrMsg|i18n}}</p>
                 <div ng-class="[(proxy.preferredName ? 'error-font-size' : 'no-display')]"
-                   role="alert" aria-live="assertive">
+                     role="alert" aria-live="assertive">
                     <p class="global-proxy-name-display-add-page">{{proxy.preferredName}}</p>
                 </div>
             </div>
@@ -82,3 +82,4 @@
             <span>{{globalProxyManagementDataValidator.authorizationsErrMsg|i18n}}</span>
         </div>
     </div>
+</div>

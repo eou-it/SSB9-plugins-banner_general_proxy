@@ -9,7 +9,8 @@ globalProxyMgmtAppDirectives.directive('globalProxyMgmtDeleteButton', ['$filter'
             clickFunction: '=',
             item: '=',
             buttonTitle: '@',
-            enabled: '='
+            enabled: '=',
+            deleteFunction: '&'
         },
         templateUrl: $filter('webAppResourcePath')('globalProxyManagementApp/globalProxyManagementHome/globalProxyMgmtDeleteButton.html')
     };

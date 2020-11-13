@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
+ Copyright 2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 globalProxyManagementApp.directive('globalLandingPageProxyTile', ['$state', '$rootScope', '$filter',
     function ($state, $rootScope, $filter) {
@@ -7,7 +7,8 @@ globalProxyManagementApp.directive('globalLandingPageProxyTile', ['$state', '$ro
         restrict: 'E',
         templateUrl: '../assets/globalProxyManagementApp/globalProxyManagementHome/globalProxyMgmtStudentTile.html',
         scope: {
-            proxyData: '='
+            proxyData: '=',
+            deleteFunction: '&'
         },
         link: function(scope) {
             scope.onTileSelect = function(pageUrl) {

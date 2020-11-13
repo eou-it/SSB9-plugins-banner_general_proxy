@@ -143,4 +143,82 @@ BEGIN
   ?           := return_json;
 END;
 """
+
+    public final static String DELETE_GLOBAL_PROXY_RELATIONSHIP = """
+DECLARE
+  p_proxyIDM gpbprxy.gpbprxy_proxy_idm%TYPE := ?;
+  p_personPIDM spriden.spriden_pidm%TYPE    := ?;
+  global_pidm spriden.spriden_pidm%TYPE     := ?;
+  error_status VARCHAR2(1)                  := 'N';
+  CURSOR C_PageList
+    RETURN GPRAUTH%ROWTYPE
+  IS
+    SELECT GPRAUTH.*
+    FROM GPRAUTH
+    WHERE GPRAUTH_PROXY_IDM = p_proxyIDM
+    AND GPRAUTH_PERSON_PIDM = p_personPIDM;
+  lv_GPBPRXY_rec gp_gpbprxy.gpbprxy_rec;
+  lv_GPBPRXY_ref gp_gpbprxy.gpbprxy_ref;
+  lv_GPRXREF_rec gp_gprxref.gprxref_rec;
+  lv_GPRXREF_ref gp_gprxref.gprxref_ref;
+  proxy_access_cookie OWA_COOKIE.cookie;
+  proxy_access_value VARCHAR2 (255);
+  lv_hold_rowid gb_common.internal_record_id_type;
+BEGIN
+
+  -- Get the proxy record and verify that it is compatible with the current user
+  lv_GPBPRXY_ref := gp_gpbprxy.F_Query_One (p_proxyIDM);
+  FETCH lv_GPBPRXY_ref INTO lv_GPBPRXY_rec;
+  CLOSE lv_GPBPRXY_ref;
+  IF lv_GPBPRXY_rec.R_PROXY_PIDM <> global_pidm THEN
+    error_status                 := 'Y';
+  END IF;
+  
+  -- GLOBAL DELETE_RELATIONSHIP e-mail
+  -- Need to send letter before we actually delete
+  IF error_status = 'N' THEN
+    SELECT ROWID
+    INTO lv_hold_rowid
+    FROM gprxref
+    WHERE gprxref_proxy_idm = p_proxyIDM
+    AND gprxref_person_pidm = p_personPIDM;
+    -- Send message with generic login URL since no action is required
+    gp_gpbeltr.P_Create ( p_syst_code => 'PROXY_GLOBAL_ACCESS', p_ctyp_code => 'DELETE_RELATIONSHIP', p_ctyp_url => NULL, p_ctyp_exp_date => NULL, p_ctyp_exe_date => NULL, p_transmit_date => NULL, p_proxy_idm => p_proxyIDM, p_proxy_old_data => bwgkprxy.F_GetSpridenID(global_pidm), p_proxy_new_data => bwgkprxy.F_GetSpridenID(p_personPIDM), p_person_pidm => p_personPIDM, p_user_id => goksels.f_get_ssb_id_context, p_create_date => SYSDATE, p_create_user => goksels.f_get_ssb_id_context, p_rowid_out => lv_hold_rowid );
+    gb_common.P_Commit;
+    bwgkprxy.P_SendEmail(lv_hold_rowid);
+    IF NVL(bwgkprxy.F_GetOption ('DELETE_HISTORY',NULL,'PROXY_GLOBAL_ACCESS'),'N') <> 'Y' THEN
+      -- update to prior date instead of deleting all records
+      gp_gprxref.p_update( p_proxy_idm => p_proxyIDM, p_person_pidm => p_personPIDM, p_start_date => TRUNC(SYSDATE - 1), p_stop_date => TRUNC(SYSDATE - 1), p_user_id => goksels.f_get_ssb_id_context);
+      gb_common.P_Commit;
+    ELSE
+      -- Delete history records
+      DELETE
+      FROM gprhist
+      WHERE gprhist_proxy_idm = p_proxyIDM
+      AND gprhist_person_pidm = p_personPIDM;
+      COMMIT;
+      
+      -- Delete authorization records
+      FOR page IN C_PageList
+      LOOP
+        gp_gprauth.P_Delete (p_proxy_idm => p_proxyIDM, p_person_pidm => p_personPIDM, p_page_name => page.GPRAUTH_PAGE_NAME);
+      END LOOP;
+      gb_common.P_Commit;
+      
+      -- Delete relationship record
+      lv_GPRXREF_ref := gp_gprxref.F_Query_One (p_proxyIDM, p_personPIDM);
+      FETCH lv_GPRXREF_ref INTO lv_GPRXREF_rec;
+      IF lv_GPRXREF_ref%FOUND THEN
+        gp_gprxref.P_Delete (p_proxy_idm => p_proxyIDM, p_person_pidm => p_personPIDM);
+        gb_common.P_Commit;
+      ELSE
+        error_status := 'Y';
+      END IF;
+      CLOSE lv_GPRXREF_ref;
+    END IF;
+  END IF;
+  ? := error_status;
+END;
+"""
+
 }

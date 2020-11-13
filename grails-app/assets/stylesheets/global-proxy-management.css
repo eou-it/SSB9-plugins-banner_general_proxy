@@ -1,12 +1,16 @@
 /********************************************************************************
   Copyright 2020 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
-.global-proxy-desktop-visible{
-    visibility: visible;
-    position: relative;
-    height: auto;
-    width: auto;
-    margin: 0px;
+.global-proxy-tablet-visible{
+    visibility: hidden;
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
 }
 
 .global-proxy-mobile-visible{
@@ -21,6 +25,17 @@
     border: 0;
 }
 
+.global-proxy-desktop-visible{
+    visibility: visible;
+    position: relative;
+    height: auto;
+    width: auto;
+    margin: 0px;
+    overflow: initial;
+    clip: initial;
+    padding: initial;
+}
+
 .center-contents {
     padding-bottom: 50px;
     top: 50%;
@@ -32,7 +47,7 @@
 
 .global-proxy-heading {
     font-family: OpenSans-semibold;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .global-proxy-subheading {
@@ -48,6 +63,12 @@
 .global-proxy-no-proxies-yet-add-new-button {
     margin-top: 25px;
     font-size: 16px;
+}
+
+.global-proxy-existing-proxies-add-new-button {
+    height: 44px;
+    font-size: 16px;
+    float: right;
 }
 
 .global-proxy-landing-page-notification-box {
@@ -68,7 +89,12 @@
     margin: 30px 50px 100px;
 }
 
-.global-proxy-edit-content hr {
+.global-proxy-new-proxy-hr {
+    margin-left: -50px;
+    margin-right: -50px;
+}
+
+.global-proxy-extend-hr {
     margin-left: -50px;
     margin-right: -50px;
 }
@@ -108,6 +134,45 @@
     border: 1px solid #026BC8;
 }
 
+.global-proxy-student-tile{
+    display: flex;
+}
+
+.global-proxy-student-tile > div {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.global-proxy-student-tile hr {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.global-proxy-student-tile-student-info {
+    margin-right: 15% !important;
+}
+
+.global-proxy-student-tile .tile-icon {
+    margin-right: 49px !important;
+}
+
+.global-proxy-student-tile .delete-btn {
+    padding: 0 !important;
+    margin-left: 49px !important;
+}
+
+.global-proxy-edit-content > .row {
+    display: flex;
+}
+
+.global-proxy-heading-container{
+    margin: auto;
+}
+
+.global-proxy-edit-content > .proxy-mgmt-button-container {
+    margin: auto;
+}
+
 /*Tablet device*/
 @media screen and (min-width: 768px) and (max-width: 1023px) {
     .global-proxy-desktop-visible{
@@ -124,11 +189,30 @@
     }
 
     .global-proxy-mobile-visible{
+        visibility: hidden;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+    }
+
+    .global-proxy-tablet-visible{
         visibility: visible;
         position: relative;
         height: auto;
         width: auto;
         margin: 0px;
+        overflow: initial;
+        clip: initial;
+        padding: initial;
+    }
+
+    .global-proxy-student-tile-student-info {
+        margin-right: 10% !important;
     }
 }
 
@@ -145,7 +229,27 @@
         font-size: 16px;
     }
 
+    .global-proxy-existing-proxies-add-new-button {
+        margin-top: -10px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        width: 100%;
+        height: 48px;
+    }
+
     .global-proxy-desktop-visible{
+        visibility: hidden;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+    }
+
+    .global-proxy-tablet-visible{
         visibility: hidden;
         position: absolute;
         overflow: hidden;
@@ -163,5 +267,25 @@
         height: auto;
         width: auto;
         margin: 0px;
+    }
+
+    .global-proxy-extend-hr {
+        display: none;
+    }
+
+    .global-proxy-student-tile{
+        display: inherit;
+    }
+
+    .global-proxy-student-tile .delete-btn {
+        float: right;
+    }
+
+    .global-proxy-student-tile  .tile-icon,.global-proxy-student-tile-student-info {
+        margin-bottom: 30px !important;
+    }
+
+    .global-proxy-heading-container{
+        display: none;
     }
 }

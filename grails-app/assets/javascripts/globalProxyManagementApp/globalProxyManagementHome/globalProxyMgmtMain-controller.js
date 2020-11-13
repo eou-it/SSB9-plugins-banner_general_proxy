@@ -22,10 +22,30 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
         },
 
         refreshProxies = function (response) {
-            $scope.proxies = response.proxies;
+            $scope.students = response.students;
             $scope.proxiesLoaded = true;
         },
+        updateTiles = function(){
+            $scope.proxyTiles = [];
 
+            var addStudentProxyTile = function(student, isActive) {
+                 $scope.proxyTiles.push(
+                     {
+                         desc: student.name,
+                         pages : student.pages,
+                         selectedPage: {code: null, description: null},
+                         id: student.id,
+                         active: isActive,
+                         token: student.token,
+                         bannerId: student.bannerId
+                     }
+                 );
+             };
+
+             _.each($scope.students.active, function(student) {
+                 addStudentProxyTile(student, true);
+             });
+        },
         init = function() {
 
             globalProxyMgmtAppService.getProxyList().$promise.then(function (response) {
@@ -38,26 +58,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
                     $rootScope.studenSSB = $('meta[name=studentSsbBaseURL]').attr("content")
                 }
 
-
-                var addStudentProxyTile = function(student, isActive) {
-                    $scope.proxyTiles.push(
-                        {
-                            desc: student.name,
-                            pages : student.pages,
-                            selectedPage: {code: null, description: null},
-                            id: student.id,
-                            active: isActive,
-                            token: student.token
-                        }
-                    );
-                };
-
-                $scope.students = response.students;
-
-                _.each($scope.students.active, function(student) {
-                    addStudentProxyTile(student, true);
-                });
-
+                updateTiles()
 
             });
 
@@ -82,13 +83,13 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
         $scope.confirmDeleteProxy = function (proxy) {
             var deleteProxy = function () {
                 $scope.cancelNotification();
-
                 globalProxyMgmtAppService.deleteProxy(proxy).$promise.then(function (response) {
-
                     if (response.failure) {
                         notificationCenterService.displayNotification(response.message, $scope.notificationErrorType);
                     } else {
+                        notificationCenterService.displayNotification($filter('i18n')('globalProxyManagement.delete.success'), $scope.notificationSuccessType);
                         refreshProxies(response);
+                        updateTiles()
                     }
                 });
             };
@@ -116,7 +117,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
         //$scope.enableDeleteRelationship = proxyConfigResolve.enableDeleteRelationship;
 
         $scope.proxyCanBeDeleted = function(proxy){
-            return ($scope.enableDeleteRelationship && (proxy.deleteAllowedPerLastView === 'Y'));
+            return true
         };
 
         // INITIALIZE
