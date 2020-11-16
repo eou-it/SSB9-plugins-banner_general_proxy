@@ -158,7 +158,15 @@ class ProxyController {
     private def getGSSUrl() {
         try{
             ConfigProperties configProperties = ConfigProperties.fetchByConfigNameAndAppId('GENERALLOCATION','GENERAL_SS')
-            return configProperties? configProperties.configValue  : null
+            String mepCode = session.getAttribute( 'mep' )
+            if (mepCode) {
+                log.debug( "mepCode $mepCode" )
+                log.debug( "URL to redirect $configProperties.configValue&mepCode=$mepCode" )
+                return configProperties? "$configProperties.configValue&mepCode=$mepCode"  : null
+            }else{
+                log.debug( "URL to redirect $configProperties.configValue" )
+                return configProperties? configProperties.configValue  : null
+            }
         }catch (SQLException e){
             log.warn("Unable to fetch the configuration GENERALLOCATION "+e.getMessage())
             return ""

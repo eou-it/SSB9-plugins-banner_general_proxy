@@ -49,9 +49,15 @@ globalProxyManagementApp.directive('globalLandingPageProxyTile', ['$state', '$ro
                         if (url.indexOf("proxy") > -1) {
                                 $state.go(url, {id: proxyData.id});
                         } else{
-                            window.open(
-                                encodeURI($rootScope.studenSSB + "/proxy/navigate?url=" + url + "&token=" + scope.proxyData.token),"_self"
-                            );
+                            if (!!window.mepCode){
+                                window.open(
+                                encodeURI($rootScope.studenSSB + "/proxy/navigate?url=" + url + "&token=" + scope.proxyData.token + "&mepCode=" + window.mepCode),"_self"
+                                )
+                            }else{
+                                window.open(
+                                    encodeURI($rootScope.studenSSB + "/proxy/navigate?url=" + url + "&token=" + scope.proxyData.token),"_self"
+                                )
+                            }
                         }
                 };
 
