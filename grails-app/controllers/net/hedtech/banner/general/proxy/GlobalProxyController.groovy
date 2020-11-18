@@ -13,9 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder
 
 import java.sql.SQLException
 
-/**
- * Controller for Global Proxy.
- */
 class GlobalProxyController {
     static defaultAction = 'landingPage'
     def globalProxyService
@@ -130,9 +127,6 @@ class GlobalProxyController {
         }
     }
 
-    /*
-     Delete Proxy.
-     */
     def deleteProxy() {
         def proxy = request?.JSON ?: params
         def globalPidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
@@ -156,15 +150,46 @@ class GlobalProxyController {
         }
     }
 
+    def createGlobalProxyRelationship(){
+        def proxy = request?.JSON ?: params
+        def globalPidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        def userEmailFirstNameAndLastName = globalProxyService.getUserActivePreferredEmailFirstNameAndLastName(globalPidm)
+
+        try {
+            def gidmParams = [globalPidm: globalPidm, email: userEmailFirstNameAndLastName.email, lastName: userEmailFirstNameAndLastName.lastName, firstName: userEmailFirstNameAndLastName.firstName]
+            proxy.gidm = globalProxyService.getGlobalProxyGidm(gidmParams)
+            proxy.globalPidm = globalPidm
+
+            if (proxy.gidm){
+                def errorInformation = globalProxyService.createProxy(proxy)
+
+                if (errorInformation.errorStatus == 'Y'){
+                    def errorMessage = errorInformation.errorMsg != "PROXYEXISTS" ? "globalProxyManagement.create." + errorInformation.errorMsg : "globalProxyManagement.create.failure"
+                    throw new ApplicationException(GlobalProxyController.class, MessageHelper.message(errorMessage))
+                }
+
+                def studentList = getStudentList()
+                session["students"] = studentList
+                render studentList as JSON
+            }
+            else{
+                throw new ApplicationException(GlobalProxyController.class, MessageHelper.message("globalProxyManagement.create.failure"))
+            }
+
+        } catch (Exception e) {
+            render ProxyControllerUtility.returnFailureMessage(e) as JSON
+        }
+    }
+
     private static boolean isGlobalProxyUserTargetingTheirOwnId(targetId) {
         Integer globalProxyUserPidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
         def globalProxyUser = PersonIdentificationName?.fetchBannerPerson(globalProxyUserPidm)
         globalProxyUser?.bannerId == targetId?.trim()
     }
 
-    private static String getPreferredNameBasedOnProxyRule(String bannerId) {
-        def bannerPerson = PersonIdentificationName?.fetchBannerPerson(bannerId)
-        return PersonUtility?.getPreferredNameForProxyDisplay(bannerPerson?.pidm)
+    private String getPreferredNameBasedOnProxyRule(String bannerId) {
+        def pidm = globalProxyService.getTargetPidmFromCaseInsensitiveId(bannerId)
+        return pidm != "NULL" ?  PersonUtility?.getPreferredNameForProxyDisplay(Integer?.valueOf(pidm)) : ""
     }
 
     private def getSSSUrl() {

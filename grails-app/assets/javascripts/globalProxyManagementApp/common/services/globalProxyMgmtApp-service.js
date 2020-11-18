@@ -35,7 +35,7 @@ globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$f
 
     this.createProxy = function (entity) {
         return $resource('../ssb/:controller/:action',
-            {controller: 'ProxyManagement', action: 'createUpdateProxy'}, {delete: {method:'POST'}}).save(entity);
+            {controller: 'GlobalProxy', action: 'createGlobalProxyRelationship'}, {delete: {method:'POST'}}).save(entity);
     };
 
     this.updateProxy = function (entity) {
