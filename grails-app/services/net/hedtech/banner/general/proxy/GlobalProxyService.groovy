@@ -17,6 +17,7 @@ import java.sql.SQLException
 @Transactional
 class GlobalProxyService {
     def personEmailService
+    def personIdentificationNameCurrentService
     def sessionFactory                     // injected by Spring
     def dataSource
 
@@ -24,6 +25,12 @@ class GlobalProxyService {
         def userPreferredEmail = personEmailService.findPreferredEmailAddress(pidm)
         def doesUserHaveActivePreferredEmail = userPreferredEmail != null
         doesUserHaveActivePreferredEmail
+    }
+
+    def getUserActivePreferredEmailFirstNameAndLastName(pidm){
+        def userPreferredEmail = personEmailService?.findPreferredEmailAddress(pidm)?.emailAddress
+        def bannerPersonName = personIdentificationNameCurrentService?.getCurrentNameByPidm(pidm)
+        return [email: userPreferredEmail, firstName: bannerPersonName?.firstName, lastName: bannerPersonName?.lastName]
     }
 
     def getRelationshipOptions(pidm) {
@@ -115,6 +122,71 @@ class GlobalProxyService {
         }
 
         return errorStatus
+    }
+
+    def createProxy(params) {
+        def returnMessage = [:]
+        def errorStatus = ''
+        def errorMsg = ''
+
+        def sqlText = GlobalProxyManagementApi.CREATE_GLOBAL_PROXY()
+
+        try {
+            def sql = new Sql(sessionFactory.getCurrentSession().connection())
+            sql.call(sqlText, [params.gidm, params.globalPidm, params.retp, params.targetBannerId, Sql.VARCHAR, Sql.VARCHAR]) {
+                returnErrorStatus, returnErrorMsg ->
+                    errorStatus = returnErrorStatus
+                    errorMsg = returnErrorMsg
+
+            }
+        }
+        catch (e) {
+            log.error("The following error occurred while the Global Proxy was attempting to create a relationship: " + e.printStackTrace())
+            throw new ApplicationException(GlobalProxyService.class, e)
+        }
+
+        returnMessage = [errStatus: errorStatus, errMsg: errorMsg]
+        return returnMessage
+    }
+
+    def getGlobalProxyGidm(params) {
+        def gidm = ''
+
+        def sqlText = GlobalProxyManagementApi.GET_GLOBAL_PROXY_GIDM()
+
+        try {
+            def sql = new Sql(sessionFactory.getCurrentSession().connection())
+            sql.call(sqlText, [params.globalPidm, params.email, params.lastName, params.firstName, Sql.VARCHAR]) {
+                returnGidm ->
+                    gidm = returnGidm
+            }
+        }
+        catch (e) {
+            log.error("The following error occurred while the Global Proxy was attempting to get the Global Proxy Gidm: " + e.printStackTrace())
+            throw new ApplicationException(GlobalProxyService.class, e)
+        }
+
+        return gidm
+    }
+
+    def getTargetPidmFromCaseInsensitiveId(caseInsensitiveBannerId){
+        def pidm = "NULL"
+
+        def sqlText = GlobalProxyManagementApi.GET_TARGET_PIDM_FROM_CASE_INSENSITIVE_ID
+
+        try {
+            def sql = new Sql(sessionFactory.getCurrentSession().connection())
+            sql.call(sqlText, [caseInsensitiveBannerId, Sql.VARCHAR]) {
+                returnPidm ->
+                    pidm = returnPidm
+            }
+        }
+        catch (e) {
+            log.error("The following error occurred while the Global Proxy was attempting to get the preferred name of a targeted student to proxy: " + e.printStackTrace())
+            throw new ApplicationException(GlobalProxyService.class, e)
+        }
+
+        return pidm
     }
 
 }

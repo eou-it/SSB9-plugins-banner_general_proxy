@@ -330,7 +330,28 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                     setPreferredName(response.preferredName);
 
                     if ($scope.globalProxyManagementDataValidator.isValidProxyData($scope.proxy, true)) {
-                        console.log("SAVED");
+                        globalProxyMgmtAppService.createProxy({retp: $scope.proxy.p_retp_code, targetBannerId: $scope.proxy.targetId}).$promise.then(function (response) {
+                            if (response.failure) {
+                                notificationCenterService.displayNotification(response.message, $scope.notificationErrorType);
+                            } else {
+                                var notifications = [],
+                                    doStateGoSuccess = function () {
+                                        formDirty = false;
+
+                                        notifications.push({
+                                            message: 'globalProxyManagement.create.success',
+                                            messageType: $scope.notificationSuccessType,
+                                            flashType: $scope.flashNotification
+                                        });
+
+                                        $state.go('home',
+                                            {onLoadNotifications: notifications},
+                                            {reload: true, inherit: false, notify: true}
+                                        );
+                                    };
+                                doStateGoSuccess();
+                            }
+                        });
                     } else {
                         globalProxyMgmtErrorService.displayMessages();
                     }
@@ -385,6 +406,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
 
         let $stateChangeStartUnbind = $scope.$on('$stateChangeStart', function (event, toState) {
             if (formDirty) {
+                debugger;
                 event.preventDefault();
                 showSaveCancelMessage(toState)
             }
@@ -397,7 +419,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         }, true);
 
         $scope.$watch('proxyAuxData', function (newVal) {
-            if (formDirty !== true){
+            if (formDirty !== true) {
                 formDirty = !angular.equals(newVal, beforeUpdateProxyAuxData);
             }
         }, true);
