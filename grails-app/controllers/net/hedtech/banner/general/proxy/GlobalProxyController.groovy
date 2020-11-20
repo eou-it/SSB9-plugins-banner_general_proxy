@@ -204,12 +204,7 @@ class GlobalProxyController {
 
     private def getStudentList() {
         def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
-        def studentList = generalSsbProxyService.getStudentListForProxy(p_proxyIDM)
-
-        //Add Banner ID to map for the Global Proxy to view
-        studentList.students.active.each { it ->
-            it.bannerId = generalSsbProxyService.getStudentIdFromToken(it.id)
-        }
+        def studentList = globalProxyService.getStudentListForGlobalProxy(p_proxyIDM)
 
         return studentList
     }

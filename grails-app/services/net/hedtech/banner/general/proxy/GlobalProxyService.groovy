@@ -8,15 +8,16 @@ import groovy.json.JsonSlurper
 import groovy.sql.Sql
 import groovy.util.logging.Slf4j
 import net.hedtech.banner.exceptions.ApplicationException
+import net.hedtech.banner.general.person.PersonUtility
 import net.hedtech.banner.proxy.api.GlobalProxyManagementApi
-import net.hedtech.banner.proxy.api.ProxyManagementApi
-
-import java.sql.SQLException
+import net.hedtech.banner.proxy.api.ProxyLandingPageApi
+import org.springframework.security.core.context.SecurityContextHolder
 
 @Slf4j
 @Transactional
 class GlobalProxyService {
     def personEmailService
+    def generalSsbProxyService
     def personIdentificationNameCurrentService
     def sessionFactory                     // injected by Spring
     def dataSource
@@ -27,7 +28,7 @@ class GlobalProxyService {
         doesUserHaveActivePreferredEmail
     }
 
-    def getUserActivePreferredEmailFirstNameAndLastName(pidm){
+    def getUserActivePreferredEmailFirstNameAndLastName(pidm) {
         def userPreferredEmail = personEmailService?.findPreferredEmailAddress(pidm)?.emailAddress
         def bannerPersonName = personIdentificationNameCurrentService?.getCurrentNameByPidm(pidm)
         return [email: userPreferredEmail, firstName: bannerPersonName?.firstName, lastName: bannerPersonName?.lastName]
@@ -169,7 +170,7 @@ class GlobalProxyService {
         return gidm
     }
 
-    def getTargetPidmFromCaseInsensitiveId(caseInsensitiveBannerId){
+    def getTargetPidmFromCaseInsensitiveId(caseInsensitiveBannerId) {
         def pidm = "NULL"
 
         def sqlText = GlobalProxyManagementApi.GET_TARGET_PIDM_FROM_CASE_INSENSITIVE_ID
@@ -187,6 +188,34 @@ class GlobalProxyService {
         }
 
         return pidm
+    }
+
+    def getStudentListForGlobalProxy(def gidm) {
+
+        def studentList = ""
+
+        def sqlText = ProxyLandingPageApi.STUDENT_LIST_FOR_PROXY
+
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        sql.call(sqlText, [gidm, Sql.VARCHAR
+        ]) { studentListJson ->
+            studentList = studentListJson
+        }
+
+        def studentsListMap = new JsonSlurper().parseText(studentList)
+
+        studentsListMap << generalSsbProxyService.getPersonalInformation(SecurityContextHolder?.context?.authentication?.principal?.gidm)
+
+        studentsListMap.students.active.each { it ->
+            def pidm = PersonUtility.getPerson(it.id).pidm
+            it.bannerId = it.id
+            it.id = generalSsbProxyService.getToken(it.id)
+            def pages = generalSsbProxyService.getProxyPages(gidm, pidm)?.pages
+            it.pages = pages
+            it.name = PersonUtility.getPreferredNameForProxyDisplay(pidm)
+        }
+
+        return studentsListMap
     }
 
 }
