@@ -96,12 +96,12 @@ class ProxyController {
         session['proxyWebRules'] = proxyConfigurationService.getFinaidConfigurationsBasedOnRole()
     }
 
-    def returnMe(){
+    def onReturn(){
         if (session["loggedUserPidm"]) {
             springSecurityService?.getAuthentication()?.user?.pidm = session["loggedUserPidm"]
             session["globalProxyMode"] = false
             RequestContextHolder.currentRequestAttributes()?.request?.session.setAttribute("guestUser", false)
-            render "PIDM context set"
+            render "context set"
         }else{
             response.sendError( 403 )
             return
