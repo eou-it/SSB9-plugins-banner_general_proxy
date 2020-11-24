@@ -276,60 +276,6 @@ END;
       lv_last spriden.spriden_last_name%TYPE := ?;
       lv_first spriden.spriden_first_name %TYPE := ?;
       p_proxyIDM gpbprxy.gpbprxy_proxy_idm%TYPE;
-      -- to apply mep code to Banner9 url for proxy e-mail communication
-      FUNCTION F_ApplyMepCodeToProxyURL(
-          endpoint IN VARCHAR2)
-        RETURN VARCHAR2
-      IS
-      BEGIN
-        IF g\$_vpdi_security.G\$_IS_MIF_ENABLED THEN
-          IF INSTR(endpoint,'?') != 0 THEN
-            RETURN REPLACE(endpoint,'?','?mepCode='|| g\$_vpdi_security.G\$_VPDI_GET_INST_CODE_FNC || '&');
-          ELSE
-            RETURN (endpoint || '?mepCode=' || g\$_vpdi_security.G\$_VPDI_GET_INST_CODE_FNC);
-          END IF;
-        ELSE
-          RETURN endpoint;
-        END IF;
-      END F_ApplyMepCodeToProxyURL;
-      --
-      --
-      -- Get the URL for accessing Banner 9 Proxy
-    FUNCTION F_getProxyURL(
-        p_action VARCHAR2 DEFAULT NULL)
-      RETURN VARCHAR2
-    IS
-      CURSOR gurocfg_c ( p_appid_in gurocfg.gurocfg_gubappl_app_id%TYPE, p_config_in gurocfg.gurocfg_name%TYPE)
-      IS
-        SELECT gurocfg_value
-        FROM gurocfg
-        WHERE gurocfg_gubappl_app_id = p_appid_in
-        AND gurocfg_name             = p_config_in
-        AND gurocfg_type             = 'string';
-      lv_use_ban9  VARCHAR2(1);
-      lv_key       VARCHAR2(1000);
-      lv_endpoint  VARCHAR2(60);
-      lv_proxy_url VARCHAR2(1000);
-    BEGIN
-      --
-      OPEN gurocfg_c('BAN9_PROXY', 'proxyAccessURL.LOCATION');
-      FETCH gurocfg_c INTO lv_proxy_url;
-      IF gurocfg_c%NOTFOUND THEN
-        raise_application_error(-20103, 'Could not build URL for proxy e-mail communication');
-      END IF;
-      CLOSE gurocfg_c;
-      lv_key := 'proxyAccessURL.' || p_action;
-      OPEN gurocfg_c('BAN9_PROXY', lv_key);
-      FETCH gurocfg_c INTO lv_endpoint;
-      -- process mep context
-      -- it adds the mepCode parameter if system is under mep context
-      lv_endpoint := F_ApplyMepCodeToProxyURL(lv_endpoint);
-      IF gurocfg_c%NOTFOUND THEN
-        raise_application_error(-20103, 'Could not build URL for proxy e-mail communication');
-      END IF;
-      CLOSE gurocfg_c;
-      RETURN lv_proxy_url || lv_endpoint;
-    END F_getProxyURL;
     FUNCTION F_GenerateIDM
       RETURN NUMBER
     IS
@@ -421,9 +367,6 @@ END;
       gspcrpt.p_saltedhash( lv_salt, lv_salt, lv_pinhash);
       gp_gpbprxy.P_Create ( p_proxy_idm => lv_proxyIDM, p_email_address => lv_email, p_last_name => p_last, p_first_name => p_first, p_proxy_pidm => p_pidm, p_pin => lv_pinhash, p_pin_disabled_ind => 'C', p_salt => lv_salt, p_entity_cde => bwgkprxy.F_GetSpridenEntity (p_pidm), p_id => bwgkprxy.F_GetSpridenID (p_pidm), p_email_ver_date => NULL, p_pin_exp_date => NULL, p_create_user => goksels.f_get_ssb_id_context, p_create_date => SYSDATE, p_user_id => goksels.f_get_ssb_id_context, p_opt_out_adv_date => NULL, p_rowid_out => lv_hold_rowid );
       gp_gpbeltr.P_Create ( p_syst_code => global_syst, p_ctyp_code => 'NEW_PROXY', p_ctyp_url => NULL, p_ctyp_exp_date => SYSDATE + bwgkprxy.F_GetOption ('ACTION_VALID_DAYS'), p_ctyp_exe_date => NULL, p_transmit_date => NULL, p_proxy_idm => lv_proxyIDM, p_proxy_old_data => NULL, p_proxy_new_data => NULL, p_person_pidm => global_pidm, p_user_id => goksels.f_get_ssb_id_context, p_create_date => SYSDATE, p_create_user => goksels.f_get_ssb_id_context, p_rowid_out => lv_hold_rowid );
-      gp_gpbeltr.P_Update ( p_ctyp_code => 'NEW_PROXY_NOA', p_ctyp_url => F_getProxyURL('NEW_PROXY') || twbkbssf.F_Encode (lv_hold_rowid), p_user_id => goksels.f_get_ssb_id_context, p_rowid => lv_hold_rowid );
-      gb_common.P_Commit;
-      gp_gpbeltr.P_Create ( p_syst_code => global_syst, p_ctyp_code => 'NEW_PROXY_ACCESS_CODE', p_ctyp_url => NULL, p_ctyp_exp_date => SYSDATE + bwgkprxy.F_GetOption ('ACTION_VALID_DAYS'), p_ctyp_exe_date => NULL, p_transmit_date => NULL, p_proxy_idm => lv_proxyIDM, p_proxy_old_data => NULL, p_proxy_new_data => NULL, p_person_pidm => global_pidm, p_user_id => goksels.f_get_ssb_id_context, p_create_date => SYSDATE, p_create_user => goksels.f_get_ssb_id_context, p_rowid_out => lv_hold_rowid );
       gb_common.P_Commit;
       RETURN lv_proxyIDM;
     END F_GetProxyIDM;
