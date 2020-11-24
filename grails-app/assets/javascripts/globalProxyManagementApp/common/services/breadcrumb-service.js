@@ -11,7 +11,7 @@ globalProxyManagementApp.service( 'breadcrumbService', ['$filter', '$rootScope',
         GLOBAL_PROXY_PAGE_URL;
 
     $rootScope.applicationContextRoot = $('meta[name=applicationContextRoot]').attr("content");
-    GEN_LANDING_PAGE_SIGNATURE = new RegExp($rootScope.applicationContextRoot +'/ssb/general$');
+    GEN_LANDING_PAGE_SIGNATURE = new RegExp($rootScope.applicationContextRoot +'/ssb/general#$');
     GLOBAL_PROXY_PAGE_URL = $rootScope.applicationContextRoot  + '/ssb/globalProxy' + '#';
 
     this.reset = function() {
