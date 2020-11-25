@@ -137,11 +137,11 @@ class GlobalProxyController {
             proxy.gidm = generalSsbProxyService?.getGIDMfromPidmGlobalAccess(globalPidm)
 
             def errorStatus = globalProxyService.deleteProxy(proxy)
-            if (errorStatus == 'Y'){
+            if (errorStatus == 'Y') {
                 throw new ApplicationException(GlobalProxyController.class, MessageHelper.message("globalProxyManagement.delete.failure"))
             }
 
-            def studentList = getStudentList()
+            def studentList = getStudentList(proxy.gidm)
             session["students"] = studentList
             render studentList as JSON
 
@@ -150,7 +150,7 @@ class GlobalProxyController {
         }
     }
 
-    def createGlobalProxyRelationship(){
+    def createGlobalProxyRelationship() {
         def proxy = request?.JSON ?: params
         def globalPidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
         def userEmailFirstNameAndLastName = globalProxyService.getUserActivePreferredEmailFirstNameAndLastName(globalPidm)
@@ -160,19 +160,18 @@ class GlobalProxyController {
             proxy.gidm = globalProxyService.getGlobalProxyGidm(gidmParams)
             proxy.globalPidm = globalPidm
 
-            if (proxy.gidm){
+            if (proxy.gidm) {
                 def errorInformation = globalProxyService.createProxy(proxy)
 
-                if (errorInformation.errorStatus == 'Y'){
+                if (errorInformation.errorStatus == 'Y') {
                     def errorMessage = errorInformation.errorMsg != "PROXYEXISTS" ? "globalProxyManagement.create." + errorInformation.errorMsg : "globalProxyManagement.create.failure"
                     throw new ApplicationException(GlobalProxyController.class, MessageHelper.message(errorMessage))
                 }
 
-                def studentList = getStudentList()
+                def studentList = getStudentList(proxy.gidm)
                 session["students"] = studentList
                 render studentList as JSON
-            }
-            else{
+            } else {
                 throw new ApplicationException(GlobalProxyController.class, MessageHelper.message("globalProxyManagement.create.failure"))
             }
 
@@ -189,7 +188,7 @@ class GlobalProxyController {
 
     private String getPreferredNameBasedOnProxyRule(String bannerId) {
         def pidm = globalProxyService.getTargetPidmFromCaseInsensitiveId(bannerId)
-        return pidm != "NULL" ?  PersonUtility?.getPreferredNameForProxyDisplay(Integer?.valueOf(pidm)) : ""
+        return pidm != "NULL" ? PersonUtility?.getPreferredNameForProxyDisplay(Integer?.valueOf(pidm)) : ""
     }
 
     private def getSSSUrl() {
@@ -202,10 +201,9 @@ class GlobalProxyController {
         }
     }
 
-    private def getStudentList() {
-        def p_proxyIDM = SecurityContextHolder?.context?.authentication?.principal?.gidm
+    private def getStudentList(gidm = null) {
+        def p_proxyIDM = gidm ? gidm : SecurityContextHolder?.context?.authentication?.principal?.gidm
         def studentList = globalProxyService.getStudentListForGlobalProxy(p_proxyIDM)
-
         return studentList
     }
 }
