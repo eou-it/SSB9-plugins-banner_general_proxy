@@ -163,8 +163,8 @@ class GlobalProxyController {
             if (proxy.gidm) {
                 def errorInformation = globalProxyService.createProxy(proxy)
 
-                if (errorInformation.errorStatus == 'Y') {
-                    def errorMessage = errorInformation.errorMsg != "PROXYEXISTS" ? "globalProxyManagement.create." + errorInformation.errorMsg : "globalProxyManagement.create.failure"
+                if (errorInformation.errStatus == 'Y') {
+                    def errorMessage = errorInformation.errMsg != "PROXYEXISTS" ? "globalProxyManagement.create." + errorInformation.errMsg : "globalProxyManagement.create.failure"
                     throw new ApplicationException(GlobalProxyController.class, MessageHelper.message(errorMessage))
                 }
 

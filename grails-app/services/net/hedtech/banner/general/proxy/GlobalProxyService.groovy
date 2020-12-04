@@ -44,7 +44,7 @@ class GlobalProxyService {
                         relationships = relationshipsJson
                     }
         }
-        catch (e) {
+        catch (Exception e) {
             log.error("The following error occurred while the Global Proxy was retrieving the relationship options for a new relationship: " + e.printStackTrace())
             throw new ApplicationException(GlobalProxyService.class, e)
         }
@@ -70,7 +70,7 @@ class GlobalProxyService {
                     proxyPages = proxyPagesJson
             }
         }
-        catch (e) {
+        catch (Exception e) {
             log.error("The following error occurred while the Global Proxy was getting the available pages for a new relationship: " + e.printStackTrace())
             throw new ApplicationException(GlobalProxyService.class, e)
         }
@@ -96,7 +96,7 @@ class GlobalProxyService {
                     returnJson = json
             }
         }
-        catch (e) {
+        catch (Exception e) {
             log.error("The following error occurred while checking if a Global Proxy targeted relationship is valid: " + e.printStackTrace())
             throw new ApplicationException(GlobalProxyService.class, e)
         }
@@ -117,7 +117,7 @@ class GlobalProxyService {
                     errorStatus = returnParam
             }
         }
-        catch (e) {
+        catch (Exception e) {
             log.error("The following error occurred while the Global Proxy was attempting to delete a relationship: " + e.printStackTrace())
             throw new ApplicationException(GlobalProxyService.class, e)
         }
@@ -141,7 +141,7 @@ class GlobalProxyService {
 
             }
         }
-        catch (e) {
+        catch (Exception e) {
             log.error("The following error occurred while the Global Proxy was attempting to create a relationship: " + e.printStackTrace())
             throw new ApplicationException(GlobalProxyService.class, e)
         }
@@ -162,7 +162,7 @@ class GlobalProxyService {
                     gidm = returnGidm
             }
         }
-        catch (e) {
+        catch (Exception e) {
             log.error("The following error occurred while the Global Proxy was attempting to get the Global Proxy Gidm: " + e.printStackTrace())
             throw new ApplicationException(GlobalProxyService.class, e)
         }
@@ -182,7 +182,7 @@ class GlobalProxyService {
                     pidm = returnPidm
             }
         }
-        catch (e) {
+        catch (Exception e) {
             log.error("The following error occurred while the Global Proxy was attempting to get the preferred name of a targeted student to proxy: " + e.printStackTrace())
             throw new ApplicationException(GlobalProxyService.class, e)
         }
