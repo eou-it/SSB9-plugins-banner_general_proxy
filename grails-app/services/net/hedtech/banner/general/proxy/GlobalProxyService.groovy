@@ -1,5 +1,5 @@
 /********************************************************************************
- Copyright 2020 Ellucian Company L.P. and its affiliates.
+ Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
@@ -26,6 +26,23 @@ class GlobalProxyService {
         def userPreferredEmail = personEmailService.findPreferredEmailAddress(pidm)
         def doesUserHaveActivePreferredEmail = userPreferredEmail != null
         doesUserHaveActivePreferredEmail
+    }
+
+    def isUsersEmailInUseByAnotherProxy(pidm){
+        def sql = new Sql(sessionFactory.getCurrentSession().connection())
+        def sqlText = """SELECT * FROM GPBPRXY WHERE GPBPRXY_EMAIL_ADDRESS = ? AND (GPBPRXY_PROXY_PIDM <> ? OR GPBPRXY_PROXY_PIDM IS NULL)"""
+        def activePreferredEmailAddress = personEmailService?.findPreferredEmailAddress(pidm)?.emailAddress
+        def returnValue = true
+        try {
+            returnValue = sql?.firstRow(sqlText, [activePreferredEmailAddress, pidm]) != null
+        }
+        catch (Exception e) {
+            log.error("The following error occurred while the Global Proxy was checking to see if their email was in use by another proxy: " + e.printStackTrace())
+            throw new ApplicationException(GlobalProxyService.class, e)
+        }
+        finally {
+            return returnValue
+        }
     }
 
     def getUserActivePreferredEmailFirstNameAndLastName(pidm) {

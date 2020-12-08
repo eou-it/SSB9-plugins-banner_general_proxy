@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2020 Ellucian Company L.P. and its affiliates.
+ Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.general.proxy
 
@@ -53,14 +53,9 @@ class GlobalProxyController {
         render studentList as JSON
     }
 
-    def getLoggedInUserHasActivePreferredEmail() {
+    def getLoggedInUserHasValidEmailAddress() {
         try {
-            def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
-            def doesUserHaveActivePreferredEmail
-            doesUserHaveActivePreferredEmail = pidm ?
-                    globalProxyService?.doesUserHaveActivePreferredEmail(pidm) :
-                    false
-            def returnMap = [doesUserHaveActivePreferredEmailAddress: doesUserHaveActivePreferredEmail]
+            def returnMap = checkIfLoggedInUserHasValidEmailAddress()
             render returnMap as JSON
         }
         catch (Exception e) {
@@ -151,11 +146,19 @@ class GlobalProxyController {
     }
 
     def createGlobalProxyRelationship() {
-        def proxy = request?.JSON ?: params
-        def globalPidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
-        def userEmailFirstNameAndLastName = globalProxyService.getUserActivePreferredEmailFirstNameAndLastName(globalPidm)
-
         try {
+            def returnMapValidUserEmailAddress = checkIfLoggedInUserHasValidEmailAddress()
+
+            if(!returnMapValidUserEmailAddress.doesUserHaveActivePreferredEmailAddress){
+                throw new ApplicationException(GlobalProxyController.class, MessageHelper.message("globalProxyManagement.message.noActivePreferredEmailAddress"))
+            }
+            else if (returnMapValidUserEmailAddress.isUsersEmailInUseByAnotherProxy){
+                throw new ApplicationException(GlobalProxyController.class, MessageHelper.message("globalProxyManagement.message.emailInUseByProxy"))
+            }
+
+            def proxy = request?.JSON ?: params
+            def globalPidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+            def userEmailFirstNameAndLastName = globalProxyService.getUserActivePreferredEmailFirstNameAndLastName(globalPidm)
             def gidmParams = [globalPidm: globalPidm, email: userEmailFirstNameAndLastName.email, lastName: userEmailFirstNameAndLastName.lastName, firstName: userEmailFirstNameAndLastName.firstName]
             proxy.gidm = globalProxyService.getGlobalProxyGidm(gidmParams)
             proxy.globalPidm = globalPidm
@@ -205,5 +208,22 @@ class GlobalProxyController {
         def p_proxyIDM = gidm ? gidm : SecurityContextHolder?.context?.authentication?.principal?.gidm
         def studentList = globalProxyService.getStudentListForGlobalProxy(p_proxyIDM)
         return studentList
+    }
+
+    private def checkIfLoggedInUserHasValidEmailAddress() {
+        def pidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
+        def doesUserHaveActivePreferredEmail
+        def isUsersEmailInUseByAnotherProxy = false
+        doesUserHaveActivePreferredEmail = pidm ?
+                globalProxyService?.doesUserHaveActivePreferredEmail(pidm) :
+                false
+
+        if (doesUserHaveActivePreferredEmail) {
+            isUsersEmailInUseByAnotherProxy = globalProxyService?.isUsersEmailInUseByAnotherProxy(pidm)
+        }
+
+
+        return [doesUserHaveActivePreferredEmailAddress: doesUserHaveActivePreferredEmail,
+                isUsersEmailInUseByAnotherProxy        : isUsersEmailInUseByAnotherProxy]
     }
 }

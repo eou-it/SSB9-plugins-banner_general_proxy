@@ -1,13 +1,13 @@
 /*******************************************************************************
- Copyright 2020 Ellucian Company L.P. and its affiliates.
+ Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 
 globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$filter', '$resource', '$q', 'notificationCenterService', function ($rootScope, $filter, $resource, $q, notificationCenterService) {
 
     var fetchProxies = $resource('../ssb/:controller/:action',
             {controller: 'GlobalProxy', action: 'getGlobalProxies'}, {query: {method:'GET', isArray:false}}),
-        fetchDoesUserHaveActivePreferredEmail = $resource('../ssb/:controller/:action',
-                    {controller: 'GlobalProxy', action: 'getLoggedInUserHasActivePreferredEmail'}, {query: {method:'GET', isArray:false}}),
+        fetchDoesUserHaveValidEmailAddress = $resource('../ssb/:controller/:action',
+                    {controller: 'GlobalProxy', action: 'getLoggedInUserHasValidEmailAddress'}, {query: {method:'GET', isArray:false}}),
         fetchRelationshipOptions = $resource('../ssb/:controller/:action',
             {controller: 'GlobalProxy', action: 'getRelationshipOptions'}, {query: {method:'GET', isArray:false}}),
         fetchCommunicationLog = $resource('../ssb/:controller/:action',
@@ -96,8 +96,8 @@ globalProxyManagementApp.service('globalProxyMgmtAppService', ['$rootScope', '$f
         return fetchGlobalProxiesByQuery.query(params)
     };
 
-    this.getDoesUserHaveActivePreferredEmailAddress = function(params){
-        return fetchDoesUserHaveActivePreferredEmail.query(params)
+    this.getDoesUserHaveValidEmailAddress = function(params){
+        return fetchDoesUserHaveValidEmailAddress.query(params)
     };
 
     this.isGlobalProxyAccessTargetValid = function(params){

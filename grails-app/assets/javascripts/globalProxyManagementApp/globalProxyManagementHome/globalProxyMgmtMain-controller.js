@@ -1,5 +1,5 @@
 /********************************************************************************
-  Copyright 2020 Ellucian Company L.P. and its affiliates.
+  Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
 ********************************************************************************/
 globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scope', '$rootScope', '$location', '$state', '$stateParams',
     '$timeout', '$filter', 'notificationCenterService', 'globalProxyMgmtAppService',
@@ -62,9 +62,14 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
 
             });
 
+            globalProxyMgmtAppService.getDoesUserHaveValidEmailAddress().$promise.then(function(response){
+                $scope.userHasActivePreferredEmailAddress = response.doesUserHaveActivePreferredEmailAddress !== undefined
+                    && response.doesUserHaveActivePreferredEmailAddress === true;
+                $scope.isUsersEmailInUseByAnotherProxy = response.isUsersEmailInUseByAnotherProxy !== undefined
+                && response.isUsersEmailInUseByAnotherProxy === true;
 
-            globalProxyMgmtAppService.getDoesUserHaveActivePreferredEmailAddress().$promise.then(function(response){
-                $scope.userHasActivePreferredEmailAddress = response.doesUserHaveActivePreferredEmailAddress;
+                $scope.validEmailChecksLoaded = true;
+
             });
 
             displayNotificationsOnStateLoad();
@@ -75,6 +80,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
         // --------------------
         $scope.proxies = [];
         $scope.proxiesLoaded = false;
+        $scope.validEmailChecksLoaded = false;
 
         $scope.cancelNotification = function () {
             notificationCenterService.clearNotifications();
