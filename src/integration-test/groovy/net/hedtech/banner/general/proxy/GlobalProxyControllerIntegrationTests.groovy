@@ -1,3 +1,6 @@
+/*******************************************************************************
+ Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
+ ****************************************************************************** */
 package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
@@ -7,6 +10,7 @@ import grails.util.GrailsWebMockUtil
 import grails.util.Holders
 import grails.web.servlet.context.GrailsWebApplicationContext
 import groovy.sql.Sql
+import net.hedtech.banner.general.person.PersonEmail
 import net.hedtech.banner.i18n.MessageHelper
 import net.hedtech.banner.testing.BaseIntegrationTestCase
 import org.grails.plugins.testing.GrailsMockHttpServletRequest
@@ -124,9 +128,12 @@ class GlobalProxyControllerIntegrationTests extends BaseIntegrationTestCase {
     }
 
     @Test
-    void testGetLoggedInUserHasActivePreferredEmail() {
-        final def GLOBAL_PROXY_ID = 'HOPTE0606'
-        final def GLOBAL_PROXY_PIDM = 30204
+    void testGetLoggedInUserHasValidEmailAddress() {
+        final def GLOBAL_PROXY_ID = 'HOS00001'
+        final def GLOBAL_PROXY_PIDM = 37859
+        final def GLOBAL_PROXY_ORIGINAL_EMAIL = 'eejamison@camp.edu'
+        final def PROXY_EMAIL_ALREADY_IN_USE = 'mrbunny@gvalleyu.edu'
+        final def GLOBAL_PROXY_EMAIL_ALREADY_IN_USE = 'rmchapman@banner.edu'
         def returnData
 
         mockRequest()
@@ -135,39 +142,68 @@ class GlobalProxyControllerIntegrationTests extends BaseIntegrationTestCase {
 
         try {
             //User has preferred and active email address
-            updateActivePreferredEmailAddress(true, true, GLOBAL_PROXY_PIDM)
-            controller.getLoggedInUserHasActivePreferredEmail()
+            updateActivePreferredEmailAddress(GLOBAL_PROXY_ORIGINAL_EMAIL,true, true, GLOBAL_PROXY_PIDM)
+            controller.getLoggedInUserHasValidEmailAddress()
             assertThatDataExists(controller.response.contentAsString, false)
             returnData = JSON.parse(controller.response.contentAsString)
             assertTrue returnData?.doesUserHaveActivePreferredEmailAddress
+            assertFalse returnData?.isUsersEmailInUseByAnotherProxy
 
             //User has active email which is not preferred
             mockRequest()
-            updateActivePreferredEmailAddress(true, false, GLOBAL_PROXY_PIDM)
-            controller.getLoggedInUserHasActivePreferredEmail()
+            updateActivePreferredEmailAddress(GLOBAL_PROXY_ORIGINAL_EMAIL,true, false, GLOBAL_PROXY_PIDM)
+            controller.getLoggedInUserHasValidEmailAddress()
             assertThatDataExists(controller.response.contentAsString, false)
             returnData = JSON.parse(controller.response.contentAsString)
             assertFalse returnData?.doesUserHaveActivePreferredEmailAddress
-
-            //User has preferred email which is not active
-            mockRequest()
-            updateActivePreferredEmailAddress(false, true, GLOBAL_PROXY_PIDM)
-            controller.getLoggedInUserHasActivePreferredEmail()
-            assertThatDataExists(controller.response.contentAsString, false)
-            returnData = JSON.parse(controller.response.contentAsString)
-            assertFalse returnData?.doesUserHaveActivePreferredEmailAddress
+            assertFalse returnData?.isUsersEmailInUseByAnotherProxy
 
             //User has email which is neither active nor preferred
             mockRequest()
-            updateActivePreferredEmailAddress(false, false, GLOBAL_PROXY_PIDM)
-            controller.getLoggedInUserHasActivePreferredEmail()
+            updateActivePreferredEmailAddress(GLOBAL_PROXY_ORIGINAL_EMAIL,false, false, GLOBAL_PROXY_PIDM)
+            controller.getLoggedInUserHasValidEmailAddress()
             assertThatDataExists(controller.response.contentAsString, false)
             returnData = JSON.parse(controller.response.contentAsString)
             assertFalse returnData?.doesUserHaveActivePreferredEmailAddress
+            assertFalse returnData?.isUsersEmailInUseByAnotherProxy
+
+            //User has an active and preferred email which is in use by another proxy
+            mockRequest()
+            updateActivePreferredEmailAddress(GLOBAL_PROXY_ORIGINAL_EMAIL,true, true, GLOBAL_PROXY_PIDM, PROXY_EMAIL_ALREADY_IN_USE)
+            controller.getLoggedInUserHasValidEmailAddress()
+            assertThatDataExists(controller.response.contentAsString, false)
+            returnData = JSON.parse(controller.response.contentAsString)
+            assertTrue returnData?.doesUserHaveActivePreferredEmailAddress
+            assertTrue returnData?.isUsersEmailInUseByAnotherProxy
+
+            //User has an active and preferred email which is in use by another global proxy
+            mockRequest()
+            updateActivePreferredEmailAddress(PROXY_EMAIL_ALREADY_IN_USE,true, true, GLOBAL_PROXY_PIDM, GLOBAL_PROXY_EMAIL_ALREADY_IN_USE)
+            controller.getLoggedInUserHasValidEmailAddress()
+            assertThatDataExists(controller.response.contentAsString, false)
+            returnData = JSON.parse(controller.response.contentAsString)
+            assertTrue returnData?.doesUserHaveActivePreferredEmailAddress
+            assertTrue returnData?.isUsersEmailInUseByAnotherProxy
+
+            //User does not have an active preferred email address and their email is in use by another proxy.
+            //If the user does not have an active preferred email address, then they have no email address which can be in use by another proxy.
+            //Therefore, isUsersEmailInUseByAnotherProxy should return false.
+            mockRequest()
+            updateActivePreferredEmailAddress(GLOBAL_PROXY_EMAIL_ALREADY_IN_USE,false, false, GLOBAL_PROXY_PIDM, PROXY_EMAIL_ALREADY_IN_USE)
+            controller.getLoggedInUserHasValidEmailAddress()
+            assertThatDataExists(controller.response.contentAsString, false)
+            returnData = JSON.parse(controller.response.contentAsString)
+            assertFalse returnData?.doesUserHaveActivePreferredEmailAddress
+            assertFalse returnData?.isUsersEmailInUseByAnotherProxy
         }
         finally {
             //Set email back to default seed data value
-            updateActivePreferredEmailAddress(true, true, GLOBAL_PROXY_PIDM)
+            updateActivePreferredEmailAddress(GLOBAL_PROXY_ORIGINAL_EMAIL, true, true, GLOBAL_PROXY_PIDM, GLOBAL_PROXY_ORIGINAL_EMAIL)
+
+             def sql = new Sql(sessionFactory.getCurrentSession().connection())
+             def sqlString = """UPDATE GOREMAL SET GOREMAL_EMAIL_ADDRESS = ?, GOREMAL_STATUS_IND = 'A', GOREMAL_PREFERRED_IND = 'Y' WHERE GOREMAL_PIDM = ?"""
+             sql.executeUpdate(sqlString, [GLOBAL_PROXY_ORIGINAL_EMAIL, GLOBAL_PROXY_PIDM])
+             sql.commit()
         }
     }
 
@@ -234,6 +270,10 @@ class GlobalProxyControllerIntegrationTests extends BaseIntegrationTestCase {
         final def INVALID_RELATIONSHIP = 'AAA'
         final def NULL_ID = ''
         final def GLOBAL_PROXY_ID = 'HOS00001'
+        final def GLOBAL_PROXY_ORIGINAL_EMAIL = 'eejamison@camp.edu'
+        final def PROXY_EMAIL_ALREADY_IN_USE = 'mrbunny@gvalleyu.edu'
+        final def GLOBAL_PROXY_PIDM = 37859
+
         def targetStudentFoundForGlobalProxy = null
         def existingProxies
         def response
@@ -250,9 +290,31 @@ class GlobalProxyControllerIntegrationTests extends BaseIntegrationTestCase {
         targetStudentFoundForGlobalProxy = getExistingProxyFromExistingProxyList(existingProxies, NON_EXISTENT_RELATIONSHIP_ID)
         assertNull(targetStudentFoundForGlobalProxy)
 
-        //Test Invalid ID
+        //Test No Active Preferred Email (Create Relationship checks for this before saving.)
+        updateActivePreferredEmailAddress(GLOBAL_PROXY_ORIGINAL_EMAIL,false, false, GLOBAL_PROXY_PIDM)
         mockRequest()
-        def params = [targetBannerId: INVALID_ID, retp: 'UNIV_FINAID']
+        def params = [targetBannerId: GLOBAL_PROXY_ID, retp: 'UNIV_FINAID']
+        controller.params.putAll(params)
+        controller.createGlobalProxyRelationship()
+        assertThatDataExists(controller.response.contentAsString, false)
+        response = JSON.parse(controller.response.contentAsString)
+        assertEquals( MessageHelper.message('globalProxyManagement.message.noActivePreferredEmailAddress'), response.message)
+
+
+        //Test Email Already In Use (Create Relationship checks for this before saving.)
+        updateActivePreferredEmailAddress(GLOBAL_PROXY_ORIGINAL_EMAIL,true, true, GLOBAL_PROXY_PIDM, PROXY_EMAIL_ALREADY_IN_USE)
+        mockRequest()
+        params = [targetBannerId: GLOBAL_PROXY_ID, retp: 'UNIV_FINAID']
+        controller.params.putAll(params)
+        controller.createGlobalProxyRelationship()
+        assertThatDataExists(controller.response.contentAsString, false)
+        response = JSON.parse(controller.response.contentAsString)
+        assertEquals( MessageHelper.message('globalProxyManagement.message.emailInUseByProxy'), response.message)
+
+        //Test Invalid ID
+        updateActivePreferredEmailAddress(PROXY_EMAIL_ALREADY_IN_USE,true, true, GLOBAL_PROXY_PIDM, GLOBAL_PROXY_ORIGINAL_EMAIL)
+        mockRequest()
+        params = [targetBannerId: INVALID_ID, retp: 'UNIV_FINAID']
         controller.params.putAll(params)
         controller.createGlobalProxyRelationship()
         assertThatDataExists(controller.response.contentAsString, false)
@@ -322,12 +384,23 @@ class GlobalProxyControllerIntegrationTests extends BaseIntegrationTestCase {
         sql.commit()
     }
 
-    private def updateActivePreferredEmailAddress(active, preferred, pidm) {
-        def sql = new Sql(sessionFactory.getCurrentSession().connection())
-        def activeInd = active ? 'A' : 'I'
-        def preferredInd = preferred ? 'Y' : 'N'
-        sql.executeUpdate("""UPDATE GOREMAL SET GOREMAL_STATUS_IND = ?, GOREMAL_PREFERRED_IND = ? WHERE GOREMAL_PIDM = ?""", [activeInd, preferredInd, pidm])
-        sql.commit()
+    private def updateActivePreferredEmailAddress(originalEmail, active, preferred, pidm, newEmail = '')
+    {
+        List<PersonEmail> emailAddresses = PersonEmail.fetchByPidmAndStatus(pidm, 'A')
+        List<PersonEmail> emailAddressesInactive = PersonEmail.fetchByPidmAndStatus(pidm, 'I')
+        emailAddresses.addAll(emailAddressesInactive)
+        PersonEmail emailAddress
+        emailAddresses?.each{
+            if (it.emailAddress == originalEmail){
+                emailAddress = it
+            }
+        }
+        emailAddress?.preferredIndicator = preferred
+        emailAddress?.statusIndicator = active ? 'A' : 'I'
+        if (newEmail != ''){
+            emailAddress?.emailAddress = newEmail
+        }
+        emailAddress?.save(flush: true, failOnError: true)
     }
 
     private def updateProxyAccessPreferredNameSetting(value) {
