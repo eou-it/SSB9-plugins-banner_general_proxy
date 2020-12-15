@@ -1,10 +1,10 @@
 /*******************************************************************************
  Copyright 2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-globalProxyManagementApp.service('globalProxyMgmtErrorService', ['notificationCenterService', '$filter',
-    function (notificationCenterService, $filter) {
-        var messages = [],
-            proxyProfileMessageCenter = "#proxyProfileErrorMsgCenter";
+globalProxyManagementApp.service('globalProxyMgmtErrorService', ['notificationCenterService',
+    function (notificationCenterService) {
+        let messages = [];
+        const proxyProfileMessageCenter = "#proxyProfileErrorMsgCenter";
 
         this.refreshMessages = function() {
             messages = [];
@@ -14,9 +14,8 @@ globalProxyManagementApp.service('globalProxyMgmtErrorService', ['notificationCe
         };
 
         this.getErrorBannerId = function (proxy) {
-            var invalidTargetMsg = 'globalProxyManagement.message.targetNotValid';
-            var invalidBannerIdMsg = 'globalProxyManagement.message.bannerIdRequired';
-
+            const invalidTargetMsg = 'globalProxyManagement.message.targetNotValid';
+            const invalidBannerIdMsg = 'globalProxyManagement.message.bannerIdRequired';
 
             if (proxy.isValidBannerId === "false"){
                 messages.push({msg: invalidBannerIdMsg, type: 'error'});
@@ -33,8 +32,8 @@ globalProxyManagementApp.service('globalProxyMgmtErrorService', ['notificationCe
         };
 
         this.getErrorRelationship = function (proxy) {
-            var invalidRelationshipMsg = 'globalProxyManagement.message.relationshipRequired';
-            var noPagesAuthorizedMsg = 'proxyManagement.message.noAuthorizationsAvailable';
+            const invalidRelationshipMsg = 'globalProxyManagement.message.relationshipRequired';
+            const noPagesAuthorizedMsg = 'proxyManagement.message.noAuthorizationsAvailable';
 
             if (!proxy.p_retp_code) {
                 messages.push({msg: invalidRelationshipMsg, type: 'error'});

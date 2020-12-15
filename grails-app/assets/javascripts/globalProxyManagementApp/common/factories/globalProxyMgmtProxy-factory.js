@@ -1,12 +1,10 @@
 /*******************************************************************************
  Copyright 2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-globalProxyManagementApp.factory('ProxyManagementProxy',
+globalProxyManagementApp.factory('GlobalProxyManagementProxy',
     function () {
         return function (proxyProfile) {
             return {
-                alt: proxyProfile ? proxyProfile.alt : null,
-                cver : proxyProfile ? proxyProfile.cver : null,
                 p_code: null,
                 p_retp_code: proxyProfile ? proxyProfile.p_retp_code : null,
                 pages: proxyProfile ? proxyProfile.pages : [],

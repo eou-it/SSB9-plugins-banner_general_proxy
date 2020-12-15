@@ -2,9 +2,9 @@
  Copyright 2020 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', ['$scope', '$rootScope', '$state', '$location', '$stateParams',
-    '$timeout', '$filter', '$q', 'notificationCenterService', 'globalProxyMgmtAppService', 'globalProxyMgmtErrorService', 'ProxyManagementProxy', 'GlobalProxyManagementDataValidator',
+    '$timeout', '$filter', '$q', 'notificationCenterService', 'globalProxyMgmtAppService', 'globalProxyMgmtErrorService', 'GlobalProxyManagementProxy', 'GlobalProxyManagementDataValidator',
     function ($scope, $rootScope, $state, $location, $stateParams, $timeout, $filter, $q, notificationCenterService,
-              globalProxyMgmtAppService, globalProxyMgmtErrorService, ProxyManagementProxy, GlobalProxyManagementDataValidator) {
+              globalProxyMgmtAppService, globalProxyMgmtErrorService, GlobalProxyManagementProxy, GlobalProxyManagementDataValidator) {
 
         // LOCAL FUNCTIONS
         // ---------------
@@ -20,33 +20,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                         notificationCenterService.addNotification(notification.message, notification.messageType, notification.flashType);
                     });
                 }, 200);
-            },
-            setSelectedRelationship = function (code) {
-                $scope.proxyAuxData.selectedRelationship = _.find($scope.relationshipChoices, function (rel) {
-                    return rel.code == code;
-                });
-
-                if (!$scope.proxyAuxData.selectedRelationship) {
-                    $scope.proxyAuxData.selectedRelationship = {code: null, description: null};
-                }
-
-                $scope.isRelationshipSelected = !!code;
-            },
-            displayResponseMessages = function (messages) {
-                _.each(messages, function (message) {
-                    if (message.code === 'PIN_EXPIRATION_DATE') {
-                        $scope.passwordExpDateMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
-                    }
-
-                    if (message.code === 'EMAIL_VERIFIED') {
-                        $scope.emailVerifiedDateMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
-                    }
-
-                    if (message.code === 'OPTOUT') {
-                        $scope.optOutMsg = $filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]);
-                    }
-                    notificationCenterService.addNotification($filter('i18n')('proxyManagement.profile.label.' + message.code, [message.value]), $rootScope.notificationInfoType, true);
-                });
             },
             displayResponseFailureMessages = function (flashMessage, notificationMessage) {
                 $scope.flashMessage = flashMessage;
@@ -85,9 +58,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                 notificationCenterService.displayNotification('globalProxyManagement.message.saveCancel', 'warning', false, prompt);
             },
             init = function () {
-                let alt = $stateParams.alt,
-                    cver;
-
                 $scope.globalProxyManagementDataValidator = new GlobalProxyManagementDataValidator();
 
                 globalProxyMgmtAppService.getRelationshipOptions().$promise.then(function (response) {
@@ -103,73 +73,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                         }
                     }
                 });
-
-                if (alt) {
-                    $scope.currentAlt = alt;
-                    cver = $stateParams.cver;
-                    $scope.currentCver = cver;
-
-                    // Set up for "edit proxy"
-                    $scope.isCreateNew = false;
-
-                    $scope.isRelationshipSelected = true;
-
-                    globalProxyMgmtAppService.getProxy({alt: alt, cver: cver}).$promise.then(function (response) {
-                        let setupEditDialog = function () {
-                            $scope.proxy = new ProxyManagementProxy(response.proxyProfile);
-                            $scope.authPages = $scope.proxy.getAuthorizedPages();
-                            displayResponseMessages(response.messages.messages);
-                            setSelectedRelationship($scope.proxy.p_retp_code);
-
-                            globalProxyMgmtAppService.getClonedProxiesList({
-                                alt: alt,
-                                cver: cver,
-                                p_retp_code: $scope.proxy.p_retp_code
-                            }).$promise.then(function (response) {
-                                if (response.failure) {
-                                    displayResponseFailureMessages(response.message.clonedProxiesList, response.message);
-                                } else {
-                                    $scope.clonedProxiesList = response.cloneList;
-                                }
-                            });
-
-                            // watch changes on passphrase
-                            $scope.$watch('proxy.p_passphrase', function (newVal, oldVal) {
-                                $scope.dirty = (newVal != oldVal)
-                            });
-                            // watch changes on pages
-                            $scope.$watch('proxy.pages | json', function (newVal, oldVal) {
-                                $scope.dirty = !_.isEqual(newVal, oldVal);
-                            });
-                        };
-
-                        if (response.failure) {
-                            displayResponseFailureMessages(response.message, response.message);
-                        } else {
-                            setupEditDialog();
-                        }
-                    });
-                } else {
-                    $scope.proxy = new ProxyManagementProxy();
-
-                    setSelectedRelationship($scope.proxy.p_retp_code);
-
-                    globalProxyMgmtAppService.getClonedProxiesListOnCreate().$promise.then(function (response) {
-                        if (response.failure) {
-                            displayResponseFailureMessages(response.message.clonedProxiesList, response.message);
-                        } else {
-                            $scope.clonedProxiesList = response.cloneList;
-                        }
-                    });
-
-                    globalProxyMgmtAppService.getAddProxiesList().$promise.then(function (response) {
-                        if (response.failure) {
-                            displayResponseFailureMessages(response.message.clonedProxiesList, response.message);
-                        } else {
-                            $scope.addProxiesList = response.addList;
-                        }
-                    });
-                }
 
                 beforeUpdateProxy = angular.copy($scope.proxy);
                 beforeUpdateProxyAuxData = angular.copy($scope.proxyAuxData);
@@ -193,8 +96,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
 
         $scope.handleRelationshipChange = function () {
             globalProxyMgmtAppService.getDataModelOnRelationshipChange({
-                alt: $scope.proxy.alt,
-                cver: $scope.proxy.cver,
                 p_retp_code: $scope.proxyAuxData.selectedRelationship.code
             }).$promise.then(function (response) {
                 if (response.failure) {
@@ -226,97 +127,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
             });
         };
 
-        $scope.handleClonedListChange = function () {
-
-            if ($scope.isCreateNew) {
-                $scope.proxy.p_retp_code = $scope.proxyAuxData.clonedProxy.retp;
-                setSelectedRelationship($scope.proxy.p_retp_code);
-            }
-
-            globalProxyMgmtAppService.getClonedAuthorizationsList({
-                alt: $scope.proxyAuxData.clonedProxy.code,
-                cver: $scope.proxyAuxData.clonedProxy.cver,
-                p_retp_code: $scope.proxy.p_retp_code
-            }).$promise.then(function (response) {
-                if (response.failure) {
-                    displayResponseFailureMessages(response.message, response.message);
-                } else {
-                    $scope.proxy.pages = response.pages;
-                    $scope.globalProxyManagementDataValidator.removeProxyProfileFieldErrors($scope.proxy);
-                }
-            });
-
-        };
-
-        $scope.handleAddListChange = function () {
-            $scope.proxy.handleAddListChange($scope.proxyAuxData);
-        };
-
-        $scope.emailPassphrase = function () {
-
-            if (!$scope.proxy.p_passphrase) {
-                notificationCenterService.addNotification('proxyManagement.profile.error.passphrase', "error", true);
-            } else if ($scope.dirty) {
-                notificationCenterService.addNotification('proxyManagement.message.checkDirtyOnEmail', 'error', true);
-            } else {
-
-                globalProxyMgmtAppService.emailPassphrase({alt: $scope.proxy.alt, cver: $scope.proxy.cver}).$promise.then(function (response) {
-                    let messageType, message;
-
-                    if (response.failure) {
-                        messageType = 'error';
-                        message = response.message;
-                    } else {
-                        if (response.resetStatus != 'SUCCESS') {
-                            messageType = 'error';
-                            message = 'proxyManagement.message.emailPassphraseFailure';
-                        } else {
-                            messageType = 'success';
-                            message = 'proxyManagement.message.emailPassphraseSuccess';
-                        }
-                    }
-
-                    notificationCenterService.clearNotifications();
-                    notificationCenterService.addNotification(message, messageType, true);
-                });
-
-            }
-        };
-
-        $scope.emailAuthentications = function () {
-
-            if ($scope.dirty) {
-                notificationCenterService.addNotification('proxyManagement.message.checkDirtyOnEmail', 'error', true);
-                return;
-            }
-
-            globalProxyMgmtAppService.emailAuthentications({alt: $scope.proxy.alt, cver: $scope.proxy.cver}).$promise.then(function (response) {
-                let messageType, message;
-
-                if (response.failure) {
-                    messageType = 'error';
-                    message = response.message;
-                } else {
-                    if (response.resetStatus != 'SUCCESS') {
-                        messageType = 'error';
-                        message = 'proxyManagement.message.emailAuthorizationsFailure';
-                    } else {
-                        messageType = 'success';
-                        message = 'proxyManagement.message.emailAuthorizationsSuccess';
-                    }
-                }
-
-                notificationCenterService.clearNotifications();
-                notificationCenterService.addNotification(message, messageType, true);
-            });
-        };
-
-        //toggle all checkboxes
-        $scope.toggleSelect = function () {
-            $scope.proxy.toggleCheckboxes();
-            $scope.globalProxyManagementDataValidator.removeProxyProfileFieldErrors($scope.proxy);
-        };
-
         $scope.save = function () {
             notificationCenterService.clearNotifications();
 
@@ -334,7 +144,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
                             if (response.failure) {
                                 notificationCenterService.displayNotification(response.message, $scope.notificationErrorType);
                             } else {
-                                var notifications = [],
+                                const notifications = [],
                                     doStateGoSuccess = function () {
                                         formDirty = false;
 
@@ -370,7 +180,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         // --------------------
         $scope.dirty = false;
         $scope.isCreateNew = true;
-        $scope.proxy;
+        $scope.proxy = new GlobalProxyManagementProxy();
         $scope.isTargetIdValid = false;
         $scope.proxyAuxData = {
             selectedRelationship: {code: null},
@@ -387,11 +197,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         $scope.isBannerIdFocused = false;
         $scope.relationshipChoices = [];
         $scope.clonedProxiesList = [];
-        $scope.addProxiesList = [];
-        $scope.passwordExpDateMsg = '';
-        $scope.emailVerifiedDateMsg = '';
-        $scope.optOutMsg = '';
-        $scope.authPages = [];
         $scope.globalProxyManagementDataValidator = {};
 
         $scope.maxBannerIdLength = 30;

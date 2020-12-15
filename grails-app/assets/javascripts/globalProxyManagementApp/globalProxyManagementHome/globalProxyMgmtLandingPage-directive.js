@@ -12,15 +12,15 @@ globalProxyManagementApp.directive('globalLandingPageProxyTile', ['$state', '$ro
         },
         link: function(scope) {
             scope.onTileSelect = function(pageUrl) {
-                var proxyData = scope.proxyData;
-                var setId = function() {
+                const proxyData = scope.proxyData;
+                const setId = function () {
                         jQuery.ajax({
                             url: "proxy/setId",
                             data: {"id": proxyData.id},
                             async: false
                         });
                     },
-                    goProxyApp = function(url) {
+                    goProxyApp = function (url) {
 
                         //clear storage for Term Selector
                         if (sessionStorage.getItem("termCode")) {
@@ -40,26 +40,25 @@ globalProxyManagementApp.directive('globalLandingPageProxyTile', ['$state', '$ro
                             sessionStorage.removeItem("aidYearDesc");
                         }
 
-
                         sessionStorage.setItem("id", proxyData.id);
                         sessionStorage.setItem("name", proxyData.desc);
 
                         $rootScope.studentName = proxyData.desc;
 
                         if (url.indexOf("proxy") > -1) {
-                                $state.go(url, {id: proxyData.id});
-                        } else{
-                            if (!!window.mepCode){
+                            $state.go(url, {id: proxyData.id});
+                        } else {
+                            if (!!window.mepCode) {
                                 window.open(
-                                encodeURI($rootScope.studenSSB + "/proxy/navigate?url=" + url + "&token=" + scope.proxyData.token + "&mepCode=" + window.mepCode),"_self"
+                                    encodeURI($rootScope.studenSSB + "/proxy/navigate?url=" + url + "&token=" + scope.proxyData.token + "&mepCode=" + window.mepCode), "_self"
                                 )
-                            }else{
+                            } else {
                                 window.open(
-                                    encodeURI($rootScope.studenSSB + "/proxy/navigate?url=" + url + "&token=" + scope.proxyData.token),"_self"
+                                    encodeURI($rootScope.studenSSB + "/proxy/navigate?url=" + url + "&token=" + scope.proxyData.token), "_self"
                                 )
                             }
                         }
-                };
+                    };
 
                 //setId();
                 goProxyApp(pageUrl);

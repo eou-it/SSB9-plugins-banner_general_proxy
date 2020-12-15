@@ -13,68 +13,67 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
          * may be that it's not a typical concern -- would only affect showing notifications on initial
          * page load -- but it's barely noticeable so doesn't hurt to leave it.)
          */
-        var displayNotificationsOnStateLoad = function() {
-            $timeout(function() {
-                _.each($stateParams.onLoadNotifications, function(notification) {
-                    notificationCenterService.addNotification(notification.message, notification.messageType, notification.flashType);
+        const displayNotificationsOnStateLoad = function () {
+                $timeout(function () {
+                    _.each($stateParams.onLoadNotifications, function (notification) {
+                        notificationCenterService.addNotification(notification.message, notification.messageType, notification.flashType);
+                    });
+                }, 200);
+            },
+
+            refreshProxies = function (response) {
+                $scope.students = response.students;
+                $scope.proxiesLoaded = true;
+            },
+            updateTiles = function () {
+                $scope.proxyTiles = [];
+
+                const addStudentProxyTile = function (student, isActive) {
+                    $scope.proxyTiles.push(
+                        {
+                            desc: student.name,
+                            pages: student.pages,
+                            selectedPage: {code: null, description: null},
+                            id: student.id,
+                            active: isActive,
+                            token: student.token,
+                            bannerId: student.bannerId
+                        }
+                    );
+                };
+
+                _.each($scope.students.active, function (student) {
+                    addStudentProxyTile(student, true);
                 });
-            }, 200);
-        },
+            },
+            init = function () {
 
-        refreshProxies = function (response) {
-            $scope.students = response.students;
-            $scope.proxiesLoaded = true;
-        },
-        updateTiles = function(){
-            $scope.proxyTiles = [];
+                globalProxyMgmtAppService.getProxyList().$promise.then(function (response) {
 
-            var addStudentProxyTile = function(student, isActive) {
-                 $scope.proxyTiles.push(
-                     {
-                         desc: student.name,
-                         pages : student.pages,
-                         selectedPage: {code: null, description: null},
-                         id: student.id,
-                         active: isActive,
-                         token: student.token,
-                         bannerId: student.bannerId
-                     }
-                 );
-             };
+                    refreshProxies(response);
 
-             _.each($scope.students.active, function(student) {
-                 addStudentProxyTile(student, true);
-             });
-        },
-        init = function() {
+                    //console.log(JSON.stringify(response));
 
-            globalProxyMgmtAppService.getProxyList().$promise.then(function (response) {
+                    if ($('meta[name=studentSsbBaseURL]').attr("content") != undefined && $('meta[name=studentSsbBaseURL]').attr("content") !== null) {
+                        $rootScope.studenSSB = $('meta[name=studentSsbBaseURL]').attr("content")
+                    }
 
-                refreshProxies(response)
+                    updateTiles()
 
-                //console.log(JSON.stringify(response));
+                });
 
-                if ($('meta[name=studentSsbBaseURL]').attr("content") != undefined && $('meta[name=studentSsbBaseURL]').attr("content") !== null) {
-                    $rootScope.studenSSB = $('meta[name=studentSsbBaseURL]').attr("content")
-                }
+                globalProxyMgmtAppService.getDoesUserHaveValidEmailAddress().$promise.then(function (response) {
+                    $scope.userHasActivePreferredEmailAddress = response.doesUserHaveActivePreferredEmailAddress !== undefined
+                        && response.doesUserHaveActivePreferredEmailAddress === true;
+                    $scope.isUsersEmailInUseByAnotherProxy = response.isUsersEmailInUseByAnotherProxy !== undefined
+                        && response.isUsersEmailInUseByAnotherProxy === true;
 
-                updateTiles()
+                    $scope.validEmailChecksLoaded = true;
 
-            });
+                });
 
-            globalProxyMgmtAppService.getDoesUserHaveValidEmailAddress().$promise.then(function(response){
-                $scope.userHasActivePreferredEmailAddress = response.doesUserHaveActivePreferredEmailAddress !== undefined
-                    && response.doesUserHaveActivePreferredEmailAddress === true;
-                $scope.isUsersEmailInUseByAnotherProxy = response.isUsersEmailInUseByAnotherProxy !== undefined
-                && response.isUsersEmailInUseByAnotherProxy === true;
-
-                $scope.validEmailChecksLoaded = true;
-
-            });
-
-            displayNotificationsOnStateLoad();
-        };
-
+                displayNotificationsOnStateLoad();
+            };
 
         // CONTROLLER VARIABLES
         // --------------------
@@ -87,7 +86,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
         };
 
         $scope.confirmDeleteProxy = function (proxy) {
-            var deleteProxy = function () {
+            const deleteProxy = function () {
                 $scope.cancelNotification();
                 globalProxyMgmtAppService.deleteProxy(proxy).$promise.then(function (response) {
                     if (response.failure) {
@@ -100,7 +99,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
                 });
             };
 
-            var prompts = [
+            const prompts = [
                 {
                     label: $filter('i18n')('proxyManagement.label.button.cancel'),
                     action: $scope.cancelNotification
@@ -111,19 +110,11 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtMainController',['$scop
                 }
             ];
 
-            if ($scope.proxyCanBeDeleted(proxy)) {
-                notificationCenterService.addNotification('proxyManagement.confirm.proxy.delete.text', 'warning', false, prompts);
-            }
+            notificationCenterService.addNotification('proxyManagement.confirm.proxy.delete.text', 'warning', false, prompts);
         };
 
         $scope.goToEditProxyState = function() {
             $state.go('editProxy');
-        };
-
-        //$scope.enableDeleteRelationship = proxyConfigResolve.enableDeleteRelationship;
-
-        $scope.proxyCanBeDeleted = function(proxy){
-            return true
         };
 
         // INITIALIZE

@@ -4,10 +4,10 @@
 angular.module('I18n', []).
     filter('i18n', function () {
         return function (key, data) {
-            var value = _.isUndefined(key) ? key : window.i18n[key];
+            let value = _.isUndefined(key) ? key : window.i18n[key];
             if(value && data) {
-                for(var i=0; i < data.length; i++) {
-                    var regexp = new RegExp('\\{('+i+')\\}', "g");
+                for(let i=0; i < data.length; i++) {
+                    const regexp = new RegExp('\\{(' + i + ')\\}', "g");
 
                     // Note how the replacement value (second argument to the "replace" function) is wrapped inside an
                     // anonymous function. Historically, this hasn't been done in i18n filters.  However, where the

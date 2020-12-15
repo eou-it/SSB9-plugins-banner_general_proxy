@@ -3,7 +3,7 @@
  *******************************************************************************/
 globalProxyManagementApp.filter('webAppResourcePath', ['webAppResourcePathString', function (webAppResourcePathString) {
     return function(input){
-        var separator = input[0] === '/' ? '' : '/';
+        const separator = input[0] === '/' ? '' : '/';
         return webAppResourcePathString + separator + input;
     };
 }]);

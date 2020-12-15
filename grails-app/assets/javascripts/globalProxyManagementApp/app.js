@@ -1,11 +1,10 @@
 /*******************************************************************************
  Copyright 2020 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
-var globalProxyMgmtAppControllers = angular.module('globalProxyMgmtAppControllers', []);
-var globalProxyMgmtAppDirectives = angular.module('globalProxyMgmtAppDirectives', []);
+const globalProxyMgmtAppControllers = angular.module('globalProxyMgmtAppControllers', []);
+const globalProxyMgmtAppDirectives = angular.module('globalProxyMgmtAppDirectives', []);
 
-
-var globalProxyManagementApp = angular.module('globalProxyManagementApp', [
+const globalProxyManagementApp = angular.module('globalProxyManagementApp', [
     'extensibility',
     'ngResource',
     'ui.router',
@@ -26,7 +25,7 @@ var globalProxyManagementApp = angular.module('globalProxyManagementApp', [
                 $rootScope.flashNotification = true;
 
                 $rootScope.$on('$stateChangeStart',
-                    function(event, toState, toParams, fromState, fromParams, options) {
+                    function (event, toState, toParams, fromState, fromParams, options) {
                         // Prevent notifications from a previous page from displaying
                         notificationCenterService.clearNotifications();
                     });
@@ -36,7 +35,7 @@ var globalProxyManagementApp = angular.module('globalProxyManagementApp', [
                 $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
                     $state.previous = fromState;
                     $state.previousParams = fromParams;
-                    if(toState.name === 'editProxy'){
+                    if (toState.name === 'editProxy') {
                         sessionStorage.setItem('globalProxyInfoCallingPage', true);
                     }
                     breadcrumbService.setBreadcrumbs(toState.data.breadcrumbs);
@@ -59,11 +58,11 @@ var globalProxyManagementApp = angular.module('globalProxyManagementApp', [
                 // Above, we use the isDesktop function implemented in the banner_ui_ss plugin, which thus far has
                 // proven to be satisfactory.  Below we modify the implementation of isTablet from banner_ui_ss to
                 // be consistent with the definition of "is tablet" elsewhere in this app.
-                var isTablet = window.matchMedia("only screen and (min-width: 768px) and (max-width:1024px)");
+                const isTablet = window.matchMedia("only screen and (min-width: 768px) and (max-width:1024px)");
                 $rootScope.isTabletView = isTablet.matches;
 
-                $rootScope.isMobileView = function() {
-                    var isMobile = window.matchMedia("only screen and (min-width: 0px) and (max-width: 767px)");
+                $rootScope.isMobileView = function () {
+                    const isMobile = window.matchMedia("only screen and (min-width: 0px) and (max-width: 767px)");
                     return isMobile.matches;
                 };
 
@@ -103,12 +102,6 @@ globalProxyManagementApp.config(['$stateProvider', '$urlRouterProvider',
                 url: "/home",
                 templateUrl: '../assets/globalProxyManagementApp/globalProxyManagementHome/globalProxyMgmtMain.html',
                 controller: 'globalProxyMgmtMainController',
-                //resolve: {
-                //TODO add resolve if needed
-                //    proxyConfigResolve: ['globalProxyMgmtAppService', function (globalProxyMgmtAppService) {
-                //        return globalProxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
-                //    }]
-                //},
                 data: {
                     breadcrumbs: [{label: 'general.breadcrumb.globalProxyManagement'}]
                 },
@@ -121,12 +114,6 @@ globalProxyManagementApp.config(['$stateProvider', '$urlRouterProvider',
                 url: '/editProxy/?alt&cver&firstName&lastName&email',
                 templateUrl: '../assets/globalProxyManagementApp/globalProxyManagementEditProxy/globalProxyMgmtEditProxy.html',
                 controller: 'globalProxyMgmtEditProxyController',
-                //resolve: {
-                //TODO Add resolve if needed
-                //    proxyConfigResolve: ['globalProxyMgmtAppService', function (globalProxyMgmtAppService) {
-                 //       return globalProxyMgmtAppService.getFromPersonalInfo('ProxyConfig').$promise;
-                 //   }]
-                //},
                 data: {
                     breadcrumbs: [{label: 'proxyManagement.label.addProxy'}]
                 },
@@ -154,7 +141,7 @@ globalProxyManagementApp.config(['$httpProvider',
         $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
         $httpProvider.interceptors.push(['$q', '$window','$rootScope', function ($q, $window, $rootScope) {
             $rootScope.ActiveAjaxConectionsWithouthNotifications = 0;
-            var checker = function (parameters, status) {
+            const checker = function (parameters, status) {
                 //YOU CAN USE parameters.url TO IGNORE SOME URL
                 if (status === "request") {
                     $rootScope.ActiveAjaxConectionsWithouthNotifications += 1;

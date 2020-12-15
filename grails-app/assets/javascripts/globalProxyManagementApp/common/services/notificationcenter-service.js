@@ -3,7 +3,7 @@
  *******************************************************************************/
 
 globalProxyManagementApp.service('notificationCenterService', ['$filter', function ($filter) {
-    var flashNotification = false;
+    const flashNotification = false;
 
     this.localMessageCenter = null;
     this.clearNotifications = function() {
@@ -20,13 +20,13 @@ globalProxyManagementApp.service('notificationCenterService', ['$filter', functi
      * @param prompts
      */
     this.displayNotification = function(displayMessage, messageType, flashType, prompts) {
-        var i18nDisplayMessage = $filter('i18n')(displayMessage);
+        const i18nDisplayMessage = $filter('i18n')(displayMessage);
 
         displayMessage = i18nDisplayMessage !== undefined ? i18nDisplayMessage : displayMessage;
 
         this.clearNotifications();
 
-        var notification = new Notification(
+        const notification = new Notification(
             {
                 message: displayMessage,
                 type: messageType,
@@ -50,8 +50,8 @@ globalProxyManagementApp.service('notificationCenterService', ['$filter', functi
      * @returns {*} A reference to the newly added notification.  Can be used as a handle to remove it.
      */
     this.addNotification = function(displayMessage, messageType, flashType, prompts) {
-        var i18nDisplayMessage = $filter('i18n')(displayMessage),
-            notification = null,
+        const i18nDisplayMessage = $filter('i18n')(displayMessage);
+        let notification = null,
             alreadyDisplayed;
 
         displayMessage = i18nDisplayMessage !== undefined ? i18nDisplayMessage : displayMessage;
@@ -88,7 +88,7 @@ globalProxyManagementApp.service('notificationCenterService', ['$filter', functi
     };
 
     this.focusNotificationCenter = function(messageType) {
-        var notifCenterElems;
+        let notifCenterElems;
 
         if(this.localMessageCenter !== null) {
             notifCenterElems = $(this.localMessageCenter);
@@ -113,11 +113,11 @@ globalProxyManagementApp.service('notificationCenterService', ['$filter', functi
             notifications.remove(notification);
         }
         else {
-            var i18nDisplayMessage = $filter('i18n')(notification);
+            const i18nDisplayMessage = $filter('i18n')(notification);
 
-            var msg = i18nDisplayMessage !== undefined ? i18nDisplayMessage : notification;
+            const msg = i18nDisplayMessage !== undefined ? i18nDisplayMessage : notification;
 
-            var identByMsg = _.find(notifications.models, function(n) {
+            const identByMsg = _.find(notifications.models, function (n) {
                 return n.get('message') === msg;
             });
 
