@@ -1,5 +1,5 @@
 /********************************************************************************
- Copyright 2020 Ellucian Company L.P. and its affiliates.
+ Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
  ********************************************************************************/
 globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', ['$scope', '$rootScope', '$state', '$location', '$stateParams',
     '$timeout', '$filter', '$q', 'notificationCenterService', 'globalProxyMgmtAppService', 'globalProxyMgmtErrorService', 'GlobalProxyManagementProxy', 'GlobalProxyManagementDataValidator',
@@ -199,7 +199,7 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         $scope.clonedProxiesList = [];
         $scope.globalProxyManagementDataValidator = {};
 
-        $scope.maxBannerIdLength = 30;
+        $scope.maxBannerIdLength = 9;
 
         let isOnIOS = navigator.userAgent.match(/iPad|iPhone|iPod/i);
         let eventName = isOnIOS ? "pagehide" : "beforeunload";

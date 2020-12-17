@@ -55,13 +55,25 @@ class GlobalProxyControllerIntegrationTests extends BaseIntegrationTestCase {
         final def STUDENT_ID = 'HOSR24796'
         final def NON_STUDENT_ID = 'PBDDEV1'
         final def INVALID_ID = 'foo999'
+        final def BANNER_ID_OVER_MAX_LENGTH = 'AAAAAAAAAA' //Max length is 9
         def returnData
 
         mockRequest()
         SSBSetUp(GLOBAL_PROXY_ID, '111111')
         controller.request.contentType = "text/json"
 
-        def params = [targetId: STUDENT_ID]
+        //Test Banner ID too long
+        def params = [targetId: BANNER_ID_OVER_MAX_LENGTH]
+        controller.params.putAll(params)
+        controller.checkIfGlobalProxyAccessTargetIsValid()
+        assertThatDataExists(controller.response.contentAsString, false)
+        returnData = JSON.parse(controller.response.contentAsString)
+        assertEquals "false", returnData?.isValidBannerId
+        assertEquals "false", returnData?.isValidToBeProxied
+
+        //Test valid banner ID which is valid to be proxied
+        mockRequest()
+        params = [targetId: STUDENT_ID]
         controller.params.putAll(params)
         controller.checkIfGlobalProxyAccessTargetIsValid()
         assertThatDataExists(controller.response.contentAsString, false)
@@ -69,6 +81,7 @@ class GlobalProxyControllerIntegrationTests extends BaseIntegrationTestCase {
         assertEquals "true", returnData?.isValidBannerId
         assertEquals "true", returnData?.isValidToBeProxied
 
+        //Test valid ID which is not valid to be proxied
         mockRequest()
         params = [targetId: NON_STUDENT_ID]
         controller.params.putAll(params)
@@ -78,6 +91,7 @@ class GlobalProxyControllerIntegrationTests extends BaseIntegrationTestCase {
         assertEquals "true", returnData?.isValidBannerId
         assertEquals "false", returnData?.isValidToBeProxied
 
+        //Test invalid ID
         mockRequest()
         params = [targetId: INVALID_ID]
         controller.params.putAll(params)
@@ -87,6 +101,7 @@ class GlobalProxyControllerIntegrationTests extends BaseIntegrationTestCase {
         assertEquals "false", returnData?.isValidBannerId
         assertEquals "false", returnData?.isValidToBeProxied
 
+        //Test valid ID which is the Global Proxy's own ID and not valid to be proxied
         mockRequest()
         params = [targetId: GLOBAL_PROXY_ID]
         controller.params.putAll(params)
@@ -270,6 +285,7 @@ class GlobalProxyControllerIntegrationTests extends BaseIntegrationTestCase {
         final def INVALID_RELATIONSHIP = 'AAA'
         final def NULL_ID = ''
         final def GLOBAL_PROXY_ID = 'HOS00001'
+        final def BANNER_ID_OVER_MAX_LENGTH = 'AAAAAAAAAA' //Max length is 9
         final def GLOBAL_PROXY_ORIGINAL_EMAIL = 'eejamison@camp.edu'
         final def PROXY_EMAIL_ALREADY_IN_USE = 'mrbunny@gvalleyu.edu'
         final def GLOBAL_PROXY_PIDM = 37859
@@ -347,6 +363,15 @@ class GlobalProxyControllerIntegrationTests extends BaseIntegrationTestCase {
         assertThatDataExists(controller.response.contentAsString, false)
         response = JSON.parse(controller.response.contentAsString)
         assertTrue(response.failure)
+
+        //Test targeted ID is too long
+        mockRequest()
+        params = [targetBannerId: BANNER_ID_OVER_MAX_LENGTH, retp: 'UNIV_FINAID']
+        controller.params.putAll(params)
+        controller.createGlobalProxyRelationship()
+        assertThatDataExists(controller.response.contentAsString, false)
+        response = JSON.parse(controller.response.contentAsString)
+        assertEquals( MessageHelper.message('globalProxyManagement.message.bannerIdRequired'), response.message)
 
         //Add the relationship to the Global Proxy
         mockRequest()

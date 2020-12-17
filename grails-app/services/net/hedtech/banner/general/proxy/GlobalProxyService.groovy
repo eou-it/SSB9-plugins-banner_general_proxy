@@ -9,6 +9,7 @@ import groovy.sql.Sql
 import groovy.util.logging.Slf4j
 import net.hedtech.banner.exceptions.ApplicationException
 import net.hedtech.banner.general.person.PersonUtility
+import net.hedtech.banner.i18n.MessageHelper
 import net.hedtech.banner.proxy.api.GlobalProxyManagementApi
 import net.hedtech.banner.proxy.api.ProxyLandingPageApi
 import org.springframework.security.core.context.SecurityContextHolder
@@ -21,6 +22,8 @@ class GlobalProxyService {
     def personIdentificationNameCurrentService
     def sessionFactory                     // injected by Spring
     def dataSource
+
+    private final Integer MAX_BANNER_ID_LENGTH = 9
 
     def doesUserHaveActivePreferredEmail(pidm) {
         def userPreferredEmail = personEmailService.findPreferredEmailAddress(pidm)
@@ -106,6 +109,10 @@ class GlobalProxyService {
 
         def sqlText = GlobalProxyManagementApi.CHECK_IF_GLOBAL_PROXY_ACCESS_TARGET_IS_VALID
 
+        if (isBannerIdTooLong(params?.targetId) || params?.targetId == null){
+            return [isValidBannerId: "false", isValidToBeProxied: "false"]
+        }
+
         try {
             def sql = new Sql(sessionFactory.getCurrentSession().connection())
             sql.call(sqlText, [params.targetId, Sql.VARCHAR]) {
@@ -148,6 +155,10 @@ class GlobalProxyService {
         def errorMsg = ''
 
         def sqlText = GlobalProxyManagementApi.CREATE_GLOBAL_PROXY()
+
+        if (isBannerIdTooLong(params?.targetBannerId) || params?.targetBannerId == null){
+            throw new ApplicationException(GlobalProxyService.class, MessageHelper.message("globalProxyManagement.message.bannerIdRequired"))
+        }
 
         try {
             def sql = new Sql(sessionFactory.getCurrentSession().connection())
@@ -233,6 +244,10 @@ class GlobalProxyService {
         }
 
         return studentsListMap
+    }
+
+    private def isBannerIdTooLong(bannerId){
+        return bannerId?.length() > MAX_BANNER_ID_LENGTH
     }
 
 }
