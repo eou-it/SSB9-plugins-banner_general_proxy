@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <%--
 /*******************************************************************************
-Copyright 2020 Ellucian Company L.P. and its affiliates.
+Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 --%>
 <!--[if IE 9 ]>    <html xmlns:ng="http://angularjs.org" ng-app="proxyApp" id="ng-app" class="ie9"> <![endif]-->

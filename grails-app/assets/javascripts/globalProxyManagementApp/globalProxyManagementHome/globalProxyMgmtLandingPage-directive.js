@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2020 Ellucian Company L.P. and its affiliates.
+ Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 globalProxyManagementApp.directive('globalLandingPageProxyTile', ['$state', '$rootScope', '$filter',
     function ($state, $rootScope, $filter) {
