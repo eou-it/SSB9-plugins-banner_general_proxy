@@ -1,3 +1,6 @@
+/********************************************************************************
+  Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
+********************************************************************************/
 package net.hedtech.banner.proxy.api
 
 class GlobalProxyManagementApi {
@@ -568,5 +571,101 @@ BEGIN
   ? := return_value;
 END;
 """
+
+    /*
+    Input: Global Proxy GIDM
+    Output: List of Proxied Users for Global Proxy
+    */
+    public final static String PROXIED_USERS_LIST_FOR_GLOBAL_PROXY = """
+DECLARE
+  lv_attr_nt     G_ATTRIBUTE_NT;
+  lv_minify_ext  varchar2(04);
+  TYPE T_desc_table IS TABLE OF TWGBWMNU.TWGBWMNU_DESC%TYPE
+  index by binary_integer;
+  lv_used_desc   T_desc_table;
+  lv_value varchar2(2000);
+
+  CURSOR C_PersonList
+      IS
+           SELECT GPRXREF.*, SPRIDEN_ID ID
+             FROM GPRXREF, SPRIDEN
+             WHERE GPRXREF_PERSON_PIDM = SPRIDEN_PIDM
+             AND SPRIDEN_CHANGE_IND IS NULL
+             AND GPRXREF_PROXY_IDM = ?
+                  AND EXISTS (SELECT 'Y' FROM GOBTPAC 
+                  WHERE GOBTPAC_PIDM = GPRXREF_PERSON_PIDM
+                  AND GOBTPAC_PIN_DISABLED_IND = 'N')
+         ORDER BY F_Format_Name (GPRXREF_PERSON_PIDM, 'LFMI');
+
+  active varchar2(3000);
+  inactive varchar2(3000);
+  student varchar2(3000);
+  students varchar2(3000);
+
+BEGIN
+
+      -- Loop through potential Banner Web users
+      -- Only show users if they have the Proxy Management role
+
+     active := '"active":[';
+     inactive := '"inactive":[';
+
+      FOR person IN C_PersonList
+      LOOP
+         -- Execute the GORRSQL rule for proxy management
+         -- Only create tab for first occurance of role
+         lv_attr_nt :=
+            gp_gorrsql.F_Execute_Rule ('SSB_ROLES',
+                                       'SSB_ROLE_PROXYTARGET',
+                                       person.GPRXREF_PERSON_PIDM);
+
+         IF lv_attr_nt IS NOT NULL AND lv_attr_nt.COUNT > 0
+         THEN
+            FOR i IN lv_attr_nt.FIRST .. lv_attr_nt.LAST
+            LOOP
+               IF lv_attr_nt (i)."value" = 'TRUE'
+               THEN
+                IF lv_used_desc.EXISTS (person.GPRXREF_PERSON_PIDM)
+                  THEN
+                     NULL;
+                 ELSE
+                  lv_used_desc (person.GPRXREF_PERSON_PIDM) :=
+                        person.GPRXREF_PERSON_PIDM;
+
+                   gspcrpt.p_apply(dbms_random.string('P',12) || '::'  || to_char(sysdate,'DDMMYYYYHH24MISS') || '::' || person.GPRXREF_PERSON_PIDM, lv_value);
+
+                      student := '{' ||
+                      '"name" ' || ':' || '"' || f_format_name (person.GPRXREF_PERSON_PIDM, 'FML') || '"' ||
+                      ',"id" ' || ':'  || '"' || person.ID || '"' || 
+                      ',"token" ' || ':'  || '"' || lv_value || '"' || '},';
+                      
+                      IF TRUNC(SYSDATE) BETWEEN TRUNC(person.GPRXREF_START_DATE) AND TRUNC (person.GPRXREF_STOP_DATE)
+                      THEN
+                         active := active || student;
+                      ELSE
+                         inactive := inactive || student;
+                      END IF;
+                  END IF;
+                 END IF;
+            END LOOP;
+
+         END IF;
+      END LOOP;
+
+     active := TRIM(TRAILING ',' FROM active );
+     active := active || ']';
+     
+     inactive := TRIM(TRAILING ',' FROM inactive );
+     inactive := inactive || ']';
+
+     students := '{ "students":{'
+                 || active || ','
+                 || inactive
+                 || '}}';
+
+     ? := students;
+
+END;
+    """
 
 }

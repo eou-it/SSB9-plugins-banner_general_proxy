@@ -211,7 +211,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
 
         let $stateChangeStartUnbind = $scope.$on('$stateChangeStart', function (event, toState) {
             if (formDirty) {
-                debugger;
                 event.preventDefault();
                 showSaveCancelMessage(toState)
             }

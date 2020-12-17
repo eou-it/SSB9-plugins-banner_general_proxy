@@ -222,7 +222,7 @@ class GlobalProxyService {
 
         def studentList = ""
 
-        def sqlText = ProxyLandingPageApi.STUDENT_LIST_FOR_PROXY
+        def sqlText = GlobalProxyManagementApi.PROXIED_USERS_LIST_FOR_GLOBAL_PROXY
 
         def sql = new Sql(sessionFactory.getCurrentSession().connection())
         sql.call(sqlText, [gidm, Sql.VARCHAR
