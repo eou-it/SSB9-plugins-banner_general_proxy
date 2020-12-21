@@ -24,7 +24,9 @@ globalProxyManagementApp.service( 'breadcrumbService', ['$filter', '$rootScope',
             }
         ];
 
-        callingUrl = sessionStorage.getItem('genAppCallingPage') + '#';
+        if (sessionStorage.getItem('genAppCallingPage')){
+            callingUrl = sessionStorage.getItem('genAppCallingPage') + '#';
+        }
 
         if (callingUrl) {
             label = GEN_LANDING_PAGE_SIGNATURE.test(callingUrl) ? 'banner.generalssb.landingpage.title' : 'default.paginate.prev';
