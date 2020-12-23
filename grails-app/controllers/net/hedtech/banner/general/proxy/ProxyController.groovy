@@ -132,7 +132,16 @@ class ProxyController {
                 }
 
                 def gidm = generalSsbProxyService.getGIDMfromPidmGlobalAccess(springSecurityService?.getAuthentication()?.user?.pidm)
-                println "GIDM In Proxy Controller: " + gidm
+
+                def pages = generalSsbProxyService.getProxyPages(gidm,studentPidm)
+                def page = url.replace("#","").replace("!","");
+
+                if (url && !pages?.pages?.find{it?.url?.contains(page)}) {
+                    log.warn("Access Forbidden: " + page)
+                    response.sendError( 403 )
+                    return
+                }
+
 
                 session["loggedUserPidm"] = springSecurityService?.getAuthentication()?.user?.pidm
                 session["globalProxyMode"] = true
