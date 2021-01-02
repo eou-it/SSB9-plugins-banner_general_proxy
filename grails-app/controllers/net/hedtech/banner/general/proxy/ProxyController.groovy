@@ -115,10 +115,6 @@ class ProxyController {
             addProxyFinancialAidConfigurationsToSession()
             def url = addFinaidMarkerToUrlIfUrlIsForFinaidPage(params?.url)
 
-            //TO DO
-            //1. Change pidm to id
-            //2. Parser(token + random length + expiration)
-            //3. Check for roles and security on the following: params?.url, globalProxyPidm and studentPidm
             if (params.token) {
 
                 // get the student's  pidm from the token

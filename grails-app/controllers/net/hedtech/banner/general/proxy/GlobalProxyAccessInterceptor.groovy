@@ -2,9 +2,6 @@
  Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.general.proxy
-import net.hedtech.banner.security.XssSanitizer
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.context.request.RequestContextHolder
 
 class GlobalProxyAccessInterceptor {
 
@@ -16,77 +13,51 @@ class GlobalProxyAccessInterceptor {
 
     GlobalProxyAccessInterceptor() {
         match controller: '*', action: '*'
+        match controller: 'studentProfile', action: '*'
+        match controller: 'studentGrades', action: '*'
+        match controller: 'studentTaxNotification', action: '*'
+        match controller: 'awardHistory', action: '*'
+        match controller: 'awardOffer' , action: '*'
+        match controller: 'studentAcademicProgress', action: '*'
+        match controller: 'federalShoppingSheet', action: '*'
+        match controller: 'resources', action: '*'
     }
 
 
-    def getGlobalProxyConfig() {
-        ["/ssb/studentTaxNotification" : ["/ssb/studentTaxNotification",
-                                          "/ssb/studentTaxNotification/getTaxYears",
-                                          "/ssb/accountSummary/getDefaultConfiguration",
-                                          "/ssb/login/auth",
-                                          "/ssb/studentHold/getHoldCount",
-                                          "/ssb/selfServiceMenu/data?type=Personal",
-                                          "/ssb/selfServiceMenu/data","/ssb/logout",
-                                          "/ssb/studentTaxNotification/getTaxNotificationAndConfiguration"
-        ],
-          "/ssb/studentProfile" :         ["/ssb/studentProfile",
-                                           "/ssb/studentPicture/picture",
-                                           "ssb/studentProfile/renderCurriculumTemplate",
-                                           "ssb/studentProfile/viewRegistrationNotices",
-                                           "/ssb/studentProfile/viewRegistrationNotices",
-                                           "/ssb/studentNotes/getConfiguration",
-                                           "/ssb/studentHolds/getHoldsCountCacheHolds",
-                                           "/ssb/studentProfile/viewRegisteredCourseList",
-                                           "/ssb/studentProfile/viewGPAHoursList"
-          ]
-                ]
+    def getGlobalProxyURLConfig() {
+        ["resources"              : "resources",
+         "studentTaxNotification" : "studentTaxNotification",
+         "studentProfile"         : "studentProfile",
+         "studentGrades"          : "studentGrades",
+         "awardHistory"           : "listAwardHistoryDetails",
+         "awardLetter"            : "listAwardLetterDetails",
+         "studentAcademicProgress": "studentAcademicProgress",
+         "federalShoppingSheet"   : "federalShoppingSheet",
+         "studentNotifications"   : "notifications"
+        ]
+
     }
 
 
     boolean before() {
 
-        String theUrl = constructUrl(request, controllerName, actionName)
-
-        println "URL: " + theUrl
-        println "CONTROLLER-NAME: " + controllerName
-        def requestParams = request.getParameterMap()
-        def pageUrl = requestParams.url
-        def studentPidm = requestParams.pidm
-
         if (session["globalProxyMode"]) {
-            if (!theUrl.contains("proxy") || !theUrl.contains("logout")) {
-                def x = getGlobalProxyConfig().collectMany { k, v -> (v.contains(theUrl)) ? [k] : [] }
-                println "x1->: " + x[0]
-                if(x){
-                    println "CHECK-ACCESS"
 
-                    println "LOGGED-USER-PIDM " + session["loggedUserPidm"]
-                    def userPidm = springSecurityService?.getAuthentication()?.user?.pidm
-                    def p_proxyIDM = generalSsbProxyService.getGIDMfromPidmGlobalAccess(session["loggedUserPidm"])
-                    println "USER-PIDM: " + userPidm
-                    println "USER-GIDM: " + p_proxyIDM
-                    println "URL-PAGE: " + theUrl
+            def userPidm = springSecurityService?.getAuthentication()?.user?.pidm
+            def p_proxyIDM = generalSsbProxyService.getGIDMfromPidmGlobalAccess(session["loggedUserPidm"])
 
-                   /*
-                    def pages = generalSsbProxyService.getProxyPages(p_proxyIDM,userPidm)
-                    println "PAGES: " + pages
 
-                    if (!pages.pages.find{it.url == x[0]}){
-                        println "****ERROR*****"
-                        //log.error('Invalid attempt for Id: ' + id)
-                        //403
-                        redirect(controller: "error", action: "accessForbidden")
-                        return false
-                    }
-                    */
-                }else{
-                    //403
-                    //redirect(controller: "error", action: "accessForbidden")
-                    //return false
-                }
+            def pages = generalSsbProxyService.getProxyPages(p_proxyIDM, userPidm)
+
+
+            def page = getGlobalProxyURLConfig()."$controllerName"
+
+
+            if (page && !pages?.pages?.find { it?.url?.contains(page) }) {
+                response.sendError(403)
+                return
             }
         }
-
 
         return true
     }
@@ -101,7 +72,7 @@ class GlobalProxyAccessInterceptor {
     private String constructUrl(request, controllerName, actionName) {
         String theUrl = "/ssb/"
 
-        if(controllerName) {
+        if (controllerName) {
             theUrl += controllerName
             theUrl += actionName ? "/" + actionName : ""
             //theUrl += request.getQueryString() ? "?" + request.getQueryString(): ""
