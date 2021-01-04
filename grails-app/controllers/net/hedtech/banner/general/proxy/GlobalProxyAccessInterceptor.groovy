@@ -12,7 +12,6 @@ class GlobalProxyAccessInterceptor {
     int order = HIGHEST_PRECEDENCE + 300
 
     GlobalProxyAccessInterceptor() {
-        match controller: '*', action: '*'
         match controller: 'studentProfile', action: '*'
         match controller: 'studentGrades', action: '*'
         match controller: 'studentTaxNotification', action: '*'
