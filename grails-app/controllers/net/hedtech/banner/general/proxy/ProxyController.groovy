@@ -45,6 +45,7 @@ class ProxyController {
     private final static String AWARD_PACKAGE_URL = '/ssb/proxy/awardPackage';
     private final static String ACCOUNT_SUMMARY_URL = '/ssb/proxy/acctsumm';
     private final static String AWARD_HISTORY_URL = '/ssb/proxy/awardhist';
+    private final static String GLOBAL_PROXY_MANAGEMENT_URL = '/ssb/globalProxy';
 
 
     private getAllStudentsInSingleList() {
@@ -120,7 +121,6 @@ class ProxyController {
                 // get the student's  pidm from the token
 
                 def studentPidm = generalSsbProxyService.getStudentPidmFromToken(params.token)
-                println "Student-PIDM: " + studentPidm
 
                 if (!studentPidm){
                     response.sendError( 403 )
@@ -144,7 +144,7 @@ class ProxyController {
                 springSecurityService?.getAuthentication()?.user?.pidm = new Integer(studentPidm)
                 RequestContextHolder.currentRequestAttributes()?.request?.session.setAttribute("guestUser", true)
 
-                session["globalGuestProxyBaseURL"] =  getGSSUrl()
+                session["globalGuestProxyBaseURL"] =  getGSSUrl() + GLOBAL_PROXY_MANAGEMENT_URL
             }
 
             redirect(url: url, params: params)
