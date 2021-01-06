@@ -45,7 +45,7 @@ class ProxyController {
     private final static String AWARD_PACKAGE_URL = '/ssb/proxy/awardPackage';
     private final static String ACCOUNT_SUMMARY_URL = '/ssb/proxy/acctsumm';
     private final static String AWARD_HISTORY_URL = '/ssb/proxy/awardhist';
-    private final static String GLOBAL_PROXY_MANAGEMENT_URL = '/ssb/globalProxy';
+    private final static String GLOBAL_PROXY_MANAGEMENT_URL = '/ssb/globalProxy#/home';
 
 
     private getAllStudentsInSingleList() {
@@ -142,6 +142,10 @@ class ProxyController {
                 session["loggedUserPidm"] = springSecurityService?.getAuthentication()?.user?.pidm
                 session["globalProxyMode"] = true
                 springSecurityService?.getAuthentication()?.user?.pidm = new Integer(studentPidm)
+
+                //adds gidm to the Global Proxy
+                SecurityContextHolder?.context?.authentication?.principal?.gidm = new Integer(gidm)
+
                 RequestContextHolder.currentRequestAttributes()?.request?.session.setAttribute("guestUser", true)
 
                 session["globalGuestProxyBaseURL"] =  getGSSUrl() + GLOBAL_PROXY_MANAGEMENT_URL
