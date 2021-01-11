@@ -1,5 +1,5 @@
 <!--*******************************************************************************
-  Copyright 2019 Ellucian Company L.P. and its affiliates.
+  Copyright 2019-2021 Ellucian Company L.P. and its affiliates.
 *******************************************************************************-->
 <div class="row">
     <div class="col-xs-12 col-md-6 col-lg-4">
@@ -125,8 +125,8 @@
 </div>
 <div class="proxy-bottom-buttons mgmt">
     <div class="proxy-desktop-visible">
-        <input ng-if="!profileRequired" ng-click="cancel()" type="button" value="{{'proxy.label.cancel'|i18n}}" class="secondary left">
-        <input ng-class="profileRequired ? 'only-submit' : null" ng-click="save()" type="button" value="{{'proxy.label.submit'|i18n}}" class="primary">
+        <button ng-if="!profileRequired" ng-click="cancel()" class="secondary left">{{'proxy.label.cancel'|i18n}}</button>
+        <button ng-class="profileRequired ? 'only-submit' : null" ng-click="save()" class="primary">{{'proxy.label.submit'|i18n}}</button>
     </div>
 </div>
 

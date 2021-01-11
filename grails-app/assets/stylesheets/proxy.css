@@ -389,12 +389,12 @@ p.notification-msg {
     padding: 42px 0 100px;
 }
 
-.proxy-bottom-buttons input {
+.proxy-bottom-buttons button {
     width: 100%;
     height: 44px;
 }
 
-.proxy-bottom-buttons .proxy-mobile-visible input {
+.proxy-bottom-buttons .proxy-mobile-visible button {
     margin-bottom: 20px;
 }
 
@@ -1459,15 +1459,15 @@ a.breadcrumbButton.leaf-breadcrumb {
         padding: 8px;
     }
 
-    .proxy-bottom-buttons input {
+    .proxy-bottom-buttons button {
         width: 260px;
     }
 
-    .proxy-bottom-buttons input.left {
+    .proxy-bottom-buttons button.left {
         margin-right: 10px;
     }
 
-    .proxy-bottom-buttons input.only-submit {
+    .proxy-bottom-buttons button.only-submit {
         margin-left: 130px;
     }
 
