@@ -70,10 +70,10 @@ class ProxyController {
         }
     }
 
-    private void logProxyNavigationToAccessHistory() {
+    private void logProxyNavigationToAccessHistory(studentPidm = null) {
         def logHistoryMessage = messageSource.getMessage(XssSanitizer?.sanitize("proxy.page.heading" +
                 filterFinAidUrl(params?.url)?.replaceAll("/", ".")), null, LocaleContextHolder.getLocale())
-        generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], logHistoryMessage)
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(studentPidm ? studentPidm : session["currentStudentPidm"], logHistoryMessage)
     }
 
     // This will cut off the aid year part from url
@@ -112,21 +112,18 @@ class ProxyController {
     // Main Proxy Page Navigator
     def navigate() {
         try {
-            logProxyNavigationToAccessHistory()
             addProxyFinancialAidConfigurationsToSession()
             def url = addFinaidMarkerToUrlIfUrlIsForFinaidPage(params?.url)
+            def isGlobalProxyNavigating = params?.token != null
 
-            if (params.token) {
-
-                // get the student's  pidm from the token
-
+            if (isGlobalProxyNavigating) {
+                //Get the student's pidm from the token
                 def studentPidm = generalSsbProxyService.getStudentPidmFromToken(params.token)
 
                 if (!studentPidm){
                     response.sendError( 403 )
                     return
                 }
-
                 def gidm = generalSsbProxyService.getGIDMfromPidmGlobalAccess(springSecurityService?.getAuthentication()?.user?.pidm)
 
                 def pages = generalSsbProxyService.getProxyPages(gidm,studentPidm)
@@ -138,17 +135,19 @@ class ProxyController {
                     return
                 }
 
-
                 session["loggedUserPidm"] = springSecurityService?.getAuthentication()?.user?.pidm
                 session["globalProxyMode"] = true
                 springSecurityService?.getAuthentication()?.user?.pidm = new Integer(studentPidm)
 
                 //adds gidm to the Global Proxy
                 SecurityContextHolder?.context?.authentication?.principal?.gidm = new Integer(gidm)
-
                 RequestContextHolder.currentRequestAttributes()?.request?.session.setAttribute("guestUser", true)
 
                 session["globalGuestProxyBaseURL"] =  getGSSUrl() + GLOBAL_PROXY_MANAGEMENT_URL
+                logProxyNavigationToAccessHistory(studentPidm)
+            }
+            else{
+                logProxyNavigationToAccessHistory()
             }
 
             redirect(url: url, params: params)
