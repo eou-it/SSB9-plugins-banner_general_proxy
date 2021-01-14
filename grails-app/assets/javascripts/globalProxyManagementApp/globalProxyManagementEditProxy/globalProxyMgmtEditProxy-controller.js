@@ -179,7 +179,6 @@ globalProxyMgmtAppControllers.controller('globalProxyMgmtEditProxyController', [
         // CONTROLLER VARIABLES
         // --------------------
         $scope.dirty = false;
-        $scope.isCreateNew = true;
         $scope.proxy = new GlobalProxyManagementProxy();
         $scope.isTargetIdValid = false;
         $scope.proxyAuxData = {
