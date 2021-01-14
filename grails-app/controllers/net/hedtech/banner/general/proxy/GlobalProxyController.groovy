@@ -186,7 +186,7 @@ class GlobalProxyController {
     private static boolean isGlobalProxyUserTargetingTheirOwnId(targetId) {
         Integer globalProxyUserPidm = SecurityContextHolder?.context?.authentication?.principal?.pidm
         def globalProxyUser = PersonIdentificationName?.fetchBannerPerson(globalProxyUserPidm)
-        globalProxyUser?.bannerId == targetId?.trim()
+        String?.valueOf(globalProxyUser?.bannerId)?.toUpperCase() == String?.valueOf(targetId)?.trim()?.toUpperCase()
     }
 
     private String getPreferredNameBasedOnProxyRule(String bannerId) {
