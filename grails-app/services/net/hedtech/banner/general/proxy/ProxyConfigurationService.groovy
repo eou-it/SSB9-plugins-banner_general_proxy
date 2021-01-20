@@ -3,7 +3,6 @@
  ********************************************************************************/
 package net.hedtech.banner.general.proxy
 
-import grails.util.Holders
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
 import net.hedtech.banner.exceptions.ApplicationException
@@ -172,10 +171,8 @@ class ProxyConfigurationService extends ServiceBase {
 
     private getRoles() {
         [
-                STUDENT : hasUserRole("STUDENT"),
-                EMPLOYEE: hasUserRole("EMPLOYEE"),
-                FACULTY : hasUserRole("FACULTY"),
-                PROXY   : SecurityContextHolder?.context?.authentication?.principal?.gidm ? true : false
+                GLOBAL_PROXY : hasUserRole("PROXYGLOBALACCESS"),
+                PROXY   : hasUserRole("GUEST")
         ]
     }
 
