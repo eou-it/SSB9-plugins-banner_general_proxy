@@ -101,7 +101,7 @@ class ProxyController {
         if (session["loggedUserPidm"]) {
             springSecurityService?.getAuthentication()?.user?.pidm = session["loggedUserPidm"]
             session["globalProxyMode"] = false
-            RequestContextHolder.currentRequestAttributes()?.request?.session.setAttribute("guestUser", false)
+            RequestContextHolder?.currentRequestAttributes()?.request?.session?.setAttribute("guestUser", null)
             render "context set"
         }else{
             response.sendError( 403 )
