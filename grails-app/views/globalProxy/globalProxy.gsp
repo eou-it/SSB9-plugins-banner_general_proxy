@@ -55,6 +55,7 @@ Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
                     /\${applicationContextRoot}\/ssb\/survey\/survey$/,
                     /\${applicationContextRoot}\/resetPassword\/validateans$/,
                     /\${applicationContextRoot}\/ssb\/personalInformation\/resetPasswordWithSecurityQuestions$/,
+                    /\/StudentSelfService\/ssb\//,
                     /\/seamless/
                 ],
                 isExcluded;
