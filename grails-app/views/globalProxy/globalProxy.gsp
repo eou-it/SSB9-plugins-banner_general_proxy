@@ -48,13 +48,15 @@ Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
         // Track calling page for breadcrumbs
         (function () {
             // URLs to exclude from updating genAppCallingPage, because they're actually either the authentication
-            // page, a part of the Personal Information app, or App Nav, and are not "calling pages."
+            // page, a part of the Personal Information app, App Nav, or this page itself (result of using browser
+            // Back button from StudentSelfService) and are not "calling pages."
             var referrerUrl = document.referrer,
                 excludedRegex = [
                     /\${applicationContextRoot}\/login\/auth$/,
                     /\${applicationContextRoot}\/ssb\/survey\/survey$/,
                     /\${applicationContextRoot}\/resetPassword\/validateans$/,
                     /\${applicationContextRoot}\/ssb\/personalInformation\/resetPasswordWithSecurityQuestions$/,
+                    /\${applicationContextRoot}\/ssb\/globalProxy$/,
                     /\/StudentSelfService\/ssb\//,
                     /\/seamless/
                 ],

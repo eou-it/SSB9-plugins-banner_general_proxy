@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat
  */
 class ProxyController {
     static defaultAction = 'landingPage'
+    static final LOGGED_USER_PIDM = 'loggedUserPidm'
 
     def generalSsbProxyService
     def personRelatedHoldService
@@ -98,8 +99,8 @@ class ProxyController {
     }
 
     def onReturn(){
-        if (session["loggedUserPidm"]) {
-            springSecurityService?.getAuthentication()?.user?.pidm = session["loggedUserPidm"]
+        if (session[LOGGED_USER_PIDM]) {
+            springSecurityService?.getAuthentication()?.user?.pidm = session[LOGGED_USER_PIDM]
             session["globalProxyMode"] = false
             RequestContextHolder?.currentRequestAttributes()?.request?.session?.setAttribute("guestUser", null)
             render "context set"
@@ -124,6 +125,16 @@ class ProxyController {
                     response.sendError( 403 )
                     return
                 }
+
+                // If the proxy user's pidm was saved in a previous visit here, use that to reset it in the authentication
+                // service. This is used to work around a browser Back arrow issue where the pidm is set to the *student's*
+                // pidm (see below where pidm is set to "new Integer(studentPidm)"), but it never gets reset to the
+                // proxy user's pidm (see onReturn() above) because the user clicks the browser Back button rather than
+                // the "home" logo in the header; the latter *would* result in onReturn() being called, the former does not.
+                if (session[LOGGED_USER_PIDM]) {
+                    springSecurityService?.getAuthentication()?.user?.pidm = session[LOGGED_USER_PIDM]
+                }
+
                 def gidm = generalSsbProxyService.getGIDMfromPidmGlobalAccess(springSecurityService?.getAuthentication()?.user?.pidm)
 
                 def pages = generalSsbProxyService.getProxyPages(gidm,studentPidm)
@@ -135,7 +146,7 @@ class ProxyController {
                     return
                 }
 
-                session["loggedUserPidm"] = springSecurityService?.getAuthentication()?.user?.pidm
+                session[LOGGED_USER_PIDM] = springSecurityService?.getAuthentication()?.user?.pidm
                 session["globalProxyMode"] = true
                 springSecurityService?.getAuthentication()?.user?.pidm = new Integer(studentPidm)
 
