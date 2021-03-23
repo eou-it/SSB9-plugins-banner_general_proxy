@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <%--
 /*******************************************************************************
-Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
+Copyright 2019-2021 Ellucian Company L.P. and its affiliates.
 *******************************************************************************/
 --%>
 <!--[if IE 9 ]>    <html xmlns:ng="http://angularjs.org" ng-app="proxyApp" id="ng-app" class="ie9"> <![endif]-->
@@ -59,7 +59,7 @@ Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
                     return regex.test(referrerUrl);
                 });
 
-                if (!isExcluded) {
+                if (!isExcluded && referrerUrl.indexOf("/ssb/") !== -1) {
                     // Track this page
                     sessionStorage.setItem('genAppCallingPage', referrerUrl);
                 }

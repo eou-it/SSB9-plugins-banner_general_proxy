@@ -1,10 +1,11 @@
 /*******************************************************************************
- Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
+ Copyright 2019-2021 Ellucian Company L.P. and its affiliates.
  ****************************************************************************** */
 package net.hedtech.banner.general.proxy
 
 import grails.converters.JSON
 import net.hedtech.banner.exceptions.ApplicationException
+import net.hedtech.banner.general.configuration.ConfigProperties
 import net.hedtech.banner.general.system.ProxyAccessSystemOptionType
 import net.hedtech.banner.i18n.MessageHelper
 import org.grails.web.json.JSONObject
@@ -13,7 +14,9 @@ import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.security.core.context.SecurityContextHolder
 import net.hedtech.banner.security.XssSanitizer
 import net.hedtech.banner.general.person.PersonUtility
+import org.springframework.web.context.request.RequestContextHolder
 
+import java.sql.SQLException
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -22,6 +25,7 @@ import java.text.SimpleDateFormat
  */
 class ProxyController {
     static defaultAction = 'landingPage'
+    static final LOGGED_USER_PIDM = 'loggedUserPidm'
 
     def generalSsbProxyService
     def personRelatedHoldService
@@ -42,6 +46,7 @@ class ProxyController {
     private final static String AWARD_PACKAGE_URL = '/ssb/proxy/awardPackage';
     private final static String ACCOUNT_SUMMARY_URL = '/ssb/proxy/acctsumm';
     private final static String AWARD_HISTORY_URL = '/ssb/proxy/awardhist';
+    private final static String GLOBAL_PROXY_MANAGEMENT_URL = '/ssb/globalProxy#/home';
 
 
     private getAllStudentsInSingleList() {
@@ -66,10 +71,10 @@ class ProxyController {
         }
     }
 
-    private void logProxyNavigationToAccessHistory() {
+    private void logProxyNavigationToAccessHistory(studentPidm = null) {
         def logHistoryMessage = messageSource.getMessage(XssSanitizer?.sanitize("proxy.page.heading" +
                 filterFinAidUrl(params?.url)?.replaceAll("/", ".")), null, LocaleContextHolder.getLocale())
-        generalSsbProxyService.updateProxyHistoryOnPageAccess(session["currentStudentPidm"], logHistoryMessage)
+        generalSsbProxyService.updateProxyHistoryOnPageAccess(studentPidm ? studentPidm : session["currentStudentPidm"], logHistoryMessage)
     }
 
     // This will cut off the aid year part from url
@@ -93,12 +98,69 @@ class ProxyController {
         session['proxyWebRules'] = proxyConfigurationService.getFinaidConfigurationsBasedOnRole()
     }
 
+    def onReturn(){
+        if (session[LOGGED_USER_PIDM]) {
+            springSecurityService?.getAuthentication()?.user?.pidm = session[LOGGED_USER_PIDM]
+            session["globalProxyMode"] = false
+            RequestContextHolder?.currentRequestAttributes()?.request?.session?.setAttribute("guestUser", null)
+            render "context set"
+        }else{
+            response.sendError( 403 )
+            return
+        }
+    }
+
     // Main Proxy Page Navigator
     def navigate() {
         try {
-            logProxyNavigationToAccessHistory()
             addProxyFinancialAidConfigurationsToSession()
             def url = addFinaidMarkerToUrlIfUrlIsForFinaidPage(params?.url)
+            def isGlobalProxyNavigating = params?.token != null
+
+            if (isGlobalProxyNavigating) {
+                //Get the student's pidm from the token
+                def studentPidm = generalSsbProxyService.getStudentPidmFromToken(params.token)
+
+                if (!studentPidm){
+                    response.sendError( 403 )
+                    return
+                }
+
+                // If the proxy user's pidm was saved in a previous visit here, use that to reset it in the authentication
+                // service. This is used to work around a browser Back arrow issue where the pidm is set to the *student's*
+                // pidm (see below where pidm is set to "new Integer(studentPidm)"), but it never gets reset to the
+                // proxy user's pidm (see onReturn() above) because the user clicks the browser Back button rather than
+                // the "home" logo in the header; the latter *would* result in onReturn() being called, the former does not.
+                if (session[LOGGED_USER_PIDM]) {
+                    springSecurityService?.getAuthentication()?.user?.pidm = session[LOGGED_USER_PIDM]
+                }
+
+                def gidm = generalSsbProxyService.getGIDMfromPidmGlobalAccess(springSecurityService?.getAuthentication()?.user?.pidm)
+
+                def pages = generalSsbProxyService.getProxyPages(gidm,studentPidm)
+                def page = url.replace("#","").replace("!","");
+
+                if (url && !pages?.pages?.find{it?.url?.contains(page)}) {
+                    log.warn("Access Forbidden: " + page)
+                    response.sendError( 403 )
+                    return
+                }
+
+                session[LOGGED_USER_PIDM] = springSecurityService?.getAuthentication()?.user?.pidm
+                session["globalProxyMode"] = true
+                springSecurityService?.getAuthentication()?.user?.pidm = new Integer(studentPidm)
+
+                //adds gidm to the Global Proxy
+                SecurityContextHolder?.context?.authentication?.principal?.gidm = new Integer(gidm)
+                RequestContextHolder.currentRequestAttributes()?.request?.session.setAttribute("guestUser", true)
+
+                session["globalGuestProxyBaseURL"] =  getGSSUrl() + GLOBAL_PROXY_MANAGEMENT_URL
+                logProxyNavigationToAccessHistory(studentPidm)
+            }
+            else{
+                logProxyNavigationToAccessHistory()
+            }
+
             redirect(url: url, params: params)
         }
         catch (NoSuchMessageException e) {
@@ -107,6 +169,22 @@ class ProxyController {
                     messageSource.getMessage(XssSanitizer?.sanitize('proxy.error.dataError'), null, LocaleContextHolder.getLocale()))
         }
     }
+
+    /**
+     * Returns the general location from gurocfg table
+     * @return String
+     * */
+    private def getGSSUrl() {
+        try{
+            ConfigProperties configProperties = ConfigProperties.fetchByConfigNameAndAppId('GENERALLOCATION','GENERAL_SS')
+                log.debug( "URL to redirect $configProperties.configValue" )
+                return configProperties? configProperties.configValue  : null
+        }catch (SQLException e){
+            log.warn("Unable to fetch the configuration GENERALLOCATION "+e.getMessage())
+            return ""
+        }
+    }
+
 
     def landingPage() {
         try {
@@ -393,7 +471,7 @@ class ProxyController {
         def pidm =PersonUtility.getPerson(XssSanitizer.sanitize(generalSsbProxyService.getStudentIdFromToken(params.id))).pidm
         springSecurityService?.getAuthentication()?.user?.pidm = pidm
         session["currentStudentPidm"] = pidm
-        session["globalGuestProxyBaseURL"] = "/"
+        //session["globalGuestProxyBaseURL"] = "/"
         render "PIDM context set"
     }
 

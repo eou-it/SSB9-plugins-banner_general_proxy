@@ -1,0 +1,19 @@
+<!--******************************************************************************
+  Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div ng-if="validEmailChecksLoaded" ng-class="students.active.length > 0 && (userHasActivePreferredEmailAddress && !isUsersEmailInUseByAnotherProxy) ? '' : 'proxy-mgmt-home-content'">
+    <div ng-if="!userHasActivePreferredEmailAddress">
+        <global-proxy-mgmt-notification display-message="{{'globalProxyManagement.message.noActivePreferredEmailAddress'|i18n}}" notification-type="warning" />
+    </div>
+    <div ng-if="userHasActivePreferredEmailAddress">
+        <div ng-if="isUsersEmailInUseByAnotherProxy">
+            <global-proxy-mgmt-notification display-message="{{'globalProxyManagement.message.emailInUseByProxy'|i18n}}" notification-type="error" />
+        </div>
+        <div ng-if="!isUsersEmailInUseByAnotherProxy && proxiesLoaded && students.active.length < 1" class="center-contents">
+            <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyNoProxyAddedYetTemplate.html'|webAppResourcePath"></ng-include>
+        </div>
+        <div ng-if="!isUsersEmailInUseByAnotherProxy && proxiesLoaded && students.active.length > 0">
+            <ng-include src="'globalProxyManagementApp/globalProxyManagementHome/globalProxyMgmtLandingPage.html'|webAppResourcePath"></ng-include>
+        </div>
+    </div>
+</div>

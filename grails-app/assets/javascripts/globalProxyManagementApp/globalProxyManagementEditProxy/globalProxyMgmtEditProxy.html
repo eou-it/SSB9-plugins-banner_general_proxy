@@ -1,0 +1,70 @@
+<!--*******************************************************************************
+  Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="global-proxy-edit-content">
+    <div class="global-proxy-heading">
+        <span class="bold">{{'proxyManagement.label.addProxy'|i18n}}</span>
+        <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.addProxyUsingForm'|i18n}}"></proxy-mgmt-popover-tooltip>
+    </div>
+    <hr class="global-proxy-new-proxy-hr" />
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <global-proxy-mgmt-notification notification-type="info" display-message="{{'globalProxyManagement.message.bannerId'|i18n}}" />
+        </div>
+    </div>
+    <div class="row global-proxy-banner-id-input-row">
+        <div class="col-xs-12 col-md-6 col-lg-4">
+            <label class="input-field-label" for="name-banner-id">{{'globalProxyManagement.label.bannerId'|i18n}} <i>{{'proxyManagement.label.hint.required'|i18n}}</i></label><br>
+            <input ng-model="proxy.targetId" ng-blur="isBannerIdFocused=false; handleBannerIdChange(proxy)" ng-focus="isBannerIdFocused=true"
+                   ng-class="[(!!globalProxyManagementDataValidator.bannerIdErrMsg && !isBannerIdFocused ? 'input-field-error' : null)]"
+                   class="text-input-field gssb-eds-text-field semi-bold form-spacing"
+                   type="text" placeholder="{{'globalProxyManagement.placeholder.enter'|i18n}}" size="{{(maxBannerIdLength + 2)}}" maxlength="{{maxBannerIdLength}}" title="{{proxy.targetId}}"
+                   id="name-banner-id">
+            <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.bannerIdErrMsg ? 'field-error error-font-size' : 'no-display')]"
+               role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.bannerIdErrMsg|i18n}}</p>
+            <div ng-class="[(proxy.preferredName ? 'error-font-size' : 'no-display')]"
+                 role="alert" aria-live="assertive">
+                <p class="global-proxy-name-display-add-page">{{proxy.preferredName}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-lg-4" ng-class="(!!globalProxyManagementDataValidator.relationshipErrMsg ? 'global-proxy-dropdown-error' : null)">
+            <label class="input-field-label" for="relationship">{{'proxyManagement.label.relationship'|i18n}}</label>
+            <proxy-mgmt-popover-tooltip popover-contents="{{'proxyManagement.message.profile'|i18n}}"></proxy-mgmt-popover-tooltip>
+            <br>
+            <xe-ui-select class="global-proxy-dropdown-box" ng-model="proxyAuxData.selectedRelationship" theme="select2" search-enabled="false" ng-change="handleRelationshipChange()"
+                          id="relationship">
+                <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select, 'proxyManagement.label.relationship'|i18n)" placeholder="{{placeholder.relationship}}">
+                    {{$select.selected.description ? $select.selected.description : placeholder.relationship}}
+                </xe-ui-select-match>
+                <xe-ui-select-choices repeat="choice in relationshipChoices">
+                    <div ng-bind-html="choice.description"></div>
+                </xe-ui-select-choices>
+            </xe-ui-select>
+            <p class="input-field-label mobile-errors" ng-class="[(!!globalProxyManagementDataValidator.relationshipErrMsg ? 'field-error error-font-size' : 'no-display')]"
+               role="alert" aria-live="assertive">{{globalProxyManagementDataValidator.relationshipErrMsg|i18n}}</p>
+        </div>
+    </div>
+    <div class="row global-proxy-top-padding">
+        <div class="col-xs-12 col-md-12 col-lg-12">
+            <div ng-if="proxy.pages && proxy.pages.length > 0">
+                <div><b>{{'globalProxyManagement.message.authorizations'|i18n}}</b></div>
+                <div ng-repeat="authItem in proxy.pages">
+                    <div>{{authItem.desc}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row global-proxy-top-padding">
+        <div class="col-xs-12 col-md-6 col-lg-4">
+            <button ng-if="!profileRequired" ng-click="cancel()" class="secondary left">{{'proxy.label.cancel'|i18n}}</button>
+            <button ng-class="profileRequired ? 'only-submit' : null" ng-click="save()" class="primary">{{'proxy.label.submit'|i18n}}</button>
+        </div>
+    </div>
+    <div id="proxyProfileErrorMsgCenter" class="visuallyhidden" tabindex="-1">
+        <span>globalProxyManagementDataValidator.bannerIdErrMsg</span>
+        <span>globalProxyManagementDataValidator.relationshipErrMsg</span>
+        <span>globalProxyManagementDataValidator.authorizationsErrMsg</span>
+    </div>
+</div>

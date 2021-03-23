@@ -1,0 +1,291 @@
+/********************************************************************************
+  Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
+********************************************************************************/
+.global-proxy-tablet-visible{
+    visibility: hidden;
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+}
+
+.global-proxy-mobile-visible{
+    visibility: hidden;
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+}
+
+.global-proxy-desktop-visible{
+    visibility: visible;
+    position: relative;
+    height: auto;
+    width: auto;
+    margin: 0px;
+    overflow: initial;
+    clip: initial;
+    padding: initial;
+}
+
+.center-contents {
+    padding-bottom: 50px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,40%);
+    position: relative;
+    text-align: center;
+}
+
+.global-proxy-heading {
+    font-family: OpenSans-semibold;
+    font-size: 20px;
+}
+
+.global-proxy-subheading {
+    font-family: OpenSans-regular;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.global-proxy-no-proxies-yet-row-buffer {
+    margin-top: 25px;
+}
+
+.global-proxy-no-proxies-yet-add-new-button {
+    margin-top: 25px;
+    font-size: 16px;
+}
+
+.global-proxy-existing-proxies-add-new-button {
+    height: 44px;
+    font-size: 16px;
+    float: right;
+}
+
+.global-proxy-landing-page-notification-box {
+    display: table;
+    margin-bottom: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.global-proxy-search{
+    width: 100%;
+    margin-top: 1.5em;
+    height: 44px;
+}
+
+.global-proxy-edit-content{
+    margin: 30px 50px 100px;
+}
+
+.global-proxy-new-proxy-hr {
+    margin-left: -50px;
+    margin-right: -50px;
+}
+
+.global-proxy-extend-hr {
+    margin-left: -50px;
+    margin-right: -50px;
+}
+
+.global-proxy-name-display-add-page{
+    color: #333;
+    margin-top: 7px;
+}
+
+.global-proxy-edit-content input{
+    height: 44px;
+}
+
+.global-proxy-dropdown-box {
+    background-color: #FFFFFF;
+    min-width: 100%;
+}
+
+.global-proxy-dropdown-error a {
+    border-color:#CD3B3E !important;
+    color:#CD3B3E !important;
+}
+
+.global-proxy-edit-content .row {
+    margin-top: 15px;
+}
+
+.global-proxy-top-padding {
+    margin-top: 30px !important;
+}
+
+.global-proxy-button-container .primary{
+    border: 1px solid #026BC8;
+}
+
+.global-proxy-button-container .primary:hover{
+    border: 1px solid #026BC8;
+}
+
+.global-proxy-student-tile{
+    display: flex;
+}
+
+.global-proxy-student-tile > div {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.global-proxy-student-tile hr {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.global-proxy-student-tile-student-info {
+    margin-right: 15% !important;
+}
+
+.global-proxy-student-tile .tile-icon {
+    margin-right: 49px !important;
+}
+
+.global-proxy-student-tile .delete-btn {
+    padding: 0 !important;
+    margin-left: 49px !important;
+}
+
+.global-proxy-edit-content > .row {
+    display: flex;
+}
+
+.global-proxy-heading-container{
+    margin: auto;
+}
+
+.global-proxy-edit-content > .proxy-mgmt-button-container {
+    margin: auto;
+}
+
+/*Tablet device*/
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .global-proxy-desktop-visible{
+        visibility: hidden;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+
+    }
+
+    .global-proxy-mobile-visible{
+        visibility: hidden;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+    }
+
+    .global-proxy-tablet-visible{
+        visibility: visible;
+        position: relative;
+        height: auto;
+        width: auto;
+        margin: 0px;
+        overflow: initial;
+        clip: initial;
+        padding: initial;
+    }
+
+    .global-proxy-student-tile-student-info {
+        margin-right: 10% !important;
+    }
+}
+
+/* Mobile device */
+@media screen and (max-width: 767px) {
+    .center-contents {
+        transform: translate(-50%,10%);
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .global-proxy-no-proxies-yet-add-new-button {
+        margin-top: 5px;
+        font-size: 16px;
+    }
+
+    .global-proxy-existing-proxies-add-new-button {
+        margin-top: -10px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        width: 100%;
+        height: 48px;
+    }
+
+    .global-proxy-desktop-visible{
+        visibility: hidden;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+    }
+
+    .global-proxy-tablet-visible{
+        visibility: hidden;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+    }
+
+    .global-proxy-mobile-visible{
+        visibility: visible;
+        position: relative;
+        height: auto;
+        width: auto;
+        margin: 0px;
+    }
+
+    .global-proxy-extend-hr {
+        display: none;
+    }
+
+    .global-proxy-student-tile{
+        display: inherit;
+    }
+
+    .global-proxy-student-tile .delete-btn {
+        float: right;
+    }
+
+    .global-proxy-student-tile  .tile-icon,.global-proxy-student-tile-student-info {
+        margin-bottom: 30px !important;
+    }
+
+    .global-proxy-heading-container{
+        display: none;
+    }
+}

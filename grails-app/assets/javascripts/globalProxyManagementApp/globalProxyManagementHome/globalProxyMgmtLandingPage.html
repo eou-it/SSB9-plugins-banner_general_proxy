@@ -1,0 +1,21 @@
+<!--*******************************************************************************
+  Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div class="global-proxy-edit-content container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 global-proxy-heading-container">
+            <div class="global-proxy-heading">
+                {{'globalProxyManagement.title.globalProxyManagement'|i18n}}
+            </div>
+        </div>
+        <div class="proxy-mgmt-button-container center col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <button ng-click="goToEditProxyState()" class="primary global-proxy-existing-proxies-add-new-button">{{'proxyManagement.label.addProxy'|i18n}}</button>
+        </div>
+    </div>
+    <hr class="global-proxy-extend-hr"/>
+    <div class="tile-group">
+        <div ng-repeat="proxy in proxyTiles" class="proxy-content-section proxy-tile">
+            <global-landing-page-proxy-tile proxy-data="proxy" delete-function="confirmDeleteProxy(proxy)" class="tile-container"/>
+        </div>
+    </div>
+</div>

@@ -9,7 +9,7 @@ proxyManagementApp.service( 'breadcrumbService', ['$filter', '$rootScope', funct
         GEN_LANDING_PAGE_SIGNATURE;
 
     $rootScope.applicationContextRoot = $('meta[name=applicationContextRoot]').attr("content");
-    GEN_LANDING_PAGE_SIGNATURE = new RegExp($rootScope.applicationContextRoot +'/ssb/general$');
+    GEN_LANDING_PAGE_SIGNATURE = new RegExp($rootScope.applicationContextRoot +'/ssb/general#$');
 
     this.reset = function() {
         var label;
@@ -21,7 +21,9 @@ proxyManagementApp.service( 'breadcrumbService', ['$filter', '$rootScope', funct
             }
         ];
 
-        callingUrl = sessionStorage.getItem('genAppCallingPage');
+        if (sessionStorage.getItem('genAppCallingPage')){
+            callingUrl = sessionStorage.getItem('genAppCallingPage') + '#';
+        }
 
         if (callingUrl) {
             label = GEN_LANDING_PAGE_SIGNATURE.test(callingUrl) ? 'banner.generalssb.landingpage.title' : 'default.paginate.prev';

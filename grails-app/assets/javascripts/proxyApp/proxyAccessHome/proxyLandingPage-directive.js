@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright 2019-2020 Ellucian Company L.P. and its affiliates.
+ Copyright 2019-2021 Ellucian Company L.P. and its affiliates.
  *******************************************************************************/
 proxyAppDirectives.directive('landingPageAppTile', ['$state', '$rootScope', function ($state, $rootScope) {
     return{

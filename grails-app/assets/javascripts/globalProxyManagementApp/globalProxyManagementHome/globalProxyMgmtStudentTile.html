@@ -1,0 +1,38 @@
+<!--*******************************************************************************
+  Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
+*******************************************************************************-->
+<div ng-class="proxyData.active ? null : 'disabled'" class="tile-wrapper">
+    <div class="global-proxy-student-tile">
+        <div class="global-proxy-mobile-visible">
+            <global-proxy-mgmt-delete-button item="proxyData" delete-function="deleteFunction()" button-title="{{'proxyManagement.button.title.deleteProxy'|i18n}}" />
+        </div>
+        <div class="tile-icon">
+                <img ng-src="{{'icons/student.png'|webAppResourcePath}}"  alt="{{'globalProxyManagement.image.alt.studentIcon'|i18n}}"
+                                 aria-label="{{'globalProxyManagement.image.alt.studentIcon'|i18n}}"/>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 global-proxy-student-tile-student-info">
+            <div class="tile-title break-long-words">
+                {{'proxy.landingPage.label.proxy.for'|i18n}}<span class="student-name-proxy-home">{{proxyData.desc}}</span>
+            </div>
+            <hr />
+            <div>{{proxyData.bannerId}}</div>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            <div ng-if="proxyData.active">
+                <xe-ui-select id="select2MultipleLabel" ng-model="proxyData.selectedPage" on-select="onTileSelect(proxyData.selectedPage.url)"
+                              theme="select2" search-enabled="false">
+                    <xe-ui-select-match ng-init="setupSelectCtrlFocusser($select)"
+                                        placeholder="{{'proxy.landingPage.label.select.to.view'|i18n}}">
+                        {{$select.selected.desc ? $select.selected.desc : ('proxy.landingPage.label.select.to.view'|i18n)}}
+                    </xe-ui-select-match>
+                    <xe-ui-select-choices repeat="page in proxyData.pages | propsFilter: {desc: $select.search}">
+                        <div ng-bind-html="page.desc | highlight: $select.search"></div>
+                    </xe-ui-select-choices>
+                </xe-ui-select>
+            </div>
+        </div>
+        <div class="global-proxy-desktop-visible global-proxy-tablet-visible">
+            <global-proxy-mgmt-delete-button item="proxyData" delete-function="deleteFunction()" button-title="{{'proxyManagement.button.title.deleteProxy'|i18n}}" />
+        </div>
+    </div>
+</div>

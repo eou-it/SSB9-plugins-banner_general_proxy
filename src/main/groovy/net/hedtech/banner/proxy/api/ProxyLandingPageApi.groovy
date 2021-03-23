@@ -5,6 +5,28 @@ package net.hedtech.banner.proxy.api
 
 class ProxyLandingPageApi {
 
+    public final static String GET_GIDM_GLOBAL_ACCESS = """
+  DECLARE
+     pidm SPRIDEN.SPRIDEN_PIDM%TYPE;
+     gidm GPBPRXY.GPBPRXY_PROXY_IDM%TYPE;
+     
+--
+   cursor getGidm(pidm SPRIDEN.SPRIDEN_PIDM%TYPE) is
+   select gpbprxy_proxy_idm
+     from gpbprxy
+     where gpbprxy_proxy_pidm = pidm;
+   BEGIN
+   pidm := ?;
+   --  
+   open getGidm(pidm);
+   fetch getGidm into gidm;  
+--   
+   ? := gidm;
+   -- DBMS_OUTPUT.PUT_LINE('GIDM: ' || gidm);
+--
+  END;
+"""
+
     public final static String GET_STUDENT_ID_FROM_TOKEN ="""
   DECLARE
      token varchar2(2000);
@@ -16,6 +38,34 @@ class ProxyLandingPageApi {
    proxyId := substr(proxyId,instr(proxyId,'::', 1, 2) + 2);
 --   
    ? := proxyId;
+--
+  END;
+"""
+
+    public final static String GET_STUDENT_PIDM_FROM_TOKEN ="""
+  DECLARE
+     token varchar2(2000);
+     pidm  varchar2(2000);
+     expDate date;
+     timeOut  EXCEPTION;
+   BEGIN
+   token := ?;
+   --
+   gspcrpu.p_unapply (token,pidm);
+   
+   expDate := to_date(substr(pidm, instr(pidm, '::', 1, 1) + 2, 14), 'DDMMYYYYHH24MISS') + 1800/24/60/60;
+   
+   if expDate < SYSDATE then
+     RAISE timeOut;
+   end if;
+   
+   pidm := substr(pidm,instr(pidm,'::', 1, 2) + 2);
+  
+--   
+   ? := to_number(pidm);
+   EXCEPTION
+     WHEN others THEN 
+     null;
 --
   END;
 """
@@ -42,6 +92,7 @@ DECLARE
   TYPE T_desc_table IS TABLE OF TWGBWMNU.TWGBWMNU_DESC%TYPE
   index by binary_integer;
   lv_used_desc   T_desc_table;
+  lv_value varchar2(2000);
 
   CURSOR C_PersonList
       IS
@@ -90,9 +141,12 @@ BEGIN
                   lv_used_desc (person.GPRXREF_PERSON_PIDM) :=
                         person.GPRXREF_PERSON_PIDM;
 
+                   gspcrpt.p_apply(dbms_random.string('P',12) || '::'  || to_char(sysdate,'DDMMYYYYHH24MISS') || '::' || person.GPRXREF_PERSON_PIDM, lv_value);
+
                       student := '{' ||
                       '"name" ' || ':' || '"' || f_format_name (person.GPRXREF_PERSON_PIDM, 'FML') || '"' ||
-                      ',"id" ' || ':'  || '"' || person.ID || '"' || '},';
+                      ',"id" ' || ':'  || '"' || person.ID || '"' || 
+                      ',"token" ' || ':'  || '"' || lv_value || '"' || '},';
                       
                       IF TRUNC(SYSDATE) BETWEEN TRUNC(person.GPRXREF_START_DATE) AND TRUNC (person.GPRXREF_STOP_DATE)
                       THEN

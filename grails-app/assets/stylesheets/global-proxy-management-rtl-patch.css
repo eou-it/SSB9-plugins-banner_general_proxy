@@ -1,0 +1,15 @@
+/********************************************************************************
+  Copyright 2020-2021 Ellucian Company L.P. and its affiliates.
+********************************************************************************/
+.center-contents  {
+    transform:translate(50%,40%);
+}
+/*** Media Query Section ***/
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+}
+
+@media screen and (max-width: 767px) {
+    .center-contents  {
+    transform:translate(50%,10%);
+}
+}
